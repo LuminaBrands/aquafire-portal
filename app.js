@@ -6,7 +6,7 @@
 const MODELS = {
   original: {
     name: 'Aquafire Original',
-    frontAngle: 53,
+    frontAngle: 58,
     backAngle: 68,
     lightOffset: 5.3,       // front of insert → front edge of LED opening
     lightOffsetBack: 4.6,   // back of insert → back edge of LED opening
@@ -19,7 +19,7 @@ const MODELS = {
   },
   pro: {
     name: 'Aquafire Pro',
-    frontAngle: 58,
+    frontAngle: 53,
     backAngle: 68,
     lightOffset: 5.3,
     lightOffsetBack: 4.6,
@@ -32,7 +32,7 @@ const MODELS = {
   },
   lite: {
     name: 'Aquafire Lite',
-    frontAngle: 53,
+    frontAngle: 58,
     backAngle: 68,
     lightOffset: 4.0,
     lightOffsetBack: 3.75,
@@ -199,16 +199,17 @@ function drawLightDiagram() {
 
   // Enclosure height: tall enough to show the insert + max opening + buffer
   // Use max-possible height to keep scale stable while sliding
+  const cordSpace = 2;
   const maxPossibleOpening = (8 + model.lightOffset) * Math.tan(frontAngleRad);
   const maxPossibleBackOpening = (8 + model.lightOffsetBack) * Math.tan(backAngleRad);
-  const stableHeight = insertH + Math.max(maxPossibleOpening, maxPossibleBackOpening) + 3;
+  const stableHeight = cordSpace + insertH + Math.max(maxPossibleOpening, maxPossibleBackOpening) + 3;
   const encHeight = stableHeight;
 
-  // Insert position
+  // Insert position — 2" above the floor for cord/wiring space
   const insertFrontX = setback;
   const insertBackX  = setback + insertDepth;
-  const insertBotY   = 0;  // sits on floor
-  const insertTopY   = insertH;
+  const insertBotY   = cordSpace;
+  const insertTopY   = cordSpace + insertH;
 
   // LED position (at the top of the insert)
   const ledFrontX = insertFrontX + model.lightOffset;
@@ -274,9 +275,34 @@ function drawLightDiagram() {
   ctx.fillStyle = '#8b90a0';
   ctx.font = 'bold 12px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(model.name, ixPx + iwPx / 2, py(insertH / 2) + 4);
+  ctx.fillText(model.name, ixPx + iwPx / 2, py(cordSpace + insertH / 2) + 4);
   ctx.font = '10px sans-serif';
-  ctx.fillText('(cross-section)', ixPx + iwPx / 2, py(insertH / 2) + 18);
+  ctx.fillText('(cross-section)', ixPx + iwPx / 2, py(cordSpace + insertH / 2) + 18);
+
+  // ── Installation surface line ──
+  // A horizontal line flush with the top of the insert, spanning the full enclosure width.
+  // This represents the countertop / wall surface the insert is mounted into.
+  ctx.strokeStyle = '#8b90a0';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.moveTo(px(0) - wallThick, py(insertTopY));
+  ctx.lineTo(px(encDepth) + wallThick, py(insertTopY));
+  ctx.stroke();
+
+  // Installation surface label
+  ctx.fillStyle = '#8b90a0';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('Installation Surface', px(0) - wallThick - 4, py(insertTopY) - 4);
+
+  // ── Cord space label ──
+  if (cordSpace > 0) {
+    ctx.fillStyle = '#555d78';
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Cord / wiring space', ixPx + iwPx / 2, py(cordSpace / 2) + 3);
+  }
 
   // ── LED light source strip ──
   ctx.fillStyle = '#f4a535';
@@ -291,49 +317,37 @@ function drawLightDiagram() {
   ctx.textAlign = 'center';
   ctx.fillText('LED LIGHT SOURCE', px((ledFrontX + ledBackX) / 2), py(ledY) - 10);
 
-  // ── Front light path (UP and LEFT) ──
-  // Light cone fill
+  // ── Light cone fill (BETWEEN front and back rays) ──
+  const backClampY = Math.min(backRayEndY, encHeight);
+  const backClampX = backRayEndY <= encHeight
+    ? backRayEndX
+    : ledBackX + (encHeight - ledY) / Math.tan(backAngleRad);
+  const frontClampY = Math.min(frontRayEndY, encHeight);
+
   ctx.save();
-  ctx.globalAlpha = 0.10;
+  ctx.globalAlpha = 0.12;
   ctx.fillStyle = '#f4a535';
   ctx.beginPath();
+  // Trace: LED front edge → front ray end → back ray end → LED back edge → close
   ctx.moveTo(px(ledFrontX), py(ledY));
-  ctx.lineTo(px(frontRayEndX), py(frontRayEndY));
-  ctx.lineTo(px(frontRayEndX), py(ledY));
+  ctx.lineTo(px(frontRayEndX), py(frontClampY));
+  ctx.lineTo(px(backClampX), py(backClampY));
+  ctx.lineTo(px(ledBackX), py(ledY));
   ctx.closePath();
   ctx.fill();
   ctx.restore();
 
-  // Front ray dashed line
+  // ── Front light ray line ──
   ctx.strokeStyle = '#f4a535';
   ctx.lineWidth = 2;
   ctx.setLineDash([8, 5]);
   ctx.beginPath();
   ctx.moveTo(px(ledFrontX), py(ledY));
-  ctx.lineTo(px(frontRayEndX), py(frontRayEndY));
+  ctx.lineTo(px(frontRayEndX), py(frontClampY));
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // ── Back light path (UP and RIGHT) ──
-  // Clamp to enclosure height if the ray goes above the ceiling
-  const backClampY = Math.min(backRayEndY, encHeight);
-  const backClampX = backRayEndY <= encHeight
-    ? backRayEndX
-    : ledBackX + (encHeight - ledY) / Math.tan(backAngleRad);
-
-  // Light cone fill
-  ctx.save();
-  ctx.globalAlpha = 0.07;
-  ctx.fillStyle = '#e8611a';
-  ctx.beginPath();
-  ctx.moveTo(px(ledBackX), py(ledY));
-  ctx.lineTo(px(backClampX), py(backClampY));
-  ctx.lineTo(px(backClampX), py(ledY));
-  ctx.closePath();
-  ctx.fill();
-  ctx.restore();
-
-  // Back ray dashed line
+  // ── Back light ray line ──
   ctx.strokeStyle = '#e8611a';
   ctx.lineWidth = 1.5;
   ctx.setLineDash([8, 5]);
