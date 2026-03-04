@@ -162,11 +162,12 @@ function drawCutoutDiagram(dims) {
   const iBTR = { x: iBR.x, y: iBR.y - h };
 
   // ── Cutout on enclosure top ──
-  // Centered in the top face, matching insert footprint
-  const cutPadX = (encW - w) / 2;
-  const cutPadD = (encD - d) / 2;
-  const cFL = { x: eFTL.x + cutPadX, y: eFTL.y };
-  const cFR = { x: eFTR.x - cutPadX, y: eFTR.y };
+  // Centered in the top face with equal clearance on all sides
+  const cutPadX = (encW - w) / 2;  // side clearance in px
+  const cutPadD = (encD - d) / 2;  // front/back clearance in px
+  // Offset cutout inward from front edge along isometric depth axis
+  const cFL = { x: eFTL.x + cutPadX + cutPadD * isoX, y: eFTL.y - cutPadD * isoY };
+  const cFR = { x: eFTR.x - cutPadX + cutPadD * isoX, y: eFTR.y - cutPadD * isoY };
   const cBL = { x: cFL.x + d*isoX, y: cFL.y - d*isoY };
   const cBR = { x: cFR.x + d*isoX, y: cFR.y - d*isoY };
 
@@ -282,13 +283,20 @@ function drawCutoutDiagram(dims) {
   out += `<text x="${encLabelX}" y="${encLabelY}" fill="#878c99" font-family="Inter,sans-serif"
     font-size="14" text-anchor="middle" font-weight="600" letter-spacing="4" opacity="0.6">ENCLOSURE</text>`;
 
-  // ── "CUTOUT" label centered in the cutout ──
-  const cutCx = (cFL.x + cBR.x) / 2;
-  const cutCy = (cFL.y + cBR.y) / 2;
-  out += `<text x="${cutCx}" y="${cutCy - 2}" fill="#e8a838" font-family="Inter,sans-serif"
-    font-size="13" text-anchor="middle" font-weight="700" letter-spacing="3">CUTOUT</text>`;
-  out += `<text x="${cutCx}" y="${cutCy + 14}" fill="#e8a838" font-family="Inter,sans-serif"
-    font-size="10" text-anchor="middle" font-weight="400" letter-spacing="1" opacity="0.7">Installation Surface</text>`;
+  // ── "CUTOUT" label — below the cutout front edge, between cutout and enclosure front ──
+  const cutLabelX = (cFL.x + cFR.x) / 2;
+  const cutLabelY = cFL.y + (eFTL.y - cFL.y) / 2 + cutPadD * isoY / 2;
+  out += `<text x="${cutLabelX}" y="${cutLabelY + 2}" fill="#e8a838" font-family="Inter,sans-serif"
+    font-size="11" text-anchor="middle" font-weight="700" letter-spacing="3">CUTOUT</text>`;
+
+  // ── "Installation Surface" label — on the clearance area of the enclosure top ──
+  // Place in the front-right clearance area between cutout and enclosure edge
+  const instSurfX = (cFR.x + eFTR.x) / 2;
+  const instSurfY = (cFR.y + eFTR.y) / 2;
+  out += `<text x="${instSurfX}" y="${instSurfY - 2}" fill="#878c99" font-family="Inter,sans-serif"
+    font-size="9" text-anchor="middle" font-weight="500" letter-spacing="1" opacity="0.7">Installation</text>`;
+  out += `<text x="${instSurfX}" y="${instSurfY + 10}" fill="#878c99" font-family="Inter,sans-serif"
+    font-size="9" text-anchor="middle" font-weight="500" letter-spacing="1" opacity="0.7">Surface</text>`;
 
   // ── Drop-in arrows (purely vertical, manual arrowheads) ──
   const arrowCount = 3;
