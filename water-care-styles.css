@@ -373,7 +373,9 @@ select {
   text-align: center;
   font-size: 0.72rem;
   color: var(--text-muted);
-  margin-top: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
   line-height: 1.4;
 }
 .data-source a { color: var(--blue); text-decoration: none; }
