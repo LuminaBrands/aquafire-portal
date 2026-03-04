@@ -685,9 +685,18 @@ function buildTable() {
   tbody.innerHTML = html;
 }
 
+// ── Reset opening slider to recommended max ──
+function resetOpeningToMax() {
+  const { model, setback } = getState();
+  const angleRad = model.frontAngle * Math.PI / 180;
+  const maxOpening = Math.floor((setback + model.lightOffset) * Math.tan(angleRad) - 1);
+  openingSlider.value = maxOpening;
+  update();
+}
+
 // ── Event listeners ──
-modelSelect.addEventListener('change', update);
-sizeSelect.addEventListener('change', update);
+modelSelect.addEventListener('change', resetOpeningToMax);
+sizeSelect.addEventListener('change', resetOpeningToMax);
 setbackSlider.addEventListener('input', update);
 backSetbackSlider.addEventListener('input', update);
 openingSlider.addEventListener('input', update);
@@ -695,10 +704,4 @@ window.addEventListener('resize', update);
 
 // ── Init ──
 buildTable();
-// Set opening slider to recommended max for initial state
-const initModel = MODELS[modelSelect.value];
-const initAngleRad = initModel.frontAngle * Math.PI / 180;
-const initSetback = parseFloat(setbackSlider.value);
-const initMaxOpening = Math.floor((initSetback + initModel.lightOffset) * Math.tan(initAngleRad) - 1);
-openingSlider.value = initMaxOpening;
-update();
+resetOpeningToMax();
