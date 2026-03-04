@@ -59,7 +59,6 @@ const cutoutD           = document.getElementById('cutout-d');
 const cutoutH           = document.getElementById('cutout-h');
 const maxOpeningEl      = document.getElementById('max-opening');
 const lightAngleEl      = document.getElementById('light-angle-display');
-const offsetEl          = document.getElementById('offset-display');
 const canvas            = document.getElementById('light-diagram');
 const ctx               = canvas.getContext('2d');
 
@@ -104,11 +103,10 @@ function update() {
   openingDisp.textContent     = openingHeight.toFixed(1) + '"';
 
   const angleRad   = model.frontAngle * Math.PI / 180;
-  const maxOpening = (setback + model.lightOffset) * Math.tan(angleRad) - 1;
+  const maxOpening = Math.floor((setback + model.lightOffset) * Math.tan(angleRad) - 1);
 
-  maxOpeningEl.textContent = maxOpening.toFixed(2) + '"';
+  maxOpeningEl.textContent = maxOpening + '"';
   lightAngleEl.textContent = model.frontAngle + '°';
-  offsetEl.textContent     = model.lightOffset + '"';
 
   drawCutoutDiagram(dims);
   drawLightDiagram();
@@ -163,13 +161,13 @@ function drawCutoutDiagram(dims) {
 // ── Interactive Light Path Diagram (Canvas) ──
 //
 // Physical layout (cross-section / side view):
-//   - The insert sits at the BOTTOM of the enclosure.
+//   - The insert sits at the BOTTOM of the enclosure, 2" above the floor.
 //   - The LED light source is at the TOP of the insert.
-//   - Light projects UPWARD from the LED, illuminating the water vapor.
+//   - Light projects UPWARD from the LED.
 //   - BOTH front and back light paths go UPWARD.
 //   - The "light trap" is a soffit at the top of the front viewing opening
 //     that catches the upward light before it escapes into the room.
-//   - The "max opening" is the maximum viewing window height = (SB+OS)*tan(angle) - 1.
+//   - The "max opening" = floor((SB+OS)*tan(angle) - 1).
 //
 // Diagram orientation:
 //   LEFT  = FRONT (room side, viewing opening)
@@ -198,7 +196,7 @@ function drawLightDiagram() {
   const encDepth      = setback + insertDepth + backSetback;
   const frontAngleRad = model.frontAngle * Math.PI / 180;
   const backAngleRad  = model.backAngle  * Math.PI / 180;
-  const maxOpening    = (setback + model.lightOffset) * Math.tan(frontAngleRad) - 1;
+  const maxOpening    = Math.floor((setback + model.lightOffset) * Math.tan(frontAngleRad) - 1);
 
   // Back ray rise
   const backHorizDist = model.lightOffsetBack + backSetback;
@@ -230,7 +228,7 @@ function drawLightDiagram() {
   const encHeight = Math.max(actualOpeningTopY, backRayEndY, frontRayEndY) + 4;
 
   // ── Pixel mapping ──
-  const marginL = 75, marginR = 50, marginT = 40, marginB = 50;
+  const marginL = 70, marginR = 50, marginT = 30, marginB = 65;
   const drawW = W - marginL - marginR;
   const drawH = H - marginT - marginB;
   const pxPerInch = Math.min(drawW / (encDepth + 2), drawH / (encHeight + 2));
@@ -248,7 +246,7 @@ function drawLightDiagram() {
   ctx.font = '13px sans-serif';
   ctx.textAlign = 'center';
   ctx.save();
-  ctx.translate(marginL - 55, py(encHeight / 2));
+  ctx.translate(marginL - 60, py(encHeight / 2));
   ctx.rotate(-Math.PI / 2);
   ctx.fillText('ROOM', 0, 0);
   ctx.restore();
@@ -270,11 +268,9 @@ function drawLightDiagram() {
 
   // Insert label
   ctx.fillStyle = '#8b90a0';
-  ctx.font = 'bold 12px sans-serif';
+  ctx.font = 'bold 11px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(model.name, ixPx + iwPx / 2, py(cordSpace + insertH / 2) + 4);
-  ctx.font = '10px sans-serif';
-  ctx.fillText('(cross-section)', ixPx + iwPx / 2, py(cordSpace + insertH / 2) + 18);
+  ctx.fillText(model.name, ixPx + iwPx / 2, py(cordSpace + insertH / 2) + 5);
 
   // ── Installation surface line ──
   ctx.strokeStyle = '#8b90a0';
@@ -285,11 +281,11 @@ function drawLightDiagram() {
   ctx.lineTo(px(encDepth) + wallThick, py(insertTopY));
   ctx.stroke();
 
-  // Installation surface label
+  // Installation surface label — positioned on the right side to avoid overlapping LED label
   ctx.fillStyle = '#8b90a0';
   ctx.font = '10px sans-serif';
-  ctx.textAlign = 'right';
-  ctx.fillText('Installation Surface', px(0) - wallThick - 4, py(insertTopY) - 4);
+  ctx.textAlign = 'left';
+  ctx.fillText('Installation Surface', px(encDepth) + wallThick + 4, py(insertTopY) + 4);
 
   // ── Cord space label ──
   if (cordSpace > 0) {
@@ -310,14 +306,19 @@ function drawLightDiagram() {
   ctx.fillStyle = '#f4a535';
   ctx.font = 'bold 10px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('LED LIGHT SOURCE', px((ledFrontX + ledBackX) / 2), py(ledY) - 10);
+  ctx.fillText('LED LIGHT SOURCE', px((ledFrontX + ledBackX) / 2), py(ledY) - 14);
 
-  // ── Light cone fill (all vertical space between angles up to ceiling) ──
+  // ── Light cone fill (clipped to enclosure interior) ──
   const riseToTop = encHeight - ledY;
   const frontRayCeilingX = ledFrontX - riseToTop / Math.tan(frontAngleRad);
   const backRayCeilingX  = ledBackX + riseToTop / Math.tan(backAngleRad);
 
   ctx.save();
+  // Clip to enclosure bounds so light doesn't bleed through walls/ceiling
+  ctx.beginPath();
+  ctx.rect(px(0), py(encHeight), encDepth * pxPerInch, encHeight * pxPerInch);
+  ctx.clip();
+
   ctx.globalAlpha = 0.12;
   ctx.fillStyle = '#f4a535';
   ctx.beginPath();
@@ -385,7 +386,7 @@ function drawLightDiagram() {
     ctx.font = 'bold 9px sans-serif';
     ctx.textAlign = 'center';
     if (setback > 0.8) {
-      ctx.fillText('LIGHT TRAP', px(setback / 2), py(lightTrapBotY) - soffitH / 2 - 5);
+      ctx.fillText('LIGHT TRAP', px(setback / 2), py(lightTrapBotY) - soffitH / 2 - 6);
     }
   }
 
@@ -401,84 +402,8 @@ function drawLightDiagram() {
     ctx.setLineDash([]);
   }
 
-  // ── Front Setback dimension ──
-  const sbDimPy = py(0) + wallThick + 16;
-  if (setback > 0) {
-    ctx.strokeStyle = '#78b8f0';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(px(0), sbDimPy);
-    ctx.lineTo(px(setback), sbDimPy);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(px(0), sbDimPy - 5);
-    ctx.lineTo(px(0), sbDimPy + 5);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(px(setback), sbDimPy - 5);
-    ctx.lineTo(px(setback), sbDimPy + 5);
-    ctx.stroke();
-
-    ctx.fillStyle = '#78b8f0';
-    ctx.font = '11px sans-serif';
-    ctx.textAlign = 'center';
-    if (setback > 0.5) {
-      ctx.fillText('Front SB: ' + setback.toFixed(1) + '"', px(setback / 2), sbDimPy + 14);
-    }
-  }
-
-  // ── Back Setback dimension ──
-  if (backSetback > 0) {
-    ctx.strokeStyle = '#5bc0de';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(px(insertBackX), sbDimPy);
-    ctx.lineTo(px(encDepth), sbDimPy);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(px(insertBackX), sbDimPy - 5);
-    ctx.lineTo(px(insertBackX), sbDimPy + 5);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(px(encDepth), sbDimPy - 5);
-    ctx.lineTo(px(encDepth), sbDimPy + 5);
-    ctx.stroke();
-
-    ctx.fillStyle = '#5bc0de';
-    ctx.font = '11px sans-serif';
-    ctx.textAlign = 'center';
-    if (backSetback > 0.5) {
-      ctx.fillText('Back SB: ' + backSetback.toFixed(1) + '"', px((insertBackX + encDepth) / 2), sbDimPy + 14);
-    }
-  }
-
-  // ── Offset dimension (OS: insert front to LED front) ──
-  const osDimPy = py(insertTopY) + 16;
-  ctx.strokeStyle = '#a78bfa';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(px(insertFrontX), osDimPy);
-  ctx.lineTo(px(ledFrontX), osDimPy);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(px(insertFrontX), osDimPy - 5);
-  ctx.lineTo(px(insertFrontX), osDimPy + 5);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(px(ledFrontX), osDimPy - 5);
-  ctx.lineTo(px(ledFrontX), osDimPy + 5);
-  ctx.stroke();
-
-  ctx.fillStyle = '#a78bfa';
-  ctx.font = '11px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('OS: ' + model.lightOffset + '"', px((insertFrontX + ledFrontX) / 2), osDimPy + 14);
-
   // ── Front angle arc ──
-  const arcR = Math.min(35, (setback + model.lightOffset) * pxPerInch * 0.35);
+  const arcR = Math.min(30, (setback + model.lightOffset) * pxPerInch * 0.3);
   if (arcR > 12) {
     ctx.strokeStyle = '#f4a535';
     ctx.lineWidth = 1;
@@ -487,18 +412,18 @@ function drawLightDiagram() {
     ctx.stroke();
 
     ctx.fillStyle = '#f4a535';
-    ctx.font = '11px sans-serif';
+    ctx.font = '10px sans-serif';
     ctx.textAlign = 'right';
     const labelAngle = Math.PI - frontAngleRad / 2;
     ctx.fillText(
       model.frontAngle + '°',
-      px(ledFrontX) + Math.cos(labelAngle) * (arcR + 16),
-      py(ledY) + Math.sin(labelAngle) * (arcR + 16) + 4
+      px(ledFrontX) + Math.cos(labelAngle) * (arcR + 14),
+      py(ledY) + Math.sin(labelAngle) * (arcR + 14) + 4
     );
   }
 
   // ── Back angle arc ──
-  const backArcR = Math.min(30, backHorizDist * pxPerInch * 0.25);
+  const backArcR = Math.min(25, backHorizDist * pxPerInch * 0.2);
   if (backArcR > 10 && backHorizDist > 0.5) {
     ctx.strokeStyle = '#e8611a';
     ctx.lineWidth = 1;
@@ -507,13 +432,13 @@ function drawLightDiagram() {
     ctx.stroke();
 
     ctx.fillStyle = '#e8611a';
-    ctx.font = '11px sans-serif';
+    ctx.font = '10px sans-serif';
     ctx.textAlign = 'left';
     const bLabelAngle = -backAngleRad / 2;
     ctx.fillText(
       model.backAngle + '°',
-      px(ledBackX) + Math.cos(bLabelAngle) * (backArcR + 14),
-      py(ledY) + Math.sin(bLabelAngle) * (backArcR + 14) + 4
+      px(ledBackX) + Math.cos(bLabelAngle) * (backArcR + 12),
+      py(ledY) + Math.sin(bLabelAngle) * (backArcR + 12) + 4
     );
   }
 
@@ -541,7 +466,7 @@ function drawLightDiagram() {
     ctx.fillStyle = '#4ade80';
     ctx.font = '9px sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('Rec. Max: ' + maxOpening.toFixed(1) + '"', px(0) + 4, py(frontRayEndY) - 4);
+    ctx.fillText('Rec. Max: ' + maxOpening + '"', px(0) + 4, py(frontRayEndY) - 5);
   }
 
   // ── Light escape visualization ──
@@ -618,9 +543,9 @@ function drawLightDiagram() {
   // Opening label (rotated)
   ctx.save();
   ctx.fillStyle = arrowColor;
-  ctx.font = 'bold 12px sans-serif';
+  ctx.font = 'bold 11px sans-serif';
   ctx.textAlign = 'center';
-  ctx.translate(arrowX - 16, (moArrowBotPy + moArrowTopPy) / 2);
+  ctx.translate(arrowX - 14, (moArrowBotPy + moArrowTopPy) / 2);
   ctx.rotate(-Math.PI / 2);
   const openLabel = isOverMax
     ? 'Opening: ' + openingHeight.toFixed(1) + '" (OVER MAX)'
@@ -628,42 +553,92 @@ function drawLightDiagram() {
   ctx.fillText(openLabel, 0, 0);
   ctx.restore();
 
-  // ── FRONT / BACK labels ──
+  // ── Front Setback dimension ──
+  const sbDimPy = py(0) + wallThick + 14;
+  if (setback > 0) {
+    ctx.strokeStyle = '#78b8f0';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(px(0), sbDimPy);
+    ctx.lineTo(px(setback), sbDimPy);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(px(0), sbDimPy - 4);
+    ctx.lineTo(px(0), sbDimPy + 4);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(px(setback), sbDimPy - 4);
+    ctx.lineTo(px(setback), sbDimPy + 4);
+    ctx.stroke();
+
+    ctx.fillStyle = '#78b8f0';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    if (setback > 0.5) {
+      ctx.fillText('Front SB: ' + setback.toFixed(1) + '"', px(setback / 2), sbDimPy + 13);
+    }
+  }
+
+  // ── Back Setback dimension ──
+  if (backSetback > 0) {
+    ctx.strokeStyle = '#5bc0de';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(px(insertBackX), sbDimPy);
+    ctx.lineTo(px(encDepth), sbDimPy);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(px(insertBackX), sbDimPy - 4);
+    ctx.lineTo(px(insertBackX), sbDimPy + 4);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(px(encDepth), sbDimPy - 4);
+    ctx.lineTo(px(encDepth), sbDimPy + 4);
+    ctx.stroke();
+
+    ctx.fillStyle = '#5bc0de';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    if (backSetback > 0.5) {
+      ctx.fillText('Back SB: ' + backSetback.toFixed(1) + '"', px((insertBackX + encDepth) / 2), sbDimPy + 13);
+    }
+  }
+
+  // ── FRONT / BACK labels (below setback dimensions) ──
+  const frontBackPy = sbDimPy + 28;
   ctx.fillStyle = '#8b90a0';
   ctx.font = '12px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('FRONT', px(0), py(0) + wallThick + 36);
-  ctx.fillText('BACK', px(encDepth), py(0) + wallThick + 36);
+  ctx.fillText('FRONT', px(0), frontBackPy);
+  ctx.fillText('BACK', px(encDepth), frontBackPy);
 
   // ── Legend ──
-  const legendX = W - 190;
-  const legendY = 18;
-  ctx.font = '11px sans-serif';
+  const legendX = W - 180;
+  const legendY = 16;
+  ctx.font = '10px sans-serif';
   ctx.textAlign = 'left';
 
   ctx.fillStyle = '#f4a535';
-  ctx.fillRect(legendX, legendY, 14, 3);
-  ctx.fillText('Front light path', legendX + 20, legendY + 5);
+  ctx.fillRect(legendX, legendY, 12, 3);
+  ctx.fillText('Front light path', legendX + 18, legendY + 4);
 
   ctx.fillStyle = '#e8611a';
-  ctx.fillRect(legendX, legendY + 20, 14, 3);
-  ctx.fillText('Back light path', legendX + 20, legendY + 25);
+  ctx.fillRect(legendX, legendY + 18, 12, 3);
+  ctx.fillText('Back light path', legendX + 18, legendY + 22);
 
   ctx.fillStyle = '#78b8f0';
-  ctx.fillRect(legendX, legendY + 40, 14, 3);
-  ctx.fillText('Front setback (SB)', legendX + 20, legendY + 45);
+  ctx.fillRect(legendX, legendY + 36, 12, 3);
+  ctx.fillText('Front setback (SB)', legendX + 18, legendY + 40);
 
   ctx.fillStyle = '#5bc0de';
-  ctx.fillRect(legendX, legendY + 60, 14, 3);
-  ctx.fillText('Back setback', legendX + 20, legendY + 65);
-
-  ctx.fillStyle = '#a78bfa';
-  ctx.fillRect(legendX, legendY + 80, 14, 3);
-  ctx.fillText('Light offset (OS)', legendX + 20, legendY + 85);
+  ctx.fillRect(legendX, legendY + 54, 12, 3);
+  ctx.fillText('Back setback', legendX + 18, legendY + 58);
 
   ctx.fillStyle = '#4ade80';
-  ctx.fillRect(legendX, legendY + 100, 14, 3);
-  ctx.fillText('Recommended max', legendX + 20, legendY + 105);
+  ctx.fillRect(legendX, legendY + 72, 12, 3);
+  ctx.fillText('Recommended max', legendX + 18, legendY + 76);
 
   // Cross-section label
   ctx.fillStyle = '#555d78';
@@ -687,7 +662,6 @@ function buildTable() {
         <td>${frac(d.h)}</td>
         <td>${m.frontAngle}°</td>
         <td>${m.backAngle}°</td>
-        <td>${m.lightOffset}"</td>
       </tr>`;
     }
   }
@@ -708,6 +682,6 @@ buildTable();
 const initModel = MODELS[modelSelect.value];
 const initAngleRad = initModel.frontAngle * Math.PI / 180;
 const initSetback = parseFloat(setbackSlider.value);
-const initMaxOpening = (initSetback + initModel.lightOffset) * Math.tan(initAngleRad) - 1;
-openingSlider.value = Math.round(initMaxOpening * 2) / 2; // round to nearest 0.5
+const initMaxOpening = Math.floor((initSetback + initModel.lightOffset) * Math.tan(initAngleRad) - 1);
+openingSlider.value = initMaxOpening;
 update();
