@@ -58,7 +58,6 @@ const cutoutW           = document.getElementById('cutout-w');
 const cutoutD           = document.getElementById('cutout-d');
 const cutoutH           = document.getElementById('cutout-h');
 const maxOpeningEl      = document.getElementById('max-opening');
-const lightAngleEl      = document.getElementById('light-angle-display');
 const canvas            = document.getElementById('light-diagram');
 const ctx               = canvas.getContext('2d');
 
@@ -106,7 +105,6 @@ function update() {
   const maxOpening = Math.floor((setback + model.lightOffset) * Math.tan(angleRad) - 1);
 
   maxOpeningEl.textContent = maxOpening + '"';
-  lightAngleEl.textContent = model.frontAngle + '°';
 
   drawCutoutDiagram(dims);
   drawLightDiagram();
@@ -302,16 +300,15 @@ function drawLightDiagram() {
   ctx.fillRect(px(ledFrontX), py(ledY) - 2, model.lightWidth * pxPerInch, 5);
   ctx.shadowBlur = 0;
 
-  // LED label
+  // Light path label (above LED strip, raised to avoid angle arc overlap)
   ctx.fillStyle = '#f4a535';
   ctx.font = 'bold 10px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('LED LIGHT SOURCE', px((ledFrontX + ledBackX) / 2), py(ledY) - 14);
+  ctx.fillText('LIGHT PATH', px((ledFrontX + ledBackX) / 2), py(ledY) - 28);
 
   // ── Light cone fill (clipped to enclosure interior) ──
+  // Use actual ray line directions so shading aligns perfectly with drawn rays
   const riseToTop = encHeight - ledY;
-  const frontRayCeilingX = ledFrontX - riseToTop / Math.tan(frontAngleRad);
-  const backRayCeilingX  = ledBackX + riseToTop / Math.tan(backAngleRad);
 
   ctx.save();
   // Clip to enclosure bounds so light doesn't bleed through walls/ceiling
@@ -319,15 +316,27 @@ function drawLightDiagram() {
   ctx.rect(px(0), py(encHeight), encDepth * pxPerInch, encHeight * pxPerInch);
   ctx.clip();
 
-  ctx.globalAlpha = 0.12;
-  ctx.fillStyle = '#f4a535';
-  ctx.beginPath();
-  ctx.moveTo(px(ledFrontX), py(ledY));
-  ctx.lineTo(px(frontRayCeilingX), py(encHeight));
-  ctx.lineTo(px(backRayCeilingX), py(encHeight));
-  ctx.lineTo(px(ledBackX), py(ledY));
-  ctx.closePath();
-  ctx.fill();
+  if (maxOpening > 0) {
+    // Front cone edge: extend front ray line (ledFrontX,ledY)->(0,frontRayEndY) to ceiling
+    const frontRayRise = frontRayEndY - ledY; // = maxOpening
+    const frontT = riseToTop / frontRayRise;
+    const frontConeX = ledFrontX + frontT * (frontRayEndX - ledFrontX);
+
+    // Back cone edge: extend back ray line (ledBackX,ledY)->(backClampX,backClampY) to ceiling
+    const backRayRise = backClampY - ledY;
+    const backT = backRayRise > 0 ? riseToTop / backRayRise : 1;
+    const backConeX = ledBackX + backT * (backClampX - ledBackX);
+
+    ctx.globalAlpha = 0.12;
+    ctx.fillStyle = '#f4a535';
+    ctx.beginPath();
+    ctx.moveTo(px(ledFrontX), py(ledY));
+    ctx.lineTo(px(frontConeX), py(encHeight));
+    ctx.lineTo(px(backConeX), py(encHeight));
+    ctx.lineTo(px(ledBackX), py(ledY));
+    ctx.closePath();
+    ctx.fill();
+  }
   ctx.restore();
 
   // ── Front light ray line ──

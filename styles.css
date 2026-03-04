@@ -172,8 +172,6 @@ input[type="range"]::-moz-range-thumb {
 .result-value { display: block; font-size: 1.5rem; font-weight: 700; color: var(--accent); margin: 4px 0 2px; }
 .result-card.primary .result-value { font-size: 1.8rem; }
 .result-sub { font-size: 0.78rem; color: var(--text-muted); }
-.result-card.secondary { padding: 10px 16px; background: transparent; }
-.result-card.secondary .result-value { font-size: 1rem; color: var(--text-muted); }
 
 /* ── Canvas ── */
 .diagram-panel { background: var(--surface-alt); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
