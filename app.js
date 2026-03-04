@@ -102,7 +102,7 @@ function update() {
   openingDisp.textContent     = openingHeight.toFixed(1) + '"';
 
   const angleRad   = model.frontAngle * Math.PI / 180;
-  const maxOpening = Math.floor((setback + model.lightOffset) * Math.tan(angleRad) - 1);
+  const maxOpening = Math.round((setback + model.lightOffset) * Math.tan(angleRad) - 1);
 
   maxOpeningEl.textContent = maxOpening + '"';
 
@@ -453,7 +453,7 @@ function drawLightDiagram() {
   const encDepth      = setback + insertDepth + backSetback;
   const frontAngleRad = model.frontAngle * Math.PI / 180;
   const backAngleRad  = model.backAngle  * Math.PI / 180;
-  const maxOpening    = Math.floor((setback + model.lightOffset) * Math.tan(frontAngleRad) - 1);
+  const maxOpening    = Math.round((setback + model.lightOffset) * Math.tan(frontAngleRad) - 1);
 
   // Back ray rise
   const backHorizDist = model.lightOffsetBack + backSetback;
@@ -902,7 +902,7 @@ function drawLightDiagram() {
   ctx.fillText('BACK', px(encDepth), frontBackPy);
 
   // ── Legend ──
-  const legendX = px(encDepth) + wallThick + 16;
+  const legendX = px(encDepth) + wallThick + 116;
   const legendY = 16;
   ctx.font = '10px sans-serif';
   ctx.textAlign = 'left';
@@ -959,7 +959,7 @@ function buildTable() {
 function resetOpeningToMax() {
   const { model, setback } = getState();
   const angleRad = model.frontAngle * Math.PI / 180;
-  const maxOpening = Math.floor((setback + model.lightOffset) * Math.tan(angleRad) - 1);
+  const maxOpening = Math.round((setback + model.lightOffset) * Math.tan(angleRad) - 1);
   openingSlider.value = maxOpening;
   update();
 }
