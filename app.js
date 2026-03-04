@@ -450,8 +450,8 @@ function drawLightDiagram() {
   const W = 700, H = 500;
   canvas.width  = W * dpr;
   canvas.height = H * dpr;
-  canvas.style.width  = W + 'px';
-  canvas.style.height = H + 'px';
+  canvas.style.width  = '';
+  canvas.style.height = '';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
   ctx.fillStyle = '#121417';
