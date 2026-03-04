@@ -233,11 +233,8 @@ function drawCutoutDiagram(dims) {
     <linearGradient id="ins-top" x1="0" y1="1" x2="0.5" y2="0">
       <stop offset="0%" stop-color="#3e424c"/><stop offset="100%" stop-color="#484d58"/>
     </linearGradient>
-    <linearGradient id="glass-grad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1a2a40"/><stop offset="40%" stop-color="#0e1925"/><stop offset="100%" stop-color="#162438"/>
-    </linearGradient>
     <linearGradient id="flame-grad" x1="0.5" y1="1" x2="0.5" y2="0">
-      <stop offset="0%" stop-color="#e8a838" stop-opacity="0.9"/><stop offset="50%" stop-color="#d45a20" stop-opacity="0.6"/><stop offset="100%" stop-color="#e8a838" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#e8a838" stop-opacity="0.8"/><stop offset="40%" stop-color="#d45a20" stop-opacity="0.5"/><stop offset="100%" stop-color="#e8a838" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="cutout-glow" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#e8a838" stop-opacity="0.12"/><stop offset="100%" stop-color="#e8a838" stop-opacity="0.03"/>
@@ -320,33 +317,36 @@ function drawCutoutDiagram(dims) {
   out += `<polygon points="${iFTL.x},${iFTL.y} ${iFTR.x},${iFTR.y} ${iBTR.x},${iBTR.y} ${iBTL.x},${iBTL.y}"
     fill="url(#ins-top)" stroke="#5a5e68" stroke-width="1.5"/>`;
 
-  // ── Glass panel ──
-  const gi = 8, gti = 10, gbi = 14;
-  const gFL = { x: iFL.x + gi, y: iFL.y - gbi };
-  const gFR = { x: iFR.x - gi, y: iFR.y - gbi };
-  const gFTL = { x: iFTL.x + gi, y: iFTL.y + gti };
-  const gFTR = { x: iFTR.x - gi, y: iFTR.y + gti };
+  // ── Flame / light source on top of insert ──
+  // LED strip across the top face
+  const ledInset = 12;
+  const ledFL = { x: iFTL.x + ledInset, y: iFTL.y };
+  const ledFR = { x: iFTR.x - ledInset, y: iFTR.y };
+  const ledBL = { x: ledFL.x + (d * isoX * 0.3), y: ledFL.y - (d * isoY * 0.3) };
+  const ledBR = { x: ledFR.x + (d * isoX * 0.3), y: ledFR.y - (d * isoY * 0.3) };
+  // LED strip
+  out += `<polygon points="${ledFL.x},${ledFL.y} ${ledFR.x},${ledFR.y} ${ledBR.x},${ledBR.y} ${ledBL.x},${ledBL.y}"
+    fill="#e8a838" opacity="0.25" filter="url(#glow)"/>`;
+  out += `<polygon points="${ledFL.x},${ledFL.y} ${ledFR.x},${ledFR.y} ${ledBR.x},${ledBR.y} ${ledBL.x},${ledBL.y}"
+    fill="none" stroke="#e8a838" stroke-width="1" opacity="0.5"/>`;
+  // Flame wisps rising from top
+  const flameCx = (iFTL.x + iBTR.x) / 2;
+  const flameCy = (iFTL.y + iBTR.y) / 2;
+  const flameW = (ledFR.x - ledFL.x) * 0.4;
+  out += `<ellipse cx="${flameCx}" cy="${flameCy - 8}"
+    rx="${flameW / 2}" ry="14"
+    fill="url(#flame-grad)" filter="url(#glow)" opacity="0.5"/>`;
+  // Smaller secondary wisps
+  out += `<ellipse cx="${flameCx - flameW * 0.4}" cy="${flameCy - 5}"
+    rx="${flameW / 4}" ry="10"
+    fill="url(#flame-grad)" filter="url(#glow)" opacity="0.3"/>`;
+  out += `<ellipse cx="${flameCx + flameW * 0.4}" cy="${flameCy - 5}"
+    rx="${flameW / 4}" ry="10"
+    fill="url(#flame-grad)" filter="url(#glow)" opacity="0.3"/>`;
 
-  out += `<polygon points="${gFL.x},${gFL.y} ${gFR.x},${gFR.y} ${gFTR.x},${gFTR.y} ${gFTL.x},${gFTL.y}"
-    fill="url(#glass-grad)" stroke="#4a6080" stroke-width="1" opacity="0.9"/>`;
-  // Glass reflection highlights
-  out += `<line x1="${gFTL.x+10}" y1="${gFTL.y+5}" x2="${gFL.x+16}" y2="${gFL.y-5}"
-    stroke="rgba(150,180,220,0.12)" stroke-width="4" stroke-linecap="round"/>`;
-  out += `<line x1="${gFTL.x+22}" y1="${gFTL.y+5}" x2="${gFL.x+28}" y2="${gFL.y-5}"
-    stroke="rgba(150,180,220,0.06)" stroke-width="2" stroke-linecap="round"/>`;
-
-  // ── Flame glow ──
-  const flameW = (gFR.x - gFL.x) * 0.55;
-  const flameCx = (gFL.x + gFR.x) / 2;
-  const flameBot = gFL.y - 4;
-  const flameTop = (gFTL.y + gFL.y) / 2;
-  out += `<ellipse cx="${flameCx}" cy="${(flameBot+flameTop)/2+4}"
-    rx="${flameW/2}" ry="${(flameBot-flameTop)/2}"
-    fill="url(#flame-grad)" filter="url(#glow)" opacity="0.45"/>`;
-
-  // ── Model name on insert top ──
-  const insLabelX = (iFTL.x + iBTR.x) / 2;
-  const insLabelY = (iFTL.y + iBTR.y) / 2 + 4;
+  // ── Model name on insert front face ──
+  const insLabelX = (iFL.x + iFR.x) / 2;
+  const insLabelY = (iFL.y + iFTL.y) / 2 + 4;
   out += `<text x="${insLabelX}" y="${insLabelY}" fill="#b0b4be" font-family="Inter,sans-serif"
     font-size="12" text-anchor="middle" font-weight="600" letter-spacing="2">${modelName.toUpperCase()}</text>`;
 
