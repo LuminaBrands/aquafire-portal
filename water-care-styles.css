@@ -775,8 +775,18 @@ footer {
   text-decoration: underline;
 }
 
+/* Two-column row for Steps 2 & 3 */
+.two-col-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.two-col-row .card { margin: 28px 0; }
+
 /* Responsive */
 @media (max-width: 800px) {
+  .two-col-row { grid-template-columns: 1fr; }
   .water-hardness-layout { grid-template-columns: 1fr; }
   .card { padding: 24px 20px; margin: 20px 0; }
   .step-row { gap: 14px; }
