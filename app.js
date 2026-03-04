@@ -507,13 +507,17 @@ function drawLightDiagram() {
   // Enclosure height: dynamic, tall enough to show everything
   const encHeight = Math.max(actualOpeningTopY, backRayEndY, frontRayEndY) + 4;
 
-  // ── Pixel mapping ──
-  const marginL = 70, marginR = isDouble ? 190 : 170, marginT = 30, marginB = 65;
-  const drawW = W - marginL - marginR;
+  // ── 3D Isometric parameters ──
+  const depth3D = isMobile ? 35 : 55;
+  const offX = Math.round(depth3D * 0.65);
+  const offY = Math.round(depth3D * 0.32);
+
+  // ── Pixel mapping (adjusted for 3D offset) ──
+  const marginL = 70, marginR = isDouble ? 190 : 170, marginT = 30 + offY, marginB = 65;
+  const drawW = W - marginL - marginR - offX;
   const drawH = H - marginT - marginB;
   const pxPerInch = Math.min(drawW / (encDepth + 2), drawH / (encHeight + 2));
 
-  // Center the diagram horizontally within the available drawing area
   const usedW = (encDepth + 2) * pxPerInch;
   const centerOffset = (drawW - usedW) / 2;
 
@@ -522,8 +526,166 @@ function drawLightDiagram() {
 
   function px(x) { return frontPx + x * pxPerInch; }
   function py(y) { return floorPx - y * pxPerInch; }
+  function pxB(x) { return px(x) + offX; }
+  function pyB(y) { return py(y) - offY; }
 
   const wallThick = 8;
+
+  // ════════════════════════════════════════════════════════
+  // 3D Isometric depth layer (drawn behind the cross-section)
+  // ════════════════════════════════════════════════════════
+
+  // -- Back face: enclosure interior --
+  ctx.fillStyle = '#14171c';
+  ctx.fillRect(pxB(0), pyB(encHeight), encDepth * pxPerInch, encHeight * pxPerInch);
+
+  // -- Back face: insert --
+  ctx.fillStyle = '#1c1f26';
+  ctx.fillRect(pxB(insertFrontX), pyB(insertTopY), insertDepth * pxPerInch, insertH * pxPerInch);
+  ctx.strokeStyle = '#333740';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(pxB(insertFrontX), pyB(insertTopY), insertDepth * pxPerInch, insertH * pxPerInch);
+
+  // -- Back face: walls --
+  ctx.fillStyle = '#22262e';
+  // Floor
+  ctx.fillRect(pxB(0) - wallThick, pyB(0), encDepth * pxPerInch + wallThick * 2, wallThick);
+  // Ceiling
+  ctx.fillRect(pxB(0) - wallThick, pyB(encHeight) - wallThick, encDepth * pxPerInch + wallThick * 2, wallThick);
+  // Back wall
+  if (isDouble) {
+    const bltBot = Math.min(actualOpeningTopY, encHeight);
+    const bwU1 = pyB(encHeight) - wallThick, bwU2 = pyB(bltBot);
+    if (bwU2 > bwU1) ctx.fillRect(pxB(encDepth), bwU1, wallThick, bwU2 - bwU1);
+    const bwL1 = pyB(insertTopY), bwL2 = pyB(0);
+    if (bwL2 > bwL1) ctx.fillRect(pxB(encDepth), bwL1, wallThick, bwL2 - bwL1);
+  } else {
+    ctx.fillRect(pxB(encDepth), pyB(encHeight) - wallThick, wallThick, encHeight * pxPerInch + wallThick * 2);
+  }
+  // Front wall segments (back face)
+  const bltBotY = Math.min(actualOpeningTopY, encHeight);
+  const bfU1 = pyB(encHeight) - wallThick, bfU2 = pyB(bltBotY);
+  if (bfU2 > bfU1) ctx.fillRect(pxB(0) - wallThick, bfU1, wallThick, bfU2 - bfU1);
+  const bfL1 = pyB(insertTopY), bfL2 = pyB(0);
+  if (bfL2 > bfL1) ctx.fillRect(pxB(0) - wallThick, bfL1, wallThick, bfL2 - bfL1);
+
+  // Back face: installation surface line
+  ctx.strokeStyle = '#555960';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.moveTo(pxB(0) - wallThick, pyB(insertTopY));
+  ctx.lineTo(pxB(encDepth) + wallThick, pyB(insertTopY));
+  ctx.stroke();
+
+  // -- Connecting isometric surfaces --
+
+  // Interior ceiling surface
+  ctx.fillStyle = '#1e2228';
+  ctx.beginPath();
+  ctx.moveTo(px(0), py(encHeight)); ctx.lineTo(px(encDepth), py(encHeight));
+  ctx.lineTo(pxB(encDepth), pyB(encHeight)); ctx.lineTo(pxB(0), pyB(encHeight));
+  ctx.closePath(); ctx.fill();
+
+  // Interior right wall surface
+  ctx.fillStyle = '#191c22';
+  ctx.beginPath();
+  ctx.moveTo(px(encDepth), py(0)); ctx.lineTo(px(encDepth), py(encHeight));
+  ctx.lineTo(pxB(encDepth), pyB(encHeight)); ctx.lineTo(pxB(encDepth), pyB(0));
+  ctx.closePath(); ctx.fill();
+
+  // Interior floor surface
+  ctx.fillStyle = '#181b22';
+  ctx.beginPath();
+  ctx.moveTo(px(0), py(0)); ctx.lineTo(px(encDepth), py(0));
+  ctx.lineTo(pxB(encDepth), pyB(0)); ctx.lineTo(pxB(0), pyB(0));
+  ctx.closePath(); ctx.fill();
+
+  // Insert top surface (with gradient)
+  const iTopGrad = ctx.createLinearGradient(px(insertFrontX), py(insertTopY), pxB(insertFrontX), pyB(insertTopY));
+  iTopGrad.addColorStop(0, '#2a2e38'); iTopGrad.addColorStop(1, '#22262e');
+  ctx.fillStyle = iTopGrad;
+  ctx.beginPath();
+  ctx.moveTo(px(insertFrontX), py(insertTopY)); ctx.lineTo(px(insertBackX), py(insertTopY));
+  ctx.lineTo(pxB(insertBackX), pyB(insertTopY)); ctx.lineTo(pxB(insertFrontX), pyB(insertTopY));
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#4a4f5c'; ctx.lineWidth = 1; ctx.stroke();
+
+  // LED glow on insert top surface
+  ctx.fillStyle = 'rgba(232, 168, 56, 0.08)';
+  ctx.beginPath();
+  ctx.moveTo(px(ledFrontX), py(ledY)); ctx.lineTo(px(ledBackX), py(ledY));
+  ctx.lineTo(pxB(ledBackX), pyB(ledY)); ctx.lineTo(pxB(ledFrontX), pyB(ledY));
+  ctx.closePath(); ctx.fill();
+
+  // Insert right side surface
+  ctx.fillStyle = '#1e222a';
+  ctx.beginPath();
+  ctx.moveTo(px(insertBackX), py(insertBotY)); ctx.lineTo(px(insertBackX), py(insertTopY));
+  ctx.lineTo(pxB(insertBackX), pyB(insertTopY)); ctx.lineTo(pxB(insertBackX), pyB(insertBotY));
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#4a4f5c'; ctx.lineWidth = 1; ctx.stroke();
+
+  // Floor slab top surface
+  ctx.fillStyle = '#2f333c';
+  ctx.beginPath();
+  ctx.moveTo(px(0) - wallThick, py(0)); ctx.lineTo(px(encDepth) + wallThick, py(0));
+  ctx.lineTo(pxB(encDepth) + wallThick, pyB(0)); ctx.lineTo(pxB(0) - wallThick, pyB(0));
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#3a3e48'; ctx.lineWidth = 0.5; ctx.stroke();
+
+  // Ceiling slab top surface
+  ctx.fillStyle = '#353a45';
+  ctx.beginPath();
+  ctx.moveTo(px(0) - wallThick, py(encHeight) - wallThick);
+  ctx.lineTo(px(encDepth) + wallThick, py(encHeight) - wallThick);
+  ctx.lineTo(pxB(encDepth) + wallThick, pyB(encHeight) - wallThick);
+  ctx.lineTo(pxB(0) - wallThick, pyB(encHeight) - wallThick);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#3a3e48'; ctx.lineWidth = 0.5; ctx.stroke();
+
+  // Back wall right surface (single mode)
+  if (!isDouble) {
+    ctx.fillStyle = '#282c35';
+    ctx.beginPath();
+    ctx.moveTo(px(encDepth) + wallThick, py(0));
+    ctx.lineTo(px(encDepth) + wallThick, py(encHeight) - wallThick);
+    ctx.lineTo(pxB(encDepth) + wallThick, pyB(encHeight) - wallThick);
+    ctx.lineTo(pxB(encDepth) + wallThick, pyB(0));
+    ctx.closePath(); ctx.fill();
+  }
+
+  // -- Isometric edge outlines --
+  ctx.strokeStyle = '#3a3e48';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([]);
+
+  // Depth lines at outer corners
+  ctx.beginPath();
+  ctx.moveTo(px(0) - wallThick, py(encHeight) - wallThick);
+  ctx.lineTo(pxB(0) - wallThick, pyB(encHeight) - wallThick);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(px(encDepth) + wallThick, py(encHeight) - wallThick);
+  ctx.lineTo(pxB(encDepth) + wallThick, pyB(encHeight) - wallThick);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(px(encDepth) + wallThick, py(0));
+  ctx.lineTo(pxB(encDepth) + wallThick, pyB(0));
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(px(0) - wallThick, py(0));
+  ctx.lineTo(pxB(0) - wallThick, pyB(0));
+  ctx.stroke();
+
+  // Back face outline
+  ctx.strokeStyle = '#2c3038';
+  ctx.beginPath();
+  ctx.moveTo(pxB(0) - wallThick, pyB(0));
+  ctx.lineTo(pxB(encDepth) + wallThick, pyB(0));
+  ctx.lineTo(pxB(encDepth) + wallThick, pyB(encHeight) - wallThick);
+  ctx.lineTo(pxB(0) - wallThick, pyB(encHeight) - wallThick);
+  ctx.closePath(); ctx.stroke();
 
   // ── "Room" label(s) ──
   ctx.fillStyle = '#4a4f5c';
@@ -1065,7 +1227,7 @@ function drawLightDiagram() {
   ctx.fillStyle = '#4a4f5c';
   ctx.font = '10px sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText(isDouble ? 'Cross-section / double side' : 'Cross-section / side view', 14, 16);
+  ctx.fillText(isDouble ? '3D cutaway / double side' : '3D cutaway / side view', 14, 16);
 }
 
 // ── Reference Table ──
