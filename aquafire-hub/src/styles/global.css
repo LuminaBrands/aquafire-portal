@@ -1,0 +1,62 @@
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Design tokens ── */
+:root {
+  --bg:          #121417;
+  --surface:     #1b1e24;
+  --surface-alt: #22262e;
+  --border:      #2c3038;
+  --border-warm: #3a3229;
+  --text:        #e4e5e9;
+  --text-muted:  #878c99;
+  --red:         #c0392b;
+  --red-dark:    #a93226;
+  --red-glow:    rgba(192,57,43,0.15);
+  --amber:       #e8a838;
+  --amber-dim:   #c78820;
+  --amber-glow:  rgba(232,168,56,0.10);
+  --ember:       #d45a20;
+  --radius:      14px;
+  --radius-sm:   8px;
+  --shadow:      0 2px 24px rgba(0,0,0,.35);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: 'Poppins', sans-serif;
+}
+
+a { color: inherit; }
+
+.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ── Shared button ── */
+.btn-primary {
+  display: inline-block;
+  padding: 12px 32px;
+  background: var(--red);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 12px var(--red-glow);
+}
+.btn-primary:hover {
+  background: var(--red-dark);
+  box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+}

@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Quick Start Guides" description="Step-by-step installation guides for Aquafire Original, Pro, and Lite models.">
+  <header class="page-header">
+    <div class="container">
+      <h1>Quick Start Guides</h1>
+      <p class="page-sub">Step-by-step installation for every Aquafire model.</p>
+    </div>
+  </header>
+
+  <main class="container page-body">
+    <div class="model-grid">
+      <div class="model-card">
+        <h2>Aquafire Original</h2>
+        <p>The classic water vapor fireplace. Available in 20", 40", and 60".</p>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="model-card">
+        <h2>Aquafire Pro</h2>
+        <p>Premium model with enhanced flame realism and wider light angles.</p>
+        <span class="badge">Coming Soon</span>
+      </div>
+      <div class="model-card">
+        <h2>Aquafire Lite</h2>
+        <p>Compact and easy to install — perfect for smaller spaces.</p>
+        <span class="badge">Coming Soon</span>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .page-header {
+    padding: 48px 0 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #241b1b 0%, var(--bg) 100%);
+  }
+  .page-header h1 { font-size: 2rem; }
+  .page-sub { color: var(--text-muted); margin-top: 8px; font-size: 0.95rem; }
+  .page-body { padding: 48px 0; }
+  .model-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .model-card {
+    padding: 32px 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: center;
+  }
+  .model-card h2 { font-size: 1.2rem; margin-bottom: 8px; }
+  .model-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 16px; }
+  .badge {
+    display: inline-block;
+    padding: 4px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+  }
+</style>

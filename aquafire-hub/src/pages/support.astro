@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Support Hub" description="Warranty registration, troubleshooting, and support for your Aquafire fireplace.">
+  <header class="page-header">
+    <div class="container">
+      <h1>Support Hub</h1>
+      <p class="page-sub">Warranty, troubleshooting, and everything you need to keep your Aquafire running perfectly.</p>
+    </div>
+  </header>
+
+  <main class="container page-body">
+    <div class="support-grid">
+      <a href="#" class="support-card">
+        <span class="support-icon">&#x1f4dd;</span>
+        <h2>Register Warranty</h2>
+        <p>Activate your warranty coverage.</p>
+      </a>
+      <a href="#" class="support-card">
+        <span class="support-icon">&#x1f527;</span>
+        <h2>Submit a Claim</h2>
+        <p>File a warranty or service claim.</p>
+      </a>
+      <a href="#" class="support-card">
+        <span class="support-icon">&#x2753;</span>
+        <h2>Troubleshooting</h2>
+        <p>Common issues and fixes.</p>
+      </a>
+      <a href="#" class="support-card">
+        <span class="support-icon">&#x1f4da;</span>
+        <h2>FAQs</h2>
+        <p>Frequently asked questions.</p>
+      </a>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .page-header {
+    padding: 48px 0 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #241b1b 0%, var(--bg) 100%);
+  }
+  .page-header h1 { font-size: 2rem; }
+  .page-sub { color: var(--text-muted); margin-top: 8px; font-size: 0.95rem; }
+  .page-body { padding: 48px 0; }
+  .support-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .support-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 36px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .support-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(192,57,43,0.3);
+  }
+  .support-icon { font-size: 2rem; margin-bottom: 12px; }
+  .support-card h2 { font-size: 1rem; margin-bottom: 6px; }
+  .support-card p { color: var(--text-muted); font-size: 0.85rem; }
+</style>

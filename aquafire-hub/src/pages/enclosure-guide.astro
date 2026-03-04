@@ -1,0 +1,177 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/enclosure.css';
+---
+
+<Base title="Enclosure Design Guide" description="Interactive calculator for enclosure dimensions, cutout sizes, and light trap configuration.">
+  <header class="enc-header">
+    <div class="container">
+      <h1>Enclosure Design Guide</h1>
+      <p class="enc-sub">Configure your fireplace enclosure dimensions with precision</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Step 1: Model Selection -->
+    <section class="card" id="model-selection">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div>
+          <h2>Choose Your Model</h2>
+          <p class="card-desc">Select the Aquafire insert and size for your project.</p>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="model">Model</label>
+          <select id="model">
+            <option value="original">Aquafire Original</option>
+            <option value="pro">Aquafire Pro</option>
+            <option value="lite">Aquafire Lite</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="size">Size</label>
+          <select id="size">
+            <option value="20">20"</option>
+            <option value="40">40"</option>
+            <option value="60" selected>60"</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2: Cutout Dimensions -->
+    <section class="card" id="cutout-section">
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div>
+          <h2>Cutout Dimensions</h2>
+          <p class="card-desc">Your enclosure cutout must be precisely sized. The insert hangs from flanges only &frac12;" thick&mdash;accuracy is critical.</p>
+        </div>
+      </div>
+      <div class="cutout-layout">
+        <div class="dimensions-display">
+          <div class="dim-box">
+            <span class="dim-label">Width</span>
+            <span class="dim-value" id="cutout-w">&mdash;</span>
+          </div>
+          <div class="dim-box">
+            <span class="dim-label">Depth</span>
+            <span class="dim-value" id="cutout-d">&mdash;</span>
+          </div>
+          <div class="dim-box">
+            <span class="dim-label">Height</span>
+            <span class="dim-value" id="cutout-h">&mdash;</span>
+          </div>
+        </div>
+        <div class="cutout-diagram-wrapper">
+          <svg id="cutout-diagram" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 3: Light Trap Calculator -->
+    <section class="card card--wide" id="light-trap-section">
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div>
+          <h2>Light Trap Calculator</h2>
+          <p class="card-desc">Size the viewing opening to prevent LED light from escaping. Adjust the setbacks and opening height, then watch the cross-section update in real time.</p>
+        </div>
+      </div>
+      <div class="calculator-layout">
+        <div class="controls-panel">
+          <div class="form-group">
+            <label for="setback-slider">Front Setback</label>
+            <div class="slider-row">
+              <input type="range" id="setback-slider" min="0" max="21" step="0.5" value="6">
+              <span class="slider-value" id="setback-display">6.0"</span>
+            </div>
+            <p class="hint">Distance from the insert's front edge to the light trap above.</p>
+          </div>
+          <div class="form-group">
+            <label for="back-setback-slider">Back Setback</label>
+            <div class="slider-row">
+              <input type="range" id="back-setback-slider" min="0" max="21" step="0.5" value="2">
+              <span class="slider-value" id="back-setback-display">2.0"</span>
+            </div>
+            <p class="hint">Distance from the back of the insert to the enclosure wall.</p>
+          </div>
+          <div class="form-group">
+            <label for="opening-slider">Opening Height</label>
+            <div class="slider-row">
+              <input type="range" id="opening-slider" min="0" max="50" step="0.5" value="15">
+              <span class="slider-value" id="opening-display">15.0"</span>
+            </div>
+            <p class="hint">Viewing opening above the installation surface. Exceeding the max allows light to escape.</p>
+          </div>
+          <div class="result-card">
+            <span class="result-label">Recommended Max Opening</span>
+            <span class="result-value" id="max-opening">&mdash;</span>
+            <span class="result-sub">maximum before light escape</span>
+          </div>
+          <p class="formula-note">
+            The max opening is based on your setback distance and the light angle of your model, rounded down to the nearest inch.
+          </p>
+        </div>
+        <div class="diagram-panel">
+          <canvas id="light-diagram" width="700" height="500"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reference Table -->
+    <section class="card" id="reference-section">
+      <h2>Quick Reference</h2>
+      <p class="card-desc">All model specifications at a glance.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Size</th>
+              <th>Cutout W</th>
+              <th>Cutout D</th>
+              <th>Cutout H</th>
+              <th>Front Angle</th>
+              <th>Back Angle</th>
+            </tr>
+          </thead>
+          <tbody id="ref-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="card cta-section">
+      <h2>Ready to Get Started?</h2>
+      <a href="https://www.aquafire.com" class="cta-button" target="_blank" rel="noopener">Shop Aquafire</a>
+      <a href="https://www.aquafire.com/pages/contact" class="cta-link" target="_blank" rel="noopener">or contact sales to get a custom quote</a>
+    </section>
+  </main>
+
+  <script is:inline src="/enclosure-app.js"></script>
+</Base>
+
+<style>
+  .enc-header {
+    padding: 48px 0 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #241b1b 0%, var(--bg) 100%);
+    position: relative;
+  }
+  .enc-header h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .enc-sub {
+    color: var(--text-muted);
+    margin-top: 8px;
+    font-size: 0.95rem;
+  }
+</style>
