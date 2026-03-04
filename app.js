@@ -290,15 +290,15 @@ function drawCutoutDiagram(dims) {
   out += `<text x="${cutCx}" y="${cutCy + 14}" fill="#e8a838" font-family="Inter,sans-serif"
     font-size="10" text-anchor="middle" font-weight="400" letter-spacing="1" opacity="0.7">Installation Surface</text>`;
 
-  // ── Drop-in arrows ──
+  // ── Drop-in arrows (purely vertical) ──
   const arrowCount = 3;
   for (let i = 0; i < arrowCount; i++) {
     const t = (i + 1) / (arrowCount + 1);
-    const topX = iFL.x + t * (iFR.x - iFL.x);
+    // Use cutout front edge X positions so arrows are vertical and aligned with dashed lines
+    const ax = cFL.x + t * (cFR.x - cFL.x);
     const topY = iFL.y + 12;
-    const botX = cFL.x + t * (cFR.x - cFL.x);
     const botY = cFL.y - 8;
-    out += `<line x1="${topX}" y1="${topY}" x2="${botX}" y2="${botY}"
+    out += `<line x1="${ax}" y1="${topY}" x2="${ax}" y2="${botY}"
       stroke="#e8a838" stroke-width="1.8" stroke-dasharray="5,5" opacity="0.55"
       marker-end="url(#arrow-down)"/>`;
   }
@@ -318,12 +318,28 @@ function drawCutoutDiagram(dims) {
     fill="url(#ins-top)" stroke="#5a5e68" stroke-width="1.5"/>`;
 
   // ── Flame / light source on top of insert ──
-  // LED strip across the top face
-  const ledInset = 12;
-  const ledFL = { x: iFTL.x + ledInset, y: iFTL.y };
-  const ledFR = { x: iFTR.x - ledInset, y: iFTR.y };
-  const ledBL = { x: ledFL.x + (d * isoX * 0.3), y: ledFL.y - (d * isoY * 0.3) };
-  const ledBR = { x: ledFR.x + (d * isoX * 0.3), y: ledFR.y - (d * isoY * 0.3) };
+  // LED strip centered on the top face (runs front-to-back in the middle)
+  const ledInsetSide = 12;
+  // Center strip: 30% of depth, centered at 50% depth
+  const ledDepthFrac = 0.30;
+  const ledStartFrac = 0.5 - ledDepthFrac / 2;  // 0.35
+  const ledEndFrac = 0.5 + ledDepthFrac / 2;     // 0.65
+  const ledFL = {
+    x: iFTL.x + ledInsetSide + d * isoX * ledStartFrac,
+    y: iFTL.y - d * isoY * ledStartFrac
+  };
+  const ledFR = {
+    x: iFTR.x - ledInsetSide + d * isoX * ledStartFrac,
+    y: iFTR.y - d * isoY * ledStartFrac
+  };
+  const ledBL = {
+    x: iFTL.x + ledInsetSide + d * isoX * ledEndFrac,
+    y: iFTL.y - d * isoY * ledEndFrac
+  };
+  const ledBR = {
+    x: iFTR.x - ledInsetSide + d * isoX * ledEndFrac,
+    y: iFTR.y - d * isoY * ledEndFrac
+  };
   // LED strip
   out += `<polygon points="${ledFL.x},${ledFL.y} ${ledFR.x},${ledFR.y} ${ledBR.x},${ledBR.y} ${ledBL.x},${ledBL.y}"
     fill="#e8a838" opacity="0.25" filter="url(#glow)"/>`;
@@ -362,7 +378,7 @@ function drawCutoutDiagram(dims) {
   out += dimLine(cFL.x, wDimY, cFR.x, wDimY, frac(dims.w), 'WIDTH', 'below', 0);
 
   // ── Depth: along right side of cutout (isometric diagonal) ──
-  const depthOff = 60;
+  const depthOff = 90;
   const dS = { x: cFR.x + depthOff, y: cFR.y };
   const dE = { x: cBR.x + depthOff, y: cBR.y };
   out += extLine(cFR.x+6, cFR.y, dS.x+4, dS.y);
