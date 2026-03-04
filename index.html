@@ -4,22 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aquafire Fireplace Enclosure Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <div class="container">
-      <h1>Aquafire Enclosure Guide</h1>
-      <p class="subtitle">Design your perfect fireplace enclosure with confidence</p>
+    <div class="header-glow"></div>
+    <div class="container header-inner">
+      <span class="brand-mark">AQUAFIRE</span>
+      <h1>Enclosure Design Guide</h1>
+      <p class="subtitle">Configure your fireplace enclosure dimensions with precision</p>
     </div>
   </header>
 
   <main class="container">
     <!-- Step 1: Model Selection -->
     <section class="card" id="model-selection">
-      <div class="step-badge">Step 1</div>
-      <h2>Select Your Aquafire Model</h2>
-      <p>Choose your fireplace model and size to get started.</p>
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div>
+          <h2>Choose Your Model</h2>
+          <p class="card-desc">Select the Aquafire insert and size for your project.</p>
+        </div>
+      </div>
 
       <div class="form-row">
         <div class="form-group">
@@ -43,37 +52,43 @@
 
     <!-- Step 2: Cutout Dimensions -->
     <section class="card" id="cutout-section">
-      <div class="step-badge">Step 2</div>
-      <h2>Recommended Cutout Dimensions</h2>
-      <p>Your enclosure cutout must be precisely sized. The Aquafire insert hangs from flanges that are only &frac12;" thick, so accuracy is critical.</p>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div>
+          <h2>Cutout Dimensions</h2>
+          <p class="card-desc">Your enclosure cutout must be precisely sized. The insert hangs from flanges only &frac12;" thick&mdash;accuracy is critical.</p>
+        </div>
+      </div>
 
       <div class="dimensions-display">
         <div class="dim-box">
           <span class="dim-label">Width</span>
-          <span class="dim-value" id="cutout-w">—</span>
+          <span class="dim-value" id="cutout-w">&mdash;</span>
         </div>
         <div class="dim-box">
           <span class="dim-label">Depth</span>
-          <span class="dim-value" id="cutout-d">—</span>
+          <span class="dim-value" id="cutout-d">&mdash;</span>
         </div>
         <div class="dim-box">
           <span class="dim-label">Height</span>
-          <span class="dim-value" id="cutout-h">—</span>
+          <span class="dim-value" id="cutout-h">&mdash;</span>
         </div>
       </div>
 
       <div class="cutout-diagram-wrapper">
-        <svg id="cutout-diagram" viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">
-          <!-- 3D isometric cutout -->
-        </svg>
+        <svg id="cutout-diagram" viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
     </section>
 
     <!-- Step 3: Light Trap Calculator -->
-    <section class="card" id="light-trap-section">
-      <div class="step-badge">Step 3</div>
-      <h2>Light Trap &amp; Maximum Opening Calculator</h2>
-      <p>The viewing opening must be sized correctly to prevent LED light from escaping the enclosure. Use the slider below to adjust the setback (how far the insert sits from the front face of your enclosure) and see how it affects the maximum opening height.</p>
+    <section class="card card--wide" id="light-trap-section">
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div>
+          <h2>Light Trap Calculator</h2>
+          <p class="card-desc">Size the viewing opening to prevent LED light from escaping. Adjust the setbacks and opening height, then watch the cross-section update in real time.</p>
+        </div>
+      </div>
 
       <div class="calculator-layout">
         <div class="controls-panel">
@@ -83,7 +98,7 @@
               <input type="range" id="setback-slider" min="0" max="21" step="0.5" value="6">
               <span class="slider-value" id="setback-display">6.0"</span>
             </div>
-            <p class="hint">Horizontal distance from the Aquafire's front edge to the inside edge of the light trap above.</p>
+            <p class="hint">Distance from the insert's front edge to the light trap above.</p>
           </div>
 
           <div class="form-group">
@@ -92,7 +107,7 @@
               <input type="range" id="back-setback-slider" min="0" max="21" step="0.5" value="2">
               <span class="slider-value" id="back-setback-display">2.0"</span>
             </div>
-            <p class="hint">Distance from the back of the Aquafire to the back wall of the enclosure.</p>
+            <p class="hint">Distance from the back of the insert to the enclosure wall.</p>
           </div>
 
           <div class="form-group">
@@ -101,31 +116,30 @@
               <input type="range" id="opening-slider" min="0" max="50" step="0.5" value="15">
               <span class="slider-value" id="opening-display">15.0"</span>
             </div>
-            <p class="hint">Height of the viewing opening above the installation surface. Exceeding the recommended max allows light to escape.</p>
+            <p class="hint">Viewing opening above the installation surface. Exceeding the max allows light to escape.</p>
           </div>
 
-          <div class="result-cards">
-            <div class="result-card primary">
-              <span class="result-label">Recommended Max Opening</span>
-              <span class="result-value" id="max-opening">—</span>
-              <span class="result-sub">maximum before light escape</span>
-            </div>
+          <div class="result-card">
+            <span class="result-label">Recommended Max Opening</span>
+            <span class="result-value" id="max-opening">&mdash;</span>
+            <span class="result-sub">maximum before light escape</span>
           </div>
+
+          <p class="formula-note">
+            The max opening is based on your setback distance and the light angle of your model, rounded down to the nearest inch.
+          </p>
         </div>
 
         <div class="diagram-panel">
           <canvas id="light-diagram" width="700" height="500"></canvas>
         </div>
       </div>
-
-      <div class="formula-note">
-        The recommended max opening is calculated based on your setback distance and the light angle of your Aquafire model, rounded down to the nearest inch for safety.
-      </div>
     </section>
 
     <!-- Reference Table -->
     <section class="card" id="reference-section">
-      <h2>Quick Reference: All Models</h2>
+      <h2>Quick Reference</h2>
+      <p class="card-desc">All model specifications at a glance.</p>
       <div class="table-wrapper">
         <table>
           <thead>

@@ -132,27 +132,27 @@ function drawCutoutDiagram(dims) {
 
   svg.innerHTML = `
     <polygon points="${fl.x},${fl.y} ${fr.x},${fr.y} ${br.x},${br.y} ${bl.x},${bl.y}"
-      fill="#1e2230" stroke="#f4a535" stroke-width="1.5"/>
+      fill="#1b1e24" stroke="#e8a838" stroke-width="1.5"/>
     <polygon points="${bl.x},${bl.y} ${br.x},${br.y} ${btr.x},${btr.y} ${btl.x},${btl.y}"
-      fill="#262b3a" stroke="#f4a535" stroke-width="1.5"/>
+      fill="#1f2229" stroke="#e8a838" stroke-width="1.5"/>
     <polygon points="${fr.x},${fr.y} ${br.x},${br.y} ${btr.x},${btr.y} ${ftr.x},${ftr.y}"
-      fill="#2a3044" stroke="#f4a535" stroke-width="1.5"/>
+      fill="#22262e" stroke="#e8a838" stroke-width="1.5"/>
     <polygon points="${fl.x},${fl.y} ${bl.x},${bl.y} ${btl.x},${btl.y} ${ftl.x},${ftl.y}"
-      fill="#222838" stroke="#f4a535" stroke-width="1.5" stroke-dasharray="6,3"/>
+      fill="#1d2027" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="6,3"/>
     <polygon points="${fl.x},${fl.y} ${fr.x},${fr.y} ${ftr.x},${ftr.y} ${ftl.x},${ftl.y}"
-      fill="none" stroke="#f4a535" stroke-width="2" stroke-dasharray="8,4"/>
+      fill="none" stroke="#e8a838" stroke-width="2" stroke-dasharray="8,4"/>
     <polygon points="${ftl.x},${ftl.y} ${ftr.x},${ftr.y} ${btr.x},${btr.y} ${btl.x},${btl.y}"
-      fill="#2e3550" stroke="#f4a535" stroke-width="1.5"/>
-    <line x1="${fl.x}" y1="${fl.y+22}" x2="${fr.x}" y2="${fr.y+22}" stroke="#8b90a0" stroke-width="1"/>
-    <line x1="${fl.x}" y1="${fl.y+10}" x2="${fl.x}" y2="${fl.y+26}" stroke="#8b90a0" stroke-width="1"/>
-    <line x1="${fr.x}" y1="${fr.y+10}" x2="${fr.x}" y2="${fr.y+26}" stroke="#8b90a0" stroke-width="1"/>
-    <text x="${(fl.x+fr.x)/2}" y="${fl.y+40}" fill="#f4a535" font-size="13" text-anchor="middle" font-weight="600">${frac(dims.w)} W</text>
-    <line x1="${fr.x+18}" y1="${fr.y}" x2="${fr.x+18}" y2="${ftr.y}" stroke="#8b90a0" stroke-width="1"/>
-    <line x1="${fr.x+10}" y1="${fr.y}" x2="${fr.x+24}" y2="${fr.y}" stroke="#8b90a0" stroke-width="1"/>
-    <line x1="${fr.x+10}" y1="${ftr.y}" x2="${fr.x+24}" y2="${ftr.y}" stroke="#8b90a0" stroke-width="1"/>
-    <text x="${fr.x+32}" y="${(fr.y+ftr.y)/2+4}" fill="#f4a535" font-size="13" text-anchor="start" font-weight="600">${frac(dims.h)} H</text>
-    <line x1="${br.x+16}" y1="${br.y+8}" x2="${fr.x+16}" y2="${fr.y+8}" stroke="#8b90a0" stroke-width="1"/>
-    <text x="${(fr.x+br.x)/2+24}" y="${(fr.y+br.y)/2+24}" fill="#f4a535" font-size="13" text-anchor="middle" font-weight="600" transform="rotate(-25,${(fr.x+br.x)/2+24},${(fr.y+br.y)/2+24})">${frac(dims.d)} D</text>
+      fill="#252830" stroke="#e8a838" stroke-width="1.5"/>
+    <line x1="${fl.x}" y1="${fl.y+22}" x2="${fr.x}" y2="${fr.y+22}" stroke="#878c99" stroke-width="1"/>
+    <line x1="${fl.x}" y1="${fl.y+10}" x2="${fl.x}" y2="${fl.y+26}" stroke="#878c99" stroke-width="1"/>
+    <line x1="${fr.x}" y1="${fr.y+10}" x2="${fr.x}" y2="${fr.y+26}" stroke="#878c99" stroke-width="1"/>
+    <text x="${(fl.x+fr.x)/2}" y="${fl.y+40}" fill="#e8a838" font-family="Inter, sans-serif" font-size="13" text-anchor="middle" font-weight="600">${frac(dims.w)} W</text>
+    <line x1="${fr.x+18}" y1="${fr.y}" x2="${fr.x+18}" y2="${ftr.y}" stroke="#878c99" stroke-width="1"/>
+    <line x1="${fr.x+10}" y1="${fr.y}" x2="${fr.x+24}" y2="${fr.y}" stroke="#878c99" stroke-width="1"/>
+    <line x1="${fr.x+10}" y1="${ftr.y}" x2="${fr.x+24}" y2="${ftr.y}" stroke="#878c99" stroke-width="1"/>
+    <text x="${fr.x+32}" y="${(fr.y+ftr.y)/2+4}" fill="#e8a838" font-family="Inter, sans-serif" font-size="13" text-anchor="start" font-weight="600">${frac(dims.h)} H</text>
+    <line x1="${br.x+16}" y1="${br.y+8}" x2="${fr.x+16}" y2="${fr.y+8}" stroke="#878c99" stroke-width="1"/>
+    <text x="${(fr.x+br.x)/2+24}" y="${(fr.y+br.y)/2+24}" fill="#e8a838" font-family="Inter, sans-serif" font-size="13" text-anchor="middle" font-weight="600" transform="rotate(-25,${(fr.x+br.x)/2+24},${(fr.y+br.y)/2+24})">${frac(dims.d)} D</text>
   `;
 }
 
@@ -182,7 +182,7 @@ function drawLightDiagram() {
   canvas.style.height = H + 'px';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  ctx.fillStyle = '#1a1d27';
+  ctx.fillStyle = '#121417';
   ctx.fillRect(0, 0, W, H);
 
   // ── Geometry (inches) ──
@@ -240,7 +240,7 @@ function drawLightDiagram() {
   const wallThick = 8;
 
   // ── "Room" label ──
-  ctx.fillStyle = '#555d78';
+  ctx.fillStyle = '#4a4f5c';
   ctx.font = '13px sans-serif';
   ctx.textAlign = 'center';
   ctx.save();
@@ -250,12 +250,12 @@ function drawLightDiagram() {
   ctx.restore();
 
   // ── Enclosure interior background ──
-  ctx.fillStyle = '#1e2230';
+  ctx.fillStyle = '#1b1e24';
   ctx.fillRect(px(0), py(encHeight), encDepth * pxPerInch, encHeight * pxPerInch);
 
   // ── Draw the insert body ──
-  ctx.fillStyle = '#2a2f42';
-  ctx.strokeStyle = '#555d78';
+  ctx.fillStyle = '#22262e';
+  ctx.strokeStyle = '#4a4f5c';
   ctx.lineWidth = 2;
   const ixPx = px(insertFrontX);
   const iyPx = py(insertTopY);
@@ -265,13 +265,13 @@ function drawLightDiagram() {
   ctx.strokeRect(ixPx, iyPx, iwPx, ihPx);
 
   // Insert label
-  ctx.fillStyle = '#8b90a0';
+  ctx.fillStyle = '#878c99';
   ctx.font = 'bold 11px sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText(model.name, ixPx + iwPx / 2, py(cordSpace + insertH / 2) + 5);
 
   // ── Installation surface line ──
-  ctx.strokeStyle = '#8b90a0';
+  ctx.strokeStyle = '#878c99';
   ctx.lineWidth = 2;
   ctx.setLineDash([]);
   ctx.beginPath();
@@ -280,7 +280,7 @@ function drawLightDiagram() {
   ctx.stroke();
 
   // Installation surface label — two lines to fit on mobile
-  ctx.fillStyle = '#8b90a0';
+  ctx.fillStyle = '#878c99';
   ctx.font = '10px sans-serif';
   ctx.textAlign = 'left';
   ctx.fillText('Installation', px(encDepth) + wallThick + 4, py(insertTopY) - 2);
@@ -288,21 +288,21 @@ function drawLightDiagram() {
 
   // ── Cord space label ──
   if (cordSpace > 0) {
-    ctx.fillStyle = '#555d78';
+    ctx.fillStyle = '#4a4f5c';
     ctx.font = '9px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('Cord / wiring space', ixPx + iwPx / 2, py(cordSpace / 2) + 3);
   }
 
   // ── LED light source strip ──
-  ctx.fillStyle = '#f4a535';
-  ctx.shadowColor = '#f4a535';
+  ctx.fillStyle = '#e8a838';
+  ctx.shadowColor = '#e8a838';
   ctx.shadowBlur = 14;
   ctx.fillRect(px(ledFrontX), py(ledY) - 2, model.lightWidth * pxPerInch, 5);
   ctx.shadowBlur = 0;
 
   // Light path label (above LED strip, raised to avoid angle arc overlap)
-  ctx.fillStyle = '#f4a535';
+  ctx.fillStyle = '#e8a838';
   ctx.font = 'bold 10px sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('LIGHT PATH', px((ledFrontX + ledBackX) / 2), py(ledY) - 28);
@@ -335,7 +335,7 @@ function drawLightDiagram() {
     const backConeX = ledBackX + backT * (backClampX - ledBackX);
 
     ctx.globalAlpha = 0.12;
-    ctx.fillStyle = '#f4a535';
+    ctx.fillStyle = '#e8a838';
     ctx.beginPath();
     ctx.moveTo(px(ledFrontX), py(ledY));
     ctx.lineTo(px(frontConeX), py(encHeight));
@@ -347,7 +347,7 @@ function drawLightDiagram() {
   ctx.restore();
 
   // ── Front light ray line ──
-  ctx.strokeStyle = '#f4a535';
+  ctx.strokeStyle = '#e8a838';
   ctx.lineWidth = 2;
   ctx.setLineDash([8, 5]);
   ctx.beginPath();
@@ -357,7 +357,7 @@ function drawLightDiagram() {
   ctx.setLineDash([]);
 
   // ── Back light ray line ──
-  ctx.strokeStyle = '#e8611a';
+  ctx.strokeStyle = '#d45a20';
   ctx.lineWidth = 1.5;
   ctx.setLineDash([8, 5]);
   ctx.beginPath();
@@ -367,7 +367,7 @@ function drawLightDiagram() {
   ctx.setLineDash([]);
 
   // ── Enclosure walls ──
-  ctx.fillStyle = '#363c52';
+  ctx.fillStyle = '#2c3038';
 
   // Floor
   ctx.fillRect(px(0) - wallThick, py(0), encDepth * pxPerInch + wallThick * 2, wallThick);
@@ -397,7 +397,7 @@ function drawLightDiagram() {
 
   // ── Light trap soffit ──
   if (setback > 0 && lightTrapBotY < encHeight) {
-    ctx.fillStyle = '#3a4160';
+    ctx.fillStyle = '#2c3038';
     const soffitH = 4;
     ctx.fillRect(px(0), py(lightTrapBotY) - soffitH / 2, Math.min(setback, setback + 0.3) * pxPerInch, soffitH);
 
@@ -416,13 +416,13 @@ function drawLightDiagram() {
   // ── Front angle arc (from installation surface horizontal to front light path) ──
   const arcR = Math.min(24, Math.max(14, (setback + model.lightOffset) * pxPerInch * 0.15));
   if (arcR > 10) {
-    ctx.strokeStyle = '#f4a535';
+    ctx.strokeStyle = '#e8a838';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.arc(px(ledFrontX), py(ledY), arcR, frontAngleRad - Math.PI, Math.PI, true);
     ctx.stroke();
 
-    ctx.fillStyle = '#f4a535';
+    ctx.fillStyle = '#e8a838';
     ctx.font = '10px sans-serif';
     ctx.textAlign = 'right';
     const labelAngle = frontAngleRad / 2 - Math.PI;
@@ -436,13 +436,13 @@ function drawLightDiagram() {
   // ── Back angle arc ──
   const backArcR = Math.min(25, backHorizDist * pxPerInch * 0.2);
   if (backArcR > 10 && backHorizDist > 0.5) {
-    ctx.strokeStyle = '#e8611a';
+    ctx.strokeStyle = '#d45a20';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.arc(px(ledBackX), py(ledY), backArcR, -backAngleRad, 0, false);
     ctx.stroke();
 
-    ctx.fillStyle = '#e8611a';
+    ctx.fillStyle = '#d45a20';
     ctx.font = '10px sans-serif';
     ctx.textAlign = 'left';
     const bLabelAngle = -backAngleRad / 2;
@@ -454,7 +454,7 @@ function drawLightDiagram() {
   }
 
   // ── Redraw walls on top for clean edges ──
-  ctx.fillStyle = '#363c52';
+  ctx.fillStyle = '#2c3038';
   ctx.fillRect(px(0) - wallThick, py(0), encDepth * pxPerInch + wallThick * 2, wallThick);
   ctx.fillRect(px(0) - wallThick, py(encHeight) - wallThick, encDepth * pxPerInch + wallThick * 2, wallThick);
   ctx.fillRect(px(encDepth), py(encHeight) - wallThick, wallThick, encHeight * pxPerInch + wallThick * 2);
@@ -528,7 +528,7 @@ function drawLightDiagram() {
   const arrowX = px(0) - wallThick - 18;
   const moArrowBotPy = py(ledY);
   const moArrowTopPy = py(Math.min(actualOpeningTopY, encHeight));
-  const arrowColor = isOverMax ? '#ff5555' : '#f4a535';
+  const arrowColor = isOverMax ? '#ff5555' : '#e8a838';
 
   ctx.strokeStyle = arrowColor;
   ctx.lineWidth = 1.5;
@@ -632,7 +632,7 @@ function drawLightDiagram() {
 
   // ── FRONT / BACK labels (below floor) ──
   const frontBackPy = py(0) + wallThick + 22;
-  ctx.fillStyle = '#8b90a0';
+  ctx.fillStyle = '#878c99';
   ctx.font = '12px sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('FRONT', px(0), frontBackPy);
@@ -644,11 +644,11 @@ function drawLightDiagram() {
   ctx.font = '10px sans-serif';
   ctx.textAlign = 'left';
 
-  ctx.fillStyle = '#f4a535';
+  ctx.fillStyle = '#e8a838';
   ctx.fillRect(legendX, legendY, 12, 3);
   ctx.fillText('Front light path', legendX + 18, legendY + 4);
 
-  ctx.fillStyle = '#e8611a';
+  ctx.fillStyle = '#d45a20';
   ctx.fillRect(legendX, legendY + 18, 12, 3);
   ctx.fillText('Back light path', legendX + 18, legendY + 22);
 
@@ -665,7 +665,7 @@ function drawLightDiagram() {
   ctx.fillText('Recommended max', legendX + 18, legendY + 76);
 
   // Cross-section label
-  ctx.fillStyle = '#555d78';
+  ctx.fillStyle = '#4a4f5c';
   ctx.font = '10px sans-serif';
   ctx.textAlign = 'left';
   ctx.fillText('Cross-section / side view', 14, 16);
