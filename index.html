@@ -3,193 +3,268 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aquafire Fireplace Enclosure Guide</title>
+  <title>Aquafire Hub | Your Complete Guide</title>
+  <meta name="description" content="The complete guide to your Aquafire water vapor fireplace.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Reset & Tokens ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #121417; --surface: #1b1e24; --surface-alt: #22262e;
+      --border: #2c3038; --text: #e4e5e9; --text-muted: #878c99;
+      --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
+      --amber: #e8a838; --radius: 14px; --radius-sm: 8px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  </style>
+  <link rel="stylesheet" href="hub.css">
+  <style>
+    /* ── Hero ── */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 56px 0 48px; text-align: center;
+      background: linear-gradient(180deg, #241b1b 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-glow {
+      position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 260px; border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(200,40,40,0.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; }
+    .hero-logo { height: 28px; width: auto; margin-bottom: 16px; opacity: 0.7; }
+    .hero h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.5px; line-height: 1.2; }
+    .hero-sub { color: var(--text-muted); margin-top: 10px; font-size: 1rem; }
+
+    /* ── Bento Grid ── */
+    .bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 40px 0; }
+    .tile-wide { grid-column: span 2; }
+    .bento-tile {
+      display: flex; flex-direction: column; gap: 8px;
+      padding: 28px 28px 24px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      text-decoration: none; color: var(--text);
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .bento-tile:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    .bento-tile::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; opacity: 0; transition: opacity 0.2s;
+    }
+    .bento-tile:hover::before { opacity: 1; }
+
+    .accent-red::before { background: var(--red); }
+    .accent-red:hover { border-color: rgba(192,57,43,0.3); }
+    .accent-amber::before { background: var(--amber); }
+    .accent-amber:hover { border-color: rgba(232,168,56,0.3); }
+    .accent-blue::before { background: #3b82f6; }
+    .accent-blue:hover { border-color: rgba(59,130,246,0.3); }
+    .accent-gradient::before { background: linear-gradient(90deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .accent-gradient:hover { border-color: rgba(220,39,67,0.3); }
+    .accent-yt-red::before { background: #ff0000; }
+    .accent-yt-red:hover { border-color: rgba(255,0,0,0.25); }
+    .accent-muted::before { background: var(--border); }
+    .accent-muted:hover { border-color: rgba(255,255,255,0.08); }
+
+    .tile-icon { font-size: 1.6rem; line-height: 1; margin-bottom: 4px; }
+    .tile-title { font-size: 1.1rem; font-weight: 700; line-height: 1.3; }
+    .tile-desc { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; flex: 1; }
+    .tile-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.82rem; font-weight: 600; margin-top: 4px; transition: gap 0.15s;
+    }
+    .bento-tile:hover .tile-cta { gap: 10px; }
+    .accent-red .tile-cta { color: var(--red); }
+    .accent-amber .tile-cta { color: var(--amber); }
+    .accent-blue .tile-cta { color: #3b82f6; }
+    .accent-gradient .tile-cta { color: #dc2743; }
+    .accent-yt-red .tile-cta { color: #ff0000; }
+
+    /* Testimonial */
+    .tile-testimonial { justify-content: center; cursor: default; }
+    .tile-testimonial .tile-title {
+      font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 500;
+      font-style: italic; color: var(--text-muted); line-height: 1.5;
+    }
+    .tile-testimonial .tile-desc { font-size: 0.8rem; font-style: normal; margin-top: 4px; }
+    .tile-testimonial:hover { transform: none; box-shadow: none; }
+
+    /* CTA tile */
+    .tile-cta-type {
+      background: linear-gradient(135deg, rgba(192,57,43,0.08) 0%, var(--surface) 100%);
+      border-color: rgba(192,57,43,0.2); text-align: center; align-items: center;
+    }
+    .tile-cta-type .tile-cta {
+      background: var(--red); color: #fff; padding: 10px 28px;
+      border-radius: var(--radius-sm); margin-top: 8px; font-size: 0.9rem;
+    }
+    .tile-cta-type:hover .tile-cta { background: var(--red-dark); }
+
+    .arrow-icon { width: 14px; height: 14px; vertical-align: middle; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .bento { grid-template-columns: repeat(2, 1fr); }
+      .tile-wide { grid-column: span 2; }
+    }
+    @media (max-width: 560px) {
+      .bento { grid-template-columns: 1fr; gap: 12px; }
+      .tile-wide { grid-column: span 1; }
+      .bento-tile { padding: 22px 20px 18px; }
+      .hero h1 { font-size: 1.6rem; }
+      .hero { padding: 40px 0 36px; }
+    }
+  </style>
 </head>
 <body>
   <nav class="site-nav">
     <div class="container nav-inner">
-      <a href="index.html" class="nav-logo">
+      <a href="/" class="nav-logo">
         <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
       </a>
       <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links">
-        <li><a href="index.html" class="active">Enclosure Guide</a></li>
+        <li><a href="/" class="active">Home</a></li>
+        <li><a href="getting-started.html">Getting Started</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="enclosure-guide.html">Enclosure Guide</a></li>
         <li><a href="water-care.html">Water Care</a></li>
+        <li><a href="support.html">Support</a></li>
+        <li class="nav-cta">
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener" class="btn-primary btn-sm">Shop Aquafire</a>
+        </li>
       </ul>
     </div>
   </nav>
 
-  <header>
-    <div class="header-glow"></div>
-    <div class="container header-inner">
-      <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" class="brand-logo">
-      <h1>Enclosure Design Guide</h1>
-      <p class="subtitle">Configure your fireplace enclosure dimensions with precision</p>
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-glow"></div>
+    <div class="container hero-content">
+      <img
+        src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031"
+        alt="Aquafire" class="hero-logo"
+      >
+      <h1>Your Complete Aquafire Guide</h1>
+      <p class="hero-sub">Everything you need to plan, install, and maintain your water vapor fireplace.</p>
     </div>
   </header>
 
+  <!-- Bento Grid -->
   <main class="container">
-    <!-- Step 1: Model Selection -->
-    <section class="card" id="model-selection">
-      <div class="step-row">
-        <div class="step-num">1</div>
-        <div>
-          <h2>Choose Your Model</h2>
-          <p class="card-desc">Select the Aquafire insert and size for your project.</p>
-        </div>
+    <div class="bento">
+      <a href="getting-started.html" class="bento-tile tile-wide accent-red">
+        <span class="tile-icon">&#x1f680;</span>
+        <h2 class="tile-title">Getting Started</h2>
+        <p class="tile-desc">New to Aquafire? Everything you need to know to plan, install, and enjoy your water vapor fireplace.</p>
+        <span class="tile-cta">Start Here <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+
+      <a href="enclosure-guide.html" class="bento-tile accent-amber">
+        <span class="tile-icon">&#x1f4d0;</span>
+        <h2 class="tile-title">Enclosure Builder</h2>
+        <p class="tile-desc">Interactive calculator for enclosure dimensions, cutout sizes, and light trap configuration.</p>
+        <span class="tile-cta">Open Calculator <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+
+      <a href="water-care.html" class="bento-tile accent-blue">
+        <span class="tile-icon">&#x1f4a7;</span>
+        <h2 class="tile-title">Water Care Guide</h2>
+        <p class="tile-desc">Water hardness calculator and Vapor Pure softener setup for crystal-clear flames.</p>
+        <span class="tile-cta">Check Water <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+
+      <a href="quick-start.html" class="bento-tile accent-amber">
+        <span class="tile-icon">&#x26a1;</span>
+        <h2 class="tile-title">Quick Start Guides</h2>
+        <p class="tile-desc">Step-by-step installation for every Aquafire model &mdash; Original, Pro, and Lite.</p>
+        <span class="tile-cta">View Guides <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+
+      <a href="support.html" class="bento-tile accent-red">
+        <span class="tile-icon">&#x1f6e0;</span>
+        <h2 class="tile-title">Support Hub</h2>
+        <p class="tile-desc">Register your warranty, submit claims, troubleshooting guides, and FAQs.</p>
+        <span class="tile-cta">Get Help <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+
+      <a href="https://www.aquafire.com" target="_blank" rel="noopener" class="bento-tile accent-amber">
+        <span class="tile-icon">&#x1f6d2;</span>
+        <h2 class="tile-title">Shop Accessories</h2>
+        <p class="tile-desc">Complementary products, replacement parts, and everything to enhance your setup.</p>
+        <span class="tile-cta">Browse Shop <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+
+      <div class="bento-tile accent-muted tile-testimonial">
+        <h2 class="tile-title">&ldquo;Absolutely stunning &mdash; guests always ask if it&rsquo;s real fire.&rdquo;</h2>
+        <p class="tile-desc">&mdash; Sarah M., Aquafire Pro owner</p>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="model">Model</label>
-          <select id="model">
-            <option value="original">Aquafire Original</option>
-            <option value="pro">Aquafire Pro</option>
-            <option value="lite">Aquafire Lite</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="size">Size</label>
-          <select id="size">
-            <option value="20">20"</option>
-            <option value="40">40"</option>
-            <option value="60" selected>60"</option>
-          </select>
-        </div>
-      </div>
-    </section>
+      <a href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener" class="bento-tile accent-gradient">
+        <span class="tile-icon">&#x1f4f8;</span>
+        <h2 class="tile-title">Follow @aquafire</h2>
+        <p class="tile-desc">Design inspiration, installations, and behind-the-scenes.</p>
+        <span class="tile-cta">Instagram <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
 
-    <!-- Step 2: Cutout Dimensions -->
-    <section class="card" id="cutout-section">
-      <div class="step-row">
-        <div class="step-num">2</div>
-        <div>
-          <h2>Cutout Dimensions</h2>
-          <p class="card-desc">Your enclosure cutout must be precisely sized. The insert hangs from flanges only &frac12;" thick&mdash;accuracy is critical.</p>
-        </div>
-      </div>
+      <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener" class="bento-tile accent-yt-red">
+        <span class="tile-icon">&#x25b6;</span>
+        <h2 class="tile-title">Aquafire on YouTube</h2>
+        <p class="tile-desc">Tutorials, install walkthroughs, and flame demos.</p>
+        <span class="tile-cta">Watch Now <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
 
-      <div class="cutout-layout">
-        <div class="dimensions-display">
-          <div class="dim-box">
-            <span class="dim-label">Width</span>
-            <span class="dim-value" id="cutout-w">&mdash;</span>
-          </div>
-          <div class="dim-box">
-            <span class="dim-label">Depth</span>
-            <span class="dim-value" id="cutout-d">&mdash;</span>
-          </div>
-          <div class="dim-box">
-            <span class="dim-label">Height</span>
-            <span class="dim-value" id="cutout-h">&mdash;</span>
-          </div>
-        </div>
-
-        <div class="cutout-diagram-wrapper">
-          <svg id="cutout-diagram" xmlns="http://www.w3.org/2000/svg"></svg>
-        </div>
-      </div>
-    </section>
-
-    <!-- Step 3: Light Trap Calculator -->
-    <section class="card card--wide" id="light-trap-section">
-      <div class="step-row">
-        <div class="step-num">3</div>
-        <div>
-          <h2>Light Trap Calculator</h2>
-          <p class="card-desc">Size the viewing opening to prevent LED light from escaping. Adjust the setbacks and opening height, then watch the cross-section update in real time.</p>
-        </div>
-      </div>
-
-      <div class="calculator-layout">
-        <div class="controls-panel">
-          <div class="form-group">
-            <label for="setback-slider">Front Setback</label>
-            <div class="slider-row">
-              <input type="range" id="setback-slider" min="0" max="21" step="0.5" value="6">
-              <span class="slider-value" id="setback-display">6.0"</span>
-            </div>
-            <p class="hint">Distance from the insert's front edge to the light trap above.</p>
-          </div>
-
-          <div class="form-group">
-            <label for="back-setback-slider">Back Setback</label>
-            <div class="slider-row">
-              <input type="range" id="back-setback-slider" min="0" max="21" step="0.5" value="2">
-              <span class="slider-value" id="back-setback-display">2.0"</span>
-            </div>
-            <p class="hint">Distance from the back of the insert to the enclosure wall.</p>
-          </div>
-
-          <div class="form-group">
-            <label for="opening-slider">Opening Height</label>
-            <div class="slider-row">
-              <input type="range" id="opening-slider" min="0" max="50" step="0.5" value="15">
-              <span class="slider-value" id="opening-display">15.0"</span>
-            </div>
-            <p class="hint">Viewing opening above the installation surface. Exceeding the max allows light to escape.</p>
-          </div>
-
-          <div class="result-card">
-            <span class="result-label">Recommended Max Opening</span>
-            <span class="result-value" id="max-opening">&mdash;</span>
-            <span class="result-sub">maximum before light escape</span>
-          </div>
-
-          <p class="formula-note">
-            The max opening is based on your setback distance and the light angle of your model, rounded down to the nearest inch.
-          </p>
-        </div>
-
-        <div class="diagram-panel">
-          <canvas id="light-diagram" width="700" height="500"></canvas>
-        </div>
-      </div>
-    </section>
-
-    <!-- Reference Table -->
-    <section class="card" id="reference-section">
-      <h2>Quick Reference</h2>
-      <p class="card-desc">All model specifications at a glance.</p>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Model</th>
-              <th>Size</th>
-              <th>Cutout W</th>
-              <th>Cutout D</th>
-              <th>Cutout H</th>
-              <th>Front Angle</th>
-              <th>Back Angle</th>
-            </tr>
-          </thead>
-          <tbody id="ref-table-body"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="card cta-section">
-      <h2>Ready to Get Started?</h2>
-      <a href="https://www.aquafire.com" class="cta-button" target="_blank" rel="noopener">Shop Aquafire</a>
-      <a href="https://www.aquafire.com/pages/contact" class="cta-link" target="_blank" rel="noopener">or contact sales to get a custom quote</a>
-    </section>
+      <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="bento-tile tile-wide accent-red tile-cta-type">
+        <span class="tile-icon">&#x1f4ac;</span>
+        <h2 class="tile-title">Need a Custom Quote?</h2>
+        <p class="tile-desc">Our team can help with custom enclosures, commercial projects, and bulk orders.</p>
+        <span class="tile-cta">Contact Sales <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+    </div>
   </main>
 
-  <footer>
-    <div class="container">
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" height="20">
+        <p>The complete guide to your Aquafire water vapor fireplace.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Guides</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="quick-start.html">Quick Start</a>
+          <a href="enclosure-guide.html">Enclosure Guide</a>
+          <a href="water-care.html">Water Care</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="support.html">Support Hub</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom container">
       <p>&copy; 2026 Aquafire. All rights reserved.</p>
     </div>
   </footer>
 
-  <script src="app.js"></script>
   <script>
     const toggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');

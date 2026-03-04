@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Hub | Aquafire Hub</title>
+  <meta name="description" content="Warranty registration, troubleshooting, and support for your Aquafire fireplace.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #121417; --surface: #1b1e24; --border: #2c3038;
+      --text: #e4e5e9; --text-muted: #878c99;
+      --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
+      --radius: 14px; --radius-sm: 8px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    h1, h2 { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .support-card {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; padding: 36px 24px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); text-decoration: none; color: var(--text);
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .support-card:hover { transform: translateY(-2px); border-color: rgba(192,57,43,0.3); }
+    .support-icon { font-size: 2rem; margin-bottom: 12px; }
+    .support-card h2 { font-size: 1rem; margin-bottom: 6px; }
+    .support-card p { color: var(--text-muted); font-size: 0.85rem; }
+  </style>
+  <link rel="stylesheet" href="hub.css">
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="getting-started.html">Getting Started</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="enclosure-guide.html">Enclosure Guide</a></li>
+        <li><a href="water-care.html">Water Care</a></li>
+        <li><a href="support.html" class="active">Support</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Support Hub</h1>
+      <p class="page-sub">Warranty, troubleshooting, and everything you need to keep your Aquafire running perfectly.</p>
+    </div>
+  </header>
+
+  <main class="container page-body">
+    <div class="support-grid">
+      <a href="#" class="support-card">
+        <span class="support-icon">&#x1f4dd;</span>
+        <h2>Register Warranty</h2>
+        <p>Activate your warranty coverage.</p>
+      </a>
+      <a href="#" class="support-card">
+        <span class="support-icon">&#x1f527;</span>
+        <h2>Submit a Claim</h2>
+        <p>File a warranty or service claim.</p>
+      </a>
+      <a href="#" class="support-card">
+        <span class="support-icon">&#x2753;</span>
+        <h2>Troubleshooting</h2>
+        <p>Common issues and fixes.</p>
+      </a>
+      <a href="#" class="support-card">
+        <span class="support-icon">&#x1f4da;</span>
+        <h2>FAQs</h2>
+        <p>Frequently asked questions.</p>
+      </a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" height="20">
+        <p>The complete guide to your Aquafire water vapor fireplace.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Guides</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="quick-start.html">Quick Start</a>
+          <a href="enclosure-guide.html">Enclosure Guide</a>
+          <a href="water-care.html">Water Care</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="support.html">Support Hub</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom container"><p>&copy; 2026 Aquafire. All rights reserved.</p></div>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle?.addEventListener('click', () => {
+      const open = navLinks?.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  </script>
+</body>
+</html>

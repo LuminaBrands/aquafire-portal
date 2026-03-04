@@ -1,13 +1,41 @@
----
-import Base from '../layouts/Base.astro';
-import '../styles/enclosure.css';
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Fireplace Enclosure Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="hub.css">
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="getting-started.html">Getting Started</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="enclosure-guide.html" class="active">Enclosure Guide</a></li>
+        <li><a href="water-care.html">Water Care</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+    </div>
+  </nav>
 
-<Base title="Enclosure Design Guide" description="Interactive calculator for enclosure dimensions, cutout sizes, and light trap configuration.">
-  <header class="enc-header">
-    <div class="container">
+  <header>
+    <div class="header-glow"></div>
+    <div class="container header-inner">
+      <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" class="brand-logo">
       <h1>Enclosure Design Guide</h1>
-      <p class="enc-sub">Configure your fireplace enclosure dimensions with precision</p>
+      <p class="subtitle">Configure your fireplace enclosure dimensions with precision</p>
     </div>
   </header>
 
@@ -21,6 +49,7 @@ import '../styles/enclosure.css';
           <p class="card-desc">Select the Aquafire insert and size for your project.</p>
         </div>
       </div>
+
       <div class="form-row">
         <div class="form-group">
           <label for="model">Model</label>
@@ -50,6 +79,7 @@ import '../styles/enclosure.css';
           <p class="card-desc">Your enclosure cutout must be precisely sized. The insert hangs from flanges only &frac12;" thick&mdash;accuracy is critical.</p>
         </div>
       </div>
+
       <div class="cutout-layout">
         <div class="dimensions-display">
           <div class="dim-box">
@@ -65,6 +95,7 @@ import '../styles/enclosure.css';
             <span class="dim-value" id="cutout-h">&mdash;</span>
           </div>
         </div>
+
         <div class="cutout-diagram-wrapper">
           <svg id="cutout-diagram" xmlns="http://www.w3.org/2000/svg"></svg>
         </div>
@@ -80,6 +111,7 @@ import '../styles/enclosure.css';
           <p class="card-desc">Size the viewing opening to prevent LED light from escaping. Adjust the setbacks and opening height, then watch the cross-section update in real time.</p>
         </div>
       </div>
+
       <div class="calculator-layout">
         <div class="controls-panel">
           <div class="form-group">
@@ -90,6 +122,7 @@ import '../styles/enclosure.css';
             </div>
             <p class="hint">Distance from the insert's front edge to the light trap above.</p>
           </div>
+
           <div class="form-group">
             <label for="back-setback-slider">Back Setback</label>
             <div class="slider-row">
@@ -98,6 +131,7 @@ import '../styles/enclosure.css';
             </div>
             <p class="hint">Distance from the back of the insert to the enclosure wall.</p>
           </div>
+
           <div class="form-group">
             <label for="opening-slider">Opening Height</label>
             <div class="slider-row">
@@ -106,15 +140,18 @@ import '../styles/enclosure.css';
             </div>
             <p class="hint">Viewing opening above the installation surface. Exceeding the max allows light to escape.</p>
           </div>
+
           <div class="result-card">
             <span class="result-label">Recommended Max Opening</span>
             <span class="result-value" id="max-opening">&mdash;</span>
             <span class="result-sub">maximum before light escape</span>
           </div>
+
           <p class="formula-note">
             The max opening is based on your setback distance and the light angle of your model, rounded down to the nearest inch.
           </p>
         </div>
+
         <div class="diagram-panel">
           <canvas id="light-diagram" width="700" height="500"></canvas>
         </div>
@@ -151,27 +188,39 @@ import '../styles/enclosure.css';
     </section>
   </main>
 
-  <script is:inline src="/enclosure-app.js"></script>
-</Base>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" height="20">
+        <p>The complete guide to your Aquafire water vapor fireplace.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Guides</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="quick-start.html">Quick Start</a>
+          <a href="enclosure-guide.html">Enclosure Guide</a>
+          <a href="water-care.html">Water Care</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="support.html">Support Hub</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom container"><p>&copy; 2026 Aquafire. All rights reserved.</p></div>
+  </footer>
 
-<style>
-  .enc-header {
-    padding: 48px 0 40px;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, #241b1b 0%, var(--bg) 100%);
-    position: relative;
-  }
-  .enc-header h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    line-height: 1.2;
-  }
-  .enc-sub {
-    color: var(--text-muted);
-    margin-top: 8px;
-    font-size: 0.95rem;
-  }
-</style>
+  <script src="app.js"></script>
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle?.addEventListener('click', () => {
+      const open = navLinks?.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  </script>
+</body>
+</html>
