@@ -306,6 +306,12 @@ function drawLightDiagram() {
   ctx.textAlign = 'center';
   ctx.fillText('LIGHT PATH', px((ledFrontX + ledBackX) / 2), py(ledY) - 28);
 
+  // ── Back ray clamping (needed by both cone fill and back ray line) ──
+  const backClampY = Math.min(backRayEndY, encHeight);
+  const backClampX = backRayEndY <= encHeight
+    ? backRayEndX
+    : ledBackX + (encHeight - ledY) / Math.tan(backAngleRad);
+
   // ── Light cone fill (clipped to enclosure interior) ──
   // Use actual ray line directions so shading aligns perfectly with drawn rays
   const riseToTop = encHeight - ledY;
@@ -350,11 +356,6 @@ function drawLightDiagram() {
   ctx.setLineDash([]);
 
   // ── Back light ray line ──
-  const backClampY = Math.min(backRayEndY, encHeight);
-  const backClampX = backRayEndY <= encHeight
-    ? backRayEndX
-    : ledBackX + (encHeight - ledY) / Math.tan(backAngleRad);
-
   ctx.strokeStyle = '#e8611a';
   ctx.lineWidth = 1.5;
   ctx.setLineDash([8, 5]);
