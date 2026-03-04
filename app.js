@@ -116,16 +116,18 @@ function drawCutoutDiagram(dims) {
   const modelKey = modelSelect.value;
   const modelName = MODELS[modelKey].name;
   // ── Physical sizing ──
+  // 4" clearance on every side of the cutout
+  const clearance = 4;
   const minEncHInches = 14;
-  const encHInches = Math.max(minEncHInches, dims.h + 4);
+  const encHInches = Math.max(minEncHInches, dims.h + clearance);
 
-  // Scale: map inches → SVG px, fit widest model (60.25") into ~420px
-  const scale = 420 / 60.25;
+  // Scale: map inches → SVG px, fit widest model (60.25"+8") into ~420px
+  const scale = 420 / (60.25 + clearance * 2);
   const w = dims.w * scale;
   const d = dims.d * scale;
   const h = dims.h * scale;
-  const encW = (dims.w + 3) * scale;
-  const encD = (dims.d + 4) * scale;
+  const encW = (dims.w + clearance * 2) * scale;  // 4" each side
+  const encD = (dims.d + clearance * 2) * scale;  // 4" front and back
   const encH = encHInches * scale;
 
   // Isometric projection
@@ -202,8 +204,9 @@ function drawCutoutDiagram(dims) {
       if (sublabel) s += `<text x="${mx-16-off}" y="${my+12}" fill="${mutedCol}" font-family="Inter,sans-serif" font-size="11" text-anchor="end" letter-spacing="2">${sublabel}</text>`;
     } else if (side === 'along') {
       const angle = Math.atan2(dy,dx) * 180 / Math.PI;
-      s += `<text x="${mx+nx*3}" y="${my+ny*3-6}" fill="${col}" font-family="Inter,sans-serif" font-size="16" text-anchor="middle" font-weight="700" transform="rotate(${angle},${mx+nx*3},${my+ny*3-6})">${label}</text>`;
-      if (sublabel) s += `<text x="${mx+nx*3}" y="${my+ny*3+10}" fill="${mutedCol}" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" letter-spacing="2" transform="rotate(${angle},${mx+nx*3},${my+ny*3+10})">${sublabel}</text>`;
+      const tOff = 7; // perpendicular offset multiplier to clear the line
+      s += `<text x="${mx+nx*tOff}" y="${my+ny*tOff-6}" fill="${col}" font-family="Inter,sans-serif" font-size="16" text-anchor="middle" font-weight="700" transform="rotate(${angle},${mx+nx*tOff},${my+ny*tOff-6})">${label}</text>`;
+      if (sublabel) s += `<text x="${mx+nx*tOff}" y="${my+ny*tOff+10}" fill="${mutedCol}" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" letter-spacing="2" transform="rotate(${angle},${mx+nx*tOff},${my+ny*tOff+10})">${sublabel}</text>`;
     }
     return s;
   }
@@ -246,9 +249,6 @@ function drawCutoutDiagram(dims) {
     <filter id="cutout-shadow">
       <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#e8a838" flood-opacity="0.25"/>
     </filter>
-    <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="10" markerWidth="10" markerHeight="10" orient="auto">
-      <path d="M1,0 L5,10 L9,0" fill="#e8a838" opacity="0.8"/>
-    </marker>
   </defs>`;
 
   // ── Enclosure box ──
@@ -290,17 +290,19 @@ function drawCutoutDiagram(dims) {
   out += `<text x="${cutCx}" y="${cutCy + 14}" fill="#e8a838" font-family="Inter,sans-serif"
     font-size="10" text-anchor="middle" font-weight="400" letter-spacing="1" opacity="0.7">Installation Surface</text>`;
 
-  // ── Drop-in arrows (purely vertical) ──
+  // ── Drop-in arrows (purely vertical, manual arrowheads) ──
   const arrowCount = 3;
   for (let i = 0; i < arrowCount; i++) {
     const t = (i + 1) / (arrowCount + 1);
-    // Use cutout front edge X positions so arrows are vertical and aligned with dashed lines
     const ax = cFL.x + t * (cFR.x - cFL.x);
     const topY = iFL.y + 12;
     const botY = cFL.y - 8;
-    out += `<line x1="${ax}" y1="${topY}" x2="${ax}" y2="${botY}"
-      stroke="#e8a838" stroke-width="1.8" stroke-dasharray="5,5" opacity="0.55"
-      marker-end="url(#arrow-down)"/>`;
+    // Dashed line (stop short for arrowhead)
+    out += `<line x1="${ax}" y1="${topY}" x2="${ax}" y2="${botY - 10}"
+      stroke="#e8a838" stroke-width="1.8" stroke-dasharray="5,5" opacity="0.55"/>`;
+    // Arrowhead pointing down
+    out += `<polygon points="${ax},${botY} ${ax-5},${botY-12} ${ax+5},${botY-12}"
+      fill="#e8a838" opacity="0.7"/>`;
   }
 
   // ── Insert box ──
