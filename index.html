@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Fireplace Enclosure Guide</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Aquafire Enclosure Guide</h1>
+      <p class="subtitle">Design your perfect fireplace enclosure with confidence</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Step 1: Model Selection -->
+    <section class="card" id="model-selection">
+      <div class="step-badge">Step 1</div>
+      <h2>Select Your Aquafire Model</h2>
+      <p>Choose your fireplace model and size to get started.</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="model">Model</label>
+          <select id="model">
+            <option value="original">Aquafire Original</option>
+            <option value="pro">Aquafire Pro</option>
+            <option value="lite">Aquafire Lite</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="size">Size</label>
+          <select id="size">
+            <option value="20">20"</option>
+            <option value="40">40"</option>
+            <option value="60">60"</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2: Cutout Dimensions -->
+    <section class="card" id="cutout-section">
+      <div class="step-badge">Step 2</div>
+      <h2>Recommended Cutout Dimensions</h2>
+      <p>Your enclosure cutout must be precisely sized. The Aquafire insert hangs from flanges that are only &frac12;" thick, so accuracy is critical.</p>
+
+      <div class="dimensions-display">
+        <div class="dim-box">
+          <span class="dim-label">Width</span>
+          <span class="dim-value" id="cutout-w">—</span>
+        </div>
+        <div class="dim-box">
+          <span class="dim-label">Depth</span>
+          <span class="dim-value" id="cutout-d">—</span>
+        </div>
+        <div class="dim-box">
+          <span class="dim-label">Height</span>
+          <span class="dim-value" id="cutout-h">—</span>
+        </div>
+      </div>
+
+      <div class="cutout-diagram-wrapper">
+        <svg id="cutout-diagram" viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- 3D isometric cutout -->
+        </svg>
+      </div>
+    </section>
+
+    <!-- Step 3: Light Trap Calculator -->
+    <section class="card" id="light-trap-section">
+      <div class="step-badge">Step 3</div>
+      <h2>Light Trap &amp; Maximum Opening Calculator</h2>
+      <p>The viewing opening must be sized correctly to prevent LED light from escaping the enclosure. Use the slider below to adjust the setback (how far the insert sits from the front face of your enclosure) and see how it affects the maximum opening height.</p>
+
+      <div class="calculator-layout">
+        <div class="controls-panel">
+          <div class="form-group">
+            <label for="setback-slider">Setback Distance</label>
+            <div class="slider-row">
+              <input type="range" id="setback-slider" min="0" max="8" step="0.125" value="1">
+              <span class="slider-value" id="setback-display">1.000"</span>
+            </div>
+            <p class="hint">Horizontal distance from the Aquafire's front edge to the inside edge of the light trap above.</p>
+          </div>
+
+          <div class="result-cards">
+            <div class="result-card primary">
+              <span class="result-label">Maximum Opening Height</span>
+              <span class="result-value" id="max-opening">—</span>
+              <span class="result-sub">to prevent light escape</span>
+            </div>
+            <div class="result-card">
+              <span class="result-label">Front Light Angle</span>
+              <span class="result-value" id="light-angle-display">—</span>
+            </div>
+            <div class="result-card">
+              <span class="result-label">Light Emit Offset</span>
+              <span class="result-value" id="offset-display">—</span>
+              <span class="result-sub">from front edge</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="diagram-panel">
+          <canvas id="light-diagram" width="700" height="500"></canvas>
+        </div>
+      </div>
+
+      <div class="formula-note">
+        <strong>Formula:</strong> Max Opening = (Setback + Offset) &times; tan(Light Angle)
+      </div>
+    </section>
+
+    <!-- Reference Table -->
+    <section class="card" id="reference-section">
+      <h2>Quick Reference: All Models</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Size</th>
+              <th>Cutout W</th>
+              <th>Cutout D</th>
+              <th>Cutout H</th>
+              <th>Front Angle</th>
+              <th>Back Angle</th>
+              <th>Light Offset</th>
+            </tr>
+          </thead>
+          <tbody id="ref-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Aquafire. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
