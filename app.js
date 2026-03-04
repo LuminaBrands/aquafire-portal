@@ -402,19 +402,19 @@ function drawLightDiagram() {
     ctx.setLineDash([]);
   }
 
-  // ── Front angle arc ──
-  const arcR = Math.min(30, (setback + model.lightOffset) * pxPerInch * 0.3);
-  if (arcR > 12) {
+  // ── Front angle arc (from installation surface horizontal to front light path) ──
+  const arcR = Math.min(24, Math.max(14, (setback + model.lightOffset) * pxPerInch * 0.15));
+  if (arcR > 10) {
     ctx.strokeStyle = '#f4a535';
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.arc(px(ledFrontX), py(ledY), arcR, Math.PI - frontAngleRad, Math.PI, true);
+    ctx.arc(px(ledFrontX), py(ledY), arcR, frontAngleRad - Math.PI, Math.PI, true);
     ctx.stroke();
 
     ctx.fillStyle = '#f4a535';
     ctx.font = '10px sans-serif';
     ctx.textAlign = 'right';
-    const labelAngle = Math.PI - frontAngleRad / 2;
+    const labelAngle = frontAngleRad / 2 - Math.PI;
     ctx.fillText(
       model.frontAngle + '°',
       px(ledFrontX) + Math.cos(labelAngle) * (arcR + 14),
@@ -463,10 +463,17 @@ function drawLightDiagram() {
     ctx.stroke();
     ctx.setLineDash([]);
 
+    // Check if Rec. Max label would overlap with Light Trap label
+    const lightTrapLabelPy = py(lightTrapBotY) - 8;
+    const recMaxDefaultPy = py(frontRayEndY) - 5;
+    const recMaxLabelPy = Math.abs(recMaxDefaultPy - lightTrapLabelPy) < 16
+      ? py(frontRayEndY) + 14   // move below the line if overlapping
+      : recMaxDefaultPy;
+
     ctx.fillStyle = '#4ade80';
     ctx.font = '9px sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('Rec. Max: ' + maxOpening + '"', px(0) + 4, py(frontRayEndY) - 5);
+    ctx.fillText('Rec. Max: ' + maxOpening + '"', px(0) + 4, recMaxLabelPy);
   }
 
   // ── Light escape visualization ──
@@ -553,8 +560,8 @@ function drawLightDiagram() {
   ctx.fillText(openLabel, 0, 0);
   ctx.restore();
 
-  // ── Front Setback dimension ──
-  const sbDimPy = py(0) + wallThick + 14;
+  // ── Front Setback dimension (near installation surface) ──
+  const sbDimPy = py(insertTopY) + 14;
   if (setback > 0) {
     ctx.strokeStyle = '#78b8f0';
     ctx.lineWidth = 1;
@@ -606,8 +613,8 @@ function drawLightDiagram() {
     }
   }
 
-  // ── FRONT / BACK labels (below setback dimensions) ──
-  const frontBackPy = sbDimPy + 28;
+  // ── FRONT / BACK labels (below floor) ──
+  const frontBackPy = py(0) + wallThick + 22;
   ctx.fillStyle = '#8b90a0';
   ctx.font = '12px sans-serif';
   ctx.textAlign = 'center';
