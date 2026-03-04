@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Care Guide | Aquafire</title>
+  <meta name="description" content="Water hardness calculator and Vapor Pure softener replacement timeline for your Aquafire.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="water-care-styles.css">
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Enclosure Guide</a></li>
+        <li><a href="water-care.html" class="active">Water Care</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="wc-header">
+    <div class="container">
+      <h1>Water Care Guide</h1>
+      <p class="wc-sub">Calculate your water hardness and Vapor Pure softener replacement schedule</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Step 1: Water Hardness -->
+    <section class="card" id="hardness-section">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div>
+          <h2>Water Hardness</h2>
+          <p class="card-desc">Hard water is the #1 factor that shortens the life of your Aquafire. Find your water hardness below.</p>
+        </div>
+      </div>
+      <div class="water-hardness-layout">
+        <div class="hardness-input-panel">
+          <div class="form-group">
+            <label>Search by ZIP code or city</label>
+            <div class="search-wrapper">
+              <input type="text" id="zipSearch" placeholder="e.g. 85001 or Phoenix" autocomplete="off">
+              <span class="search-icon">&#128269;</span>
+              <div class="autocomplete-list" id="autocompleteList"></div>
+            </div>
+            <div class="city-name-display" id="cityNameDisplay">
+              <span>&#128205;</span>
+              <span id="cityNameText"></span>
+            </div>
+            <div class="water-hardness-display" id="hardnessDisplay">
+              <span id="hardnessText"></span>
+              <span id="hardnessClassification"></span>
+            </div>
+          </div>
+          <div class="or-divider">or enter manually</div>
+          <div class="form-group">
+            <label>Water hardness in PPM <span style="font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0">(parts per million)</span></label>
+            <input type="number" id="ppmInput" placeholder="e.g. 200" min="0" max="1000" step="1">
+          </div>
+          <div class="hardness-scale" id="hardnessScale">
+            <div class="hardness-scale-label">Water Hardness Scale</div>
+            <div class="hardness-bar">
+              <div class="hardness-bar-segment seg-soft">Soft</div>
+              <div class="hardness-bar-segment seg-moderate">Moderate</div>
+              <div class="hardness-bar-segment seg-hard">Hard</div>
+              <div class="hardness-bar-segment seg-vhard">Very Hard</div>
+              <div class="hardness-scale-marker" id="hardnessMarker"></div>
+            </div>
+            <div class="hardness-bar-labels">
+              <span>0&ndash;60</span>
+              <span>61&ndash;120</span>
+              <span>121&ndash;180</span>
+              <span>181+ PPM</span>
+            </div>
+          </div>
+          <div class="data-source">
+            Data from municipal reports. For accuracy, check your
+            <a href="https://www.epa.gov/ccr" target="_blank" rel="noopener">local CCR</a>
+            or use a home test kit.
+          </div>
+        </div>
+        <div class="map-panel">
+          <div class="map-panel-title">US Water Hardness Map</div>
+          <div class="tile-map-wrapper">
+            <div class="tile-map" id="tileMap"></div>
+          </div>
+          <div class="map-legend">
+            <span class="legend-item"><span class="legend-color" style="background:rgba(46,204,113,0.5)"></span>Soft</span>
+            <span class="legend-item"><span class="legend-color" style="background:rgba(241,196,15,0.5)"></span>Moderate</span>
+            <span class="legend-item"><span class="legend-color" style="background:rgba(230,126,34,0.5)"></span>Hard</span>
+            <span class="legend-item"><span class="legend-color" style="background:rgba(231,76,60,0.5)"></span>V.Hard</span>
+          </div>
+          <div class="map-city-label" id="mapCityLabel"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2: Fireplace Configuration -->
+    <section class="card" id="fireplace-section">
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div>
+          <h2>Fireplace Configuration</h2>
+          <p class="card-desc">Select the size, quantity, and softener grade for each fireplace in your installation.</p>
+        </div>
+      </div>
+      <div id="fireplaceRows">
+        <div class="fireplace-row" data-index="0">
+          <div class="form-group">
+            <label>Fireplace size</label>
+            <select class="fp-size">
+              <option value="1">20" (1 segment)</option>
+              <option value="2">40" (2 segments)</option>
+              <option value="3" selected>60" (3 segments)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Quantity</label>
+            <select class="fp-qty">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <span class="fp-per-label">per</span>
+          <div class="form-group fp-softener-group">
+            <label>Softener</label>
+            <select class="fp-softener">
+              <option value="300">300 grain (Residential)</option>
+              <option value="700">700 grain (Commercial)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <button class="add-fireplace-btn" id="addFireplaceBtn">+ Add another fireplace configuration</button>
+      <div class="total-segments" id="totalSegments">Total 20" segments: <strong>3</strong></div>
+    </section>
+
+    <!-- Step 3: Usage -->
+    <section class="card" id="usage-section">
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div>
+          <h2>Usage</h2>
+          <p class="card-desc">How often will you run your fireplace? This affects how quickly your softener cartridge is consumed.</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Hours per day</label>
+        <div class="slider-row">
+          <input type="range" id="hpdSlider" min="0.5" max="24" step="0.5" value="3.5">
+          <span class="slider-value" id="hpdValue">3.5 hrs</span>
+        </div>
+        <p class="hint">Recreational use is typically 3&ndash;4 hours per day.</p>
+      </div>
+      <div class="form-group" style="margin-top:16px">
+        <label>Days per week</label>
+        <div class="slider-row">
+          <input type="range" id="dpwSlider" min="0.5" max="7" step="0.5" value="2.5">
+          <span class="slider-value" id="dpwValue">2.5 days</span>
+        </div>
+        <p class="hint">Residential installations average 2&ndash;3 days per week.</p>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section class="card" id="result-section">
+      <div class="step-row">
+        <div class="step-num">&#10003;</div>
+        <div>
+          <h2>Replacement Timeline</h2>
+          <p class="card-desc">Your estimated Vapor Pure softener cartridge replacement schedule.</p>
+        </div>
+      </div>
+      <div id="resultContainer"></div>
+      <div id="noResultCard">
+        <div class="no-result">Enter your water hardness above to see your estimated softener replacement timeline.</div>
+      </div>
+    </section>
+
+    <!-- Reference Table -->
+    <section class="card" id="reference-section">
+      <h2>Softener Guide</h2>
+      <p class="card-desc">Choose the right Vapor Pure system for your installation.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Usage Type</th>
+              <th>Water Hardness</th>
+              <th>Recommended System</th>
+              <th>Capacity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Recreational (3&ndash;4 days/wk, &le;6 hrs/day)</td>
+              <td>Soft to Hard (&le;180 PPM)</td>
+              <td>Residential Grade</td>
+              <td>300 grains</td>
+            </tr>
+            <tr>
+              <td>Recreational</td>
+              <td>Very Hard (&gt;180 PPM)</td>
+              <td>Commercial Grade</td>
+              <td>700 grains</td>
+            </tr>
+            <tr>
+              <td>Commercial (daily, &gt;6 hrs/day)</td>
+              <td>Any hardness level</td>
+              <td>Commercial Grade</td>
+              <td>700 grains</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="formula-note">
+        Cartridges are interchangeable between Residential and Commercial systems. If you find you&rsquo;re replacing more often than expected, switch to a Commercial Replacement Cartridge on your next refill.
+      </p>
+    </section>
+
+    <!-- CTA -->
+    <section class="card cta-section">
+      <h2>Keep Your Flames Crystal Clear</h2>
+      <a href="https://www.aquafire.com/products/vapor-pure-filter-softener-system" class="cta-button" target="_blank" rel="noopener">Shop Vapor Pure</a>
+      <a href="https://www.aquafire.com/products/vaporpure-cartridge" class="cta-link" target="_blank" rel="noopener">or buy replacement cartridges</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">&copy; 2026 Aquafire. All rights reserved.</div>
+  </footer>
+
+  <script src="water-care-app.js"></script>
+  <script>
+    // Mobile nav toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle?.addEventListener('click', () => {
+      const open = navLinks?.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  </script>
+</body>
+</html>

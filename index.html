@@ -10,6 +10,21 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Enclosure Guide</a></li>
+        <li><a href="water-care.html">Water Care</a></li>
+      </ul>
+    </div>
+  </nav>
+
   <header>
     <div class="header-glow"></div>
     <div class="container header-inner">
@@ -175,5 +190,13 @@
   </footer>
 
   <script src="app.js"></script>
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle?.addEventListener('click', () => {
+      const open = navLinks?.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  </script>
 </body>
 </html>
