@@ -653,6 +653,33 @@ function drawLightDiagram() {
     ctx.lineTo(pxB(encDepth) + wallThick, pyB(encHeight) - wallThick);
     ctx.lineTo(pxB(encDepth) + wallThick, pyB(0));
     ctx.closePath(); ctx.fill();
+  } else {
+    // Double-side: back wall right surfaces for the solid segments
+    const dblLtBot = Math.min(actualOpeningTopY, encHeight);
+    // Upper segment (light trap to ceiling)
+    const dblUpperTop = py(encHeight) - wallThick;
+    const dblUpperBot = py(dblLtBot);
+    if (dblUpperBot > dblUpperTop) {
+      ctx.fillStyle = '#282c35';
+      ctx.beginPath();
+      ctx.moveTo(px(encDepth) + wallThick, dblUpperTop);
+      ctx.lineTo(px(encDepth) + wallThick, dblUpperBot);
+      ctx.lineTo(pxB(encDepth) + wallThick, dblUpperBot - offY);
+      ctx.lineTo(pxB(encDepth) + wallThick, dblUpperTop - offY);
+      ctx.closePath(); ctx.fill();
+    }
+    // Lower segment (floor to installation surface)
+    const dblLowerTop = py(insertTopY);
+    const dblLowerBot = py(0);
+    if (dblLowerBot > dblLowerTop) {
+      ctx.fillStyle = '#282c35';
+      ctx.beginPath();
+      ctx.moveTo(px(encDepth) + wallThick, dblLowerTop);
+      ctx.lineTo(px(encDepth) + wallThick, dblLowerBot);
+      ctx.lineTo(pxB(encDepth) + wallThick, dblLowerBot - offY);
+      ctx.lineTo(pxB(encDepth) + wallThick, dblLowerTop - offY);
+      ctx.closePath(); ctx.fill();
+    }
   }
 
   // -- Isometric edge outlines --
