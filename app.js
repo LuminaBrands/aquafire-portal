@@ -434,7 +434,8 @@ function drawCutoutDiagram(dims) {
 function drawLightDiagram() {
   const { model, dims, setback, backSetback, openingHeight } = getState();
   const dpr = window.devicePixelRatio || 1;
-  const W = 700, H = 500;
+  const isMobile = window.innerWidth <= 800;
+  const W = 700, H = isMobile ? 700 : 500;
   canvas.width  = W * dpr;
   canvas.height = H * dpr;
   canvas.style.width  = '';
