@@ -8,9 +8,9 @@ const MODELS = {
     name: 'Aquafire Original',
     frontAngle: 53,
     backAngle: 68,
-    lightOffset: 5.3,       // front edge of light opening from front of unit
-    lightOffsetBack: 4.6,   // back edge of light opening from back of unit
-    lightWidth: 3,          // width of light opening (front-to-back)
+    lightOffset: 5.3,       // distance from front of insert to front edge of LED opening
+    lightOffsetBack: 4.6,   // distance from back of insert to back edge of LED opening
+    lightWidth: 3,          // depth of LED opening (front-to-back)
     sizes: {
       20: { w: 20.25, d: 12.25, h: 12 },
       40: { w: 40.25, d: 12.25, h: 12 },
@@ -61,7 +61,6 @@ const ctx           = canvas.getContext('2d');
 
 // ── Helpers ──
 function frac(n) {
-  // Render a number as a fractional string (e.g., 12.25 → 12 1/4")
   const whole = Math.floor(n);
   const rem = n - whole;
   const fracs = [
@@ -90,16 +89,12 @@ function getState() {
 function update() {
   const { model, dims, setback } = getState();
 
-  // Cutout dimensions
   cutoutW.textContent = frac(dims.w);
   cutoutD.textContent = frac(dims.d);
   cutoutH.textContent = frac(dims.h);
 
-  // Setback display
   setbackDisp.textContent = setback.toFixed(3) + '"';
 
-  // Light trap calculation
-  // Max Opening = (SB + OS) * tan(angle)
   const angleRad   = model.frontAngle * Math.PI / 180;
   const maxOpening = (setback + model.lightOffset) * Math.tan(angleRad);
 
@@ -116,7 +111,6 @@ function drawCutoutDiagram(dims) {
   const svg = document.getElementById('cutout-diagram');
   const vbW = 500, vbH = 280;
 
-  // Normalise dims so they fit nicely
   const scale = 12;
   const w = dims.w / scale * 40;
   const d = dims.d / scale * 40;
@@ -128,55 +122,56 @@ function drawCutoutDiagram(dims) {
   const cx = vbW / 2 - 20;
   const cy = vbH / 2 + 20;
 
-  // Corner points (isometric projection)
-  const fl = { x: cx - w/2, y: cy };                           // front-left
-  const fr = { x: cx + w/2, y: cy };                           // front-right
-  const bl = { x: fl.x + d*isoX, y: fl.y - d*isoY };          // back-left
-  const br = { x: fr.x + d*isoX, y: fr.y - d*isoY };          // back-right
-  const ftl = { x: fl.x, y: fl.y - h };                        // front-top-left
-  const ftr = { x: fr.x, y: fr.y - h };                        // front-top-right
-  const btl = { x: bl.x, y: bl.y - h };                        // back-top-left
-  const btr = { x: br.x, y: br.y - h };                        // back-top-right
+  const fl  = { x: cx - w/2, y: cy };
+  const fr  = { x: cx + w/2, y: cy };
+  const bl  = { x: fl.x + d*isoX, y: fl.y - d*isoY };
+  const br  = { x: fr.x + d*isoX, y: fr.y - d*isoY };
+  const ftl = { x: fl.x, y: fl.y - h };
+  const ftr = { x: fr.x, y: fr.y - h };
+  const btl = { x: bl.x, y: bl.y - h };
+  const btr = { x: br.x, y: br.y - h };
 
   svg.innerHTML = `
-    <!-- Bottom face -->
     <polygon points="${fl.x},${fl.y} ${fr.x},${fr.y} ${br.x},${br.y} ${bl.x},${bl.y}"
       fill="#1e2230" stroke="#f4a535" stroke-width="1.5"/>
-    <!-- Back face -->
     <polygon points="${bl.x},${bl.y} ${br.x},${br.y} ${btr.x},${btr.y} ${btl.x},${btl.y}"
       fill="#262b3a" stroke="#f4a535" stroke-width="1.5"/>
-    <!-- Right face -->
     <polygon points="${fr.x},${fr.y} ${br.x},${br.y} ${btr.x},${btr.y} ${ftr.x},${ftr.y}"
       fill="#2a3044" stroke="#f4a535" stroke-width="1.5"/>
-    <!-- Left face -->
     <polygon points="${fl.x},${fl.y} ${bl.x},${bl.y} ${btl.x},${btl.y} ${ftl.x},${ftl.y}"
       fill="#222838" stroke="#f4a535" stroke-width="1.5" stroke-dasharray="6,3"/>
-    <!-- Front face (opening) -->
     <polygon points="${fl.x},${fl.y} ${fr.x},${fr.y} ${ftr.x},${ftr.y} ${ftl.x},${ftl.y}"
       fill="none" stroke="#f4a535" stroke-width="2" stroke-dasharray="8,4"/>
-    <!-- Top face -->
     <polygon points="${ftl.x},${ftl.y} ${ftr.x},${ftr.y} ${btr.x},${btr.y} ${btl.x},${btl.y}"
       fill="#2e3550" stroke="#f4a535" stroke-width="1.5"/>
-
-    <!-- Width dimension -->
     <line x1="${fl.x}" y1="${fl.y+22}" x2="${fr.x}" y2="${fr.y+22}" stroke="#8b90a0" stroke-width="1"/>
     <line x1="${fl.x}" y1="${fl.y+10}" x2="${fl.x}" y2="${fl.y+26}" stroke="#8b90a0" stroke-width="1"/>
     <line x1="${fr.x}" y1="${fr.y+10}" x2="${fr.x}" y2="${fr.y+26}" stroke="#8b90a0" stroke-width="1"/>
     <text x="${(fl.x+fr.x)/2}" y="${fl.y+40}" fill="#f4a535" font-size="13" text-anchor="middle" font-weight="600">${frac(dims.w)} W</text>
-
-    <!-- Height dimension -->
     <line x1="${fr.x+18}" y1="${fr.y}" x2="${fr.x+18}" y2="${ftr.y}" stroke="#8b90a0" stroke-width="1"/>
     <line x1="${fr.x+10}" y1="${fr.y}" x2="${fr.x+24}" y2="${fr.y}" stroke="#8b90a0" stroke-width="1"/>
     <line x1="${fr.x+10}" y1="${ftr.y}" x2="${fr.x+24}" y2="${ftr.y}" stroke="#8b90a0" stroke-width="1"/>
     <text x="${fr.x+32}" y="${(fr.y+ftr.y)/2+4}" fill="#f4a535" font-size="13" text-anchor="start" font-weight="600">${frac(dims.h)} H</text>
-
-    <!-- Depth dimension -->
     <line x1="${br.x+16}" y1="${br.y+8}" x2="${fr.x+16}" y2="${fr.y+8}" stroke="#8b90a0" stroke-width="1"/>
     <text x="${(fr.x+br.x)/2+24}" y="${(fr.y+br.y)/2+24}" fill="#f4a535" font-size="13" text-anchor="middle" font-weight="600" transform="rotate(-25,${(fr.x+br.x)/2+24},${(fr.y+br.y)/2+24})">${frac(dims.d)} D</text>
   `;
 }
 
 // ── Interactive Light Path Diagram (Canvas) ──
+// Cross-section / side view of the enclosure.
+//
+// Physical layout:
+//   - The insert HANGS from the top of the enclosure via flanges.
+//   - The LED light source is at the TOP of the insert, projecting light DOWNWARD.
+//   - The "light trap" is the ceiling overhang between the front face and the
+//     insert — it blocks LED light from escaping upward into the room.
+//   - The "max opening" is the maximum viewing window height, measured from
+//     the top of the enclosure downward.  It equals (SB + OS) * tan(angle).
+//
+// Diagram orientation:
+//   LEFT  = FRONT (room side, viewing opening)
+//   RIGHT = BACK  (wall side)
+//
 function drawLightDiagram() {
   const { model, dims, setback } = getState();
   const dpr = window.devicePixelRatio || 1;
@@ -187,332 +182,422 @@ function drawLightDiagram() {
   canvas.style.height = H + 'px';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  // Clear
   ctx.fillStyle = '#1a1d27';
   ctx.fillRect(0, 0, W, H);
 
-  // ── Coordinate system ──
-  // We draw a cross-section (side view) of the enclosure.
-  // Scale: 1 inch = pxPerInch pixels
-  const enclosureDepth = dims.d;
-  const enclosureHeight = dims.h;
-  const totalInchesW = enclosureDepth + 8; // extra margin
-  const totalInchesH = enclosureHeight + 10;
-  const pxPerInch = Math.min((W - 100) / totalInchesW, (H - 120) / totalInchesH);
+  // ── Geometry (inches) ──
+  const encDepth  = dims.d;               // enclosure depth = cutout depth
+  const insertH   = dims.h;               // insert height = cutout height
+  // Make enclosure taller than the insert to show the viewing area below
+  const encHeight = insertH + 6;          // extra space below insert for viewing
 
-  // Origin: bottom-left of enclosure interior
-  const originX = 60;
-  const originY = H - 70;
+  const frontAngleRad = model.frontAngle * Math.PI / 180;
+  const backAngleRad  = model.backAngle * Math.PI / 180;
+  const maxOpening    = (setback + model.lightOffset) * Math.tan(frontAngleRad);
 
-  function toX(inches) { return originX + inches * pxPerInch; }
-  function toY(inches) { return originY - inches * pxPerInch; }
+  // ── Pixel mapping ──
+  // Leave margins for labels and room label on left
+  const marginL = 110, marginR = 40, marginT = 50, marginB = 60;
+  const drawW = W - marginL - marginR;
+  const drawH = H - marginT - marginB;
+  const pxPerInch = Math.min(drawW / (encDepth + 2), drawH / (encHeight + 2));
 
-  const encW = enclosureDepth * pxPerInch;
-  const encH = enclosureHeight * pxPerInch;
+  // Origin: top-left of enclosure interior, in pixel coords
+  const ox = marginL + 1 * pxPerInch; // 1" margin from left edge
+  const oy = marginT + 1 * pxPerInch; // 1" margin from top
 
-  // ── Draw enclosure box ──
-  ctx.strokeStyle = '#444b60';
-  ctx.lineWidth = 2;
-  ctx.fillStyle = '#1e2230';
+  // Enclosure coordinate → pixel
+  // x: 0 = front face (left), positive = toward back (right)
+  // y: 0 = ceiling (top), positive = downward
+  function px(x) { return ox + x * pxPerInch; }
+  function py(y) { return oy + y * pxPerInch; }
+
+  const wallThick = 8; // pixels for wall rendering
+
+  // ── Draw "Room" label on the left ──
+  ctx.fillStyle = '#555d78';
+  ctx.font = '13px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.save();
+  ctx.translate(marginL - 50, py(encHeight / 2));
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('ROOM', 0, 0);
+  ctx.restore();
+
+  // ── Draw enclosure structure ──
+  // Ceiling
+  ctx.fillStyle = '#363c52';
+  ctx.fillRect(px(0) - wallThick, py(0) - wallThick, encDepth * pxPerInch + wallThick * 2, wallThick);
 
   // Floor
-  ctx.fillRect(toX(0), originY, encW, 12);
-  ctx.fillStyle = '#262b3a';
+  ctx.fillRect(px(0) - wallThick, py(encHeight), encDepth * pxPerInch + wallThick * 2, wallThick);
 
   // Back wall
-  ctx.fillRect(toX(enclosureDepth), toY(enclosureHeight + 2), 12, (enclosureHeight + 2) * pxPerInch + 12);
+  ctx.fillRect(px(encDepth), py(0) - wallThick, wallThick, encHeight * pxPerInch + wallThick * 2);
 
-  // Ceiling / top
-  ctx.fillStyle = '#262b3a';
-  ctx.fillRect(toX(0), toY(enclosureHeight + 2), encW + 12, 12);
+  // Front wall — upper portion (light trap area) and nothing below (viewing opening)
+  // The light trap is the front wall material from the ceiling down.
+  // We draw the front wall above the max opening line.
+  // The inner edge of the light trap is at x = SB (setback from front face, directly below insert front)
+  // Actually the light trap depth (how far the soffit extends inward) = setback
+  const lightTrapBottomY = maxOpening; // from ceiling, the light trap's bottom edge
+  // Front wall from ceiling to lightTrapBottomY
+  ctx.fillStyle = '#363c52';
+  ctx.fillRect(px(0) - wallThick, py(0) - wallThick, wallThick, Math.min(lightTrapBottomY, encHeight) * pxPerInch + wallThick);
 
-  // Labels for enclosure
-  ctx.fillStyle = '#8b90a0';
-  ctx.font = '11px sans-serif';
-  ctx.textAlign = 'center';
+  // ── Enclosure interior background ──
+  ctx.fillStyle = '#1e2230';
+  ctx.fillRect(px(0), py(0), encDepth * pxPerInch, encHeight * pxPerInch);
 
-  // ── Draw fireplace insert ──
-  const insertDepth = enclosureDepth;  // insert fills full depth
-  const insertH = enclosureHeight - 1; // slightly shorter visually
-  const insertFrontX = setback;        // how far from front face
+  // ── Light trap soffit (ceiling overhang) ──
+  // The light trap is the horizontal ceiling material that extends from the front face
+  // inward by the setback distance.  It's at the top of the enclosure.
+  if (setback > 0) {
+    ctx.fillStyle = '#3a4160';
+    ctx.fillRect(px(0), py(0), setback * pxPerInch, wallThick * 0.8);
 
-  // Insert body
+    // Label
+    ctx.fillStyle = '#78b8f0';
+    ctx.font = 'bold 10px sans-serif';
+    ctx.textAlign = 'center';
+    if (setback > 0.8) {
+      ctx.fillText('LIGHT TRAP', px(setback / 2), py(0) - 4);
+    }
+  }
+
+  // ── Draw the insert body ──
+  // Insert hangs from ceiling (y=0), front edge at x = setback
+  const insertFrontX = setback;
+  const insertBackX  = encDepth; // insert fills to the back
+  const insertTopY   = 0;       // hangs from ceiling
+  const insertBotY   = insertH; // insert height
+
   ctx.fillStyle = '#2a2f42';
   ctx.strokeStyle = '#555d78';
-  ctx.lineWidth = 1.5;
-  const ix = toX(insertFrontX);
-  const iy = toY(0);
-  const iw = (insertDepth - setback) * pxPerInch;
-  const ih = insertH * pxPerInch;
-  ctx.fillRect(ix, iy - ih, iw, ih);
-  ctx.strokeRect(ix, iy - ih, iw, ih);
+  ctx.lineWidth = 2;
+  ctx.fillRect(px(insertFrontX), py(insertTopY), (insertBackX - insertFrontX) * pxPerInch, insertH * pxPerInch);
+  ctx.strokeRect(px(insertFrontX), py(insertTopY), (insertBackX - insertFrontX) * pxPerInch, insertH * pxPerInch);
+
+  // Flanges at the top (small tabs extending past the insert on each side)
+  ctx.fillStyle = '#555d78';
+  const flangeW = 6;
+  ctx.fillRect(px(insertFrontX) - flangeW, py(0), flangeW, 4);
+  ctx.fillRect(px(insertBackX), py(0), flangeW, 4);
 
   // Insert label
   ctx.fillStyle = '#8b90a0';
-  ctx.font = 'bold 11px sans-serif';
+  ctx.font = 'bold 12px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(model.name, ix + iw/2, iy - ih/2 + 4);
-
-  // ── Light source position ──
-  // The light emits from a strip on top of the insert.
-  // lightOffset = distance from FRONT of insert to FRONT edge of light opening
-  const lightFrontX = insertFrontX + model.lightOffset;
-  const lightBackX  = insertFrontX + model.lightOffset + model.lightWidth;
-  const lightY      = insertH; // top of insert
-
-  // Draw light source strip on top of insert
-  const lx1 = toX(lightFrontX);
-  const lx2 = toX(lightBackX);
-  const ly  = toY(lightY);
-
-  ctx.fillStyle = '#f4a535';
-  ctx.fillRect(lx1, ly - 3, lx2 - lx1, 6);
-
-  // Light source label
-  ctx.fillStyle = '#f4a535';
+  ctx.fillText(model.name, px((insertFrontX + insertBackX) / 2), py(insertH / 2) + 4);
   ctx.font = '10px sans-serif';
+  ctx.fillText('(cross-section)', px((insertFrontX + insertBackX) / 2), py(insertH / 2) + 18);
+
+  // ── LED light source strip ──
+  // At the top of the insert, offset from the insert's front edge
+  const ledFrontX = insertFrontX + model.lightOffset;
+  const ledBackX  = ledFrontX + model.lightWidth;
+  const ledY      = insertTopY; // top of insert = ceiling
+
+  ctx.fillStyle = '#f4a535';
+  ctx.shadowColor = '#f4a535';
+  ctx.shadowBlur = 12;
+  ctx.fillRect(px(ledFrontX), py(ledY) + 2, (ledBackX - ledFrontX) * pxPerInch, 5);
+  ctx.shadowBlur = 0;
+
+  // LED label
+  ctx.fillStyle = '#f4a535';
+  ctx.font = 'bold 10px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('LED Light Source', (lx1 + lx2) / 2, ly - 10);
+  ctx.fillText('LED LIGHT SOURCE', px((ledFrontX + ledBackX) / 2), py(ledY) + 20);
 
-  // ── Draw light paths ──
-  const frontAngleRad = model.frontAngle * Math.PI / 180;
-  const backAngleRad  = model.backAngle * Math.PI / 180;
+  // ── Front light path ──
+  // From the front edge of the LED opening, going LEFT (forward) and DOWN
+  // at frontAngle degrees from horizontal.
+  // Start: (ledFrontX, 0)
+  // End: at the front face x=0, the ray has dropped by maxOpening
+  const frontRayEndX = 0;
+  const frontRayEndY = maxOpening;  // dropped from ceiling
 
-  // Front light path: from the front edge of the light, going toward the front/up
-  // This defines the MAXIMUM opening.
-  // The light goes forward (toward 0) and up from lightFrontX at lightY.
-  // At angle from vertical: tan(angle) = horizontal/vertical
-  // Actually the angle is from center of fireplace going outward.
-  // Per formula: Max Opening = (SB + OS) * tan(angle)
-  // where SB = setback, OS = lightOffset from front of insert
-  // This means the light ray goes from the front edge of the light source,
-  // forward by (SB + OS) inches to the front face (x=0),
-  // and rises by maxOpening inches.
-
-  // The light emits from the front edge of light strip (lightFrontX, lightY).
-  // At x=0 (front face / light trap edge), the ray height is:
-  //   height_above_lightY = (lightFrontX - 0) * tan(frontAngle)
-  // But wait: lightFrontX = insertFrontX + lightOffset = setback + lightOffset = SB + OS
-  // So height_at_front = (SB + OS) * tan(frontAngle) — matches the formula!
-
-  const maxOpening = (setback + model.lightOffset) * Math.tan(frontAngleRad);
-
-  // Front light ray: from (lightFrontX, lightY) to (0, lightY + maxOpening)
-  // Draw the cone of light from the light source
-  const rayEndY_front = lightY + maxOpening;
-
-  // Back light path: from the back edge of light, going toward back wall
-  const backRayDist = enclosureDepth - lightBackX;
-  const backRayH = backRayDist * Math.tan(backAngleRad);
-  const rayEndY_back = lightY + backRayH;
-
-  // ── Light cone fill ──
+  // Light cone fill (front)
   ctx.save();
-  ctx.globalAlpha = 0.08;
+  ctx.globalAlpha = 0.10;
   ctx.fillStyle = '#f4a535';
   ctx.beginPath();
-  ctx.moveTo(lx1, ly);
-  ctx.lineTo(toX(0), toY(rayEndY_front));
-  ctx.lineTo(toX(0), toY(lightY));
-  ctx.closePath();
-  ctx.fill();
-
-  // Back light cone
-  ctx.fillStyle = '#e8611a';
-  ctx.beginPath();
-  ctx.moveTo(lx2, ly);
-  ctx.lineTo(toX(enclosureDepth), toY(Math.min(rayEndY_back, enclosureHeight + 2)));
-  ctx.lineTo(toX(enclosureDepth), toY(lightY));
+  ctx.moveTo(px(ledFrontX), py(ledY));
+  ctx.lineTo(px(frontRayEndX), py(frontRayEndY));
+  ctx.lineTo(px(frontRayEndX), py(ledY));
   ctx.closePath();
   ctx.fill();
   ctx.restore();
 
-  // ── Front light ray line ──
+  // Front ray line
   ctx.strokeStyle = '#f4a535';
   ctx.lineWidth = 2;
-  ctx.setLineDash([6, 4]);
+  ctx.setLineDash([8, 5]);
   ctx.beginPath();
-  ctx.moveTo(lx1, ly);
-  ctx.lineTo(toX(0), toY(rayEndY_front));
+  ctx.moveTo(px(ledFrontX), py(ledY));
+  ctx.lineTo(px(frontRayEndX), py(frontRayEndY));
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // ── Back light ray line ──
+  // ── Back light path ──
+  // From the back edge of the LED opening, going RIGHT (backward) and DOWN
+  // at backAngle degrees from horizontal.
+  const backHorizDist = encDepth - ledBackX;
+  const backDrop      = backHorizDist * Math.tan(backAngleRad);
+  const backRayEndY   = Math.min(backDrop, encHeight);
+  const backRayEndX   = backDrop <= encHeight
+    ? encDepth
+    : ledBackX + encHeight / Math.tan(backAngleRad);
+
+  // Light cone fill (back)
+  ctx.save();
+  ctx.globalAlpha = 0.07;
+  ctx.fillStyle = '#e8611a';
+  ctx.beginPath();
+  ctx.moveTo(px(ledBackX), py(ledY));
+  ctx.lineTo(px(backRayEndX), py(backRayEndY));
+  ctx.lineTo(px(backRayEndX), py(ledY));
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+
+  // Back ray line
   ctx.strokeStyle = '#e8611a';
   ctx.lineWidth = 1.5;
-  ctx.setLineDash([6, 4]);
+  ctx.setLineDash([8, 5]);
   ctx.beginPath();
-  ctx.moveTo(lx2, ly);
-  const backRayEndClamp = Math.min(rayEndY_back, enclosureHeight + 2);
-  ctx.lineTo(toX(enclosureDepth), toY(backRayEndClamp));
+  ctx.moveTo(px(ledBackX), py(ledY));
+  ctx.lineTo(px(backRayEndX), py(backRayEndY));
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // ── Draw front opening / light trap ──
-  // The front wall with an opening at the bottom
-  // Ceiling extends from top down to enclosure top
-  // Light trap: the ceiling hangs down over the opening
+  // ── Redraw front wall over the light paths ──
+  // Top portion (light trap material) — solid to show it blocks light
+  ctx.fillStyle = '#363c52';
+  ctx.fillRect(px(0) - wallThick, py(0) - wallThick, wallThick, Math.min(lightTrapBottomY, encHeight) * pxPerInch + wallThick);
 
-  // Front wall outline (above opening)
-  ctx.strokeStyle = '#8b90a0';
-  ctx.lineWidth = 2;
-  ctx.fillStyle = '#262b3a';
+  // ── Viewing opening indication ──
+  // The opening goes from y = lightTrapBottomY down to y = encHeight
+  const openingTopPx  = py(Math.min(lightTrapBottomY, encHeight));
+  const openingBotPx  = py(encHeight);
+  if (lightTrapBottomY < encHeight) {
+    // Opening bracket on the front face
+    ctx.strokeStyle = '#4a5068';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    ctx.moveTo(px(0), openingTopPx);
+    ctx.lineTo(px(0), openingBotPx);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
 
-  // Top part of front wall (light trap / header)
-  const openingTop = Math.min(rayEndY_front, enclosureHeight);
-  ctx.fillRect(toX(-0.5) - 6, toY(enclosureHeight + 2), 12, (enclosureHeight + 2 - openingTop) * pxPerInch);
-
-  // ── Max Opening arrow ──
-  const arrowX = toX(0) - 22;
-  const arrowTop = toY(openingTop);
-  const arrowBot = originY;
+  // ── Max Opening dimension arrow (left of front face) ──
+  const arrowX = px(0) - wallThick - 18;
+  const arrowTopPy = py(0);
+  const arrowBotPy = py(Math.min(maxOpening, encHeight));
 
   ctx.strokeStyle = '#f4a535';
   ctx.lineWidth = 1.5;
-  ctx.setLineDash([]);
   ctx.beginPath();
-  ctx.moveTo(arrowX, arrowBot);
-  ctx.lineTo(arrowX, arrowTop);
+  ctx.moveTo(arrowX, arrowTopPy);
+  ctx.lineTo(arrowX, arrowBotPy);
   ctx.stroke();
 
   // Arrow heads
   ctx.fillStyle = '#f4a535';
   ctx.beginPath();
-  ctx.moveTo(arrowX, arrowBot);
-  ctx.lineTo(arrowX - 4, arrowBot - 8);
-  ctx.lineTo(arrowX + 4, arrowBot - 8);
+  ctx.moveTo(arrowX, arrowTopPy);
+  ctx.lineTo(arrowX - 4, arrowTopPy + 8);
+  ctx.lineTo(arrowX + 4, arrowTopPy + 8);
   ctx.closePath();
   ctx.fill();
   ctx.beginPath();
-  ctx.moveTo(arrowX, arrowTop);
-  ctx.lineTo(arrowX - 4, arrowTop + 8);
-  ctx.lineTo(arrowX + 4, arrowTop + 8);
+  ctx.moveTo(arrowX, arrowBotPy);
+  ctx.lineTo(arrowX - 4, arrowBotPy - 8);
+  ctx.lineTo(arrowX + 4, arrowBotPy - 8);
   ctx.closePath();
   ctx.fill();
 
-  // Max opening label
+  // Tick lines
+  ctx.strokeStyle = '#f4a535';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(arrowX - 6, arrowTopPy);
+  ctx.lineTo(px(0) - wallThick, arrowTopPy);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(arrowX - 6, arrowBotPy);
+  ctx.lineTo(px(0), arrowBotPy);
+  ctx.stroke();
+
+  // Max opening label (rotated, left of arrow)
   ctx.save();
   ctx.fillStyle = '#f4a535';
   ctx.font = 'bold 12px sans-serif';
   ctx.textAlign = 'center';
-  ctx.translate(arrowX - 14, (arrowTop + arrowBot) / 2);
+  ctx.translate(arrowX - 16, (arrowTopPy + arrowBotPy) / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.fillText('Max Opening: ' + maxOpening.toFixed(2) + '"', 0, 0);
   ctx.restore();
 
-  // ── Setback dimension ──
-  const sbLineY = originY + 24;
-  ctx.strokeStyle = '#78b8f0';
-  ctx.lineWidth = 1;
-  ctx.setLineDash([]);
-  ctx.beginPath();
-  ctx.moveTo(toX(0), sbLineY);
-  ctx.lineTo(toX(setback), sbLineY);
-  ctx.stroke();
+  // ── Setback dimension (horizontal, at top) ──
+  const sbDimY = py(0) - wallThick - 16;
+  if (setback > 0) {
+    ctx.strokeStyle = '#78b8f0';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(px(0), sbDimY);
+    ctx.lineTo(px(setback), sbDimY);
+    ctx.stroke();
 
-  // Tick marks
-  ctx.beginPath();
-  ctx.moveTo(toX(0), sbLineY - 5);
-  ctx.lineTo(toX(0), sbLineY + 5);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(toX(setback), sbLineY - 5);
-  ctx.lineTo(toX(setback), sbLineY + 5);
-  ctx.stroke();
+    // Tick marks
+    ctx.beginPath();
+    ctx.moveTo(px(0), sbDimY - 5);
+    ctx.lineTo(px(0), sbDimY + 5);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(px(setback), sbDimY - 5);
+    ctx.lineTo(px(setback), sbDimY + 5);
+    ctx.stroke();
 
-  ctx.fillStyle = '#78b8f0';
-  ctx.font = '11px sans-serif';
-  ctx.textAlign = 'center';
-  if (setback > 0.3) {
-    ctx.fillText('SB: ' + setback.toFixed(3) + '"', (toX(0) + toX(setback)) / 2, sbLineY + 16);
+    ctx.fillStyle = '#78b8f0';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'center';
+    if (setback > 0.5) {
+      ctx.fillText('SB: ' + setback.toFixed(3) + '"', px(setback / 2), sbDimY - 6);
+    }
   }
 
-  // ── Offset dimension line ──
-  const osLineY = originY + 42;
+  // ── Offset dimension (horizontal, from insert front to LED front) ──
+  const osDimY = py(0) + insertH * pxPerInch + 18;
   ctx.strokeStyle = '#a78bfa';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(toX(insertFrontX), osLineY);
-  ctx.lineTo(toX(lightFrontX), osLineY);
+  ctx.moveTo(px(insertFrontX), osDimY);
+  ctx.lineTo(px(ledFrontX), osDimY);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(px(insertFrontX), osDimY - 5);
+  ctx.lineTo(px(insertFrontX), osDimY + 5);
   ctx.stroke();
   ctx.beginPath();
-  ctx.moveTo(toX(insertFrontX), osLineY - 5);
-  ctx.lineTo(toX(insertFrontX), osLineY + 5);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(toX(lightFrontX), osLineY - 5);
-  ctx.lineTo(toX(lightFrontX), osLineY + 5);
+  ctx.moveTo(px(ledFrontX), osDimY - 5);
+  ctx.lineTo(px(ledFrontX), osDimY + 5);
   ctx.stroke();
 
   ctx.fillStyle = '#a78bfa';
   ctx.font = '11px sans-serif';
-  ctx.fillText('Offset: ' + model.lightOffset + '"', (toX(insertFrontX) + toX(lightFrontX)) / 2, osLineY + 16);
+  ctx.textAlign = 'center';
+  ctx.fillText('OS: ' + model.lightOffset + '"', px((insertFrontX + ledFrontX) / 2), osDimY + 16);
 
-  // ── Angle arc ──
-  // Draw front angle arc from the light source
-  ctx.strokeStyle = '#f4a535';
-  ctx.lineWidth = 1;
-  const arcR = 30;
-  // The front ray goes from (lightFrontX, lightY) upward-left.
-  // Angle is measured from vertical (straight up).
-  // In canvas coords: straight up is -PI/2.
-  // The ray angle from vertical = frontAngle degrees.
-  // In canvas terms, the ray goes at angle (-PI/2 - frontAngleRad) from horizontal.
-  // Actually let me think about this differently.
-  // The light goes from the light source toward the front-top.
-  // The horizontal distance = lightFrontX, vertical distance = maxOpening.
-  // The angle from the horizontal = atan(maxOpening / lightFrontX) = frontAngle
-  // So the ray makes frontAngle with horizontal.
-  // In canvas: horizontal is 0 (right), PI is left.
-  // The ray goes up-left, so angle from positive x-axis = PI - frontAngle
-  const rayCanvasAngle = Math.PI - frontAngleRad;
-  const verticalAngle = Math.PI * 1.5; // straight up in canvas
-  // Draw arc from "up" to the ray direction
-  ctx.beginPath();
-  // Arc from the vertical (up from light source) to the ray direction
-  // Up direction in canvas = -PI/2 = 3PI/2
-  // Ray direction = PI - frontAngle
-  ctx.arc(lx1, ly, arcR, rayCanvasAngle, -Math.PI / 2, false);
-  ctx.stroke();
+  // ── Angle arc at the LED source ──
+  // The front ray goes left and down at frontAngle from horizontal.
+  // In canvas: horizontal-left = PI, downward-left at angle = PI + frontAngle
+  // But we want the arc between horizontal-left and the ray direction.
+  const arcR = Math.min(35, (setback + model.lightOffset) * pxPerInch * 0.4);
+  if (arcR > 12) {
+    ctx.strokeStyle = '#f4a535';
+    ctx.lineWidth = 1;
+    // In canvas coords from the LED source point:
+    // Horizontal-left direction = PI
+    // The front ray goes left-and-down. The angle below horizontal = frontAngle.
+    // Canvas angle for the ray = PI + frontAngle (below horizontal-left)
+    const arcStartAngle = Math.PI;                  // horizontal left
+    const arcEndAngle   = Math.PI + frontAngleRad;  // ray direction (below horiz-left)
+    ctx.beginPath();
+    ctx.arc(px(ledFrontX), py(ledY), arcR, arcStartAngle, arcEndAngle, false);
+    ctx.stroke();
 
-  ctx.fillStyle = '#f4a535';
-  ctx.font = '11px sans-serif';
-  ctx.textAlign = 'left';
-  ctx.fillText(model.frontAngle + '°', lx1 - arcR - 22, ly - arcR/2 - 2);
+    // Angle label
+    ctx.fillStyle = '#f4a535';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'right';
+    const angleLabelAngle = arcStartAngle + frontAngleRad / 2;
+    const labelR = arcR + 14;
+    ctx.fillText(
+      model.frontAngle + '°',
+      px(ledFrontX) + Math.cos(angleLabelAngle) * labelR,
+      py(ledY) + Math.sin(angleLabelAngle) * labelR + 4
+    );
+  }
+
+  // ── Back angle arc ──
+  if (backHorizDist > 0.5) {
+    const arcRBack = Math.min(30, backHorizDist * pxPerInch * 0.3);
+    if (arcRBack > 10) {
+      ctx.strokeStyle = '#e8611a';
+      ctx.lineWidth = 1;
+      // Horizontal-right = 0
+      // Back ray goes right-and-down at backAngle below horizontal
+      ctx.beginPath();
+      ctx.arc(px(ledBackX), py(ledY), arcRBack, 0, backAngleRad, false);
+      ctx.stroke();
+
+      ctx.fillStyle = '#e8611a';
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'left';
+      const bLabelAngle = backAngleRad / 2;
+      const bLabelR = arcRBack + 14;
+      ctx.fillText(
+        model.backAngle + '°',
+        px(ledBackX) + Math.cos(bLabelAngle) * bLabelR,
+        py(ledY) + Math.sin(bLabelAngle) * bLabelR + 4
+      );
+    }
+  }
+
+  // ── Redraw enclosure walls on top for clean edges ──
+  // Ceiling
+  ctx.fillStyle = '#363c52';
+  ctx.fillRect(px(0) - wallThick, py(0) - wallThick, encDepth * pxPerInch + wallThick * 2, wallThick);
+  // Floor
+  ctx.fillRect(px(0) - wallThick, py(encHeight), encDepth * pxPerInch + wallThick * 2, wallThick);
+  // Back wall
+  ctx.fillRect(px(encDepth), py(0) - wallThick, wallThick, encHeight * pxPerInch + wallThick * 2);
+  // Front wall top (light trap)
+  ctx.fillRect(px(0) - wallThick, py(0) - wallThick, wallThick, Math.min(lightTrapBottomY, encHeight) * pxPerInch + wallThick);
+
+  // ── Wall labels ──
+  ctx.fillStyle = '#555d78';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'center';
+
+  // Front / Back at bottom
+  ctx.fillStyle = '#8b90a0';
+  ctx.font = '12px sans-serif';
+  ctx.fillText('FRONT', px(0), py(encHeight) + wallThick + 20);
+  ctx.fillText('BACK', px(encDepth), py(encHeight) + wallThick + 20);
 
   // ── Legend ──
-  const legendX = W - 200;
-  const legendY = 24;
+  const legendX = W - 190;
+  const legendY = 22;
   ctx.font = '11px sans-serif';
+  ctx.textAlign = 'left';
 
   ctx.fillStyle = '#f4a535';
   ctx.fillRect(legendX, legendY, 14, 3);
   ctx.fillText('Front light path', legendX + 20, legendY + 5);
 
   ctx.fillStyle = '#e8611a';
-  ctx.fillRect(legendX, legendY + 18, 14, 3);
-  ctx.fillText('Back light path', legendX + 20, legendY + 23);
+  ctx.fillRect(legendX, legendY + 20, 14, 3);
+  ctx.fillText('Back light path', legendX + 20, legendY + 25);
 
   ctx.fillStyle = '#78b8f0';
-  ctx.fillRect(legendX, legendY + 36, 14, 3);
-  ctx.fillText('Setback (SB)', legendX + 20, legendY + 41);
+  ctx.fillRect(legendX, legendY + 40, 14, 3);
+  ctx.fillText('Setback (SB)', legendX + 20, legendY + 45);
 
   ctx.fillStyle = '#a78bfa';
-  ctx.fillRect(legendX, legendY + 54, 14, 3);
-  ctx.fillText('Light offset (OS)', legendX + 20, legendY + 59);
+  ctx.fillRect(legendX, legendY + 60, 14, 3);
+  ctx.fillText('Light offset (OS)', legendX + 20, legendY + 65);
 
-  // ── Cross-section label ──
+  // Cross-section label
   ctx.fillStyle = '#555d78';
   ctx.font = '10px sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText('Cross-section / side view', 12, 18);
-
-  // ── "Front" / "Back" labels ──
-  ctx.fillStyle = '#8b90a0';
-  ctx.font = '12px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('FRONT', toX(0), originY + 58);
-  ctx.fillText('BACK', toX(enclosureDepth), originY + 58);
+  ctx.fillText('Cross-section / side view', 14, 16);
 }
 
 // ── Reference Table ──
