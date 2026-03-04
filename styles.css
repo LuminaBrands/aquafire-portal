@@ -190,8 +190,8 @@ select {
 }
 
 /* ── Cutout Diagram ── */
-.cutout-diagram-wrapper { text-align: center; margin-top: 12px; }
-#cutout-diagram { max-width: 480px; width: 100%; }
+.cutout-diagram-wrapper { text-align: center; margin-top: 16px; }
+#cutout-diagram { max-width: 640px; width: 100%; }
 
 /* ── Sliders ── */
 .slider-row { display: flex; align-items: center; gap: 14px; }
