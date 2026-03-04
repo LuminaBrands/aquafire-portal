@@ -533,7 +533,14 @@ input[type="range"]::-moz-range-thumb {
 .fireplace-row .form-group { margin-bottom: 0; min-width: 0; }
 .fireplace-row .fp-softener-group { grid-column: 1 / -1; }
 .fireplace-row .fp-per-label {
-  display: none;
+  grid-column: 1 / -1;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  text-align: center;
+  margin: 2px 0 -2px;
 }
 .fireplace-row .remove-btn {
   padding: 10px 12px;
