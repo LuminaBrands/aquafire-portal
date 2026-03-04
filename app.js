@@ -503,8 +503,12 @@ function drawLightDiagram() {
   const drawH = H - marginT - marginB;
   const pxPerInch = Math.min(drawW / (encDepth + 2), drawH / (encHeight + 2));
 
+  // Center the diagram horizontally within the available drawing area
+  const usedW = (encDepth + 2) * pxPerInch;
+  const centerOffset = (drawW - usedW) / 2;
+
   const floorPx = H - marginB;
-  const frontPx = marginL;
+  const frontPx = marginL + centerOffset;
 
   function px(x) { return frontPx + x * pxPerInch; }
   function py(y) { return floorPx - y * pxPerInch; }
@@ -911,7 +915,7 @@ function drawLightDiagram() {
   ctx.fillText('BACK', px(encDepth), frontBackPy);
 
   // ── Legend ──
-  const legendX = W - 180;
+  const legendX = Math.max(px(encDepth) - 140, px(encDepth / 2));
   const legendY = 16;
   ctx.font = '10px sans-serif';
   ctx.textAlign = 'left';
