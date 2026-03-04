@@ -279,11 +279,12 @@ function drawLightDiagram() {
   ctx.lineTo(px(encDepth) + wallThick, py(insertTopY));
   ctx.stroke();
 
-  // Installation surface label — positioned on the right side to avoid overlapping LED label
+  // Installation surface label — two lines to fit on mobile
   ctx.fillStyle = '#8b90a0';
   ctx.font = '10px sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText('Installation Surface', px(encDepth) + wallThick + 4, py(insertTopY) + 4);
+  ctx.fillText('Installation', px(encDepth) + wallThick + 4, py(insertTopY) - 2);
+  ctx.fillText('Surface', px(encDepth) + wallThick + 4, py(insertTopY) + 10);
 
   // ── Cord space label ──
   if (cordSpace > 0) {
@@ -386,6 +387,14 @@ function drawLightDiagram() {
     ctx.fillRect(px(0) - wallThick, frontWallTopPx, wallThick, frontWallH);
   }
 
+  // Front wall — solid lower portion (floor to installation surface)
+  const frontLowerTopPx = py(insertTopY);
+  const frontLowerBotPx = py(0);
+  const frontLowerH = frontLowerBotPx - frontLowerTopPx;
+  if (frontLowerH > 0) {
+    ctx.fillRect(px(0) - wallThick, frontLowerTopPx, wallThick, frontLowerH);
+  }
+
   // ── Light trap soffit ──
   if (setback > 0 && lightTrapBotY < encHeight) {
     ctx.fillStyle = '#3a4160';
@@ -400,17 +409,9 @@ function drawLightDiagram() {
     }
   }
 
-  // ── Viewing opening bracket ──
-  if (lightTrapBotY < encHeight) {
-    ctx.strokeStyle = '#4a5068';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4, 3]);
-    ctx.beginPath();
-    ctx.moveTo(px(0), py(0));
-    ctx.lineTo(px(0), py(lightTrapBotY));
-    ctx.stroke();
-    ctx.setLineDash([]);
-  }
+  // ── Viewing opening gap ──
+  // The opening is the gap between the lower front wall (floor to install surface)
+  // and the upper front wall (light trap to ceiling). No line needed here.
 
   // ── Front angle arc (from installation surface horizontal to front light path) ──
   const arcR = Math.min(24, Math.max(14, (setback + model.lightOffset) * pxPerInch * 0.15));
@@ -459,6 +460,9 @@ function drawLightDiagram() {
   ctx.fillRect(px(encDepth), py(encHeight) - wallThick, wallThick, encHeight * pxPerInch + wallThick * 2);
   if (frontWallH > 0) {
     ctx.fillRect(px(0) - wallThick, frontWallTopPx, wallThick, frontWallH);
+  }
+  if (frontLowerH > 0) {
+    ctx.fillRect(px(0) - wallThick, frontLowerTopPx, wallThick, frontLowerH);
   }
 
   // ── Recommended max opening reference line ──
@@ -510,11 +514,14 @@ function drawLightDiagram() {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Warning label
+    // Warning label — two lines, positioned inside the opening to fit on mobile
     ctx.fillStyle = '#ff5555';
-    ctx.font = 'bold 10px sans-serif';
-    ctx.textAlign = 'right';
-    ctx.fillText('LIGHT ESCAPE', px(0) - wallThick - 6, (gapTopPy + gapBotPy) / 2 + 4);
+    ctx.font = 'bold 9px sans-serif';
+    ctx.textAlign = 'left';
+    const escLabelX = px(0) + 4;
+    const escLabelY = (gapTopPy + gapBotPy) / 2;
+    ctx.fillText('LIGHT', escLabelX, escLabelY - 2);
+    ctx.fillText('ESCAPE', escLabelX, escLabelY + 10);
   }
 
   // ── Opening dimension arrow ──
