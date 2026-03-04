@@ -52,6 +52,8 @@ const setbackSlider     = document.getElementById('setback-slider');
 const setbackDisp       = document.getElementById('setback-display');
 const backSetbackSlider = document.getElementById('back-setback-slider');
 const backSetbackDisp   = document.getElementById('back-setback-display');
+const openingSlider     = document.getElementById('opening-slider');
+const openingDisp       = document.getElementById('opening-display');
 const cutoutW           = document.getElementById('cutout-w');
 const cutoutD           = document.getElementById('cutout-d');
 const cutoutH           = document.getElementById('cutout-h');
@@ -79,28 +81,30 @@ function frac(n) {
 }
 
 function getState() {
-  const modelKey    = modelSelect.value;
-  const sizeKey     = sizeSelect.value;
-  const model       = MODELS[modelKey];
-  const dims        = model.sizes[sizeKey];
-  const setback     = parseFloat(setbackSlider.value);
-  const backSetback = parseFloat(backSetbackSlider.value);
-  return { modelKey, model, dims, setback, backSetback };
+  const modelKey      = modelSelect.value;
+  const sizeKey       = sizeSelect.value;
+  const model         = MODELS[modelKey];
+  const dims          = model.sizes[sizeKey];
+  const setback       = parseFloat(setbackSlider.value);
+  const backSetback   = parseFloat(backSetbackSlider.value);
+  const openingHeight = parseFloat(openingSlider.value);
+  return { modelKey, model, dims, setback, backSetback, openingHeight };
 }
 
 // ── Update all displays ──
 function update() {
-  const { model, dims, setback, backSetback } = getState();
+  const { model, dims, setback, backSetback, openingHeight } = getState();
 
   cutoutW.textContent = frac(dims.w);
   cutoutD.textContent = frac(dims.d);
   cutoutH.textContent = frac(dims.h);
 
-  setbackDisp.textContent     = setback.toFixed(3) + '"';
-  backSetbackDisp.textContent = backSetback.toFixed(3) + '"';
+  setbackDisp.textContent     = setback.toFixed(1) + '"';
+  backSetbackDisp.textContent = backSetback.toFixed(1) + '"';
+  openingDisp.textContent     = openingHeight.toFixed(1) + '"';
 
   const angleRad   = model.frontAngle * Math.PI / 180;
-  const maxOpening = (setback + model.lightOffset) * Math.tan(angleRad);
+  const maxOpening = (setback + model.lightOffset) * Math.tan(angleRad) - 1;
 
   maxOpeningEl.textContent = maxOpening.toFixed(2) + '"';
   lightAngleEl.textContent = model.frontAngle + '°';
@@ -165,7 +169,7 @@ function drawCutoutDiagram(dims) {
 //   - BOTH front and back light paths go UPWARD.
 //   - The "light trap" is a soffit at the top of the front viewing opening
 //     that catches the upward light before it escapes into the room.
-//   - The "max opening" is the maximum viewing window height = (SB+OS)*tan(angle).
+//   - The "max opening" is the maximum viewing window height = (SB+OS)*tan(angle) - 1.
 //
 // Diagram orientation:
 //   LEFT  = FRONT (room side, viewing opening)
@@ -173,7 +177,7 @@ function drawCutoutDiagram(dims) {
 //   y increases UPWARD (floor at bottom, ceiling at top)
 //
 function drawLightDiagram() {
-  const { model, dims, setback, backSetback } = getState();
+  const { model, dims, setback, backSetback, openingHeight } = getState();
   const dpr = window.devicePixelRatio || 1;
   const W = 700, H = 500;
   canvas.width  = W * dpr;
@@ -186,24 +190,19 @@ function drawLightDiagram() {
   ctx.fillRect(0, 0, W, H);
 
   // ── Geometry (inches) ──
-  // x: 0 = front face (left), positive = toward back (right)
-  // y: 0 = floor (bottom), positive = upward
   const insertDepth = dims.d;
   const insertH     = dims.h;
+  const cordSpace   = 2;
 
   // Enclosure dimensions
-  const encDepth  = setback + insertDepth + backSetback;
+  const encDepth      = setback + insertDepth + backSetback;
   const frontAngleRad = model.frontAngle * Math.PI / 180;
   const backAngleRad  = model.backAngle  * Math.PI / 180;
-  const maxOpening = (setback + model.lightOffset) * Math.tan(frontAngleRad);
+  const maxOpening    = (setback + model.lightOffset) * Math.tan(frontAngleRad) - 1;
 
-  // Enclosure height: tall enough to show the insert + max opening + buffer
-  // Use max-possible height to keep scale stable while sliding
-  const cordSpace = 2;
-  const maxPossibleOpening = (8 + model.lightOffset) * Math.tan(frontAngleRad);
-  const maxPossibleBackOpening = (8 + model.lightOffsetBack) * Math.tan(backAngleRad);
-  const stableHeight = cordSpace + insertH + Math.max(maxPossibleOpening, maxPossibleBackOpening) + 3;
-  const encHeight = stableHeight;
+  // Back ray rise
+  const backHorizDist = model.lightOffsetBack + backSetback;
+  const backRise      = backHorizDist * Math.tan(backAngleRad);
 
   // Insert position — 2" above the floor for cord/wiring space
   const insertFrontX = setback;
@@ -214,32 +213,30 @@ function drawLightDiagram() {
   // LED position (at the top of the insert)
   const ledFrontX = insertFrontX + model.lightOffset;
   const ledBackX  = ledFrontX + model.lightWidth;
-  const ledY      = insertTopY;  // top surface of insert
+  const ledY      = insertTopY;
 
   // Front light ray: from LED front edge, going LEFT (forward) and UP
-  // At the front face (x=0), the ray has risen by maxOpening above the LED
   const frontRayEndX = 0;
   const frontRayEndY = ledY + maxOpening;
 
   // Back light ray: from LED back edge, going RIGHT (backward) and UP
-  const backHorizDist = model.lightOffsetBack + backSetback;
-  const backRise      = backHorizDist * Math.tan(backAngleRad);
-  const backRayEndX   = encDepth;  // back wall
-  const backRayEndY   = ledY + backRise;
+  const backRayEndX = encDepth;
+  const backRayEndY = ledY + backRise;
+
+  // Actual opening position (user-controlled via slider)
+  const actualOpeningTopY = insertTopY + openingHeight;
+
+  // Enclosure height: dynamic, tall enough to show everything
+  const encHeight = Math.max(actualOpeningTopY, backRayEndY, frontRayEndY) + 4;
 
   // ── Pixel mapping ──
-  // Use max-possible enclosure depth for stable scaling
-  const maxEncDepth = insertDepth + 16; // max front(8) + max back(8)
-  const marginL = 100, marginR = 40, marginT = 40, marginB = 50;
+  const marginL = 75, marginR = 50, marginT = 40, marginB = 50;
   const drawW = W - marginL - marginR;
   const drawH = H - marginT - marginB;
-  const pxPerInch = Math.min(drawW / (maxEncDepth + 2), drawH / (stableHeight + 2));
+  const pxPerInch = Math.min(drawW / (encDepth + 2), drawH / (encHeight + 2));
 
-  // Canvas pixel coords from enclosure coords
-  // x: front face at left, back wall at right
-  // y: floor at bottom, ceiling at top
-  const floorPx   = H - marginB;
-  const frontPx   = marginL;
+  const floorPx = H - marginB;
+  const frontPx = marginL;
 
   function px(x) { return frontPx + x * pxPerInch; }
   function py(y) { return floorPx - y * pxPerInch; }
@@ -280,8 +277,6 @@ function drawLightDiagram() {
   ctx.fillText('(cross-section)', ixPx + iwPx / 2, py(cordSpace + insertH / 2) + 18);
 
   // ── Installation surface line ──
-  // A horizontal line flush with the top of the insert, spanning the full enclosure width.
-  // This represents the countertop / wall surface the insert is mounted into.
   ctx.strokeStyle = '#8b90a0';
   ctx.lineWidth = 2;
   ctx.setLineDash([]);
@@ -308,7 +303,7 @@ function drawLightDiagram() {
   ctx.fillStyle = '#f4a535';
   ctx.shadowColor = '#f4a535';
   ctx.shadowBlur = 14;
-  ctx.fillRect(px(ledFrontX), py(ledY) - 2, (model.lightWidth) * pxPerInch, 5);
+  ctx.fillRect(px(ledFrontX), py(ledY) - 2, model.lightWidth * pxPerInch, 5);
   ctx.shadowBlur = 0;
 
   // LED label
@@ -317,21 +312,18 @@ function drawLightDiagram() {
   ctx.textAlign = 'center';
   ctx.fillText('LED LIGHT SOURCE', px((ledFrontX + ledBackX) / 2), py(ledY) - 10);
 
-  // ── Light cone fill (BETWEEN front and back rays) ──
-  const backClampY = Math.min(backRayEndY, encHeight);
-  const backClampX = backRayEndY <= encHeight
-    ? backRayEndX
-    : ledBackX + (encHeight - ledY) / Math.tan(backAngleRad);
-  const frontClampY = Math.min(frontRayEndY, encHeight);
+  // ── Light cone fill (all vertical space between angles up to ceiling) ──
+  const riseToTop = encHeight - ledY;
+  const frontRayCeilingX = ledFrontX - riseToTop / Math.tan(frontAngleRad);
+  const backRayCeilingX  = ledBackX + riseToTop / Math.tan(backAngleRad);
 
   ctx.save();
   ctx.globalAlpha = 0.12;
   ctx.fillStyle = '#f4a535';
   ctx.beginPath();
-  // Trace: LED front edge → front ray end → back ray end → LED back edge → close
   ctx.moveTo(px(ledFrontX), py(ledY));
-  ctx.lineTo(px(frontRayEndX), py(frontClampY));
-  ctx.lineTo(px(backClampX), py(backClampY));
+  ctx.lineTo(px(frontRayCeilingX), py(encHeight));
+  ctx.lineTo(px(backRayCeilingX), py(encHeight));
   ctx.lineTo(px(ledBackX), py(ledY));
   ctx.closePath();
   ctx.fill();
@@ -343,11 +335,16 @@ function drawLightDiagram() {
   ctx.setLineDash([8, 5]);
   ctx.beginPath();
   ctx.moveTo(px(ledFrontX), py(ledY));
-  ctx.lineTo(px(frontRayEndX), py(frontClampY));
+  ctx.lineTo(px(frontRayEndX), py(frontRayEndY));
   ctx.stroke();
   ctx.setLineDash([]);
 
   // ── Back light ray line ──
+  const backClampY = Math.min(backRayEndY, encHeight);
+  const backClampX = backRayEndY <= encHeight
+    ? backRayEndX
+    : ledBackX + (encHeight - ledY) / Math.tan(backAngleRad);
+
   ctx.strokeStyle = '#e8611a';
   ctx.lineWidth = 1.5;
   ctx.setLineDash([8, 5]);
@@ -357,7 +354,7 @@ function drawLightDiagram() {
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // ── Enclosure walls (drawn over interior) ──
+  // ── Enclosure walls ──
   ctx.fillStyle = '#363c52';
 
   // Floor
@@ -369,11 +366,8 @@ function drawLightDiagram() {
   // Back wall
   ctx.fillRect(px(encDepth), py(encHeight) - wallThick, wallThick, encHeight * pxPerInch + wallThick * 2);
 
-  // Front wall — light trap portion (from ceiling down to max opening line)
-  // The light trap is the front wall material above the viewing opening.
-  // The viewing opening goes from the floor up to (ledY + maxOpening) from the floor.
-  // The front wall (light trap) goes from (ledY + maxOpening) up to the ceiling.
-  const lightTrapBotY = Math.min(frontRayEndY, encHeight);  // where the light ray exits
+  // Front wall — light trap portion (from user-specified opening top to ceiling)
+  const lightTrapBotY = Math.min(actualOpeningTopY, encHeight);
   const frontWallTopPx = py(encHeight) - wallThick;
   const frontWallBotPx = py(lightTrapBotY);
   const frontWallH = frontWallBotPx - frontWallTopPx;
@@ -381,23 +375,21 @@ function drawLightDiagram() {
     ctx.fillRect(px(0) - wallThick, frontWallTopPx, wallThick, frontWallH);
   }
 
-  // ── Light trap soffit (horizontal overhang) ──
-  // Extends inward from the front face at the height of the light trap
+  // ── Light trap soffit ──
   if (setback > 0 && lightTrapBotY < encHeight) {
     ctx.fillStyle = '#3a4160';
     const soffitH = 4;
-    ctx.fillRect(px(0), py(lightTrapBotY) - soffitH/2, Math.min(setback, setback + 0.3) * pxPerInch, soffitH);
+    ctx.fillRect(px(0), py(lightTrapBotY) - soffitH / 2, Math.min(setback, setback + 0.3) * pxPerInch, soffitH);
 
-    // Light trap label
     ctx.fillStyle = '#78b8f0';
     ctx.font = 'bold 9px sans-serif';
     ctx.textAlign = 'center';
     if (setback > 0.8) {
-      ctx.fillText('LIGHT TRAP', px(setback / 2), py(lightTrapBotY) - soffitH/2 - 5);
+      ctx.fillText('LIGHT TRAP', px(setback / 2), py(lightTrapBotY) - soffitH / 2 - 5);
     }
   }
 
-  // ── Viewing opening bracket (dashed line on front face) ──
+  // ── Viewing opening bracket ──
   if (lightTrapBotY < encHeight) {
     ctx.strokeStyle = '#4a5068';
     ctx.lineWidth = 1;
@@ -409,60 +401,7 @@ function drawLightDiagram() {
     ctx.setLineDash([]);
   }
 
-  // ── Max Opening dimension arrow ──
-  const arrowX = px(0) - wallThick - 18;
-  const arrowBotPy = py(0);
-  const arrowTopPy = py(Math.min(maxOpening + insertH, encHeight));
-
-  // Only show max opening measurement from the top of the insert
-  const moArrowBotPy = py(ledY);
-  const moArrowTopPy = py(Math.min(frontRayEndY, encHeight));
-
-  ctx.strokeStyle = '#f4a535';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(arrowX, moArrowBotPy);
-  ctx.lineTo(arrowX, moArrowTopPy);
-  ctx.stroke();
-
-  // Arrow heads
-  ctx.fillStyle = '#f4a535';
-  ctx.beginPath();
-  ctx.moveTo(arrowX, moArrowBotPy);
-  ctx.lineTo(arrowX - 4, moArrowBotPy - 8);
-  ctx.lineTo(arrowX + 4, moArrowBotPy - 8);
-  ctx.closePath();
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(arrowX, moArrowTopPy);
-  ctx.lineTo(arrowX - 4, moArrowTopPy + 8);
-  ctx.lineTo(arrowX + 4, moArrowTopPy + 8);
-  ctx.closePath();
-  ctx.fill();
-
-  // Tick lines
-  ctx.strokeStyle = '#f4a535';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(arrowX - 6, moArrowBotPy);
-  ctx.lineTo(px(0), moArrowBotPy);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(arrowX - 6, moArrowTopPy);
-  ctx.lineTo(px(0), moArrowTopPy);
-  ctx.stroke();
-
-  // Max opening label (rotated)
-  ctx.save();
-  ctx.fillStyle = '#f4a535';
-  ctx.font = 'bold 12px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.translate(arrowX - 16, (moArrowBotPy + moArrowTopPy) / 2);
-  ctx.rotate(-Math.PI / 2);
-  ctx.fillText('Max Opening: ' + maxOpening.toFixed(2) + '"', 0, 0);
-  ctx.restore();
-
-  // ── Front Setback dimension (horizontal, below the insert) ──
+  // ── Front Setback dimension ──
   const sbDimPy = py(0) + wallThick + 16;
   if (setback > 0) {
     ctx.strokeStyle = '#78b8f0';
@@ -485,7 +424,7 @@ function drawLightDiagram() {
     ctx.font = '11px sans-serif';
     ctx.textAlign = 'center';
     if (setback > 0.5) {
-      ctx.fillText('Front SB: ' + setback.toFixed(3) + '"', px(setback / 2), sbDimPy + 14);
+      ctx.fillText('Front SB: ' + setback.toFixed(1) + '"', px(setback / 2), sbDimPy + 14);
     }
   }
 
@@ -511,7 +450,7 @@ function drawLightDiagram() {
     ctx.font = '11px sans-serif';
     ctx.textAlign = 'center';
     if (backSetback > 0.5) {
-      ctx.fillText('Back SB: ' + backSetback.toFixed(3) + '"', px((insertBackX + encDepth) / 2), sbDimPy + 14);
+      ctx.fillText('Back SB: ' + backSetback.toFixed(1) + '"', px((insertBackX + encDepth) / 2), sbDimPy + 14);
     }
   }
 
@@ -539,21 +478,14 @@ function drawLightDiagram() {
   ctx.fillText('OS: ' + model.lightOffset + '"', px((insertFrontX + ledFrontX) / 2), osDimPy + 14);
 
   // ── Front angle arc ──
-  // The front ray goes UP and LEFT from the LED front edge.
-  // In canvas pixel coords, "up-left" direction:
-  // Horizontal-left in canvas = PI
-  // The ray goes at frontAngle ABOVE horizontal-left = PI - frontAngle
   const arcR = Math.min(35, (setback + model.lightOffset) * pxPerInch * 0.35);
   if (arcR > 12) {
     ctx.strokeStyle = '#f4a535';
     ctx.lineWidth = 1;
-    // In canvas coords: going left = angle PI. Going up-left = PI - frontAngle
-    // Arc from horizontal-left (PI) counterclockwise to ray direction (PI - frontAngle)
     ctx.beginPath();
     ctx.arc(px(ledFrontX), py(ledY), arcR, Math.PI - frontAngleRad, Math.PI, true);
     ctx.stroke();
 
-    // Angle label
     ctx.fillStyle = '#f4a535';
     ctx.font = '11px sans-serif';
     ctx.textAlign = 'right';
@@ -570,7 +502,6 @@ function drawLightDiagram() {
   if (backArcR > 10 && backHorizDist > 0.5) {
     ctx.strokeStyle = '#e8611a';
     ctx.lineWidth = 1;
-    // Back ray goes UP and RIGHT. In canvas: right = 0, up-right = -backAngle
     ctx.beginPath();
     ctx.arc(px(ledBackX), py(ledY), backArcR, -backAngleRad, 0, false);
     ctx.stroke();
@@ -588,16 +519,114 @@ function drawLightDiagram() {
 
   // ── Redraw walls on top for clean edges ──
   ctx.fillStyle = '#363c52';
-  // Floor
   ctx.fillRect(px(0) - wallThick, py(0), encDepth * pxPerInch + wallThick * 2, wallThick);
-  // Ceiling
   ctx.fillRect(px(0) - wallThick, py(encHeight) - wallThick, encDepth * pxPerInch + wallThick * 2, wallThick);
-  // Back wall
   ctx.fillRect(px(encDepth), py(encHeight) - wallThick, wallThick, encHeight * pxPerInch + wallThick * 2);
-  // Front wall (light trap portion above opening)
   if (frontWallH > 0) {
     ctx.fillRect(px(0) - wallThick, frontWallTopPx, wallThick, frontWallH);
   }
+
+  // ── Recommended max opening reference line ──
+  const isOverMax = openingHeight > maxOpening;
+  if (frontRayEndY > ledY && frontRayEndY < encHeight) {
+    ctx.strokeStyle = '#4ade80';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([6, 3]);
+    ctx.beginPath();
+    ctx.moveTo(px(0) - wallThick, py(frontRayEndY));
+    ctx.lineTo(px(Math.min(setback + 2, encDepth * 0.5)), py(frontRayEndY));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#4ade80';
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('Rec. Max: ' + maxOpening.toFixed(1) + '"', px(0) + 4, py(frontRayEndY) - 4);
+  }
+
+  // ── Light escape visualization ──
+  if (isOverMax) {
+    // Warning zone between recommended max and actual opening on the front face
+    const gapTopPy = py(Math.min(actualOpeningTopY, encHeight));
+    const gapBotPy = py(frontRayEndY);
+    if (gapBotPy > gapTopPy) {
+      ctx.fillStyle = 'rgba(255, 85, 85, 0.15)';
+      ctx.fillRect(px(0) - wallThick - 2, gapTopPy, wallThick + 4, gapBotPy - gapTopPy);
+    }
+
+    // Front ray extending into the room past the front face
+    const escExtent = 5;
+    const frontSlope = maxOpening / (setback + model.lightOffset);
+    const escY = frontRayEndY + frontSlope * escExtent;
+
+    ctx.strokeStyle = '#ff5555';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    ctx.moveTo(px(0), py(frontRayEndY));
+    ctx.lineTo(px(-escExtent), py(escY));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Warning label
+    ctx.fillStyle = '#ff5555';
+    ctx.font = 'bold 10px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('LIGHT ESCAPE', px(0) - wallThick - 6, (gapTopPy + gapBotPy) / 2 + 4);
+  }
+
+  // ── Opening dimension arrow ──
+  const arrowX = px(0) - wallThick - 18;
+  const moArrowBotPy = py(ledY);
+  const moArrowTopPy = py(Math.min(actualOpeningTopY, encHeight));
+  const arrowColor = isOverMax ? '#ff5555' : '#f4a535';
+
+  ctx.strokeStyle = arrowColor;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(arrowX, moArrowBotPy);
+  ctx.lineTo(arrowX, moArrowTopPy);
+  ctx.stroke();
+
+  // Arrow heads
+  ctx.fillStyle = arrowColor;
+  ctx.beginPath();
+  ctx.moveTo(arrowX, moArrowBotPy);
+  ctx.lineTo(arrowX - 4, moArrowBotPy - 8);
+  ctx.lineTo(arrowX + 4, moArrowBotPy - 8);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(arrowX, moArrowTopPy);
+  ctx.lineTo(arrowX - 4, moArrowTopPy + 8);
+  ctx.lineTo(arrowX + 4, moArrowTopPy + 8);
+  ctx.closePath();
+  ctx.fill();
+
+  // Tick lines
+  ctx.strokeStyle = arrowColor;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(arrowX - 6, moArrowBotPy);
+  ctx.lineTo(px(0), moArrowBotPy);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(arrowX - 6, moArrowTopPy);
+  ctx.lineTo(px(0), moArrowTopPy);
+  ctx.stroke();
+
+  // Opening label (rotated)
+  ctx.save();
+  ctx.fillStyle = arrowColor;
+  ctx.font = 'bold 12px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.translate(arrowX - 16, (moArrowBotPy + moArrowTopPy) / 2);
+  ctx.rotate(-Math.PI / 2);
+  const openLabel = isOverMax
+    ? 'Opening: ' + openingHeight.toFixed(1) + '" (OVER MAX)'
+    : 'Opening: ' + openingHeight.toFixed(1) + '"';
+  ctx.fillText(openLabel, 0, 0);
+  ctx.restore();
 
   // ── FRONT / BACK labels ──
   ctx.fillStyle = '#8b90a0';
@@ -631,6 +660,10 @@ function drawLightDiagram() {
   ctx.fillStyle = '#a78bfa';
   ctx.fillRect(legendX, legendY + 80, 14, 3);
   ctx.fillText('Light offset (OS)', legendX + 20, legendY + 85);
+
+  ctx.fillStyle = '#4ade80';
+  ctx.fillRect(legendX, legendY + 100, 14, 3);
+  ctx.fillText('Recommended max', legendX + 20, legendY + 105);
 
   // Cross-section label
   ctx.fillStyle = '#555d78';
@@ -666,8 +699,15 @@ modelSelect.addEventListener('change', update);
 sizeSelect.addEventListener('change', update);
 setbackSlider.addEventListener('input', update);
 backSetbackSlider.addEventListener('input', update);
+openingSlider.addEventListener('input', update);
 window.addEventListener('resize', update);
 
 // ── Init ──
 buildTable();
+// Set opening slider to recommended max for initial state
+const initModel = MODELS[modelSelect.value];
+const initAngleRad = initModel.frontAngle * Math.PI / 180;
+const initSetback = parseFloat(setbackSlider.value);
+const initMaxOpening = (initSetback + initModel.lightOffset) * Math.tan(initAngleRad) - 1;
+openingSlider.value = Math.round(initMaxOpening * 2) / 2; // round to nearest 0.5
 update();
