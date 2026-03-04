@@ -270,12 +270,7 @@ function drawCutoutDiagram(dims) {
   // Inner dark fill
   out += `<polygon points="${cFL.x+3},${cFL.y+1} ${cFR.x-3},${cFR.y+1} ${cBR.x-3},${cBR.y+1} ${cBL.x+3},${cBL.y+1}"
     fill="#0c0e11" stroke="none"/>`;
-  // Corner marks for emphasis
-  const cm = 10;
-  out += `<polyline points="${cFL.x},${cFL.y+cm} ${cFL.x},${cFL.y} ${cFL.x+cm},${cFL.y}" fill="none" stroke="#e8a838" stroke-width="3"/>`;
-  out += `<polyline points="${cFR.x},${cFR.y+cm} ${cFR.x},${cFR.y} ${cFR.x-cm},${cFR.y}" fill="none" stroke="#e8a838" stroke-width="3"/>`;
-  out += `<polyline points="${cBL.x-cm*isoX},${cBL.y+cm*isoY} ${cBL.x},${cBL.y} ${cBL.x+cm},${cBL.y}" fill="none" stroke="#e8a838" stroke-width="3" opacity="0.6"/>`;
-  out += `<polyline points="${cBR.x+cm*isoX},${cBR.y+cm*isoY} ${cBR.x},${cBR.y} ${cBR.x-cm},${cBR.y}" fill="none" stroke="#e8a838" stroke-width="3" opacity="0.6"/>`;
+
 
   // ── "ENCLOSURE" label ──
   const encLabelX = (eFL.x + eFR.x) / 2;
@@ -289,14 +284,6 @@ function drawCutoutDiagram(dims) {
   out += `<text x="${cutLabelX}" y="${cutLabelY + 2}" fill="#e8a838" font-family="Inter,sans-serif"
     font-size="11" text-anchor="middle" font-weight="700" letter-spacing="3">CUTOUT</text>`;
 
-  // ── "Installation Surface" label — on the clearance area of the enclosure top ──
-  // Place in the front-right clearance area between cutout and enclosure edge
-  const instSurfX = (cFR.x + eFTR.x) / 2;
-  const instSurfY = (cFR.y + eFTR.y) / 2;
-  out += `<text x="${instSurfX}" y="${instSurfY - 2}" fill="#878c99" font-family="Inter,sans-serif"
-    font-size="9" text-anchor="middle" font-weight="500" letter-spacing="1" opacity="0.7">Installation</text>`;
-  out += `<text x="${instSurfX}" y="${instSurfY + 10}" fill="#878c99" font-family="Inter,sans-serif"
-    font-size="9" text-anchor="middle" font-weight="500" letter-spacing="1" opacity="0.7">Surface</text>`;
 
   // ── Drop-in arrows (purely vertical, manual arrowheads) ──
   const arrowCount = 3;
@@ -399,7 +386,7 @@ function drawCutoutDiagram(dims) {
   const hDimX = eFL.x - 36;
   out += extLine(eFL.x-6, eFL.y, hDimX-6, eFL.y);
   out += extLine(eFTL.x-6, eFTL.y, hDimX-6, eFTL.y);
-  out += dimLine(hDimX, eFL.y, hDimX, eFTL.y, frac(dims.h), 'HEIGHT', 'left', 0);
+  out += dimLine(hDimX, eFL.y, hDimX, eFTL.y, frac(dims.h), 'Min. HEIGHT', 'left', 0);
 
   // ── Compute tight viewBox from all significant points ──
   const allPts = [
