@@ -58,8 +58,15 @@ const cutoutW           = document.getElementById('cutout-w');
 const cutoutD           = document.getElementById('cutout-d');
 const cutoutH           = document.getElementById('cutout-h');
 const maxOpeningEl      = document.getElementById('max-opening');
+const maxOpeningSub     = document.getElementById('max-opening-sub');
+const backMaxCard       = document.getElementById('back-max-card');
+const backMaxOpeningEl  = document.getElementById('back-max-opening');
+const hearthHint        = document.getElementById('hearth-hint');
+const hearthBtns        = document.querySelectorAll('.hearth-btn');
 const canvas            = document.getElementById('light-diagram');
 const ctx               = canvas.getContext('2d');
+
+let hearthType = 'single'; // 'single' or 'double'
 
 // ── Helpers ──
 function frac(n) {
@@ -86,7 +93,7 @@ function getState() {
   const setback       = parseFloat(setbackSlider.value);
   const backSetback   = parseFloat(backSetbackSlider.value);
   const openingHeight = parseFloat(openingSlider.value);
-  return { modelKey, model, dims, setback, backSetback, openingHeight };
+  return { modelKey, model, dims, setback, backSetback, openingHeight, hearthType };
 }
 
 // ── Update all displays ──
@@ -102,9 +109,22 @@ function update() {
   openingDisp.textContent     = openingHeight.toFixed(1) + '"';
 
   const angleRad   = model.frontAngle * Math.PI / 180;
-  const maxOpening = Math.round((setback + model.lightOffset) * Math.tan(angleRad) - 1);
+  const frontMax   = Math.round((setback + model.lightOffset) * Math.tan(angleRad) - 1);
 
-  maxOpeningEl.textContent = maxOpening + '"';
+  const isDouble = hearthType === 'double';
+  if (isDouble) {
+    const backAngleRad = model.backAngle * Math.PI / 180;
+    const backMax = Math.round((backSetback + model.lightOffsetBack) * Math.tan(backAngleRad) - 1);
+    const effectiveMax = Math.min(frontMax, backMax);
+    maxOpeningEl.textContent = effectiveMax + '"';
+    maxOpeningSub.textContent = 'limited by ' + (backMax <= frontMax ? 'back' : 'front') + ' opening';
+    backMaxOpeningEl.textContent = backMax + '"';
+    backMaxCard.style.display = '';
+  } else {
+    maxOpeningEl.textContent = frontMax + '"';
+    maxOpeningSub.textContent = 'maximum before light escape';
+    backMaxCard.style.display = 'none';
+  }
 
   drawCutoutDiagram(dims);
   drawLightDiagram();
@@ -432,7 +452,8 @@ function drawCutoutDiagram(dims) {
 //   y increases UPWARD (floor at bottom, ceiling at top)
 //
 function drawLightDiagram() {
-  const { model, dims, setback, backSetback, openingHeight } = getState();
+  const { model, dims, setback, backSetback, openingHeight, hearthType } = getState();
+  const isDouble = hearthType === 'double';
   const dpr = window.devicePixelRatio || 1;
   const isMobile = window.innerWidth <= 800;
   const W = 700, H = isMobile ? 700 : 500;
@@ -459,6 +480,7 @@ function drawLightDiagram() {
   // Back ray rise
   const backHorizDist = model.lightOffsetBack + backSetback;
   const backRise      = backHorizDist * Math.tan(backAngleRad);
+  const backMaxOpening = Math.round((backSetback + model.lightOffsetBack) * Math.tan(backAngleRad) - 1);
 
   // Insert position — 2" above the floor for cord/wiring space
   const insertFrontX = setback;
@@ -486,7 +508,7 @@ function drawLightDiagram() {
   const encHeight = Math.max(actualOpeningTopY, backRayEndY, frontRayEndY) + 4;
 
   // ── Pixel mapping ──
-  const marginL = 70, marginR = 170, marginT = 30, marginB = 65;
+  const marginL = 70, marginR = isDouble ? 190 : 170, marginT = 30, marginB = 65;
   const drawW = W - marginL - marginR;
   const drawH = H - marginT - marginB;
   const pxPerInch = Math.min(drawW / (encDepth + 2), drawH / (encHeight + 2));
@@ -503,7 +525,7 @@ function drawLightDiagram() {
 
   const wallThick = 8;
 
-  // ── "Room" label ──
+  // ── "Room" label(s) ──
   ctx.fillStyle = '#4a4f5c';
   ctx.font = '13px sans-serif';
   ctx.textAlign = 'center';
@@ -512,6 +534,16 @@ function drawLightDiagram() {
   ctx.rotate(-Math.PI / 2);
   ctx.fillText('ROOM', 0, 0);
   ctx.restore();
+  if (isDouble) {
+    ctx.fillStyle = '#4a4f5c';
+    ctx.font = '13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.save();
+    ctx.translate(px(encDepth) + wallThick + 50, py(encHeight / 2));
+    ctx.rotate(Math.PI / 2);
+    ctx.fillText('ROOM', 0, 0);
+    ctx.restore();
+  }
 
   // ── Enclosure interior background ──
   ctx.fillStyle = '#1b1e24';
@@ -640,7 +672,25 @@ function drawLightDiagram() {
   ctx.fillRect(px(0) - wallThick, py(encHeight) - wallThick, encDepth * pxPerInch + wallThick * 2, wallThick);
 
   // Back wall
-  ctx.fillRect(px(encDepth), py(encHeight) - wallThick, wallThick, encHeight * pxPerInch + wallThick * 2);
+  if (isDouble) {
+    // Double-side: back wall has an opening matching the front
+    const backLightTrapBotY = Math.min(actualOpeningTopY, encHeight);
+    const backWallTopPx = py(encHeight) - wallThick;
+    const backWallBotPx = py(backLightTrapBotY);
+    const backWallH = backWallBotPx - backWallTopPx;
+    if (backWallH > 0) {
+      ctx.fillRect(px(encDepth), backWallTopPx, wallThick, backWallH);
+    }
+    // Back wall — solid lower portion (floor to installation surface)
+    const backLowerTopPx = py(insertTopY);
+    const backLowerBotPx = py(0);
+    const backLowerH = backLowerBotPx - backLowerTopPx;
+    if (backLowerH > 0) {
+      ctx.fillRect(px(encDepth), backLowerTopPx, wallThick, backLowerH);
+    }
+  } else {
+    ctx.fillRect(px(encDepth), py(encHeight) - wallThick, wallThick, encHeight * pxPerInch + wallThick * 2);
+  }
 
   // Front wall — light trap portion (from user-specified opening top to ceiling)
   const lightTrapBotY = Math.min(actualOpeningTopY, encHeight);
@@ -670,6 +720,20 @@ function drawLightDiagram() {
     ctx.textAlign = 'center';
     if (setback > 0.8) {
       ctx.fillText('LIGHT TRAP', px(setback / 2), py(lightTrapBotY) - soffitH / 2 - 6);
+    }
+  }
+
+  // ── Back light trap soffit (double-side only) ──
+  if (isDouble && backSetback > 0 && lightTrapBotY < encHeight) {
+    ctx.fillStyle = '#2c3038';
+    const soffitH = 4;
+    ctx.fillRect(px(encDepth - backSetback), py(lightTrapBotY) - soffitH / 2, backSetback * pxPerInch, soffitH);
+
+    ctx.fillStyle = '#5bc0de';
+    ctx.font = 'bold 9px sans-serif';
+    ctx.textAlign = 'center';
+    if (backSetback > 0.8) {
+      ctx.fillText('LIGHT TRAP', px(encDepth - backSetback / 2), py(lightTrapBotY) - soffitH / 2 - 6);
     }
   }
 
@@ -721,7 +785,20 @@ function drawLightDiagram() {
   ctx.fillStyle = '#2c3038';
   ctx.fillRect(px(0) - wallThick, py(0), encDepth * pxPerInch + wallThick * 2, wallThick);
   ctx.fillRect(px(0) - wallThick, py(encHeight) - wallThick, encDepth * pxPerInch + wallThick * 2, wallThick);
-  ctx.fillRect(px(encDepth), py(encHeight) - wallThick, wallThick, encHeight * pxPerInch + wallThick * 2);
+  if (isDouble) {
+    // Redraw back wall with opening
+    const backLightTrapBotY = Math.min(actualOpeningTopY, encHeight);
+    const bwTopPx = py(encHeight) - wallThick;
+    const bwBotPx = py(backLightTrapBotY);
+    const bwH = bwBotPx - bwTopPx;
+    if (bwH > 0) ctx.fillRect(px(encDepth), bwTopPx, wallThick, bwH);
+    const blTopPx = py(insertTopY);
+    const blBotPx = py(0);
+    const blH = blBotPx - blTopPx;
+    if (blH > 0) ctx.fillRect(px(encDepth), blTopPx, wallThick, blH);
+  } else {
+    ctx.fillRect(px(encDepth), py(encHeight) - wallThick, wallThick, encHeight * pxPerInch + wallThick * 2);
+  }
   if (frontWallH > 0) {
     ctx.fillRect(px(0) - wallThick, frontWallTopPx, wallThick, frontWallH);
   }
@@ -729,8 +806,10 @@ function drawLightDiagram() {
     ctx.fillRect(px(0) - wallThick, frontLowerTopPx, wallThick, frontLowerH);
   }
 
-  // ── Recommended max opening reference line ──
-  const isOverMax = openingHeight > maxOpening;
+  // ── Recommended max opening reference line (front) ──
+  const isFrontOverMax = openingHeight > maxOpening;
+  const isBackOverMax = isDouble && openingHeight > backMaxOpening;
+  const isOverMax = isFrontOverMax || isBackOverMax;
   if (frontRayEndY > ledY && frontRayEndY < encHeight) {
     ctx.strokeStyle = '#4ade80';
     ctx.lineWidth = 1.5;
@@ -751,11 +830,31 @@ function drawLightDiagram() {
     ctx.fillStyle = '#4ade80';
     ctx.font = '9px sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('Rec. Max: ' + maxOpening + '"', px(0) + 4, recMaxLabelPy);
+    ctx.fillText((isDouble ? 'Front Max: ' : 'Rec. Max: ') + maxOpening + '"', px(0) + 4, recMaxLabelPy);
   }
 
-  // ── Light escape visualization ──
-  if (isOverMax) {
+  // ── Recommended max opening reference line (back, double-side only) ──
+  if (isDouble) {
+    const backRecY = ledY + backMaxOpening;
+    if (backRecY > ledY && backRecY < encHeight) {
+      ctx.strokeStyle = '#4ade80';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([6, 3]);
+      ctx.beginPath();
+      ctx.moveTo(px(encDepth) + wallThick, py(backRecY));
+      ctx.lineTo(px(Math.max(encDepth - backSetback - 2, encDepth * 0.5)), py(backRecY));
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#4ade80';
+      ctx.font = '9px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText('Back Max: ' + backMaxOpening + '"', px(encDepth) - 4, py(backRecY) - 5);
+    }
+  }
+
+  // ── Front light escape visualization ──
+  if (isFrontOverMax) {
     // Warning zone between recommended max and actual opening on the front face
     const gapTopPy = py(Math.min(actualOpeningTopY, encHeight));
     const gapBotPy = py(frontRayEndY);
@@ -778,11 +877,45 @@ function drawLightDiagram() {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Warning label — two lines, positioned inside the opening to fit on mobile
+    // Warning label
     ctx.fillStyle = '#ff5555';
     ctx.font = 'bold 9px sans-serif';
     ctx.textAlign = 'left';
     const escLabelX = px(0) + 4;
+    const escLabelY = (gapTopPy + gapBotPy) / 2;
+    ctx.fillText('LIGHT', escLabelX, escLabelY - 2);
+    ctx.fillText('ESCAPE', escLabelX, escLabelY + 10);
+  }
+
+  // ── Back light escape visualization (double-side only) ──
+  if (isBackOverMax) {
+    const backRecY = ledY + backMaxOpening;
+    const gapTopPy = py(Math.min(actualOpeningTopY, encHeight));
+    const gapBotPy = py(backRecY);
+    if (gapBotPy > gapTopPy) {
+      ctx.fillStyle = 'rgba(255, 85, 85, 0.15)';
+      ctx.fillRect(px(encDepth) - 2, gapTopPy, wallThick + 4, gapBotPy - gapTopPy);
+    }
+
+    // Back ray extending out past the back face
+    const escExtent = 5;
+    const backSlope = backMaxOpening / (backSetback + model.lightOffsetBack);
+    const escY = backRecY + backSlope * escExtent;
+
+    ctx.strokeStyle = '#ff5555';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    ctx.moveTo(px(encDepth), py(backRecY));
+    ctx.lineTo(px(encDepth + escExtent), py(escY));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Warning label
+    ctx.fillStyle = '#ff5555';
+    ctx.font = 'bold 9px sans-serif';
+    ctx.textAlign = 'right';
+    const escLabelX = px(encDepth) - 4;
     const escLabelY = (gapTopPy + gapBotPy) / 2;
     ctx.fillText('LIGHT', escLabelX, escLabelY - 2);
     ctx.fillText('ESCAPE', escLabelX, escLabelY + 10);
@@ -932,7 +1065,7 @@ function drawLightDiagram() {
   ctx.fillStyle = '#4a4f5c';
   ctx.font = '10px sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText('Cross-section / side view', 14, 16);
+  ctx.fillText(isDouble ? 'Cross-section / double side' : 'Cross-section / side view', 14, 16);
 }
 
 // ── Reference Table ──
@@ -972,6 +1105,18 @@ setbackSlider.addEventListener('input', update);
 backSetbackSlider.addEventListener('input', update);
 openingSlider.addEventListener('input', update);
 window.addEventListener('resize', update);
+
+hearthBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    hearthBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    hearthType = btn.dataset.hearth;
+    hearthHint.textContent = hearthType === 'double'
+      ? 'Double-side hearth with viewing openings on both front and back.'
+      : 'Standard hearth with a single front viewing opening.';
+    update();
+  });
+});
 
 // ── Init ──
 buildTable();

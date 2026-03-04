@@ -314,6 +314,36 @@ input[type="range"]::-moz-range-thumb {
   line-height: 1.45;
 }
 
+/* ── Hearth type toggle ── */
+.hearth-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.hearth-btn {
+  flex: 1;
+  padding: 8px 14px;
+  background: var(--card-bg);
+  color: var(--text-muted);
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.hearth-btn + .hearth-btn { border-left: 1px solid var(--border); }
+.hearth-btn.active {
+  background: var(--amber);
+  color: #121417;
+}
+
+.result-card--back {
+  border-color: #d45a20;
+}
+.result-card--back .result-value { color: #d45a20; }
+
 /* ── Calculator layout ── */
 .calculator-layout {
   display: grid;
