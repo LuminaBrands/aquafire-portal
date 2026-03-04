@@ -189,6 +189,7 @@ header h1 {
 /* ── Forms ── */
 .form-row { display: flex; gap: 20px; flex-wrap: wrap; }
 .form-group { flex: 1; min-width: 180px; margin-bottom: 8px; }
+.controls-panel > .form-group { margin-bottom: 20px; }
 .form-group label {
   display: block;
   font-size: 0.78rem;
