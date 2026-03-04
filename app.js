@@ -498,7 +498,7 @@ function drawLightDiagram() {
   const encHeight = Math.max(actualOpeningTopY, backRayEndY, frontRayEndY) + 4;
 
   // ── Pixel mapping ──
-  const marginL = 70, marginR = 50, marginT = 30, marginB = 65;
+  const marginL = 70, marginR = 170, marginT = 30, marginB = 65;
   const drawW = W - marginL - marginR;
   const drawH = H - marginT - marginB;
   const pxPerInch = Math.min(drawW / (encDepth + 2), drawH / (encHeight + 2));
@@ -915,7 +915,7 @@ function drawLightDiagram() {
   ctx.fillText('BACK', px(encDepth), frontBackPy);
 
   // ── Legend ──
-  const legendX = Math.max(px(encDepth) - 140, px(encDepth / 2));
+  const legendX = px(encDepth) + wallThick + 16;
   const legendY = 16;
   ctx.font = '10px sans-serif';
   ctx.textAlign = 'left';
