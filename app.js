@@ -115,30 +115,25 @@ function drawCutoutDiagram(dims) {
   const svg = document.getElementById('cutout-diagram');
   const modelKey = modelSelect.value;
   const modelName = MODELS[modelKey].name;
-  const vbW = 960, vbH = 800;
-  svg.setAttribute('viewBox', `0 0 ${vbW} ${vbH}`);
-
   // ── Physical sizing ──
-  // The enclosure must be deep enough to contain the insert (min ~14" tall)
   const minEncHInches = 14;
-  const encHInches = Math.max(minEncHInches, dims.h + 4); // at least 4" taller than insert
+  const encHInches = Math.max(minEncHInches, dims.h + 4);
 
-  // Scale: map inches → SVG px, fit the widest model (60.25") into ~420px
+  // Scale: map inches → SVG px, fit widest model (60.25") into ~420px
   const scale = 420 / 60.25;
-  const w = dims.w * scale;        // insert width
-  const d = dims.d * scale;        // insert depth
-  const h = dims.h * scale;        // insert height
-  const encW = (dims.w + 3) * scale;  // enclosure ~3" wider
-  const encD = (dims.d + 4) * scale;  // enclosure ~4" deeper
-  const encH = encHInches * scale;     // enclosure height (min 14")
+  const w = dims.w * scale;
+  const d = dims.d * scale;
+  const h = dims.h * scale;
+  const encW = (dims.w + 3) * scale;
+  const encD = (dims.d + 4) * scale;
+  const encH = encHInches * scale;
 
   // Isometric projection
   const isoX = 0.65, isoY = 0.32;
 
-  // ── Layout anchors ──
-  // Enclosure sits in lower portion, offset left so depth lines have room on right
-  const encCx = vbW / 2 - 60;
-  const encCy = vbH - 110;   // front-bottom of enclosure
+  // ── Layout anchors — place relative to (0,0), viewBox computed later ──
+  const encCx = 0;
+  const encCy = 0;  // front-bottom of enclosure at origin
 
   // ── Enclosure corners ──
   const eFL = { x: encCx - encW/2, y: encCy };
@@ -367,7 +362,7 @@ function drawCutoutDiagram(dims) {
   out += dimLine(cFL.x, wDimY, cFR.x, wDimY, frac(dims.w), 'WIDTH', 'below', 0);
 
   // ── Depth: along right side of cutout (isometric diagonal) ──
-  const depthOff = 32;
+  const depthOff = 60;
   const dS = { x: cFR.x + depthOff, y: cFR.y };
   const dE = { x: cBR.x + depthOff, y: cBR.y };
   out += extLine(cFR.x+6, cFR.y, dS.x+4, dS.y);
@@ -380,12 +375,29 @@ function drawCutoutDiagram(dims) {
   out += extLine(eFTL.x-6, eFTL.y, hDimX-6, eFTL.y);
   out += dimLine(hDimX, eFL.y, hDimX, eFTL.y, frac(dims.h), 'HEIGHT', 'left', 0);
 
-  // ── Enclosure min height annotation (right side of enclosure) ──
-  const ehDimX = eFR.x + 28;
-  out += extLine(eFR.x+6, eFR.y, ehDimX+6, eFR.y);
-  out += extLine(eFTR.x+6, eFTR.y, ehDimX+6, eFTR.y);
-  const encHLabel = encHInches + '"';
-  out += dimLine(ehDimX, eFR.y, ehDimX, eFTR.y, encHLabel, 'MIN. ENCL.', 'right', 0);
+  // ── Compute tight viewBox from all significant points ──
+  const allPts = [
+    eFL, eFR, eBL, eBR, eFTL, eFTR, eBTL, eBTR,
+    iFL, iFR, iBL, iBR, iFTL, iFTR, iBTL, iBTR,
+    cFL, cFR, cBL, cBR,
+    // dimension endpoints
+    { x: hDimX - 40, y: eFL.y }, { x: hDimX - 40, y: eFTL.y },
+    { x: dS.x + 40, y: dS.y }, { x: dE.x + 40, y: dE.y },
+    { x: cFL.x, y: wDimY + 50 },
+  ];
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (const p of allPts) {
+    if (p.x < minX) minX = p.x;
+    if (p.x > maxX) maxX = p.x;
+    if (p.y < minY) minY = p.y;
+    if (p.y > maxY) maxY = p.y;
+  }
+  const pad = 24;
+  const vbX = minX - pad;
+  const vbY = minY - pad;
+  const vbW = maxX - minX + pad * 2;
+  const vbH = maxY - minY + pad * 2;
+  svg.setAttribute('viewBox', `${vbX} ${vbY} ${vbW} ${vbH}`);
 
   svg.innerHTML = out;
 }

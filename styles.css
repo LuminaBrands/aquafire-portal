@@ -159,15 +159,23 @@ select {
   padding-right: 36px;
 }
 
-/* ── Dimensions ── */
-.dimensions-display { display: flex; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+/* ── Cutout Layout (dims left, diagram right) ── */
+.cutout-layout {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.dimensions-display {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 .dim-box {
-  flex: 1;
-  min-width: 110px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 18px 14px;
+  padding: 20px 18px;
   text-align: center;
   transition: border-color 0.2s;
 }
@@ -183,15 +191,15 @@ select {
 }
 .dim-value {
   display: block;
-  font-size: 1.5rem;
+  font-size: 1.65rem;
   font-weight: 700;
   color: var(--amber);
   font-variant-numeric: tabular-nums;
 }
 
 /* ── Cutout Diagram ── */
-.cutout-diagram-wrapper { text-align: center; margin-top: 20px; }
-#cutout-diagram { max-width: 860px; width: 100%; }
+.cutout-diagram-wrapper { text-align: center; }
+#cutout-diagram { width: 100%; }
 
 /* ── Sliders ── */
 .slider-row { display: flex; align-items: center; gap: 14px; }
@@ -341,6 +349,9 @@ footer {
 @media (max-width: 800px) {
   .calculator-layout { grid-template-columns: 1fr; }
   .controls-panel { position: static; }
+  .cutout-layout { grid-template-columns: 1fr; }
+  .dimensions-display { flex-direction: row; flex-wrap: wrap; gap: 10px; }
+  .dim-box { flex: 1; min-width: 100px; }
   header { padding: 36px 0 32px; }
   header h1 { font-size: 1.7rem; }
   .card { padding: 24px 20px; margin: 20px 0; }
