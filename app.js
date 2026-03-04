@@ -115,26 +115,32 @@ function drawCutoutDiagram(dims) {
   const svg = document.getElementById('cutout-diagram');
   const modelKey = modelSelect.value;
   const modelName = MODELS[modelKey].name;
-  const vbW = 640, vbH = 520;
+  const vbW = 960, vbH = 800;
   svg.setAttribute('viewBox', `0 0 ${vbW} ${vbH}`);
 
-  // Scale factor — normalize so the 60" wide model fits nicely
-  const baseScale = 3.8;
-  const w = dims.w * baseScale;
-  const d = dims.d * baseScale;
-  const h = dims.h * baseScale;
+  // ── Physical sizing ──
+  // The enclosure must be deep enough to contain the insert (min ~14" tall)
+  const minEncHInches = 14;
+  const encHInches = Math.max(minEncHInches, dims.h + 4); // at least 4" taller than insert
 
-  // Isometric projection factors
-  const isoX = 0.7, isoY = 0.35;
+  // Scale: map inches → SVG px, fit the widest model (60.25") into ~420px
+  const scale = 420 / 60.25;
+  const w = dims.w * scale;        // insert width
+  const d = dims.d * scale;        // insert depth
+  const h = dims.h * scale;        // insert height
+  const encW = (dims.w + 3) * scale;  // enclosure ~3" wider
+  const encD = (dims.d + 4) * scale;  // enclosure ~4" deeper
+  const encH = encHInches * scale;     // enclosure height (min 14")
 
-  // ── Enclosure (lower box) ──
-  const encW = w * 1.15;   // wider than insert
-  const encD = d * 1.3;    // deeper than insert
-  const encH = h * 0.7;    // shorter box
-  const encCx = vbW / 2 - 30;
-  const encCy = vbH - 90;
+  // Isometric projection
+  const isoX = 0.65, isoY = 0.32;
 
-  // Enclosure 8 corners
+  // ── Layout anchors ──
+  // Enclosure sits in lower portion, offset left so depth lines have room on right
+  const encCx = vbW / 2 - 60;
+  const encCy = vbH - 110;   // front-bottom of enclosure
+
+  // ── Enclosure corners ──
   const eFL = { x: encCx - encW/2, y: encCy };
   const eFR = { x: encCx + encW/2, y: encCy };
   const eBL = { x: eFL.x + encD*isoX, y: eFL.y - encD*isoY };
@@ -144,8 +150,8 @@ function drawCutoutDiagram(dims) {
   const eBTL = { x: eBL.x, y: eBL.y - encH };
   const eBTR = { x: eBR.x, y: eBR.y - encH };
 
-  // ── Insert (upper box, floating above) ──
-  const gap = 46; // gap between enclosure top and insert bottom
+  // ── Insert (floating above enclosure) ──
+  const gap = 70;
   const insCx = encCx;
   const insBot = eFTL.y - gap;
 
@@ -158,220 +164,228 @@ function drawCutoutDiagram(dims) {
   const iBTL = { x: iBL.x, y: iBL.y - h };
   const iBTR = { x: iBR.x, y: iBR.y - h };
 
-  // ── Cutout on enclosure top surface ──
-  // The cutout is exactly the insert dimensions, centered on top
-  const cutOffX = (encW - w) / 2;
-  const cutOffD = (encD - d) / 2;
-  const cFL = { x: eFTL.x + cutOffX, y: eFTL.y };
-  const cFR = { x: eFTR.x - cutOffX, y: eFTR.y };
+  // ── Cutout on enclosure top ──
+  // Centered in the top face, matching insert footprint
+  const cutPadX = (encW - w) / 2;
+  const cutPadD = (encD - d) / 2;
+  const cFL = { x: eFTL.x + cutPadX, y: eFTL.y };
+  const cFR = { x: eFTR.x - cutPadX, y: eFTR.y };
   const cBL = { x: cFL.x + d*isoX, y: cFL.y - d*isoY };
   const cBR = { x: cFR.x + d*isoX, y: cFR.y - d*isoY };
 
-  // ── SVG defs for gradients and markers ──
+  // ── Helper: dimension arrow with ticks + arrowheads ──
+  function dimLine(x1,y1, x2,y2, label, sublabel, side, offset) {
+    // side: 'below'|'right'|'along' — where to place the label
+    let s = '';
+    const col = '#e8a838';
+    const mutedCol = '#878c99';
+    const off = offset || 0;
+    // Main line
+    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${mutedCol}" stroke-width="1.2"/>`;
+    // Tick at start
+    const dx = x2-x1, dy = y2-y1;
+    const len = Math.sqrt(dx*dx+dy*dy);
+    const nx = -dy/len * 5, ny = dx/len * 5; // perpendicular
+    s += `<line x1="${x1+nx}" y1="${y1+ny}" x2="${x1-nx}" y2="${y1-ny}" stroke="${mutedCol}" stroke-width="1.5"/>`;
+    // Tick at end
+    s += `<line x1="${x2+nx}" y1="${y2+ny}" x2="${x2-nx}" y2="${y2-ny}" stroke="${mutedCol}" stroke-width="1.5"/>`;
+    // Arrowhead at start
+    const adx = dx/len*8, ady = dy/len*8;
+    s += `<polygon points="${x1},${y1} ${x1+adx+nx*0.6},${y1+ady+ny*0.6} ${x1+adx-nx*0.6},${y1+ady-ny*0.6}" fill="${mutedCol}"/>`;
+    // Arrowhead at end
+    s += `<polygon points="${x2},${y2} ${x2-adx+nx*0.6},${y2-ady+ny*0.6} ${x2-adx-nx*0.6},${y2-ady-ny*0.6}" fill="${mutedCol}"/>`;
+
+    const mx = (x1+x2)/2, my = (y1+y2)/2;
+    if (side === 'below') {
+      s += `<text x="${mx}" y="${my+22+off}" fill="${col}" font-family="Inter,sans-serif" font-size="16" text-anchor="middle" font-weight="700">${label}</text>`;
+      if (sublabel) s += `<text x="${mx}" y="${my+38+off}" fill="${mutedCol}" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" letter-spacing="2">${sublabel}</text>`;
+    } else if (side === 'right') {
+      s += `<text x="${mx+16+off}" y="${my-4}" fill="${col}" font-family="Inter,sans-serif" font-size="16" text-anchor="start" font-weight="700">${label}</text>`;
+      if (sublabel) s += `<text x="${mx+16+off}" y="${my+12}" fill="${mutedCol}" font-family="Inter,sans-serif" font-size="11" text-anchor="start" letter-spacing="2">${sublabel}</text>`;
+    } else if (side === 'left') {
+      s += `<text x="${mx-16-off}" y="${my-4}" fill="${col}" font-family="Inter,sans-serif" font-size="16" text-anchor="end" font-weight="700">${label}</text>`;
+      if (sublabel) s += `<text x="${mx-16-off}" y="${my+12}" fill="${mutedCol}" font-family="Inter,sans-serif" font-size="11" text-anchor="end" letter-spacing="2">${sublabel}</text>`;
+    } else if (side === 'along') {
+      const angle = Math.atan2(dy,dx) * 180 / Math.PI;
+      s += `<text x="${mx+nx*3}" y="${my+ny*3-6}" fill="${col}" font-family="Inter,sans-serif" font-size="16" text-anchor="middle" font-weight="700" transform="rotate(${angle},${mx+nx*3},${my+ny*3-6})">${label}</text>`;
+      if (sublabel) s += `<text x="${mx+nx*3}" y="${my+ny*3+10}" fill="${mutedCol}" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" letter-spacing="2" transform="rotate(${angle},${mx+nx*3},${my+ny*3+10})">${sublabel}</text>`;
+    }
+    return s;
+  }
+
+  // ── Helper: extension line (thin guide from geometry to dimension) ──
+  function extLine(x1,y1,x2,y2) {
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#878c99" stroke-width="0.7" stroke-dasharray="3,3" opacity="0.4"/>`;
+  }
+
+  // ── SVG defs ──
   let out = `<defs>
     <linearGradient id="enc-front" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#282c35"/>
-      <stop offset="100%" stop-color="#1b1e24"/>
+      <stop offset="0%" stop-color="#282c35"/><stop offset="100%" stop-color="#1b1e24"/>
     </linearGradient>
     <linearGradient id="enc-side" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#22262e"/>
-      <stop offset="100%" stop-color="#1b1e24"/>
+      <stop offset="0%" stop-color="#22262e"/><stop offset="100%" stop-color="#1b1e24"/>
     </linearGradient>
     <linearGradient id="enc-top" x1="0" y1="1" x2="0.5" y2="0">
-      <stop offset="0%" stop-color="#2a2e38"/>
-      <stop offset="100%" stop-color="#353a45"/>
+      <stop offset="0%" stop-color="#2a2e38"/><stop offset="100%" stop-color="#353a45"/>
     </linearGradient>
     <linearGradient id="ins-front" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#3a3e48"/>
-      <stop offset="100%" stop-color="#2c3038"/>
+      <stop offset="0%" stop-color="#3a3e48"/><stop offset="100%" stop-color="#2c3038"/>
     </linearGradient>
     <linearGradient id="ins-side" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#353940"/>
-      <stop offset="100%" stop-color="#2a2e35"/>
+      <stop offset="0%" stop-color="#353940"/><stop offset="100%" stop-color="#2a2e35"/>
     </linearGradient>
     <linearGradient id="ins-top" x1="0" y1="1" x2="0.5" y2="0">
-      <stop offset="0%" stop-color="#3e424c"/>
-      <stop offset="100%" stop-color="#484d58"/>
+      <stop offset="0%" stop-color="#3e424c"/><stop offset="100%" stop-color="#484d58"/>
     </linearGradient>
     <linearGradient id="glass-grad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1a2a40"/>
-      <stop offset="40%" stop-color="#0e1925"/>
-      <stop offset="100%" stop-color="#162438"/>
+      <stop offset="0%" stop-color="#1a2a40"/><stop offset="40%" stop-color="#0e1925"/><stop offset="100%" stop-color="#162438"/>
     </linearGradient>
     <linearGradient id="flame-grad" x1="0.5" y1="1" x2="0.5" y2="0">
-      <stop offset="0%" stop-color="#e8a838" stop-opacity="0.9"/>
-      <stop offset="50%" stop-color="#d45a20" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="#e8a838" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#e8a838" stop-opacity="0.9"/><stop offset="50%" stop-color="#d45a20" stop-opacity="0.6"/><stop offset="100%" stop-color="#e8a838" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="cutout-glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8a838" stop-opacity="0.12"/><stop offset="100%" stop-color="#e8a838" stop-opacity="0.03"/>
     </linearGradient>
     <filter id="glow">
-      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="10" markerWidth="8" markerHeight="8" orient="auto">
-      <path d="M0,0 L5,10 L10,0" fill="#e8a838" opacity="0.8"/>
-    </marker>
-    <marker id="dim-start" viewBox="0 0 6 10" refX="3" refY="5" markerWidth="5" markerHeight="8">
-      <line x1="3" y1="0" x2="3" y2="10" stroke="#878c99" stroke-width="1.5"/>
-    </marker>
-    <marker id="dim-end" viewBox="0 0 6 10" refX="3" refY="5" markerWidth="5" markerHeight="8">
-      <line x1="3" y1="0" x2="3" y2="10" stroke="#878c99" stroke-width="1.5"/>
+    <filter id="cutout-shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#e8a838" flood-opacity="0.25"/>
+    </filter>
+    <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="10" markerWidth="10" markerHeight="10" orient="auto">
+      <path d="M1,0 L5,10 L9,0" fill="#e8a838" opacity="0.8"/>
     </marker>
   </defs>`;
 
-  // ── Draw enclosure box ──
+  // ── Enclosure box ──
   // Front face
   out += `<polygon points="${eFL.x},${eFL.y} ${eFR.x},${eFR.y} ${eFTR.x},${eFTR.y} ${eFTL.x},${eFTL.y}"
     fill="url(#enc-front)" stroke="#3a3e48" stroke-width="1.5"/>`;
   // Right side face
   out += `<polygon points="${eFR.x},${eFR.y} ${eBR.x},${eBR.y} ${eBTR.x},${eBTR.y} ${eFTR.x},${eFTR.y}"
     fill="url(#enc-side)" stroke="#3a3e48" stroke-width="1.5"/>`;
-  // Top face (behind cutout)
+  // Top face
   out += `<polygon points="${eFTL.x},${eFTL.y} ${eFTR.x},${eFTR.y} ${eBTR.x},${eBTR.y} ${eBTL.x},${eBTL.y}"
     fill="url(#enc-top)" stroke="#3a3e48" stroke-width="1.5"/>`;
 
-  // ── Cutout hole on top surface ──
+  // ── Cutout hole (prominent) ──
+  // Outer glow
   out += `<polygon points="${cFL.x},${cFL.y} ${cFR.x},${cFR.y} ${cBR.x},${cBR.y} ${cBL.x},${cBL.y}"
-    fill="#121417" stroke="#e8a838" stroke-width="2" stroke-dasharray="6,3"/>`;
-  // Inner shadow on cutout
-  out += `<polygon points="${cFL.x+2},${cFL.y+1} ${cFR.x-2},${cFR.y+1} ${cBR.x-2},${cBR.y+1} ${cBL.x+2},${cBL.y+1}"
-    fill="none" stroke="rgba(232,168,56,0.15)" stroke-width="4"/>`;
+    fill="url(#cutout-glow)" stroke="#e8a838" stroke-width="2.5" filter="url(#cutout-shadow)"/>`;
+  // Inner dark fill
+  out += `<polygon points="${cFL.x+3},${cFL.y+1} ${cFR.x-3},${cFR.y+1} ${cBR.x-3},${cBR.y+1} ${cBL.x+3},${cBL.y+1}"
+    fill="#0c0e11" stroke="none"/>`;
+  // Corner marks for emphasis
+  const cm = 10;
+  out += `<polyline points="${cFL.x},${cFL.y+cm} ${cFL.x},${cFL.y} ${cFL.x+cm},${cFL.y}" fill="none" stroke="#e8a838" stroke-width="3"/>`;
+  out += `<polyline points="${cFR.x},${cFR.y+cm} ${cFR.x},${cFR.y} ${cFR.x-cm},${cFR.y}" fill="none" stroke="#e8a838" stroke-width="3"/>`;
+  out += `<polyline points="${cBL.x-cm*isoX},${cBL.y+cm*isoY} ${cBL.x},${cBL.y} ${cBL.x+cm},${cBL.y}" fill="none" stroke="#e8a838" stroke-width="3" opacity="0.6"/>`;
+  out += `<polyline points="${cBR.x+cm*isoX},${cBR.y+cm*isoY} ${cBR.x},${cBR.y} ${cBR.x-cm},${cBR.y}" fill="none" stroke="#e8a838" stroke-width="3" opacity="0.6"/>`;
 
-  // ── "ENCLOSURE" label on front face ──
+  // ── "ENCLOSURE" label ──
   const encLabelX = (eFL.x + eFR.x) / 2;
-  const encLabelY = (eFL.y + eFTL.y) / 2 + 4;
-  out += `<text x="${encLabelX}" y="${encLabelY}" fill="#878c99" font-family="Inter, sans-serif"
-    font-size="11" text-anchor="middle" font-weight="600" letter-spacing="3" opacity="0.7">ENCLOSURE</text>`;
+  const encLabelY = (eFL.y + eFTL.y) / 2 + 6;
+  out += `<text x="${encLabelX}" y="${encLabelY}" fill="#878c99" font-family="Inter,sans-serif"
+    font-size="14" text-anchor="middle" font-weight="600" letter-spacing="4" opacity="0.6">ENCLOSURE</text>`;
 
-  // ── "Cutout" label near cutout ──
-  const cutLabelX = (cFL.x + cFR.x) / 2;
-  const cutLabelY = cFL.y - 6;
-  out += `<text x="${cutLabelX}" y="${cutLabelY}" fill="#e8a838" font-family="Inter, sans-serif"
-    font-size="10" text-anchor="middle" font-weight="600" letter-spacing="1" opacity="0.9">CUTOUT</text>`;
+  // ── "CUTOUT" label centered in the cutout ──
+  const cutCx = (cFL.x + cBR.x) / 2;
+  const cutCy = (cFL.y + cBR.y) / 2;
+  out += `<text x="${cutCx}" y="${cutCy - 2}" fill="#e8a838" font-family="Inter,sans-serif"
+    font-size="13" text-anchor="middle" font-weight="700" letter-spacing="3">CUTOUT</text>`;
+  out += `<text x="${cutCx}" y="${cutCy + 14}" fill="#e8a838" font-family="Inter,sans-serif"
+    font-size="10" text-anchor="middle" font-weight="400" letter-spacing="1" opacity="0.7">Installation Surface</text>`;
 
-  // ── Installation arrows (insert dropping into enclosure) ──
+  // ── Drop-in arrows ──
   const arrowCount = 3;
   for (let i = 0; i < arrowCount; i++) {
     const t = (i + 1) / (arrowCount + 1);
     const topX = iFL.x + t * (iFR.x - iFL.x);
-    const topY = iFL.y + 10;
+    const topY = iFL.y + 12;
     const botX = cFL.x + t * (cFR.x - cFL.x);
-    const botY = cFL.y - 6;
+    const botY = cFL.y - 8;
     out += `<line x1="${topX}" y1="${topY}" x2="${botX}" y2="${botY}"
-      stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"
+      stroke="#e8a838" stroke-width="1.8" stroke-dasharray="5,5" opacity="0.55"
       marker-end="url(#arrow-down)"/>`;
   }
 
-  // ── Draw insert box ──
-  // Left side face (hidden, dashed)
+  // ── Insert box ──
+  // Hidden faces (dashed)
   out += `<polygon points="${iFL.x},${iFL.y} ${iBL.x},${iBL.y} ${iBTL.x},${iBTL.y} ${iFTL.x},${iFTL.y}"
-    fill="none" stroke="#4a4f5c" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>`;
-  // Back face (hidden, dashed)
+    fill="none" stroke="#4a4f5c" stroke-width="1" stroke-dasharray="5,4" opacity="0.3"/>`;
   out += `<polygon points="${iBL.x},${iBL.y} ${iBR.x},${iBR.y} ${iBTR.x},${iBTR.y} ${iBTL.x},${iBTL.y}"
-    fill="none" stroke="#4a4f5c" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>`;
-
-  // Front face
+    fill="none" stroke="#4a4f5c" stroke-width="1" stroke-dasharray="5,4" opacity="0.3"/>`;
+  // Visible faces
   out += `<polygon points="${iFL.x},${iFL.y} ${iFR.x},${iFR.y} ${iFTR.x},${iFTR.y} ${iFTL.x},${iFTL.y}"
     fill="url(#ins-front)" stroke="#5a5e68" stroke-width="1.5"/>`;
-  // Right side face
   out += `<polygon points="${iFR.x},${iFR.y} ${iBR.x},${iBR.y} ${iBTR.x},${iBTR.y} ${iFTR.x},${iFTR.y}"
     fill="url(#ins-side)" stroke="#5a5e68" stroke-width="1.5"/>`;
-  // Top face
   out += `<polygon points="${iFTL.x},${iFTL.y} ${iFTR.x},${iFTR.y} ${iBTR.x},${iBTR.y} ${iBTL.x},${iBTL.y}"
     fill="url(#ins-top)" stroke="#5a5e68" stroke-width="1.5"/>`;
 
-  // ── Glass panel on front face (viewing window) ──
-  const glassInset = 6;
-  const glassTopInset = 8;
-  const glassBotInset = 10;
-  const gFL = { x: iFL.x + glassInset, y: iFL.y - glassBotInset };
-  const gFR = { x: iFR.x - glassInset, y: iFR.y - glassBotInset };
-  const gFTL = { x: iFTL.x + glassInset, y: iFTL.y + glassTopInset };
-  const gFTR = { x: iFTR.x - glassInset, y: iFTR.y + glassTopInset };
+  // ── Glass panel ──
+  const gi = 8, gti = 10, gbi = 14;
+  const gFL = { x: iFL.x + gi, y: iFL.y - gbi };
+  const gFR = { x: iFR.x - gi, y: iFR.y - gbi };
+  const gFTL = { x: iFTL.x + gi, y: iFTL.y + gti };
+  const gFTR = { x: iFTR.x - gi, y: iFTR.y + gti };
 
   out += `<polygon points="${gFL.x},${gFL.y} ${gFR.x},${gFR.y} ${gFTR.x},${gFTR.y} ${gFTL.x},${gFTL.y}"
     fill="url(#glass-grad)" stroke="#4a6080" stroke-width="1" opacity="0.9"/>`;
-  // Glass reflection
-  out += `<line x1="${gFTL.x + 8}" y1="${gFTL.y + 4}" x2="${gFL.x + 14}" y2="${gFL.y - 4}"
-    stroke="rgba(150,180,220,0.15)" stroke-width="3" stroke-linecap="round"/>`;
+  // Glass reflection highlights
+  out += `<line x1="${gFTL.x+10}" y1="${gFTL.y+5}" x2="${gFL.x+16}" y2="${gFL.y-5}"
+    stroke="rgba(150,180,220,0.12)" stroke-width="4" stroke-linecap="round"/>`;
+  out += `<line x1="${gFTL.x+22}" y1="${gFTL.y+5}" x2="${gFL.x+28}" y2="${gFL.y-5}"
+    stroke="rgba(150,180,220,0.06)" stroke-width="2" stroke-linecap="round"/>`;
 
-  // ── Flame/mist glow inside glass ──
-  const flameW = (gFR.x - gFL.x) * 0.6;
+  // ── Flame glow ──
+  const flameW = (gFR.x - gFL.x) * 0.55;
   const flameCx = (gFL.x + gFR.x) / 2;
   const flameBot = gFL.y - 4;
-  const flameTop = (gFTL.y + gFL.y) / 2 - 5;
-  out += `<ellipse cx="${flameCx}" cy="${(flameBot + flameTop) / 2 + 5}"
-    rx="${flameW / 2}" ry="${(flameBot - flameTop) / 2}"
-    fill="url(#flame-grad)" filter="url(#glow)" opacity="0.5"/>`;
+  const flameTop = (gFTL.y + gFL.y) / 2;
+  out += `<ellipse cx="${flameCx}" cy="${(flameBot+flameTop)/2+4}"
+    rx="${flameW/2}" ry="${(flameBot-flameTop)/2}"
+    fill="url(#flame-grad)" filter="url(#glow)" opacity="0.45"/>`;
 
   // ── Model name on insert top ──
   const insLabelX = (iFTL.x + iBTR.x) / 2;
-  const insLabelY = (iFTL.y + iBTR.y) / 2 + 3;
-  out += `<text x="${insLabelX}" y="${insLabelY}" fill="#b0b4be" font-family="Inter, sans-serif"
-    font-size="10" text-anchor="middle" font-weight="600" letter-spacing="1">${modelName.toUpperCase()}</text>`;
+  const insLabelY = (iFTL.y + iBTR.y) / 2 + 4;
+  out += `<text x="${insLabelX}" y="${insLabelY}" fill="#b0b4be" font-family="Inter,sans-serif"
+    font-size="12" text-anchor="middle" font-weight="600" letter-spacing="2">${modelName.toUpperCase()}</text>`;
 
-  // ── Dimension lines ──
-  // Width dimension (below enclosure front face)
-  const dimWy = eFL.y + 22;
-  out += `<line x1="${cFL.x}" y1="${cFL.y+8}" x2="${cFL.x}" y2="${dimWy+4}" stroke="#878c99" stroke-width="0.8" opacity="0.5"/>`;
-  out += `<line x1="${cFR.x}" y1="${cFR.y+8}" x2="${cFR.x}" y2="${dimWy+4}" stroke="#878c99" stroke-width="0.8" opacity="0.5"/>`;
-  out += `<line x1="${cFL.x}" y1="${dimWy}" x2="${cFR.x}" y2="${dimWy}" stroke="#878c99" stroke-width="1"/>`;
-  out += `<line x1="${cFL.x}" y1="${dimWy-4}" x2="${cFL.x}" y2="${dimWy+4}" stroke="#878c99" stroke-width="1.2"/>`;
-  out += `<line x1="${cFR.x}" y1="${dimWy-4}" x2="${cFR.x}" y2="${dimWy+4}" stroke="#878c99" stroke-width="1.2"/>`;
-  // Arrow heads on width line
-  out += `<polygon points="${cFL.x},${dimWy} ${cFL.x+6},${dimWy-3} ${cFL.x+6},${dimWy+3}" fill="#878c99"/>`;
-  out += `<polygon points="${cFR.x},${dimWy} ${cFR.x-6},${dimWy-3} ${cFR.x-6},${dimWy+3}" fill="#878c99"/>`;
-  out += `<text x="${(cFL.x+cFR.x)/2}" y="${dimWy+18}" fill="#e8a838" font-family="Inter, sans-serif"
-    font-size="13" text-anchor="middle" font-weight="700">${frac(dims.w)}</text>`;
-  out += `<text x="${(cFL.x+cFR.x)/2}" y="${dimWy+32}" fill="#878c99" font-family="Inter, sans-serif"
-    font-size="10" text-anchor="middle" font-weight="500">WIDTH</text>`;
+  // ════════════════════════════════════════════════
+  // ── CUTOUT DIMENSIONS (primary focus) ──
+  // ════════════════════════════════════════════════
 
-  // Height dimension (right side of insert)
-  const dimHx = iFR.x + 22;
-  out += `<line x1="${iFR.x+8}" y1="${iFR.y}" x2="${dimHx+4}" y2="${iFR.y}" stroke="#878c99" stroke-width="0.8" opacity="0.5"/>`;
-  out += `<line x1="${iFTR.x+8}" y1="${iFTR.y}" x2="${dimHx+4}" y2="${iFTR.y}" stroke="#878c99" stroke-width="0.8" opacity="0.5"/>`;
-  out += `<line x1="${dimHx}" y1="${iFR.y}" x2="${dimHx}" y2="${iFTR.y}" stroke="#878c99" stroke-width="1"/>`;
-  out += `<line x1="${dimHx-4}" y1="${iFR.y}" x2="${dimHx+4}" y2="${iFR.y}" stroke="#878c99" stroke-width="1.2"/>`;
-  out += `<line x1="${dimHx-4}" y1="${iFTR.y}" x2="${dimHx+4}" y2="${iFTR.y}" stroke="#878c99" stroke-width="1.2"/>`;
-  // Arrow heads on height line
-  out += `<polygon points="${dimHx},${iFR.y} ${dimHx-3},${iFR.y-6} ${dimHx+3},${iFR.y-6}" fill="#878c99"/>`;
-  out += `<polygon points="${dimHx},${iFTR.y} ${dimHx-3},${iFTR.y+6} ${dimHx+3},${iFTR.y+6}" fill="#878c99"/>`;
-  const dimHmid = (iFR.y + iFTR.y) / 2;
-  out += `<text x="${dimHx+14}" y="${dimHmid - 4}" fill="#e8a838" font-family="Inter, sans-serif"
-    font-size="13" text-anchor="start" font-weight="700">${frac(dims.h)}</text>`;
-  out += `<text x="${dimHx+14}" y="${dimHmid + 10}" fill="#878c99" font-family="Inter, sans-serif"
-    font-size="10" text-anchor="start" font-weight="500">HEIGHT</text>`;
+  // ── Width: horizontal below the enclosure front face ──
+  const wDimY = eFL.y + 36;
+  // Extension lines from cutout front corners down
+  out += extLine(cFL.x, cFL.y+8, cFL.x, wDimY+6);
+  out += extLine(cFR.x, cFR.y+8, cFR.x, wDimY+6);
+  out += dimLine(cFL.x, wDimY, cFR.x, wDimY, frac(dims.w), 'WIDTH', 'below', 0);
 
-  // Depth dimension (along the right-side depth edge of cutout)
-  const depthDimOff = 18;
-  const dStart = { x: cFR.x + depthDimOff, y: cFR.y };
-  const dEnd = { x: cBR.x + depthDimOff, y: cBR.y };
-  out += `<line x1="${cFR.x+6}" y1="${cFR.y}" x2="${dStart.x+4}" y2="${dStart.y}" stroke="#878c99" stroke-width="0.8" opacity="0.5"/>`;
-  out += `<line x1="${cBR.x+6}" y1="${cBR.y}" x2="${dEnd.x+4}" y2="${dEnd.y}" stroke="#878c99" stroke-width="0.8" opacity="0.5"/>`;
-  out += `<line x1="${dStart.x}" y1="${dStart.y}" x2="${dEnd.x}" y2="${dEnd.y}" stroke="#878c99" stroke-width="1"/>`;
-  // Perpendicular ticks
-  out += `<line x1="${dStart.x-3}" y1="${dStart.y-3}" x2="${dStart.x+3}" y2="${dStart.y+3}" stroke="#878c99" stroke-width="1.2"/>`;
-  out += `<line x1="${dEnd.x-3}" y1="${dEnd.y-3}" x2="${dEnd.x+3}" y2="${dEnd.y+3}" stroke="#878c99" stroke-width="1.2"/>`;
-  const dMid = { x: (dStart.x + dEnd.x) / 2 + 16, y: (dStart.y + dEnd.y) / 2 };
-  const depthAngle = Math.atan2(dEnd.y - dStart.y, dEnd.x - dStart.x) * 180 / Math.PI;
-  out += `<text x="${dMid.x}" y="${dMid.y - 6}" fill="#e8a838" font-family="Inter, sans-serif"
-    font-size="13" text-anchor="middle" font-weight="700"
-    transform="rotate(${depthAngle},${dMid.x},${dMid.y - 6})">${frac(dims.d)}</text>`;
-  out += `<text x="${dMid.x}" y="${dMid.y + 9}" fill="#878c99" font-family="Inter, sans-serif"
-    font-size="10" text-anchor="middle" font-weight="500"
-    transform="rotate(${depthAngle},${dMid.x},${dMid.y + 9})">DEPTH</text>`;
+  // ── Depth: along right side of cutout (isometric diagonal) ──
+  const depthOff = 32;
+  const dS = { x: cFR.x + depthOff, y: cFR.y };
+  const dE = { x: cBR.x + depthOff, y: cBR.y };
+  out += extLine(cFR.x+6, cFR.y, dS.x+4, dS.y);
+  out += extLine(cBR.x+6, cBR.y, dE.x+4, dE.y);
+  out += dimLine(dS.x, dS.y, dE.x, dE.y, frac(dims.d), 'DEPTH', 'along', 0);
 
-  // ── Flanges indicator (small marks on cutout edge) ──
-  const flangeLen = 4;
-  // Front-left flange
-  out += `<line x1="${cFL.x}" y1="${cFL.y}" x2="${cFL.x - flangeLen}" y2="${cFL.y}"
-    stroke="#e8a838" stroke-width="2" opacity="0.6"/>`;
-  // Front-right flange
-  out += `<line x1="${cFR.x}" y1="${cFR.y}" x2="${cFR.x + flangeLen}" y2="${cFR.y}"
-    stroke="#e8a838" stroke-width="2" opacity="0.6"/>`;
+  // ── Height: vertical on left side of enclosure ──
+  const hDimX = eFL.x - 36;
+  out += extLine(eFL.x-6, eFL.y, hDimX-6, eFL.y);
+  out += extLine(eFTL.x-6, eFTL.y, hDimX-6, eFTL.y);
+  out += dimLine(hDimX, eFL.y, hDimX, eFTL.y, frac(dims.h), 'HEIGHT', 'left', 0);
 
-  // ── Small "½ inch flange" note ──
-  out += `<text x="${cFL.x - 8}" y="${cFL.y + 14}" fill="#878c99" font-family="Inter, sans-serif"
-    font-size="8" text-anchor="end" opacity="0.7">½" flange</text>`;
+  // ── Enclosure min height annotation (right side of enclosure) ──
+  const ehDimX = eFR.x + 28;
+  out += extLine(eFR.x+6, eFR.y, ehDimX+6, eFR.y);
+  out += extLine(eFTR.x+6, eFTR.y, ehDimX+6, eFTR.y);
+  const encHLabel = encHInches + '"';
+  out += dimLine(ehDimX, eFR.y, ehDimX, eFTR.y, encHLabel, 'MIN. ENCL.', 'right', 0);
 
   svg.innerHTML = out;
 }
