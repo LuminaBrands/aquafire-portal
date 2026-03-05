@@ -1070,8 +1070,8 @@ function drawLightDiagram() {
     ctx.fillStyle = '#ff5555';
     ctx.font = 'bold 9px sans-serif';
     ctx.textAlign = 'right';
-    const escLabelX = px(0) - wallThick - 32;
-    const escLabelY = (gapTopPy + gapBotPy) / 2;
+    const escLabelX = px(0) - wallThick - 50;
+    const escLabelY = (gapTopPy + gapBotPy) / 2 - 50;
     ctx.fillText('LIGHT', escLabelX, escLabelY - 2);
     ctx.fillText('ESCAPE', escLabelX, escLabelY + 10);
   }
@@ -1104,8 +1104,8 @@ function drawLightDiagram() {
     ctx.fillStyle = '#ff5555';
     ctx.font = 'bold 9px sans-serif';
     ctx.textAlign = 'left';
-    const escLabelX = px(encDepth) + wallThick + 32;
-    const escLabelY = (gapTopPy + gapBotPy) / 2;
+    const escLabelX = px(encDepth) + wallThick + 50;
+    const escLabelY = (gapTopPy + gapBotPy) / 2 - 50;
     ctx.fillText('LIGHT', escLabelX, escLabelY - 2);
     ctx.fillText('ESCAPE', escLabelX, escLabelY + 10);
   }
