@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Pro | Quick Start Guide</title>
+  <meta name="description" content="Aquafire Pro water vapor electric fireplace — specs, features, and quick start guide.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #121417; --surface: #1b1e24; --border: #2c3038;
+      --text: #e4e5e9; --text-muted: #878c99;
+      --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
+      --radius: 14px; --radius-sm: 8px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Hero Title Card ── */
+    .pro-hero {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      padding: 48px 0;
+      flex-wrap: wrap;
+    }
+    .pro-hero-img {
+      flex: 1 1 420px;
+      max-width: 560px;
+    }
+    .pro-hero-img img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+    }
+    .pro-hero-text {
+      flex: 1 1 320px;
+    }
+    .pro-hero-text .breadcrumb {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .pro-hero-text .breadcrumb a {
+      text-decoration: none;
+      color: var(--text-muted);
+      transition: color 0.15s;
+    }
+    .pro-hero-text .breadcrumb a:hover { color: var(--text); }
+    .pro-hero-text h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .pro-hero-text .tagline {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .pro-hero-text .btn-primary {
+      display: inline-block;
+      padding: 12px 32px;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px var(--red-glow);
+    }
+    .pro-hero-text .btn-primary:hover {
+      background: var(--red-dark);
+      box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+    }
+
+    /* ── Specs Section ── */
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 28px;
+      letter-spacing: -0.3px;
+    }
+    .specs-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .spec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+    }
+    .spec-card h3 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .spec-table { width: 100%; }
+    .spec-table tr { border-bottom: 1px solid var(--border); }
+    .spec-table tr:last-child { border-bottom: none; }
+    .spec-table td {
+      padding: 10px 0;
+      font-size: 0.88rem;
+      vertical-align: top;
+    }
+    .spec-table td:first-child { color: var(--text-muted); padding-right: 16px; white-space: nowrap; }
+    .spec-table td:last-child { color: var(--text); text-align: right; }
+
+    /* ── Features List ── */
+    .features-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .feature-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px 22px;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+    .feature-item strong { color: var(--text); }
+
+    /* ── Video Section ── */
+    .video-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+      border-radius: var(--radius);
+    }
+
+    @media (max-width: 700px) {
+      .pro-hero { gap: 28px; }
+      .pro-hero-text h1 { font-size: 1.8rem; }
+    }
+  </style>
+  <link rel="stylesheet" href="hub.css">
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="getting-started.html">Getting Started</a></li>
+        <li><a href="quick-start.html" class="active">Quick Start</a></li>
+        <li><a href="enclosure-guide.html">Enclosure Guide</a></li>
+        <li><a href="water-care.html">Water Care</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- Hero / Title Card -->
+    <section class="pro-hero">
+      <div class="pro-hero-img">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt="Aquafire Pro water vapor fireplace">
+      </div>
+      <div class="pro-hero-text">
+        <p class="breadcrumb"><a href="quick-start.html">Quick Start</a> / Aquafire Pro</p>
+        <h1>Aquafire Pro</h1>
+        <p class="tagline">The most advanced water vapor electric fireplace insert. Dual LED light bars, 30+ flame colors, 20-hour runtime, and home automation compatibility.</p>
+        <a href="https://www.aquafire.com/products/aquafire-pro" target="_blank" rel="noopener" class="btn-primary">Shop Aquafire Pro</a>
+      </div>
+    </section>
+
+    <!-- Specifications -->
+    <section class="specs-section">
+      <h2 class="section-title">Specifications</h2>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>Dimensions</h3>
+          <table class="spec-table">
+            <tr><td>Small 20"</td><td>20" W x 11 5/16" H x 12 15/16" D</td></tr>
+            <tr><td>Medium 40"</td><td>40" W x 11 5/16" H x 12 15/16" D</td></tr>
+            <tr><td>Large 60"</td><td>60" W x 11 5/16" H x 12 15/16" D</td></tr>
+          </table>
+        </div>
+        <div class="spec-card">
+          <h3>Weight</h3>
+          <table class="spec-table">
+            <tr><td>Small 20"</td><td>29 lbs</td></tr>
+            <tr><td>Medium 40"</td><td>59 lbs</td></tr>
+            <tr><td>Large 60"</td><td>90 lbs</td></tr>
+          </table>
+        </div>
+        <div class="spec-card">
+          <h3>Tank Capacity</h3>
+          <table class="spec-table">
+            <tr><td>Small 20"</td><td>2 Liters</td></tr>
+            <tr><td>Medium 40"</td><td>4 Liters</td></tr>
+            <tr><td>Large 60"</td><td>6 Liters</td></tr>
+          </table>
+        </div>
+        <div class="spec-card">
+          <h3>Power</h3>
+          <table class="spec-table">
+            <tr><td>Voltage</td><td>110 &ndash; 120V (60 Hz)</td></tr>
+            <tr><td>Adapter</td><td>24V adapter included</td></tr>
+            <tr><td>Runtime</td><td>Up to 20 hours</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Features -->
+    <section class="features-section">
+      <h2 class="section-title">Key Features</h2>
+      <div class="features-grid">
+        <div class="feature-item"><strong>30+ Flame Colors</strong> &mdash; Select from over 30 preset color options via the included remote or the dedicated iOS/Android app.</div>
+        <div class="feature-item"><strong>Dual LED Light Bars</strong> &mdash; Enhanced flame realism with wider light angles for a natural, immersive look.</div>
+        <div class="feature-item"><strong>No Venting Required</strong> &mdash; No chimney, no gas line. Install virtually anywhere with just a standard outlet.</div>
+        <div class="feature-item"><strong>Direct Plumbing Ready</strong> &mdash; Connect to a water line for continuous operation without manual refills.</div>
+        <div class="feature-item"><strong>Home Automation</strong> &mdash; Compatible with smart home systems for seamless integration and voice control.</div>
+        <div class="feature-item"><strong>Gang Units Together</strong> &mdash; Combine multiple inserts for up to 40 ft of continuous flame on a single control unit.</div>
+      </div>
+    </section>
+
+    <!-- Video -->
+    <section class="video-section">
+      <h2 class="section-title">See It in Action</h2>
+      <div class="video-wrapper">
+        <!-- VIDEO_PLACEHOLDER: Replace the src below with the actual video embed URL -->
+        <iframe src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Aquafire Pro video"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" height="20">
+        <p>The complete guide to your Aquafire water vapor fireplace.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Guides</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="quick-start.html">Quick Start</a>
+          <a href="enclosure-guide.html">Enclosure Guide</a>
+          <a href="water-care.html">Water Care</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="support.html">Support Hub</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom container"><p>&copy; 2026 Aquafire. All rights reserved.</p></div>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle?.addEventListener('click', () => {
+      const open = navLinks?.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  </script>
+</body>
+</html>
