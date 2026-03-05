@@ -119,6 +119,10 @@
   .footer-links { gap: 36px; }
 }
 
+/* ── Embed Mode ── */
+body.is-embed { padding-top: 0 !important; }
+body.is-embed main { padding-top: 24px; }
+
 /* ── Shared Button ── */
 .btn-primary {
   display: inline-block;
