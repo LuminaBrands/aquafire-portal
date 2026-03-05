@@ -1066,11 +1066,11 @@ function drawLightDiagram() {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Warning label
+    // Warning label (outside the enclosure, next to escape ray)
     ctx.fillStyle = '#ff5555';
     ctx.font = 'bold 9px sans-serif';
-    ctx.textAlign = 'left';
-    const escLabelX = px(0) + 4;
+    ctx.textAlign = 'right';
+    const escLabelX = px(0) - wallThick - 6;
     const escLabelY = (gapTopPy + gapBotPy) / 2;
     ctx.fillText('LIGHT', escLabelX, escLabelY - 2);
     ctx.fillText('ESCAPE', escLabelX, escLabelY + 10);
@@ -1100,11 +1100,11 @@ function drawLightDiagram() {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Warning label
+    // Warning label (outside the enclosure, next to escape ray)
     ctx.fillStyle = '#ff5555';
     ctx.font = 'bold 9px sans-serif';
-    ctx.textAlign = 'right';
-    const escLabelX = px(encDepth) - 4;
+    ctx.textAlign = 'left';
+    const escLabelX = px(encDepth) + wallThick + 6;
     const escLabelY = (gapTopPy + gapBotPy) / 2;
     ctx.fillText('LIGHT', escLabelX, escLabelY - 2);
     ctx.fillText('ESCAPE', escLabelX, escLabelY + 10);
