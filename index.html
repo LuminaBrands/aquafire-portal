@@ -114,10 +114,48 @@
 
     .arrow-icon { width: 14px; height: 14px; vertical-align: middle; }
 
+    /* ── Get Started / Model Cards ── */
+    .get-started { margin: 40px 0 0; }
+    .get-started-header { margin-bottom: 20px; }
+    .get-started-header h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.3px; }
+    .get-started-header p { color: var(--text-muted); font-size: 0.92rem; margin-top: 4px; }
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .model-card {
+      display: block;
+      padding: 28px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .model-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-color: rgba(192,57,43,0.3); }
+    .model-card img { width: 100%; height: auto; border-radius: var(--radius-sm); margin-bottom: 16px; }
+    .model-card h3 { font-size: 1.15rem; margin-bottom: 8px; }
+    .model-card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 16px; }
+    .model-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
     /* Responsive */
     @media (max-width: 900px) {
       .bento { grid-template-columns: repeat(2, 1fr); }
       .tile-wide { grid-column: span 2; }
+      .model-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 560px) {
       .bento { grid-template-columns: 1fr; gap: 12px; }
@@ -125,6 +163,7 @@
       .bento-tile { padding: 22px 20px 18px; }
       .hero h1 { font-size: 1.6rem; }
       .hero { padding: 40px 0 36px; }
+      .model-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -187,14 +226,37 @@
         <p class="tile-desc">Water hardness calculator and Vapor Pure softener setup for crystal-clear flames.</p>
         <span class="tile-cta">Check Water <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
+    </div>
 
-      <a href="quick-start.html" class="bento-tile accent-amber">
-        <span class="tile-icon">&#x26a1;</span>
-        <h2 class="tile-title">Quick Start Guides</h2>
-        <p class="tile-desc">Step-by-step installation for every Aquafire model &mdash; Original, Pro, and Lite.</p>
-        <span class="tile-cta">View Guides <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-      </a>
+    <!-- Get Started: Model Selection -->
+    <section class="get-started">
+      <div class="get-started-header">
+        <h2>Get Started</h2>
+        <p>Select your Aquafire model to get started.</p>
+      </div>
+      <div class="model-grid">
+        <div class="model-card">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ORIGINAL.png?v=1768251742" alt="Aquafire Original">
+          <h3>Aquafire Original</h3>
+          <p>The classic water vapor fireplace. Available in 20&#8221;, 40&#8221;, and 60&#8221;.</p>
+          <span class="model-badge">Coming Soon</span>
+        </div>
+        <a href="aquafire-pro.html" class="model-card">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt="Aquafire Pro">
+          <h3>Aquafire Pro</h3>
+          <p>Premium model with enhanced flame realism and wider light angles.</p>
+          <span class="model-badge">View Guide</span>
+        </a>
+        <div class="model-card">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/LITE.png?v=1768251746" alt="Aquafire Lite">
+          <h3>Aquafire Lite</h3>
+          <p>Compact and easy to install &mdash; perfect for smaller spaces.</p>
+          <span class="model-badge">Coming Soon</span>
+        </div>
+      </div>
+    </section>
 
+    <div class="bento">
       <a href="support.html" class="bento-tile accent-red">
         <span class="tile-icon">&#x1f6e0;</span>
         <h2 class="tile-title">Support Hub</h2>
