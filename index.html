@@ -151,6 +151,11 @@
       border-radius: 20px;
     }
 
+    /* ── Section Headers ── */
+    .section-header { margin: 40px 0 20px; }
+    .section-header h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.3px; }
+    .section-header p { color: var(--text-muted); font-size: 0.92rem; margin-top: 4px; }
+
     /* Responsive */
     @media (max-width: 900px) {
       .bento { grid-template-columns: repeat(2, 1fr); }
@@ -163,7 +168,13 @@
       .bento-tile { padding: 22px 20px 18px; }
       .hero h1 { font-size: 1.6rem; }
       .hero { padding: 40px 0 36px; }
-      .model-grid { grid-template-columns: 1fr; }
+      .model-grid {
+        grid-template-columns: repeat(3, 75vw);
+        overflow-x: auto; -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 8px;
+      }
+      .model-card { scroll-snap-align: start; }
     }
   </style>
 </head>
@@ -233,15 +244,34 @@
       </div>
     </section>
 
+    <!-- Planning Considerations -->
+    <div class="section-header">
+      <h2>Planning Considerations</h2>
+      <p>Tools and resources to plan your fireplace installation.</p>
+    </div>
     <div class="bento">
-      <a href="enclosure-guide.html" class="bento-tile accent-amber">
+      <a href="enclosure-guide.html" class="bento-tile tile-wide accent-amber">
         <span class="tile-icon">&#x1f4d0;</span>
         <h2 class="tile-title">Enclosure Builder</h2>
         <p class="tile-desc">Interactive calculator for enclosure dimensions, cutout sizes, and light trap configuration.</p>
         <span class="tile-cta">Open Calculator <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
 
-      <a href="water-care.html" class="bento-tile accent-blue">
+      <a href="https://www.aquafire.com" target="_blank" rel="noopener" class="bento-tile accent-amber">
+        <span class="tile-icon">&#x1f6d2;</span>
+        <h2 class="tile-title">Shop Accessories</h2>
+        <p class="tile-desc">Complementary products, replacement parts, and everything to enhance your setup.</p>
+        <span class="tile-cta">Browse Shop <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+    </div>
+
+    <!-- Maintenance & Support -->
+    <div class="section-header">
+      <h2>Maintenance &amp; Support</h2>
+      <p>Keep your fireplace running beautifully.</p>
+    </div>
+    <div class="bento">
+      <a href="water-care.html" class="bento-tile tile-wide accent-blue">
         <span class="tile-icon">&#x1f4a7;</span>
         <h2 class="tile-title">Water Care Guide</h2>
         <p class="tile-desc">Water hardness calculator and Vapor Pure softener setup for crystal-clear flames.</p>
@@ -254,14 +284,10 @@
         <p class="tile-desc">Register your warranty, submit claims, troubleshooting guides, and FAQs.</p>
         <span class="tile-cta">Get Help <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
+    </div>
 
-      <a href="https://www.aquafire.com" target="_blank" rel="noopener" class="bento-tile accent-amber">
-        <span class="tile-icon">&#x1f6d2;</span>
-        <h2 class="tile-title">Shop Accessories</h2>
-        <p class="tile-desc">Complementary products, replacement parts, and everything to enhance your setup.</p>
-        <span class="tile-cta">Browse Shop <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-      </a>
-
+    <!-- Community & More -->
+    <div class="bento">
       <div class="bento-tile accent-muted tile-testimonial">
         <h2 class="tile-title">&ldquo;Absolutely stunning &mdash; guests always ask if it&rsquo;s real fire.&rdquo;</h2>
         <p class="tile-desc">&mdash; Sarah M., Aquafire Pro owner</p>
@@ -281,7 +307,7 @@
         <span class="tile-cta">Watch Now <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
 
-      <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="bento-tile accent-red tile-cta-type">
+      <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="bento-tile accent-red tile-cta-type tile-wide">
         <span class="tile-icon">&#x1f4ac;</span>
         <h2 class="tile-title">Need a Custom Quote?</h2>
         <p class="tile-desc">Our team can help with custom enclosures, commercial projects, and bulk orders.</p>
