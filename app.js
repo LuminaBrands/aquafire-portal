@@ -452,11 +452,11 @@ function drawCutoutDiagram(dims) {
 //   y increases UPWARD (floor at bottom, ceiling at top)
 //
 function drawLightDiagram() {
-  const { model, dims, setback, backSetback, openingHeight, hearthType } = getState();
+  const { modelKey, model, dims, setback, backSetback, openingHeight, hearthType } = getState();
   const isDouble = hearthType === 'double';
   const dpr = window.devicePixelRatio || 1;
   const isMobile = window.innerWidth <= 800;
-  const W = 700, H = isMobile ? 700 : 500;
+  const W = 700, H = isMobile ? 700 : 650;
   canvas.width  = W * dpr;
   canvas.height = H * dpr;
   canvas.style.width  = '';
@@ -513,7 +513,7 @@ function drawLightDiagram() {
   const offY = Math.round(depth3D * 0.32);
 
   // ── Pixel mapping (adjusted for 3D offset) ──
-  const marginL = 70, marginR = isDouble ? 190 : 170, marginT = 30 + offY, marginB = 65;
+  const marginL = 70, marginR = isDouble ? 190 : 170, marginT = 50 + offY, marginB = 65;
   const drawW = W - marginL - marginR - offX;
   const drawH = H - marginT - marginB;
   const pxPerInch = Math.min(drawW / (encDepth + 2), drawH / (encHeight + 2));
@@ -1223,6 +1223,69 @@ function drawLightDiagram() {
   ctx.textAlign = 'center';
   ctx.fillText('FRONT', px(0), frontBackPy);
   ctx.fillText('BACK', px(encDepth), frontBackPy);
+
+  // ── Total Depth dimension (above ceiling) ──
+  const totalDepthInsert = modelKey === 'lite' ? 9.375 : 12;
+  const totalDepth = setback + totalDepthInsert + backSetback;
+  const tdY = pyB(encHeight) - wallThick - 18;
+
+  // Extension lines from walls up to arrow
+  ctx.strokeStyle = '#878c99';
+  ctx.lineWidth = 0.7;
+  ctx.setLineDash([3, 3]);
+  ctx.globalAlpha = 0.4;
+  ctx.beginPath();
+  ctx.moveTo(px(0), py(encHeight) - wallThick);
+  ctx.lineTo(px(0), tdY + 5);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(px(encDepth), py(encHeight) - wallThick);
+  ctx.lineTo(px(encDepth), tdY + 5);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.globalAlpha = 1;
+
+  // Arrow line
+  ctx.strokeStyle = '#e8a838';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(px(0), tdY);
+  ctx.lineTo(px(encDepth), tdY);
+  ctx.stroke();
+
+  // Tick marks
+  ctx.beginPath();
+  ctx.moveTo(px(0), tdY - 5);
+  ctx.lineTo(px(0), tdY + 5);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(px(encDepth), tdY - 5);
+  ctx.lineTo(px(encDepth), tdY + 5);
+  ctx.stroke();
+
+  // Arrowheads
+  ctx.fillStyle = '#e8a838';
+  ctx.beginPath();
+  ctx.moveTo(px(0), tdY);
+  ctx.lineTo(px(0) + 8, tdY - 4);
+  ctx.lineTo(px(0) + 8, tdY + 4);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(px(encDepth), tdY);
+  ctx.lineTo(px(encDepth) - 8, tdY - 4);
+  ctx.lineTo(px(encDepth) - 8, tdY + 4);
+  ctx.closePath();
+  ctx.fill();
+
+  // Total depth label
+  ctx.fillStyle = '#e8a838';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(frac(totalDepth), (px(0) + px(encDepth)) / 2, tdY - 8);
+  ctx.font = '9px sans-serif';
+  ctx.fillStyle = '#878c99';
+  ctx.fillText('TOTAL DEPTH', (px(0) + px(encDepth)) / 2, tdY - 24);
 
   // ── Legend ──
   const legendX = px(encDepth) + wallThick + 116;
