@@ -89,6 +89,29 @@
       background: var(--red-dark);
       box-shadow: 0 4px 20px rgba(192,57,43,0.35);
     }
+    .hero-secondary-nav {
+      display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 14px;
+    }
+    .hero-secondary-nav a {
+      font-size: 0.82rem; color: var(--text-muted); text-decoration: none;
+      transition: color 0.15s;
+    }
+    .hero-secondary-nav a:hover { color: var(--text); }
+    .hero-secondary-nav .sep { color: var(--border); user-select: none; }
+
+    /* ── Resources Section ── */
+    .resources-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .resources-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;
+    }
+    .resource-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 22px 20px; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .resource-card:hover { border-color: var(--red); box-shadow: 0 2px 12px var(--red-glow); }
+    .resource-card .resource-title { font-weight: 600; font-size: 0.92rem; color: var(--text); }
+    .resource-card .resource-type { font-size: 0.78rem; color: var(--text-muted); }
 
     /* ── Specs Section ── */
     .section-title {
@@ -321,6 +344,17 @@
         <h1>Aquafire Pro</h1>
         <p class="tagline">The most advanced water vapor electric fireplace insert. Dual LED light bars, 30+ flame colors, 20-hour runtime, and home automation compatibility.</p>
         <a href="#guide" class="btn-primary">Begin Setup Guide</a>
+        <div class="hero-secondary-nav">
+          <a href="#specs">Specifications</a>
+          <span class="sep">&middot;</span>
+          <a href="#features">Key Features</a>
+          <span class="sep">&middot;</span>
+          <a href="water-care.html" target="_blank" rel="noopener">Water Hardness Guide</a>
+          <span class="sep">&middot;</span>
+          <a href="enclosure-guide.html" target="_blank" rel="noopener">Enclosure Builder</a>
+          <span class="sep">&middot;</span>
+          <a href="#resources">Resources</a>
+        </div>
       </div>
     </section>
 
@@ -375,7 +409,7 @@
     </section>
 
     <!-- Specifications -->
-    <section class="specs-section">
+    <section class="specs-section" id="specs">
       <h2 class="section-title">Specifications</h2>
       <div class="specs-grid">
         <div class="spec-card">
@@ -414,7 +448,7 @@
     </section>
 
     <!-- Key Features -->
-    <section class="features-section">
+    <section class="features-section" id="features">
       <h2 class="section-title">Key Features</h2>
       <div class="features-grid">
         <div class="feature-item"><strong>30+ Flame Colors</strong> &mdash; Select from over 30 preset color options via the included remote or the dedicated iOS/Android app.</div>
@@ -423,6 +457,29 @@
         <div class="feature-item"><strong>Direct Plumbing Ready</strong> &mdash; Connect to a water line for continuous operation without manual refills.</div>
         <div class="feature-item"><strong>Home Automation</strong> &mdash; Compatible with smart home systems for seamless integration and voice control.</div>
         <div class="feature-item"><strong>Gang Units Together</strong> &mdash; Combine multiple inserts for up to 40 ft of continuous flame on a single control unit.</div>
+      </div>
+    </section>
+
+    <!-- Resources / Downloads -->
+    <section class="resources-section" id="resources">
+      <h2 class="section-title">Resources</h2>
+      <div class="resources-grid">
+        <a class="resource-card" href="https://www.aquafire.com/pages/aquafire-pro-installation-manual" target="_blank" rel="noopener">
+          <span class="resource-title">Full Installation Manual</span>
+          <span class="resource-type">PDF Download</span>
+        </a>
+        <a class="resource-card" href="https://www.aquafire.com/pages/aquafire-warranty" target="_blank" rel="noopener">
+          <span class="resource-title">Warranty</span>
+          <span class="resource-type">PDF Download</span>
+        </a>
+        <a class="resource-card" href="https://www.aquafire.com/pages/aquafire-pro-drawings" target="_blank" rel="noopener">
+          <span class="resource-title">Drawings</span>
+          <span class="resource-type">PDF Download</span>
+        </a>
+        <a class="resource-card" href="https://www.aquafire.com/pages/aquafire-pro-user-manual" target="_blank" rel="noopener">
+          <span class="resource-title">User Manual</span>
+          <span class="resource-type">PDF Download</span>
+        </a>
       </div>
     </section>
 
