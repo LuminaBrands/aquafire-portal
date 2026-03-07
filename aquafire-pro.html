@@ -163,6 +163,120 @@
       border-radius: var(--radius);
     }
 
+    /* ── Interactive Video Guide ── */
+    .guide-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .guide-section .section-title { margin-bottom: 8px; }
+    .guide-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 28px; }
+
+    /* Step progress bar */
+    .guide-progress { display: flex; align-items: center; gap: 0; margin-bottom: 24px; }
+    .guide-progress-step {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--surface); border: 2px solid var(--border);
+      font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
+      cursor: pointer; transition: all 0.25s; flex-shrink: 0;
+      position: relative; z-index: 1;
+    }
+    .guide-progress-step:hover { border-color: var(--text-muted); color: var(--text); }
+    .guide-progress-step.active {
+      background: var(--red); border-color: var(--red); color: #fff;
+      box-shadow: 0 0 12px var(--red-glow);
+    }
+    .guide-progress-step.completed {
+      background: #1a3a2a; border-color: #2d7a4f; color: #4ade80;
+    }
+    .guide-progress-bar {
+      flex: 1; height: 2px; background: var(--border); position: relative;
+    }
+    .guide-progress-bar .bar-fill {
+      position: absolute; top: 0; left: 0; height: 100%;
+      background: #2d7a4f; transition: width 0.4s ease;
+      width: 0;
+    }
+
+    /* Video + info layout */
+    .guide-player {
+      display: grid; grid-template-columns: 1fr; gap: 24px;
+    }
+    .guide-video-wrap {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+      border-radius: var(--radius); background: #000;
+      border: 1px solid var(--border);
+    }
+    .guide-video-wrap iframe {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      border: none; border-radius: var(--radius);
+    }
+
+    /* Overlay shown when segment ends */
+    .guide-overlay {
+      position: absolute; inset: 0; z-index: 5;
+      display: none; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      border-radius: var(--radius); flex-direction: column; gap: 12px;
+    }
+    .guide-overlay.visible { display: flex; }
+    .guide-overlay-text { color: #fff; font-size: 0.9rem; font-weight: 500; }
+    .guide-overlay-btn {
+      padding: 12px 36px; background: var(--red); color: #fff;
+      font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600;
+      border: none; border-radius: var(--radius-sm); cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      box-shadow: 0 2px 12px var(--red-glow);
+    }
+    .guide-overlay-btn:hover {
+      background: var(--red-dark); box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+      transform: translateY(-1px);
+    }
+
+    /* Step info card below video */
+    .guide-info {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+    }
+    .guide-step-label {
+      font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--red); margin-bottom: 6px;
+    }
+    .guide-step-title {
+      font-family: 'Poppins', sans-serif; font-size: 1.25rem;
+      font-weight: 700; margin-bottom: 8px;
+    }
+    .guide-step-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+    /* Nav buttons */
+    .guide-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);
+    }
+    .guide-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 24px; font-family: 'Inter', sans-serif; font-size: 0.88rem;
+      font-weight: 600; border-radius: var(--radius-sm); border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .guide-btn:hover { background: rgba(255,255,255,0.04); border-color: var(--text-muted); }
+    .guide-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+    .guide-btn-next {
+      background: var(--red); border-color: var(--red); color: #fff;
+      box-shadow: 0 2px 12px var(--red-glow);
+    }
+    .guide-btn-next:hover {
+      background: var(--red-dark); border-color: var(--red-dark);
+      box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+    }
+    .guide-btn-replay { border: none; background: none; padding: 10px 12px; color: var(--text-muted); }
+    .guide-btn-replay:hover { color: var(--text); background: none; }
+
+    @media (max-width: 600px) {
+      .guide-progress-step { width: 28px; height: 28px; font-size: 0.72rem; }
+      .guide-step-title { font-size: 1.1rem; }
+      .guide-nav { gap: 8px; }
+      .guide-btn { padding: 10px 16px; font-size: 0.82rem; }
+    }
+
     @media (max-width: 700px) {
       .pro-hero { gap: 28px; }
       .pro-hero-text h1 { font-size: 1.8rem; }
@@ -204,9 +318,50 @@
       </div>
     </section>
 
-    <!-- Quick Start Video -->
+    <!-- Interactive Step-by-Step Guide -->
+    <section class="guide-section" id="guide">
+      <h2 class="section-title">Interactive Setup Guide</h2>
+      <p class="guide-subtitle">Follow along at your own pace. Each step plays a short clip — press Next when you're ready to continue.</p>
+
+      <!-- Step progress indicator -->
+      <div class="guide-progress" id="guideProgress"></div>
+
+      <!-- Video player + overlay -->
+      <div class="guide-player">
+        <div class="guide-video-wrap">
+          <div id="guidePlayer"></div>
+          <div class="guide-overlay" id="guideOverlay">
+            <p class="guide-overlay-text" id="overlayText">Step complete</p>
+            <button class="guide-overlay-btn" id="overlayBtn">Next Step</button>
+          </div>
+        </div>
+
+        <!-- Step info + nav -->
+        <div class="guide-info">
+          <p class="guide-step-label" id="guideStepLabel">Step 1 of 8</p>
+          <h3 class="guide-step-title" id="guideStepTitle">Loading...</h3>
+          <p class="guide-step-desc" id="guideStepDesc"></p>
+          <div class="guide-nav">
+            <button class="guide-btn" id="guidePrev" disabled>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Back
+            </button>
+            <button class="guide-btn guide-btn-replay" id="guideReplay" title="Replay this step">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 4v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 15a9 9 0 105.64-11.36L1 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Replay
+            </button>
+            <button class="guide-btn guide-btn-next" id="guideNext">
+              Next
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full Video (collapsed) -->
     <section class="video-section">
-      <h2 class="section-title">Quick Start Video</h2>
+      <h2 class="section-title">Full Quick Start Video</h2>
       <div class="video-wrapper">
         <iframe src="https://www.youtube.com/embed/tJxpL1tJTIU" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Aquafire Pro quick start video"></iframe>
       </div>
@@ -299,6 +454,220 @@
       const open = navLinks?.classList.toggle('open');
       toggle.setAttribute('aria-expanded', String(open));
     });
+  </script>
+
+  <!-- Interactive Video Guide -->
+  <script>
+    // ── Step definitions ──
+    // Adjust timestamps (in seconds) to match your video.
+    const GUIDE_STEPS = [
+      {
+        title: 'Unbox & Inspect Contents',
+        desc: 'Carefully remove the Aquafire Pro from the packaging. Verify all components are included: the fireplace insert, power adapter, remote control, water tank, and documentation.',
+        start: 0,
+        end: 30
+      },
+      {
+        title: 'Position the Insert',
+        desc: 'Place the Aquafire Pro in your enclosure or desired location. Ensure the unit is level and there is adequate clearance around all sides.',
+        start: 30,
+        end: 65
+      },
+      {
+        title: 'Connect Power',
+        desc: 'Route the power cable to your outlet. Plug the 24V adapter into a standard 110–120V outlet. Do not use an extension cord.',
+        start: 65,
+        end: 95
+      },
+      {
+        title: 'Fill the Water Tank',
+        desc: 'Remove the water tank and fill it with distilled or filtered water. Reinsert the tank into the unit until it clicks into place.',
+        start: 95,
+        end: 135
+      },
+      {
+        title: 'Power On & Pair Remote',
+        desc: 'Press the power button on the unit or use the included remote. The LED indicator will confirm the unit is on and ready.',
+        start: 135,
+        end: 170
+      },
+      {
+        title: 'Adjust Flame Settings',
+        desc: 'Use the remote or the Aquafire app to cycle through 30+ flame colors. Adjust flame height and brightness to your preference.',
+        start: 170,
+        end: 210
+      },
+      {
+        title: 'Connect the App (Optional)',
+        desc: 'Download the Aquafire app on iOS or Android. Connect via Bluetooth to unlock scheduling, color presets, and home automation features.',
+        start: 210,
+        end: 250
+      },
+      {
+        title: 'Enjoy Your Fireplace',
+        desc: 'Your Aquafire Pro is ready! Sit back and enjoy. Remember to check water levels periodically and follow the Water Care guide for best results.',
+        start: 250,
+        end: 280
+      }
+    ];
+
+    const VIDEO_ID = 'tJxpL1tJTIU';
+    let player = null;
+    let currentStep = 0;
+    let pollTimer = null;
+
+    // ── DOM refs ──
+    const progressEl = document.getElementById('guideProgress');
+    const overlayEl = document.getElementById('guideOverlay');
+    const overlayTextEl = document.getElementById('overlayText');
+    const overlayBtnEl = document.getElementById('overlayBtn');
+    const stepLabelEl = document.getElementById('guideStepLabel');
+    const stepTitleEl = document.getElementById('guideStepTitle');
+    const stepDescEl = document.getElementById('guideStepDesc');
+    const prevBtn = document.getElementById('guidePrev');
+    const nextBtn = document.getElementById('guideNext');
+    const replayBtn = document.getElementById('guideReplay');
+
+    // ── Build progress dots ──
+    function buildProgress() {
+      progressEl.innerHTML = '';
+      GUIDE_STEPS.forEach((step, i) => {
+        if (i > 0) {
+          const bar = document.createElement('div');
+          bar.className = 'guide-progress-bar';
+          const fill = document.createElement('div');
+          fill.className = 'bar-fill';
+          bar.appendChild(fill);
+          progressEl.appendChild(bar);
+        }
+        const dot = document.createElement('button');
+        dot.className = 'guide-progress-step';
+        dot.textContent = i + 1;
+        dot.title = step.title;
+        dot.addEventListener('click', () => goToStep(i));
+        progressEl.appendChild(dot);
+      });
+    }
+
+    // ── Update UI for current step ──
+    function updateUI() {
+      const step = GUIDE_STEPS[currentStep];
+      stepLabelEl.textContent = `Step ${currentStep + 1} of ${GUIDE_STEPS.length}`;
+      stepTitleEl.textContent = step.title;
+      stepDescEl.textContent = step.desc;
+      prevBtn.disabled = currentStep === 0;
+
+      const isLast = currentStep === GUIDE_STEPS.length - 1;
+      nextBtn.innerHTML = isLast
+        ? 'Finish'
+        : 'Next <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+      // Update progress dots
+      const dots = progressEl.querySelectorAll('.guide-progress-step');
+      const bars = progressEl.querySelectorAll('.guide-progress-bar');
+      dots.forEach((dot, i) => {
+        dot.classList.remove('active', 'completed');
+        if (i < currentStep) dot.classList.add('completed');
+        else if (i === currentStep) dot.classList.add('active');
+      });
+      bars.forEach((bar, i) => {
+        const fill = bar.querySelector('.bar-fill');
+        fill.style.width = i < currentStep ? '100%' : '0';
+      });
+    }
+
+    // ── Play the current step's segment ──
+    function playStep() {
+      const step = GUIDE_STEPS[currentStep];
+      overlayEl.classList.remove('visible');
+      if (player && player.seekTo) {
+        player.seekTo(step.start, true);
+        player.playVideo();
+        startPolling();
+      }
+    }
+
+    // ── Poll to detect when segment ends ──
+    function startPolling() {
+      stopPolling();
+      pollTimer = setInterval(() => {
+        if (!player || !player.getCurrentTime) return;
+        const t = player.getCurrentTime();
+        const step = GUIDE_STEPS[currentStep];
+        if (t >= step.end - 0.3) {
+          player.pauseVideo();
+          stopPolling();
+          showOverlay();
+        }
+      }, 250);
+    }
+
+    function stopPolling() {
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    }
+
+    // ── Show the "step complete" overlay ──
+    function showOverlay() {
+      const isLast = currentStep === GUIDE_STEPS.length - 1;
+      overlayTextEl.textContent = isLast ? 'Setup complete!' : 'Step complete';
+      overlayBtnEl.textContent = isLast ? 'Replay Guide' : 'Next Step';
+      overlayEl.classList.add('visible');
+    }
+
+    // ── Navigation ──
+    function goToStep(i) {
+      if (i < 0 || i >= GUIDE_STEPS.length) return;
+      currentStep = i;
+      updateUI();
+      playStep();
+    }
+
+    prevBtn.addEventListener('click', () => goToStep(currentStep - 1));
+    nextBtn.addEventListener('click', () => {
+      if (currentStep < GUIDE_STEPS.length - 1) {
+        goToStep(currentStep + 1);
+      } else {
+        goToStep(0);
+      }
+    });
+    replayBtn.addEventListener('click', () => playStep());
+    overlayBtnEl.addEventListener('click', () => {
+      if (currentStep < GUIDE_STEPS.length - 1) {
+        goToStep(currentStep + 1);
+      } else {
+        goToStep(0);
+      }
+    });
+
+    // ── YouTube IFrame API ──
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+
+    window.onYouTubeIframeAPIReady = function () {
+      player = new YT.Player('guidePlayer', {
+        videoId: VIDEO_ID,
+        playerVars: {
+          rel: 0,
+          modestbranding: 1,
+          controls: 1,
+          disablekb: 0,
+          start: GUIDE_STEPS[0].start
+        },
+        events: {
+          onReady: function () {
+            buildProgress();
+            updateUI();
+          },
+          onStateChange: function (e) {
+            // If user manually seeks past the end, re-sync
+            if (e.data === YT.PlayerState.PLAYING) {
+              startPolling();
+            }
+          }
+        }
+      });
+    };
   </script>
 </body>
 </html>
