@@ -229,6 +229,12 @@
       background: var(--red-dark); box-shadow: 0 4px 20px rgba(192,57,43,0.35);
       transform: translateY(-1px);
     }
+    .guide-overlay-replay {
+      background: none; border: none; color: rgba(255,255,255,0.7);
+      font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: color 0.15s; padding: 4px 8px;
+    }
+    .guide-overlay-replay:hover { color: #fff; }
 
     /* Step info card below video */
     .guide-info {
@@ -333,6 +339,7 @@
           <div class="guide-overlay" id="guideOverlay">
             <p class="guide-overlay-text" id="overlayText">Step complete</p>
             <button class="guide-overlay-btn" id="overlayBtn">Next Step</button>
+            <button class="guide-overlay-replay" id="overlayReplay">Replay Step</button>
           </div>
         </div>
 
@@ -515,6 +522,7 @@
     const prevBtn = document.getElementById('guidePrev');
     const nextBtn = document.getElementById('guideNext');
     const replayBtn = document.getElementById('guideReplay');
+    const overlayReplayBtn = document.getElementById('overlayReplay');
 
     // ── Build progress dots ──
     function buildProgress() {
@@ -619,6 +627,7 @@
       }
     });
     replayBtn.addEventListener('click', () => playStep());
+    overlayReplayBtn.addEventListener('click', () => playStep());
     overlayBtnEl.addEventListener('click', () => {
       if (currentStep < GUIDE_STEPS.length - 1) {
         goToStep(currentStep + 1);
