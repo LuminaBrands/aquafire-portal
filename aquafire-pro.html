@@ -329,9 +329,45 @@
     }
 
     @media (max-width: 700px) {
-      .pro-hero { gap: 28px; }
-      .pro-hero-text h1 { font-size: 1.8rem; }
+      .pro-hero { gap: 20px; padding: 24px 0 20px; flex-direction: column; align-items: stretch; }
+      .pro-hero-img { flex-basis: auto; max-width: 100%; }
+      .pro-hero-img img { border-radius: var(--radius-sm); max-height: 180px; object-fit: cover; width: 100%; }
+      .pro-hero-text { flex-basis: auto; }
+      .pro-hero-text .breadcrumb { margin-bottom: 6px; }
+      .pro-hero-text h1 { font-size: 1.6rem; margin-bottom: 6px; }
+      .pro-hero-text .tagline { font-size: 0.88rem; margin-bottom: 14px; line-height: 1.45; }
+      .pro-hero-text .btn-primary { padding: 10px 24px; font-size: 0.88rem; }
+      .hero-secondary-nav { gap: 6px; margin-top: 12px; }
+      .btn-secondary { padding: 6px 12px; font-size: 0.76rem; }
     }
+
+    /* ── Shop Accessories ── */
+    .shop-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .shop-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;
+    }
+    .shop-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+      display: flex; flex-direction: column;
+    }
+    .shop-card:hover { border-color: var(--red); box-shadow: 0 4px 16px var(--red-glow); transform: translateY(-2px); }
+    .shop-card-img {
+      width: 100%; aspect-ratio: 1 / 1; object-fit: cover;
+      background: #1a1c20; display: block;
+    }
+    .shop-card-body { padding: 16px; display: flex; flex-direction: column; gap: 4px; }
+    .shop-card-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+    .shop-card-meta { font-size: 0.78rem; color: var(--text-muted); }
+    .shop-card-badge {
+      display: inline-block; padding: 3px 8px; border-radius: 4px;
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+      background: rgba(192,57,43,0.12); color: var(--red); width: fit-content;
+    }
+    .shop-card-badge.coming-soon {
+      background: rgba(255,255,255,0.06); color: var(--text-muted);
+    }
+    .shop-card.disabled { opacity: 0.6; pointer-events: none; }
   </style>
   <link rel="stylesheet" href="hub.css">
 </head>
@@ -372,6 +408,7 @@
           <a href="water-care.html" class="btn-secondary" target="_blank" rel="noopener">Water Hardness Guide</a>
           <a href="enclosure-guide.html" class="btn-secondary" target="_blank" rel="noopener">Enclosure Builder</a>
           <a href="#resources" class="btn-secondary">Resources</a>
+          <a href="#shop" class="btn-secondary">Shop Accessories</a>
         </div>
       </div>
     </section>
@@ -510,6 +547,62 @@
             <span class="resource-type">PDF Download</span>
           </span>
         </a>
+      </div>
+    </section>
+
+    <!-- Shop Accessories -->
+    <section class="shop-section" id="shop">
+      <h2 class="section-title">Shop Accessories</h2>
+      <div class="shop-grid">
+        <a class="shop-card" href="https://www.aquafire.com/products/clearshield" target="_blank" rel="noopener">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ClearShield.png?v=1768251750" alt="ClearShield">
+          <div class="shop-card-body">
+            <span class="shop-card-name">ClearShield</span>
+            <span class="shop-card-meta">Water treatment solution</span>
+          </div>
+        </a>
+        <a class="shop-card" href="https://www.aquafire.com/products/vapor-pure-filter-softener-system" target="_blank" rel="noopener">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/VaporPure.png?v=1768251750" alt="Vapor Pure Water Softener">
+          <div class="shop-card-body">
+            <span class="shop-card-name">Vapor Pure Water Softener</span>
+            <span class="shop-card-meta">Inline water softener system</span>
+          </div>
+        </a>
+        <a class="shop-card" href="https://www.aquafire.com/products/scent-diffuser" target="_blank" rel="noopener">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ScentDiffuser.png?v=1768251750" alt="Scent Diffuser">
+          <div class="shop-card-body">
+            <span class="shop-card-name">Scent Diffuser</span>
+            <span class="shop-card-meta">Add fragrance to your flame</span>
+          </div>
+        </a>
+        <a class="shop-card" href="https://www.aquafire.com/products/tank-guard" target="_blank" rel="noopener">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/TankGuard.png?v=1768251750" alt="Tank Guard">
+          <div class="shop-card-body">
+            <span class="shop-card-name">Tank Guard</span>
+            <span class="shop-card-meta">Reservoir protection</span>
+          </div>
+        </a>
+        <a class="shop-card" href="https://www.aquafire.com/collections/replacement-parts" target="_blank" rel="noopener">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ReplacementParts.png?v=1768251750" alt="Replacement Parts">
+          <div class="shop-card-body">
+            <span class="shop-card-name">Replacement Parts</span>
+            <span class="shop-card-meta">Browse all parts</span>
+          </div>
+        </a>
+        <div class="shop-card disabled">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AquafireBox.png?v=1768251750" alt="AquafireBox Inserts">
+          <div class="shop-card-body">
+            <span class="shop-card-name">AquafireBox Inserts</span>
+            <span class="shop-card-badge coming-soon">Coming Soon</span>
+          </div>
+        </div>
+        <div class="shop-card disabled">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/FreeStanding.png?v=1768251750" alt="Free Standing Fireplaces">
+          <div class="shop-card-body">
+            <span class="shop-card-name">Free Standing Fireplaces</span>
+            <span class="shop-card-badge coming-soon">Coming Soon</span>
+          </div>
+        </div>
       </div>
     </section>
 
