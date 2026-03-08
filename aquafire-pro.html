@@ -350,6 +350,99 @@
       .btn-secondary { padding: 6px 12px; font-size: 0.76rem; }
     }
 
+    /* ── Troubleshooting Guide ── */
+    .troubleshoot-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .troubleshoot-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 28px; }
+
+    /* Category tabs */
+    .ts-categories {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;
+    }
+    .ts-cat-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text-muted);
+      font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .ts-cat-btn:hover { border-color: var(--text-muted); color: var(--text); }
+    .ts-cat-btn.active {
+      background: var(--red); border-color: var(--red); color: #fff;
+      box-shadow: 0 2px 12px var(--red-glow);
+    }
+    .ts-cat-btn svg { flex-shrink: 0; }
+
+    /* Problem accordion */
+    .ts-problems { display: flex; flex-direction: column; gap: 10px; }
+    .ts-problem {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .ts-problem.open { border-color: rgba(192,57,43,0.4); box-shadow: 0 2px 12px var(--red-glow); }
+    .ts-problem-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; cursor: pointer; gap: 12px;
+      transition: background 0.15s;
+    }
+    .ts-problem-header:hover { background: rgba(255,255,255,0.02); }
+    .ts-problem-title {
+      font-size: 0.9rem; font-weight: 600; color: var(--text); line-height: 1.4;
+    }
+    .ts-problem-chevron {
+      flex-shrink: 0; color: var(--text-muted); transition: transform 0.25s;
+    }
+    .ts-problem.open .ts-problem-chevron { transform: rotate(180deg); }
+
+    .ts-problem-body {
+      max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+    }
+    .ts-problem.open .ts-problem-body { max-height: 800px; }
+
+    .ts-solutions {
+      padding: 0 20px 20px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .ts-solution {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      padding: 14px 16px; background: rgba(255,255,255,0.02);
+      border-radius: 6px; border-left: 3px solid var(--border);
+    }
+    .ts-solution-cause, .ts-solution-fix { font-size: 0.84rem; line-height: 1.55; }
+    .ts-solution-label {
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.8px; margin-bottom: 4px;
+    }
+    .ts-solution-cause .ts-solution-label { color: var(--text-muted); }
+    .ts-solution-fix .ts-solution-label { color: #4ade80; }
+    .ts-solution-cause p { color: var(--text-muted); }
+    .ts-solution-fix p { color: var(--text); }
+
+    /* Alerts reference table */
+    .ts-alerts { display: flex; flex-direction: column; gap: 10px; }
+    .ts-alert-row {
+      display: grid; grid-template-columns: auto 1fr 1fr 1fr; gap: 16px;
+      align-items: center; padding: 14px 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 0.84rem;
+    }
+    .ts-alert-lights { display: flex; gap: 6px; }
+    .ts-alert-light {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .ts-alert-label {
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 2px;
+    }
+    .ts-alert-value { color: var(--text); line-height: 1.45; }
+    .ts-alert-cause { color: var(--text-muted); line-height: 1.45; }
+
+    @media (max-width: 600px) {
+      .ts-solution { grid-template-columns: 1fr; gap: 8px; }
+      .ts-alert-row { grid-template-columns: 1fr; gap: 8px; }
+      .ts-cat-btn { padding: 8px 14px; font-size: 0.8rem; }
+    }
+
     /* ── Shop Accessories ── */
     .shop-section { padding: 48px 0; border-top: 1px solid var(--border); }
     .shop-grid {
@@ -416,6 +509,7 @@
           <a href="#features" class="btn-secondary">Key Features</a>
           <a href="water-care.html" class="btn-secondary" target="_blank" rel="noopener">Water Hardness Guide</a>
           <a href="enclosure-guide.html" class="btn-secondary" target="_blank" rel="noopener">Enclosure Builder</a>
+          <a href="#troubleshoot" class="btn-secondary">Troubleshooting</a>
           <a href="#resources" class="btn-secondary">Resources</a>
           <a href="#shop" class="btn-secondary">Shop Accessories</a>
         </div>
@@ -470,6 +564,41 @@
       <div class="video-wrapper">
         <iframe src="https://www.youtube.com/embed/tJxpL1tJTIU" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Aquafire Pro quick start video"></iframe>
       </div>
+    </section>
+
+    <!-- Interactive Troubleshooting Guide -->
+    <section class="troubleshoot-section" id="troubleshoot">
+      <h2 class="section-title">Troubleshooting Guide</h2>
+      <p class="troubleshoot-subtitle">Select a category below, then tap a problem to see possible causes and solutions.</p>
+
+      <div class="ts-categories" id="tsCategories">
+        <button class="ts-cat-btn active" data-cat="power">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Power
+        </button>
+        <button class="ts-cat-btn" data-cat="water">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          Water
+        </button>
+        <button class="ts-cat-btn" data-cat="remote">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+          Remote Control
+        </button>
+        <button class="ts-cat-btn" data-cat="flame">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4-3-8-7.5-8-12a8 8 0 0 1 16 0c0 4.5-4 9-8 12z"/><circle cx="12" cy="10" r="3"/></svg>
+          Flame Appearance
+        </button>
+        <button class="ts-cat-btn" data-cat="led">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+          LED Lights
+        </button>
+        <button class="ts-cat-btn" data-cat="alerts">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Lights &amp; Beeps
+        </button>
+      </div>
+
+      <div id="tsContent"></div>
     </section>
 
     <!-- Specifications -->
@@ -866,6 +995,248 @@
         }
       });
     };
+  </script>
+
+  <!-- Troubleshooting Guide -->
+  <script>
+  (function() {
+    const TS_DATA = {
+      power: [
+        {
+          problem: 'Unit fails to turn on when using the power button',
+          solutions: [
+            { cause: 'Power supply not properly plugged in', fix: 'Check power supply connections and look for green LED on power supply indicating that it\u2019s powered.' },
+            { cause: 'Wall outlet may not be powered', fix: 'Check breaker main panel in building to see if breaker has been tripped or turned off.' }
+          ]
+        },
+        {
+          problem: 'Power supply indicator light is green, but unit still won\u2019t turn on',
+          solutions: [
+            { cause: 'Main fuse inside the fireplace may be blown', fix: 'Contact support for assistance.' }
+          ]
+        },
+        {
+          problem: 'Power supply indicator light is red',
+          solutions: [
+            { cause: 'Power supply has somehow been damaged', fix: 'Contact support for assistance.' }
+          ]
+        },
+        {
+          problem: 'Unit turns on, but power button flashes and immediately shuts off',
+          solutions: [
+            { cause: 'Possible internal component failure due to rough handling during shipping', fix: 'Contact support for assistance.' }
+          ]
+        },
+        {
+          problem: 'Unit appears to have power, but a "buzzing" sound is heard',
+          solutions: [
+            { cause: 'Power supply may not be fully plugged in on the back of the unit', fix: 'Check that 90 degree fitting is securely plugged in on the back of the unit. If it is and buzzing continues, contact support.' },
+            { cause: 'Power supply is fully plugged in on the back of the unit, but buzzing persists', fix: 'Main power outlet may be loose. Contact support for assistance.' }
+          ]
+        }
+      ],
+      water: [
+        {
+          problem: 'Musty or stale smell when unit is running',
+          solutions: [
+            { cause: 'Old or stale water generally created from lack of use', fix: 'Drain and refill with fresh water. Consider cleaning per the PM maintenance guidelines.' }
+          ]
+        },
+        {
+          problem: 'Leak detected after unit has been unused for an extended period of time',
+          solutions: [
+            { cause: 'Float sensor in mist tank may be stuck creating above normal water level in mist tube', fix: 'Drain excess water to proper level. Lift and plunge mist maker rack vigorously 10\u201315 times to free up float sensor in mist tank. Allow unit to run and recheck to make sure correct water level is maintained.' }
+          ]
+        },
+        {
+          problem: 'Unit beeps then turns off',
+          solutions: [
+            { cause: 'Low water level', fix: 'Refill unit manually or verify that water feed is on if unit is permanently plumbed.' }
+          ]
+        }
+      ],
+      remote: [
+        {
+          problem: 'Remote control does not turn fireplace on/off',
+          solutions: [
+            { cause: 'Possible dead battery', fix: 'Install new CR-2032 battery (Lithium).' },
+            { cause: 'Remote may not be synced to this particular fireplace', fix: 'Push and hold the power button on the fireplace until it flashes, then hit any button on the remote. Use this process to sync multiple fireplaces to a single remote.' }
+          ]
+        },
+        {
+          problem: 'Remote control powers the fireplace on/off, but doesn\u2019t seem to respond to flame adjustments or color changes',
+          solutions: [
+            { cause: 'Possible low battery', fix: 'Install new CR-2032 battery (Lithium).' },
+            { cause: 'Possible sync issue', fix: 'Push and hold the power button on the fireplace until it flashes, then hit any button on the remote to re-sync.' }
+          ]
+        },
+        {
+          problem: 'Remote does not work despite trying all steps listed above',
+          solutions: [
+            { cause: 'Remote may be malfunctioning', fix: 'Contact support for further assistance.' }
+          ]
+        }
+      ],
+      flame: [
+        {
+          problem: 'Flame height is less than 6" high in all sections',
+          solutions: [
+            { cause: 'Possible air flow issue due to enclosure design or ambient room currents', fix: 'Verify that fireplace is getting sufficient air and that no AC vents, fans, or air currents are impacting the mist from rising vertically.' },
+            { cause: 'Flame volume may be low', fix: 'Use remote (or phone app) to increase volume of mist by pressing the "+".' }
+          ]
+        },
+        {
+          problem: 'Flame height is less than 6" high in one section only',
+          solutions: [
+            { cause: 'Mist maker may need to be cleaned', fix: 'Follow PM instructions for cleaning mist maker. Consider cleaning all mist makers.' },
+            { cause: 'Water level in mist tube may be too high', fix: 'Remove excess water to proper level which is the height of the black mushroom cap.' }
+          ]
+        },
+        {
+          problem: 'Flames appear more "smoky" than desired',
+          solutions: [
+            { cause: 'Excess mist is being generated', fix: 'Use remote (or phone app) to decrease volume of mist by pressing the "\u2212".' }
+          ]
+        },
+        {
+          problem: 'Slower flame movement is desired',
+          solutions: [
+            { cause: 'Flame speed setting is too high', fix: 'Use remote (or phone app) to decrease speed of mist by pressing the "\u2212".' }
+          ]
+        },
+        {
+          problem: 'Faster flame movement is desired',
+          solutions: [
+            { cause: 'Flame speed setting is too low', fix: 'Use remote (or phone app) to increase speed of mist by pressing the "+".' }
+          ]
+        }
+      ],
+      led: [
+        {
+          problem: 'Lights are not on when unit is on',
+          solutions: [
+            { cause: 'Loose connection on light strip(s)', fix: 'Check connection on right end of light strip to make sure it is securely connected.' },
+            { cause: 'Possible problem with the light strip or LED driver card', fix: 'Contact support for further assistance.' }
+          ]
+        },
+        {
+          problem: 'One or more light cells are not working on an individual light strip',
+          solutions: [
+            { cause: 'There is a problem with the light strip', fix: 'Contact support for further assistance.' }
+          ]
+        }
+      ],
+      alerts: 'alerts'
+    };
+
+    const ALERTS_DATA = [
+      {
+        lights: ['#c0392b', '#c0392b', '#4ade80'],
+        beeps: 'Two quick beeps, every two seconds',
+        alert: 'Low / No Water',
+        causes: ['The water supply hasn\u2019t been turned on.', 'Water needs to be added.']
+      },
+      {
+        lights: ['blink', 'blink', 'blink'],
+        beeps: 'None',
+        alert: 'Maintenance Reminder',
+        causes: ['Due for preventative maintenance cleaning \u2014 press and hold middle and left buttons together to reset.']
+      },
+      {
+        lights: ['cycle', 'cycle', 'cycle'],
+        beeps: 'Three long beeps, every second',
+        alert: 'Overflow / High Water Alert',
+        causes: ['Water level is too high.', 'Float sensor is stuck.']
+      },
+      {
+        lights: ['flash', 'flash', 'flash'],
+        beeps: 'One short beep, every two seconds',
+        alert: 'Voltage Alert',
+        causes: ['Possible shortage.', 'Faulty power adapter.']
+      }
+    ];
+
+    const contentEl = document.getElementById('tsContent');
+    const catBtns = document.querySelectorAll('.ts-cat-btn');
+
+    function renderProblems(catKey) {
+      if (catKey === 'alerts' || TS_DATA[catKey] === 'alerts') {
+        return renderAlerts();
+      }
+      const problems = TS_DATA[catKey] || [];
+      let html = '<div class="ts-problems">';
+      problems.forEach((p, i) => {
+        html += `
+          <div class="ts-problem" data-idx="${i}">
+            <div class="ts-problem-header" onclick="this.parentElement.classList.toggle('open')">
+              <span class="ts-problem-title">${p.problem}</span>
+              <svg class="ts-problem-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="ts-problem-body">
+              <div class="ts-solutions">
+                ${p.solutions.map(s => `
+                  <div class="ts-solution">
+                    <div class="ts-solution-cause">
+                      <div class="ts-solution-label">Possible Cause</div>
+                      <p>${s.cause}</p>
+                    </div>
+                    <div class="ts-solution-fix">
+                      <div class="ts-solution-label">Solution</div>
+                      <p>${s.fix}</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>`;
+      });
+      html += '</div>';
+      return html;
+    }
+
+    function renderAlerts() {
+      let html = '<div class="ts-alerts">';
+      ALERTS_DATA.forEach(a => {
+        const lightsHtml = a.lights.map(c => {
+          if (c === 'blink') return '<div class="ts-alert-light" style="background:var(--text-muted);opacity:0.6"></div>';
+          if (c === 'cycle') return '<div class="ts-alert-light" style="background:linear-gradient(135deg,#c0392b,#f39c12,#4ade80)"></div>';
+          if (c === 'flash') return '<div class="ts-alert-light" style="background:var(--text-muted);animation:none"></div>';
+          return `<div class="ts-alert-light" style="background:${c}"></div>`;
+        }).join('');
+
+        html += `
+          <div class="ts-alert-row">
+            <div class="ts-alert-lights">${lightsHtml}</div>
+            <div>
+              <div class="ts-alert-label">Beeps</div>
+              <div class="ts-alert-value">${a.beeps}</div>
+            </div>
+            <div>
+              <div class="ts-alert-label">Alert</div>
+              <div class="ts-alert-value">${a.alert}</div>
+            </div>
+            <div>
+              <div class="ts-alert-label">Possible Cause</div>
+              <div class="ts-alert-cause">${a.causes.join('<br>')}</div>
+            </div>
+          </div>`;
+      });
+      html += '</div>';
+      return html;
+    }
+
+    function setCategory(catKey) {
+      catBtns.forEach(b => b.classList.toggle('active', b.dataset.cat === catKey));
+      contentEl.innerHTML = renderProblems(catKey);
+    }
+
+    catBtns.forEach(btn => {
+      btn.addEventListener('click', () => setCategory(btn.dataset.cat));
+    });
+
+    // Initialize with power category
+    setCategory('power');
+  })();
   </script>
 </body>
 </html>
