@@ -28,96 +28,97 @@
 
     /* ── Hub Dashboard Hero ── */
     .hub-hero {
-      padding: 36px 0 0;
+      padding: 20px 0 0;
       text-align: center;
     }
     .hub-hero .breadcrumb {
-      font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;
+      font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;
     }
     .hub-hero .breadcrumb a {
       text-decoration: none; color: var(--text-muted); transition: color 0.15s;
     }
     .hub-hero .breadcrumb a:hover { color: var(--text); }
     .hub-hero h1 {
-      font-size: 2.4rem; font-weight: 700; letter-spacing: -0.5px;
-      line-height: 1.15; margin-bottom: 6px;
+      font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px;
+      line-height: 1.15; margin-bottom: 2px;
     }
     .hub-hero .hub-tagline {
-      font-size: 1rem; color: var(--text-muted); margin-bottom: 28px;
+      font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;
     }
 
     /* Primary CTA card */
     .hub-cta-card {
-      display: flex; align-items: center; gap: 24px;
+      display: flex; align-items: center; gap: 16px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 20px 24px;
+      border-radius: var(--radius); padding: 14px 18px;
       text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;
-      margin-bottom: 20px; text-align: left;
+      margin-bottom: 12px; text-align: left;
     }
     .hub-cta-card:hover {
       border-color: var(--red); box-shadow: 0 4px 24px var(--red-glow);
     }
     .hub-cta-thumb {
-      flex-shrink: 0; width: 120px; height: 72px; border-radius: var(--radius-sm);
+      flex-shrink: 0; width: 88px; height: 56px; border-radius: var(--radius-sm);
       object-fit: cover; background: #000;
     }
     .hub-cta-body { flex: 1; min-width: 0; }
     .hub-cta-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; font-weight: 600;
       text-transform: uppercase; letter-spacing: 0.5px;
-      background: rgba(192,57,43,0.15); color: var(--red); margin-bottom: 6px;
+      background: rgba(192,57,43,0.15); color: var(--red); margin-bottom: 3px;
     }
     .hub-cta-badge svg { flex-shrink: 0; }
     .hub-cta-title {
-      font-family: 'Poppins', sans-serif; font-size: 1.1rem;
-      font-weight: 700; margin-bottom: 2px;
+      font-family: 'Poppins', sans-serif; font-size: 0.95rem;
+      font-weight: 700; margin-bottom: 1px;
     }
-    .hub-cta-meta { font-size: 0.82rem; color: var(--text-muted); }
+    .hub-cta-meta { font-size: 0.78rem; color: var(--text-muted); }
 
     /* Progress dots */
     .hub-cta-progress {
-      display: flex; gap: 5px; margin-top: 8px;
+      display: flex; gap: 4px; margin-top: 5px;
     }
     .hub-cta-dot {
-      width: 8px; height: 8px; border-radius: 50%;
+      width: 6px; height: 6px; border-radius: 50%;
       background: var(--border);
     }
     .hub-cta-dot.filled { background: var(--red); }
 
-    /* Dashboard nav grid */
+    /* Dashboard nav grid — horizontal card layout */
     .hub-grid {
       display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 12px; margin-bottom: 8px;
+      gap: 8px; margin-bottom: 8px;
     }
     .hub-card {
-      display: flex; flex-direction: column; align-items: flex-start;
-      gap: 8px; padding: 20px 18px;
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px;
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius-sm); text-decoration: none;
-      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     .hub-card:hover {
       border-color: rgba(192,57,43,0.4); box-shadow: 0 2px 16px var(--red-glow);
-      transform: translateY(-2px);
     }
     .hub-card-icon {
-      width: 36px; height: 36px; border-radius: 8px;
+      width: 32px; height: 32px; border-radius: 6px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
       background: rgba(255,255,255,0.04); color: var(--text-muted);
       transition: color 0.2s, background 0.2s;
     }
     .hub-card:hover .hub-card-icon { color: var(--red); background: rgba(192,57,43,0.1); }
     .hub-card-label {
-      font-weight: 600; font-size: 0.88rem; color: var(--text); line-height: 1.3;
+      font-weight: 600; font-size: 0.82rem; color: var(--text); line-height: 1.3;
+      white-space: nowrap;
     }
     .hub-card-desc {
-      font-size: 0.78rem; color: var(--text-muted); line-height: 1.45; margin-top: -4px;
+      font-size: 0.72rem; color: var(--text-muted); line-height: 1.35;
+      margin-left: auto; text-align: right; white-space: nowrap; flex-shrink: 0;
     }
 
     /* Full-width bottom row card */
     .hub-grid-full {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
       margin-bottom: 0;
     }
 
@@ -379,15 +380,18 @@
     }
 
     @media (max-width: 700px) {
-      .hub-hero { padding: 24px 0 0; }
-      .hub-hero h1 { font-size: 1.7rem; }
-      .hub-hero .hub-tagline { font-size: 0.88rem; margin-bottom: 20px; }
-      .hub-cta-card { padding: 16px; gap: 16px; }
-      .hub-cta-thumb { width: 80px; height: 52px; }
-      .hub-cta-title { font-size: 0.95rem; }
-      .hub-grid { gap: 10px; }
-      .hub-grid-full { grid-template-columns: 1fr; gap: 10px; }
-      .hub-card { padding: 16px 14px; }
+      .hub-hero { padding: 16px 0 0; }
+      .hub-hero h1 { font-size: 1.5rem; }
+      .hub-hero .hub-tagline { font-size: 0.82rem; margin-bottom: 12px; }
+      .hub-cta-card { padding: 12px; gap: 12px; }
+      .hub-cta-thumb { width: 64px; height: 44px; }
+      .hub-cta-title { font-size: 0.88rem; }
+      .hub-grid { gap: 6px; }
+      .hub-grid-full { grid-template-columns: 1fr; gap: 6px; }
+      .hub-card { padding: 10px 12px; gap: 10px; }
+      .hub-card-icon { width: 28px; height: 28px; }
+      .hub-card-icon svg { width: 16px; height: 16px; }
+      .hub-card-desc { display: none; }
     }
 
     /* ── Troubleshooting Guide ── */
@@ -574,28 +578,28 @@
       <div class="hub-grid">
         <a href="#troubleshoot" class="hub-card">
           <div class="hub-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
           </div>
           <span class="hub-card-label">Troubleshooting</span>
           <span class="hub-card-desc">Diagnose &amp; fix common issues</span>
         </a>
         <a href="#specs" class="hub-card">
           <div class="hub-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
           </div>
           <span class="hub-card-label">Specs &amp; Features</span>
           <span class="hub-card-desc">Dimensions, power, capabilities</span>
         </a>
         <a href="water-care.html" class="hub-card">
           <div class="hub-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
           </div>
           <span class="hub-card-label">Water Care</span>
           <span class="hub-card-desc">Hardness guide &amp; maintenance</span>
         </a>
         <a href="enclosure-guide.html" class="hub-card">
           <div class="hub-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="22" height="12" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="22" height="12" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
           </div>
           <span class="hub-card-label">Enclosure Builder</span>
           <span class="hub-card-desc">Build specs &amp; requirements</span>
@@ -604,21 +608,21 @@
       <div class="hub-grid-full">
         <a href="#resources" class="hub-card">
           <div class="hub-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           </div>
           <span class="hub-card-label">Manuals</span>
           <span class="hub-card-desc">PDFs &amp; downloads</span>
         </a>
         <a href="#shop" class="hub-card">
           <div class="hub-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           </div>
           <span class="hub-card-label">Accessories</span>
           <span class="hub-card-desc">Shop add-ons &amp; parts</span>
         </a>
         <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="hub-card">
           <div class="hub-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </div>
           <span class="hub-card-label">Contact Support</span>
           <span class="hub-card-desc">Get help from our team</span>
