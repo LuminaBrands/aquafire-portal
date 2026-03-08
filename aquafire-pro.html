@@ -394,15 +394,14 @@
       .hub-cta-thumb { width: 72px; height: 48px; }
       .hub-cta-title { font-size: 0.92rem; }
       .hub-cta-arrow { display: none; }
-      .hub-grid, .hub-grid-full {
-        grid-template-columns: 1fr; gap: 8px;
-      }
+      .hub-grid, .hub-grid-full { gap: 8px; }
       .hub-card {
-        padding: 14px 16px; gap: 12px;
+        flex-direction: column; align-items: flex-start;
+        padding: 14px; gap: 6px;
       }
-      .hub-card-icon { width: 32px; height: 32px; }
-      .hub-card-icon svg { width: 18px; height: 18px; }
-      .hub-card-desc { font-size: 0.72rem; }
+      .hub-card-desc {
+        margin-left: 0; text-align: left; font-size: 0.7rem;
+      }
     }
 
     /* ── Troubleshooting Guide ── */
