@@ -28,11 +28,11 @@
 
     /* ── Hub Dashboard Hero ── */
     .hub-hero {
-      padding: 20px 0 0;
+      padding: 24px 0 0;
       text-align: center;
     }
     .hub-hero .breadcrumb {
-      font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;
+      font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px;
     }
     .hub-hero .breadcrumb a {
       text-decoration: none; color: var(--text-muted); transition: color 0.15s;
@@ -43,44 +43,51 @@
       line-height: 1.15; margin-bottom: 2px;
     }
     .hub-hero .hub-tagline {
-      font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;
+      font-size: 0.88rem; color: var(--text-muted); margin-bottom: 18px;
     }
 
-    /* Primary CTA card */
+    /* Primary CTA card — emphasized */
     .hub-cta-card {
-      display: flex; align-items: center; gap: 16px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 14px 18px;
+      display: flex; align-items: center; gap: 20px;
+      background: linear-gradient(135deg, rgba(192,57,43,0.08) 0%, var(--surface) 60%);
+      border: 1.5px solid rgba(192,57,43,0.35);
+      border-radius: var(--radius); padding: 18px 22px;
       text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;
-      margin-bottom: 12px; text-align: left;
+      margin-bottom: 14px; text-align: left;
+      box-shadow: 0 2px 16px var(--red-glow);
     }
     .hub-cta-card:hover {
-      border-color: var(--red); box-shadow: 0 4px 24px var(--red-glow);
+      border-color: var(--red); box-shadow: 0 6px 32px rgba(192,57,43,0.25);
     }
     .hub-cta-thumb {
-      flex-shrink: 0; width: 88px; height: 56px; border-radius: var(--radius-sm);
+      flex-shrink: 0; width: 100px; height: 64px; border-radius: var(--radius-sm);
       object-fit: cover; background: #000;
     }
     .hub-cta-body { flex: 1; min-width: 0; }
     .hub-cta-badge {
       display: inline-flex; align-items: center; gap: 5px;
-      padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; font-weight: 600;
+      padding: 2px 9px; border-radius: 20px; font-size: 0.67rem; font-weight: 600;
       text-transform: uppercase; letter-spacing: 0.5px;
-      background: rgba(192,57,43,0.15); color: var(--red); margin-bottom: 3px;
+      background: rgba(192,57,43,0.18); color: var(--red); margin-bottom: 4px;
     }
     .hub-cta-badge svg { flex-shrink: 0; }
     .hub-cta-title {
-      font-family: 'Poppins', sans-serif; font-size: 0.95rem;
+      font-family: 'Poppins', sans-serif; font-size: 1.05rem;
       font-weight: 700; margin-bottom: 1px;
     }
-    .hub-cta-meta { font-size: 0.78rem; color: var(--text-muted); }
+    .hub-cta-meta { font-size: 0.8rem; color: var(--text-muted); }
+    .hub-cta-arrow {
+      flex-shrink: 0; color: var(--red); opacity: 0.6;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .hub-cta-card:hover .hub-cta-arrow { opacity: 1; transform: translateX(3px); }
 
     /* Progress dots */
     .hub-cta-progress {
-      display: flex; gap: 4px; margin-top: 5px;
+      display: flex; gap: 4px; margin-top: 6px;
     }
     .hub-cta-dot {
-      width: 6px; height: 6px; border-radius: 50%;
+      width: 7px; height: 7px; border-radius: 50%;
       background: var(--border);
     }
     .hub-cta-dot.filled { background: var(--red); }
@@ -88,11 +95,11 @@
     /* Dashboard nav grid — horizontal card layout */
     .hub-grid {
       display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 8px; margin-bottom: 8px;
+      gap: 10px; margin-bottom: 10px;
     }
     .hub-card {
       display: flex; align-items: center; gap: 12px;
-      padding: 12px 14px;
+      padding: 14px 16px;
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius-sm); text-decoration: none;
       transition: border-color 0.2s, box-shadow 0.2s;
@@ -108,17 +115,17 @@
     }
     .hub-card:hover .hub-card-icon { color: var(--red); background: rgba(192,57,43,0.1); }
     .hub-card-label {
-      font-weight: 600; font-size: 0.82rem; color: var(--text); line-height: 1.3;
+      font-weight: 600; font-size: 0.84rem; color: var(--text); line-height: 1.3;
       white-space: nowrap;
     }
     .hub-card-desc {
-      font-size: 0.72rem; color: var(--text-muted); line-height: 1.35;
+      font-size: 0.74rem; color: var(--text-muted); line-height: 1.35;
       margin-left: auto; text-align: right; white-space: nowrap; flex-shrink: 0;
     }
 
-    /* Full-width bottom row card */
+    /* Bottom row — same 2-col grid */
     .hub-grid-full {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
       margin-bottom: 0;
     }
 
@@ -383,15 +390,16 @@
       .hub-hero { padding: 16px 0 0; }
       .hub-hero h1 { font-size: 1.5rem; }
       .hub-hero .hub-tagline { font-size: 0.82rem; margin-bottom: 12px; }
-      .hub-cta-card { padding: 12px; gap: 12px; }
-      .hub-cta-thumb { width: 64px; height: 44px; }
-      .hub-cta-title { font-size: 0.88rem; }
-      .hub-grid { gap: 6px; }
-      .hub-grid-full { grid-template-columns: 1fr; gap: 6px; }
-      .hub-card { padding: 10px 12px; gap: 10px; }
+      .hub-cta-card { padding: 14px; gap: 14px; }
+      .hub-cta-thumb { width: 72px; height: 48px; }
+      .hub-cta-title { font-size: 0.92rem; }
+      .hub-cta-arrow { display: none; }
+      .hub-grid { gap: 8px; }
+      .hub-grid-full { gap: 8px; }
+      .hub-card { padding: 12px 14px; gap: 10px; }
       .hub-card-icon { width: 28px; height: 28px; }
       .hub-card-icon svg { width: 16px; height: 16px; }
-      .hub-card-desc { display: none; }
+      .hub-card-desc { font-size: 0.68rem; }
     }
 
     /* ── Troubleshooting Guide ── */
@@ -572,6 +580,7 @@
             <div class="hub-cta-dot"></div><div class="hub-cta-dot"></div><div class="hub-cta-dot"></div>
           </div>
         </div>
+        <svg class="hub-cta-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </a>
 
       <!-- Dashboard Navigation Grid -->
