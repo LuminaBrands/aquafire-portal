@@ -326,6 +326,18 @@ function resizeCanvas() {
   canvas.height = window.innerHeight;
 }
 
+// ── Card guide dimensions (pixels) ──
+// The guide is drawn at a fixed pixel size; the user moves their phone until
+// the physical card lines up, then taps to confirm.  At that moment, the
+// guide's pixel width equals CARD_WIDTH real inches, giving us pxPerInch.
+function getCardGuide() {
+  const guideW = Math.round(canvas.width * 0.55);
+  const guideH = Math.round(guideW * (CARD_HEIGHT / CARD_WIDTH));
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  return { x: cx - guideW / 2, y: cy - guideH / 2, w: guideW, h: guideH };
+}
+
 // ── Calibration flow ──
 function startCalibration() {
   isCalibrated = false;
@@ -335,21 +347,53 @@ function startCalibration() {
   touchHint.style.display = 'none';
 
   if (calibMethod === 'card') {
-    calTitle.textContent = 'Place Credit Card on Surface';
-    calInstruction.textContent = 'Tap two opposite corners of the card to set the scale.';
+    calTitle.textContent = 'Align Your Credit Card';
+    calInstruction.textContent =
+      'Place a card on the surface, then move your phone until the card fills the guide outline. Tap anywhere to confirm.';
+    // Hide the two-dot progress for card mode (single tap now)
+    calDot1.style.display = 'none';
+    calDot2.style.display = 'none';
   } else {
     const dist = parseFloat(knownDistInput.value) || 12;
     calTitle.textContent = `Mark a ${dist}\u2033 Distance`;
     calInstruction.textContent = 'Tap the start and end points of the known distance.';
+    calDot1.style.display = '';
+    calDot2.style.display = '';
+    calDot1.className = 'cal-dot active';
+    calDot2.className = 'cal-dot';
   }
-  calDot1.className = 'cal-dot active';
-  calDot2.className = 'cal-dot';
 
   if (animFrame) cancelAnimationFrame(animFrame);
   renderLoop();
 }
 
+function finishCalibration(centerX, centerY) {
+  isCalibrated = true;
+  calibrateUI.style.display = 'none';
+  hudEl.style.display = 'flex';
+  touchHint.style.display = 'block';
+  updateHUD();
+
+  anchorPos = { x: centerX, y: centerY };
+  rectAngle = 0;
+  rectScale = 1;
+  isLocked = false;
+  hudLock.classList.remove('active');
+
+  setAnchorOrientation();
+  setTimeout(updateGyroStatus, 500);
+}
+
 function handleCalibrationTap(x, y) {
+  if (calibMethod === 'card') {
+    // Single tap — guide overlay sets the scale
+    const guide = getCardGuide();
+    pxPerInch = guide.w / CARD_WIDTH;
+    finishCalibration(canvas.width / 2, canvas.height / 2);
+    return;
+  }
+
+  // Manual two-tap flow (unchanged)
   calPoints.push({ x, y });
 
   if (calPoints.length === 1) {
@@ -362,36 +406,16 @@ function handleCalibrationTap(x, y) {
     const dx = calPoints[1].x - calPoints[0].x;
     const dy = calPoints[1].y - calPoints[0].y;
     const pxDist = Math.sqrt(dx * dx + dy * dy);
-
-    const realDist = calibMethod === 'card'
-      ? CARD_DIAGONAL
-      : (parseFloat(knownDistInput.value) || 12);
+    const realDist = parseFloat(knownDistInput.value) || 12;
 
     pxPerInch = pxDist / realDist;
     calDot2.className = 'cal-dot done';
 
     setTimeout(() => {
-      isCalibrated = true;
-      calibrateUI.style.display = 'none';
-      hudEl.style.display = 'flex';
-      touchHint.style.display = 'block';
-      updateHUD();
-
-      // Place cutout centered between the two cal points
-      anchorPos = {
-        x: (calPoints[0].x + calPoints[1].x) / 2,
-        y: (calPoints[0].y + calPoints[1].y) / 2,
-      };
-      rectAngle = 0;
-      rectScale = 1;
-      isLocked = false;
-      hudLock.classList.remove('active');
-
-      // Snapshot orientation at placement time
-      setAnchorOrientation();
-
-      // Update gyro indicator now that we know if it works
-      setTimeout(updateGyroStatus, 500);
+      finishCalibration(
+        (calPoints[0].x + calPoints[1].x) / 2,
+        (calPoints[0].y + calPoints[1].y) / 2,
+      );
     }, 400);
   }
 }
@@ -535,9 +559,14 @@ function renderLoop() {
 }
 
 function drawCalibrationMarkers() {
+  if (calibMethod === 'card') {
+    drawCardGuide();
+    return;
+  }
+
+  // Manual mode: draw tapped points
   for (let i = 0; i < calPoints.length; i++) {
     const p = calPoints[i];
-    // Pulsing ring
     const pulse = 1 + 0.15 * Math.sin(Date.now() / 300);
     ctx.strokeStyle = '#e8a838';
     ctx.lineWidth = 2;
@@ -573,6 +602,58 @@ function drawCalibrationMarkers() {
     ctx.stroke();
     ctx.setLineDash([]);
   }
+}
+
+function drawCardGuide() {
+  const g = getCardGuide();
+  const pulse = 1 + 0.08 * Math.sin(Date.now() / 400);
+
+  // Subtle animated glow
+  ctx.shadowColor = 'rgba(232, 168, 56, 0.25)';
+  ctx.shadowBlur = 12 * pulse;
+
+  // Card outline — rounded rectangle
+  ctx.strokeStyle = `rgba(232, 168, 56, ${0.6 + 0.15 * Math.sin(Date.now() / 400)})`;
+  ctx.lineWidth = 2.5;
+  roundRect(ctx, g.x, g.y, g.w, g.h, 10);
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Light fill so user can see the target area
+  ctx.fillStyle = 'rgba(232, 168, 56, 0.06)';
+  roundRect(ctx, g.x, g.y, g.w, g.h, 10);
+  ctx.fill();
+
+  // Corner brackets for alignment
+  const bLen = 24;
+  ctx.strokeStyle = '#e8a838';
+  ctx.lineWidth = 3;
+  const corners = [
+    [g.x, g.y, 1, 1],
+    [g.x + g.w, g.y, -1, 1],
+    [g.x + g.w, g.y + g.h, -1, -1],
+    [g.x, g.y + g.h, 1, -1],
+  ];
+  for (const [cx, cy, dx, dy] of corners) {
+    ctx.beginPath();
+    ctx.moveTo(cx + bLen * dx, cy);
+    ctx.lineTo(cx, cy);
+    ctx.lineTo(cx, cy + bLen * dy);
+    ctx.stroke();
+  }
+
+  // Label above the guide
+  ctx.fillStyle = '#e8a838';
+  ctx.font = 'bold 14px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('Align card to this outline', g.x + g.w / 2, g.y - 14);
+
+  // Dimension hint below
+  ctx.font = '12px Inter, sans-serif';
+  ctx.fillStyle = 'rgba(232, 168, 56, 0.6)';
+  ctx.textBaseline = 'top';
+  ctx.fillText('3\u215C\u2033 \u00D7 2\u215B\u2033', g.x + g.w / 2, g.y + g.h + 12);
 }
 
 function drawCutoutOverlay() {
