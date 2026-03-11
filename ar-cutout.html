@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>AR Cutout Visualizer | Aquafire</title>
+  <meta name="description" content="Use your camera to visualize the exact fireplace cutout dimensions on your surface material.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #121417; --surface: #1b1e24; --surface-alt: #22262e;
+      --border: #2c3038; --text: #e4e5e9; --text-muted: #878c99;
+      --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
+      --amber: #e8a838; --radius: 14px; --radius-sm: 8px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  </style>
+  <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="ar-cutout-styles.css">
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="getting-started.html">Getting Started</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="enclosure-guide.html">Enclosure Guide</a></li>
+        <li><a href="water-care.html">Water Care</a></li>
+        <li><a href="ar-cutout.html" class="active">AR Cutout</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header (shown before camera starts) -->
+  <header class="page-header" id="page-header">
+    <div class="container">
+      <h1>AR Cutout Visualizer</h1>
+      <p class="page-sub">Point your camera at a surface and see the exact cutout dimensions overlaid in real time.</p>
+    </div>
+  </header>
+
+  <main class="container" id="main-content">
+
+    <!-- Step 1: Configure -->
+    <section class="card config-card" id="config-section">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div>
+          <h2>Configure Your Cutout</h2>
+          <p class="card-desc">Select the model and size to visualize on your surface.</p>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ar-model">Model</label>
+          <select id="ar-model">
+            <option value="original">Aquafire Original</option>
+            <option value="pro">Aquafire Pro</option>
+            <option value="lite">Aquafire Lite</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="ar-size">Size</label>
+          <select id="ar-size">
+            <option value="20">20"</option>
+            <option value="40" selected>40"</option>
+            <option value="60">60"</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ar-setback">Front Setback</label>
+          <div class="slider-row">
+            <input type="range" id="ar-setback" min="0" max="12" step="0.25" value="1">
+            <span id="ar-setback-display" class="slider-val">1"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dim-summary" id="dim-summary">
+        <div class="dim-item">
+          <span class="dim-label">Cutout Width</span>
+          <span class="dim-value" id="sum-w">--</span>
+        </div>
+        <div class="dim-item">
+          <span class="dim-label">Cutout Depth</span>
+          <span class="dim-value" id="sum-d">--</span>
+        </div>
+        <div class="dim-item">
+          <span class="dim-label">Cutout Height</span>
+          <span class="dim-value" id="sum-h">--</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2: Calibrate -->
+    <section class="card config-card" id="calibrate-section">
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div>
+          <h2>Calibrate Scale</h2>
+          <p class="card-desc">Place a standard credit card on your surface for size reference, or enter a known distance manually.</p>
+        </div>
+      </div>
+
+      <div class="calibrate-options">
+        <button class="calibrate-btn active" data-method="card" id="btn-card">
+          <span class="cal-icon">&#x1f4b3;</span>
+          <span>Credit Card</span>
+          <span class="cal-detail">3.375" &times; 2.125"</span>
+        </button>
+        <button class="calibrate-btn" data-method="manual" id="btn-manual">
+          <span class="cal-icon">&#x1f4cf;</span>
+          <span>Manual Entry</span>
+          <span class="cal-detail">Enter a known distance</span>
+        </button>
+      </div>
+
+      <div class="manual-input" id="manual-input" style="display:none">
+        <div class="form-group">
+          <label for="known-distance">Known distance (inches)</label>
+          <input type="number" id="known-distance" min="1" max="120" step="0.25" value="12" placeholder="e.g. 12">
+        </div>
+        <p class="hint">You'll draw this distance on screen to set the scale.</p>
+      </div>
+    </section>
+
+    <!-- Launch Button -->
+    <div class="launch-row">
+      <button class="btn-primary btn-launch" id="btn-launch">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Open Camera &amp; Visualize
+      </button>
+      <p class="launch-hint">Works best on mobile devices with a rear camera.</p>
+    </div>
+
+    <!-- Unsupported notice -->
+    <div class="notice" id="no-camera-notice" style="display:none">
+      <p><strong>Camera not available.</strong> Your browser or device doesn't support camera access. Try opening this page on your phone using Safari (iOS) or Chrome (Android).</p>
+    </div>
+
+  </main>
+
+  <!-- ── AR Fullscreen Overlay ── -->
+  <div class="ar-overlay" id="ar-overlay" style="display:none">
+    <video id="ar-video" autoplay playsinline muted></video>
+    <canvas id="ar-canvas"></canvas>
+
+    <!-- Calibration UI -->
+    <div class="ar-calibrate-ui" id="ar-calibrate-ui">
+      <div class="cal-prompt">
+        <div class="cal-prompt-inner">
+          <h3 id="cal-title">Place Credit Card on Surface</h3>
+          <p id="cal-instruction">Tap two opposite corners of the card to set the scale.</p>
+          <div class="cal-progress">
+            <span class="cal-dot active" id="cal-dot-1"></span>
+            <span class="cal-dot" id="cal-dot-2"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AR HUD -->
+    <div class="ar-hud" id="ar-hud" style="display:none">
+      <div class="hud-top">
+        <div class="hud-dims" id="hud-dims"></div>
+      </div>
+      <div class="hud-bottom">
+        <button class="hud-btn" id="hud-recalibrate" title="Recalibrate">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        </button>
+        <button class="hud-btn" id="hud-lock" title="Lock/Unlock position">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </button>
+        <button class="hud-btn hud-btn-close" id="hud-close" title="Close AR">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Touch instructions -->
+    <div class="ar-touch-hint" id="ar-touch-hint" style="display:none">
+      <p>Drag to move &middot; Pinch to resize &middot; Two-finger rotate</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" height="20">
+        <p>The complete guide to your Aquafire water vapor fireplace.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Guides</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="quick-start.html">Quick Start</a>
+          <a href="enclosure-guide.html">Enclosure Guide</a>
+          <a href="water-care.html">Water Care</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="ar-cutout.html">AR Cutout</a>
+          <a href="support.html">Support Hub</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <p>&copy; 2026 Aquafire. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="embed.js"></script>
+  <script src="ar-cutout-app.js"></script>
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle?.addEventListener('click', () => {
+      const open = navLinks?.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  </script>
+</body>
+</html>
