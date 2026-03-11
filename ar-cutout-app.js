@@ -39,8 +39,6 @@ const CARD_DIAGONAL = Math.sqrt(CARD_WIDTH * CARD_WIDTH + CARD_HEIGHT * CARD_HEI
 // ── DOM Refs ──
 const modelSelect = document.getElementById('ar-model');
 const sizeSelect = document.getElementById('ar-size');
-const setbackSlider = document.getElementById('ar-setback');
-const setbackDisp = document.getElementById('ar-setback-display');
 const sumW = document.getElementById('sum-w');
 const sumD = document.getElementById('sum-d');
 const sumH = document.getElementById('sum-h');
@@ -95,10 +93,11 @@ let currentOrientation = { alpha: 0, beta: 0, gamma: 0 };
 // Smoothed offset applied to the rendered position
 let gyroOffset = { x: 0, y: 0 };
 // Smoothing factor (0 = no smoothing, 1 = frozen). Higher = smoother but laggier
-const GYRO_SMOOTH = 0.25;
+const GYRO_SMOOTH = 0.55;
 // Pixels of screen shift per degree of device rotation (tunable)
-// At ~12" viewing distance, 1° ≈ 0.2" of parallax, so ~15-20px at typical DPI
-const PX_PER_DEG = 18;
+const PX_PER_DEG = 12;
+// Deadzone in degrees — ignore tiny jitters below this threshold
+const GYRO_DEADZONE = 0.4;
 
 // Touch gesture state
 let activeTouches = {};
@@ -127,12 +126,11 @@ function frac(n) {
 function getDims() {
   const modelKey = modelSelect.value;
   const sizeKey = sizeSelect.value;
-  const setback = parseFloat(setbackSlider.value) || 0;
   const model = MODELS[modelKey];
   const dims = model.sizes[sizeKey];
   return {
-    w: dims.w + (setback * 2),
-    d: dims.d + setback,
+    w: dims.w,
+    d: dims.d,
     h: dims.h,
     modelName: model.name,
     size: sizeKey,
@@ -174,10 +172,6 @@ function getRenderPos() {
 // ── Config listeners ──
 modelSelect.addEventListener('change', updateSummary);
 sizeSelect.addEventListener('change', updateSummary);
-setbackSlider.addEventListener('input', () => {
-  setbackDisp.textContent = frac(parseFloat(setbackSlider.value));
-  updateSummary();
-});
 updateSummary();
 
 // ── Calibration method toggle ──
@@ -248,24 +242,34 @@ function setAnchorOrientation() {
   gyroOffset = { x: 0, y: 0 };
 }
 
+/** Apply deadzone — zero out small rotations to suppress jitter */
+function applyDeadzone(val) {
+  if (Math.abs(val) < GYRO_DEADZONE) return 0;
+  // Subtract deadzone so response starts from 0 at the edge
+  return val - Math.sign(val) * GYRO_DEADZONE;
+}
+
 /** Update gyroOffset based on orientation change since anchor was set.
- *  Called every frame in the render loop. */
+ *  Called every frame in the render loop.
+ *
+ *  The phone is pointed DOWN at a horizontal surface (beta ≈ 90°).
+ *  In this posture:
+ *    - alpha (yaw / compass) maps to horizontal screen shift
+ *    - gamma (left-right tilt) maps to vertical screen shift (phone tilted
+ *      toward/away from user moves the view up/down on the surface)
+ *  Beta changes near 90° mostly mean moving closer/further from surface,
+ *  which doesn't translate to useful lateral shift, so we ignore it.
+ */
 function updateGyroOffset() {
   if (!anchorOrientation || !gyroAvailable) return;
 
-  // Compute how much the phone has rotated since the cutout was placed
-  // gamma = left/right tilt → horizontal screen shift
-  // beta = forward/back tilt → vertical screen shift
-  const dGamma = angleDiff(currentOrientation.gamma, anchorOrientation.gamma);
-  const dBeta = angleDiff(currentOrientation.beta, anchorOrientation.beta);
+  const dAlpha = applyDeadzone(angleDiff(currentOrientation.alpha, anchorOrientation.alpha));
+  const dGamma = applyDeadzone(angleDiff(currentOrientation.gamma, anchorOrientation.gamma));
 
-  // Also factor in yaw (alpha) for horizontal panning
-  const dAlpha = angleDiff(currentOrientation.alpha, anchorOrientation.alpha);
-
-  // Target offset: phone rotated right → cutout should move left on screen
-  // (so it appears to stay in world space)
-  const targetX = -(dGamma + dAlpha * 0.5) * PX_PER_DEG;
-  const targetY = dBeta * PX_PER_DEG;
+  // Yaw rotation → horizontal shift (rotate right = scene shifts left)
+  const targetX = -dAlpha * PX_PER_DEG;
+  // Left-right tilt when pointing down → vertical shift
+  const targetY = dGamma * PX_PER_DEG;
 
   // Smooth toward target (exponential moving average)
   gyroOffset.x += (targetX - gyroOffset.x) * (1 - GYRO_SMOOTH);
@@ -719,4 +723,3 @@ function roundRect(ctx, x, y, w, h, r) {
 // Also update overlay when config changes during AR session
 modelSelect.addEventListener('change', () => { if (isCalibrated) updateHUD(); });
 sizeSelect.addEventListener('change', () => { if (isCalibrated) updateHUD(); });
-setbackSlider.addEventListener('input', () => { if (isCalibrated) updateHUD(); });
