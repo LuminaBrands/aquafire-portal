@@ -212,7 +212,7 @@ function startCalibration() {
   if (calibMethod === 'card') {
     calTitle.textContent = 'Align Your Credit Card';
     calInstruction.textContent =
-      'Hold a card against the wall or surface where your fireplace will go. Step back until the card fits the guide, then tap to confirm.';
+      'Place a credit card on your countertop or surface material. Step back until the card fits the guide, then tap to confirm.';
     // Hide the two-dot progress for card mode (single tap now)
     calDot1.style.display = 'none';
     calDot2.style.display = 'none';
