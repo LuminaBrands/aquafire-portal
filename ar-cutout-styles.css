@@ -270,8 +270,26 @@
 }
 .hud-top {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
+
+/* Gyro status badge */
+.gyro-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  background: rgba(18,20,23,0.7);
+  border: 1px solid var(--border);
+  pointer-events: none;
+}
+.gyro-badge.active { color: #27ae60; border-color: rgba(39,174,96,0.3); }
+.gyro-badge.off { color: var(--text-muted); }
+.gyro-badge.pending { color: var(--amber); }
 .hud-dims {
   pointer-events: auto;
   background: rgba(18,20,23,0.82);
