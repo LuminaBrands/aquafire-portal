@@ -1,5 +1,6 @@
 /* ──────────────────────────────────────────────────────────
    Aquafire AR Cutout Visualizer – ar-cutout-app.js
+   v2 — Gyroscope-stabilized overlay
    ────────────────────────────────────────────────────────── */
 
 // ── Model Data (mirrored from app.js) ──
@@ -65,21 +66,39 @@ const manualInput = document.getElementById('manual-input');
 const knownDistInput = document.getElementById('known-distance');
 const pageHeader = document.getElementById('page-header');
 const mainContent = document.getElementById('main-content');
+const gyroStatus = document.getElementById('gyro-status');
 
 const ctx = canvas.getContext('2d');
 
 // ── State ──
-let calibMethod = 'card';       // 'card' | 'manual'
-let calPoints = [];             // calibration tap points [{x,y}]
-let pxPerInch = 0;              // pixels per inch (set after calibration)
-let cutout = { w: 0, d: 0, h: 0 }; // current cutout dims in inches
-let rectPos = { x: 0, y: 0 };  // center of overlay rect (px)
-let rectAngle = 0;              // rotation angle (rad)
-let rectScale = 1;              // additional pinch scale
+let calibMethod = 'card';
+let calPoints = [];
+let pxPerInch = 0;
+let cutout = { w: 0, d: 0, h: 0 };
+
+// The cutout's "anchor" position — where the user placed it in screen coords
+let anchorPos = { x: 0, y: 0 };
+let rectAngle = 0;
+let rectScale = 1;
 let isLocked = false;
 let isCalibrated = false;
 let stream = null;
 let animFrame = null;
+
+// ── Gyroscope / Device Orientation ──
+let gyroAvailable = false;
+let gyroPermission = 'unknown'; // 'unknown' | 'granted' | 'denied'
+// Orientation at the moment the user places/anchors the cutout
+let anchorOrientation = null; // { alpha, beta, gamma }
+// Current live orientation from the device
+let currentOrientation = { alpha: 0, beta: 0, gamma: 0 };
+// Smoothed offset applied to the rendered position
+let gyroOffset = { x: 0, y: 0 };
+// Smoothing factor (0 = no smoothing, 1 = frozen). Higher = smoother but laggier
+const GYRO_SMOOTH = 0.25;
+// Pixels of screen shift per degree of device rotation (tunable)
+// At ~12" viewing distance, 1° ≈ 0.2" of parallax, so ~15-20px at typical DPI
+const PX_PER_DEG = 18;
 
 // Touch gesture state
 let activeTouches = {};
@@ -115,10 +134,6 @@ function getDims() {
     w: dims.w + (setback * 2),
     d: dims.d + setback,
     h: dims.h,
-    rawW: dims.w,
-    rawD: dims.d,
-    rawH: dims.h,
-    setback,
     modelName: model.name,
     size: sizeKey,
   };
@@ -130,8 +145,6 @@ function updateSummary() {
   sumW.textContent = frac(d.w);
   sumD.textContent = frac(d.d);
   sumH.textContent = frac(d.h);
-
-  // Update HUD if visible
   if (isCalibrated) updateHUD();
 }
 
@@ -140,6 +153,22 @@ function updateHUD() {
     `<div class="hud-dim-item"><span class="hud-dim-label">W</span><span class="hud-dim-val">${frac(cutout.w)}</span></div>` +
     `<div class="hud-dim-item"><span class="hud-dim-label">D</span><span class="hud-dim-val">${frac(cutout.d)}</span></div>` +
     `<div class="hud-dim-item"><span class="hud-dim-label">H</span><span class="hud-dim-val">${frac(cutout.h)}</span></div>`;
+}
+
+/** Normalize angle difference to [-180, 180] */
+function angleDiff(a, b) {
+  let d = a - b;
+  while (d > 180) d -= 360;
+  while (d < -180) d += 360;
+  return d;
+}
+
+/** Get the effective render position: anchor + gyro offset */
+function getRenderPos() {
+  return {
+    x: anchorPos.x + gyroOffset.x,
+    y: anchorPos.y + gyroOffset.y,
+  };
 }
 
 // ── Config listeners ──
@@ -172,8 +201,82 @@ if (!hasCamera) {
   noCameraNotice.style.display = 'block';
 }
 
+// ── Gyroscope Setup ──
+function onDeviceOrientation(e) {
+  if (e.alpha == null) return;
+  currentOrientation = {
+    alpha: e.alpha, // compass heading (0-360)
+    beta: e.beta,   // front-back tilt (-180 to 180)
+    gamma: e.gamma, // left-right tilt (-90 to 90)
+  };
+  gyroAvailable = true;
+}
+
+async function requestGyroPermission() {
+  // iOS 13+ requires explicit permission
+  if (typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
+    try {
+      const result = await DeviceOrientationEvent.requestPermission();
+      gyroPermission = result; // 'granted' or 'denied'
+      if (result === 'granted') {
+        window.addEventListener('deviceorientation', onDeviceOrientation, true);
+      }
+    } catch {
+      gyroPermission = 'denied';
+    }
+  } else {
+    // Android / desktop — just listen, no permission needed
+    window.addEventListener('deviceorientation', onDeviceOrientation, true);
+    gyroPermission = 'granted';
+    // Check if events actually fire after a short delay
+    setTimeout(() => {
+      if (!gyroAvailable) {
+        gyroPermission = 'denied';
+      }
+    }, 1000);
+  }
+}
+
+/** Snapshot the current orientation as the anchor reference */
+function setAnchorOrientation() {
+  if (gyroAvailable) {
+    anchorOrientation = { ...currentOrientation };
+  } else {
+    anchorOrientation = null;
+  }
+  gyroOffset = { x: 0, y: 0 };
+}
+
+/** Update gyroOffset based on orientation change since anchor was set.
+ *  Called every frame in the render loop. */
+function updateGyroOffset() {
+  if (!anchorOrientation || !gyroAvailable) return;
+
+  // Compute how much the phone has rotated since the cutout was placed
+  // gamma = left/right tilt → horizontal screen shift
+  // beta = forward/back tilt → vertical screen shift
+  const dGamma = angleDiff(currentOrientation.gamma, anchorOrientation.gamma);
+  const dBeta = angleDiff(currentOrientation.beta, anchorOrientation.beta);
+
+  // Also factor in yaw (alpha) for horizontal panning
+  const dAlpha = angleDiff(currentOrientation.alpha, anchorOrientation.alpha);
+
+  // Target offset: phone rotated right → cutout should move left on screen
+  // (so it appears to stay in world space)
+  const targetX = -(dGamma + dAlpha * 0.5) * PX_PER_DEG;
+  const targetY = dBeta * PX_PER_DEG;
+
+  // Smooth toward target (exponential moving average)
+  gyroOffset.x += (targetX - gyroOffset.x) * (1 - GYRO_SMOOTH);
+  gyroOffset.y += (targetY - gyroOffset.y) * (1 - GYRO_SMOOTH);
+}
+
 // ── Launch AR ──
 btnLaunch.addEventListener('click', async () => {
+  // Request gyro permission FIRST (must be user-gesture-triggered on iOS)
+  await requestGyroPermission();
+
   try {
     stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } },
@@ -182,22 +285,37 @@ btnLaunch.addEventListener('click', async () => {
     video.srcObject = stream;
     await video.play();
 
-    // Size canvas to match video
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Show overlay
     overlay.style.display = 'block';
     pageHeader.style.display = 'none';
     mainContent.style.display = 'none';
     document.body.style.overflow = 'hidden';
 
-    // Reset calibration
+    // Update gyro status indicator
+    updateGyroStatus();
+
     startCalibration();
-  } catch (err) {
+  } catch {
     alert('Could not access camera. Please allow camera permissions and try again.');
   }
 });
+
+function updateGyroStatus() {
+  if (!gyroStatus) return;
+  if (gyroAvailable || gyroPermission === 'granted') {
+    gyroStatus.textContent = 'Gyro: Active';
+    gyroStatus.className = 'gyro-badge active';
+  } else if (gyroPermission === 'denied') {
+    gyroStatus.textContent = 'Gyro: Off';
+    gyroStatus.className = 'gyro-badge off';
+  } else {
+    gyroStatus.textContent = 'Gyro: Pending';
+    gyroStatus.className = 'gyro-badge pending';
+  }
+  gyroStatus.style.display = 'inline-block';
+}
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -217,13 +335,12 @@ function startCalibration() {
     calInstruction.textContent = 'Tap two opposite corners of the card to set the scale.';
   } else {
     const dist = parseFloat(knownDistInput.value) || 12;
-    calTitle.textContent = `Mark a ${dist}" Distance`;
+    calTitle.textContent = `Mark a ${dist}\u2033 Distance`;
     calInstruction.textContent = 'Tap the start and end points of the known distance.';
   }
   calDot1.className = 'cal-dot active';
   calDot2.className = 'cal-dot';
 
-  // Start render loop
   if (animFrame) cancelAnimationFrame(animFrame);
   renderLoop();
 }
@@ -242,17 +359,13 @@ function handleCalibrationTap(x, y) {
     const dy = calPoints[1].y - calPoints[0].y;
     const pxDist = Math.sqrt(dx * dx + dy * dy);
 
-    let realDist;
-    if (calibMethod === 'card') {
-      realDist = CARD_DIAGONAL; // diagonal of credit card
-    } else {
-      realDist = parseFloat(knownDistInput.value) || 12;
-    }
+    const realDist = calibMethod === 'card'
+      ? CARD_DIAGONAL
+      : (parseFloat(knownDistInput.value) || 12);
 
     pxPerInch = pxDist / realDist;
     calDot2.className = 'cal-dot done';
 
-    // Transition to AR mode
     setTimeout(() => {
       isCalibrated = true;
       calibrateUI.style.display = 'none';
@@ -260,12 +373,21 @@ function handleCalibrationTap(x, y) {
       touchHint.style.display = 'block';
       updateHUD();
 
-      // Center the rect
-      rectPos = { x: canvas.width / 2, y: canvas.height / 2 };
+      // Place cutout centered between the two cal points
+      anchorPos = {
+        x: (calPoints[0].x + calPoints[1].x) / 2,
+        y: (calPoints[0].y + calPoints[1].y) / 2,
+      };
       rectAngle = 0;
       rectScale = 1;
       isLocked = false;
       hudLock.classList.remove('active');
+
+      // Snapshot orientation at placement time
+      setAnchorOrientation();
+
+      // Update gyro indicator now that we know if it works
+      setTimeout(updateGyroStatus, 500);
     }, 400);
   }
 }
@@ -274,21 +396,21 @@ function handleCalibrationTap(x, y) {
 canvas.addEventListener('pointerdown', (e) => {
   e.preventDefault();
 
-  // During calibration: handle taps
   if (!isCalibrated) {
     handleCalibrationTap(e.clientX, e.clientY);
     return;
   }
 
-  // AR mode: start drag if not locked
   if (isLocked) return;
 
   activeTouches[e.pointerId] = { x: e.clientX, y: e.clientY };
-
   const ids = Object.keys(activeTouches);
+
   if (ids.length === 1) {
+    // Start drag — record current anchor + gyro offset as starting point
+    const renderPos = getRenderPos();
     dragStart = { x: e.clientX, y: e.clientY };
-    dragOffset = { x: rectPos.x, y: rectPos.y };
+    dragOffset = { x: renderPos.x, y: renderPos.y };
   } else if (ids.length === 2) {
     const [a, b] = ids.map(id => activeTouches[id]);
     lastPinchDist = Math.hypot(b.x - a.x, b.y - a.y);
@@ -307,12 +429,18 @@ canvas.addEventListener('pointermove', (e) => {
 
   const ids = Object.keys(activeTouches);
 
-  // Single finger drag
+  // Single finger drag — move the anchor
   if (ids.length === 1 && dragStart) {
     const dx = e.clientX - dragStart.x;
     const dy = e.clientY - dragStart.y;
-    rectPos.x = dragOffset.x + dx;
-    rectPos.y = dragOffset.y + dy;
+    // Move anchor so the rendered pos follows the finger
+    anchorPos.x = dragOffset.x + dx - gyroOffset.x;
+    anchorPos.y = dragOffset.y + dy - gyroOffset.y;
+    // Re-anchor the gyro so the cutout doesn't jump when you release
+    setAnchorOrientation();
+    // After re-anchoring, anchorPos IS the render pos
+    anchorPos.x = dragOffset.x + dx;
+    anchorPos.y = dragOffset.y + dy;
   }
 
   // Two finger: pinch + rotate
@@ -327,48 +455,47 @@ canvas.addEventListener('pointermove', (e) => {
       rectScale = Math.max(0.2, Math.min(rectScale, 5));
     }
 
-    const angleDelta = angle - lastPinchAngle;
-    rectAngle += angleDelta;
-
+    rectAngle += angle - lastPinchAngle;
     lastPinchDist = dist;
     lastPinchAngle = angle;
 
-    // Update center to midpoint of fingers
-    rectPos.x = (a.x + b.x) / 2;
-    rectPos.y = (a.y + b.y) / 2;
+    // Move anchor to midpoint of fingers
+    anchorPos.x = (a.x + b.x) / 2;
+    anchorPos.y = (a.y + b.y) / 2;
+    setAnchorOrientation();
   }
 });
 
-canvas.addEventListener('pointerup', (e) => {
+function onPointerEnd(e) {
   delete activeTouches[e.pointerId];
   if (Object.keys(activeTouches).length === 0) {
     dragStart = null;
     lastPinchDist = 0;
     lastPinchAngle = 0;
+    // Re-anchor orientation so cutout stays where user left it
+    setAnchorOrientation();
+    anchorPos = getRenderPos();
+    gyroOffset = { x: 0, y: 0 };
   }
-});
-canvas.addEventListener('pointercancel', (e) => {
-  delete activeTouches[e.pointerId];
-  if (Object.keys(activeTouches).length === 0) {
-    dragStart = null;
-    lastPinchDist = 0;
-    lastPinchAngle = 0;
-  }
-});
+}
+canvas.addEventListener('pointerup', onPointerEnd);
+canvas.addEventListener('pointercancel', onPointerEnd);
 
 // ── HUD Controls ──
-hudRecalibrate.addEventListener('click', () => {
-  startCalibration();
-});
+hudRecalibrate.addEventListener('click', () => startCalibration());
 
 hudLock.addEventListener('click', () => {
   isLocked = !isLocked;
   hudLock.classList.toggle('active', isLocked);
+  if (isLocked) {
+    // Bake in gyro offset and re-anchor
+    anchorPos = getRenderPos();
+    gyroOffset = { x: 0, y: 0 };
+    setAnchorOrientation();
+  }
 });
 
-hudClose.addEventListener('click', () => {
-  closeAR();
-});
+hudClose.addEventListener('click', () => closeAR());
 
 function closeAR() {
   overlay.style.display = 'none';
@@ -392,10 +519,11 @@ function closeAR() {
 function renderLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw calibration markers
   if (!isCalibrated) {
     drawCalibrationMarkers();
   } else {
+    // Update gyro offset every frame
+    updateGyroOffset();
     drawCutoutOverlay();
   }
 
@@ -405,29 +533,32 @@ function renderLoop() {
 function drawCalibrationMarkers() {
   for (let i = 0; i < calPoints.length; i++) {
     const p = calPoints[i];
-    // Crosshair
+    // Pulsing ring
+    const pulse = 1 + 0.15 * Math.sin(Date.now() / 300);
     ctx.strokeStyle = '#e8a838';
     ctx.lineWidth = 2;
+
+    // Crosshair
     ctx.beginPath();
     ctx.moveTo(p.x - 16, p.y);
     ctx.lineTo(p.x + 16, p.y);
     ctx.moveTo(p.x, p.y - 16);
     ctx.lineTo(p.x, p.y + 16);
     ctx.stroke();
+
     // Circle
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
-    ctx.strokeStyle = '#e8a838';
-    ctx.lineWidth = 2;
+    ctx.arc(p.x, p.y, 8 * pulse, 0, Math.PI * 2);
     ctx.stroke();
+
     // Label
     ctx.fillStyle = '#e8a838';
     ctx.font = 'bold 13px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(`Point ${i + 1}`, p.x, p.y - 22);
+    ctx.fillText(`Point ${i + 1}`, p.x, p.y - 24);
   }
 
-  // Draw line between points
+  // Dashed line between points
   if (calPoints.length === 2) {
     ctx.beginPath();
     ctx.moveTo(calPoints[0].x, calPoints[0].y);
@@ -443,14 +574,20 @@ function drawCalibrationMarkers() {
 function drawCutoutOverlay() {
   const w = cutout.w * pxPerInch * rectScale;
   const d = cutout.d * pxPerInch * rectScale;
+  const pos = getRenderPos();
 
   ctx.save();
-  ctx.translate(rectPos.x, rectPos.y);
+  ctx.translate(pos.x, pos.y);
   ctx.rotate(rectAngle);
 
+  // ── Glow / shadow behind the cutout ──
+  ctx.shadowColor = 'rgba(192, 57, 43, 0.35)';
+  ctx.shadowBlur = 24;
+
   // Semi-transparent fill
-  ctx.fillStyle = 'rgba(192, 57, 43, 0.12)';
+  ctx.fillStyle = 'rgba(192, 57, 43, 0.10)';
   ctx.fillRect(-w / 2, -d / 2, w, d);
+  ctx.shadowBlur = 0;
 
   // Border
   ctx.strokeStyle = 'rgba(192, 57, 43, 0.85)';
@@ -476,7 +613,7 @@ function drawCutoutOverlay() {
   }
 
   // Dashed center crosshair
-  ctx.strokeStyle = 'rgba(228,229,233,0.25)';
+  ctx.strokeStyle = 'rgba(228,229,233,0.2)';
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
   ctx.beginPath();
@@ -487,42 +624,54 @@ function drawCutoutOverlay() {
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // Dimension labels
-  ctx.fillStyle = '#fff';
-  ctx.font = 'bold 14px Inter, sans-serif';
+  // ── Dimension labels ──
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
-  // Width label (top)
-  const widthLabel = frac(cutout.w);
-  drawDimLabel(0, -d / 2 - 18, widthLabel, w);
+  // Width (top)
+  drawDimLabel(0, -d / 2 - 18, frac(cutout.w), w);
 
-  // Depth label (right side)
+  // Depth (right side, rotated)
   ctx.save();
   ctx.translate(w / 2 + 18, 0);
   ctx.rotate(Math.PI / 2);
   drawDimLabel(0, 0, frac(cutout.d), d);
   ctx.restore();
 
-  // "Insert goes here" text in center
-  ctx.fillStyle = 'rgba(228,229,233,0.5)';
+  // Center label
+  ctx.fillStyle = 'rgba(228,229,233,0.45)';
   ctx.font = '12px Inter, sans-serif';
   ctx.fillText('Insert cutout', 0, -10);
   ctx.font = '11px Inter, sans-serif';
-  ctx.fillStyle = 'rgba(228,229,233,0.35)';
-  ctx.fillText(getDims().modelName + ' ' + getDims().size + '\u2033', 0, 8);
+  ctx.fillStyle = 'rgba(228,229,233,0.3)';
+  const dims = getDims();
+  ctx.fillText(dims.modelName + ' ' + dims.size + '\u2033', 0, 8);
 
   ctx.restore();
+
+  // ── Anchor dot (small dot showing world-lock point) ──
+  if (gyroAvailable && !isLocked) {
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(232,168,56,0.4)';
+    ctx.fill();
+  }
 }
 
 function drawDimLabel(x, y, text, lineW) {
-  // Background pill
   const metrics = ctx.measureText(text);
-  const pw = metrics.width + 14;
+  const pw = metrics.width + 16;
   const ph = 22;
-  ctx.fillStyle = 'rgba(18,20,23,0.8)';
-  roundRect(ctx, x - pw / 2, y - ph / 2, pw, ph, 4);
+
+  // Background pill
+  ctx.fillStyle = 'rgba(18,20,23,0.82)';
+  roundRect(ctx, x - pw / 2, y - ph / 2, pw, ph, 5);
   ctx.fill();
+  // Subtle border
+  ctx.strokeStyle = 'rgba(232,168,56,0.25)';
+  ctx.lineWidth = 1;
+  roundRect(ctx, x - pw / 2, y - ph / 2, pw, ph, 5);
+  ctx.stroke();
 
   // Text
   ctx.fillStyle = '#e8a838';
@@ -531,19 +680,15 @@ function drawDimLabel(x, y, text, lineW) {
   ctx.textBaseline = 'middle';
   ctx.fillText(text, x, y);
 
-  // Arrows
+  // Dimension arrows
   const half = lineW / 2;
   const gap = pw / 2 + 4;
-  ctx.strokeStyle = 'rgba(232,168,56,0.6)';
+  ctx.strokeStyle = 'rgba(232,168,56,0.5)';
   ctx.lineWidth = 1;
   if (half > gap + 10) {
-    // Left arrow line
     ctx.beginPath();
     ctx.moveTo(x - gap, y);
     ctx.lineTo(x - half, y);
-    ctx.stroke();
-    // Right arrow line
-    ctx.beginPath();
     ctx.moveTo(x + gap, y);
     ctx.lineTo(x + half, y);
     ctx.stroke();
