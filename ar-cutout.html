@@ -54,7 +54,7 @@
   <header class="page-header" id="page-header">
     <div class="container">
       <h1>AR Cutout Visualizer</h1>
-      <p class="page-sub">Point your camera at a surface and see the exact cutout dimensions overlaid in real time.</p>
+      <p class="page-sub">Point your camera at the wall where your fireplace will go and see the exact cutout size overlaid to scale.</p>
     </div>
   </header>
 
@@ -143,7 +143,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
         Open Camera &amp; Visualize
       </button>
-      <p class="launch-hint">Works best on mobile devices with a rear camera.</p>
+      <p class="launch-hint">Works best on mobile. Hold a credit card against the target wall to calibrate at the right distance.</p>
     </div>
 
     <!-- Unsupported notice -->
@@ -175,15 +175,11 @@
     <!-- AR HUD -->
     <div class="ar-hud" id="ar-hud" style="display:none">
       <div class="hud-top">
-        <span class="gyro-badge" id="gyro-status" style="display:none">Gyro: Pending</span>
         <div class="hud-dims" id="hud-dims"></div>
       </div>
       <div class="hud-bottom">
         <button class="hud-btn" id="hud-recalibrate" title="Recalibrate">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-        </button>
-        <button class="hud-btn" id="hud-lock" title="Lock/Unlock position">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </button>
         <button class="hud-btn hud-btn-close" id="hud-close" title="Close AR">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -193,7 +189,7 @@
 
     <!-- Touch instructions -->
     <div class="ar-touch-hint" id="ar-touch-hint" style="display:none">
-      <p>Drag to reposition &middot; Pinch to resize &middot; Two-finger rotate &middot; Move phone to pan</p>
+      <p>Drag to reposition &middot; Pinch to resize &middot; Move phone to look around</p>
     </div>
   </div>
 
