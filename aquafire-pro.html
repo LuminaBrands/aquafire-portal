@@ -201,6 +201,13 @@
       margin-bottom: 28px;
       letter-spacing: -0.3px;
     }
+    .section-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(192,57,43,0.15); color: var(--red);
+      font-size: 0.75rem; font-weight: 700; margin-right: 8px;
+      vertical-align: middle;
+    }
     .specs-section { padding: 48px 0; border-top: 1px solid var(--border); }
     .specs-grid {
       display: grid;
@@ -392,10 +399,13 @@
       .hub-hero h1 { font-size: 1.5rem; }
       .hub-hero .hub-tagline { font-size: 0.82rem; margin-bottom: 12px; }
       .hub-cta-card { padding: 14px; gap: 14px; }
+      .hub-cta-card--large { padding: 18px; gap: 16px; }
+      .hub-cta-card--large .hub-cta-thumb { width: 90px; height: 60px; }
+      .hub-cta-card--large .hub-cta-title { font-size: 1.05rem; }
       .hub-cta-thumb { width: 72px; height: 48px; }
       .hub-cta-title { font-size: 0.92rem; }
       .hub-cta-arrow { display: none; }
-      .hub-grid, .hub-grid-full { gap: 8px; }
+      .hub-grid, .hub-grid-full, .hub-grid-extra { gap: 8px; }
       .hub-card {
         flex-direction: column; align-items: flex-start;
         padding: 14px; gap: 6px;
@@ -578,10 +588,37 @@
     }
     .tour-dot:hover { background: #4a4f5c; }
     .tour-dot--active { background: var(--amber); transform: scale(1.25); box-shadow: 0 0 8px var(--amber-glow); }
-    /* Chapters label */
-    .hub-chapters-label {
-      font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.8px; color: var(--text-muted); margin: 18px 0 8px;
+    /* Large CTA variant */
+    .hub-cta-card--large { padding: 24px 28px; gap: 24px; }
+    .hub-cta-card--large .hub-cta-thumb { width: 130px; height: 84px; }
+    .hub-cta-card--large .hub-cta-title { font-size: 1.25rem; }
+    .hub-cta-card--large .hub-cta-meta { font-size: 0.85rem; }
+
+    /* Collapsible chapters */
+    .hub-chapters-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 12px 16px;
+      color: var(--text-muted); font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      cursor: pointer; margin: 14px 0 0;
+      transition: border-color 0.2s, background 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .hub-chapters-toggle:hover { border-color: rgba(192,57,43,0.3); background: var(--surface-alt); }
+    .hub-chapters-chevron { transition: transform 0.3s; flex-shrink: 0; }
+    .hub-chapters-toggle[aria-expanded="true"] .hub-chapters-chevron { transform: rotate(180deg); }
+    .hub-chapters-content {
+      max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+    }
+    .hub-chapters-content--open { max-height: 600px; }
+    .hub-chapters-content .hub-grid { margin-top: 10px; }
+
+    /* Extra links row below chapters */
+    .hub-grid-extra {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid var(--border);
     }
 
     /* Sticky chapter nav */
@@ -664,88 +701,117 @@
       <p class="hub-tagline">Your interactive owner's guide</p>
 
       <!-- Primary CTA: Setup Guide -->
-      <a href="#guide" class="hub-cta-card">
+      <a href="#tour" class="hub-cta-card hub-cta-card--large">
         <img class="hub-cta-thumb" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt="Aquafire Pro">
         <div class="hub-cta-body">
           <span class="hub-cta-badge">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Video Guide
+            Interactive Guide
           </span>
           <div class="hub-cta-title">Begin Setup Guide</div>
-          <div class="hub-cta-meta">6 steps &middot; follow along at your own pace</div>
+          <div class="hub-cta-meta">8 chapters &middot; follow along at your own pace</div>
           <div class="hub-cta-progress">
             <div class="hub-cta-dot"></div><div class="hub-cta-dot"></div><div class="hub-cta-dot"></div>
             <div class="hub-cta-dot"></div><div class="hub-cta-dot"></div><div class="hub-cta-dot"></div>
+            <div class="hub-cta-dot"></div><div class="hub-cta-dot"></div>
           </div>
         </div>
         <svg class="hub-cta-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </a>
 
-      <!-- Chapter Navigation -->
-      <p class="hub-chapters-label">Jump to chapter:</p>
-      <div class="hub-grid">
-        <a href="#tour" class="hub-card">
-          <div class="hub-card-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-          </div>
-          <span class="hub-card-label">Tour Your Aquafire</span>
-          <span class="hub-card-desc">Explore key features</span>
-        </a>
-        <a href="#troubleshoot" class="hub-card">
-          <div class="hub-card-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          </div>
-          <span class="hub-card-label">Troubleshooting</span>
-          <span class="hub-card-desc">Diagnose &amp; fix common issues</span>
-        </a>
-        <a href="#specs" class="hub-card">
-          <div class="hub-card-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-          </div>
-          <span class="hub-card-label">Specs &amp; Features</span>
-          <span class="hub-card-desc">Dimensions, power, capabilities</span>
-        </a>
-        <a href="water-care.html" class="hub-card">
-          <div class="hub-card-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-          </div>
-          <span class="hub-card-label">Water Care</span>
-          <span class="hub-card-desc">Hardness guide &amp; maintenance</span>
-        </a>
-        <a href="enclosure-guide.html" class="hub-card">
-          <div class="hub-card-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="22" height="12" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-          </div>
-          <span class="hub-card-label">Enclosure Builder</span>
-          <span class="hub-card-desc">Build specs &amp; requirements</span>
-        </a>
-        <a href="#resources" class="hub-card">
-          <div class="hub-card-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          </div>
-          <span class="hub-card-label">Manuals</span>
-          <span class="hub-card-desc">PDFs &amp; downloads</span>
-        </a>
-        <a href="#shop" class="hub-card">
-          <div class="hub-card-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          </div>
-          <span class="hub-card-label">Accessories</span>
-          <span class="hub-card-desc">Shop add-ons &amp; parts</span>
-        </a>
-        <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="hub-card">
-          <div class="hub-card-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <span class="hub-card-label">Contact Support</span>
-          <span class="hub-card-desc">Get help from our team</span>
-        </a>
+      <!-- Collapsible Chapter Navigation -->
+      <button class="hub-chapters-toggle" id="chaptersToggle" aria-expanded="false">
+        <span>Jump to chapter</span>
+        <svg class="hub-chapters-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="hub-chapters-content" id="chaptersContent">
+        <div class="hub-grid">
+          <a href="#tour" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            </div>
+            <span class="hub-card-label">1. Tour Your Aquafire</span>
+            <span class="hub-card-desc">Explore key features</span>
+          </a>
+          <a href="#guide" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <span class="hub-card-label">2. Setup Guide</span>
+            <span class="hub-card-desc">Step-by-step video walkthrough</span>
+          </a>
+          <a href="#video" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/></svg>
+            </div>
+            <span class="hub-card-label">3. Full Video</span>
+            <span class="hub-card-desc">Complete quick start video</span>
+          </a>
+          <a href="#troubleshoot" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            </div>
+            <span class="hub-card-label">4. Troubleshooting</span>
+            <span class="hub-card-desc">Diagnose &amp; fix common issues</span>
+          </a>
+          <a href="#specs" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            </div>
+            <span class="hub-card-label">5. Specifications</span>
+            <span class="hub-card-desc">Dimensions, power, capabilities</span>
+          </a>
+          <a href="#features" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <span class="hub-card-label">6. Key Features</span>
+            <span class="hub-card-desc">What makes Aquafire unique</span>
+          </a>
+          <a href="#resources" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <span class="hub-card-label">7. Resources</span>
+            <span class="hub-card-desc">Manuals &amp; downloads</span>
+          </a>
+          <a href="#shop" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </div>
+            <span class="hub-card-label">8. Accessories</span>
+            <span class="hub-card-desc">Shop add-ons &amp; parts</span>
+          </a>
+        </div>
+        <div class="hub-grid-extra">
+          <a href="water-care.html" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            </div>
+            <span class="hub-card-label">Water Care</span>
+            <span class="hub-card-desc">Hardness guide &amp; maintenance</span>
+          </a>
+          <a href="enclosure-guide.html" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="22" height="12" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+            <span class="hub-card-label">Enclosure Builder</span>
+            <span class="hub-card-desc">Build specs &amp; requirements</span>
+          </a>
+          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <span class="hub-card-label">Contact Support</span>
+            <span class="hub-card-desc">Get help from our team</span>
+          </a>
+        </div>
       </div>
     </section>
 
     <!-- Tour Your Aquafire -->
     <section class="tour-section" id="tour">
-      <h2 class="section-title">Tour Your Aquafire</h2>
+      <h2 class="section-title"><span class="section-num">1</span> Tour Your Aquafire</h2>
       <p class="tour-subtitle">Get familiar with the key features of your unit before installation.</p>
 
       <div class="tour-layout">
@@ -932,7 +998,7 @@
 
     <!-- Interactive Step-by-Step Guide -->
     <section class="guide-section" id="guide">
-      <h2 class="section-title">Interactive Setup Guide</h2>
+      <h2 class="section-title"><span class="section-num">2</span> Interactive Setup Guide</h2>
       <p class="guide-subtitle">Follow along at your own pace. Each step plays a short clip — press Next when you're ready to continue.</p>
 
       <!-- Step progress indicator -->
@@ -974,7 +1040,7 @@
 
     <!-- Full Video (collapsed) -->
     <section class="video-section" id="video">
-      <h2 class="section-title">Full Quick Start Video</h2>
+      <h2 class="section-title"><span class="section-num">3</span> Full Quick Start Video</h2>
       <div class="video-wrapper">
         <iframe src="https://www.youtube.com/embed/tJxpL1tJTIU" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Aquafire Pro quick start video"></iframe>
       </div>
@@ -982,7 +1048,7 @@
 
     <!-- Interactive Troubleshooting Guide -->
     <section class="troubleshoot-section" id="troubleshoot">
-      <h2 class="section-title">Troubleshooting Guide</h2>
+      <h2 class="section-title"><span class="section-num">4</span> Troubleshooting Guide</h2>
       <p class="troubleshoot-subtitle">Select a category below, then tap a problem to see possible causes and solutions.</p>
 
       <div class="ts-categories" id="tsCategories">
@@ -1017,7 +1083,7 @@
 
     <!-- Specifications -->
     <section class="specs-section" id="specs">
-      <h2 class="section-title">Specifications</h2>
+      <h2 class="section-title"><span class="section-num">5</span> Specifications</h2>
       <div class="specs-grid">
         <div class="spec-card">
           <h3>Dimensions</h3>
@@ -1056,7 +1122,7 @@
 
     <!-- Key Features -->
     <section class="features-section" id="features">
-      <h2 class="section-title">Key Features</h2>
+      <h2 class="section-title"><span class="section-num">6</span> Key Features</h2>
       <div class="features-grid">
         <div class="feature-item"><strong>30+ Flame Colors</strong> &mdash; Select from over 30 preset color options via the included remote or the dedicated iOS/Android app.</div>
         <div class="feature-item"><strong>Dual LED Light Bars</strong> &mdash; Enhanced flame realism with wider light angles for a natural, immersive look.</div>
@@ -1069,7 +1135,7 @@
 
     <!-- Resources / Downloads -->
     <section class="resources-section" id="resources">
-      <h2 class="section-title">Resources</h2>
+      <h2 class="section-title"><span class="section-num">7</span> Resources</h2>
       <div class="resources-grid">
         <a class="resource-card" href="https://www.aquafire.com/pages/aquafire-pro-installation-manual" target="_blank" rel="noopener">
           <svg class="resource-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
@@ -1104,7 +1170,7 @@
 
     <!-- Shop Accessories -->
     <section class="shop-section" id="shop">
-      <h2 class="section-title">Shop Accessories</h2>
+      <h2 class="section-title"><span class="section-num">8</span> Shop Accessories</h2>
       <div class="shop-grid">
         <a class="shop-card" href="https://www.aquafire.com/products/aquafire-clearshield" target="_blank" rel="noopener">
           <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/all_clearshirlds_972897a2-c366-453b-b658-258e86a282ea.png?v=1761142736" alt="ClearShield">
@@ -1747,17 +1813,29 @@
     goTo(0);
   })();
 
+  // ── Collapsible Chapters Toggle ──
+  (function() {
+    var toggle = document.getElementById('chaptersToggle');
+    var content = document.getElementById('chaptersContent');
+    if (!toggle || !content) return;
+    toggle.addEventListener('click', function() {
+      var open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', !open);
+      content.classList.toggle('hub-chapters-content--open', !open);
+    });
+  })();
+
   // ── Sticky Chapter Navigation ──
   (function() {
     var CHAPTERS = [
-      { id: 'tour', label: 'Tour' },
-      { id: 'guide', label: 'Setup Guide' },
-      { id: 'video', label: 'Full Video' },
-      { id: 'troubleshoot', label: 'Troubleshooting' },
-      { id: 'specs', label: 'Specs' },
-      { id: 'features', label: 'Features' },
-      { id: 'resources', label: 'Manuals' },
-      { id: 'shop', label: 'Accessories' }
+      { id: 'tour', label: '1. Tour' },
+      { id: 'guide', label: '2. Setup Guide' },
+      { id: 'video', label: '3. Full Video' },
+      { id: 'troubleshoot', label: '4. Troubleshooting' },
+      { id: 'specs', label: '5. Specs' },
+      { id: 'features', label: '6. Features' },
+      { id: 'resources', label: '7. Resources' },
+      { id: 'shop', label: '8. Accessories' }
     ];
 
     var nav = document.getElementById('chapterNav');
