@@ -143,6 +143,31 @@ header h1 {
   font-weight: 400;
 }
 
+/* ── Header Notice ── */
+.header-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 14px 18px;
+  background: rgba(232, 168, 56, 0.08);
+  border: 1px solid var(--border-warm);
+  border-left: 3px solid var(--amber);
+  border-radius: var(--radius-sm);
+  max-width: 720px;
+}
+.header-notice-icon {
+  flex-shrink: 0;
+  color: var(--amber);
+  margin-top: 2px;
+}
+.header-notice p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* ── Cards ── */
 .card {
   background: var(--surface);
