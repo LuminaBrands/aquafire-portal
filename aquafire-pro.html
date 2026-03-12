@@ -663,7 +663,7 @@
             Interactive Tour
           </span>
           <div class="hub-cta-title">Get to Know Your Aquafire</div>
-          <div class="hub-cta-meta">6 features &middot; explore front, back &amp; side views</div>
+          <div class="hub-cta-meta">5 features &middot; explore top, front &amp; back views</div>
         </div>
         <svg class="hub-cta-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </a>
@@ -733,96 +733,111 @@
         <div class="tour-diagram-area">
           <div class="tour-view-label" id="tour-view-label">Top View</div>
 
-          <!-- TOP VIEW — looking down into the open-top unit -->
-          <svg id="tour-view-top" class="tour-svg tour-svg--active" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+          <!-- TOP VIEW — looking down, showing control panel, fill port, and top vents -->
+          <svg id="tour-view-top" class="tour-svg tour-svg--active" viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg">
             <!-- Outer shell (top-down rectangle, long side = width) -->
-            <rect x="10" y="20" width="500" height="140" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
-            <!-- Inner cavity (open top, looking down) -->
-            <rect x="18" y="28" width="484" height="124" rx="2" fill="#0d0f12" stroke="#2c3038" stroke-width="1"/>
-            <!-- Wall thickness indicators -->
+            <rect x="10" y="20" width="500" height="150" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
+            <!-- Inner cavity -->
+            <rect x="18" y="28" width="484" height="134" rx="2" fill="#0d0f12" stroke="#2c3038" stroke-width="1"/>
+            <!-- Walls -->
             <rect x="10" y="20" width="500" height="8" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/><!-- back wall -->
-            <rect x="10" y="152" width="500" height="8" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/><!-- front wall (open, thinner) -->
-            <rect x="10" y="20" width="8" height="140" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/><!-- left end -->
-            <rect x="502" y="20" width="8" height="140" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/><!-- right end -->
-            <!-- LED light bars — two strips running full width inside front & back edges -->
-            <rect x="24" y="34" width="472" height="4" rx="2" fill="#e8a838" opacity="0.35"/>
-            <rect x="24" y="34" width="472" height="4" rx="2" fill="none" stroke="#e8a838" stroke-width="0.5" opacity="0.5"/>
-            <rect x="24" y="142" width="472" height="4" rx="2" fill="#e8a838" opacity="0.35"/>
-            <rect x="24" y="142" width="472" height="4" rx="2" fill="none" stroke="#e8a838" stroke-width="0.5" opacity="0.5"/>
+            <rect x="10" y="162" width="500" height="8" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/><!-- front wall -->
+            <rect x="10" y="20" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/><!-- left end -->
+            <rect x="502" y="20" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/><!-- right end -->
+            <!-- Two top-lid vents (rectangular slots on top surface, near front & back edges) -->
+            <g opacity="0.5" stroke="#3a3e48" stroke-width="0.8" fill="none">
+              <rect x="100" y="34" width="300" height="3" rx="1.5"/>
+              <rect x="100" y="40" width="300" height="3" rx="1.5"/>
+              <rect x="100" y="150" width="300" height="3" rx="1.5"/>
+              <rect x="100" y="156" width="300" height="3" rx="1.5"/>
+            </g>
             <!-- Vapor nozzle row (center line) -->
-            <g opacity="0.25">
-              <circle cx="80" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
-              <circle cx="140" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
-              <circle cx="200" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
-              <circle cx="260" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
-              <circle cx="320" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
-              <circle cx="380" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
-              <circle cx="440" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
+            <g opacity="0.2">
+              <circle cx="80" cy="95" r="3.5" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="140" cy="95" r="3.5" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="200" cy="95" r="3.5" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="260" cy="95" r="3.5" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="320" cy="95" r="3.5" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="380" cy="95" r="3.5" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="440" cy="95" r="3.5" fill="none" stroke="#878c99" stroke-width="0.8"/>
             </g>
-            <g opacity="0.15">
-              <circle cx="80" cy="90" r="1.5" fill="#878c99"/>
-              <circle cx="140" cy="90" r="1.5" fill="#878c99"/>
-              <circle cx="200" cy="90" r="1.5" fill="#878c99"/>
-              <circle cx="260" cy="90" r="1.5" fill="#878c99"/>
-              <circle cx="320" cy="90" r="1.5" fill="#878c99"/>
-              <circle cx="380" cy="90" r="1.5" fill="#878c99"/>
-              <circle cx="440" cy="90" r="1.5" fill="#878c99"/>
-            </g>
+            <!-- Control panel — top-right area, recessed panel with 3 buttons -->
+            <rect x="410" y="60" width="86" height="38" rx="3" fill="#151719" stroke="#2c3038" stroke-width="1"/>
+            <!-- B2 (leftmost) -->
+            <circle cx="428" cy="75" r="5" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
+            <text x="428" y="87" text-anchor="middle" fill="#878c99" font-size="4" font-family="Inter, sans-serif">B2</text>
+            <!-- B1 (center) -->
+            <circle cx="452" cy="75" r="5" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
+            <text x="452" y="87" text-anchor="middle" fill="#878c99" font-size="4" font-family="Inter, sans-serif">B1</text>
+            <!-- On/Off (rightmost, with red LED) -->
+            <circle cx="476" cy="75" r="5" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
+            <circle cx="476" cy="75" r="1.8" fill="#c0392b" opacity="0.7"/>
+            <text x="476" y="87" text-anchor="middle" fill="#878c99" font-size="3.5" font-family="Inter, sans-serif">ON/OFF</text>
+            <!-- Fill port — directly to the right of control panel -->
+            <circle cx="498" cy="75" r="5" fill="#151719" stroke="#3a3e48" stroke-width="1"/>
+            <circle cx="498" cy="75" r="2" fill="#0d0f12" stroke="#2c3038" stroke-width="0.5"/>
+            <text x="498" y="87" text-anchor="middle" fill="#878c99" font-size="3.5" font-family="Inter, sans-serif">FILL</text>
             <!-- Label -->
-            <text x="260" y="175" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Top View (open top)</text>
-            <!-- LED hotspot -->
-            <g id="hotspot-led" class="tour-hotspot" style="display:none">
-              <rect x="20" y="30" width="480" height="12" rx="4" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.2">
-                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
-              </rect>
-              <rect x="20" y="138" width="480" height="12" rx="4" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.2">
-                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
-              </rect>
-            </g>
-          </svg>
-
-          <!-- RIGHT END VIEW — short side panel with Control Panel & Fill Port -->
-          <svg id="tour-view-end" class="tour-svg" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
-            <!-- End panel outline (short side, ~13" deep × ~11" tall) -->
-            <rect x="30" y="20" width="160" height="140" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
-            <!-- Top edge (open top — dashed to show opening) -->
-            <line x1="30" y1="20" x2="190" y2="20" stroke="#3a3e48" stroke-width="1.5" stroke-dasharray="4,3"/>
-            <!-- Panel surface detail -->
-            <rect x="36" y="26" width="148" height="128" fill="#1a1c20" stroke="none"/>
-            <!-- Fill port — circular port near upper-right area -->
-            <circle cx="150" cy="56" r="8" fill="#151719" stroke="#3a3e48" stroke-width="1"/>
-            <circle cx="150" cy="56" r="3" fill="#0d0f12" stroke="#2c3038" stroke-width="0.5"/>
-            <text x="150" y="72" text-anchor="middle" fill="#878c99" font-size="5" font-family="Inter, sans-serif">FILL</text>
-            <!-- Control panel — recessed area with 3 buttons, lower portion -->
-            <rect x="55" y="90" width="110" height="55" rx="4" fill="#151719" stroke="#2c3038" stroke-width="1"/>
-            <!-- Power button (leftmost, with red LED) -->
-            <circle cx="80" cy="112" r="6" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
-            <circle cx="80" cy="112" r="2" fill="#c0392b" opacity="0.7"/>
-            <text x="80" y="126" text-anchor="middle" fill="#878c99" font-size="4" font-family="Inter, sans-serif">PWR</text>
-            <!-- B1 fill button (center) -->
-            <circle cx="110" cy="112" r="6" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
-            <text x="110" y="126" text-anchor="middle" fill="#878c99" font-size="4" font-family="Inter, sans-serif">B1</text>
-            <!-- B2 drain button (right) -->
-            <circle cx="140" cy="112" r="6" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
-            <text x="140" y="126" text-anchor="middle" fill="#878c99" font-size="4" font-family="Inter, sans-serif">B2</text>
-            <!-- Label -->
-            <text x="110" y="185" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Right End View</text>
-            <!-- Fill Port hotspot -->
-            <g id="hotspot-fill" class="tour-hotspot" style="display:none">
-              <circle cx="150" cy="56" r="14" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
-                <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite"/>
-              </circle>
-              <circle cx="150" cy="56" r="3" fill="#e8a838"/>
-            </g>
+            <text x="260" y="190" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Top View</text>
             <!-- Control Panel hotspot -->
             <g id="hotspot-ctrl" class="tour-hotspot" style="display:none">
-              <rect x="49" y="84" width="122" height="67" rx="6" fill="rgba(232,168,56,0.1)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+              <rect x="404" y="54" width="98" height="50" rx="6" fill="rgba(232,168,56,0.1)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
                 <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
               </rect>
             </g>
+            <!-- Fill Port hotspot -->
+            <g id="hotspot-fill" class="tour-hotspot" style="display:none">
+              <circle cx="498" cy="75" r="12" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
+                <animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="498" cy="75" r="3" fill="#e8a838"/>
+            </g>
+            <!-- Top Vents hotspot -->
+            <g id="hotspot-vents-top" class="tour-hotspot" style="display:none">
+              <rect x="96" y="30" width="312" height="17" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
+                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+              </rect>
+              <rect x="96" y="146" width="312" height="17" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
+                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+              </rect>
+            </g>
           </svg>
 
-          <!-- BACK VIEW — long back panel with Power Port & Dry Contact on left -->
+          <!-- FRONT VIEW — long front panel showing front vents -->
+          <svg id="tour-view-front" class="tour-svg" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+            <!-- Front panel outline -->
+            <rect x="10" y="10" width="500" height="150" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
+            <!-- Panel surface -->
+            <rect x="18" y="18" width="484" height="134" fill="#1a1c20" stroke="none"/>
+            <!-- Top edge (open top — dashed) -->
+            <line x1="10" y1="10" x2="510" y2="10" stroke="#3a3e48" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <!-- Bottom edge -->
+            <rect x="10" y="148" width="500" height="12" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
+            <!-- Side walls -->
+            <rect x="10" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
+            <rect x="502" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
+            <!-- Front vent slots — horizontal rows -->
+            <g opacity="0.45" stroke="#3a3e48" stroke-width="0.8" fill="none">
+              <rect x="40" y="50" width="30" height="3" rx="1.5"/><rect x="78" y="50" width="30" height="3" rx="1.5"/><rect x="116" y="50" width="30" height="3" rx="1.5"/><rect x="154" y="50" width="30" height="3" rx="1.5"/><rect x="192" y="50" width="30" height="3" rx="1.5"/><rect x="230" y="50" width="30" height="3" rx="1.5"/><rect x="268" y="50" width="30" height="3" rx="1.5"/><rect x="306" y="50" width="30" height="3" rx="1.5"/><rect x="344" y="50" width="30" height="3" rx="1.5"/><rect x="382" y="50" width="30" height="3" rx="1.5"/><rect x="420" y="50" width="30" height="3" rx="1.5"/><rect x="458" y="50" width="30" height="3" rx="1.5"/>
+              <rect x="40" y="57" width="30" height="3" rx="1.5"/><rect x="78" y="57" width="30" height="3" rx="1.5"/><rect x="116" y="57" width="30" height="3" rx="1.5"/><rect x="154" y="57" width="30" height="3" rx="1.5"/><rect x="192" y="57" width="30" height="3" rx="1.5"/><rect x="230" y="57" width="30" height="3" rx="1.5"/><rect x="268" y="57" width="30" height="3" rx="1.5"/><rect x="306" y="57" width="30" height="3" rx="1.5"/><rect x="344" y="57" width="30" height="3" rx="1.5"/><rect x="382" y="57" width="30" height="3" rx="1.5"/><rect x="420" y="57" width="30" height="3" rx="1.5"/><rect x="458" y="57" width="30" height="3" rx="1.5"/>
+              <rect x="40" y="64" width="30" height="3" rx="1.5"/><rect x="78" y="64" width="30" height="3" rx="1.5"/><rect x="116" y="64" width="30" height="3" rx="1.5"/><rect x="154" y="64" width="30" height="3" rx="1.5"/><rect x="192" y="64" width="30" height="3" rx="1.5"/><rect x="230" y="64" width="30" height="3" rx="1.5"/><rect x="268" y="64" width="30" height="3" rx="1.5"/><rect x="306" y="64" width="30" height="3" rx="1.5"/><rect x="344" y="64" width="30" height="3" rx="1.5"/><rect x="382" y="64" width="30" height="3" rx="1.5"/><rect x="420" y="64" width="30" height="3" rx="1.5"/><rect x="458" y="64" width="30" height="3" rx="1.5"/>
+            </g>
+            <!-- Surface texture -->
+            <g opacity="0.06" stroke="#3a3e48" stroke-width="0.5">
+              <line x1="30" y1="90" x2="490" y2="90"/><line x1="30" y1="110" x2="490" y2="110"/>
+              <line x1="30" y1="130" x2="490" y2="130"/>
+            </g>
+            <!-- Label -->
+            <text x="260" y="175" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Front View</text>
+            <!-- Front Vents hotspot -->
+            <g id="hotspot-vents-front" class="tour-hotspot" style="display:none">
+              <rect x="36" y="46" width="458" height="25" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
+                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+              </rect>
+            </g>
+          </svg>
+
+          <!-- BACK VIEW — long back panel with back vents, Power Port & Dry Contact -->
           <svg id="tour-view-back" class="tour-svg" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
             <!-- Back panel outline -->
             <rect x="10" y="10" width="500" height="150" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
@@ -835,6 +850,12 @@
             <!-- Side walls -->
             <rect x="10" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
             <rect x="502" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
+            <!-- Back vent slots — horizontal rows -->
+            <g opacity="0.45" stroke="#3a3e48" stroke-width="0.8" fill="none">
+              <rect x="40" y="30" width="30" height="3" rx="1.5"/><rect x="78" y="30" width="30" height="3" rx="1.5"/><rect x="116" y="30" width="30" height="3" rx="1.5"/><rect x="154" y="30" width="30" height="3" rx="1.5"/><rect x="192" y="30" width="30" height="3" rx="1.5"/><rect x="230" y="30" width="30" height="3" rx="1.5"/><rect x="268" y="30" width="30" height="3" rx="1.5"/><rect x="306" y="30" width="30" height="3" rx="1.5"/><rect x="344" y="30" width="30" height="3" rx="1.5"/><rect x="382" y="30" width="30" height="3" rx="1.5"/><rect x="420" y="30" width="30" height="3" rx="1.5"/><rect x="458" y="30" width="30" height="3" rx="1.5"/>
+              <rect x="40" y="37" width="30" height="3" rx="1.5"/><rect x="78" y="37" width="30" height="3" rx="1.5"/><rect x="116" y="37" width="30" height="3" rx="1.5"/><rect x="154" y="37" width="30" height="3" rx="1.5"/><rect x="192" y="37" width="30" height="3" rx="1.5"/><rect x="230" y="37" width="30" height="3" rx="1.5"/><rect x="268" y="37" width="30" height="3" rx="1.5"/><rect x="306" y="37" width="30" height="3" rx="1.5"/><rect x="344" y="37" width="30" height="3" rx="1.5"/><rect x="382" y="37" width="30" height="3" rx="1.5"/><rect x="420" y="37" width="30" height="3" rx="1.5"/><rect x="458" y="37" width="30" height="3" rx="1.5"/>
+              <rect x="40" y="44" width="30" height="3" rx="1.5"/><rect x="78" y="44" width="30" height="3" rx="1.5"/><rect x="116" y="44" width="30" height="3" rx="1.5"/><rect x="154" y="44" width="30" height="3" rx="1.5"/><rect x="192" y="44" width="30" height="3" rx="1.5"/><rect x="230" y="44" width="30" height="3" rx="1.5"/><rect x="268" y="44" width="30" height="3" rx="1.5"/><rect x="306" y="44" width="30" height="3" rx="1.5"/><rect x="344" y="44" width="30" height="3" rx="1.5"/><rect x="382" y="44" width="30" height="3" rx="1.5"/><rect x="420" y="44" width="30" height="3" rx="1.5"/><rect x="458" y="44" width="30" height="3" rx="1.5"/>
+            </g>
             <!-- Recessed connector area — far LEFT side of back panel -->
             <rect x="24" y="100" width="80" height="44" rx="3" fill="#151719" stroke="#2c3038" stroke-width="1"/>
             <!-- Power port (DC barrel jack) -->
@@ -846,14 +867,14 @@
             <rect x="76" y="115" width="4" height="6" rx="0.5" fill="#3a3e48"/>
             <rect x="82" y="115" width="4" height="6" rx="0.5" fill="#3a3e48"/>
             <text x="83" y="132" text-anchor="middle" fill="#878c99" font-size="4.5" font-family="Inter, sans-serif">DRY</text>
-            <!-- Surface texture — subtle horizontal lines -->
-            <g opacity="0.08" stroke="#3a3e48" stroke-width="0.5">
-              <line x1="120" y1="40" x2="490" y2="40"/><line x1="120" y1="60" x2="490" y2="60"/>
-              <line x1="120" y1="80" x2="490" y2="80"/><line x1="120" y1="100" x2="490" y2="100"/>
-              <line x1="120" y1="120" x2="490" y2="120"/>
-            </g>
             <!-- Label -->
             <text x="260" y="175" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Back View</text>
+            <!-- Back Vents hotspot -->
+            <g id="hotspot-vents-back" class="tour-hotspot" style="display:none">
+              <rect x="36" y="26" width="458" height="25" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
+                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+              </rect>
+            </g>
             <!-- Power Port hotspot -->
             <g id="hotspot-power" class="tour-hotspot" style="display:none">
               <circle cx="45" cy="118" r="14" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
@@ -869,46 +890,11 @@
               <circle cx="83" cy="118" r="3" fill="#e8a838"/>
             </g>
           </svg>
-
-          <!-- SIDE VIEW — long side panel showing venting slots -->
-          <svg id="tour-view-side" class="tour-svg" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
-            <!-- Side panel outline -->
-            <rect x="10" y="10" width="500" height="150" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
-            <!-- Top edge (open top — dashed) -->
-            <line x1="10" y1="10" x2="510" y2="10" stroke="#3a3e48" stroke-width="1.5" stroke-dasharray="4,3"/>
-            <!-- Bottom edge -->
-            <rect x="10" y="148" width="500" height="12" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
-            <!-- End walls -->
-            <rect x="10" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
-            <rect x="502" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
-            <!-- Upper vent slots -->
-            <g opacity="0.45" stroke="#3a3e48" stroke-width="0.8" fill="none">
-              <rect x="40" y="28" width="30" height="3" rx="1.5"/><rect x="78" y="28" width="30" height="3" rx="1.5"/><rect x="116" y="28" width="30" height="3" rx="1.5"/><rect x="154" y="28" width="30" height="3" rx="1.5"/><rect x="192" y="28" width="30" height="3" rx="1.5"/><rect x="230" y="28" width="30" height="3" rx="1.5"/><rect x="268" y="28" width="30" height="3" rx="1.5"/><rect x="306" y="28" width="30" height="3" rx="1.5"/><rect x="344" y="28" width="30" height="3" rx="1.5"/><rect x="382" y="28" width="30" height="3" rx="1.5"/><rect x="420" y="28" width="30" height="3" rx="1.5"/><rect x="458" y="28" width="30" height="3" rx="1.5"/>
-              <rect x="40" y="35" width="30" height="3" rx="1.5"/><rect x="78" y="35" width="30" height="3" rx="1.5"/><rect x="116" y="35" width="30" height="3" rx="1.5"/><rect x="154" y="35" width="30" height="3" rx="1.5"/><rect x="192" y="35" width="30" height="3" rx="1.5"/><rect x="230" y="35" width="30" height="3" rx="1.5"/><rect x="268" y="35" width="30" height="3" rx="1.5"/><rect x="306" y="35" width="30" height="3" rx="1.5"/><rect x="344" y="35" width="30" height="3" rx="1.5"/><rect x="382" y="35" width="30" height="3" rx="1.5"/><rect x="420" y="35" width="30" height="3" rx="1.5"/><rect x="458" y="35" width="30" height="3" rx="1.5"/>
-            </g>
-            <!-- Lower vent slots -->
-            <g opacity="0.45" stroke="#3a3e48" stroke-width="0.8" fill="none">
-              <rect x="40" y="115" width="30" height="3" rx="1.5"/><rect x="78" y="115" width="30" height="3" rx="1.5"/><rect x="116" y="115" width="30" height="3" rx="1.5"/><rect x="154" y="115" width="30" height="3" rx="1.5"/><rect x="192" y="115" width="30" height="3" rx="1.5"/><rect x="230" y="115" width="30" height="3" rx="1.5"/><rect x="268" y="115" width="30" height="3" rx="1.5"/><rect x="306" y="115" width="30" height="3" rx="1.5"/><rect x="344" y="115" width="30" height="3" rx="1.5"/><rect x="382" y="115" width="30" height="3" rx="1.5"/><rect x="420" y="115" width="30" height="3" rx="1.5"/><rect x="458" y="115" width="30" height="3" rx="1.5"/>
-              <rect x="40" y="122" width="30" height="3" rx="1.5"/><rect x="78" y="122" width="30" height="3" rx="1.5"/><rect x="116" y="122" width="30" height="3" rx="1.5"/><rect x="154" y="122" width="30" height="3" rx="1.5"/><rect x="192" y="122" width="30" height="3" rx="1.5"/><rect x="230" y="122" width="30" height="3" rx="1.5"/><rect x="268" y="122" width="30" height="3" rx="1.5"/><rect x="306" y="122" width="30" height="3" rx="1.5"/><rect x="344" y="122" width="30" height="3" rx="1.5"/><rect x="382" y="122" width="30" height="3" rx="1.5"/><rect x="420" y="122" width="30" height="3" rx="1.5"/><rect x="458" y="122" width="30" height="3" rx="1.5"/>
-              <rect x="40" y="129" width="30" height="3" rx="1.5"/><rect x="78" y="129" width="30" height="3" rx="1.5"/><rect x="116" y="129" width="30" height="3" rx="1.5"/><rect x="154" y="129" width="30" height="3" rx="1.5"/><rect x="192" y="129" width="30" height="3" rx="1.5"/><rect x="230" y="129" width="30" height="3" rx="1.5"/><rect x="268" y="129" width="30" height="3" rx="1.5"/><rect x="306" y="129" width="30" height="3" rx="1.5"/><rect x="344" y="129" width="30" height="3" rx="1.5"/><rect x="382" y="129" width="30" height="3" rx="1.5"/><rect x="420" y="129" width="30" height="3" rx="1.5"/><rect x="458" y="129" width="30" height="3" rx="1.5"/>
-            </g>
-            <!-- Label -->
-            <text x="260" y="175" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Side View</text>
-            <!-- Venting hotspot -->
-            <g id="hotspot-vents" class="tour-hotspot" style="display:none">
-              <rect x="36" y="24" width="458" height="18" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
-                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
-              </rect>
-              <rect x="36" y="111" width="458" height="25" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
-                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
-              </rect>
-            </g>
-          </svg>
         </div>
 
         <div class="tour-info-panel">
-          <span class="tour-stop-count" id="tour-stop-count">1 / 6</span>
-          <h3 class="tour-stop-title" id="tour-stop-title">Water Fill Port</h3>
+          <span class="tour-stop-count" id="tour-stop-count">1 / 5</span>
+          <h3 class="tour-stop-title" id="tour-stop-title">Control Panel</h3>
           <p class="tour-stop-desc" id="tour-stop-desc">Loading...</p>
           <div class="tour-nav">
             <button class="tour-btn" id="tour-prev" aria-label="Previous">
@@ -1676,10 +1662,9 @@
   <script>
   (function() {
     var STOPS = [
-      { title: 'Water Fill Port', desc: 'Located on the right end panel. Use this port to manually add water to the reservoir. The unit also supports direct plumbing for automatic fill.', view: 'end', hotspot: 'hotspot-fill' },
-      { title: 'Control Panel', desc: 'Three buttons on the right end panel: Power (turns unit on/off), B1 (starts the fill cycle), and B2 (starts the drain cycle). The power LED glows red when active.', view: 'end', hotspot: 'hotspot-ctrl' },
-      { title: 'LED Light Bar', desc: 'Two full-width LED strips run along the inside front and back edges, visible from above through the open top. They illuminate the water vapor to create realistic flame effects with adjustable color.', view: 'top', hotspot: 'hotspot-led' },
-      { title: 'Venting', desc: 'Horizontal slot vents run along both long sides of the unit in upper and lower bands. These allow airflow for the ultrasonic mist system. Keep vents unobstructed in your enclosure.', view: 'side', hotspot: 'hotspot-vents' },
+      { title: 'Control Panel', desc: 'Located on the top-right of the unit. Three buttons from left to right: B2 (drain), B1 (fill), and On/Off (with red LED indicator). Controls all unit functions.', view: 'top', hotspot: 'hotspot-ctrl' },
+      { title: 'Water Fill Port', desc: 'Located directly to the right of the control panel on the top surface. Use this port to manually add water to the reservoir. The unit also supports direct plumbing for automatic fill.', view: 'top', hotspot: 'hotspot-fill' },
+      { title: 'Venting', desc: 'The unit has vents on the front panel, back panel, and two vent strips on the top lid. These allow airflow for the ultrasonic mist system. Keep all vents unobstructed in your enclosure design.', view: 'back', hotspot: 'hotspot-vents-back' },
       { title: 'Power Port', desc: 'The DC power input is in a recessed area on the far left side of the back panel. Connect the included power adapter here. Route the cable out through your enclosure before finishing.', view: 'back', hotspot: 'hotspot-power' },
       { title: 'Dry Contact', desc: 'Located next to the power port in the recessed area on the back panel. This terminal block allows integration with home automation systems or external switches for remote on/off control.', view: 'back', hotspot: 'hotspot-dry' }
     ];
@@ -1701,7 +1686,7 @@
       dotsEl.appendChild(dot);
     });
 
-    var VIEW_LABELS = { top: 'Top View', end: 'Right End View', back: 'Back View', side: 'Side View' };
+    var VIEW_LABELS = { top: 'Top View', front: 'Front View', back: 'Back View' };
 
     function goTo(idx) {
       current = idx;
