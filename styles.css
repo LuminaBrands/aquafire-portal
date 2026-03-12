@@ -154,7 +154,7 @@ header h1 {
   border: 1px solid var(--border-warm);
   border-left: 3px solid var(--amber);
   border-radius: var(--radius-sm);
-  max-width: 720px;
+  margin: 28px 0;
 }
 .header-notice-icon {
   flex-shrink: 0;
