@@ -731,108 +731,177 @@
 
       <div class="tour-layout">
         <div class="tour-diagram-area">
-          <div class="tour-view-label" id="tour-view-label">Front View</div>
+          <div class="tour-view-label" id="tour-view-label">Top View</div>
 
-          <!-- FRONT VIEW -->
-          <svg id="tour-view-front" class="tour-svg tour-svg--active" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
-            <rect x="10" y="10" width="500" height="160" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
-            <rect x="18" y="18" width="484" height="136" rx="2" fill="#0d0f12" stroke="#2c3038" stroke-width="1"/>
-            <rect x="10" y="10" width="500" height="12" rx="3" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
-            <rect x="10" y="10" width="8" height="160" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
-            <rect x="502" y="10" width="8" height="160" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
-            <rect x="10" y="158" width="500" height="12" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
-            <circle cx="30" cy="30" r="3" fill="#0d0f12" stroke="#2c3038" stroke-width="0.8"/>
-            <circle cx="490" cy="30" r="3" fill="#0d0f12" stroke="#2c3038" stroke-width="0.8"/>
-            <circle cx="30" cy="150" r="3" fill="#0d0f12" stroke="#2c3038" stroke-width="0.8"/>
-            <circle cx="490" cy="150" r="3" fill="#0d0f12" stroke="#2c3038" stroke-width="0.8"/>
-            <rect x="24" y="24" width="472" height="5" rx="2" fill="#e8a838" opacity="0.15"/>
-            <g opacity="0.08">
-              <ellipse cx="130" cy="100" rx="40" ry="25" fill="#e4e5e9"/>
-              <ellipse cx="260" cy="95" rx="50" ry="30" fill="#e4e5e9"/>
-              <ellipse cx="390" cy="100" rx="40" ry="25" fill="#e4e5e9"/>
+          <!-- TOP VIEW — looking down into the open-top unit -->
+          <svg id="tour-view-top" class="tour-svg tour-svg--active" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+            <!-- Outer shell (top-down rectangle, long side = width) -->
+            <rect x="10" y="20" width="500" height="140" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
+            <!-- Inner cavity (open top, looking down) -->
+            <rect x="18" y="28" width="484" height="124" rx="2" fill="#0d0f12" stroke="#2c3038" stroke-width="1"/>
+            <!-- Wall thickness indicators -->
+            <rect x="10" y="20" width="500" height="8" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/><!-- back wall -->
+            <rect x="10" y="152" width="500" height="8" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/><!-- front wall (open, thinner) -->
+            <rect x="10" y="20" width="8" height="140" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/><!-- left end -->
+            <rect x="502" y="20" width="8" height="140" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/><!-- right end -->
+            <!-- LED light bars — two strips running full width inside front & back edges -->
+            <rect x="24" y="34" width="472" height="4" rx="2" fill="#e8a838" opacity="0.35"/>
+            <rect x="24" y="34" width="472" height="4" rx="2" fill="none" stroke="#e8a838" stroke-width="0.5" opacity="0.5"/>
+            <rect x="24" y="142" width="472" height="4" rx="2" fill="#e8a838" opacity="0.35"/>
+            <rect x="24" y="142" width="472" height="4" rx="2" fill="none" stroke="#e8a838" stroke-width="0.5" opacity="0.5"/>
+            <!-- Vapor nozzle row (center line) -->
+            <g opacity="0.25">
+              <circle cx="80" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="140" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="200" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="260" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="320" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="380" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
+              <circle cx="440" cy="90" r="4" fill="none" stroke="#878c99" stroke-width="0.8"/>
             </g>
-            <line x1="10" y1="178" x2="510" y2="178" stroke="#878c99" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="260" y="177" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">40&quot;</text>
+            <g opacity="0.15">
+              <circle cx="80" cy="90" r="1.5" fill="#878c99"/>
+              <circle cx="140" cy="90" r="1.5" fill="#878c99"/>
+              <circle cx="200" cy="90" r="1.5" fill="#878c99"/>
+              <circle cx="260" cy="90" r="1.5" fill="#878c99"/>
+              <circle cx="320" cy="90" r="1.5" fill="#878c99"/>
+              <circle cx="380" cy="90" r="1.5" fill="#878c99"/>
+              <circle cx="440" cy="90" r="1.5" fill="#878c99"/>
+            </g>
+            <!-- Label -->
+            <text x="260" y="175" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Top View (open top)</text>
+            <!-- LED hotspot -->
             <g id="hotspot-led" class="tour-hotspot" style="display:none">
-              <circle cx="260" cy="26" r="10" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
-                <animate attributeName="r" values="10;14;10" dur="2s" repeatCount="indefinite"/>
-              </circle>
-              <circle cx="260" cy="26" r="3" fill="#e8a838"/>
+              <rect x="20" y="30" width="480" height="12" rx="4" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.2">
+                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+              </rect>
+              <rect x="20" y="138" width="480" height="12" rx="4" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.2">
+                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+              </rect>
             </g>
           </svg>
 
-          <!-- BACK VIEW -->
-          <svg id="tour-view-back" class="tour-svg" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
-            <rect x="10" y="10" width="500" height="160" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
-            <rect x="10" y="10" width="500" height="12" rx="3" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
-            <rect x="10" y="158" width="500" height="12" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
-            <rect x="10" y="10" width="8" height="160" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
-            <rect x="502" y="10" width="8" height="160" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
-            <rect x="18" y="22" width="484" height="136" fill="#1a1c20" stroke="none"/>
-            <g opacity="0.3" stroke="#2c3038" stroke-width="0.5" fill="none">
-              <rect x="30" y="32" width="24" height="4" rx="2"/><rect x="62" y="32" width="24" height="4" rx="2"/><rect x="94" y="32" width="24" height="4" rx="2"/><rect x="126" y="32" width="24" height="4" rx="2"/><rect x="158" y="32" width="24" height="4" rx="2"/><rect x="190" y="32" width="24" height="4" rx="2"/><rect x="222" y="32" width="24" height="4" rx="2"/><rect x="254" y="32" width="24" height="4" rx="2"/><rect x="286" y="32" width="24" height="4" rx="2"/><rect x="318" y="32" width="24" height="4" rx="2"/><rect x="350" y="32" width="24" height="4" rx="2"/><rect x="382" y="32" width="24" height="4" rx="2"/><rect x="414" y="32" width="24" height="4" rx="2"/><rect x="446" y="32" width="24" height="4" rx="2"/><rect x="478" y="32" width="14" height="4" rx="2"/>
-              <rect x="30" y="40" width="24" height="4" rx="2"/><rect x="62" y="40" width="24" height="4" rx="2"/><rect x="94" y="40" width="24" height="4" rx="2"/><rect x="126" y="40" width="24" height="4" rx="2"/><rect x="158" y="40" width="24" height="4" rx="2"/><rect x="190" y="40" width="24" height="4" rx="2"/><rect x="222" y="40" width="24" height="4" rx="2"/><rect x="254" y="40" width="24" height="4" rx="2"/><rect x="286" y="40" width="24" height="4" rx="2"/><rect x="318" y="40" width="24" height="4" rx="2"/><rect x="350" y="40" width="24" height="4" rx="2"/><rect x="382" y="40" width="24" height="4" rx="2"/><rect x="414" y="40" width="24" height="4" rx="2"/><rect x="446" y="40" width="24" height="4" rx="2"/><rect x="478" y="40" width="14" height="4" rx="2"/>
-            </g>
-            <circle cx="30" cy="30" r="3" fill="#0d0f12" stroke="#2c3038" stroke-width="0.8"/>
-            <circle cx="490" cy="30" r="3" fill="#0d0f12" stroke="#2c3038" stroke-width="0.8"/>
-            <circle cx="30" cy="150" r="3" fill="#0d0f12" stroke="#2c3038" stroke-width="0.8"/>
-            <circle cx="490" cy="150" r="3" fill="#0d0f12" stroke="#2c3038" stroke-width="0.8"/>
-            <rect x="60" y="90" width="80" height="50" rx="3" fill="#151719" stroke="#2c3038" stroke-width="1"/>
-            <circle cx="78" cy="108" r="4" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
-            <circle cx="78" cy="108" r="1.5" fill="#c0392b" opacity="0.6"/>
-            <circle cx="96" cy="108" r="4" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
-            <circle cx="114" cy="108" r="4" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
-            <text x="100" y="130" text-anchor="middle" fill="#878c99" font-size="5" font-family="Inter, sans-serif">CTRL</text>
-            <circle cx="200" cy="60" r="6" fill="#151719" stroke="#3a3e48" stroke-width="1"/>
-            <text x="200" y="52" text-anchor="middle" fill="#878c99" font-size="4.5" font-family="Inter, sans-serif">FILL</text>
-            <rect x="55" y="145" width="14" height="10" rx="2" fill="#151719" stroke="#3a3e48" stroke-width="1"/>
-            <text x="62" y="143" text-anchor="middle" fill="#878c99" font-size="4.5" font-family="Inter, sans-serif">PWR</text>
-            <circle cx="200" cy="152" r="5" fill="#151719" stroke="#3a3e48" stroke-width="1"/>
-            <text x="200" y="146" text-anchor="middle" fill="#878c99" font-size="4.5" font-family="Inter, sans-serif">DRAIN</text>
-            <text x="260" y="177" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Back View</text>
+          <!-- RIGHT END VIEW — short side panel with Control Panel & Fill Port -->
+          <svg id="tour-view-end" class="tour-svg" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- End panel outline (short side, ~13" deep × ~11" tall) -->
+            <rect x="30" y="20" width="160" height="140" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
+            <!-- Top edge (open top — dashed to show opening) -->
+            <line x1="30" y1="20" x2="190" y2="20" stroke="#3a3e48" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <!-- Panel surface detail -->
+            <rect x="36" y="26" width="148" height="128" fill="#1a1c20" stroke="none"/>
+            <!-- Fill port — circular port near upper-right area -->
+            <circle cx="150" cy="56" r="8" fill="#151719" stroke="#3a3e48" stroke-width="1"/>
+            <circle cx="150" cy="56" r="3" fill="#0d0f12" stroke="#2c3038" stroke-width="0.5"/>
+            <text x="150" y="72" text-anchor="middle" fill="#878c99" font-size="5" font-family="Inter, sans-serif">FILL</text>
+            <!-- Control panel — recessed area with 3 buttons, lower portion -->
+            <rect x="55" y="90" width="110" height="55" rx="4" fill="#151719" stroke="#2c3038" stroke-width="1"/>
+            <!-- Power button (leftmost, with red LED) -->
+            <circle cx="80" cy="112" r="6" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
+            <circle cx="80" cy="112" r="2" fill="#c0392b" opacity="0.7"/>
+            <text x="80" y="126" text-anchor="middle" fill="#878c99" font-size="4" font-family="Inter, sans-serif">PWR</text>
+            <!-- B1 fill button (center) -->
+            <circle cx="110" cy="112" r="6" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
+            <text x="110" y="126" text-anchor="middle" fill="#878c99" font-size="4" font-family="Inter, sans-serif">B1</text>
+            <!-- B2 drain button (right) -->
+            <circle cx="140" cy="112" r="6" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
+            <text x="140" y="126" text-anchor="middle" fill="#878c99" font-size="4" font-family="Inter, sans-serif">B2</text>
+            <!-- Label -->
+            <text x="110" y="185" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Right End View</text>
+            <!-- Fill Port hotspot -->
             <g id="hotspot-fill" class="tour-hotspot" style="display:none">
-              <circle cx="200" cy="60" r="12" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5"><animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite"/></circle>
-              <circle cx="200" cy="60" r="3" fill="#e8a838"/>
+              <circle cx="150" cy="56" r="14" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
+                <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="150" cy="56" r="3" fill="#e8a838"/>
             </g>
+            <!-- Control Panel hotspot -->
             <g id="hotspot-ctrl" class="tour-hotspot" style="display:none">
-              <rect x="50" y="82" width="100" height="64" rx="6" fill="rgba(232,168,56,0.1)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2"><animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/></rect>
-            </g>
-            <g id="hotspot-power" class="tour-hotspot" style="display:none">
-              <circle cx="62" cy="150" r="12" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5"><animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite"/></circle>
-              <circle cx="62" cy="150" r="3" fill="#e8a838"/>
-            </g>
-            <g id="hotspot-drain" class="tour-hotspot" style="display:none">
-              <circle cx="200" cy="152" r="12" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5"><animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite"/></circle>
-              <circle cx="200" cy="152" r="3" fill="#e8a838"/>
+              <rect x="49" y="84" width="122" height="67" rx="6" fill="rgba(232,168,56,0.1)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+                <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+              </rect>
             </g>
           </svg>
 
-          <!-- SIDE VIEW -->
-          <svg id="tour-view-side" class="tour-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
-            <rect x="30" y="10" width="140" height="160" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
-            <rect x="30" y="10" width="140" height="10" rx="3" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
-            <rect x="30" y="160" width="140" height="10" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
-            <rect x="30" y="10" width="6" height="160" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
-            <rect x="164" y="10" width="6" height="160" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
-            <g opacity="0.4" stroke="#3a3e48" stroke-width="0.8" fill="none">
-              <rect x="42" y="32" width="18" height="3" rx="1.5"/><rect x="66" y="32" width="18" height="3" rx="1.5"/><rect x="90" y="32" width="18" height="3" rx="1.5"/><rect x="114" y="32" width="18" height="3" rx="1.5"/><rect x="138" y="32" width="18" height="3" rx="1.5"/>
-              <rect x="42" y="39" width="18" height="3" rx="1.5"/><rect x="66" y="39" width="18" height="3" rx="1.5"/><rect x="90" y="39" width="18" height="3" rx="1.5"/><rect x="114" y="39" width="18" height="3" rx="1.5"/><rect x="138" y="39" width="18" height="3" rx="1.5"/>
+          <!-- BACK VIEW — long back panel with Power Port & Dry Contact on left -->
+          <svg id="tour-view-back" class="tour-svg" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+            <!-- Back panel outline -->
+            <rect x="10" y="10" width="500" height="150" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
+            <!-- Panel surface -->
+            <rect x="18" y="18" width="484" height="134" fill="#1a1c20" stroke="none"/>
+            <!-- Top edge (open top — dashed) -->
+            <line x1="10" y1="10" x2="510" y2="10" stroke="#3a3e48" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <!-- Bottom edge -->
+            <rect x="10" y="148" width="500" height="12" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
+            <!-- Side walls -->
+            <rect x="10" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
+            <rect x="502" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
+            <!-- Recessed connector area — far LEFT side of back panel -->
+            <rect x="24" y="100" width="80" height="44" rx="3" fill="#151719" stroke="#2c3038" stroke-width="1"/>
+            <!-- Power port (DC barrel jack) -->
+            <rect x="36" y="112" width="18" height="12" rx="2" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
+            <rect x="40" y="115" width="10" height="6" rx="1" fill="#0d0f12"/>
+            <text x="45" y="132" text-anchor="middle" fill="#878c99" font-size="4.5" font-family="Inter, sans-serif">PWR</text>
+            <!-- Dry contact terminal block -->
+            <rect x="72" y="112" width="22" height="12" rx="2" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
+            <rect x="76" y="115" width="4" height="6" rx="0.5" fill="#3a3e48"/>
+            <rect x="82" y="115" width="4" height="6" rx="0.5" fill="#3a3e48"/>
+            <text x="83" y="132" text-anchor="middle" fill="#878c99" font-size="4.5" font-family="Inter, sans-serif">DRY</text>
+            <!-- Surface texture — subtle horizontal lines -->
+            <g opacity="0.08" stroke="#3a3e48" stroke-width="0.5">
+              <line x1="120" y1="40" x2="490" y2="40"/><line x1="120" y1="60" x2="490" y2="60"/>
+              <line x1="120" y1="80" x2="490" y2="80"/><line x1="120" y1="100" x2="490" y2="100"/>
+              <line x1="120" y1="120" x2="490" y2="120"/>
             </g>
-            <g opacity="0.35" stroke="#3a3e48" stroke-width="0.8" fill="none">
-              <circle cx="52" cy="85" r="8"/><circle cx="76" cy="85" r="8"/><circle cx="100" cy="85" r="8"/><circle cx="124" cy="85" r="8"/><circle cx="148" cy="85" r="8"/>
+            <!-- Label -->
+            <text x="260" y="175" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Back View</text>
+            <!-- Power Port hotspot -->
+            <g id="hotspot-power" class="tour-hotspot" style="display:none">
+              <circle cx="45" cy="118" r="14" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
+                <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="45" cy="118" r="3" fill="#e8a838"/>
             </g>
-            <g opacity="0.2" fill="#3a3e48">
-              <circle cx="52" cy="85" r="2"/><circle cx="76" cy="85" r="2"/><circle cx="100" cy="85" r="2"/><circle cx="124" cy="85" r="2"/><circle cx="148" cy="85" r="2"/>
+            <!-- Dry Contact hotspot -->
+            <g id="hotspot-dry" class="tour-hotspot" style="display:none">
+              <circle cx="83" cy="118" r="14" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
+                <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="83" cy="118" r="3" fill="#e8a838"/>
             </g>
-            <g opacity="0.4" stroke="#3a3e48" stroke-width="0.8" fill="none">
-              <rect x="42" y="120" width="18" height="3" rx="1.5"/><rect x="66" y="120" width="18" height="3" rx="1.5"/><rect x="90" y="120" width="18" height="3" rx="1.5"/><rect x="114" y="120" width="18" height="3" rx="1.5"/><rect x="138" y="120" width="18" height="3" rx="1.5"/>
-              <rect x="42" y="127" width="18" height="3" rx="1.5"/><rect x="66" y="127" width="18" height="3" rx="1.5"/><rect x="90" y="127" width="18" height="3" rx="1.5"/><rect x="114" y="127" width="18" height="3" rx="1.5"/><rect x="138" y="127" width="18" height="3" rx="1.5"/>
-              <rect x="42" y="134" width="18" height="3" rx="1.5"/><rect x="66" y="134" width="18" height="3" rx="1.5"/><rect x="90" y="134" width="18" height="3" rx="1.5"/><rect x="114" y="134" width="18" height="3" rx="1.5"/><rect x="138" y="134" width="18" height="3" rx="1.5"/>
+          </svg>
+
+          <!-- SIDE VIEW — long side panel showing venting slots -->
+          <svg id="tour-view-side" class="tour-svg" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+            <!-- Side panel outline -->
+            <rect x="10" y="10" width="500" height="150" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
+            <!-- Top edge (open top — dashed) -->
+            <line x1="10" y1="10" x2="510" y2="10" stroke="#3a3e48" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <!-- Bottom edge -->
+            <rect x="10" y="148" width="500" height="12" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
+            <!-- End walls -->
+            <rect x="10" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
+            <rect x="502" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
+            <!-- Upper vent slots -->
+            <g opacity="0.45" stroke="#3a3e48" stroke-width="0.8" fill="none">
+              <rect x="40" y="28" width="30" height="3" rx="1.5"/><rect x="78" y="28" width="30" height="3" rx="1.5"/><rect x="116" y="28" width="30" height="3" rx="1.5"/><rect x="154" y="28" width="30" height="3" rx="1.5"/><rect x="192" y="28" width="30" height="3" rx="1.5"/><rect x="230" y="28" width="30" height="3" rx="1.5"/><rect x="268" y="28" width="30" height="3" rx="1.5"/><rect x="306" y="28" width="30" height="3" rx="1.5"/><rect x="344" y="28" width="30" height="3" rx="1.5"/><rect x="382" y="28" width="30" height="3" rx="1.5"/><rect x="420" y="28" width="30" height="3" rx="1.5"/><rect x="458" y="28" width="30" height="3" rx="1.5"/>
+              <rect x="40" y="35" width="30" height="3" rx="1.5"/><rect x="78" y="35" width="30" height="3" rx="1.5"/><rect x="116" y="35" width="30" height="3" rx="1.5"/><rect x="154" y="35" width="30" height="3" rx="1.5"/><rect x="192" y="35" width="30" height="3" rx="1.5"/><rect x="230" y="35" width="30" height="3" rx="1.5"/><rect x="268" y="35" width="30" height="3" rx="1.5"/><rect x="306" y="35" width="30" height="3" rx="1.5"/><rect x="344" y="35" width="30" height="3" rx="1.5"/><rect x="382" y="35" width="30" height="3" rx="1.5"/><rect x="420" y="35" width="30" height="3" rx="1.5"/><rect x="458" y="35" width="30" height="3" rx="1.5"/>
             </g>
-            <text x="100" y="177" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Side View</text>
+            <!-- Lower vent slots -->
+            <g opacity="0.45" stroke="#3a3e48" stroke-width="0.8" fill="none">
+              <rect x="40" y="115" width="30" height="3" rx="1.5"/><rect x="78" y="115" width="30" height="3" rx="1.5"/><rect x="116" y="115" width="30" height="3" rx="1.5"/><rect x="154" y="115" width="30" height="3" rx="1.5"/><rect x="192" y="115" width="30" height="3" rx="1.5"/><rect x="230" y="115" width="30" height="3" rx="1.5"/><rect x="268" y="115" width="30" height="3" rx="1.5"/><rect x="306" y="115" width="30" height="3" rx="1.5"/><rect x="344" y="115" width="30" height="3" rx="1.5"/><rect x="382" y="115" width="30" height="3" rx="1.5"/><rect x="420" y="115" width="30" height="3" rx="1.5"/><rect x="458" y="115" width="30" height="3" rx="1.5"/>
+              <rect x="40" y="122" width="30" height="3" rx="1.5"/><rect x="78" y="122" width="30" height="3" rx="1.5"/><rect x="116" y="122" width="30" height="3" rx="1.5"/><rect x="154" y="122" width="30" height="3" rx="1.5"/><rect x="192" y="122" width="30" height="3" rx="1.5"/><rect x="230" y="122" width="30" height="3" rx="1.5"/><rect x="268" y="122" width="30" height="3" rx="1.5"/><rect x="306" y="122" width="30" height="3" rx="1.5"/><rect x="344" y="122" width="30" height="3" rx="1.5"/><rect x="382" y="122" width="30" height="3" rx="1.5"/><rect x="420" y="122" width="30" height="3" rx="1.5"/><rect x="458" y="122" width="30" height="3" rx="1.5"/>
+              <rect x="40" y="129" width="30" height="3" rx="1.5"/><rect x="78" y="129" width="30" height="3" rx="1.5"/><rect x="116" y="129" width="30" height="3" rx="1.5"/><rect x="154" y="129" width="30" height="3" rx="1.5"/><rect x="192" y="129" width="30" height="3" rx="1.5"/><rect x="230" y="129" width="30" height="3" rx="1.5"/><rect x="268" y="129" width="30" height="3" rx="1.5"/><rect x="306" y="129" width="30" height="3" rx="1.5"/><rect x="344" y="129" width="30" height="3" rx="1.5"/><rect x="382" y="129" width="30" height="3" rx="1.5"/><rect x="420" y="129" width="30" height="3" rx="1.5"/><rect x="458" y="129" width="30" height="3" rx="1.5"/>
+            </g>
+            <!-- Label -->
+            <text x="260" y="175" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Side View</text>
+            <!-- Venting hotspot -->
             <g id="hotspot-vents" class="tour-hotspot" style="display:none">
-              <rect x="38" y="28" width="124" height="18" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2"><animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/></rect>
-              <rect x="38" y="116" width="124" height="26" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2"><animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/></rect>
+              <rect x="36" y="24" width="458" height="18" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
+                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+              </rect>
+              <rect x="36" y="111" width="458" height="25" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
+                <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+              </rect>
             </g>
           </svg>
         </div>
@@ -1607,12 +1676,12 @@
   <script>
   (function() {
     var STOPS = [
-      { title: 'Water Fill Port', desc: 'Located on the back panel. Use this port to manually add water to the reservoir. The unit also supports direct plumbing for automatic fill.', view: 'back', hotspot: 'hotspot-fill' },
-      { title: 'Control Panel', desc: 'Three buttons on the back panel: Power (turns unit on/off), B1 (starts the fill cycle), and B2 (starts the drain cycle). The power LED glows red when active.', view: 'back', hotspot: 'hotspot-ctrl' },
-      { title: 'LED Light Bar', desc: 'A full-width LED strip runs along the inside top edge of the front opening. It illuminates the water vapor to create realistic flame effects with adjustable color.', view: 'front', hotspot: 'hotspot-led' },
-      { title: 'Venting', desc: 'Slot vents run along both sides of the unit in upper and lower bands. These allow airflow for the ultrasonic mist system. Keep vents unobstructed in your enclosure.', view: 'side', hotspot: 'hotspot-vents' },
-      { title: 'Power Port', desc: 'The DC power input is on the back panel, lower-left area. Connect the included power adapter here. Route the cable out through your enclosure before finishing.', view: 'back', hotspot: 'hotspot-power' },
-      { title: 'Drain Port', desc: 'Located on the back panel near the bottom. Connect tubing here to drain the reservoir for maintenance or winterization. Can also be plumbed to a floor drain.', view: 'back', hotspot: 'hotspot-drain' }
+      { title: 'Water Fill Port', desc: 'Located on the right end panel. Use this port to manually add water to the reservoir. The unit also supports direct plumbing for automatic fill.', view: 'end', hotspot: 'hotspot-fill' },
+      { title: 'Control Panel', desc: 'Three buttons on the right end panel: Power (turns unit on/off), B1 (starts the fill cycle), and B2 (starts the drain cycle). The power LED glows red when active.', view: 'end', hotspot: 'hotspot-ctrl' },
+      { title: 'LED Light Bar', desc: 'Two full-width LED strips run along the inside front and back edges, visible from above through the open top. They illuminate the water vapor to create realistic flame effects with adjustable color.', view: 'top', hotspot: 'hotspot-led' },
+      { title: 'Venting', desc: 'Horizontal slot vents run along both long sides of the unit in upper and lower bands. These allow airflow for the ultrasonic mist system. Keep vents unobstructed in your enclosure.', view: 'side', hotspot: 'hotspot-vents' },
+      { title: 'Power Port', desc: 'The DC power input is in a recessed area on the far left side of the back panel. Connect the included power adapter here. Route the cable out through your enclosure before finishing.', view: 'back', hotspot: 'hotspot-power' },
+      { title: 'Dry Contact', desc: 'Located next to the power port in the recessed area on the back panel. This terminal block allows integration with home automation systems or external switches for remote on/off control.', view: 'back', hotspot: 'hotspot-dry' }
     ];
     var current = 0;
     var titleEl = document.getElementById('tour-stop-title');
@@ -1632,7 +1701,7 @@
       dotsEl.appendChild(dot);
     });
 
-    var VIEW_LABELS = { front: 'Front View', back: 'Back View', side: 'Side View' };
+    var VIEW_LABELS = { top: 'Top View', end: 'Right End View', back: 'Back View', side: 'Side View' };
 
     function goTo(idx) {
       current = idx;
