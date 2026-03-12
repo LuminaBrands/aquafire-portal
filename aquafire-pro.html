@@ -578,19 +578,45 @@
     }
     .tour-dot:hover { background: #4a4f5c; }
     .tour-dot--active { background: var(--amber); transform: scale(1.25); box-shadow: 0 0 8px var(--amber-glow); }
-    .hub-cta-tour {
-      display: flex; align-items: center; gap: 16px;
-      background: linear-gradient(135deg, rgba(232,168,56,0.06) 0%, var(--surface) 60%);
-      border: 1px solid rgba(232,168,56,0.25); border-radius: var(--radius);
-      padding: 14px 18px; text-decoration: none; text-align: left;
-      transition: border-color 0.2s, box-shadow 0.2s; margin-bottom: 14px;
+    /* Chapters label */
+    .hub-chapters-label {
+      font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--text-muted); margin: 18px 0 8px;
     }
-    .hub-cta-tour:hover { border-color: var(--amber-dim); box-shadow: 0 4px 20px rgba(232,168,56,0.12); }
-    .hub-cta-tour .hub-cta-badge { background: rgba(232,168,56,0.15); color: var(--amber); }
-    .hub-cta-tour .hub-cta-arrow { color: var(--amber); }
+
+    /* Sticky chapter nav */
+    .chapter-nav {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 28px; padding: 6px 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      z-index: 900; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .chapter-nav--visible { opacity: 1; pointer-events: auto; }
+    .chapter-nav-btn {
+      display: flex; align-items: center; gap: 5px;
+      background: none; border: 1px solid var(--border); border-radius: 20px;
+      color: var(--text); font-size: 0.72rem; font-weight: 600;
+      padding: 6px 14px; cursor: pointer; white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .chapter-nav-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(192,57,43,0.4); }
+    .chapter-nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .chapter-nav-btn:disabled:hover { background: none; border-color: var(--border); }
+    .chapter-nav-btn svg { flex-shrink: 0; }
+    .chapter-nav-label {
+      font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.5px; padding: 0 4px;
+    }
     @media (max-width: 700px) {
       .tour-layout { grid-template-columns: 1fr; }
       .tour-info-panel { order: -1; }
+      .chapter-nav { bottom: 12px; padding: 5px 6px; gap: 4px; }
+      .chapter-nav-btn { font-size: 0.65rem; padding: 5px 10px; }
+      .chapter-nav-label { display: none; }
     }
   </style>
   <link rel="stylesheet" href="hub.css">
@@ -655,21 +681,16 @@
         <svg class="hub-cta-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </a>
 
-      <!-- Tour CTA -->
-      <a href="#tour" class="hub-cta-tour">
-        <div class="hub-cta-body">
-          <span class="hub-cta-badge">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-            Interactive Tour
-          </span>
-          <div class="hub-cta-title">Get to Know Your Aquafire</div>
-          <div class="hub-cta-meta">5 features &middot; explore top, front &amp; back views</div>
-        </div>
-        <svg class="hub-cta-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </a>
-
-      <!-- Dashboard Navigation Grid -->
+      <!-- Chapter Navigation -->
+      <p class="hub-chapters-label">Jump to chapter:</p>
       <div class="hub-grid">
+        <a href="#tour" class="hub-card">
+          <div class="hub-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          </div>
+          <span class="hub-card-label">Tour Your Aquafire</span>
+          <span class="hub-card-desc">Explore key features</span>
+        </a>
         <a href="#troubleshoot" class="hub-card">
           <div class="hub-card-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -698,8 +719,6 @@
           <span class="hub-card-label">Enclosure Builder</span>
           <span class="hub-card-desc">Build specs &amp; requirements</span>
         </a>
-      </div>
-      <div class="hub-grid-full">
         <a href="#resources" class="hub-card">
           <div class="hub-card-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -954,7 +973,7 @@
     </section>
 
     <!-- Full Video (collapsed) -->
-    <section class="video-section">
+    <section class="video-section" id="video">
       <h2 class="section-title">Full Quick Start Video</h2>
       <div class="video-wrapper">
         <iframe src="https://www.youtube.com/embed/tJxpL1tJTIU" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Aquafire Pro quick start video"></iframe>
@@ -1140,6 +1159,19 @@
     </section>
 
   </main>
+
+  <!-- Sticky Chapter Nav -->
+  <div class="chapter-nav" id="chapterNav">
+    <button class="chapter-nav-btn" id="chapterPrev" disabled>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      <span id="chapterPrevLabel">Prev</span>
+    </button>
+    <span class="chapter-nav-label" id="chapterCurrent"></span>
+    <button class="chapter-nav-btn" id="chapterNext">
+      <span id="chapterNextLabel">Next</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
 
   <!-- Back to Top -->
   <button class="back-to-top" id="backToTop" aria-label="Back to top">
@@ -1713,6 +1745,83 @@
       if (e.key === 'ArrowRight' && current < STOPS.length - 1) goTo(current + 1);
     });
     goTo(0);
+  })();
+
+  // ── Sticky Chapter Navigation ──
+  (function() {
+    var CHAPTERS = [
+      { id: 'tour', label: 'Tour' },
+      { id: 'guide', label: 'Setup Guide' },
+      { id: 'video', label: 'Full Video' },
+      { id: 'troubleshoot', label: 'Troubleshooting' },
+      { id: 'specs', label: 'Specs' },
+      { id: 'features', label: 'Features' },
+      { id: 'resources', label: 'Manuals' },
+      { id: 'shop', label: 'Accessories' }
+    ];
+
+    var nav = document.getElementById('chapterNav');
+    var prevBtn = document.getElementById('chapterPrev');
+    var nextBtn = document.getElementById('chapterNext');
+    var prevLabel = document.getElementById('chapterPrevLabel');
+    var nextLabel = document.getElementById('chapterNextLabel');
+    var currentLabel = document.getElementById('chapterCurrent');
+    if (!nav) return;
+
+    var currentChapter = -1;
+
+    function getActiveChapter() {
+      var scrollY = window.scrollY || window.pageYOffset;
+      var viewH = window.innerHeight;
+      var best = -1;
+      for (var i = 0; i < CHAPTERS.length; i++) {
+        var el = document.getElementById(CHAPTERS[i].id);
+        if (!el) continue;
+        var top = el.getBoundingClientRect().top + scrollY;
+        if (top <= scrollY + viewH * 0.4) best = i;
+      }
+      return best;
+    }
+
+    function update() {
+      var idx = getActiveChapter();
+      // Show nav once user scrolls past hero
+      var heroBottom = document.getElementById('hub-top');
+      var pastHero = heroBottom && (heroBottom.getBoundingClientRect().bottom < 0);
+      nav.classList.toggle('chapter-nav--visible', pastHero && idx >= 0);
+
+      if (idx === currentChapter) return;
+      currentChapter = idx;
+
+      currentLabel.textContent = idx >= 0 ? CHAPTERS[idx].label : '';
+
+      prevBtn.disabled = idx <= 0;
+      prevLabel.textContent = idx > 0 ? CHAPTERS[idx - 1].label : 'Prev';
+
+      nextBtn.disabled = idx >= CHAPTERS.length - 1;
+      nextLabel.textContent = idx < CHAPTERS.length - 1 ? CHAPTERS[idx + 1].label : 'Next';
+    }
+
+    function scrollTo(idx) {
+      var el = document.getElementById(CHAPTERS[idx].id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    prevBtn.addEventListener('click', function() {
+      if (currentChapter > 0) scrollTo(currentChapter - 1);
+    });
+    nextBtn.addEventListener('click', function() {
+      if (currentChapter < CHAPTERS.length - 1) scrollTo(currentChapter + 1);
+    });
+
+    var ticking = false;
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(function() { update(); ticking = false; });
+        ticking = true;
+      }
+    });
+    update();
   })();
   </script>
 </body>
