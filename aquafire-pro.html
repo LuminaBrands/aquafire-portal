@@ -405,14 +405,15 @@
       .hub-cta-thumb { width: 72px; height: 48px; }
       .hub-cta-title { font-size: 0.92rem; }
       .hub-cta-arrow { display: none; }
-      .hub-grid, .hub-grid-full, .hub-grid-extra { gap: 8px; }
+      .hub-grid, .hub-grid-full, .hub-grid-extra { gap: 8px; grid-template-columns: 1fr; }
       .hub-card {
-        flex-direction: column; align-items: flex-start;
-        padding: 14px; gap: 6px;
+        flex-direction: row; align-items: center;
+        padding: 12px 14px; gap: 10px;
       }
       .hub-card-desc {
         margin-left: 0; text-align: left; font-size: 0.7rem;
       }
+      .hub-chapters-content--open { max-height: 2000px; }
     }
 
     /* ── Troubleshooting Guide ── */
@@ -609,9 +610,9 @@
     .hub-chapters-chevron { transition: transform 0.3s; flex-shrink: 0; }
     .hub-chapters-toggle[aria-expanded="true"] .hub-chapters-chevron { transform: rotate(180deg); }
     .hub-chapters-content {
-      max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+      max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
     }
-    .hub-chapters-content--open { max-height: 600px; }
+    .hub-chapters-content--open { max-height: 1200px; }
     .hub-chapters-content .hub-grid { margin-top: 10px; }
 
     /* Extra links row below chapters */
