@@ -405,7 +405,7 @@
     var pct = total ? Math.round((done / total) * 100) : 0;
 
     barFill.style.width = pct + '%';
-    if (barLabel) barLabel.textContent = done + ' / ' + total + ' completed';
+    if (barLabel) barLabel.textContent = done + ' / ' + total;
     if (ptsDisplay) ptsDisplay.textContent = userPoints.toLocaleString() + ' pts';
   }
 

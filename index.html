@@ -162,67 +162,81 @@
 
     /* ── Rewards Banner ── */
     .rewards-banner {
-      margin: -1px auto 0;
+      margin: 0;
       border-bottom: 1px solid var(--border);
       background: linear-gradient(180deg, rgba(232,168,56,0.04) 0%, var(--bg) 100%);
     }
     .rewards-banner-inner {
       display: flex;
       align-items: center;
-      gap: 28px;
-      padding: 28px 0;
+      gap: 20px;
+      padding: 24px 0;
     }
     .rewards-banner-icon {
       flex-shrink: 0;
-      width: 56px;
-      height: 56px;
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: rgba(232,168,56,0.08);
       border: 1px solid rgba(232,168,56,0.15);
-      border-radius: 14px;
-      font-size: 1.6rem;
+      border-radius: 12px;
+      font-size: 1.4rem;
     }
     .rewards-banner-body { flex: 1; min-width: 0; }
+    .rewards-banner-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
     .rewards-banner-title {
       font-family: 'Poppins', sans-serif;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 8px;
+      white-space: nowrap;
     }
     .rewards-banner-title .rb-badge {
-      font-size: 0.62rem;
+      font-size: 0.58rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      padding: 2px 8px;
+      padding: 2px 7px;
       background: rgba(232,168,56,0.12);
       color: var(--amber);
       border-radius: 4px;
       font-family: 'Inter', sans-serif;
     }
+    .rb-points-display {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--amber);
+      white-space: nowrap;
+    }
     .rewards-banner-desc {
       color: var(--text-muted);
-      font-size: 0.85rem;
-      line-height: 1.5;
-      margin-bottom: 14px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      margin-bottom: 10px;
     }
     .rewards-banner-progress {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-    .rb-bar-wrap { flex: 1; max-width: 260px; }
+    .rb-bar-wrap { flex: 1; }
     .rb-bar {
-      height: 6px;
+      height: 5px;
       background: #22262e;
       border-radius: 3px;
       overflow: hidden;
-      margin-bottom: 4px;
+      margin-bottom: 0;
     }
     .rb-bar-fill {
       height: 100%;
@@ -232,14 +246,8 @@
       width: 0%;
     }
     .rb-bar-label {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
-    }
-    .rb-points-display {
-      font-family: 'Poppins', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--amber);
       white-space: nowrap;
     }
     .rewards-banner-action {
@@ -249,15 +257,16 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 10px 20px;
+      padding: 9px 18px;
       background: rgba(232,168,56,0.08);
       border: 1px solid rgba(232,168,56,0.2);
       border-radius: 10px;
       color: var(--amber);
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 600;
       text-decoration: none;
       transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
     }
     .rb-learn-link:hover {
       background: rgba(232,168,56,0.14);
@@ -272,9 +281,33 @@
       .model-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 700px) {
-      .rewards-banner-inner { flex-wrap: wrap; gap: 16px; }
-      .rewards-banner-action { width: 100%; }
-      .rb-learn-link { width: 100%; justify-content: center; }
+      .rewards-banner-inner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 20px 0;
+      }
+      .rewards-banner-icon { display: none; }
+      .rewards-banner-top { margin-bottom: 6px; }
+      .rewards-banner-desc { margin-bottom: 12px; font-size: 0.82rem; }
+      .rewards-banner-progress {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      .rb-bar-wrap { grid-column: 1 / -1; }
+      .rb-bar { height: 6px; }
+      .rb-bar-label { grid-column: 1; }
+      .rewards-banner-action { }
+      .rb-learn-link {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 0.82rem;
+      }
     }
     @media (max-width: 560px) {
       .bento { grid-template-columns: 1fr; gap: 12px; }
@@ -289,8 +322,10 @@
         padding-bottom: 8px;
       }
       .model-card { scroll-snap-align: start; }
-      .rewards-banner-icon { display: none; }
-      .rewards-banner-inner { padding: 22px 0; }
+      .rewards-banner-inner { padding: 18px 0; }
+      .rewards-banner-title { font-size: 0.9rem; }
+      .rewards-banner-desc { font-size: 0.78rem; margin-bottom: 10px; }
+      .rb-learn-link { padding: 11px 16px; }
     }
   </style>
 </head>
@@ -337,14 +372,16 @@
     <div class="container rewards-banner-inner">
       <div class="rewards-banner-icon">&#x1f525;</div>
       <div class="rewards-banner-body">
-        <h2 class="rewards-banner-title">Aquafire Rewards <span class="rb-badge">New</span></h2>
-        <p class="rewards-banner-desc">Earn points as you explore guides, use tools, and complete your setup. Sign in to start tracking your progress.</p>
+        <div class="rewards-banner-top">
+          <h2 class="rewards-banner-title">&#x1f525; Aquafire Rewards <span class="rb-badge">New</span></h2>
+          <span class="rb-points-display" id="rb-home-points">0 pts</span>
+        </div>
+        <p class="rewards-banner-desc">Earn points as you explore guides, use tools, and complete your fireplace setup.</p>
         <div class="rewards-banner-progress">
           <div class="rb-bar-wrap">
             <div class="rb-bar"><div class="rb-bar-fill" id="rb-home-bar-fill"></div></div>
-            <span class="rb-bar-label" id="rb-home-bar-label">0 / 14 completed</span>
           </div>
-          <span class="rb-points-display" id="rb-home-points">0 pts</span>
+          <span class="rb-bar-label" id="rb-home-bar-label">0 / 14</span>
         </div>
       </div>
       <div class="rewards-banner-action">
