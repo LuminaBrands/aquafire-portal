@@ -163,14 +163,16 @@
     /* ── Rewards Banner ── */
     .rewards-banner {
       margin: 0;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(232,168,56,0.04) 0%, var(--bg) 100%);
+      padding: 20px 0;
     }
     .rewards-banner-inner {
       display: flex;
       align-items: center;
       gap: 20px;
-      padding: 24px 0;
+      padding: 20px 24px;
+      background: linear-gradient(180deg, rgba(232,168,56,0.04) 0%, var(--surface) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
     }
     .rewards-banner-icon {
       flex-shrink: 0;
@@ -256,21 +258,19 @@
     .rb-learn-link {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 9px 18px;
-      background: rgba(232,168,56,0.08);
-      border: 1px solid rgba(232,168,56,0.2);
-      border-radius: 10px;
-      color: var(--amber);
-      font-size: 0.78rem;
-      font-weight: 600;
+      gap: 4px;
+      padding: 0;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 500;
       text-decoration: none;
-      transition: background 0.15s, border-color 0.15s;
       white-space: nowrap;
+      transition: color 0.15s;
     }
     .rb-learn-link:hover {
-      background: rgba(232,168,56,0.14);
-      border-color: rgba(232,168,56,0.35);
+      color: var(--amber);
     }
     .rb-learn-link svg { flex-shrink: 0; }
 
@@ -285,7 +285,7 @@
         flex-direction: column;
         align-items: stretch;
         gap: 0;
-        padding: 20px 0;
+        padding: 18px 20px;
       }
       .rewards-banner-icon { display: none; }
       .rewards-banner-top { margin-bottom: 6px; }
@@ -295,19 +295,13 @@
         grid-template-columns: 1fr auto;
         align-items: center;
         gap: 12px;
-        margin-bottom: 14px;
+        margin-bottom: 10px;
       }
       .rb-bar-wrap { grid-column: 1 / -1; }
       .rb-bar { height: 6px; }
       .rb-bar-label { grid-column: 1; }
-      .rewards-banner-action { }
-      .rb-learn-link {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        padding: 12px 20px;
-        font-size: 0.82rem;
-      }
+      .rewards-banner-action { text-align: center; }
+      .rb-learn-link { font-size: 0.78rem; }
     }
     @media (max-width: 560px) {
       .bento { grid-template-columns: 1fr; gap: 12px; }
@@ -322,10 +316,9 @@
         padding-bottom: 8px;
       }
       .model-card { scroll-snap-align: start; }
-      .rewards-banner-inner { padding: 18px 0; }
+      .rewards-banner-inner { padding: 16px 16px; }
       .rewards-banner-title { font-size: 0.9rem; }
       .rewards-banner-desc { font-size: 0.78rem; margin-bottom: 10px; }
-      .rb-learn-link { padding: 11px 16px; }
     }
   </style>
 </head>
