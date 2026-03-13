@@ -378,7 +378,7 @@
       if (!badge) {
         badge = document.createElement('span');
         badge.className = 'af-reward-badge';
-        el.appendChild(badge);
+        el.insertBefore(badge, el.firstChild);
       }
 
       var completed = completedRewards[rid];

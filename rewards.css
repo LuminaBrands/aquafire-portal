@@ -425,9 +425,4 @@
 
 @media (max-width: 560px) {
   .af-modal { border-radius: 16px; }
-  .bento-tile .af-reward-badge {
-    position: static;
-    margin-top: 8px;
-    align-self: flex-start;
-  }
 }
