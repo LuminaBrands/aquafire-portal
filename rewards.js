@@ -390,6 +390,23 @@
         badge.innerHTML = '<span class="af-rb-flame">&#x1f525;</span><span class="af-rb-pts">+' + reward.points + ' pts</span>';
       }
     });
+    updateHomeBanner();
+  }
+
+  /* ── Home Banner Update ── */
+  function updateHomeBanner() {
+    var barFill = document.getElementById('rb-home-bar-fill');
+    var barLabel = document.getElementById('rb-home-bar-label');
+    var ptsDisplay = document.getElementById('rb-home-points');
+    if (!barFill) return;
+
+    var total = Object.keys(REWARDS).length;
+    var done = Object.keys(completedRewards).length;
+    var pct = total ? Math.round((done / total) * 100) : 0;
+
+    barFill.style.width = pct + '%';
+    if (barLabel) barLabel.textContent = done + ' / ' + total + ' completed';
+    if (ptsDisplay) ptsDisplay.textContent = userPoints.toLocaleString() + ' pts';
   }
 
   /* ── Auto-detection of section completion ── */

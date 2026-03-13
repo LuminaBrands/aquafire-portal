@@ -160,11 +160,121 @@
     .section-header h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.3px; }
     .section-header p { color: var(--text-muted); font-size: 0.92rem; margin-top: 4px; }
 
+    /* ── Rewards Banner ── */
+    .rewards-banner {
+      margin: -1px auto 0;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(232,168,56,0.04) 0%, var(--bg) 100%);
+    }
+    .rewards-banner-inner {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding: 28px 0;
+    }
+    .rewards-banner-icon {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(232,168,56,0.08);
+      border: 1px solid rgba(232,168,56,0.15);
+      border-radius: 14px;
+      font-size: 1.6rem;
+    }
+    .rewards-banner-body { flex: 1; min-width: 0; }
+    .rewards-banner-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rewards-banner-title .rb-badge {
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 2px 8px;
+      background: rgba(232,168,56,0.12);
+      color: var(--amber);
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+    }
+    .rewards-banner-desc {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .rewards-banner-progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .rb-bar-wrap { flex: 1; max-width: 260px; }
+    .rb-bar {
+      height: 6px;
+      background: #22262e;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+    .rb-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #c0392b, #e8a838);
+      border-radius: 3px;
+      transition: width 0.6s ease;
+      width: 0%;
+    }
+    .rb-bar-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .rb-points-display {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--amber);
+      white-space: nowrap;
+    }
+    .rewards-banner-action {
+      flex-shrink: 0;
+    }
+    .rb-learn-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      background: rgba(232,168,56,0.08);
+      border: 1px solid rgba(232,168,56,0.2);
+      border-radius: 10px;
+      color: var(--amber);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .rb-learn-link:hover {
+      background: rgba(232,168,56,0.14);
+      border-color: rgba(232,168,56,0.35);
+    }
+    .rb-learn-link svg { flex-shrink: 0; }
+
     /* Responsive */
     @media (max-width: 900px) {
       .bento { grid-template-columns: repeat(2, 1fr); }
       .tile-wide { grid-column: span 2; }
       .model-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .rewards-banner-inner { flex-wrap: wrap; gap: 16px; }
+      .rewards-banner-action { width: 100%; }
+      .rb-learn-link { width: 100%; justify-content: center; }
     }
     @media (max-width: 560px) {
       .bento { grid-template-columns: 1fr; gap: 12px; }
@@ -179,6 +289,8 @@
         padding-bottom: 8px;
       }
       .model-card { scroll-snap-align: start; }
+      .rewards-banner-icon { display: none; }
+      .rewards-banner-inner { padding: 22px 0; }
     }
   </style>
 </head>
@@ -219,6 +331,30 @@
       <p class="hero-sub">Everything you need to plan, install, and maintain your water vapor fireplace.</p>
     </div>
   </header>
+
+  <!-- Rewards Banner -->
+  <section class="rewards-banner">
+    <div class="container rewards-banner-inner">
+      <div class="rewards-banner-icon">&#x1f525;</div>
+      <div class="rewards-banner-body">
+        <h2 class="rewards-banner-title">Aquafire Rewards <span class="rb-badge">New</span></h2>
+        <p class="rewards-banner-desc">Earn points as you explore guides, use tools, and complete your setup. Sign in to start tracking your progress.</p>
+        <div class="rewards-banner-progress">
+          <div class="rb-bar-wrap">
+            <div class="rb-bar"><div class="rb-bar-fill" id="rb-home-bar-fill"></div></div>
+            <span class="rb-bar-label" id="rb-home-bar-label">0 / 14 completed</span>
+          </div>
+          <span class="rb-points-display" id="rb-home-points">0 pts</span>
+        </div>
+      </div>
+      <div class="rewards-banner-action">
+        <a href="rewards.html" class="rb-learn-link">
+          Learn More
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- Bento Grid -->
   <main class="container">
