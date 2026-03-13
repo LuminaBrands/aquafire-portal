@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maintenance Guide | Aquafire Hub</title>
+  <meta name="description" content="Interactive preventative maintenance guide for your Aquafire water vapor fireplace. Step-by-step cleaning schedules for mist makers and full system flushes.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #121417; --surface: #1b1e24; --surface-alt: #22262e;
+      --border: #2c3038; --text: #e4e5e9; --text-muted: #878c99;
+      --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
+      --amber: #e8a838; --amber-dim: #c78820; --amber-glow: rgba(232,168,56,0.10);
+      --green: #27ae60; --green-glow: rgba(39,174,96,0.12);
+      --blue: #3b82f6; --radius: 14px; --radius-sm: 8px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; }
+    .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Page Header ── */
+    .maint-header {
+      padding: 48px 0 40px; text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #1b2118 0%, var(--bg) 100%);
+    }
+    .maint-header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
+    .maint-sub { color: var(--text-muted); margin-top: 8px; font-size: 0.95rem; max-width: 540px; margin-left: auto; margin-right: auto; }
+
+    /* ── Schedule Overview ── */
+    .schedule-cards {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      margin: 32px 0 40px;
+    }
+    .schedule-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      text-decoration: none; display: block;
+    }
+    .schedule-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    .schedule-card--quarterly { border-left: 3px solid var(--amber); }
+    .schedule-card--quarterly:hover { border-color: rgba(232,168,56,0.4); border-left-color: var(--amber); }
+    .schedule-card--biannual { border-left: 3px solid var(--blue); }
+    .schedule-card--biannual:hover { border-color: rgba(59,130,246,0.4); border-left-color: var(--blue); }
+    .schedule-freq {
+      font-size: 0.68rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.8px; margin-bottom: 6px;
+    }
+    .schedule-card--quarterly .schedule-freq { color: var(--amber); }
+    .schedule-card--biannual .schedule-freq { color: var(--blue); }
+    .schedule-card h3 { font-size: 1.05rem; margin-bottom: 4px; }
+    .schedule-card p { color: var(--text-muted); font-size: 0.82rem; line-height: 1.5; }
+    .schedule-time { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 0.75rem; color: var(--text-muted); }
+    .schedule-time svg { flex-shrink: 0; }
+
+    /* ── Vapor Pure Banner ── */
+    .vapor-pure-banner {
+      background: linear-gradient(135deg, rgba(59,130,246,0.06) 0%, var(--surface) 60%);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 24px 28px; margin-bottom: 40px;
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .vapor-pure-icon {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: rgba(59,130,246,0.12); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--blue); font-size: 1.2rem;
+    }
+    .vapor-pure-banner h3 { font-size: 0.95rem; margin-bottom: 4px; }
+    .vapor-pure-banner p { color: var(--text-muted); font-size: 0.82rem; line-height: 1.5; }
+
+    /* ── Procedure Sections ── */
+    .procedure {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-bottom: 24px; overflow: hidden;
+    }
+    .procedure-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 22px 24px; cursor: pointer; user-select: none;
+      transition: background 0.15s;
+    }
+    .procedure-header:hover { background: rgba(255,255,255,0.02); }
+    .procedure-badge {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: #fff;
+    }
+    .procedure-badge--quarterly { background: rgba(232,168,56,0.18); color: var(--amber); }
+    .procedure-badge--biannual { background: rgba(59,130,246,0.18); color: var(--blue); }
+    .procedure-meta { flex: 1; }
+    .procedure-meta h2 { font-size: 1.1rem; line-height: 1.3; }
+    .procedure-meta span { font-size: 0.75rem; color: var(--text-muted); }
+    .procedure-chevron {
+      transition: transform 0.3s; flex-shrink: 0; color: var(--text-muted);
+    }
+    .procedure--open .procedure-chevron { transform: rotate(180deg); }
+    .procedure-body {
+      max-height: 0; overflow: hidden; transition: max-height 0.5s ease;
+    }
+    .procedure--open .procedure-body { max-height: 5000px; }
+    .procedure-inner { padding: 0 24px 28px; }
+
+    /* ── Tools Needed ── */
+    .tools-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 24px; padding-top: 4px;
+    }
+    .tool-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; font-size: 0.75rem; font-weight: 500;
+      background: var(--surface-alt); border: 1px solid var(--border);
+      border-radius: 20px; color: var(--text-muted);
+    }
+
+    /* ── Steps ── */
+    .step {
+      display: flex; gap: 16px; padding: 16px 0;
+      border-top: 1px solid rgba(44,48,56,0.5);
+    }
+    .step:first-child { border-top: none; }
+    .step-check {
+      flex-shrink: 0; width: 28px; height: 28px; margin-top: 2px;
+      border: 2px solid var(--border); border-radius: 50%;
+      background: none; cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .step-check:hover { border-color: var(--green); }
+    .step-check svg { opacity: 0; transition: opacity 0.15s; color: #fff; }
+    .step--done .step-check {
+      background: var(--green); border-color: var(--green);
+    }
+    .step--done .step-check svg { opacity: 1; }
+    .step--done .step-content { opacity: 0.5; }
+    .step-num {
+      font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 4px;
+    }
+    .step-text { font-size: 0.88rem; line-height: 1.6; }
+    .step-content { transition: opacity 0.2s; }
+
+    /* ── Warnings / Notes ── */
+    .warning-box {
+      display: flex; gap: 14px; padding: 16px 18px;
+      background: rgba(192,57,43,0.06); border: 1px solid rgba(192,57,43,0.2);
+      border-radius: var(--radius-sm); margin-top: 8px;
+    }
+    .warning-box--amber {
+      background: rgba(232,168,56,0.06); border-color: rgba(232,168,56,0.2);
+    }
+    .warning-icon { flex-shrink: 0; font-size: 1.1rem; line-height: 1.4; }
+    .warning-box p { font-size: 0.82rem; line-height: 1.6; color: var(--text-muted); }
+    .warning-box strong { color: var(--text); }
+
+    .tip-box {
+      display: flex; gap: 14px; padding: 16px 18px;
+      background: rgba(39,174,96,0.06); border: 1px solid rgba(39,174,96,0.2);
+      border-radius: var(--radius-sm); margin-top: 16px;
+    }
+    .tip-box p { font-size: 0.82rem; line-height: 1.6; color: var(--text-muted); }
+    .tip-box strong { color: var(--text); }
+
+    /* ── Progress Bar ── */
+    .progress-bar-wrap {
+      margin: 20px 0 8px; display: flex; align-items: center; gap: 12px;
+    }
+    .progress-track {
+      flex: 1; height: 6px; background: var(--surface-alt);
+      border-radius: 3px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; width: 0%; border-radius: 3px;
+      transition: width 0.4s ease, background 0.3s;
+    }
+    .progress-fill--quarterly { background: var(--amber); }
+    .progress-fill--biannual { background: var(--blue); }
+    .progress-label { font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; font-weight: 600; }
+
+    /* ── Reset Reminder ── */
+    .reset-card {
+      background: linear-gradient(135deg, rgba(232,168,56,0.06) 0%, var(--surface) 60%);
+      border: 1px solid rgba(232,168,56,0.2); border-radius: var(--radius);
+      padding: 24px 28px; margin-top: 40px;
+    }
+    .reset-card h3 { font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+    .reset-card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+    .reset-steps {
+      display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap;
+    }
+    .reset-step {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px; background: var(--surface-alt);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 0.8rem; font-weight: 500;
+    }
+    .reset-step-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(232,168,56,0.15); color: var(--amber);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.68rem; font-weight: 700; flex-shrink: 0;
+    }
+
+    /* ── Post-Cleaning Note ── */
+    .post-clean {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px; margin-top: 24px;
+    }
+    .post-clean h3 { font-size: 1rem; margin-bottom: 10px; }
+    .post-clean p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.7; }
+    .post-clean p + p { margin-top: 10px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .schedule-cards { grid-template-columns: 1fr; }
+      .maint-header h1 { font-size: 1.5rem; }
+      .maint-header { padding: 32px 0 28px; }
+      .vapor-pure-banner { flex-direction: column; }
+      .procedure-header { padding: 18px 18px; }
+      .procedure-inner { padding: 0 18px 24px; }
+      .reset-steps { flex-direction: column; }
+    }
+  </style>
+  <link rel="stylesheet" href="hub.css">
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="getting-started.html">Getting Started</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="enclosure-guide.html">Enclosure Guide</a></li>
+        <li><a href="water-care.html">Water Care</a></li>
+        <li><a href="maintenance.html" class="active">Maintenance</a></li>
+        <li><a href="ar-cutout.html">AR Cutout</a></li>
+        <li><a href="support.html">Support</a></li>
+        <li class="nav-cta">
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener" class="btn-primary btn-sm">Shop Aquafire</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="maint-header">
+    <div class="container">
+      <h1>Maintaining Your Aquafire</h1>
+      <p class="maint-sub">Follow these preventative maintenance schedules to keep your water vapor fireplace running beautifully for years to come.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Schedule Overview Cards -->
+    <div class="schedule-cards">
+      <a href="#procedure-quarterly" class="schedule-card schedule-card--quarterly" data-jump="quarterly">
+        <div class="schedule-freq">Every 3 Months</div>
+        <h3>Mist Maker Cleaning</h3>
+        <p>Quick descale and rinse of the mist maker discs to maintain optimal flame height.</p>
+        <div class="schedule-time">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          15 &ndash; 30 minutes
+        </div>
+      </a>
+      <a href="#procedure-biannual" class="schedule-card schedule-card--biannual" data-jump="biannual">
+        <div class="schedule-freq">Every 6 Months</div>
+        <h3>Full System Cleaning</h3>
+        <p>Complete drain, vinegar soak, and flush of the entire reservoir and float sensors.</p>
+        <div class="schedule-time">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          45 &ndash; 60 minutes
+        </div>
+      </a>
+    </div>
+
+    <!-- Vapor Pure Recommendation -->
+    <div class="vapor-pure-banner">
+      <div class="vapor-pure-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+      </div>
+      <div>
+        <h3>Reduce Buildup with Vapor Pure</h3>
+        <p>To significantly reduce the buildup and effects of hard water on your Aquafire, we recommend the <strong>Vapor Pure Water Softener System</strong>. Engineered alongside water quality experts specifically for Aquafire inserts, Vapor Pure is provided complimentary with your Aquafire Pro or Aquafire with Direct Plumb Kit. <a href="water-care.html" style="color: var(--blue); text-decoration: underline;">Check your water hardness &rarr;</a></p>
+      </div>
+    </div>
+
+    <!-- ═══ PROCEDURE 1: Quarterly Mist Maker Cleaning ═══ -->
+    <div class="procedure procedure--open" id="procedure-quarterly">
+      <div class="procedure-header" role="button" aria-expanded="true" tabindex="0">
+        <div class="procedure-badge procedure-badge--quarterly">3M</div>
+        <div class="procedure-meta">
+          <h2>Mist Maker Cleaning</h2>
+          <span>Every 3 months &middot; 6 steps</span>
+        </div>
+        <svg class="procedure-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="procedure-body">
+        <div class="procedure-inner">
+
+          <div class="tools-list">
+            <span class="tool-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg> White vinegar</span>
+            <span class="tool-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg> Soft toothbrush</span>
+            <span class="tool-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg> Small screwdriver</span>
+            <span class="tool-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg> Fresh water for rinsing</span>
+          </div>
+
+          <div class="progress-bar-wrap">
+            <div class="progress-track"><div class="progress-fill progress-fill--quarterly" id="prog-q"></div></div>
+            <span class="progress-label" id="prog-q-label">0 / 6</span>
+          </div>
+
+          <div class="steps" id="steps-quarterly">
+            <div class="step" data-step="1">
+              <button class="step-check" aria-label="Mark step 1 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 1</div>
+                <div class="step-text">Turn your fireplace <strong>off</strong>, then unplug the mist maker wire from the power outlet located at each of the large round mist tube housings.</div>
+              </div>
+            </div>
+
+            <div class="step" data-step="2">
+              <button class="step-check" aria-label="Mark step 2 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 2</div>
+                <div class="step-text">Remove the mist maker racks from the mist tubes. For <strong>light buildup</strong>, put a few drops of white vinegar directly on the white center disc of the mist maker. Let it sit for a few minutes, then rinse and return the rack to the tube.</div>
+              </div>
+            </div>
+
+            <div class="step" data-step="3">
+              <button class="step-check" aria-label="Mark step 3 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 3</div>
+                <div class="step-text">For assemblies with <strong>algae buildup or visible hard water residue</strong>: remove the 4 screws attaching the mist maker to the rack. Submerge the mist maker in white vinegar for <strong>10&ndash;20 minutes</strong> to soak the bottom as well. Keep the power cords out of the vinegar solution.</div>
+              </div>
+            </div>
+
+            <div class="step" data-step="4">
+              <button class="step-check" aria-label="Mark step 4 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 4</div>
+                <div class="step-text">After soaking, rinse thoroughly with fresh water. Use a <strong>soft toothbrush</strong> to gently brush the white disc surface, the metal casing, and the bottom to remove any visible stains.</div>
+                <div class="warning-box" style="margin-top: 12px;">
+                  <span class="warning-icon">&#x26A0;</span>
+                  <p><strong>Do not</strong> use a stiff bristle brush or Scotch-Brite pad on the mist makers &mdash; this can cause <strong>permanent damage</strong> to the disc.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="step" data-step="5">
+              <button class="step-check" aria-label="Mark step 5 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 5</div>
+                <div class="step-text">Re-attach the mist maker to the rack (tighten all 4 screws if removed), then place the mist maker rack back into the mist tube.</div>
+              </div>
+            </div>
+
+            <div class="step" data-step="6">
+              <button class="step-check" aria-label="Mark step 6 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 6</div>
+                <div class="step-text">Reconnect the mist maker power feed to the power outlet. Be sure to <strong>push the wire all the way down the slot</strong> in the side of the mist tube before putting the cap back on.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROCEDURE 2: Full System Cleaning ═══ -->
+    <div class="procedure" id="procedure-biannual">
+      <div class="procedure-header" role="button" aria-expanded="false" tabindex="0">
+        <div class="procedure-badge procedure-badge--biannual">6M</div>
+        <div class="procedure-meta">
+          <h2>Full System Cleaning</h2>
+          <span>Every 6 months &middot; 9 steps</span>
+        </div>
+        <svg class="procedure-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="procedure-body">
+        <div class="procedure-inner">
+
+          <div class="tools-list">
+            <span class="tool-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg> ~&frac12; gallon white vinegar</span>
+            <span class="tool-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/></svg> 3&ndash;5 gallon bucket</span>
+            <span class="tool-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/></svg> Included flex hose</span>
+            <span class="tool-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg> Small siphon hose, turkey baster, or sponge</span>
+          </div>
+
+          <div class="progress-bar-wrap">
+            <div class="progress-track"><div class="progress-fill progress-fill--biannual" id="prog-b"></div></div>
+            <span class="progress-label" id="prog-b-label">0 / 9</span>
+          </div>
+
+          <div class="steps" id="steps-biannual">
+            <div class="step" data-step="1">
+              <button class="step-check" aria-label="Mark step 1 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 1</div>
+                <div class="step-text"><strong>Turn off the water feed</strong> if your unit is direct plumbed.</div>
+              </div>
+            </div>
+
+            <div class="step" data-step="2">
+              <button class="step-check" aria-label="Mark step 2 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 2</div>
+                <div class="step-text">Connect the included flexible hose to the <strong>drain port</strong> on the front of the unit (AWA/AWP models) or on the top for AWPR series. Place the other end in a 3&ndash;5 gallon bucket.</div>
+              </div>
+            </div>
+
+            <div class="step" data-step="3">
+              <button class="step-check" aria-label="Mark step 3 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 3</div>
+                <div class="step-text">Press and hold the <strong>left button (B2)</strong> to start the drain cycle. When the cycle stops, some water will remain in the lower tank reservoirs &mdash; this is normal. Remove the remaining water from each mist tube using a &frac14;" siphon hose, turkey baster, or small sponge.</div>
+                <div class="warning-box warning-box--amber" style="margin-top: 12px;">
+                  <span class="warning-icon">&#x1f4a1;</span>
+                  <p>Avoid using any material that could flake off or leave debris in the lower tank.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="step" data-step="4">
+              <button class="step-check" aria-label="Mark step 4 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 4</div>
+                <div class="step-text">Add approximately <strong>&frac12; gallon of white vinegar</strong> using the fill/drain hose and pressing <strong>B1</strong> for manual fill &mdash; or pour equal amounts directly into each mist tube. The vinegar level should be just above the top of the mist maker (approx. 2").</div>
+                <div class="warning-box" style="margin-top: 12px;">
+                  <span class="warning-icon">&#x26A0;</span>
+                  <p><strong>Do not overfill.</strong> Excess vinegar may leak out of the front vents.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="step" data-step="5">
+              <button class="step-check" aria-label="Mark step 5 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 5</div>
+                <div class="step-text">Let the vinegar <strong>soak for 10&ndash;20 minutes</strong> to loosen hard water scaling on the float sensors.</div>
+                <div class="warning-box" style="margin-top: 12px;">
+                  <span class="warning-icon">&#x26A0;</span>
+                  <p><strong>Do not operate the fireplace</strong> during the vinegar cleaning process.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="step" data-step="6">
+              <button class="step-check" aria-label="Mark step 6 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 6</div>
+                <div class="step-text">Before draining, <strong>agitate the vinegar</strong> in each lower tank. Raise and lower the mist maker rack vigorously so you can hear it splashing. Do this <strong>10&ndash;15 times</strong> in each mist tube to break up residue on the float sensors.</div>
+              </div>
+            </div>
+
+            <div class="step" data-step="7">
+              <button class="step-check" aria-label="Mark step 7 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 7</div>
+                <div class="step-text"><strong>Drain the vinegar</strong> using the drain hose and <strong>B2</strong> button, just as you drained the water.</div>
+              </div>
+            </div>
+
+            <div class="step" data-step="8">
+              <button class="step-check" aria-label="Mark step 8 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 8</div>
+                <div class="step-text">Fill the unit with fresh water by turning the supply back on (if plumbed) or using the hose and <strong>B1</strong> fill cycle. <strong>Fill and drain the entire system twice</strong> to flush out all vinegar and contaminants.</div>
+              </div>
+            </div>
+
+            <div class="step" data-step="9">
+              <button class="step-check" aria-label="Mark step 9 complete">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="step-content">
+                <div class="step-num">Step 9</div>
+                <div class="step-text">After the <strong>3rd fill</strong> (two rinse cycles complete), run the unit as you would normally. Your system is clean and ready to go.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Post-Cleaning Note -->
+    <div class="post-clean">
+      <h3>After Your Cleaning</h3>
+      <p><strong>2&ndash;3 days after a cleaning</strong>, you may still experience mist issues. This is most likely caused by leftover debris from the initial cleaning &mdash; debris can continue to slough off days after a deep vinegar clean. <strong>This is completely normal.</strong></p>
+      <p>If mist issues persist, open the mist tubes, check for debris, re-agitate the mist rack and float sensor. You may need to flush the water to rid the tank of debris or complete another full clean.</p>
+      <div class="tip-box">
+        <span class="warning-icon">&#x2705;</span>
+        <p><strong>Pro tip:</strong> The more frequently you clean the insert, the less likely you are to experience delayed debris. Once you get into a cleaning schedule, the mist and float sensor issues should dissipate.</p>
+      </div>
+    </div>
+
+    <!-- Reset Maintenance Reminder -->
+    <div class="reset-card">
+      <h3>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Resetting the Maintenance Reminder
+      </h3>
+      <p>When your Aquafire displays the maintenance alert (all three LEDs blinking), it's time for a PM cleaning. After completing maintenance, reset the reminder:</p>
+      <div class="reset-steps">
+        <div class="reset-step">
+          <span class="reset-step-num">1</span>
+          With the unit off, locate the control panel
+        </div>
+        <div class="reset-step">
+          <span class="reset-step-num">2</span>
+          Press and hold the middle + left buttons together
+        </div>
+        <div class="reset-step">
+          <span class="reset-step-num">3</span>
+          Hold until the LEDs stop blinking &mdash; reminder is reset
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" height="20">
+        <p>The complete guide to your Aquafire water vapor fireplace.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Guides</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="quick-start.html">Quick Start</a>
+          <a href="enclosure-guide.html">Enclosure Guide</a>
+          <a href="water-care.html">Water Care</a>
+          <a href="maintenance.html">Maintenance</a>
+          <a href="ar-cutout.html">AR Cutout</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="support.html">Support Hub</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <p>&copy; 2026 Aquafire. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="embed.js"></script>
+  <script>
+    // ── Nav toggle ──
+    var toggle = document.querySelector('.nav-toggle');
+    var navLinks = document.querySelector('.nav-links');
+    if (toggle) toggle.addEventListener('click', function() {
+      var open = navLinks.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+
+    // ── Accordion toggle ──
+    document.querySelectorAll('.procedure-header').forEach(function(header) {
+      header.addEventListener('click', function() {
+        var proc = header.closest('.procedure');
+        var isOpen = proc.classList.contains('procedure--open');
+        proc.classList.toggle('procedure--open', !isOpen);
+        header.setAttribute('aria-expanded', String(!isOpen));
+      });
+      header.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); header.click(); }
+      });
+    });
+
+    // ── Interactive step checklists ──
+    function setupChecklist(containerId, progFillId, progLabelId) {
+      var container = document.getElementById(containerId);
+      var progFill = document.getElementById(progFillId);
+      var progLabel = document.getElementById(progLabelId);
+      if (!container) return;
+
+      var steps = container.querySelectorAll('.step');
+      var total = steps.length;
+      var storageKey = 'maint-' + containerId;
+
+      // Load saved state
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+
+      function updateProgress() {
+        var done = container.querySelectorAll('.step--done').length;
+        var pct = Math.round((done / total) * 100);
+        progFill.style.width = pct + '%';
+        progLabel.textContent = done + ' / ' + total;
+        if (done === total) {
+          progLabel.textContent = 'Complete!';
+          progLabel.style.color = 'var(--green)';
+        } else {
+          progLabel.style.color = '';
+        }
+      }
+
+      steps.forEach(function(step) {
+        var idx = step.dataset.step;
+        var btn = step.querySelector('.step-check');
+        if (saved[idx]) step.classList.add('step--done');
+
+        btn.addEventListener('click', function() {
+          var isDone = step.classList.toggle('step--done');
+          saved[idx] = isDone || undefined;
+          if (!isDone) delete saved[idx];
+          try { localStorage.setItem(storageKey, JSON.stringify(saved)); } catch(e) {}
+          updateProgress();
+        });
+      });
+
+      updateProgress();
+    }
+
+    setupChecklist('steps-quarterly', 'prog-q', 'prog-q-label');
+    setupChecklist('steps-biannual', 'prog-b', 'prog-b-label');
+
+    // ── Schedule card jump & open ──
+    document.querySelectorAll('.schedule-card').forEach(function(card) {
+      card.addEventListener('click', function(e) {
+        var target = document.getElementById(card.getAttribute('href').slice(1));
+        if (target && !target.classList.contains('procedure--open')) {
+          target.querySelector('.procedure-header').click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
