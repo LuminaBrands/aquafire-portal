@@ -47,9 +47,72 @@
       pointer-events: none;
     }
     .hero-content { position: relative; }
-    .hero-logo { height: 28px; width: auto; margin-bottom: 16px; opacity: 0.7; }
-    .hero h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.5px; line-height: 1.2; }
-    .hero-sub { color: var(--text-muted); margin-top: 10px; font-size: 1rem; }
+    .hero-welcome {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+      position: relative;
+      display: inline-block;
+    }
+    .hero-welcome::before,
+    .hero-welcome::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--red));
+    }
+    .hero-welcome::before { right: calc(100% + 14px); }
+    .hero-welcome::after { left: calc(100% + 14px); background: linear-gradient(90deg, var(--red), transparent); }
+    .hero h1 {
+      font-size: 2.4rem; font-weight: 700; letter-spacing: -0.5px; line-height: 1.2;
+      background: linear-gradient(135deg, #fff 0%, #e4e5e9 40%, var(--red) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub { color: var(--text-muted); margin-top: 14px; font-size: 1rem; }
+
+    /* ── Sticky Get Started Button ── */
+    .sticky-get-started {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      z-index: 900;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    }
+    .sticky-get-started.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .sticky-get-started a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 50px;
+      box-shadow: 0 8px 32px rgba(192,57,43,0.4), 0 2px 8px rgba(0,0,0,0.3);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+    .sticky-get-started a:hover {
+      background: var(--red-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(192,57,43,0.5), 0 4px 12px rgba(0,0,0,0.4);
+    }
 
     /* ── Bento Grid ── */
     .bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 40px 0; }
@@ -339,9 +402,11 @@
       border: 1px solid rgba(232,168,56,0.2);
       border-radius: 10px;
       color: var(--amber);
+      font-family: 'Inter', sans-serif;
       font-size: 0.78rem;
       font-weight: 600;
       text-decoration: none;
+      cursor: pointer;
       transition: background 0.15s, border-color 0.15s;
       white-space: nowrap;
     }
@@ -405,6 +470,10 @@
       .bento-tile { padding: 22px 20px 18px; }
       .hero h1 { font-size: 1.6rem; }
       .hero { padding: 40px 0 36px; }
+      .hero-welcome { font-size: 0.8rem; letter-spacing: 2px; }
+      .hero-welcome::before, .hero-welcome::after { width: 24px; }
+      .sticky-get-started { bottom: 16px; }
+      .sticky-get-started a { padding: 12px 22px; font-size: 0.85rem; }
       .model-grid {
         grid-template-columns: repeat(3, 75vw);
         overflow-x: auto; -webkit-overflow-scrolling: touch;
@@ -447,11 +516,8 @@
   <header class="hero">
     <div class="hero-glow"></div>
     <div class="container hero-content">
-      <img
-        src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031"
-        alt="Aquafire" class="hero-logo"
-      >
-      <h1>Your Complete Aquafire Guide</h1>
+      <p class="hero-welcome">Welcome to Your</p>
+      <h1>Aquafire Interactive<br>Owner's Guide</h1>
       <p class="hero-sub">Everything you need to plan, install, and maintain your water vapor fireplace.</p>
     </div>
   </header>
@@ -475,10 +541,10 @@
         </div>
       </div>
       <div class="rewards-banner-action">
-        <a href="#get-started" class="rb-get-started-link">
-          Get Started
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
-        </a>
+        <button type="button" class="rb-get-started-link" id="rb-signin-cta" onclick="window.AquafireRewards &amp;&amp; window.AquafireRewards.showLogin()">
+          Sign In to Start Earning
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+        </button>
         <a href="rewards.html" class="rb-learn-link">
           Learn More
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -668,6 +734,14 @@
     </div>
   </footer>
 
+  <!-- Sticky Get Started Button -->
+  <div class="sticky-get-started" id="sticky-get-started">
+    <a href="#get-started">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+      Get Started
+    </a>
+  </div>
+
   <script src="embed.js"></script>
   <script src="rewards.js"></script>
   <script>
@@ -677,6 +751,61 @@
       const open = navLinks?.classList.toggle('open');
       toggle.setAttribute('aria-expanded', String(open));
     });
+
+    // Sticky "Get Started" button: show when scrolled past the get-started section
+    (function() {
+      const stickyBtn = document.getElementById('sticky-get-started');
+      const getStarted = document.getElementById('get-started');
+      if (!stickyBtn || !getStarted) return;
+
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          // Show sticky button when the get-started section is NOT visible (scrolled past it)
+          if (entry.isIntersecting) {
+            stickyBtn.classList.remove('visible');
+          } else {
+            // Only show if we've scrolled below the section (not above it)
+            var rect = getStarted.getBoundingClientRect();
+            if (rect.bottom < 0) {
+              stickyBtn.classList.add('visible');
+            } else {
+              stickyBtn.classList.remove('visible');
+            }
+          }
+        });
+      }, { threshold: 0 });
+
+      observer.observe(getStarted);
+
+      // Hide sticky button when user clicks it (smooth scroll will bring section into view)
+      stickyBtn.querySelector('a').addEventListener('click', function() {
+        stickyBtn.classList.remove('visible');
+      });
+    })();
+
+    // Update rewards banner CTA based on auth state
+    (function() {
+      var checkAuth = setInterval(function() {
+        if (!window.AquafireRewards) return;
+        clearInterval(checkAuth);
+        // Re-check periodically if user signs in
+        var signinCta = document.getElementById('rb-signin-cta');
+        if (!signinCta) return;
+        var origParent = signinCta.parentElement;
+
+        function updateRewardsCTA() {
+          var pts = window.AquafireRewards.getPoints();
+          var completed = window.AquafireRewards.getCompleted();
+          // If user has any completed rewards or points, they're signed in
+          if (Object.keys(completed).length > 0 || pts > 0) {
+            signinCta.innerHTML = 'View Rewards <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
+            signinCta.onclick = function() { window.location.href = 'rewards.html'; };
+          }
+        }
+        updateRewardsCTA();
+        setInterval(updateRewardsCTA, 2000);
+      }, 200);
+    })();
   </script>
 </body>
 </html>
