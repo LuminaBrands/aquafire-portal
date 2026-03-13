@@ -1345,7 +1345,7 @@ function buildTable() {
 function resetOpeningToMax() {
   const { model, setback } = getState();
   const angleRad = model.frontAngle * Math.PI / 180;
-  const maxOpening = Math.round((setback + model.lightOffset) * Math.tan(angleRad) - 1);
+  const maxOpening = Math.max(13, Math.round((setback + model.lightOffset) * Math.tan(angleRad) - 1));
   openingSlider.value = maxOpening;
   update();
 }
