@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 440">
+  <defs>
+    <style>
+      .rc-body { fill: #111316; stroke: #2c3038; stroke-width: 1.5px; }
+      .rc-btn { stroke: #3a3e48; stroke-width: 1px; }
+      .rc-btn-dark { fill: #1b1e24; }
+      .rc-btn-white { fill: #e8e8e8; }
+      .rc-icon { fill: #e8e8e8; }
+      .rc-icon-dark { fill: #1b1e24; }
+      .rc-label { fill: #878c99; font-family: 'Inter', sans-serif; font-size: 7px; }
+      .rc-label-sm { fill: #5a5e68; font-family: 'Inter', sans-serif; font-size: 5.5px; }
+      .rc-brand { fill: #5a5e68; font-family: 'Inter', sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Remote body -->
+  <rect class="rc-body" x="60" y="15" width="180" height="390" rx="18" ry="18"/>
+  <rect x="64" y="19" width="172" height="382" rx="15" ry="15" fill="#0d0f12" stroke="none"/>
+
+  <!-- === ROW 1: Power, Height -, Flame, Height + === -->
+  <!-- Power button -->
+  <circle class="rc-btn rc-btn-white" cx="100" cy="60" r="17"/>
+  <path d="M100,50 v7" stroke="#1b1e24" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M94,53 a9,9 0 1,0 12,0" stroke="#1b1e24" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+  <!-- Height minus -->
+  <circle class="rc-btn rc-btn-white" cx="140" cy="60" r="17"/>
+  <line x1="132" y1="60" x2="148" y2="60" stroke="#1b1e24" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Flame icon (height) -->
+  <circle class="rc-btn rc-btn-white" cx="180" cy="60" r="17"/>
+  <path d="M180,48 c0,0-6,7-6,12 c0,3.3 2.7,6 6,6 s6-2.7 6-6 c0-5-6-12-6-12z" fill="#1b1e24" opacity="0.85"/>
+  <path d="M180,56 c0,0-2.5,3-2.5,5 c0,1.4 1.1,2.5 2.5,2.5 s2.5-1.1 2.5-2.5 c0-2-2.5-5-2.5-5z" fill="#e8a838" opacity="0.7"/>
+
+  <!-- Height plus -->
+  <circle class="rc-btn rc-btn-white" cx="220" cy="60" r="17"/>
+  <line x1="212" y1="60" x2="228" y2="60" stroke="#1b1e24" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="220" y1="52" x2="220" y2="68" stroke="#1b1e24" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- === ROW 2: Speed -, Wave, Speed + === -->
+  <!-- Speed minus -->
+  <circle class="rc-btn rc-btn-white" cx="120" cy="108" r="17"/>
+  <line x1="112" y1="108" x2="128" y2="108" stroke="#1b1e24" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Wave/speed icon -->
+  <circle class="rc-btn rc-btn-white" cx="160" cy="108" r="17"/>
+  <path d="M152,108 c3,-6 6,6 8,0 c2,-6 5,6 8,0" stroke="#1b1e24" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+
+  <!-- Speed plus -->
+  <circle class="rc-btn rc-btn-white" cx="200" cy="108" r="17"/>
+  <line x1="192" y1="108" x2="208" y2="108" stroke="#1b1e24" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="200" y1="100" x2="200" y2="116" stroke="#1b1e24" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- === ROW 3: R, G, B, Orange LED On/Off === -->
+  <circle class="rc-btn" cx="100" cy="162" r="17" fill="#c0392b"/>
+  <text x="100" y="167" text-anchor="middle" fill="#fff" font-family="Inter, sans-serif" font-weight="700" font-size="14">R</text>
+
+  <circle class="rc-btn" cx="146" cy="162" r="17" fill="#27ae60"/>
+  <text x="146" y="167" text-anchor="middle" fill="#fff" font-family="Inter, sans-serif" font-weight="700" font-size="14">G</text>
+
+  <circle class="rc-btn" cx="192" cy="162" r="17" fill="#2980b9"/>
+  <text x="192" y="167" text-anchor="middle" fill="#fff" font-family="Inter, sans-serif" font-weight="700" font-size="14">B</text>
+
+  <!-- Orange LED On/Off -->
+  <circle class="rc-btn rc-btn-white" cx="234" cy="162" r="17"/>
+  <circle cx="234" cy="158" r="5" fill="#e8a838"/>
+  <line x1="226" y1="167" x2="242" y2="167" stroke="#1b1e24" stroke-width="1.5"/>
+  <line x1="228" y1="170" x2="240" y2="170" stroke="#1b1e24" stroke-width="1.2"/>
+  <path d="M230,158 l-4,-3" stroke="#e8a838" stroke-width="1" stroke-linecap="round" fill="none"/>
+
+  <!-- === ROW 4: Orange, Green, Blue, RGB LED On/Off === -->
+  <circle class="rc-btn" cx="100" cy="210" r="17" fill="#e67e22"/>
+  <circle class="rc-btn" cx="146" cy="210" r="17" fill="#27ae60" opacity="0.8"/>
+  <circle class="rc-btn" cx="192" cy="210" r="17" fill="#2471a3"/>
+
+  <!-- RGB LED On/Off -->
+  <circle class="rc-btn rc-btn-white" cx="234" cy="210" r="17"/>
+  <circle cx="234" cy="206" r="3" fill="#c0392b"/>
+  <circle cx="231" cy="210" r="3" fill="#27ae60"/>
+  <circle cx="237" cy="210" r="3" fill="#2980b9"/>
+  <line x1="226" y1="216" x2="242" y2="216" stroke="#1b1e24" stroke-width="1.5"/>
+  <line x1="228" y1="219" x2="240" y2="219" stroke="#1b1e24" stroke-width="1.2"/>
+
+  <!-- === ROW 5: Colors + Brightness Up === -->
+  <circle class="rc-btn" cx="100" cy="258" r="17" fill="#e67e22" opacity="0.85"/>
+  <circle class="rc-btn" cx="146" cy="258" r="17" fill="#1abc9c"/>
+  <circle class="rc-btn" cx="192" cy="258" r="17" fill="#6c3483"/>
+
+  <!-- Brightness up -->
+  <circle class="rc-btn rc-btn-white" cx="234" cy="258" r="17"/>
+  <circle cx="234" cy="258" r="6" fill="none" stroke="#1b1e24" stroke-width="1.5"/>
+  <line x1="234" y1="249" x2="234" y2="252" stroke="#1b1e24" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="234" y1="264" x2="234" y2="267" stroke="#1b1e24" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="225" y1="258" x2="228" y2="258" stroke="#1b1e24" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="240" y1="258" x2="243" y2="258" stroke="#1b1e24" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="228" y1="252" x2="230" y2="254" stroke="#1b1e24" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="238" y1="254" x2="240" y2="252" stroke="#1b1e24" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="228" y1="264" x2="230" y2="262" stroke="#1b1e24" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="238" y1="262" x2="240" y2="264" stroke="#1b1e24" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- plus in center -->
+  <line x1="231" y1="258" x2="237" y2="258" stroke="#1b1e24" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="234" y1="255" x2="234" y2="261" stroke="#1b1e24" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- === ROW 6: Colors + Brightness Down === -->
+  <circle class="rc-btn" cx="100" cy="306" r="17" fill="#f39c12"/>
+  <circle class="rc-btn" cx="146" cy="306" r="17" fill="#17a589"/>
+  <circle class="rc-btn" cx="192" cy="306" r="17" fill="#7d3c98" opacity="0.8"/>
+
+  <!-- Brightness down -->
+  <circle class="rc-btn rc-btn-white" cx="234" cy="306" r="17"/>
+  <circle cx="234" cy="306" r="6" fill="none" stroke="#1b1e24" stroke-width="1.5"/>
+  <line x1="234" y1="297" x2="234" y2="300" stroke="#1b1e24" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="234" y1="312" x2="234" y2="315" stroke="#1b1e24" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="225" y1="306" x2="228" y2="306" stroke="#1b1e24" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="240" y1="306" x2="243" y2="306" stroke="#1b1e24" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="228" y1="300" x2="230" y2="302" stroke="#1b1e24" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="238" y1="302" x2="240" y2="300" stroke="#1b1e24" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="228" y1="312" x2="230" y2="310" stroke="#1b1e24" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="238" y1="310" x2="240" y2="312" stroke="#1b1e24" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- minus in center -->
+  <line x1="231" y1="306" x2="237" y2="306" stroke="#1b1e24" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- === ROW 7: Yellow, empty, empty, FADE === -->
+  <circle class="rc-btn" cx="100" cy="354" r="17" fill="#f1c40f"/>
+
+  <!-- FADE button -->
+  <circle class="rc-btn rc-btn-white" cx="234" cy="354" r="17"/>
+  <text x="234" y="357" text-anchor="middle" fill="#1b1e24" font-family="Inter, sans-serif" font-weight="700" font-size="9">FADE</text>
+
+  <!-- === Brand logo === -->
+  <text x="140" y="393" text-anchor="middle" class="rc-brand" font-size="7">A</text>
+  <line x1="145" y1="386" x2="145" y2="397" stroke="#5a5e68" stroke-width="0.5"/>
+  <text x="150" y="393" text-anchor="start" class="rc-brand" font-size="7">Fire</text>
+  <text x="150" y="401" text-anchor="start" class="rc-brand" font-size="5.5">Design</text>
+
+  <!-- === Label === -->
+  <text x="150" y="430" text-anchor="middle" fill="#878c99" font-family="Inter, sans-serif" font-size="8">Remote Controller</text>
+</svg>
