@@ -105,6 +105,78 @@
     .tile-testimonial .tile-desc { font-size: 0.8rem; font-style: normal; margin-top: 4px; }
     .tile-testimonial:hover { transform: none; box-shadow: none; }
 
+    /* Reviews Section */
+    .reviews-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 40px 0 20px;
+    }
+    .reviews-header h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.3px; }
+    .reviews-header p { color: var(--text-muted); font-size: 0.92rem; margin-top: 4px; }
+    .reviews-add-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      background: rgba(232,168,56,0.08);
+      border: 1px solid rgba(232,168,56,0.2);
+      border-radius: 10px;
+      color: var(--amber);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .reviews-add-link:hover {
+      background: rgba(232,168,56,0.14);
+      border-color: rgba(232,168,56,0.35);
+    }
+    .reviews-scroll {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 8px;
+      margin-bottom: 32px;
+    }
+    .reviews-scroll::-webkit-scrollbar { height: 4px; }
+    .reviews-scroll::-webkit-scrollbar-track { background: transparent; }
+    .reviews-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .review-card {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .review-stars {
+      display: flex;
+      gap: 2px;
+      color: var(--amber);
+      font-size: 0.95rem;
+    }
+    .review-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-style: italic;
+      color: var(--text-muted);
+      line-height: 1.5;
+      flex: 1;
+    }
+    .review-author {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
     /* CTA tile */
     .tile-cta-type {
       background: linear-gradient(135deg, rgba(192,57,43,0.08) 0%, var(--surface) 100%);
@@ -502,13 +574,47 @@
       </a>
     </div>
 
+    <!-- Customer Reviews -->
+    <div class="reviews-header">
+      <div>
+        <h2>Customer Reviews</h2>
+        <p>See what Aquafire owners are saying.</p>
+      </div>
+      <a href="https://judge.me/product_reviews/9498b1ae-d6c2-4e5b-b06b-78b0906a168f/new?source=shareable-link" target="_blank" rel="noopener" class="reviews-add-link">
+        Write a Review
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      </a>
+    </div>
+    <div class="reviews-scroll">
+      <div class="review-card">
+        <div class="review-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p class="review-text">&ldquo;Absolutely stunning &mdash; guests always ask if it&rsquo;s real fire. The water vapor effect is incredibly realistic.&rdquo;</p>
+        <span class="review-author">&mdash; Sarah M., Aquafire Pro owner</span>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p class="review-text">&ldquo;Installation was straightforward with the enclosure guide. The flames look even better in person than in the videos.&rdquo;</p>
+        <span class="review-author">&mdash; James R., Custom build</span>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p class="review-text">&ldquo;We replaced our gas fireplace with the Aquafire 60&quot; &mdash; no venting, no heat issues, and the ambiance is unreal.&rdquo;</p>
+        <span class="review-author">&mdash; Nicole &amp; David K., Renovation</span>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p class="review-text">&ldquo;Perfect for our restaurant lounge. Clients love the atmosphere and it&rsquo;s completely safe around kids and pets.&rdquo;</p>
+        <span class="review-author">&mdash; Marco T., Commercial install</span>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p class="review-text">&ldquo;The maintenance guide on the portal saved me a service call. Mist maker cleaning was easy and took 10 minutes.&rdquo;</p>
+        <span class="review-author">&mdash; Linda P., Aquafire 40 owner</span>
+      </div>
+    </div>
+
     <!-- Community & More -->
     <div class="bento">
-      <div class="bento-tile accent-muted tile-testimonial">
-        <h2 class="tile-title">&ldquo;Absolutely stunning &mdash; guests always ask if it&rsquo;s real fire.&rdquo;</h2>
-        <p class="tile-desc">&mdash; Sarah M., Aquafire Pro owner</p>
-      </div>
-
       <a href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener" class="bento-tile accent-gradient" data-reward="follow-instagram">
         <span class="tile-icon">&#x1f4f8;</span>
         <h2 class="tile-title">Follow @aquafire</h2>
