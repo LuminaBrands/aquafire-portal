@@ -1370,6 +1370,15 @@ hearthBtns.forEach(btn => {
   });
 });
 
+// ── Pre-select model from URL query param (?model=pro) ──
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var m = params.get('model');
+  if (m && modelSelect.querySelector('option[value="' + m + '"]')) {
+    modelSelect.value = m;
+  }
+})();
+
 // ── Init ──
 buildTable();
 resetOpeningToMax();
