@@ -131,10 +131,6 @@
 
   /* ── Award Points ── */
   function awardPoints(rewardId) {
-    if (!currentUser) {
-      showModal();
-      return false;
-    }
     if (completedRewards[rewardId]) return false; // Already earned
     var reward = REWARDS[rewardId];
     if (!reward) return false;
