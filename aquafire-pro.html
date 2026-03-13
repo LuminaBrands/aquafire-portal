@@ -628,10 +628,19 @@
     .hub-chapters-content .hub-grid { margin-top: 10px; }
 
     /* Extra links row below chapters */
+    .hub-grid-extra-wrap {
+      position: relative; margin-top: 14px; padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .hub-grid-extra-label {
+      position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+      background: var(--bg); padding: 0 10px;
+      font-family: inherit; font-size: 0.7rem; font-weight: 600;
+      color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase;
+      white-space: nowrap;
+    }
     .hub-grid-extra {
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
-      margin-top: 10px; padding-top: 10px;
-      border-top: 1px solid var(--border);
     }
 
     /* Sticky chapter nav */
@@ -796,7 +805,9 @@
             <span class="hub-card-desc">Shop add-ons &amp; parts</span>
           </a>
         </div>
-        <div class="hub-grid-extra">
+        <div class="hub-grid-extra-wrap">
+          <span class="hub-grid-extra-label">Useful Stuff</span>
+          <div class="hub-grid-extra">
           <a href="water-care.html" class="hub-card">
             <div class="hub-card-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
@@ -818,6 +829,7 @@
             <span class="hub-card-label">Contact Support</span>
             <span class="hub-card-desc">Get help from our team</span>
           </a>
+          </div>
         </div>
       </div>
     </section>
