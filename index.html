@@ -254,7 +254,30 @@
     }
     .rewards-banner-action {
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
+    .rb-get-started-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      background: rgba(232,168,56,0.08);
+      border: 1px solid rgba(232,168,56,0.2);
+      border-radius: 10px;
+      color: var(--amber);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .rb-get-started-link:hover {
+      background: rgba(232,168,56,0.14);
+      border-color: rgba(232,168,56,0.35);
+    }
+    .rb-get-started-link svg { flex-shrink: 0; }
     .rb-learn-link {
       display: inline-flex;
       align-items: center;
@@ -300,8 +323,9 @@
       .rb-bar-wrap { grid-column: 1 / -1; }
       .rb-bar { height: 6px; }
       .rb-bar-label { grid-column: 1; }
-      .rewards-banner-action { text-align: center; }
-      .rb-learn-link { font-size: 0.78rem; }
+      .rewards-banner-action { justify-content: center; }
+      .rb-get-started-link { font-size: 0.78rem; padding: 9px 16px; }
+      .rb-learn-link { font-size: 0.75rem; }
     }
     @media (max-width: 560px) {
       .bento { grid-template-columns: 1fr; gap: 12px; }
@@ -379,6 +403,10 @@
         </div>
       </div>
       <div class="rewards-banner-action">
+        <a href="#get-started" class="rb-get-started-link">
+          Get Started
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+        </a>
         <a href="rewards.html" class="rb-learn-link">
           Learn More
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -391,7 +419,7 @@
   <!-- Bento Grid -->
   <main class="container">
     <!-- Get Started: Model Selection -->
-    <section class="get-started">
+    <section class="get-started" id="get-started">
       <div class="get-started-header">
         <h2>Get Started</h2>
         <p>Select your Aquafire model to get started.</p>
