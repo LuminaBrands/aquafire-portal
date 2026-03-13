@@ -882,55 +882,26 @@
 
           <!-- BACK VIEW — long back panel with back vents, Power Port & Dry Contact -->
           <svg id="tour-view-back" class="tour-svg" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
-            <!-- Back panel outline -->
-            <rect x="10" y="10" width="500" height="150" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
-            <!-- Panel surface -->
-            <rect x="18" y="18" width="484" height="134" fill="#1a1c20" stroke="none"/>
-            <!-- Top edge (open top — dashed) -->
-            <line x1="10" y1="10" x2="510" y2="10" stroke="#3a3e48" stroke-width="1.5" stroke-dasharray="4,3"/>
-            <!-- Bottom edge -->
-            <rect x="10" y="148" width="500" height="12" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
-            <!-- Side walls -->
-            <rect x="10" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
-            <rect x="502" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
-            <!-- Back vent slots — horizontal rows -->
-            <g opacity="0.45" stroke="#3a3e48" stroke-width="0.8" fill="none">
-              <rect x="40" y="30" width="30" height="3" rx="1.5"/><rect x="78" y="30" width="30" height="3" rx="1.5"/><rect x="116" y="30" width="30" height="3" rx="1.5"/><rect x="154" y="30" width="30" height="3" rx="1.5"/><rect x="192" y="30" width="30" height="3" rx="1.5"/><rect x="230" y="30" width="30" height="3" rx="1.5"/><rect x="268" y="30" width="30" height="3" rx="1.5"/><rect x="306" y="30" width="30" height="3" rx="1.5"/><rect x="344" y="30" width="30" height="3" rx="1.5"/><rect x="382" y="30" width="30" height="3" rx="1.5"/><rect x="420" y="30" width="30" height="3" rx="1.5"/><rect x="458" y="30" width="30" height="3" rx="1.5"/>
-              <rect x="40" y="37" width="30" height="3" rx="1.5"/><rect x="78" y="37" width="30" height="3" rx="1.5"/><rect x="116" y="37" width="30" height="3" rx="1.5"/><rect x="154" y="37" width="30" height="3" rx="1.5"/><rect x="192" y="37" width="30" height="3" rx="1.5"/><rect x="230" y="37" width="30" height="3" rx="1.5"/><rect x="268" y="37" width="30" height="3" rx="1.5"/><rect x="306" y="37" width="30" height="3" rx="1.5"/><rect x="344" y="37" width="30" height="3" rx="1.5"/><rect x="382" y="37" width="30" height="3" rx="1.5"/><rect x="420" y="37" width="30" height="3" rx="1.5"/><rect x="458" y="37" width="30" height="3" rx="1.5"/>
-              <rect x="40" y="44" width="30" height="3" rx="1.5"/><rect x="78" y="44" width="30" height="3" rx="1.5"/><rect x="116" y="44" width="30" height="3" rx="1.5"/><rect x="154" y="44" width="30" height="3" rx="1.5"/><rect x="192" y="44" width="30" height="3" rx="1.5"/><rect x="230" y="44" width="30" height="3" rx="1.5"/><rect x="268" y="44" width="30" height="3" rx="1.5"/><rect x="306" y="44" width="30" height="3" rx="1.5"/><rect x="344" y="44" width="30" height="3" rx="1.5"/><rect x="382" y="44" width="30" height="3" rx="1.5"/><rect x="420" y="44" width="30" height="3" rx="1.5"/><rect x="458" y="44" width="30" height="3" rx="1.5"/>
-            </g>
-            <!-- Recessed connector area — far LEFT side of back panel -->
-            <rect x="24" y="100" width="80" height="44" rx="3" fill="#151719" stroke="#2c3038" stroke-width="1"/>
-            <!-- Power port (DC barrel jack) -->
-            <rect x="36" y="112" width="18" height="12" rx="2" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
-            <rect x="40" y="115" width="10" height="6" rx="1" fill="#0d0f12"/>
-            <text x="45" y="132" text-anchor="middle" fill="#878c99" font-size="4.5" font-family="Inter, sans-serif">PWR</text>
-            <!-- Dry contact terminal block -->
-            <rect x="72" y="112" width="22" height="12" rx="2" fill="#1b1e24" stroke="#3a3e48" stroke-width="1"/>
-            <rect x="76" y="115" width="4" height="6" rx="0.5" fill="#3a3e48"/>
-            <rect x="82" y="115" width="4" height="6" rx="0.5" fill="#3a3e48"/>
-            <text x="83" y="132" text-anchor="middle" fill="#878c99" font-size="4.5" font-family="Inter, sans-serif">DRY</text>
-            <!-- Label -->
-            <text x="260" y="175" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Back View</text>
+            <image href="tour-back-view.svg" x="0" y="0" width="520" height="180"/>
             <!-- Back Vents hotspot -->
             <g id="hotspot-vents-back" class="tour-hotspot" style="display:none">
-              <rect x="36" y="26" width="458" height="25" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
+              <rect x="109" y="96" width="390" height="21" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
                 <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
               </rect>
             </g>
             <!-- Power Port hotspot -->
             <g id="hotspot-power" class="tour-hotspot" style="display:none">
-              <circle cx="45" cy="118" r="14" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
+              <circle cx="50.5" cy="105.7" r="14" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
                 <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite"/>
               </circle>
-              <circle cx="45" cy="118" r="3" fill="#e8a838"/>
+              <circle cx="50.5" cy="105.7" r="3" fill="#e8a838"/>
             </g>
             <!-- Dry Contact hotspot -->
             <g id="hotspot-dry" class="tour-hotspot" style="display:none">
-              <circle cx="83" cy="118" r="14" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
+              <circle cx="81.5" cy="105.7" r="14" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
                 <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite"/>
               </circle>
-              <circle cx="83" cy="118" r="3" fill="#e8a838"/>
+              <circle cx="81.5" cy="105.7" r="3" fill="#e8a838"/>
             </g>
           </svg>
         </div>
