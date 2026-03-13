@@ -28,6 +28,10 @@
     .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
   </style>
   <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="rewards.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <style>
     /* ── Hero ── */
     .hero {
@@ -252,21 +256,21 @@
       <p>Tools and resources to plan your fireplace installation.</p>
     </div>
     <div class="bento">
-      <a href="enclosure-guide.html" class="bento-tile tile-wide accent-amber">
+      <a href="enclosure-guide.html" class="bento-tile tile-wide accent-amber" data-reward="enclosure-builder">
         <span class="tile-icon">&#x1f4d0;</span>
         <h2 class="tile-title">Enclosure Builder</h2>
         <p class="tile-desc">Interactive calculator for enclosure dimensions, cutout sizes, and light trap configuration.</p>
         <span class="tile-cta">Open Calculator <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
 
-      <a href="ar-cutout.html" class="bento-tile accent-red">
+      <a href="ar-cutout.html" class="bento-tile accent-red" data-reward="ar-cutout">
         <span class="tile-icon">&#x1f4f1;</span>
         <h2 class="tile-title">AR Cutout Visualizer</h2>
         <p class="tile-desc">Use your phone camera to overlay exact cutout dimensions on your surface material in real time.</p>
         <span class="tile-cta">Open AR Tool <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
 
-      <a href="https://www.aquafire.com" target="_blank" rel="noopener" class="bento-tile accent-amber">
+      <a href="https://www.aquafire.com" target="_blank" rel="noopener" class="bento-tile accent-amber" data-reward="shop-accessories">
         <span class="tile-icon">&#x1f6d2;</span>
         <h2 class="tile-title">Shop Accessories</h2>
         <p class="tile-desc">Complementary products, replacement parts, and everything to enhance your setup.</p>
@@ -280,21 +284,21 @@
       <p>Keep your fireplace running beautifully.</p>
     </div>
     <div class="bento">
-      <a href="water-care.html" class="bento-tile tile-wide accent-blue">
+      <a href="water-care.html" class="bento-tile tile-wide accent-blue" data-reward="water-hardness">
         <span class="tile-icon">&#x1f4a7;</span>
         <h2 class="tile-title">Water Care Guide</h2>
         <p class="tile-desc">Water hardness calculator and Vapor Pure softener setup for crystal-clear flames.</p>
         <span class="tile-cta">Check Water <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
 
-      <a href="support.html" class="bento-tile accent-red">
+      <a href="support.html" class="bento-tile accent-red" data-reward="support-hub">
         <span class="tile-icon">&#x1f6e0;</span>
         <h2 class="tile-title">Support Hub</h2>
         <p class="tile-desc">Register your warranty, submit claims, troubleshooting guides, and FAQs.</p>
         <span class="tile-cta">Get Help <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
 
-      <a href="maintenance.html" class="bento-tile tile-wide accent-amber">
+      <a href="maintenance.html" class="bento-tile tile-wide accent-amber" data-reward="mist-maker">
         <span class="tile-icon">&#x1f9f9;</span>
         <h2 class="tile-title">Maintaining Your Aquafire</h2>
         <p class="tile-desc">Interactive step-by-step preventative maintenance guide. Mist maker cleaning every 3 months, full system flush every 6 months &mdash; with progress tracking checklists.</p>
@@ -309,21 +313,21 @@
         <p class="tile-desc">&mdash; Sarah M., Aquafire Pro owner</p>
       </div>
 
-      <a href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener" class="bento-tile accent-gradient">
+      <a href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener" class="bento-tile accent-gradient" data-reward="follow-instagram">
         <span class="tile-icon">&#x1f4f8;</span>
         <h2 class="tile-title">Follow @aquafire</h2>
         <p class="tile-desc">Design inspiration, installations, and behind-the-scenes.</p>
         <span class="tile-cta">Instagram <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
 
-      <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener" class="bento-tile accent-yt-red">
+      <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener" class="bento-tile accent-yt-red" data-reward="watch-youtube">
         <span class="tile-icon">&#x25b6;</span>
         <h2 class="tile-title">Aquafire on YouTube</h2>
         <p class="tile-desc">Tutorials, install walkthroughs, and flame demos.</p>
         <span class="tile-cta">Watch Now <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
 
-      <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="bento-tile accent-red tile-cta-type tile-wide">
+      <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="bento-tile accent-red tile-cta-type tile-wide" data-reward="contact-sales">
         <span class="tile-icon">&#x1f4ac;</span>
         <h2 class="tile-title">Need a Custom Quote?</h2>
         <p class="tile-desc">Our team can help with custom enclosures, commercial projects, and bulk orders.</p>
@@ -363,6 +367,7 @@
   </footer>
 
   <script src="embed.js"></script>
+  <script src="rewards.js"></script>
   <script>
     const toggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');
