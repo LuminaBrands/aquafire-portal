@@ -433,6 +433,14 @@
       color: var(--amber);
     }
     .rb-learn-link svg { flex-shrink: 0; }
+    .rb-inline-learn-link {
+      color: var(--amber);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    .rb-inline-learn-link:hover { opacity: 0.8; }
 
     /* Responsive */
     @media (max-width: 900px) {
@@ -532,7 +540,7 @@
           <h2 class="rewards-banner-title">&#x1f525; Aquafire Rewards <span class="rb-badge">New</span></h2>
           <span class="rb-points-display" id="rb-home-points">0 pts</span>
         </div>
-        <p class="rewards-banner-desc">Earn points as you explore guides, use tools, and complete your fireplace setup.</p>
+        <p class="rewards-banner-desc">Earn points as you explore guides, use tools, and complete your fireplace setup. <a href="rewards.html" class="rb-inline-learn-link">Learn more</a></p>
         <div class="rewards-banner-progress">
           <div class="rb-bar-wrap">
             <div class="rb-bar"><div class="rb-bar-fill" id="rb-home-bar-fill"></div></div>
@@ -545,9 +553,9 @@
           Sign In to Start Earning
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
         </button>
-        <a href="rewards.html" class="rb-learn-link">
-          Learn More
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        <a href="#get-started" class="rb-learn-link">
+          Just Browsing
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
         </a>
       </div>
     </div>
@@ -559,7 +567,7 @@
     <!-- Get Started: Model Selection -->
     <section class="get-started" id="get-started">
       <div class="get-started-header">
-        <h2>Get Started</h2>
+        <h2>Let's Get Started</h2>
         <p>Select your Aquafire model to get started.</p>
       </div>
       <div class="model-grid">
