@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 520 180">
+  <defs>
+    <style>
+      .st-panel { fill: #1b1e24; stroke: #3a3e48; stroke-width: 1.5px; }
+      .st-surface { fill: #1a1c20; stroke: none; }
+      .st-wall { fill: #22262e; stroke: #3a3e48; }
+      .st-wall-thick { stroke-width: 1px; }
+      .st-wall-thin { stroke-width: 0.5px; }
+      .st-recess { fill: #151719; stroke: #2c3038; stroke-width: 1px; }
+      .st-port { fill: #1b1e24; stroke: #3a3e48; stroke-width: 1px; }
+      .st-port-inner { fill: #0d0f12; }
+      .st-terminal { fill: #3a3e48; }
+      .st-vent { fill: none; stroke: #3a3e48; stroke-width: 0.8px; }
+      .st-label { fill: #878c99; font-family: 'Inter', sans-serif; }
+      .st-dash { stroke: #3a3e48; stroke-width: 1.5px; stroke-dasharray: 4,3; }
+    </style>
+  </defs>
+  <!-- Back panel outline -->
+  <rect class="st-panel" x="10" y="10" width="500" height="150" rx="3" ry="3"/>
+  <!-- Panel surface -->
+  <rect class="st-surface" x="18" y="18" width="484" height="134"/>
+  <!-- Top edge (open top — dashed) -->
+  <line class="st-dash" x1="10" y1="10" x2="510" y2="10"/>
+  <!-- Bottom edge -->
+  <rect class="st-wall st-wall-thick" x="10" y="148" width="500" height="12"/>
+  <!-- Side walls -->
+  <rect class="st-wall st-wall-thin" x="10" y="10" width="8" height="150"/>
+  <rect class="st-wall st-wall-thin" x="502" y="10" width="8" height="150"/>
+  <!-- Back vent slots — upper rows -->
+  <g class="st-vent" opacity="0.45">
+    <rect x="40" y="30" width="30" height="3" rx="1.5"/><rect x="78" y="30" width="30" height="3" rx="1.5"/><rect x="116" y="30" width="30" height="3" rx="1.5"/><rect x="154" y="30" width="30" height="3" rx="1.5"/><rect x="192" y="30" width="30" height="3" rx="1.5"/><rect x="230" y="30" width="30" height="3" rx="1.5"/><rect x="268" y="30" width="30" height="3" rx="1.5"/><rect x="306" y="30" width="30" height="3" rx="1.5"/><rect x="344" y="30" width="30" height="3" rx="1.5"/><rect x="382" y="30" width="30" height="3" rx="1.5"/><rect x="420" y="30" width="30" height="3" rx="1.5"/><rect x="458" y="30" width="30" height="3" rx="1.5"/>
+    <rect x="40" y="37" width="30" height="3" rx="1.5"/><rect x="78" y="37" width="30" height="3" rx="1.5"/><rect x="116" y="37" width="30" height="3" rx="1.5"/><rect x="154" y="37" width="30" height="3" rx="1.5"/><rect x="192" y="37" width="30" height="3" rx="1.5"/><rect x="230" y="37" width="30" height="3" rx="1.5"/><rect x="268" y="37" width="30" height="3" rx="1.5"/><rect x="306" y="37" width="30" height="3" rx="1.5"/><rect x="344" y="37" width="30" height="3" rx="1.5"/><rect x="382" y="37" width="30" height="3" rx="1.5"/><rect x="420" y="37" width="30" height="3" rx="1.5"/><rect x="458" y="37" width="30" height="3" rx="1.5"/>
+    <rect x="40" y="44" width="30" height="3" rx="1.5"/><rect x="78" y="44" width="30" height="3" rx="1.5"/><rect x="116" y="44" width="30" height="3" rx="1.5"/><rect x="154" y="44" width="30" height="3" rx="1.5"/><rect x="192" y="44" width="30" height="3" rx="1.5"/><rect x="230" y="44" width="30" height="3" rx="1.5"/><rect x="268" y="44" width="30" height="3" rx="1.5"/><rect x="306" y="44" width="30" height="3" rx="1.5"/><rect x="344" y="44" width="30" height="3" rx="1.5"/><rect x="382" y="44" width="30" height="3" rx="1.5"/><rect x="420" y="44" width="30" height="3" rx="1.5"/><rect x="458" y="44" width="30" height="3" rx="1.5"/>
+  </g>
+  <!-- Recessed connector area — far LEFT side of back panel -->
+  <rect class="st-recess" x="24" y="100" width="80" height="44" rx="3" ry="3"/>
+  <!-- Power port (DC barrel jack) -->
+  <rect class="st-port" x="36" y="112" width="18" height="12" rx="2" ry="2"/>
+  <rect class="st-port-inner" x="40" y="115" width="10" height="6" rx="1" ry="1"/>
+  <text class="st-label" x="45" y="132" text-anchor="middle" font-size="4.5">PWR</text>
+  <!-- Dry contact terminal block -->
+  <rect class="st-port" x="72" y="112" width="22" height="12" rx="2" ry="2"/>
+  <rect class="st-terminal" x="76" y="115" width="4" height="6" rx="0.5" ry="0.5"/>
+  <rect class="st-terminal" x="82" y="115" width="4" height="6" rx="0.5" ry="0.5"/>
+  <text class="st-label" x="83" y="132" text-anchor="middle" font-size="4.5">DRY</text>
+  <!-- Label -->
+  <text class="st-label" x="260" y="175" text-anchor="middle" font-size="8">Back View</text>
+</svg>
