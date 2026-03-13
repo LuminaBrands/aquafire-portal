@@ -643,7 +643,10 @@
       white-space: nowrap;
     }
     .hub-grid-extra {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    }
+    @media (max-width: 700px) {
+      .hub-grid-extra { grid-template-columns: 1fr; gap: 8px; }
     }
 
     /* Sticky chapter nav */
