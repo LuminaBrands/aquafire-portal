@@ -186,6 +186,39 @@
         '<span class="af-nav-pts-icon">&#x1f525;</span>';
       btn.onclick = showModal;
     }
+
+    updateBannerCTA();
+  }
+
+  /* ── Banner CTA (Sign In / View Profile) ── */
+  function updateBannerCTA() {
+    // index.html banner button
+    var homeCta = document.getElementById('rb-signin-cta');
+    if (homeCta) {
+      if (currentUser) {
+        homeCta.innerHTML =
+          'View Profile' +
+          ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+        homeCta.onclick = function () { window.location.href = 'rewards.html'; };
+      } else {
+        homeCta.innerHTML =
+          'Sign In to Start Earning' +
+          ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>';
+        homeCta.onclick = function () { window.AquafireRewards && window.AquafireRewards.showLogin(); };
+      }
+    }
+
+    // rewards.html banner button
+    var rwCta = document.getElementById('rw-score-cta');
+    if (rwCta) {
+      if (currentUser) {
+        rwCta.innerHTML =
+          '<button onclick="window.location.href=\'rewards.html#rw-profile\'">View Profile</button>';
+      } else {
+        rwCta.innerHTML =
+          '<button onclick="window.AquafireRewards && window.AquafireRewards.showLogin()">Sign In to Start Earning</button>';
+      }
+    }
   }
 
   /* ── Profile Dropdown ── */
