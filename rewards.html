@@ -200,6 +200,48 @@
       color: var(--text-muted);
     }
 
+    /* ── Redeem Tiers ── */
+    .rw-tiers {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .rw-tier {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .rw-tier-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .rw-tier-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .rw-tier-range {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .rw-tier-btn {
+      padding: 8px 24px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: #555;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
     /* ── CTA Section ── */
     .rw-cta {
       margin: 48px 0 0;
@@ -283,7 +325,7 @@
         <div class="rw-score-bar-track">
           <div class="rw-score-bar-fill" id="rw-bar-fill"></div>
         </div>
-        <span class="rw-score-bar-text" id="rw-bar-text">0 / 14 activities completed</span>
+        <span class="rw-score-bar-text" id="rw-bar-text">0 / 14 modules completed</span>
       </div>
       <div class="rw-score-cta" id="rw-score-cta">
         <button onclick="window.AquafireRewards && window.AquafireRewards.showLogin()">Sign In to Start Earning</button>
@@ -328,6 +370,56 @@
             <!-- Populated by JS -->
           </tbody>
         </table>
+      </div>
+    </section>
+
+    <!-- Redeem Rewards -->
+    <section class="rw-section" id="redeem-rewards">
+      <h2>Redeem Your Points</h2>
+      <p style="color:#878c99;margin-bottom:24px;">Unlock exclusive rewards as you earn more points. Keep completing modules to reach the next tier!</p>
+      <div class="rw-tiers">
+        <div class="rw-tier">
+          <div class="rw-tier-info">
+            <span class="rw-tier-name">Tier 1</span>
+            <span class="rw-tier-range">600 – 1,200 pts</span>
+          </div>
+          <button class="rw-tier-btn" disabled>Redeem</button>
+        </div>
+        <div class="rw-tier">
+          <div class="rw-tier-info">
+            <span class="rw-tier-name">Tier 2</span>
+            <span class="rw-tier-range">1,201 – 1,500 pts</span>
+          </div>
+          <button class="rw-tier-btn" disabled>Redeem</button>
+        </div>
+        <div class="rw-tier">
+          <div class="rw-tier-info">
+            <span class="rw-tier-name">Tier 3</span>
+            <span class="rw-tier-range">1,501 – 1,850 pts</span>
+          </div>
+          <button class="rw-tier-btn" disabled>Redeem</button>
+        </div>
+        <div class="rw-tier">
+          <div class="rw-tier-info">
+            <span class="rw-tier-name">Tier 4</span>
+            <span class="rw-tier-range">1,851 – 2,250 pts</span>
+          </div>
+          <button class="rw-tier-btn" disabled>Redeem</button>
+        </div>
+        <div class="rw-tier">
+          <div class="rw-tier-info">
+            <span class="rw-tier-name">Tier 5</span>
+            <span class="rw-tier-range">2,251 – 2,800 pts</span>
+          </div>
+          <button class="rw-tier-btn" disabled>Redeem</button>
+        </div>
+        <div class="rw-tier">
+          <div class="rw-tier-info">
+            <span class="rw-tier-name">Tier 6</span>
+            <span class="rw-tier-range">2,800+ pts</span>
+          </div>
+          <button class="rw-tier-btn" disabled>Redeem</button>
+        </div>
       </div>
     </section>
 
@@ -417,7 +509,7 @@
       var pct = totalCount ? Math.round((doneCount / totalCount) * 100) : 0;
 
       if (barFill) barFill.style.width = pct + '%';
-      if (barText) barText.textContent = doneCount + ' / ' + totalCount + ' activities completed';
+      if (barText) barText.textContent = doneCount + ' / ' + totalCount + ' modules completed';
 
       // Hide sign-in CTA if logged in
       if (ctaEl && points > 0) ctaEl.style.display = 'none';

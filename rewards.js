@@ -241,6 +241,7 @@
         '<span class="af-dd-pts-label">Aquafire Reward Points</span>' +
       '</div>' +
       '<div class="af-dd-progress">' + buildProgressHTML() + '</div>' +
+      '<a href="rewards.html#redeem-rewards" class="af-dd-redeem" id="af-redeem-btn">Redeem Your Points</a>' +
       '<button class="af-dd-signout" id="af-signout-btn">Sign Out</button>';
 
     document.body.appendChild(dd);
@@ -274,7 +275,7 @@
     return (
       '<div class="af-dd-bar-wrap">' +
         '<div class="af-dd-bar"><div class="af-dd-bar-fill" style="width:' + pct + '%"></div></div>' +
-        '<span class="af-dd-bar-label">' + done + '/' + total + ' completed</span>' +
+        '<span class="af-dd-bar-label">' + done + '/' + total + ' modules completed</span>' +
       '</div>'
     );
   }
@@ -434,7 +435,7 @@
     var pct = total ? Math.round((done / total) * 100) : 0;
 
     barFill.style.width = pct + '%';
-    if (barLabel) barLabel.textContent = done + ' / ' + total;
+    if (barLabel) barLabel.textContent = done + ' / ' + total + ' modules completed';
     if (ptsDisplay) ptsDisplay.textContent = userPoints.toLocaleString() + ' pts';
   }
 
