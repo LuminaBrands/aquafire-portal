@@ -32,6 +32,9 @@
     'support-hub':       { points: 100, label: 'Visit Support Hub' },
     'contact-sales':     { points: 100, label: 'Contact Sales' },
     'shop-accessories':  { points: 100, label: 'Browse Shop' },
+    'fireplace-setup':   { points: 500, label: 'Complete Fireplace Setup' },
+    'register-warranty': { points: 300, label: 'Register Warranty' },
+    'submit-review':     { points: 500, label: 'Submit a Review' },
   };
 
   /* ── State ── */
