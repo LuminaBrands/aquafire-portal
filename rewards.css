@@ -327,107 +327,124 @@
 }
 .af-dd-signout:hover { background: rgba(255,255,255,0.08); color: #e4e5e9; }
 
-/* ── Reward Badges ── */
-.af-reward-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  background: rgba(232,168,56,0.08);
-  border: 1px solid rgba(232,168,56,0.18);
-  border-radius: 20px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #e8a838;
-  white-space: nowrap;
-  vertical-align: middle;
-  transition: background 0.2s, border-color 0.2s;
-}
-.af-reward-badge--done {
-  background: rgba(46,204,113,0.08);
-  border-color: rgba(46,204,113,0.2);
-  color: #2ecc71;
-}
-.af-rb-flame { font-size: 0.8rem; line-height: 1; }
-.af-rb-check { font-size: 0.8rem; line-height: 1; }
-.af-rb-pts { font-variant-numeric: tabular-nums; }
-
-/* Badge positioning on bento tiles */
-.bento-tile .af-reward-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-}
-
-/* Badge positioning on section cards */
-.card .af-reward-badge,
-.step-row ~ .af-reward-badge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-}
-.card {
-  position: relative;
-}
-
-/* Badge on page header sections */
-.model-card .af-reward-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-}
-.model-card {
-  position: relative;
-}
-.support-card .af-reward-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-}
-.support-card {
-  position: relative;
-}
+/* ── Reward Badges (hidden — replaced by toast popups) ── */
+.af-reward-badge { display: none !important; }
 
 /* ── Toast Notification ── */
 .af-toast {
   position: fixed;
-  bottom: 24px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%) translateY(80px);
+  transform: translate(-50%, -50%) scale(0.6);
   z-index: 10002;
   opacity: 0;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
   pointer-events: none;
 }
 .af-toast--show {
-  transform: translateX(-50%) translateY(0);
+  transform: translate(-50%, -50%) scale(1);
   opacity: 1;
 }
 .af-toast--hide {
-  transform: translateX(-50%) translateY(80px);
+  transform: translate(-50%, -50%) scale(0.85) translateY(30px);
   opacity: 0;
+  transition: transform 0.4s ease-in, opacity 0.3s ease;
 }
 .af-toast-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 48px;
+  background: radial-gradient(ellipse at center, rgba(232,168,56,0.08) 0%, #1b1e24 70%);
+  border: 1px solid rgba(232,168,56,0.3);
+  border-radius: 20px;
+  box-shadow: 0 0 60px rgba(232,168,56,0.15), 0 20px 60px rgba(0,0,0,0.5);
+  overflow: visible;
+}
+.af-toast-icon-ring {
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 24px;
-  background: #1b1e24;
-  border: 1px solid rgba(232,168,56,0.25);
-  border-radius: 14px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(232,168,56,0.1);
+  border: 2px solid rgba(232,168,56,0.3);
+  animation: af-pulse-ring 1.2s ease-out;
 }
-.af-toast-flame { font-size: 1.2rem; }
+@keyframes af-pulse-ring {
+  0%   { transform: scale(0); opacity: 0; }
+  40%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.af-toast-flame {
+  font-size: 1.6rem;
+  animation: af-flame-bounce 0.6s 0.3s ease both;
+}
+@keyframes af-flame-bounce {
+  0%   { transform: scale(0) rotate(-20deg); }
+  50%  { transform: scale(1.3) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.af-toast-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
 .af-toast-points {
   font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #e8a838;
+  animation: af-pts-count 0.6s 0.4s ease both;
+}
+@keyframes af-pts-count {
+  0%   { transform: translateY(10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
 }
 .af-toast-label {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: #878c99;
+  animation: af-label-fade 0.5s 0.6s ease both;
 }
+@keyframes af-label-fade {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Sparkle particles */
+.af-toast-sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.af-spark {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e8a838;
+}
+.af-spark-1 { top: 20%; left: 10%;  animation: af-spark-fly 0.8s 0.2s ease-out both; }
+.af-spark-2 { top: 15%; right: 12%; animation: af-spark-fly 0.8s 0.35s ease-out both; }
+.af-spark-3 { top: 50%; left: 5%;   animation: af-spark-fly 0.8s 0.25s ease-out both; }
+.af-spark-4 { top: 45%; right: 8%;  animation: af-spark-fly 0.8s 0.4s ease-out both; }
+.af-spark-5 { bottom: 25%; left: 15%;  animation: af-spark-fly 0.8s 0.3s ease-out both; }
+.af-spark-6 { bottom: 20%; right: 15%; animation: af-spark-fly 0.8s 0.45s ease-out both; }
+@keyframes af-spark-fly {
+  0%   { transform: scale(0) translate(0, 0); opacity: 1; }
+  50%  { transform: scale(1.5) translate(var(--sx, -15px), var(--sy, -20px)); opacity: 1; }
+  100% { transform: scale(0) translate(var(--ex, -25px), var(--ey, -35px)); opacity: 0; }
+}
+.af-spark-1 { --sx: -20px; --sy: -25px; --ex: -35px; --ey: -40px; }
+.af-spark-2 { --sx: 20px;  --sy: -20px; --ex: 35px;  --ey: -35px; }
+.af-spark-3 { --sx: -25px; --sy: 5px;   --ex: -40px; --ey: 10px; }
+.af-spark-4 { --sx: 22px;  --sy: 8px;   --ex: 38px;  --ey: 12px; }
+.af-spark-5 { --sx: -18px; --sy: 20px;  --ex: -30px; --ey: 35px; }
+.af-spark-6 { --sx: 18px;  --sy: 22px;  --ex: 32px;  --ey: 38px; }
 
 /* ── Responsive ── */
 @media (max-width: 800px) {

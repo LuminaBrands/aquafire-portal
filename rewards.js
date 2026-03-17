@@ -153,9 +153,19 @@
     toast.className = 'af-toast';
     toast.innerHTML =
       '<div class="af-toast-inner">' +
-        '<span class="af-toast-flame">&#x1f525;</span>' +
-        '<span class="af-toast-points">+' + points + ' pts</span>' +
-        '<span class="af-toast-label">' + label + '</span>' +
+        '<div class="af-toast-icon-ring"><span class="af-toast-flame">&#x1f525;</span></div>' +
+        '<div class="af-toast-content">' +
+          '<span class="af-toast-points">+' + points + ' pts</span>' +
+          '<span class="af-toast-label">' + label + '</span>' +
+        '</div>' +
+        '<div class="af-toast-sparkles">' +
+          '<span class="af-spark af-spark-1"></span>' +
+          '<span class="af-spark af-spark-2"></span>' +
+          '<span class="af-spark af-spark-3"></span>' +
+          '<span class="af-spark af-spark-4"></span>' +
+          '<span class="af-spark af-spark-5"></span>' +
+          '<span class="af-spark af-spark-6"></span>' +
+        '</div>' +
       '</div>';
     document.body.appendChild(toast);
     requestAnimationFrame(function () {
@@ -164,8 +174,8 @@
     setTimeout(function () {
       toast.classList.remove('af-toast--show');
       toast.classList.add('af-toast--hide');
-      setTimeout(function () { toast.remove(); }, 400);
-    }, 3000);
+      setTimeout(function () { toast.remove(); }, 500);
+    }, 3500);
   }
 
   /* ── Nav UI ── */
@@ -401,28 +411,8 @@
 
   /* ── Reward Badges on Sections ── */
   function updateAllBadges() {
-    document.querySelectorAll('[data-reward]').forEach(function (el) {
-      var rid = el.getAttribute('data-reward');
-      var reward = REWARDS[rid];
-      if (!reward) return;
-
-      // Find or create badge
-      var badge = el.querySelector('.af-reward-badge');
-      if (!badge) {
-        badge = document.createElement('span');
-        badge.className = 'af-reward-badge';
-        el.insertBefore(badge, el.firstChild);
-      }
-
-      var completed = completedRewards[rid];
-      if (completed) {
-        badge.className = 'af-reward-badge af-reward-badge--done';
-        badge.innerHTML = '<span class="af-rb-check">&#x2713;</span><span class="af-rb-pts">+' + reward.points + '</span>';
-      } else {
-        badge.className = 'af-reward-badge';
-        badge.innerHTML = '<span class="af-rb-flame">&#x1f525;</span><span class="af-rb-pts">+' + reward.points + ' pts</span>';
-      }
-    });
+    // Remove any leftover static badges
+    document.querySelectorAll('.af-reward-badge').forEach(function (b) { b.remove(); });
     updateHomeBanner();
   }
 
