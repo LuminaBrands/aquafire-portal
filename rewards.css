@@ -327,8 +327,62 @@
 }
 .af-dd-signout:hover { background: rgba(255,255,255,0.08); color: #e4e5e9; }
 
-/* ── Reward Badges (hidden — replaced by toast popups) ── */
-.af-reward-badge { display: none !important; }
+/* ── Reward Badges ── */
+.af-reward-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: rgba(232,168,56,0.08);
+  border: 1px solid rgba(232,168,56,0.18);
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #e8a838;
+  white-space: nowrap;
+  vertical-align: middle;
+  transition: background 0.2s, border-color 0.2s;
+}
+.af-reward-badge--done {
+  background: rgba(46,204,113,0.08);
+  border-color: rgba(46,204,113,0.2);
+  color: #2ecc71;
+}
+.af-rb-flame { font-size: 0.8rem; line-height: 1; }
+.af-rb-check { font-size: 0.8rem; line-height: 1; }
+.af-rb-pts { font-variant-numeric: tabular-nums; }
+
+/* Badge positioning on bento tiles */
+.bento-tile .af-reward-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+/* Badge positioning on section cards */
+.card .af-reward-badge,
+.step-row ~ .af-reward-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+.card { position: relative; }
+
+/* Badge on model cards */
+.model-card .af-reward-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+.model-card { position: relative; }
+
+/* Badge on support cards */
+.support-card .af-reward-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+.support-card { position: relative; }
 
 /* ── Toast Notification ── */
 .af-toast {

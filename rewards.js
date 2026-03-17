@@ -411,8 +411,27 @@
 
   /* ── Reward Badges on Sections ── */
   function updateAllBadges() {
-    // Remove any leftover static badges
-    document.querySelectorAll('.af-reward-badge').forEach(function (b) { b.remove(); });
+    document.querySelectorAll('[data-reward]').forEach(function (el) {
+      var rid = el.getAttribute('data-reward');
+      var reward = REWARDS[rid];
+      if (!reward) return;
+
+      var badge = el.querySelector('.af-reward-badge');
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'af-reward-badge';
+        el.insertBefore(badge, el.firstChild);
+      }
+
+      var completed = completedRewards[rid];
+      if (completed) {
+        badge.className = 'af-reward-badge af-reward-badge--done';
+        badge.innerHTML = '<span class="af-rb-check">&#x2713;</span><span class="af-rb-pts">+' + reward.points + '</span>';
+      } else {
+        badge.className = 'af-reward-badge';
+        badge.innerHTML = '<span class="af-rb-flame">&#x1f525;</span><span class="af-rb-pts">+' + reward.points + ' pts</span>';
+      }
+    });
     updateHomeBanner();
   }
 
