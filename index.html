@@ -327,7 +327,6 @@
     .rewards-banner-top {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: 12px;
       margin-bottom: 4px;
     }
@@ -351,9 +350,24 @@
       border-radius: 4px;
       font-family: 'Inter', sans-serif;
     }
+    .rb-points-wrap {
+      margin-left: auto;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+    .rb-points-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
     .rb-points-display {
       font-family: 'Poppins', sans-serif;
-      font-size: 0.95rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--amber);
       white-space: nowrap;
@@ -536,7 +550,6 @@
       <div class="rewards-banner-body">
         <div class="rewards-banner-top">
           <h2 class="rewards-banner-title">&#x1f525; Aquafire Rewards <span class="rb-badge">New</span></h2>
-          <span class="rb-points-display" id="rb-home-points">0 pts</span>
         </div>
         <p class="rewards-banner-desc">Earn points as you explore guides, use tools, and complete your fireplace setup. <a href="rewards.html" class="rb-inline-learn-link">Learn more</a></p>
         <div class="rewards-banner-progress">
@@ -545,6 +558,10 @@
           </div>
           <span class="rb-bar-label" id="rb-home-bar-label">0 / 17 modules completed</span>
         </div>
+      </div>
+      <div class="rb-points-wrap">
+        <span class="rb-points-label">Your total points:</span>
+        <span class="rb-points-display" id="rb-home-points">0 pts</span>
       </div>
       <div class="rewards-banner-action">
         <button type="button" class="rb-get-started-link" id="rb-signin-cta" onclick="window.AquafireRewards &amp;&amp; window.AquafireRewards.showLogin()">
@@ -624,7 +641,7 @@
         <span class="tile-cta">Open Maintenance Guide <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
 
-      <a href="water-care.html" class="bento-tile tile-wide accent-blue" data-reward="water-hardness">
+      <a href="water-care.html" class="bento-tile accent-blue" data-reward="water-hardness">
         <span class="tile-icon">&#x1f4a7;</span>
         <h2 class="tile-title">Water Care Guide</h2>
         <p class="tile-desc">Water hardness calculator and Vapor Pure softener setup for crystal-clear flames.</p>
@@ -708,7 +725,7 @@
         <span class="tile-cta">Watch Now <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
 
-      <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="bento-tile accent-red tile-cta-type tile-wide" data-reward="contact-sales">
+      <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="bento-tile accent-red tile-cta-type" data-reward="contact-sales">
         <span class="tile-icon">&#x1f4ac;</span>
         <h2 class="tile-title">Need a Custom Quote?</h2>
         <p class="tile-desc">Our team can help with custom enclosures, commercial projects, and bulk orders.</p>
