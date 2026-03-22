@@ -4,11 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aquafire Fireplace Enclosure Guide</title>
+  <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="apple-touch-icon" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="rewards.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <nav class="site-nav">
@@ -21,7 +27,6 @@
       </button>
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
-        <li><a href="getting-started.html">Getting Started</a></li>
         <li><a href="quick-start.html">Quick Start</a></li>
         <li><a href="enclosure-guide.html" class="active">Enclosure Guide</a></li>
         <li><a href="water-care.html">Water Care</a></li>
@@ -34,11 +39,15 @@
     <div class="header-glow"></div>
     <div class="container header-inner">
       <h1>Enclosure Design Guide</h1>
-      <p class="subtitle">Configure your fireplace enclosure dimensions with precision</p>
     </div>
   </header>
 
   <main class="container">
+    <div class="header-notice">
+      <svg class="header-notice-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p>If the enclosure is not constructed to the recommended dimensions, light from the Aquafire LED system may escape the enclosure and illuminate the ceiling. To help prevent this, incorporate a light trap into the enclosure design. Refer to the chart below for recommended finished dimensions.</p>
+    </div>
+
     <!-- Step 1: Model Selection -->
     <section class="card" id="model-selection">
       <div class="step-row">
@@ -102,7 +111,7 @@
     </section>
 
     <!-- Step 3: Light Trap Calculator -->
-    <section class="card card--wide" id="light-trap-section">
+    <section class="card card--wide" id="light-trap-section" data-reward="light-trap">
       <div class="step-row">
         <div class="step-num">3</div>
         <div>
@@ -143,7 +152,7 @@
           <div class="form-group">
             <label for="opening-slider">Opening Height</label>
             <div class="slider-row">
-              <input type="range" id="opening-slider" min="0" max="50" step="0.5" value="15">
+              <input type="range" id="opening-slider" min="13" max="50" step="0.5" value="15">
               <span class="slider-value" id="opening-display">15.0"</span>
             </div>
             <p class="hint">Viewing opening above the installation surface. Exceeding the max allows light to escape.</p>
@@ -211,7 +220,6 @@
       <div class="footer-links">
         <div class="footer-col">
           <h4>Guides</h4>
-          <a href="getting-started.html">Getting Started</a>
           <a href="quick-start.html">Quick Start</a>
           <a href="enclosure-guide.html">Enclosure Guide</a>
           <a href="water-care.html">Water Care</a>
@@ -229,6 +237,7 @@
 
   <script src="embed.js"></script>
   <script src="app.js"></script>
+  <script src="rewards.js"></script>
   <script>
     const toggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');

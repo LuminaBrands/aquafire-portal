@@ -5,11 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Water Care Guide | Aquafire</title>
   <meta name="description" content="Water hardness calculator and Vapor Pure softener replacement timeline for your Aquafire.">
+  <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="apple-touch-icon" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="water-care-styles.css">
   <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="rewards.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <nav class="site-nav">
@@ -40,7 +46,7 @@
 
   <main class="container">
     <!-- Step 1: Water Hardness -->
-    <section class="card" id="hardness-section">
+    <section class="card" id="hardness-section" data-reward="water-hardness">
       <div class="step-row">
         <div class="step-num">1</div>
         <div>
@@ -275,6 +281,7 @@
 
   <script src="embed.js"></script>
   <script src="water-care-app.js"></script>
+  <script src="rewards.js"></script>
   <script>
     // Mobile nav toggle
     const toggle = document.querySelector('.nav-toggle');
