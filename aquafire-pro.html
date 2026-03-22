@@ -539,6 +539,84 @@
     }
     .shop-card.disabled { opacity: 0.6; pointer-events: none; }
 
+    /* ── Safety Callout ── */
+    .safety-callout {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 4px solid var(--amber); border-radius: var(--radius);
+      padding: 20px 24px; margin-bottom: 40px;
+    }
+    .safety-callout-icon {
+      flex-shrink: 0; color: var(--amber); margin-top: 2px;
+    }
+    .safety-callout-body { flex: 1; }
+    .safety-callout-title {
+      font-weight: 700; font-size: 0.95rem; color: var(--amber); margin-bottom: 10px;
+    }
+    .safety-callout-list {
+      list-style: none; padding: 0; margin: 0 0 12px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .safety-callout-list li {
+      font-size: 0.84rem; color: var(--text-muted); line-height: 1.5;
+      padding-left: 18px; position: relative;
+    }
+    .safety-callout-list li::before {
+      content: ''; position: absolute; left: 0; top: 7px;
+      width: 6px; height: 6px; border-radius: 50%; background: var(--amber-dim);
+    }
+    .safety-callout-link {
+      font-size: 0.8rem; font-weight: 600; color: var(--amber);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .safety-callout-link:hover { color: var(--text); }
+
+    /* ── Maintenance Schedule ── */
+    .maint-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .maint-frequency {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .maint-frequency.open { border-color: rgba(192,57,43,0.4); box-shadow: 0 2px 12px var(--red-glow); }
+    .maint-frequency-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; cursor: pointer; gap: 12px; transition: background 0.15s;
+    }
+    .maint-frequency-header:hover { background: rgba(255,255,255,0.02); }
+    .maint-frequency-label {
+      font-size: 0.95rem; font-weight: 700; color: var(--text);
+    }
+    .maint-frequency-badge {
+      font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 4px;
+      background: rgba(192,57,43,0.12); color: var(--red); margin-left: 10px;
+    }
+    .maint-frequency .ts-problem-chevron { flex-shrink: 0; color: var(--text-muted); transition: transform 0.25s; }
+    .maint-frequency.open .ts-problem-chevron { transform: rotate(180deg); }
+    .maint-frequency-body {
+      max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+    }
+    .maint-frequency.open .maint-frequency-body { max-height: 600px; }
+    .maint-task-list {
+      padding: 0 20px 20px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .maint-task {
+      padding: 12px 16px; background: rgba(255,255,255,0.02);
+      border-radius: 6px; border-left: 3px solid var(--border);
+    }
+    .maint-task-name {
+      font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 4px;
+    }
+    .maint-task-tip {
+      font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
+    }
+
+    /* ── FAQ Section ── */
+    .faq-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    @media (max-width: 600px) {
+      .safety-callout { flex-direction: column; padding: 16px; gap: 10px; }
+    }
+
     /* ── Tour Your Aquafire ── */
     .tour-section { margin: 48px 0; }
     .tour-section .section-title { margin-bottom: 6px; }
@@ -716,8 +794,10 @@
       <a href="#tour" class="sticky-nav-link" data-section="tour">Tour</a>
       <a href="#guide" class="sticky-nav-link" data-section="guide">Setup Guide</a>
       <a href="#troubleshoot" class="sticky-nav-link" data-section="troubleshoot">Troubleshoot</a>
+      <a href="#maintenance" class="sticky-nav-link" data-section="maintenance">Maintenance</a>
       <a href="#specs" class="sticky-nav-link" data-section="specs">Specs</a>
       <a href="#features" class="sticky-nav-link" data-section="features">Features</a>
+      <a href="#faq" class="sticky-nav-link" data-section="faq">FAQ</a>
       <a href="#resources" class="sticky-nav-link" data-section="resources">Resources</a>
       <a href="#shop" class="sticky-nav-link" data-section="shop">Shop</a>
     </div>
@@ -829,6 +909,13 @@
             </div>
             <span class="hub-card-label">Enclosure Builder</span>
             <span class="hub-card-desc">Build specs &amp; requirements</span>
+          </a>
+          <a href="#maintenance" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <span class="hub-card-label">Maintenance</span>
+            <span class="hub-card-desc">Schedules &amp; care tips</span>
           </a>
           <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="hub-card">
             <div class="hub-card-icon">
@@ -1024,6 +1111,21 @@
       </div>
     </section>
 
+    <!-- Safety Callout -->
+    <div class="safety-callout">
+      <svg class="safety-callout-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div class="safety-callout-body">
+        <div class="safety-callout-title">Important Safety Information</div>
+        <ul class="safety-callout-list">
+          <li><strong>Electrical:</strong> Indoor use only. Ensure proper grounding &mdash; do not use extension cords.</li>
+          <li><strong>Water:</strong> Always maintain the water level. Use ClearShield or Vapor Pure to treat hard water.</li>
+          <li><strong>Installation:</strong> Follow all clearance requirements. Enclosure must use non-combustible materials only.</li>
+          <li><strong>Supervision:</strong> Keep children and pets away from the mist output area during operation.</li>
+        </ul>
+        <a class="safety-callout-link" href="https://www.aquafire.com/pages/aquafire-pro-installation-manual" target="_blank" rel="noopener">Read Full Installation Manual &rarr;</a>
+      </div>
+    </div>
+
     <!-- Interactive Step-by-Step Guide -->
     <section class="guide-section" id="guide">
       <h2 class="section-title"><span class="section-num">2</span> Interactive Setup Guide</h2>
@@ -1109,6 +1211,13 @@
       <div id="tsContent"></div>
     </section>
 
+    <!-- Maintenance Schedule -->
+    <section class="maint-section" id="maintenance">
+      <h2 class="section-title">Maintenance Schedule</h2>
+      <p class="guide-subtitle">Keep your Aquafire Pro running at peak performance with regular care. Tap a frequency to see tasks.</p>
+      <div id="maintContent" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </section>
+
     <!-- Specifications -->
     <section class="specs-section" id="specs">
       <h2 class="section-title"><span class="section-num">5</span> Specifications</h2>
@@ -1159,6 +1268,12 @@
         <div class="feature-item"><strong>Home Automation</strong> &mdash; Compatible with smart home systems for seamless integration and voice control.</div>
         <div class="feature-item"><strong>Gang Units Together</strong> &mdash; Combine multiple inserts for up to 40 ft of continuous flame on a single control unit.</div>
       </div>
+    </section>
+
+    <!-- Frequently Asked Questions -->
+    <section class="faq-section" id="faq">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div id="faqContent" style="display:flex;flex-direction:column;gap:10px;"></div>
     </section>
 
     <!-- Resources / Downloads -->
@@ -1782,6 +1897,137 @@
 
     // Initialize with power category
     setCategory('power');
+  })();
+
+  // ── Maintenance Schedule ──
+  (function() {
+    const MAINT_DATA = [
+      {
+        frequency: 'Weekly',
+        badge: 'Routine',
+        tasks: [
+          { name: 'Check water level', tip: 'Ensure the tank is at least half full. Top off with distilled or softened water as needed.' },
+          { name: 'Wipe down exterior surfaces', tip: 'Use a soft, dry microfiber cloth. Avoid abrasive cleaners or sprays near the mist output.' }
+        ]
+      },
+      {
+        frequency: 'Monthly',
+        badge: '30 Days',
+        tasks: [
+          { name: 'Clean mist maker disc', tip: 'Gently wipe the ceramic disc with a soft cotton cloth. Do not use metal tools or abrasive pads.' },
+          { name: 'Inspect water clarity', tip: 'If water appears cloudy or discolored, drain and refill. Consider adding ClearShield water treatment.' },
+          { name: 'Check LED strip function', tip: 'Cycle through several color presets to verify both front and rear LED bars illuminate evenly.' }
+        ]
+      },
+      {
+        frequency: 'Quarterly',
+        badge: '90 Days',
+        tasks: [
+          { name: 'Drain and refill tank completely', tip: 'Power off and unplug. Remove the drain plug or use the included siphon. Refill with fresh treated water.' },
+          { name: 'Clean tank interior', tip: 'Wipe the inside walls with a soft cloth and mild soap solution. Rinse thoroughly before refilling.' },
+          { name: 'Inspect water line connections', tip: 'For plumbed units, check all fittings for drips or mineral buildup. Tighten if needed.' }
+        ]
+      },
+      {
+        frequency: 'Annually',
+        badge: '12 Months',
+        tasks: [
+          { name: 'Replace mist maker disc', tip: 'Order a replacement disc from the Accessories shop. Swap out the old disc and test vapor output.' },
+          { name: 'Deep clean tank and water line', tip: 'Soak tank components in a mild vinegar solution (1:4 ratio) for 30 minutes, then rinse thoroughly.' },
+          { name: 'Inspect power adapter and wiring', tip: 'Check the 24V adapter for damage or excessive heat marks. Inspect wiring connections at the unit.' }
+        ]
+      }
+    ];
+
+    const container = document.getElementById('maintContent');
+    let html = '';
+    MAINT_DATA.forEach((group, gi) => {
+      html += `
+        <div class="maint-frequency${gi === 0 ? ' open' : ''}" data-freq="${gi}">
+          <div class="maint-frequency-header" onclick="this.parentElement.classList.toggle('open')">
+            <span>
+              <span class="maint-frequency-label">${group.frequency}</span>
+              <span class="maint-frequency-badge">${group.badge}</span>
+            </span>
+            <svg class="ts-problem-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="maint-frequency-body">
+            <div class="maint-task-list">
+              ${group.tasks.map(t => `
+                <div class="maint-task">
+                  <div class="maint-task-name">${t.name}</div>
+                  <div class="maint-task-tip">${t.tip}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>`;
+    });
+    container.innerHTML = html;
+  })();
+
+  // ── FAQ Section ──
+  (function() {
+    const FAQ_DATA = [
+      {
+        q: 'Can I leave the Aquafire Pro running 24/7?',
+        a: 'Yes — if connected to a direct water line, the Aquafire Pro can run continuously. When using the manual fill tank, runtime is up to 20 hours per fill depending on the unit size. The unit will automatically alert you when water is low.'
+      },
+      {
+        q: 'How often do I need to refill the water tank?',
+        a: 'Tank capacity varies by size: the 20" holds 2 liters, the 40" holds 4 liters, and the 60" holds 6 liters. With typical use, expect up to 20 hours of runtime per fill. Direct plumbing eliminates the need for manual refills entirely.'
+      },
+      {
+        q: 'What type of water should I use?',
+        a: 'Distilled or softened water is recommended for the best vapor output and longest component life. If your tap water is hard (above 120 PPM), use ClearShield water treatment or install a Vapor Pure inline softener. Check your water hardness on our <a href="water-care.html" style="color:var(--blue)">Water Care</a> page.'
+      },
+      {
+        q: 'How loud is the unit?',
+        a: 'The Aquafire Pro produces a quiet, gentle hum — comparable to a small desk fan. It is not noticeable in a typical living room environment and will not interfere with conversation or TV audio.'
+      },
+      {
+        q: 'Can I use essential oils or fragrances?',
+        a: 'Do not add oils or fragrances directly to the water tank — this can damage the mist maker disc and void your warranty. Instead, use the official <a href="https://www.aquafire.com/products/scent-diffuser" target="_blank" rel="noopener" style="color:var(--blue)">Scent Diffuser</a> accessory, which attaches externally and is designed for safe use with your Aquafire.'
+      },
+      {
+        q: 'What does the warranty cover?',
+        a: 'The Aquafire Pro includes a manufacturer warranty covering defects in materials and workmanship. Coverage details vary by component. Review the full warranty terms in our <a href="https://www.aquafire.com/pages/aquafire-warranty" target="_blank" rel="noopener" style="color:var(--blue)">Warranty document</a>.'
+      },
+      {
+        q: 'Can I install the Aquafire Pro outdoors?',
+        a: 'No. The Aquafire Pro is rated for indoor use only. It is not waterproof or weather-sealed, and exposure to outdoor elements will damage the electronics and void the warranty.'
+      },
+      {
+        q: 'How do I gang multiple units together?',
+        a: 'You can combine multiple Aquafire Pro inserts side by side for up to 40 feet of continuous flame, all controlled from a single remote. Gang kits and installation details are available in the <a href="https://www.aquafire.com/pages/aquafire-pro-installation-manual" target="_blank" rel="noopener" style="color:var(--blue)">Installation Manual</a>.'
+      },
+      {
+        q: "What's the difference between Pro, Original, and Lite?",
+        a: 'The <strong>Pro</strong> features dual LED light bars with wider viewing angles, 30+ flame colors, and enhanced flame realism. The <strong>Original</strong> offers core water vapor flame technology with a streamlined feature set. The <strong>Lite</strong> is a compact, budget-friendly option for smaller spaces. Dedicated guides for Original and Lite are coming soon.'
+      },
+      {
+        q: 'Do I need a dedicated electrical circuit?',
+        a: 'No. The Aquafire Pro runs on a standard 110–120V household outlet (60 Hz) using the included 24V adapter. No special wiring or dedicated circuit is required. Avoid using extension cords — plug directly into a grounded wall outlet.'
+      }
+    ];
+
+    const container = document.getElementById('faqContent');
+    let html = '';
+    FAQ_DATA.forEach((item, i) => {
+      html += `
+        <div class="ts-problem" data-idx="${i}">
+          <div class="ts-problem-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="ts-problem-title">${item.q}</span>
+            <svg class="ts-problem-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="ts-problem-body">
+            <div class="ts-solutions">
+              <div style="padding:4px 0;font-size:0.88rem;line-height:1.6;color:var(--text-muted);">${item.a}</div>
+            </div>
+          </div>
+        </div>`;
+    });
+    container.innerHTML = html;
   })();
   </script>
 
