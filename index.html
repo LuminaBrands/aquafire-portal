@@ -35,49 +35,79 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <style>
-    /* ── Hero ── */
+    /* ── Hero Video ── */
     .hero {
       position: relative; overflow: hidden;
-      padding: 56px 0 48px; text-align: center;
-      background: linear-gradient(180deg, #241b1b 0%, var(--bg) 100%);
-      border-bottom: 1px solid var(--border);
+      height: 100vh; min-height: 500px;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      background: #0a0a0a;
     }
-    .hero-glow {
-      position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
-      width: 600px; height: 260px; border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(200,40,40,0.14) 0%, transparent 70%);
+    .hero-video {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(
+        180deg,
+        rgba(0,0,0,0.3) 0%,
+        rgba(0,0,0,0.15) 40%,
+        rgba(0,0,0,0.4) 80%,
+        rgba(18,20,23,1) 100%
+      );
+      z-index: 1;
       pointer-events: none;
     }
-    .hero-content { position: relative; }
-    .hero-welcome {
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      font-weight: 500;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 12px;
-      position: relative;
-      display: inline-block;
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 800px; padding: 0 24px;
     }
-    .hero-welcome::before,
-    .hero-welcome::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 40px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--red));
-    }
-    .hero-welcome::before { right: calc(100% + 14px); }
-    .hero-welcome::after { left: calc(100% + 14px); background: linear-gradient(90deg, var(--red), transparent); }
     .hero h1 {
-      font-size: 2.4rem; font-weight: 700; letter-spacing: -0.5px; line-height: 1.2;
-      background: linear-gradient(135deg, #fff 0%, #e4e5e9 40%, var(--red) 100%);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      color: #fff;
+      text-shadow: 0 2px 40px rgba(0,0,0,0.5);
+    }
+    .hero h1 .hero-accent {
+      display: block;
+      background: linear-gradient(135deg, #fff 0%, var(--red) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .hero-sub { color: var(--text-muted); margin-top: 14px; font-size: 1rem; }
+    .hero-sub {
+      color: rgba(228,229,233,0.85);
+      margin-top: 20px;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      line-height: 1.6;
+      text-shadow: 0 1px 20px rgba(0,0,0,0.6);
+      max-width: 540px;
+      margin-left: auto; margin-right: auto;
+    }
+    .hero-scroll-hint {
+      position: absolute; bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: hero-bounce 2s ease-in-out infinite;
+    }
+    .hero-scroll-hint svg {
+      opacity: 0.5;
+    }
+    @keyframes hero-bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
 
     /* ── Sticky Get Started Button ── */
     .sticky-get-started {
@@ -492,10 +522,8 @@
       .bento { grid-template-columns: 1fr; gap: 12px; }
       .tile-wide { grid-column: span 1; }
       .bento-tile { padding: 22px 20px 18px; }
-      .hero h1 { font-size: 1.6rem; }
-      .hero { padding: 40px 0 36px; }
-      .hero-welcome { font-size: 0.8rem; letter-spacing: 2px; }
-      .hero-welcome::before, .hero-welcome::after { width: 24px; }
+      .hero { height: 85vh; min-height: 400px; }
+      .hero-scroll-hint { bottom: 20px; }
       .sticky-get-started { bottom: 16px; }
       .sticky-get-started a { padding: 12px 22px; font-size: 0.85rem; }
       .model-grid {
@@ -534,11 +562,31 @@
 
   <!-- Hero -->
   <header class="hero">
-    <div class="hero-glow"></div>
-    <div class="container hero-content">
-      <p class="hero-welcome">Welcome to Your</p>
-      <h1>Aquafire Interactive<br>Owner's Guide</h1>
-      <p class="hero-sub">Everything you need to plan, install, and maintain your water vapor fireplace.</p>
+    <!--
+      REPLACE the video src below with your real Aquafire MP4.
+      Recommended: 1920×1080, H.264, 15-30s loop, no audio track, 3-8 MB.
+      Upload to Shopify CDN or any CDN and update the src attribute.
+      The poster image shows while the video loads (replace it too).
+    -->
+    <video
+      class="hero-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      poster="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1745453370"
+    >
+      <!-- Replace this src with your real Aquafire fireplace video -->
+      <source src="aquafire-hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>All Flame.<br><span class="hero-accent">No Fire.</span></h1>
+      <p class="hero-sub">Stunningly realistic 3D flames powered by water &mdash; no gas, no venting, no risk.</p>
+    </div>
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
     </div>
   </header>
 
