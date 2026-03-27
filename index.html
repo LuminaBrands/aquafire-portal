@@ -35,7 +35,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <style>
-    /* ── Hero Video ── */
+    /* ── Hero Composite (image + fire video) ── */
     .hero {
       position: relative; overflow: hidden;
       height: 100vh; min-height: 500px;
@@ -43,27 +43,34 @@
       text-align: center;
       background: #0a0a0a;
     }
-    .hero-video {
+    .hero-bg {
       position: absolute; top: 0; left: 0;
       width: 100%; height: 100%;
       object-fit: cover;
       z-index: 0;
+    }
+    .hero-fire {
+      position: absolute;
+      object-fit: cover;
+      z-index: 1;
+      /* JS sets top/left/width/height to track the firebox */
     }
     .hero-overlay {
       position: absolute; top: 0; left: 0;
       width: 100%; height: 100%;
       background: linear-gradient(
         180deg,
-        rgba(0,0,0,0.3) 0%,
-        rgba(0,0,0,0.15) 40%,
-        rgba(0,0,0,0.4) 80%,
+        rgba(0,0,0,0.35) 0%,
+        rgba(0,0,0,0.1) 35%,
+        rgba(0,0,0,0.15) 60%,
+        rgba(0,0,0,0.5) 85%,
         rgba(18,20,23,1) 100%
       );
-      z-index: 1;
+      z-index: 2;
       pointer-events: none;
     }
     .hero-content {
-      position: relative; z-index: 2;
+      position: relative; z-index: 3;
       max-width: 800px; padding: 0 24px;
     }
     .hero h1 {
@@ -92,7 +99,7 @@
     .hero-scroll-hint {
       position: absolute; bottom: 32px; left: 50%;
       transform: translateX(-50%);
-      z-index: 2;
+      z-index: 3;
       display: flex; flex-direction: column; align-items: center;
       gap: 8px;
       color: rgba(255,255,255,0.5);
@@ -562,24 +569,20 @@
 
   <!-- Hero -->
   <header class="hero">
-    <!--
-      REPLACE the video src below with your real Aquafire MP4.
-      Recommended: 1920×1080, H.264, 15-30s loop, no audio track, 3-8 MB.
-      Upload to Shopify CDN or any CDN and update the src attribute.
-      The poster image shows while the video loads (replace it too).
-    -->
-    <video
-      class="hero-video"
-      autoplay
-      muted
-      loop
-      playsinline
-      poster="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1745453370"
-    >
-      <!-- Replace this src with your real Aquafire fireplace video -->
-      <source src="aquafire-hero.mp4" type="video/mp4">
+    <!-- Layer 1: Room / fireplace background image -->
+    <img class="hero-bg"
+      src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Untitled_design_-_5.png?v=1774579405"
+      alt="" draggable="false">
+
+    <!-- Layer 2: Looping fire video over the firebox opening -->
+    <video class="hero-fire" autoplay muted loop playsinline disablepictureinpicture>
+      <source src="https://cdn.shopify.com/videos/c/o/v/aec7e11e735c4982b6708c4079829644.mp4" type="video/mp4">
     </video>
+
+    <!-- Layer 3: Dark gradient overlay -->
     <div class="hero-overlay"></div>
+
+    <!-- Layer 4: Text -->
     <div class="hero-content">
       <h1>All Flame.<br><span class="hero-accent">No Fire.</span></h1>
       <p class="hero-sub">Stunningly realistic 3D flames powered by water &mdash; no gas, no venting, no risk.</p>
@@ -589,6 +592,33 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
     </div>
   </header>
+
+  <script>
+  // Position the fire video to track the firebox in the background image
+  // even as object-fit:cover crops the image at different viewport sizes.
+  (function() {
+    var img = document.querySelector('.hero-bg');
+    var fire = document.querySelector('.hero-fire');
+    var hero = document.querySelector('.hero');
+    // Firebox position within the original image (as fractions 0-1)
+    var F = { l: 0.235, t: 0.265, w: 0.325, h: 0.295 };
+    function pos() {
+      if (!img.naturalWidth) return;
+      var cw = hero.offsetWidth, ch = hero.offsetHeight;
+      var iw = img.naturalWidth, ih = img.naturalHeight;
+      var s = Math.max(cw / iw, ch / ih);
+      var rw = iw * s, rh = ih * s;
+      var ox = (cw - rw) / 2, oy = (ch - rh) / 2;
+      fire.style.left = (ox + F.l * rw) + 'px';
+      fire.style.top = (oy + F.t * rh) + 'px';
+      fire.style.width = (F.w * rw) + 'px';
+      fire.style.height = (F.h * rh) + 'px';
+    }
+    img.addEventListener('load', pos);
+    window.addEventListener('resize', pos);
+    if (img.complete) pos();
+  })();
+  </script>
 
   <!-- Rewards Banner -->
   <section class="rewards-banner">

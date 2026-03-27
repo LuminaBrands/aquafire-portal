@@ -21,7 +21,7 @@
     }
     h1 { font-family: 'Poppins', sans-serif; }
 
-    /* ── Hero Video Section ── */
+    /* ── Hero Section ── */
     .hero {
       position: relative; overflow: hidden;
       height: 100vh; min-height: 500px;
@@ -30,69 +30,40 @@
       background: #0a0a0a;
     }
 
-    .hero-video {
+    /* Layer 1: Background image */
+    .hero-bg {
       position: absolute; top: 0; left: 0;
       width: 100%; height: 100%;
       object-fit: cover;
       z-index: 0;
     }
 
-    /* Animated CSS flame simulation (fallback when no video is loaded) */
-    .hero-flame-bg {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 85%, rgba(212,90,32,0.35) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 45% 80%, rgba(192,57,43,0.3) 0%, transparent 55%),
-        radial-gradient(ellipse 70% 40% at 55% 90%, rgba(232,168,56,0.2) 0%, transparent 50%),
-        radial-gradient(ellipse 50% 30% at 50% 95%, rgba(255,120,50,0.25) 0%, transparent 45%),
-        linear-gradient(180deg, #0a0a0a 0%, #1a0f0a 60%, #2a1510 80%, #0a0a0a 100%);
-      animation: flame-pulse 4s ease-in-out infinite alternate;
-    }
-    @keyframes flame-pulse {
-      0% {
-        background:
-          radial-gradient(ellipse 80% 60% at 50% 85%, rgba(212,90,32,0.35) 0%, transparent 60%),
-          radial-gradient(ellipse 60% 50% at 45% 80%, rgba(192,57,43,0.3) 0%, transparent 55%),
-          radial-gradient(ellipse 70% 40% at 55% 90%, rgba(232,168,56,0.2) 0%, transparent 50%),
-          radial-gradient(ellipse 50% 30% at 50% 95%, rgba(255,120,50,0.25) 0%, transparent 45%),
-          linear-gradient(180deg, #0a0a0a 0%, #1a0f0a 60%, #2a1510 80%, #0a0a0a 100%);
-      }
-      50% {
-        background:
-          radial-gradient(ellipse 85% 65% at 48% 83%, rgba(212,90,32,0.4) 0%, transparent 60%),
-          radial-gradient(ellipse 65% 55% at 52% 78%, rgba(192,57,43,0.35) 0%, transparent 55%),
-          radial-gradient(ellipse 60% 45% at 50% 88%, rgba(232,168,56,0.25) 0%, transparent 50%),
-          radial-gradient(ellipse 55% 35% at 48% 93%, rgba(255,140,60,0.3) 0%, transparent 45%),
-          linear-gradient(180deg, #0a0a0a 0%, #1c100a 55%, #301812 75%, #0a0a0a 100%);
-      }
-      100% {
-        background:
-          radial-gradient(ellipse 75% 58% at 52% 87%, rgba(212,90,32,0.3) 0%, transparent 60%),
-          radial-gradient(ellipse 58% 48% at 48% 82%, rgba(192,57,43,0.28) 0%, transparent 55%),
-          radial-gradient(ellipse 72% 42% at 53% 91%, rgba(232,168,56,0.22) 0%, transparent 50%),
-          radial-gradient(ellipse 48% 28% at 52% 96%, rgba(255,110,45,0.2) 0%, transparent 45%),
-          linear-gradient(180deg, #0a0a0a 0%, #180e0a 62%, #281310 82%, #0a0a0a 100%);
-      }
+    /* Layer 2: Fire video — JS positions this over the firebox */
+    .hero-fire {
+      position: absolute;
+      object-fit: cover;
+      z-index: 1;
     }
 
+    /* Layer 3: Gradient overlay */
     .hero-overlay {
       position: absolute; top: 0; left: 0;
       width: 100%; height: 100%;
       background: linear-gradient(
         180deg,
-        rgba(0,0,0,0.3) 0%,
-        rgba(0,0,0,0.15) 40%,
-        rgba(0,0,0,0.4) 80%,
+        rgba(0,0,0,0.35) 0%,
+        rgba(0,0,0,0.1) 35%,
+        rgba(0,0,0,0.15) 60%,
+        rgba(0,0,0,0.5) 85%,
         rgba(18,20,23,1) 100%
       );
-      z-index: 1;
+      z-index: 2;
       pointer-events: none;
     }
 
+    /* Layer 4: Text content */
     .hero-content {
-      position: relative; z-index: 2;
+      position: relative; z-index: 3;
       max-width: 800px; padding: 0 24px;
     }
 
@@ -125,7 +96,7 @@
     .hero-scroll-hint {
       position: absolute; bottom: 32px; left: 50%;
       transform: translateX(-50%);
-      z-index: 2;
+      z-index: 3;
       display: flex; flex-direction: column; align-items: center;
       gap: 8px;
       color: rgba(255,255,255,0.5);
@@ -160,13 +131,6 @@
       font-size: 0.95rem;
       line-height: 1.7;
     }
-    .teaser code {
-      background: #1b1e24;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      color: #e8a838;
-    }
 
     /* ── Responsive ── */
     @media (max-width: 560px) {
@@ -178,27 +142,20 @@
 <body>
 
   <header class="hero">
-    <!--
-      VIDEO PLACEHOLDER:
-      The animated CSS gradient below simulates the glow of flames.
-      When you have a real MP4, uncomment the <video> tag and remove .hero-flame-bg.
+    <!-- Layer 1: Room / fireplace background image -->
+    <img class="hero-bg"
+      src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Untitled_design_-_5.png?v=1774579405"
+      alt="" draggable="false">
 
-      Recommended video specs:
-      - 1920x1080, H.264 MP4, 15-30s seamless loop
-      - No audio track (strip with: ffmpeg -i input.mp4 -an -c:v copy output.mp4)
-      - Target 3-8 MB file size
-    -->
-
-    <!--
-    <video class="hero-video" autoplay muted loop playsinline
-      poster="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1745453370">
-      <source src="aquafire-hero.mp4" type="video/mp4">
+    <!-- Layer 2: Looping fire video over the firebox opening -->
+    <video class="hero-fire" autoplay muted loop playsinline disablepictureinpicture>
+      <source src="https://cdn.shopify.com/videos/c/o/v/aec7e11e735c4982b6708c4079829644.mp4" type="video/mp4">
     </video>
-    -->
 
-    <div class="hero-flame-bg"></div>
+    <!-- Layer 3: Dark gradient overlay -->
     <div class="hero-overlay"></div>
 
+    <!-- Layer 4: Text -->
     <div class="hero-content">
       <h1>All Flame.<br><span class="hero-accent">No Fire.</span></h1>
       <p class="hero-sub">Stunningly realistic 3D flames powered by water &mdash; no gas, no venting, no risk.</p>
@@ -213,12 +170,39 @@
   <section class="teaser">
     <h2>Hero Preview</h2>
     <p>
-      This is a standalone preview of the Aquafire hero section.
-      The animated gradient above simulates flame glow as a placeholder.
-      Replace it with a real MP4 video by uncommenting the
-      <code>&lt;video&gt;</code> tag in the source and providing your file.
+      Background image with looping fire video composited over the firebox.
+      The video tracks the firebox position responsively via JavaScript.
     </p>
   </section>
+
+  <script>
+  // Position the fire video to track the firebox in the background image.
+  // Because object-fit:cover crops the image differently at each viewport,
+  // we replicate the cover math and map firebox coordinates to screen pixels.
+  (function() {
+    var img = document.querySelector('.hero-bg');
+    var fire = document.querySelector('.hero-fire');
+    var hero = document.querySelector('.hero');
+    // Firebox inner opening position within the original image (fractions 0-1)
+    var F = { l: 0.235, t: 0.265, w: 0.325, h: 0.295 };
+    function pos() {
+      if (!img.naturalWidth) return;
+      var cw = hero.offsetWidth, ch = hero.offsetHeight;
+      var iw = img.naturalWidth, ih = img.naturalHeight;
+      // Replicate object-fit: cover scaling
+      var s = Math.max(cw / iw, ch / ih);
+      var rw = iw * s, rh = ih * s;
+      var ox = (cw - rw) / 2, oy = (ch - rh) / 2;
+      fire.style.left = (ox + F.l * rw) + 'px';
+      fire.style.top = (oy + F.t * rh) + 'px';
+      fire.style.width = (F.w * rw) + 'px';
+      fire.style.height = (F.h * rh) + 'px';
+    }
+    img.addEventListener('load', pos);
+    window.addEventListener('resize', pos);
+    if (img.complete) pos();
+  })();
+  </script>
 
 </body>
 </html>
