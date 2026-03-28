@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find a Dealer | Aquafire</title>
+  <meta name="description" content="Find an authorized Aquafire dealer near you. Browse our network of showrooms and partners across the US and Canada.">
+  <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="apple-touch-icon" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="dealer-locator.css">
+  <link rel="stylesheet" href="hub.css">
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="getting-started.html">Getting Started</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="enclosure-guide.html">Enclosure Guide</a></li>
+        <li><a href="water-care.html">Water Care</a></li>
+        <li><a href="maintenance.html">Maintenance</a></li>
+        <li><a href="dealer-locator.html" class="active">Find a Dealer</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="dl-header">
+    <div class="container">
+      <h1>Find a Dealer</h1>
+      <p class="dl-header-sub">Locate an authorized Aquafire dealer or showroom near you</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Search & Filters -->
+    <div class="dl-controls">
+      <div class="dl-search-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="dealer-search" class="dl-search" placeholder="Search by name, city, or state...">
+      </div>
+      <select id="dealer-type-filter" class="dl-filter">
+        <option value="all">All Types</option>
+        <option value="Dealer">Dealer</option>
+        <option value="Regional Dealer">Regional Dealer</option>
+        <option value="Sales Rep">Sales Rep</option>
+        <option value="Online Dealer">Online Dealer</option>
+        <option value="Temporary Dealer">Temporary Dealer</option>
+      </select>
+      <select id="dealer-country-filter" class="dl-filter">
+        <option value="all">All Regions</option>
+        <option value="US">United States</option>
+        <option value="CA">Canada</option>
+      </select>
+      <span class="dl-count" id="dealer-count"></span>
+    </div>
+
+    <!-- Map + List Layout -->
+    <div class="dl-layout">
+      <div class="dl-map-wrap">
+        <div id="dealer-map"></div>
+      </div>
+      <div class="dl-list-wrap">
+        <div id="dealer-list"></div>
+      </div>
+    </div>
+
+    <!-- Admin Panel (hidden unless ?admin in URL) -->
+    <div id="admin-panel">
+      <h3>Admin: Export Dealer Data</h3>
+      <p>Click the button below to export the current dealer list as JavaScript code. Copy the output and paste it into <code>dealer-locator.js</code> to update the live site.</p>
+      <button id="admin-export">Export Dealer Data</button>
+      <textarea id="admin-output" readonly></textarea>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" height="20">
+        <p>The complete guide to your Aquafire water vapor fireplace.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Guides</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="quick-start.html">Quick Start</a>
+          <a href="enclosure-guide.html">Enclosure Guide</a>
+          <a href="water-care.html">Water Care</a>
+          <a href="maintenance.html">Maintenance</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="dealer-locator.html">Find a Dealer</a>
+          <a href="support.html">Support Hub</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <p>&copy; 2026 Aquafire. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="embed.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="dealer-locator.js"></script>
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle?.addEventListener('click', () => {
+      const open = navLinks?.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  </script>
+</body>
+</html>
