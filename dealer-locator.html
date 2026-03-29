@@ -217,6 +217,26 @@
       margin: 0 auto;
     }
 
+    /* ── Locate Button ── */
+    .locate-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 8px 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      font-family: inherit;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .locate-btn:hover { border-color: var(--red); color: var(--text); }
+    .locate-btn:disabled { opacity: 0.5; cursor: default; }
+
     /* ── Filter Chips ── */
     .filter-bar {
       display: flex;
@@ -283,6 +303,10 @@
         <input type="text" id="zip-input" placeholder="Enter ZIP code or city..." aria-label="ZIP code or city" maxlength="20" autocomplete="off">
         <button id="search-btn" type="button">Search</button>
       </div>
+      <button id="locate-btn" class="locate-btn" type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg>
+        Use My Location
+      </button>
       <div class="filter-bar" id="filter-bar">
         <button class="filter-chip active" data-filter="all">All</button>
         <button class="filter-chip" data-filter="showroom">Showrooms</button>
@@ -297,8 +321,8 @@
       <!-- Initial state -->
       <div class="dealer-empty" id="initial-state">
         <span class="empty-icon">&#x1f4cd;</span>
-        <h3>Search for dealers near you</h3>
-        <p>Enter your ZIP code or city name above to find authorized Aquafire dealers, showrooms, and professional installers in your area.</p>
+        <h3>Finding dealers near you...</h3>
+        <p>Allow location access for the best results, or enter your ZIP code or city name above.</p>
       </div>
     </div>
   </main>
