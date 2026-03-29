@@ -33,16 +33,14 @@ const _D = [
   ["Salt Lake Hearth Studio",2,"50 W Broadway","Salt Lake City","UT","84101","(801) 555-2990",40.7608,-111.8910],
 ];
 const _T = ["showroom", "installer", "partner"];
-// Decode at runtime so data isn't in a trivially grep-able format
 const DEALERS = _D.map(function(r) {
   return { name: r[0], type: _T[r[1]], address: r[2], city: r[3], state: r[4], zip: r[5], phone: r[6], lat: r[7], lng: r[8] };
 });
 
-// Max dealers to show in results (limits exposure)
-const MAX_VISIBLE = 4;
+var MAX_VISIBLE = 4;
 
 // Approximate ZIP code to lat/lng lookup (first 3 digits)
-const ZIP_COORDS = {
+var ZIP_COORDS = {
   "100": [40.75, -73.99], "101": [40.75, -73.99], "060": [41.77, -72.67], "061": [41.77, -72.67],
   "021": [42.35, -71.08], "022": [42.35, -71.08], "071": [40.74, -74.17], "070": [40.74, -74.17],
   "191": [39.95, -75.17], "190": [39.95, -75.17], "303": [33.77, -84.38], "300": [33.77, -84.38],
@@ -57,8 +55,7 @@ const ZIP_COORDS = {
   "8": [35.0, -110.0], "9": [38.0, -120.0],
 };
 
-// City name to approximate coords for city search
-const CITY_COORDS = {};
+var CITY_COORDS = {};
 DEALERS.forEach(function(d) {
   CITY_COORDS[d.city.toLowerCase()] = [d.lat, d.lng];
   CITY_COORDS[(d.city + " " + d.state).toLowerCase()] = [d.lat, d.lng];
@@ -87,26 +84,50 @@ function haversine(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function searchDealers(coords, filterType) {
+// Search by name — returns matching dealers (no distance, no center)
+function searchByName(query) {
+  var lower = query.toLowerCase();
+  var matches = DEALERS.filter(function(d) {
+    return d.name.toLowerCase().includes(lower) ||
+      d.city.toLowerCase().includes(lower) ||
+      d.state.toLowerCase() === lower;
+  });
+  if (matches.length === 0) return null;
+  // Use the first match as center for map
+  var center = [matches[0].lat, matches[0].lng];
+  return { results: matches.slice(0, MAX_VISIBLE), center: center, total: matches.length };
+}
+
+function searchByLocation(coords) {
   var lat = coords[0], lng = coords[1];
   var results = DEALERS.map(function(d) {
     return Object.assign({}, d, { distance: haversine(lat, lng, d.lat, d.lng) });
   });
-  if (filterType && filterType !== "all") {
-    results = results.filter(function(d) { return d.type === filterType; });
-  }
   results.sort(function(a, b) { return a.distance - b.distance; });
-  // Only return the closest dealers
   return { results: results.slice(0, MAX_VISIBLE), center: coords, total: results.length };
 }
 
-// Pin icon URL
-var PIN_ICON = "https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-Black2_fb5b133d-2bfa-48b9-87a0-17dbb49246c8.png?v=1750980504";
+// SVG map pin shape (teardrop/marker)
+function svgPin(cx, cy, size, isActive) {
+  var s = size;
+  // Teardrop pin: point at bottom, round at top
+  var path = 'M ' + cx + ' ' + (cy + s) +
+    ' C ' + (cx - s * 0.6) + ' ' + (cy + s * 0.2) + ', ' +
+    (cx - s * 0.8) + ' ' + (cy - s * 0.3) + ', ' +
+    cx + ' ' + (cy - s * 0.8) +
+    ' C ' + (cx + s * 0.8) + ' ' + (cy - s * 0.3) + ', ' +
+    (cx + s * 0.6) + ' ' + (cy + s * 0.2) + ', ' +
+    cx + ' ' + (cy + s) + ' Z';
+  var fill = isActive ? '#c0392b' : '#a93226';
+  var glow = isActive ? '<circle cx="' + cx + '" cy="' + cy + '" r="' + (s + 10) + '" fill="#c0392b" opacity="0.15"/>' : '';
+  return glow +
+    '<path d="' + path + '" fill="' + fill + '" stroke="#121417" stroke-width="1.5" style="cursor:pointer;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.4))"/>' +
+    '<circle cx="' + cx + '" cy="' + (cy - s * 0.15) + '" r="' + (s * 0.25) + '" fill="#fff" opacity="0.9"/>';
+}
 
 // ── Zoomed Map SVG ──
 function createMapSVG(dealers, center, activeIndex) {
   var mapW = 800, mapH = 500;
-  // Zoom: show roughly a 6-degree window around the search center
   var zoomRange = 3;
   var lonMin = center[1] - zoomRange * 1.4;
   var lonMax = center[1] + zoomRange * 1.4;
@@ -125,33 +146,34 @@ function createMapSVG(dealers, center, activeIndex) {
     return [x, y];
   }
 
-  // Grid lines for geographic context
+  // Grid lines
   var gridLines = "";
-  var gridLatStep = 1, gridLonStep = 1;
-  for (var gLat = Math.ceil(latMin); gLat <= Math.floor(latMax); gLat += gridLatStep) {
+  for (var gLat = Math.ceil(latMin); gLat <= Math.floor(latMax); gLat++) {
     var p1 = project(gLat, lonMin), p2 = project(gLat, lonMax);
     gridLines += '<line x1="' + p1[0] + '" y1="' + p1[1] + '" x2="' + p2[0] + '" y2="' + p2[1] + '" stroke="#2c3038" stroke-width="0.5" stroke-dasharray="4,6"/>';
   }
-  for (var gLon = Math.ceil(lonMin); gLon <= Math.floor(lonMax); gLon += gridLonStep) {
+  for (var gLon = Math.ceil(lonMin); gLon <= Math.floor(lonMax); gLon++) {
     var q1 = project(latMin, gLon), q2 = project(latMax, gLon);
     gridLines += '<line x1="' + q1[0] + '" y1="' + q1[1] + '" x2="' + q2[0] + '" y2="' + q2[1] + '" stroke="#2c3038" stroke-width="0.5" stroke-dasharray="4,6"/>';
   }
 
-  // Radius ring around search center
   var cp = project(center[0], center[1]);
-  var ringR = (mapW / (zoomRange * 2.8)) * 1.5; // roughly 1.5-degree radius visually
+  var ringR = (mapW / (zoomRange * 2.8)) * 1.5;
 
-  var pins = "";
+  // Render non-active pins first, active pin last (on top)
+  var pinsBehind = "";
+  var pinFront = "";
   dealers.forEach(function(d, i) {
     var pt = project(d.lat, d.lng);
     var isActive = i === activeIndex;
-    var iconSize = isActive ? 28 : 20;
-    var half = iconSize / 2;
-    var glow = isActive ? '<circle cx="' + pt[0] + '" cy="' + pt[1] + '" r="' + (half + 8) + '" fill="#c0392b" opacity="0.18"/>' : "";
-    var label = isActive ? '<text x="' + pt[0] + '" y="' + (pt[1] - half - 6) + '" text-anchor="middle" fill="#e4e5e9" font-size="11" font-weight="600" font-family="Inter, sans-serif">' + d.name + '</text>' : "";
-    pins += glow +
-      '<image class="map-pin' + (isActive ? " active" : "") + '" data-index="' + i + '" href="' + PIN_ICON + '" x="' + (pt[0] - half) + '" y="' + (pt[1] - half) + '" width="' + iconSize + '" height="' + iconSize + '" style="cursor:pointer;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))"/>' +
-      label;
+    var pinSize = isActive ? 18 : 13;
+    var pin = '<g class="map-pin' + (isActive ? ' active' : '') + '" data-index="' + i + '">' +
+      svgPin(pt[0], pt[1], pinSize, isActive);
+    if (isActive) {
+      pin += '<text x="' + pt[0] + '" y="' + (pt[1] - pinSize - 8) + '" text-anchor="middle" fill="#e4e5e9" font-size="11" font-weight="600" font-family="Inter, sans-serif">' + d.name + '</text>';
+    }
+    pin += '</g>';
+    if (isActive) { pinFront = pin; } else { pinsBehind += pin; }
   });
 
   return '<svg viewBox="0 0 ' + mapW + ' ' + mapH + '" xmlns="http://www.w3.org/2000/svg">' +
@@ -161,14 +183,13 @@ function createMapSVG(dealers, center, activeIndex) {
     '<circle cx="' + cp[0] + '" cy="' + cp[1] + '" r="6" fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="3,3"/>' +
     '<circle cx="' + cp[0] + '" cy="' + cp[1] + '" r="2.5" fill="#c0392b"/>' +
     '<text x="' + (cp[0] + 10) + '" y="' + (cp[1] - 10) + '" fill="#878c99" font-size="10" font-family="Inter, sans-serif">Your location</text>' +
-    pins +
+    pinsBehind + pinFront +
     '</svg>';
 }
 
 // ── Rendering ──
 var currentResults = null;
 var activeCardIndex = -1;
-var currentFilter = "all";
 var currentCenter = null;
 
 function renderResults(data) {
@@ -181,7 +202,7 @@ function renderResults(data) {
       '<div class="dealer-empty">' +
         '<span class="empty-icon">&#x1f50d;</span>' +
         '<h3>No dealers found</h3>' +
-        '<p>We couldn\'t find any dealers matching your search. Try a different ZIP code or city, or broaden your filter.</p>' +
+        '<p>We couldn\'t find any dealers matching your search. Try a different ZIP code, city, or dealer name.</p>' +
       '</div>';
     return;
   }
@@ -191,22 +212,23 @@ function renderResults(data) {
 
   var cards = "";
   results.forEach(function(d, i) {
+    var distText = d.distance != null ? d.distance.toFixed(1) + ' mi' : d.city + ', ' + d.state;
     cards +=
       '<div class="dealer-card" data-index="' + i + '" onclick="setActiveCard(' + i + ')">' +
         '<div class="dealer-name">' + d.name + '</div>' +
         '<span class="dealer-type ' + d.type + '">' + d.type + '</span>' +
         '<div class="dealer-address">' + d.address + '<br>' + d.city + ', ' + d.state + ' ' + d.zip + '</div>' +
         '<div class="dealer-meta">' +
-          '<span class="dealer-distance">' + d.distance.toFixed(1) + ' mi</span>' +
+          '<span class="dealer-distance">' + distText + '</span>' +
           '<span class="dealer-phone"><a href="tel:' + d.phone.replace(/\D/g, '') + '">' + d.phone + '</a></span>' +
           '<span class="dealer-directions"><a href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(d.address + ', ' + d.city + ', ' + d.state + ' ' + d.zip) + '" target="_blank" rel="noopener">Directions &rarr;</a></span>' +
         '</div>' +
       '</div>';
   });
 
-  var countText = results.length + " nearest dealer" + (results.length !== 1 ? "s" : "") + " shown";
+  var countText = results.length + " dealer" + (results.length !== 1 ? "s" : "") + " found";
   if (data.total > results.length) {
-    countText += " of " + data.total + " in your area";
+    countText = results.length + " nearest dealer" + (results.length !== 1 ? "s" : "") + " shown of " + data.total;
   }
 
   container.innerHTML =
@@ -236,14 +258,11 @@ function bindMapPins() {
 function setActiveCard(index) {
   if (!currentResults) return;
   activeCardIndex = index;
-
   document.querySelectorAll(".dealer-card").forEach(function(card, i) {
     card.classList.toggle("active", i === index);
   });
-
   var activeCard = document.querySelector('.dealer-card[data-index="' + index + '"]');
   if (activeCard) activeCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
   var mapContainer = document.getElementById("map-container");
   if (mapContainer) {
     mapContainer.innerHTML = createMapSVG(currentResults.results, currentResults.center, index);
@@ -253,23 +272,39 @@ function setActiveCard(index) {
 
 function doSearch(coordsOverride) {
   var coords = coordsOverride || null;
-  if (!coords) {
-    var query = document.getElementById("zip-input").value.trim();
-    if (!query) return;
-    coords = getCoords(query);
-  }
-  if (!coords) {
-    document.getElementById("dealer-content").innerHTML =
-      '<div class="dealer-empty">' +
-        '<span class="empty-icon">&#x1f50d;</span>' +
-        '<h3>Location not found</h3>' +
-        '<p>We couldn\'t find that location. Please try a valid US ZIP code or city name.</p>' +
-      '</div>';
+  var query = document.getElementById("zip-input").value.trim();
+
+  if (coords) {
+    // Direct coordinates (geolocation)
+    currentCenter = coords;
+    renderResults(searchByLocation(coords));
     return;
   }
-  currentCenter = coords;
-  var data = searchDealers(coords, currentFilter);
-  renderResults(data);
+
+  if (!query) return;
+
+  // Try location-based search first (ZIP code or city)
+  coords = getCoords(query);
+  if (coords) {
+    currentCenter = coords;
+    renderResults(searchByLocation(coords));
+    return;
+  }
+
+  // Fall back to name search
+  var nameResults = searchByName(query);
+  if (nameResults) {
+    currentCenter = nameResults.center;
+    renderResults(nameResults);
+    return;
+  }
+
+  document.getElementById("dealer-content").innerHTML =
+    '<div class="dealer-empty">' +
+      '<span class="empty-icon">&#x1f50d;</span>' +
+      '<h3>No results found</h3>' +
+      '<p>We couldn\'t find that location or dealer. Try a US ZIP code, city name, or dealer name.</p>' +
+    '</div>';
 }
 
 // ── Geolocation ──
@@ -301,22 +336,7 @@ document.getElementById("zip-input").addEventListener("keydown", function(e) {
 });
 document.getElementById("locate-btn").addEventListener("click", requestGeolocation);
 
-// Filter chips
-document.querySelectorAll(".filter-chip").forEach(function(chip) {
-  chip.addEventListener("click", function() {
-    document.querySelectorAll(".filter-chip").forEach(function(c) { c.classList.remove("active"); });
-    chip.classList.add("active");
-    currentFilter = chip.dataset.filter;
-    if (currentCenter) {
-      doSearch(currentCenter);
-    } else {
-      var query = document.getElementById("zip-input").value.trim();
-      if (query && query !== "My Location") doSearch();
-    }
-  });
-});
-
-// Auto-prompt for geolocation on page load (after short delay)
+// Auto-prompt for geolocation on page load
 window.addEventListener("load", function() {
   setTimeout(function() {
     if (navigator.geolocation) requestGeolocation();
