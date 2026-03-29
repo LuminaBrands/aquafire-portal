@@ -278,7 +278,12 @@
     <div class="container">
       <h1>Find a Dealer</h1>
       <p class="page-sub">Locate authorized Aquafire showrooms, installers, and certified partners near you.</p>
-      <div class="dealer-search" style="margin-top: 28px;">
+    </div>
+  </header>
+
+  <main class="container page-body">
+    <div class="dealer-search-section" style="text-align:center;margin-bottom:32px;">
+      <div class="dealer-search" style="margin: 0 auto;">
         <input type="text" id="zip-input" placeholder="Search by ZIP, city, or dealer name..." aria-label="Search by ZIP, city, or dealer name" maxlength="40" autocomplete="off">
         <button id="search-btn" type="button">Search</button>
       </div>
@@ -287,15 +292,57 @@
         Use My Location
       </button>
     </div>
-  </header>
-
-  <main class="container page-body">
     <div id="dealer-content">
-      <!-- Initial state -->
-      <div class="dealer-empty" id="initial-state">
-        <span class="empty-icon">&#x1f4cd;</span>
-        <h3>Finding dealers near you...</h3>
-        <p>Allow location access for the best results, or enter your ZIP code or city name above.</p>
+      <!-- Default view: shows featured dealers, replaced by JS search results -->
+      <h2 style="font-size:1.1rem;margin-bottom:16px;color:var(--text-muted)">Featured Dealers</h2>
+      <div class="dealer-layout">
+        <div class="results-panel">
+          <div class="dealer-card">
+            <div class="dealer-name">Flame &amp; Stone Design Studio</div>
+            <span class="dealer-type showroom">showroom</span>
+            <div class="dealer-address">142 Madison Ave<br>New York, NY 10016</div>
+            <div class="dealer-meta">
+              <span class="dealer-phone"><a href="tel:2125550184">(212) 555-0184</a></span>
+              <span class="dealer-directions"><a href="https://www.google.com/maps/dir/?api=1&destination=142+Madison+Ave,+New+York,+NY+10016" target="_blank" rel="noopener">Directions &rarr;</a></span>
+            </div>
+          </div>
+          <div class="dealer-card">
+            <div class="dealer-name">Pacific Fire Studio</div>
+            <span class="dealer-type showroom">showroom</span>
+            <div class="dealer-address">8800 Beverly Blvd<br>Los Angeles, CA 90048</div>
+            <div class="dealer-meta">
+              <span class="dealer-phone"><a href="tel:3235552245">(323) 555-2245</a></span>
+              <span class="dealer-directions"><a href="https://www.google.com/maps/dir/?api=1&destination=8800+Beverly+Blvd,+Los+Angeles,+CA+90048" target="_blank" rel="noopener">Directions &rarr;</a></span>
+            </div>
+          </div>
+          <div class="dealer-card">
+            <div class="dealer-name">Heartland Fire &amp; Stone</div>
+            <span class="dealer-type showroom">showroom</span>
+            <div class="dealer-address">1200 N Michigan Ave<br>Chicago, IL 60611</div>
+            <div class="dealer-meta">
+              <span class="dealer-phone"><a href="tel:3125551145">(312) 555-1145</a></span>
+              <span class="dealer-directions"><a href="https://www.google.com/maps/dir/?api=1&destination=1200+N+Michigan+Ave,+Chicago,+IL+60611" target="_blank" rel="noopener">Directions &rarr;</a></span>
+            </div>
+          </div>
+          <div class="dealer-card">
+            <div class="dealer-name">Southern Flame Gallery</div>
+            <span class="dealer-type showroom">showroom</span>
+            <div class="dealer-address">456 Peachtree Rd NE<br>Atlanta, GA 30308</div>
+            <div class="dealer-meta">
+              <span class="dealer-phone"><a href="tel:4045550637">(404) 555-0637</a></span>
+              <span class="dealer-directions"><a href="https://www.google.com/maps/dir/?api=1&destination=456+Peachtree+Rd+NE,+Atlanta,+GA+30308" target="_blank" rel="noopener">Directions &rarr;</a></span>
+            </div>
+          </div>
+        </div>
+        <div class="map-panel">
+          <div class="map-container">
+            <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+              <rect width="800" height="500" fill="#1b1e24"/>
+              <text x="400" y="240" text-anchor="middle" fill="#878c99" font-size="14" font-family="Inter,sans-serif">Search above to see dealers near you</text>
+              <text x="400" y="265" text-anchor="middle" fill="#555" font-size="12" font-family="Inter,sans-serif">Enter a ZIP code, city, or dealer name</text>
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -519,7 +566,8 @@
 
     function doSearch(coordsOverride) {
       var coords = coordsOverride || null;
-      var query = document.getElementById("zip-input").value.trim();
+      var inputEl = document.getElementById("zip-input");
+      var query = inputEl ? inputEl.value.trim() : "";
       if (coords) { currentCenter = coords; renderResults(searchByLocation(coords)); return; }
       if (!query) return;
       coords = getCoords(query);
@@ -532,10 +580,11 @@
     function requestGeolocation() {
       if (!navigator.geolocation) return;
       var btn = document.getElementById("locate-btn");
+      var input = document.getElementById("zip-input");
       if (btn) { btn.textContent = "Locating..."; btn.disabled = true; }
       navigator.geolocation.getCurrentPosition(
         function(pos) {
-          document.getElementById("zip-input").value = "My Location";
+          if (input) input.value = "My Location";
           if (btn) { btn.textContent = "Use My Location"; btn.disabled = false; }
           doSearch([pos.coords.latitude, pos.coords.longitude]);
         },
@@ -545,9 +594,12 @@
     }
 
     // Attach events
-    document.getElementById("search-btn").addEventListener("click", function() { doSearch(); });
-    document.getElementById("zip-input").addEventListener("keydown", function(e) { if (e.key === "Enter") doSearch(); });
-    document.getElementById("locate-btn").addEventListener("click", requestGeolocation);
+    var searchBtn = document.getElementById("search-btn");
+    var zipInput = document.getElementById("zip-input");
+    var locateBtn = document.getElementById("locate-btn");
+    if (searchBtn) searchBtn.addEventListener("click", function() { doSearch(); });
+    if (zipInput) zipInput.addEventListener("keydown", function(e) { if (e.key === "Enter") doSearch(); });
+    if (locateBtn) locateBtn.addEventListener("click", requestGeolocation);
 
     // Auto-detect location on load
     window.addEventListener("load", function() {
