@@ -1,4 +1,4 @@
-/* ── Dealer Locator ── */
+/* ── Dealer Locator with Leaflet Map ── */
 
 // Dealer data: [name, type(0=showroom,1=installer,2=partner), address, city, state, zip, phone, lat, lng]
 var DEALER_RAW = [
@@ -55,7 +55,7 @@ var ZIP_COORDS = {
   "8":[35.0,-110.0],"9":[38.0,-120.0]
 };
 
-// Build city lookup from dealer locations
+// City coordinates from dealer locations
 var CITY_COORDS = {};
 DEALERS.forEach(function(d) {
   CITY_COORDS[d.city.toLowerCase()] = [d.lat, d.lng];
@@ -107,285 +107,214 @@ function searchByName(query) {
 
 function searchByLocation(coords) {
   var results = DEALERS.map(function(d) {
-    var dist = haversine(coords[0], coords[1], d.lat, d.lng);
-    return { name: d.name, type: d.type, address: d.address, city: d.city, state: d.state, zip: d.zip, phone: d.phone, lat: d.lat, lng: d.lng, distance: dist };
+    return { name: d.name, type: d.type, address: d.address, city: d.city, state: d.state, zip: d.zip, phone: d.phone, lat: d.lat, lng: d.lng, distance: haversine(coords[0], coords[1], d.lat, d.lng) };
   });
   results.sort(function(a, b) { return a.distance - b.distance; });
   return { results: results.slice(0, MAX_RESULTS), center: coords, total: results.length };
 }
 
-function showAllDealers() {
-  var center = [39.5, -98.35]; // center of US
-  return { results: DEALERS.slice(), center: center, total: DEALERS.length, showAll: true };
-}
 
+// ── Leaflet Map ──
 
-// ── SVG Map Rendering ──
+var map = null;
+var markers = [];
+var userMarker = null;
+var activeCardIndex = -1;
+var currentResults = null;
 
-function svgPin(cx, cy, size, isActive) {
-  var s = size;
-  var path = 'M ' + cx + ' ' + (cy + s) +
-    ' C ' + (cx - s * 0.6) + ' ' + (cy + s * 0.2) + ', ' +
-    (cx - s * 0.8) + ' ' + (cy - s * 0.3) + ', ' +
-    cx + ' ' + (cy - s * 0.8) +
-    ' C ' + (cx + s * 0.8) + ' ' + (cy - s * 0.3) + ', ' +
-    (cx + s * 0.6) + ' ' + (cy + s * 0.2) + ', ' +
-    cx + ' ' + (cy + s) + ' Z';
-  var fill = isActive ? '#c0392b' : '#a93226';
-  var glow = isActive ? '<circle cx="' + cx + '" cy="' + cy + '" r="' + (s + 10) + '" fill="#c0392b" opacity="0.15"/>' : '';
-  return glow +
-    '<path d="' + path + '" fill="' + fill + '" stroke="#121417" stroke-width="1.5" style="cursor:pointer;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.4))"/>' +
-    '<circle cx="' + cx + '" cy="' + (cy - s * 0.15) + '" r="' + (s * 0.25) + '" fill="#fff" opacity="0.9"/>';
-}
-
-function createMapSVG(dealers, center, activeIndex, isWide) {
-  var mapW = 800, mapH = 500;
-  var zoomRange = isWide ? 18 : 3;
-  var lonMin = center[1] - zoomRange * 1.4;
-  var lonMax = center[1] + zoomRange * 1.4;
-  var latMin = center[0] - zoomRange;
-  var latMax = center[0] + zoomRange;
-
-  function project(lat, lng) {
-    var x = ((lng - lonMin) / (lonMax - lonMin)) * mapW;
-    var latRad = lat * Math.PI / 180;
-    var mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
-    var latMinRad = latMin * Math.PI / 180;
-    var latMaxRad = latMax * Math.PI / 180;
-    var mercMin = Math.log(Math.tan(Math.PI / 4 + latMinRad / 2));
-    var mercMax = Math.log(Math.tan(Math.PI / 4 + latMaxRad / 2));
-    var y = mapH - ((mercN - mercMin) / (mercMax - mercMin)) * mapH;
-    return [x, y];
-  }
-
-  // Grid lines
-  var gridStep = isWide ? 5 : 1;
-  var grid = '';
-  for (var gLat = Math.ceil(latMin / gridStep) * gridStep; gLat <= Math.floor(latMax); gLat += gridStep) {
-    var p1 = project(gLat, lonMin), p2 = project(gLat, lonMax);
-    grid += '<line x1="' + p1[0] + '" y1="' + p1[1] + '" x2="' + p2[0] + '" y2="' + p2[1] + '" stroke="#2c3038" stroke-width="0.5" stroke-dasharray="4,6"/>';
-  }
-  for (var gLon = Math.ceil(lonMin / gridStep) * gridStep; gLon <= Math.floor(lonMax); gLon += gridStep) {
-    var q1 = project(latMin, gLon), q2 = project(latMax, gLon);
-    grid += '<line x1="' + q1[0] + '" y1="' + q1[1] + '" x2="' + q2[0] + '" y2="' + q2[1] + '" stroke="#2c3038" stroke-width="0.5" stroke-dasharray="4,6"/>';
-  }
-
-  // Center marker (only in zoomed/search view)
-  var centerMarker = '';
-  if (!isWide) {
-    var cp = project(center[0], center[1]);
-    var ringR = (mapW / (zoomRange * 2.8)) * 1.5;
-    centerMarker =
-      '<circle cx="' + cp[0] + '" cy="' + cp[1] + '" r="' + ringR + '" fill="none" stroke="rgba(192,57,43,0.15)" stroke-width="1.5"/>' +
-      '<circle cx="' + cp[0] + '" cy="' + cp[1] + '" r="6" fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="3,3"/>' +
-      '<circle cx="' + cp[0] + '" cy="' + cp[1] + '" r="2.5" fill="#c0392b"/>' +
-      '<text x="' + (cp[0] + 10) + '" y="' + (cp[1] - 10) + '" fill="#878c99" font-size="10" font-family="Inter,sans-serif">Your location</text>';
-  }
-
-  // Render pins (active one last, on top)
-  var pinsBehind = '';
-  var pinFront = '';
-  dealers.forEach(function(d, i) {
-    var pt = project(d.lat, d.lng);
-    // Skip pins that are outside the viewBox
-    if (pt[0] < -30 || pt[0] > mapW + 30 || pt[1] < -30 || pt[1] > mapH + 30) return;
-    var isActive = (i === activeIndex);
-    var pinSize = isActive ? 18 : (isWide ? 10 : 13);
-    var pin = '<g class="map-pin' + (isActive ? ' active' : '') + '" data-index="' + i + '">' +
-      svgPin(pt[0], pt[1], pinSize, isActive);
-    if (isActive) {
-      pin += '<text x="' + pt[0] + '" y="' + (pt[1] - pinSize - 8) + '" text-anchor="middle" fill="#e4e5e9" font-size="11" font-weight="600" font-family="Inter,sans-serif">' + d.name + '</text>';
-    }
-    pin += '</g>';
-    if (isActive) {
-      pinFront = pin;
-    } else {
-      pinsBehind += pin;
-    }
-  });
-
-  return '<svg viewBox="0 0 ' + mapW + ' ' + mapH + '" xmlns="http://www.w3.org/2000/svg">' +
-    '<rect width="' + mapW + '" height="' + mapH + '" fill="#1b1e24"/>' +
-    grid + centerMarker + pinsBehind + pinFront +
+function createPinSVG(color) {
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="40" viewBox="0 0 28 40">' +
+    '<path d="M14 0C6.3 0 0 6.3 0 14c0 10.5 14 26 14 26s14-15.5 14-26C28 6.3 21.7 0 14 0z" fill="' + color + '" stroke="#121417" stroke-width="1.5"/>' +
+    '<circle cx="14" cy="14" r="5" fill="#fff" opacity="0.9"/>' +
     '</svg>';
 }
 
+var PIN_COLORS = {
+  showroom: '#c0392b',
+  installer: '#4da6e8',
+  partner: '#e8a838'
+};
 
-// ── State & Rendering ──
+function initMap() {
+  map = L.map('dealer-map', {
+    zoomControl: true,
+    scrollWheelZoom: true,
+    attributionControl: true
+  }).setView([39.5, -98.35], 4);
 
-var currentResults = null;
-var activeCardIndex = -1;
-var currentCenter = null;
-var isShowingAll = false;
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
 
-function renderResults(data) {
-  currentResults = data;
-  activeCardIndex = -1;
-  isShowingAll = !!data.showAll;
+  // Add all dealer markers initially
+  addDealerMarkers(DEALERS);
+  renderCards(DEALERS, false);
+}
 
-  var container = document.getElementById('dealer-content');
-  if (!container) { console.error('dealer-content not found'); return; }
+function addDealerMarkers(dealers) {
+  // Clear existing markers
+  markers.forEach(function(m) { map.removeLayer(m); });
+  markers = [];
 
-  if (!data || data.results.length === 0) {
-    container.innerHTML =
-      '<div class="dealer-empty">' +
-      '<span class="empty-icon">&#x1f50d;</span>' +
-      '<h3>No dealers found</h3>' +
-      '<p>Try a different ZIP code, city, or dealer name.</p>' +
-      '</div>';
+  dealers.forEach(function(d, i) {
+    var color = PIN_COLORS[d.type] || '#c0392b';
+    var icon = L.divIcon({
+      html: createPinSVG(color),
+      className: 'map-marker',
+      iconSize: [28, 40],
+      iconAnchor: [14, 40],
+      popupAnchor: [0, -40]
+    });
+
+    var marker = L.marker([d.lat, d.lng], { icon: icon }).addTo(map);
+
+    var popupHTML = '<b>' + d.name + '</b><br>' +
+      '<span style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;color:' + color + '">' + d.type + '</span><br>' +
+      d.address + '<br>' + d.city + ', ' + d.state + ' ' + d.zip + '<br>' +
+      '<a href="tel:' + d.phone.replace(/\D/g, '') + '">' + d.phone + '</a>' +
+      ' &middot; <a href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(d.address + ', ' + d.city + ', ' + d.state + ' ' + d.zip) + '" target="_blank" rel="noopener">Directions</a>';
+
+    marker.bindPopup(popupHTML);
+
+    marker.on('click', function() {
+      setActiveCard(i);
+    });
+
+    markers.push(marker);
+  });
+}
+
+function setActiveCard(index) {
+  activeCardIndex = index;
+
+  // Update card highlighting
+  var cards = document.querySelectorAll('.dealer-card');
+  cards.forEach(function(card, i) {
+    card.classList.toggle('active', i === index);
+  });
+
+  // Scroll card into view
+  var activeCard = document.querySelector('.dealer-card[data-index="' + index + '"]');
+  if (activeCard) activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  // Open popup and pan to marker
+  if (markers[index]) {
+    markers[index].openPopup();
+    map.panTo(markers[index].getLatLng(), { animate: true });
+  }
+}
+
+
+// ── Card Rendering ──
+
+function renderCards(dealers, showDistance) {
+  var panel = document.getElementById('results-panel');
+  var countEl = document.getElementById('results-count');
+  if (!panel || !countEl) return;
+
+  // Remove old cards (keep the count element)
+  var oldCards = panel.querySelectorAll('.dealer-card');
+  oldCards.forEach(function(c) { c.remove(); });
+
+  if (dealers.length === 0) {
+    countEl.textContent = 'No dealers found';
+    var empty = document.createElement('div');
+    empty.className = 'dealer-empty';
+    empty.innerHTML = '<h3>No results</h3><p>Try a different ZIP code, city, or dealer name.</p>';
+    panel.appendChild(empty);
     return;
   }
 
-  var results = data.results;
-  var center = data.center;
+  countEl.textContent = dealers.length + ' dealer' + (dealers.length !== 1 ? 's' : '') + (showDistance ? ' nearby' : ' nationwide');
 
-  // Build cards
-  var cards = '';
-  results.forEach(function(d, i) {
-    var distText = (d.distance != null && !data.showAll) ? d.distance.toFixed(1) + ' mi' : d.city + ', ' + d.state;
-    var phoneDigits = d.phone.replace(/[^0-9]/g, '');
-    var dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(d.address + ', ' + d.city + ', ' + d.state + ' ' + d.zip);
-    cards +=
-      '<div class="dealer-card" data-index="' + i + '">' +
+  dealers.forEach(function(d, i) {
+    var distText = (showDistance && d.distance != null) ? d.distance.toFixed(1) + ' mi' : d.city + ', ' + d.state;
+    var card = document.createElement('div');
+    card.className = 'dealer-card';
+    card.dataset.index = i;
+    card.innerHTML =
       '<div class="dealer-name">' + d.name + '</div>' +
       '<span class="dealer-type ' + d.type + '">' + d.type + '</span>' +
       '<div class="dealer-address">' + d.address + '<br>' + d.city + ', ' + d.state + ' ' + d.zip + '</div>' +
       '<div class="dealer-meta">' +
-      '<span class="dealer-distance">' + distText + '</span>' +
-      '<span class="dealer-phone"><a href="tel:' + phoneDigits + '">' + d.phone + '</a></span>' +
-      '<span class="dealer-directions"><a href="' + dirUrl + '" target="_blank" rel="noopener">Directions &rarr;</a></span>' +
-      '</div>' +
+        '<span class="dealer-distance">' + distText + '</span>' +
+        '<span class="dealer-phone"><a href="tel:' + d.phone.replace(/\D/g, '') + '">' + d.phone + '</a></span>' +
+        '<span class="dealer-directions"><a href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(d.address + ', ' + d.city + ', ' + d.state + ' ' + d.zip) + '" target="_blank" rel="noopener">Directions &rarr;</a></span>' +
       '</div>';
+    card.addEventListener('click', function() { setActiveCard(i); });
+    panel.appendChild(card);
   });
-
-  var countText;
-  if (data.showAll) {
-    countText = data.results.length + ' dealers across the US';
-  } else if (data.total > results.length) {
-    countText = results.length + ' nearest of ' + data.total + ' dealers';
-  } else {
-    countText = results.length + ' dealer' + (results.length !== 1 ? 's' : '') + ' found';
-  }
-
-  var mapSVG = createMapSVG(results, center, -1, !!data.showAll);
-
-  container.innerHTML =
-    '<div class="dealer-layout">' +
-    '<div class="results-panel">' +
-    '<div class="results-count">' + countText + '</div>' +
-    cards +
-    '</div>' +
-    '<div class="map-panel">' +
-    '<div class="map-container" id="map-container">' + mapSVG + '</div>' +
-    '</div>' +
-    '</div>';
-
-  // Bind click events on cards and pins
-  bindCardClicks();
-  bindMapPins();
-}
-
-function bindCardClicks() {
-  var cards = document.querySelectorAll('.dealer-card[data-index]');
-  for (var i = 0; i < cards.length; i++) {
-    (function(card) {
-      card.addEventListener('click', function() {
-        setActiveCard(parseInt(card.getAttribute('data-index'), 10));
-      });
-    })(cards[i]);
-  }
-}
-
-function bindMapPins() {
-  var pins = document.querySelectorAll('.map-pin[data-index]');
-  for (var i = 0; i < pins.length; i++) {
-    (function(pin) {
-      pin.addEventListener('click', function(e) {
-        e.stopPropagation();
-        setActiveCard(parseInt(pin.getAttribute('data-index'), 10));
-      });
-    })(pins[i]);
-  }
-}
-
-function setActiveCard(index) {
-  if (!currentResults) return;
-  activeCardIndex = index;
-
-  // Highlight active card
-  var cards = document.querySelectorAll('.dealer-card[data-index]');
-  for (var i = 0; i < cards.length; i++) {
-    if (parseInt(cards[i].getAttribute('data-index'), 10) === index) {
-      cards[i].classList.add('active');
-      cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    } else {
-      cards[i].classList.remove('active');
-    }
-  }
-
-  // Re-render map with active pin
-  var mapContainer = document.getElementById('map-container');
-  if (mapContainer && currentResults) {
-    // When clicking a card in "show all" mode, zoom into that dealer's area
-    var mapCenter = currentResults.center;
-    var wide = isShowingAll;
-    if (isShowingAll && currentResults.results[index]) {
-      var d = currentResults.results[index];
-      mapCenter = [d.lat, d.lng];
-      wide = false;
-    }
-    mapContainer.innerHTML = createMapSVG(currentResults.results, mapCenter, index, wide);
-    bindMapPins();
-  }
 }
 
 
-// ── Main Search ──
+// ── Search ──
 
 function doSearch(coordsOverride) {
   var coords = coordsOverride || null;
   var inputEl = document.getElementById('zip-input');
   var query = inputEl ? inputEl.value.trim() : '';
 
-  // Direct coordinates (geolocation)
   if (coords) {
-    currentCenter = coords;
-    renderResults(searchByLocation(coords));
+    // Location-based search
+    var locData = searchByLocation(coords);
+    currentResults = locData.results;
+    addDealerMarkers(currentResults);
+    renderCards(currentResults, true);
+
+    // Show user location marker
+    if (userMarker) map.removeLayer(userMarker);
+    userMarker = L.circleMarker([coords[0], coords[1]], {
+      radius: 8, fillColor: '#c0392b', fillOpacity: 0.9, color: '#fff', weight: 2
+    }).addTo(map).bindPopup('Your location');
+
+    // Fit map to show user + nearest dealers
+    var bounds = L.latLngBounds([[coords[0], coords[1]]]);
+    currentResults.forEach(function(d) { bounds.extend([d.lat, d.lng]); });
+    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
     return;
   }
 
-  // Empty query — show all
-  if (!query) {
-    renderResults(showAllDealers());
-    return;
-  }
+  if (!query) return;
 
-  // Try ZIP/city location search
+  // Try ZIP/city coords
   coords = getCoords(query);
   if (coords) {
-    currentCenter = coords;
-    renderResults(searchByLocation(coords));
+    var locData2 = searchByLocation(coords);
+    currentResults = locData2.results;
+    addDealerMarkers(currentResults);
+    renderCards(currentResults, true);
+
+    if (userMarker) map.removeLayer(userMarker);
+    userMarker = L.circleMarker([coords[0], coords[1]], {
+      radius: 8, fillColor: '#c0392b', fillOpacity: 0.9, color: '#fff', weight: 2
+    }).addTo(map).bindPopup('Search location');
+
+    var bounds2 = L.latLngBounds([[coords[0], coords[1]]]);
+    currentResults.forEach(function(d) { bounds2.extend([d.lat, d.lng]); });
+    map.fitBounds(bounds2, { padding: [40, 40], maxZoom: 12 });
     return;
   }
 
-  // Try name/city text search
-  var nameResults = searchByName(query);
-  if (nameResults) {
-    currentCenter = nameResults.center;
-    renderResults(nameResults);
+  // Try name search
+  var nameData = searchByName(query);
+  if (nameData) {
+    currentResults = nameData.results;
+    addDealerMarkers(currentResults);
+    renderCards(currentResults, false);
+
+    if (userMarker) { map.removeLayer(userMarker); userMarker = null; }
+    var bounds3 = L.latLngBounds();
+    currentResults.forEach(function(d) { bounds3.extend([d.lat, d.lng]); });
+    map.fitBounds(bounds3, { padding: [40, 40], maxZoom: 12 });
     return;
   }
 
   // No results
-  var container = document.getElementById('dealer-content');
-  if (container) {
-    container.innerHTML =
-      '<div class="dealer-empty">' +
-      '<span class="empty-icon">&#x1f50d;</span>' +
-      '<h3>No results found</h3>' +
-      '<p>Try a US ZIP code, city name, or dealer name.</p>' +
-      '</div>';
-  }
+  currentResults = [];
+  addDealerMarkers([]);
+  renderCards([], false);
 }
 
 
@@ -396,7 +325,6 @@ function requestGeolocation() {
   var btn = document.getElementById('locate-btn');
   var input = document.getElementById('zip-input');
   if (btn) { btn.textContent = 'Locating...'; btn.disabled = true; }
-
   navigator.geolocation.getCurrentPosition(
     function(pos) {
       if (input) input.value = 'My Location';
@@ -411,47 +339,24 @@ function requestGeolocation() {
 }
 
 
-// ── Initialize ──
+// ── Init ──
 
-function initDealerLocator() {
-  var searchBtn = document.getElementById('search-btn');
-  var zipInput = document.getElementById('zip-input');
-  var locateBtn = document.getElementById('locate-btn');
+document.addEventListener('DOMContentLoaded', function() {
+  initMap();
 
-  if (searchBtn) {
-    searchBtn.addEventListener('click', function() { doSearch(); });
-  }
-  if (zipInput) {
-    zipInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') doSearch();
+  document.getElementById('search-btn').addEventListener('click', function() { doSearch(); });
+  document.getElementById('zip-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doSearch();
+  });
+  document.getElementById('locate-btn').addEventListener('click', requestGeolocation);
+
+  // Nav toggle
+  var toggle = document.querySelector('.nav-toggle');
+  var navLinks = document.querySelector('.nav-links');
+  if (toggle) {
+    toggle.addEventListener('click', function() {
+      var open = navLinks.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
     });
   }
-  if (locateBtn) {
-    locateBtn.addEventListener('click', function() { requestGeolocation(); });
-  }
-
-  // Show all dealers on initial load
-  renderResults(showAllDealers());
-
-  // Try geolocation after a short delay
-  setTimeout(function() {
-    if (navigator.geolocation) requestGeolocation();
-  }, 800);
-}
-
-// Nav toggle (shared pattern)
-var toggle = document.querySelector('.nav-toggle');
-var navLinks = document.querySelector('.nav-links');
-if (toggle && navLinks) {
-  toggle.addEventListener('click', function() {
-    var open = navLinks.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', String(open));
-  });
-}
-
-// Run when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initDealerLocator);
-} else {
-  initDealerLocator();
-}
+});
