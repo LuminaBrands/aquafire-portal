@@ -4,25 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Find a Dealer | Aquafire Hub</title>
-  <meta name="description" content="Find an authorized Aquafire dealer near you. Search by ZIP code to locate showrooms, installers, and certified partners.">
+  <meta name="description" content="Find an authorized Aquafire dealer near you.">
   <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
-  <link rel="apple-touch-icon" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
   <link rel="stylesheet" href="hub.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --bg: #121417; --surface: #1b1e24; --surface-alt: #22262e;
-      --border: #2c3038; --border-warm: #3a3229;
+      --border: #2c3038;
       --text: #e4e5e9; --text-muted: #878c99;
       --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
-      --amber: #e8a838; --amber-dim: #c78820;
-      --blue: #4da6e8; --blue-dim: #2980b9;
-      --ember: #d45a20;
+      --amber: #e8a838; --blue: #4da6e8;
       --radius: 14px; --radius-sm: 8px;
-      --green: #27ae60;
     }
     html { scroll-behavior: smooth; scroll-padding-top: 72px; }
     body {
@@ -34,226 +31,93 @@
     a { color: inherit; }
     .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
-    /* ── Search Section ── */
-    .dealer-search {
-      display: flex;
-      gap: 12px;
-      max-width: 520px;
-      margin: 0 auto;
+    /* Search */
+    .search-row { display: flex; gap: 12px; max-width: 520px; margin: 0 auto; }
+    .search-row input {
+      flex: 1; padding: 14px 20px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 1rem; outline: none;
     }
-    .dealer-search input {
-      flex: 1;
-      padding: 14px 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .dealer-search input::placeholder { color: var(--text-muted); }
-    .dealer-search input:focus { border-color: var(--red); }
-    .dealer-search button {
-      padding: 14px 28px;
-      background: var(--red);
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 600;
-      border: none;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: background 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 12px var(--red-glow);
+    .search-row input::placeholder { color: var(--text-muted); }
+    .search-row input:focus { border-color: var(--red); }
+    .search-row button {
+      padding: 14px 28px; background: var(--red); color: #fff; font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem; font-weight: 600; border: none; border-radius: var(--radius-sm); cursor: pointer;
       white-space: nowrap;
     }
-    .dealer-search button:hover {
-      background: var(--red-dark);
-      box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+    .search-row button:hover { background: var(--red-dark); }
+    .geo-btn {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 8px 20px;
+      font-size: 0.82rem; font-weight: 500; font-family: inherit; background: transparent;
+      border: 1px solid var(--border); border-radius: 20px; color: var(--text-muted); cursor: pointer;
     }
+    .geo-btn:hover { border-color: var(--red); color: var(--text); }
 
-    /* ── Layout ── */
-    .dealer-layout {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 24px;
-      margin-top: 24px;
+    /* Layout */
+    .locator-grid { display: grid; grid-template-columns: 380px 1fr; gap: 24px; margin-top: 24px; }
+    .card-list {
+      display: flex; flex-direction: column; gap: 12px;
+      max-height: 600px; overflow-y: auto; padding-right: 8px;
     }
+    .card-list::-webkit-scrollbar { width: 6px; }
+    .card-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .card-count { font-size: 0.85rem; color: var(--text-muted); padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 
-    /* ── Results Panel ── */
-    .results-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-height: 620px;
-      overflow-y: auto;
-      padding-right: 8px;
+    /* Cards */
+    .d-card {
+      padding: 16px 20px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); cursor: pointer; transition: border-color 0.2s, transform 0.15s;
     }
-    .results-panel::-webkit-scrollbar { width: 6px; }
-    .results-panel::-webkit-scrollbar-track { background: transparent; }
-    .results-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .d-card:hover { transform: translateY(-1px); border-color: rgba(192,57,43,0.3); }
+    .d-card.active { border-color: var(--red); box-shadow: 0 0 0 1px var(--red), 0 4px 16px var(--red-glow); }
+    .d-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
+    .d-badge {
+      display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; padding: 2px 7px; border-radius: 4px; margin-bottom: 6px;
+    }
+    .d-badge.showroom { background: rgba(192,57,43,0.15); color: var(--red); }
+    .d-badge.installer { background: rgba(77,166,232,0.15); color: var(--blue); }
+    .d-badge.partner { background: rgba(232,168,56,0.15); color: var(--amber); }
+    .d-addr { font-size: 0.83rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 6px; }
+    .d-meta { display: flex; align-items: center; gap: 14px; font-size: 0.78rem; color: var(--text-muted); flex-wrap: wrap; }
+    .d-dist { color: var(--amber); font-weight: 600; }
+    .d-meta a { color: var(--blue); text-decoration: none; }
+    .d-meta a:hover { color: var(--text); }
+    .d-dir { margin-left: auto; font-weight: 600; }
+    .d-dir a { color: var(--text-muted); }
 
-    .results-count {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
+    /* Map */
+    .map-wrap {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden; min-height: 400px;
     }
+    #map { width: 100%; height: 100%; min-height: 400px; }
 
-    .dealer-card {
-      padding: 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      transition: border-color 0.2s, transform 0.15s;
-      cursor: pointer;
-    }
-    .dealer-card:hover { transform: translateY(-1px); border-color: rgba(192,57,43,0.3); }
-    .dealer-card.active { border-color: var(--red); box-shadow: 0 0 0 1px var(--red), 0 4px 16px var(--red-glow); }
+    /* Leaflet overrides for dark theme */
+    .leaflet-popup-content-wrapper { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; }
+    .leaflet-popup-tip { background: var(--surface); }
+    .leaflet-popup-content { font-family: 'Inter', sans-serif; font-size: 0.83rem; line-height: 1.5; margin: 10px 14px; }
+    .leaflet-popup-content b { font-family: 'Poppins', sans-serif; font-size: 0.9rem; }
+    .leaflet-popup-content a { color: var(--blue); }
+    .leaflet-popup-close-button { color: var(--text-muted) !important; }
+    .leaflet-control-attribution { font-size: 10px; }
+    .leaflet-control-attribution a { color: var(--text-muted); }
 
-    .dealer-name {
-      font-family: 'Poppins', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .dealer-type {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 3px 8px;
-      border-radius: 4px;
-      margin-bottom: 8px;
-    }
-    .dealer-type.showroom { background: rgba(192,57,43,0.15); color: var(--red); }
-    .dealer-type.installer { background: rgba(77,166,232,0.15); color: var(--blue); }
-    .dealer-type.partner { background: rgba(232,168,56,0.15); color: var(--amber); }
-
-    .dealer-address {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 8px;
-    }
-    .dealer-meta {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      flex-wrap: wrap;
-    }
-    .dealer-distance { color: var(--amber); font-weight: 600; }
-    .dealer-phone a {
-      color: var(--blue);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .dealer-phone a:hover { color: var(--text); }
-    .dealer-directions {
-      margin-left: auto;
-    }
-    .dealer-directions a {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .dealer-directions a:hover { color: var(--text); }
-
-    /* ── Map Panel ── */
-    .map-panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      position: relative;
-      min-height: 320px;
-    }
-    .map-container {
-      width: 100%;
-      aspect-ratio: 8 / 5;
-      position: relative;
-      background: var(--surface-alt);
-      overflow: hidden;
-    }
-    .map-container svg {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* ── Map Pins ── */
-    .map-pin {
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .map-pin:hover { transform: scale(1.3); }
-    .map-pin.active { transform: scale(1.4); }
-
-    /* ── Empty / Initial State ── */
-    .dealer-empty {
-      text-align: center;
-      padding: 64px 24px;
-      grid-column: 1 / -1;
-    }
-    .dealer-empty .empty-icon {
-      font-size: 3rem;
-      display: block;
-      margin-bottom: 16px;
-      opacity: 0.6;
-    }
-    .dealer-empty h3 {
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-    }
-    .dealer-empty p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-
-    /* ── Locate Button ── */
-    .locate-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 12px;
-      padding: 8px 20px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      font-family: inherit;
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .locate-btn:hover { border-color: var(--red); color: var(--text); }
-    .locate-btn:disabled { opacity: 0.5; cursor: default; }
-
-    /* ── Responsive ── */
+    /* Responsive */
     @media (max-width: 800px) {
-      .dealer-layout {
-        grid-template-columns: 1fr;
-      }
-      .map-panel { order: -1; }
-      .results-panel { max-height: none; padding-right: 0; }
+      .locator-grid { grid-template-columns: 1fr; }
+      .map-wrap { order: -1; min-height: 300px; }
+      #map { min-height: 300px; }
+      .card-list { max-height: none; }
     }
     @media (max-width: 600px) {
-      .dealer-search { flex-direction: column; }
-      .dealer-search button { width: 100%; }
+      .search-row { flex-direction: column; }
+      .search-row button { width: 100%; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Nav -->
   <nav class="site-nav">
     <div class="container nav-inner">
       <a href="/" class="nav-logo">
@@ -275,6 +139,7 @@
     </div>
   </nav>
 
+  <!-- Header -->
   <header class="page-header">
     <div class="container">
       <h1>Find a Dealer</h1>
@@ -282,23 +147,30 @@
     </div>
   </header>
 
+  <!-- Main -->
   <main class="container page-body">
     <div style="text-align:center; margin-bottom:32px;">
-      <div class="dealer-search" style="margin:0 auto;">
-        <input type="text" id="zip-input" placeholder="Search by ZIP, city, or dealer name..." aria-label="Search by ZIP, city, or dealer name" maxlength="40" autocomplete="off">
-        <button id="search-btn" type="button">Search</button>
+      <div class="search-row">
+        <input type="text" id="q" placeholder="Enter ZIP code, city, or dealer name..." maxlength="40" autocomplete="off">
+        <button type="button" id="go">Search</button>
       </div>
-      <button id="locate-btn" class="locate-btn" type="button">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg>
+      <button type="button" id="geo" class="geo-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg>
         Use My Location
       </button>
     </div>
 
-    <div id="dealer-content">
-      <div style="text-align:center; padding:48px 24px; color:var(--text-muted);">Loading dealers...</div>
+    <div class="locator-grid">
+      <div class="card-list" id="cards">
+        <div class="card-count" id="count">Loading...</div>
+      </div>
+      <div class="map-wrap">
+        <div id="map"></div>
+      </div>
     </div>
   </main>
 
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-brand">
@@ -327,6 +199,260 @@
   </footer>
 
   <script src="embed.js"></script>
-  <script src="dealer-locator-app.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+  // ─── Dealer Data ───
+  var TYPES = ['showroom', 'installer', 'partner'];
+  var COLORS = { showroom: '#c0392b', installer: '#4da6e8', partner: '#e8a838' };
+  var RAW = [
+    ['Flame & Stone Design Studio',0,'142 Madison Ave','New York','NY','10016','(212) 555-0184',40.7484,-73.9857],
+    ['Northeast Fireplace Pros',1,'85 Industrial Pkwy','Hartford','CT','06103','(860) 555-0291',41.7658,-72.6734],
+    ['Boston Hearth & Home',0,'310 Newbury St','Boston','MA','02115','(617) 555-0342',42.3491,-71.0870],
+    ['Tri-State Fire Installations',1,'22 Commerce Blvd','Newark','NJ','07102','(973) 555-0418',40.7357,-74.1724],
+    ['Philly Fireplace Co.',2,'1800 Market St','Philadelphia','PA','19103','(215) 555-0523',39.9526,-75.1652],
+    ['Southern Flame Gallery',0,'456 Peachtree Rd NE','Atlanta','GA','30308','(404) 555-0637',33.7734,-84.3830],
+    ['Coastal Fire & Design',0,'2100 N Ocean Blvd','Fort Lauderdale','FL','33305','(954) 555-0748',26.1501,-80.1096],
+    ['Miami Luxury Fireplaces',0,'8500 NW 25th St','Miami','FL','33122','(305) 555-0856',25.7907,-80.3184],
+    ['Carolina Custom Hearth',1,'700 S Tryon St','Charlotte','NC','28202','(704) 555-0912',35.2209,-80.8455],
+    ['Magnolia Fireplace Works',2,'520 Royal St','Nashville','TN','37203','(615) 555-1034',36.1543,-86.7845],
+    ['Heartland Fire & Stone',0,'1200 N Michigan Ave','Chicago','IL','60611','(312) 555-1145',41.8966,-87.6243],
+    ['Motor City Fireplaces',1,'3300 Woodward Ave','Detroit','MI','48201','(313) 555-1256',42.3461,-83.0565],
+    ['Twin Cities Hearth Co.',2,'901 Hennepin Ave','Minneapolis','MN','55403','(612) 555-1367',44.9753,-93.2760],
+    ['Buckeye Fire Design',1,'150 E Broad St','Columbus','OH','43215','(614) 555-1478',39.9612,-82.9988],
+    ['Gateway Flame Studio',0,'800 Washington Ave','St. Louis','MO','63101','(314) 555-1589',38.6303,-90.1975],
+    ['Desert Modern Fireplaces',0,'7000 E Camelback Rd','Scottsdale','AZ','85251','(480) 555-1690',33.5092,-111.9280],
+    ['Lone Star Fire & Design',0,'4500 McKinney Ave','Dallas','TX','75205','(214) 555-1801',32.8107,-96.7969],
+    ['Austin Hearth Collective',2,'1100 S Congress Ave','Austin','TX','78704','(512) 555-1912',30.2502,-97.7487],
+    ['Houston Fire Gallery',0,'2800 Kirby Dr','Houston','TX','77098','(713) 555-2023',29.7371,-95.4218],
+    ['Santa Fe Flame Artisans',1,'65 E San Francisco St','Santa Fe','NM','87501','(505) 555-2134',35.6870,-105.9378],
+    ['Pacific Fire Studio',0,'8800 Beverly Blvd','Los Angeles','CA','90048','(323) 555-2245',34.0751,-118.3776],
+    ['Bay Area Hearth & Home',0,'580 4th St','San Francisco','CA','94107','(415) 555-2356',37.7795,-122.3969],
+    ['Cascade Fireplace Co.',1,'1400 NW 14th Ave','Portland','OR','97209','(503) 555-2467',45.5310,-122.6847],
+    ['Emerald City Fire Design',0,'200 Westlake Ave N','Seattle','WA','98109','(206) 555-2578',47.6218,-122.3384],
+    ['San Diego Flame Works',2,'750 B St','San Diego','CA','92101','(619) 555-2689',32.7157,-117.1638],
+    ['Vegas Luxury Fireplaces',0,'3500 Las Vegas Blvd S','Las Vegas','NV','89109','(702) 555-2790',36.1263,-115.1703],
+    ['Denver Fire & Design',1,'1600 Champa St','Denver','CO','80202','(303) 555-2891',39.7472,-104.9903],
+    ['Salt Lake Hearth Studio',2,'50 W Broadway','Salt Lake City','UT','84101','(801) 555-2990',40.7608,-111.8910]
+  ];
+  var DEALERS = RAW.map(function(r) {
+    return { n: r[0], t: TYPES[r[1]], addr: r[2], city: r[3], st: r[4], zip: r[5], ph: r[6], lat: r[7], lng: r[8] };
+  });
+
+  // ZIP prefix → approx coords
+  var ZIPS = {
+    '100':[40.75,-73.99],'101':[40.75,-73.99],'060':[41.77,-72.67],'061':[41.77,-72.67],
+    '021':[42.35,-71.08],'022':[42.35,-71.08],'071':[40.74,-74.17],'070':[40.74,-74.17],
+    '191':[39.95,-75.17],'190':[39.95,-75.17],'303':[33.77,-84.38],'300':[33.77,-84.38],
+    '333':[26.15,-80.11],'331':[25.79,-80.32],'282':[35.22,-80.85],'372':[36.15,-86.78],
+    '606':[41.90,-87.62],'482':[42.35,-83.06],'554':[44.98,-93.28],'432':[39.96,-83.00],
+    '631':[38.63,-90.20],'852':[33.51,-111.93],'752':[32.81,-96.80],'787':[30.25,-97.75],
+    '770':[29.74,-95.42],'875':[35.69,-105.94],'900':[34.08,-118.38],'941':[37.78,-122.40],
+    '972':[45.53,-122.68],'981':[47.62,-122.34],'921':[32.72,-117.16],'891':[36.13,-115.17],
+    '802':[39.75,-104.99],'841':[40.76,-111.89],
+    '0':[42,-72],'1':[41,-74],'2':[38,-78],'3':[33,-84],
+    '4':[41,-83],'5':[44,-93],'6':[40,-90],'7':[32,-97],
+    '8':[35,-110],'9':[38,-120]
+  };
+
+  // ─── Helpers ───
+  function dist(a, b, c, d) {
+    var R = 3959, p = Math.PI / 180;
+    var x = (c - a) * p, y = (d - b) * p;
+    var h = Math.sin(x/2)*Math.sin(x/2) + Math.cos(a*p)*Math.cos(c*p)*Math.sin(y/2)*Math.sin(y/2);
+    return R * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+  }
+
+  function resolve(q) {
+    q = q.trim();
+    if (/^\d{3,5}$/.test(q)) {
+      var z = q.replace(/0+$/, '');
+      while (z.length <= 3) { if (ZIPS[z]) return ZIPS[z]; z = z.slice(0, -1) || '0'; }
+      return ZIPS[q.substring(0, 3)] || ZIPS[q.substring(0, 1)] || null;
+    }
+    var lo = q.toLowerCase();
+    for (var i = 0; i < DEALERS.length; i++) {
+      var d = DEALERS[i];
+      if (d.city.toLowerCase().indexOf(lo) !== -1 || (d.city + ' ' + d.st).toLowerCase().indexOf(lo) !== -1) return [d.lat, d.lng];
+    }
+    return null;
+  }
+
+  // ─── Map & Markers ───
+  var map, layerGroup, userDot;
+
+  function pinSVG(color) {
+    return '<svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">' +
+      '<path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0z" fill="' + color + '" stroke="#111" stroke-width="1"/>' +
+      '<circle cx="12" cy="12" r="4.5" fill="#fff" opacity="0.85"/></svg>';
+  }
+
+  function makeIcon(type) {
+    return L.divIcon({
+      html: pinSVG(COLORS[type] || '#c0392b'),
+      className: '',
+      iconSize: [24, 36],
+      iconAnchor: [12, 36],
+      popupAnchor: [0, -36]
+    });
+  }
+
+  function popup(d) {
+    var addr = d.addr + ', ' + d.city + ', ' + d.st + ' ' + d.zip;
+    return '<b>' + d.n + '</b><br>' +
+      '<span style="color:' + COLORS[d.t] + ';font-size:11px;text-transform:uppercase">' + d.t + '</span><br>' +
+      d.addr + '<br>' + d.city + ', ' + d.st + ' ' + d.zip + '<br>' +
+      '<a href="tel:' + d.ph.replace(/\D/g, '') + '">' + d.ph + '</a> · ' +
+      '<a href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(addr) + '" target="_blank">Directions</a>';
+  }
+
+  function showOnMap(dealers, center, zoom) {
+    layerGroup.clearLayers();
+    dealers.forEach(function(d, i) {
+      var m = L.marker([d.lat, d.lng], { icon: makeIcon(d.t) }).bindPopup(popup(d));
+      m.on('click', function() { highlight(i); });
+      layerGroup.addLayer(m);
+    });
+    if (center && zoom) {
+      map.setView(center, zoom);
+    } else if (dealers.length > 0) {
+      var b = L.latLngBounds(dealers.map(function(d) { return [d.lat, d.lng]; }));
+      if (center) b.extend(center);
+      map.fitBounds(b, { padding: [30, 30], maxZoom: 12 });
+    }
+  }
+
+  // ─── Cards ───
+  function buildCards(dealers, hasDist) {
+    var el = document.getElementById('cards');
+    var ct = document.getElementById('count');
+    // Remove old cards
+    while (el.children.length > 1) el.removeChild(el.lastChild);
+    ct.textContent = dealers.length + ' dealer' + (dealers.length !== 1 ? 's' : '') + (hasDist ? ' nearby' : ' nationwide');
+
+    dealers.forEach(function(d, i) {
+      var c = document.createElement('div');
+      c.className = 'd-card';
+      c.setAttribute('data-i', i);
+      var distStr = hasDist && d._mi != null ? d._mi.toFixed(1) + ' mi' : d.city + ', ' + d.st;
+      var addr = d.addr + ', ' + d.city + ', ' + d.st + ' ' + d.zip;
+      c.innerHTML =
+        '<h3>' + d.n + '</h3>' +
+        '<span class="d-badge ' + d.t + '">' + d.t + '</span>' +
+        '<div class="d-addr">' + d.addr + '<br>' + d.city + ', ' + d.st + ' ' + d.zip + '</div>' +
+        '<div class="d-meta">' +
+          '<span class="d-dist">' + distStr + '</span>' +
+          '<a href="tel:' + d.ph.replace(/\D/g, '') + '">' + d.ph + '</a>' +
+          '<span class="d-dir"><a href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(addr) + '" target="_blank">Directions →</a></span>' +
+        '</div>';
+      c.addEventListener('click', function(e) {
+        if (e.target.tagName === 'A') return; // don't hijack links
+        highlight(i);
+      });
+      el.appendChild(c);
+    });
+  }
+
+  function highlight(i) {
+    document.querySelectorAll('.d-card').forEach(function(c, j) { c.classList.toggle('active', j === i); });
+    var card = document.querySelector('.d-card[data-i="' + i + '"]');
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    var layers = layerGroup.getLayers();
+    if (layers[i]) {
+      layers[i].openPopup();
+      map.panTo(layers[i].getLatLng());
+    }
+  }
+
+  // ─── Search ───
+  function search(coords) {
+    var q = document.getElementById('q').value.trim();
+
+    if (coords) {
+      // Geolocation or explicit coords
+      var nearby = DEALERS.map(function(d) {
+        var copy = {}; for (var k in d) copy[k] = d[k];
+        copy._mi = dist(coords[0], coords[1], d.lat, d.lng);
+        return copy;
+      }).sort(function(a, b) { return a._mi - b._mi; }).slice(0, 8);
+
+      if (userDot) map.removeLayer(userDot);
+      userDot = L.circleMarker(coords, { radius: 7, fillColor: '#c0392b', fillOpacity: 1, color: '#fff', weight: 2 })
+        .addTo(map).bindPopup('You');
+
+      buildCards(nearby, true);
+      showOnMap(nearby, coords);
+      return;
+    }
+
+    if (!q) return;
+
+    // Try location (ZIP / city)
+    var loc = resolve(q);
+    if (loc) {
+      search(loc);
+      return;
+    }
+
+    // Try name match
+    var lo = q.toLowerCase();
+    var hits = DEALERS.filter(function(d) {
+      return d.n.toLowerCase().indexOf(lo) !== -1 || d.city.toLowerCase().indexOf(lo) !== -1 || d.st.toLowerCase() === lo;
+    });
+    if (hits.length > 0) {
+      if (userDot) { map.removeLayer(userDot); userDot = null; }
+      buildCards(hits, false);
+      showOnMap(hits);
+      return;
+    }
+
+    // No results
+    document.getElementById('count').textContent = 'No results found';
+    while (document.getElementById('cards').children.length > 1) document.getElementById('cards').removeChild(document.getElementById('cards').lastChild);
+    layerGroup.clearLayers();
+  }
+
+  function geolocate() {
+    if (!navigator.geolocation) return;
+    var btn = document.getElementById('geo');
+    btn.textContent = 'Locating…'; btn.disabled = true;
+    navigator.geolocation.getCurrentPosition(
+      function(p) {
+        btn.textContent = 'Use My Location'; btn.disabled = false;
+        document.getElementById('q').value = 'My Location';
+        search([p.coords.latitude, p.coords.longitude]);
+      },
+      function() { btn.textContent = 'Use My Location'; btn.disabled = false; },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  }
+
+  // ─── Init ───
+  document.addEventListener('DOMContentLoaded', function() {
+    // Create map
+    map = L.map('map', { scrollWheelZoom: true }).setView([39.5, -98.35], 4);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+    layerGroup = L.layerGroup().addTo(map);
+
+    // Show all dealers on load
+    showOnMap(DEALERS, null, null);
+    buildCards(DEALERS, false);
+
+    // Events
+    document.getElementById('go').addEventListener('click', function() { search(); });
+    document.getElementById('q').addEventListener('keydown', function(e) { if (e.key === 'Enter') search(); });
+    document.getElementById('geo').addEventListener('click', geolocate);
+
+    // Nav toggle
+    var tog = document.querySelector('.nav-toggle');
+    var links = document.querySelector('.nav-links');
+    if (tog) tog.addEventListener('click', function() {
+      var open = links.classList.toggle('open');
+      tog.setAttribute('aria-expanded', open);
+    });
+  });
+  </script>
 </body>
 </html>
