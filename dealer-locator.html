@@ -74,9 +74,13 @@
       display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
       letter-spacing: 0.5px; padding: 2px 7px; border-radius: 4px; margin-bottom: 6px;
     }
-    .d-badge.showroom { background: rgba(192,57,43,0.15); color: var(--red); }
-    .d-badge.installer { background: rgba(77,166,232,0.15); color: var(--blue); }
-    .d-badge.partner { background: rgba(232,168,56,0.15); color: var(--amber); }
+    .d-badge.dealer { background: rgba(192,57,43,0.15); color: var(--red); }
+    .d-badge.regional-dealer { background: rgba(232,168,56,0.15); color: var(--amber); }
+    .d-badge.sales-rep { background: rgba(77,166,232,0.15); color: var(--blue); }
+    .d-badge.online-dealer { background: rgba(39,174,96,0.15); color: #27ae60; }
+    .d-badge.temporary-dealer { background: rgba(135,140,153,0.15); color: var(--text-muted); }
+    .d-badge.appt { background: rgba(135,140,153,0.1); color: var(--text-muted); font-size: 0.6rem; }
+    .d-badge.country { background: rgba(135,140,153,0.1); color: var(--text-muted); font-size: 0.6rem; }
     .d-addr { font-size: 0.83rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 6px; }
     .d-meta { display: flex; align-items: center; gap: 14px; font-size: 0.78rem; color: var(--text-muted); flex-wrap: wrap; }
     .d-dist { color: var(--amber); font-weight: 600; }
@@ -201,81 +205,69 @@
   <script src="embed.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script>
-  // ─── Dealer Data ───
-  var TYPES = ['showroom', 'installer', 'partner'];
-  var COLORS = { showroom: '#c0392b', installer: '#4da6e8', partner: '#e8a838' };
-  var RAW = [
-    ['Flame & Stone Design Studio',0,'142 Madison Ave','New York','NY','10016','(212) 555-0184',40.7484,-73.9857],
-    ['Northeast Fireplace Pros',1,'85 Industrial Pkwy','Hartford','CT','06103','(860) 555-0291',41.7658,-72.6734],
-    ['Boston Hearth & Home',0,'310 Newbury St','Boston','MA','02115','(617) 555-0342',42.3491,-71.0870],
-    ['Tri-State Fire Installations',1,'22 Commerce Blvd','Newark','NJ','07102','(973) 555-0418',40.7357,-74.1724],
-    ['Philly Fireplace Co.',2,'1800 Market St','Philadelphia','PA','19103','(215) 555-0523',39.9526,-75.1652],
-    ['Southern Flame Gallery',0,'456 Peachtree Rd NE','Atlanta','GA','30308','(404) 555-0637',33.7734,-84.3830],
-    ['Coastal Fire & Design',0,'2100 N Ocean Blvd','Fort Lauderdale','FL','33305','(954) 555-0748',26.1501,-80.1096],
-    ['Miami Luxury Fireplaces',0,'8500 NW 25th St','Miami','FL','33122','(305) 555-0856',25.7907,-80.3184],
-    ['Carolina Custom Hearth',1,'700 S Tryon St','Charlotte','NC','28202','(704) 555-0912',35.2209,-80.8455],
-    ['Magnolia Fireplace Works',2,'520 Royal St','Nashville','TN','37203','(615) 555-1034',36.1543,-86.7845],
-    ['Heartland Fire & Stone',0,'1200 N Michigan Ave','Chicago','IL','60611','(312) 555-1145',41.8966,-87.6243],
-    ['Motor City Fireplaces',1,'3300 Woodward Ave','Detroit','MI','48201','(313) 555-1256',42.3461,-83.0565],
-    ['Twin Cities Hearth Co.',2,'901 Hennepin Ave','Minneapolis','MN','55403','(612) 555-1367',44.9753,-93.2760],
-    ['Buckeye Fire Design',1,'150 E Broad St','Columbus','OH','43215','(614) 555-1478',39.9612,-82.9988],
-    ['Gateway Flame Studio',0,'800 Washington Ave','St. Louis','MO','63101','(314) 555-1589',38.6303,-90.1975],
-    ['Desert Modern Fireplaces',0,'7000 E Camelback Rd','Scottsdale','AZ','85251','(480) 555-1690',33.5092,-111.9280],
-    ['Lone Star Fire & Design',0,'4500 McKinney Ave','Dallas','TX','75205','(214) 555-1801',32.8107,-96.7969],
-    ['Austin Hearth Collective',2,'1100 S Congress Ave','Austin','TX','78704','(512) 555-1912',30.2502,-97.7487],
-    ['Houston Fire Gallery',0,'2800 Kirby Dr','Houston','TX','77098','(713) 555-2023',29.7371,-95.4218],
-    ['Santa Fe Flame Artisans',1,'65 E San Francisco St','Santa Fe','NM','87501','(505) 555-2134',35.6870,-105.9378],
-    ['Pacific Fire Studio',0,'8800 Beverly Blvd','Los Angeles','CA','90048','(323) 555-2245',34.0751,-118.3776],
-    ['Bay Area Hearth & Home',0,'580 4th St','San Francisco','CA','94107','(415) 555-2356',37.7795,-122.3969],
-    ['Cascade Fireplace Co.',1,'1400 NW 14th Ave','Portland','OR','97209','(503) 555-2467',45.5310,-122.6847],
-    ['Emerald City Fire Design',0,'200 Westlake Ave N','Seattle','WA','98109','(206) 555-2578',47.6218,-122.3384],
-    ['San Diego Flame Works',2,'750 B St','San Diego','CA','92101','(619) 555-2689',32.7157,-117.1638],
-    ['Vegas Luxury Fireplaces',0,'3500 Las Vegas Blvd S','Las Vegas','NV','89109','(702) 555-2790',36.1263,-115.1703],
-    ['Denver Fire & Design',1,'1600 Champa St','Denver','CO','80202','(303) 555-2891',39.7472,-104.9903],
-    ['Salt Lake Hearth Studio',2,'50 W Broadway','Salt Lake City','UT','84101','(801) 555-2990',40.7608,-111.8910]
-  ];
-  var DEALERS = RAW.map(function(r) {
-    return { n: r[0], t: TYPES[r[1]], addr: r[2], city: r[3], st: r[4], zip: r[5], ph: r[6], lat: r[7], lng: r[8] };
-  });
-
-  // ZIP prefix → approx coords
-  var ZIPS = {
-    '100':[40.75,-73.99],'101':[40.75,-73.99],'060':[41.77,-72.67],'061':[41.77,-72.67],
-    '021':[42.35,-71.08],'022':[42.35,-71.08],'071':[40.74,-74.17],'070':[40.74,-74.17],
-    '191':[39.95,-75.17],'190':[39.95,-75.17],'303':[33.77,-84.38],'300':[33.77,-84.38],
-    '333':[26.15,-80.11],'331':[25.79,-80.32],'282':[35.22,-80.85],'372':[36.15,-86.78],
-    '606':[41.90,-87.62],'482':[42.35,-83.06],'554':[44.98,-93.28],'432':[39.96,-83.00],
-    '631':[38.63,-90.20],'852':[33.51,-111.93],'752':[32.81,-96.80],'787':[30.25,-97.75],
-    '770':[29.74,-95.42],'875':[35.69,-105.94],'900':[34.08,-118.38],'941':[37.78,-122.40],
-    '972':[45.53,-122.68],'981':[47.62,-122.34],'921':[32.72,-117.16],'891':[36.13,-115.17],
-    '802':[39.75,-104.99],'841':[40.76,-111.89],
-    '0':[42,-72],'1':[41,-74],'2':[38,-78],'3':[33,-84],
-    '4':[41,-83],'5':[44,-93],'6':[40,-90],'7':[32,-97],
-    '8':[35,-110],'9':[38,-120]
+  // ─── Real Dealer Data ───
+  var COLORS = {
+    'Dealer': '#c0392b',
+    'Regional Dealer': '#e8a838',
+    'Sales Rep': '#4da6e8',
+    'Online Dealer': '#27ae60',
+    'Temporary Dealer': '#878c99'
   };
+  var DEALERS = [
+    { name:"Bear Creative Group", type:"Regional Dealer", address:"Boca Raton, FL", lat:26.3683, lng:-80.1289, phone:"954-531-7322", email:"brad@bearcreativegroup.com", website:"https://www.bearcreativegroup.com/", appt:true, country:"US" },
+    { name:"Bear Creative Group", type:"Regional Dealer", address:"Chicago, IL", lat:41.8781, lng:-87.6298, phone:"847-404-3147", email:"joe@bearcreativegroup.com", website:"https://www.bearcreativegroup.com/", appt:true, country:"US" },
+    { name:"HearthCabinets Ventless Fireplaces", type:"Dealer", address:"250 W 26th St 2nd Floor, New York, NY 10001", lat:40.7454, lng:-73.9936, phone:"212-242-1485", email:"contact@hearthcabinet.com", website:"https://hearthcabinet.com/", appt:false, country:"US" },
+    { name:"DJ's Custom Remodel & Design", type:"Regional Dealer", address:"Peoria, AZ", lat:33.5806, lng:-112.2374, phone:"480-490-9778", email:"djshomerescue@gmail.com", website:"https://www.facebook.com/DJscustomremodel/", appt:true, country:"US" },
+    { name:"Fab Fires", type:"Regional Dealer", address:"", lat:null, lng:null, phone:"910-200-7688", email:"brett@fabfires.com", website:"", appt:true, country:"US" },
+    { name:"That's Fire!", type:"Regional Dealer", address:"", lat:null, lng:null, phone:"970-305-7994", email:"kevin@thatsfire.net", website:"", appt:true, country:"US" },
+    { name:"House Supply and Co", type:"Dealer", address:"7200 W Post Rd Unit 135, Las Vegas, NV 89113", lat:36.0652, lng:-115.2841, phone:"702-805-7700", email:"candmhomedesigns@gmail.com", website:"https://housesupplyandco.com/", appt:false, country:"US" },
+    { name:"DSA Atlanta", type:"Sales Rep", address:"Atlanta, GA", lat:33.7490, lng:-84.3880, phone:"404-218-9911", email:"steve@dsa-atl.com", website:"https://www.dsa-atl.com/", appt:true, country:"US" },
+    { name:"Electric Fireplaces Depot", type:"Online Dealer", address:"", lat:null, lng:null, phone:"1-888-957-4010", email:"support@electricfireplacesdepot.com", website:"https://electricfireplacesdepot.com/", appt:false, country:"US" },
+    { name:"Milano Smart Living", type:"Dealer", address:"200 Lexington Ave #103, New York, NY 10016", lat:40.7445, lng:-73.9810, phone:"212-729-1938", email:"info@milanosmartliving.com", website:"https://www.milanosmartliving.com/", appt:false, country:"US" },
+    { name:"Frederick Flameworks", type:"Dealer", address:"1728 Shookstown Rd, Frederick, MD 21702", lat:39.4443, lng:-77.4494, phone:"240-663-5263", email:"info@flameonfire.com", website:"https://frederickflameworks.com/", appt:false, country:"US" },
+    { name:"Todays Kitchen and Bath", type:"Temporary Dealer", address:"2476 Nissen Dr, Livermore, CA 94551", lat:37.6819, lng:-121.7680, phone:"925-523-7114", email:"ej@todayskb.com", website:"https://www.todayskb.com/", appt:false, country:"US" },
+    { name:"Natural Stone & Tile", type:"Dealer", address:"5282 E 65th St, Indianapolis, IN 46220", lat:39.8543, lng:-86.0956, phone:"317-863-5926", email:"lauras@naturalstonetilegallery.com", website:"https://naturalstonetile.co/", appt:false, country:"US" },
+    { name:"Belle Flame - Groupe Belleflamme", type:"Dealer", address:"175 rue Jean-Adam #100, Saint-Sauveur, QC J0R 1R6", lat:45.9350, lng:-74.1697, phone:"514-893-1641", email:"ventes@belleflamme.ca", website:"https://www.belleflamme.ca/en/", appt:false, country:"CA" },
+    { name:"Direct Air Systems", type:"Dealer", address:"162 Bullock Drive Unit 13, Markham, ON L3P 1W2", lat:43.8828, lng:-79.2890, phone:"416-268-1115", email:"info@directairsystems.ca", website:"https://directairsystems.ca/", appt:false, country:"CA" },
+    { name:"Direct Air Systems", type:"Dealer", address:"290 Healy Rd, Unit 3, Bolton, ON L7E 1C9", lat:43.8762, lng:-79.7352, phone:"905-951-8080", email:"info@directairsystems.ca", website:"https://directairsystems.ca/", appt:false, country:"CA" },
+    { name:"Erindale Fireplace", type:"Dealer", address:"1230 Corporate Dr, Burlington, ON L7L 5R6", lat:43.3460, lng:-79.7898, phone:"905-847-8907", email:"info@erindalefireplace.ca", website:"https://www.erindalefireplace.ca/", appt:false, country:"CA" },
+    { name:"Fine Line Fireplace", type:"Dealer", address:"45 Durward Pl, Waterloo, ON N2L 4E5", lat:43.4643, lng:-80.5204, phone:"519-725-3055", email:"info@finelinefireplaces.ca", website:"https://www.finelinefireplaces.ca/", appt:false, country:"CA" },
+    { name:"Fireplace Junction / Nestie Inc.", type:"Dealer", address:"132 Cartwright Ave, North York, ON M6A 1V2", lat:43.7054, lng:-79.4505, phone:"(647) 955-8557", email:"info@fireplacejunction.com", website:"https://www.fireplacejunction.com/", appt:false, country:"CA" },
+    { name:"Fireplace Gallery", type:"Dealer", address:"1210 Broadhollow Rd, Farmingdale, NY 11735", lat:40.7343, lng:-73.4254, phone:"631-270-4232", email:"fireplacegalleryny@gmail.com", website:"https://fireplacegalleryny.com/", appt:false, country:"US" },
+    { name:"Forrest Glade Fireplace", type:"Dealer", address:"11400 Tecumseh Rd E, Windsor, ON N8P 1N3", lat:42.2873, lng:-82.9136, phone:"519-735-2229", email:"info@forestgladefireplaces.com", website:"https://forestgladefireplaces.com/", appt:false, country:"CA" },
+    { name:"Foyer Universal", type:"Dealer", address:"8155 Boul. Saint-Laurent, Montr\u00e9al, QC H2P 2M1", lat:45.5399, lng:-73.6527, phone:"514-382-8222", email:"infos@foyeruniversel.ca", website:"https://www.foyeruniversel.ca/en/", appt:false, country:"CA" },
+    { name:"Frost and Flame", type:"Dealer", address:"621 Main St, Gorham, ME 04038", lat:43.6795, lng:-70.4440, phone:"207-856-1000", email:"info@frostandflame.com", website:"https://frostandflame.com/", appt:false, country:"US" },
+    { name:"Hearth and Home - Calgary", type:"Dealer", address:"5740 1a St SW, Calgary, AB T2H 0A6", lat:50.9970, lng:-114.0677, phone:"403-258-3732", email:"info@hearthandhomefireplace.com", website:"https://hearthandhomefireplace.com/", appt:false, country:"CA" },
+    { name:"Heat Savers", type:"Dealer", address:"2519 Government St, Victoria, BC V8T 4P6", lat:48.4380, lng:-123.3534, phone:"250-383-3512", email:"info@heatsavers.ca", website:"https://heatsavers.ca/", appt:false, country:"CA" },
+    { name:"Home Safe Hearth and Chimney Inc.", type:"Dealer", address:"504 S St Francis Ave, Wichita, KS 67202", lat:37.6858, lng:-97.3375, phone:"316-265-9828", email:"", website:"https://homesafeks.com/", appt:false, country:"US" },
+    { name:"Lux Fireplace", type:"Dealer", address:"Stuart Center, 1855 Kirschner Rd #183b, Kelowna, BC V1Y 4N7", lat:49.8713, lng:-119.4771, phone:"778-821-3473", email:"don@luxfireplaces.ca", website:"https://luxfireplaces.ca/", appt:false, country:"CA" },
+    { name:"Mainland Fireplaces", type:"Dealer", address:"20771 Langley Bypass #201, Langley, BC V3A 5E8", lat:49.1042, lng:-122.6604, phone:"604-533-2198", email:"info@mainlandfireplaces.com", website:"https://www.mainlandfireplaces.com/", appt:false, country:"CA" },
+    { name:"Maxwell Fireplace", type:"Dealer", address:"1380 Pemberton Ave, North Vancouver, BC V7P 2R7", lat:49.3178, lng:-123.0669, phone:"604-987-1293", email:"info@maxwellfireplace.ca", website:"https://www.maxwellfireplace.ca/", appt:false, country:"CA" },
+    { name:"MHC Home Comfort", type:"Dealer", address:"44 Dundas St W, Mississauga, ON L5B 1H3", lat:43.5890, lng:-79.6441, phone:"905-615-0880", email:"info@mhchomecomfort.com", website:"https://mhchomecomfort.com/", appt:false, country:"CA" },
+    { name:"Muskoka Stone", type:"Dealer", address:"721 Manitoba St, Bracebridge, ON P1L 1B3", lat:44.9960, lng:-79.3130, phone:"705-645-7528", email:"sales@muskokastoneandhearth.com", website:"https://www.muskokastoneandhearth.com/", appt:false, country:"CA" },
+    { name:"Napert Quebec", type:"Dealer", address:"1078 Bd Vachon N, Sainte-Marie, QC G6E 1M7", lat:46.4452, lng:-71.0266, phone:"418-387-8488", email:"patrick@groupenapert.com", website:"https://groupenapert.com/", appt:false, country:"CA" },
+    { name:"Norea Foyer Montreal", type:"Dealer", address:"950 Rue B\u00e9gin, Saint-Laurent, QC H4R 1V4", lat:45.5026, lng:-73.7010, phone:"514-254-4131", email:"wwhite@noreafoyersgm.com", website:"https://noreafoyersgm.com/en/", appt:false, country:"CA" },
+    { name:"Odyssey Fireplace", type:"Dealer", address:"3-11 Steinway Blvd, Etobicoke, ON M9W 6S9", lat:43.6721, lng:-79.5862, phone:"416-213-1888", email:"info@odysseyfireplaces.com", website:"https://www.odysseyfireplaces.com/", appt:false, country:"CA" },
+    { name:"Ontario Hearth", type:"Dealer", address:"3425 Laird Rd Unit 2, Mississauga, ON L5L 5R8", lat:43.5393, lng:-79.6787, phone:"905-569-2404", email:"info@ontariohearth.com", website:"https://www.ontariohearth.com/", appt:false, country:"CA" },
+    { name:"Real Lighting and Fireplace", type:"Dealer", address:"12824 Anvil Way #101/102, Surrey, BC V3W 8E7", lat:49.1396, lng:-122.8320, phone:"604-593-5393", email:"info@realfireplace.ca", website:"https://realfireplace.ca/", appt:false, country:"CA" },
+    { name:"Texas Flameworks", type:"Dealer", address:"2408 Mare Road, Carrollton, TX 75010", lat:33.0365, lng:-96.8903, phone:"214-551-7714", email:"texasflameworks@gmail.com", website:"https://www.facebook.com/61578313613190/", appt:false, country:"US" },
+    { name:"Toronto Home Comfort", type:"Dealer", address:"70 Don Park Rd Unit 11, Markham, ON L3R 1G4", lat:43.8396, lng:-79.3618, phone:"416-755-8624", email:"info@torontohomecomfort.com", website:"https://torontohomecomfort.com/", appt:false, country:"CA" },
+    { name:"Urban Fireplace", type:"Dealer", address:"328-17 Fawcett Rd, Coquitlam, BC V3K 6V2", lat:49.2395, lng:-122.8558, phone:"604-424-8300", email:"info@urbanfp.ca", website:"https://urbanfp.ca/", appt:false, country:"CA" },
+    { name:"Zoroast The Fireplace Store", type:"Dealer", address:"Unit 2, 535 Millway Avenue, Concord, ON", lat:43.7984, lng:-79.4902, phone:"416-899-9998", email:"info@thefireplacestore.ca", website:"https://www.thefireplacestore.ca/", appt:false, country:"CA" }
+  ];
+
+  // Only dealers with map coordinates
+  var MAPPABLE = DEALERS.filter(function(d) { return d.lat != null && d.lng != null; });
 
   // ─── Helpers ───
-  function dist(a, b, c, d) {
+  function haversine(a, b, c, d) {
     var R = 3959, p = Math.PI / 180;
     var x = (c - a) * p, y = (d - b) * p;
     var h = Math.sin(x/2)*Math.sin(x/2) + Math.cos(a*p)*Math.cos(c*p)*Math.sin(y/2)*Math.sin(y/2);
     return R * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
   }
 
-  function resolve(q) {
-    q = q.trim();
-    if (/^\d{3,5}$/.test(q)) {
-      var z = q.replace(/0+$/, '');
-      while (z.length <= 3) { if (ZIPS[z]) return ZIPS[z]; z = z.slice(0, -1) || '0'; }
-      return ZIPS[q.substring(0, 3)] || ZIPS[q.substring(0, 1)] || null;
-    }
-    var lo = q.toLowerCase();
-    for (var i = 0; i < DEALERS.length; i++) {
-      var d = DEALERS[i];
-      if (d.city.toLowerCase().indexOf(lo) !== -1 || (d.city + ' ' + d.st).toLowerCase().indexOf(lo) !== -1) return [d.lat, d.lng];
-    }
-    return null;
-  }
+  function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
 
   // ─── Map & Markers ───
   var map, layerGroup, userDot;
@@ -296,28 +288,28 @@
     });
   }
 
-  function popup(d) {
-    var addr = d.addr + ', ' + d.city + ', ' + d.st + ' ' + d.zip;
-    return '<b>' + d.n + '</b><br>' +
-      '<span style="color:' + COLORS[d.t] + ';font-size:11px;text-transform:uppercase">' + d.t + '</span><br>' +
-      d.addr + '<br>' + d.city + ', ' + d.st + ' ' + d.zip + '<br>' +
-      '<a href="tel:' + d.ph.replace(/\D/g, '') + '">' + d.ph + '</a> · ' +
-      '<a href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(addr) + '" target="_blank">Directions</a>';
+  function popupHTML(d) {
+    var h = '<b>' + d.name + '</b><br>' +
+      '<span style="color:' + (COLORS[d.type]||'#999') + ';font-size:11px;text-transform:uppercase">' + d.type + '</span><br>';
+    if (d.address) h += d.address + '<br>';
+    h += '<a href="tel:' + d.phone.replace(/\D/g, '') + '">' + d.phone + '</a>';
+    if (d.website) h += ' · <a href="' + d.website + '" target="_blank">Website</a>';
+    if (d.lat != null) h += ' · <a href="https://www.google.com/maps/dir/?api=1&destination=' + d.lat + ',' + d.lng + '" target="_blank">Directions</a>';
+    return h;
   }
 
-  function showOnMap(dealers, center, zoom) {
+  function showOnMap(dealers, center) {
     layerGroup.clearLayers();
-    dealers.forEach(function(d, i) {
-      var m = L.marker([d.lat, d.lng], { icon: makeIcon(d.t) }).bindPopup(popup(d));
-      m.on('click', function() { highlight(i); });
+    var mappable = dealers.filter(function(d) { return d.lat != null && d.lng != null; });
+    mappable.forEach(function(d, i) {
+      var m = L.marker([d.lat, d.lng], { icon: makeIcon(d.type) }).bindPopup(popupHTML(d));
+      m.on('click', function() { highlightCard(i); });
       layerGroup.addLayer(m);
     });
-    if (center && zoom) {
-      map.setView(center, zoom);
-    } else if (dealers.length > 0) {
-      var b = L.latLngBounds(dealers.map(function(d) { return [d.lat, d.lng]; }));
+    if (mappable.length > 0) {
+      var b = L.latLngBounds(mappable.map(function(d) { return [d.lat, d.lng]; }));
       if (center) b.extend(center);
-      map.fitBounds(b, { padding: [30, 30], maxZoom: 12 });
+      map.fitBounds(b, { padding: [40, 40], maxZoom: 12 });
     }
   }
 
@@ -325,34 +317,43 @@
   function buildCards(dealers, hasDist) {
     var el = document.getElementById('cards');
     var ct = document.getElementById('count');
-    // Remove old cards
     while (el.children.length > 1) el.removeChild(el.lastChild);
-    ct.textContent = dealers.length + ' dealer' + (dealers.length !== 1 ? 's' : '') + (hasDist ? ' nearby' : ' nationwide');
+
+    if (dealers.length === 0) {
+      ct.textContent = 'No dealers found';
+      return;
+    }
+    ct.textContent = dealers.length + ' dealer' + (dealers.length !== 1 ? 's' : '') + (hasDist ? ' nearby' : ' found');
 
     dealers.forEach(function(d, i) {
       var c = document.createElement('div');
       c.className = 'd-card';
       c.setAttribute('data-i', i);
-      var distStr = hasDist && d._mi != null ? d._mi.toFixed(1) + ' mi' : d.city + ', ' + d.st;
-      var addr = d.addr + ', ' + d.city + ', ' + d.st + ' ' + d.zip;
-      c.innerHTML =
-        '<h3>' + d.n + '</h3>' +
-        '<span class="d-badge ' + d.t + '">' + d.t + '</span>' +
-        '<div class="d-addr">' + d.addr + '<br>' + d.city + ', ' + d.st + ' ' + d.zip + '</div>' +
-        '<div class="d-meta">' +
-          '<span class="d-dist">' + distStr + '</span>' +
-          '<a href="tel:' + d.ph.replace(/\D/g, '') + '">' + d.ph + '</a>' +
-          '<span class="d-dir"><a href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(addr) + '" target="_blank">Directions →</a></span>' +
-        '</div>';
+
+      var badges = '<span class="d-badge ' + slugify(d.type) + '">' + d.type + '</span>';
+      if (d.appt) badges += ' <span class="d-badge appt">By Appointment</span>';
+      badges += ' <span class="d-badge country">' + (d.country === 'CA' ? 'Canada' : 'USA') + '</span>';
+
+      var distStr = (hasDist && d._mi != null) ? d._mi.toFixed(1) + ' mi' : (d.address || d.country);
+
+      var meta = '<span class="d-dist">' + distStr + '</span>';
+      meta += ' <a href="tel:' + d.phone.replace(/\D/g, '') + '">' + d.phone + '</a>';
+      if (d.website) meta += ' <a href="' + d.website + '" target="_blank">Website</a>';
+      if (d.lat != null) meta += ' <span class="d-dir"><a href="https://www.google.com/maps/dir/?api=1&destination=' + d.lat + ',' + d.lng + '" target="_blank">Directions \u2192</a></span>';
+
+      c.innerHTML = '<h3>' + d.name + '</h3>' + badges +
+        (d.address ? '<div class="d-addr">' + d.address + '</div>' : '') +
+        '<div class="d-meta">' + meta + '</div>';
+
       c.addEventListener('click', function(e) {
-        if (e.target.tagName === 'A') return; // don't hijack links
-        highlight(i);
+        if (e.target.tagName === 'A') return;
+        if (d.lat != null) highlightCard(i);
       });
       el.appendChild(c);
     });
   }
 
-  function highlight(i) {
+  function highlightCard(i) {
     document.querySelectorAll('.d-card').forEach(function(c, j) { c.classList.toggle('active', j === i); });
     var card = document.querySelector('.d-card[data-i="' + i + '"]');
     if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -368,16 +369,15 @@
     var q = document.getElementById('q').value.trim();
 
     if (coords) {
-      // Geolocation or explicit coords
-      var nearby = DEALERS.map(function(d) {
+      var nearby = DEALERS.filter(function(d) { return d.lat != null; }).map(function(d) {
         var copy = {}; for (var k in d) copy[k] = d[k];
-        copy._mi = dist(coords[0], coords[1], d.lat, d.lng);
+        copy._mi = haversine(coords[0], coords[1], d.lat, d.lng);
         return copy;
       }).sort(function(a, b) { return a._mi - b._mi; }).slice(0, 8);
 
       if (userDot) map.removeLayer(userDot);
       userDot = L.circleMarker(coords, { radius: 7, fillColor: '#c0392b', fillOpacity: 1, color: '#fff', weight: 2 })
-        .addTo(map).bindPopup('You');
+        .addTo(map).bindPopup('Your location');
 
       buildCards(nearby, true);
       showOnMap(nearby, coords);
@@ -386,18 +386,16 @@
 
     if (!q) return;
 
-    // Try location (ZIP / city)
-    var loc = resolve(q);
-    if (loc) {
-      search(loc);
-      return;
-    }
-
-    // Try name match
+    // Search by name, address, city, type, country
     var lo = q.toLowerCase();
     var hits = DEALERS.filter(function(d) {
-      return d.n.toLowerCase().indexOf(lo) !== -1 || d.city.toLowerCase().indexOf(lo) !== -1 || d.st.toLowerCase() === lo;
+      return d.name.toLowerCase().indexOf(lo) !== -1 ||
+        d.address.toLowerCase().indexOf(lo) !== -1 ||
+        d.type.toLowerCase().indexOf(lo) !== -1 ||
+        (d.country === 'CA' && (lo === 'canada' || lo === 'ca')) ||
+        (d.country === 'US' && (lo === 'usa' || lo === 'us' || lo === 'united states'));
     });
+
     if (hits.length > 0) {
       if (userDot) { map.removeLayer(userDot); userDot = null; }
       buildCards(hits, false);
@@ -406,15 +404,14 @@
     }
 
     // No results
-    document.getElementById('count').textContent = 'No results found';
-    while (document.getElementById('cards').children.length > 1) document.getElementById('cards').removeChild(document.getElementById('cards').lastChild);
+    buildCards([], false);
     layerGroup.clearLayers();
   }
 
   function geolocate() {
     if (!navigator.geolocation) return;
     var btn = document.getElementById('geo');
-    btn.textContent = 'Locating…'; btn.disabled = true;
+    btn.textContent = 'Locating\u2026'; btn.disabled = true;
     navigator.geolocation.getCurrentPosition(
       function(p) {
         btn.textContent = 'Use My Location'; btn.disabled = false;
@@ -428,19 +425,18 @@
 
   // ─── Init ───
   document.addEventListener('DOMContentLoaded', function() {
-    // Create map
-    map = L.map('map', { scrollWheelZoom: true }).setView([39.5, -98.35], 4);
+    // Map starts zoomed in (not showing all dealers)
+    map = L.map('map', { scrollWheelZoom: true }).setView([39.5, -98.35], 6);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com/">CARTO</a>',
+      attribution: '\u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a> \u00a9 <a href="https://carto.com/">CARTO</a>',
       subdomains: 'abcd', maxZoom: 19
     }).addTo(map);
     layerGroup = L.layerGroup().addTo(map);
 
-    // Show all dealers on load
-    showOnMap(DEALERS, null, null);
-    buildCards(DEALERS, false);
+    // No pins on initial load — search to reveal dealers
+    var ct = document.getElementById('count');
+    ct.textContent = 'Search above to find dealers near you';
 
-    // Events
     document.getElementById('go').addEventListener('click', function() { search(); });
     document.getElementById('q').addEventListener('keydown', function(e) { if (e.key === 'Enter') search(); });
     document.getElementById('geo').addEventListener('click', geolocate);
