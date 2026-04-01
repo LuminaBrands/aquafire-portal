@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dealer Management | Aquafire</title>
+  <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="hub.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #121417; --surface: #1b1e24; --surface-alt: #22262e;
+      --border: #2c3038; --border-warm: #3a3229;
+      --text: #e4e5e9; --text-muted: #878c99;
+      --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
+      --amber: #e8a838; --blue: #4da6e8; --green: #27ae60;
+      --radius: 14px; --radius-sm: 8px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* Toolbar */
+    .toolbar {
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+      padding: 20px 0; border-bottom: 1px solid var(--border);
+    }
+    .toolbar-search {
+      flex: 1; min-width: 200px; padding: 10px 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text);
+      font-family: inherit; font-size: 0.9rem; outline: none;
+    }
+    .toolbar-search::placeholder { color: var(--text-muted); }
+    .toolbar-search:focus { border-color: var(--red); }
+    .toolbar select {
+      padding: 10px 14px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text);
+      font-family: inherit; font-size: 0.85rem; outline: none; cursor: pointer;
+    }
+    .toolbar select:focus { border-color: var(--red); }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px;
+      font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600;
+      border: none; border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap;
+    }
+    .btn-primary { background: var(--red); color: #fff; box-shadow: 0 2px 12px var(--red-glow); }
+    .btn-primary:hover { background: var(--red-dark); box-shadow: 0 4px 20px rgba(192,57,43,0.35); }
+    .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--red); }
+    .btn-success { background: var(--green); color: #fff; }
+    .btn-success:hover { background: #219a52; }
+    .btn-sm { padding: 6px 12px; font-size: 0.78rem; }
+
+    /* Table */
+    .table-wrap {
+      overflow-x: auto; margin-top: 20px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    thead th {
+      text-align: left; padding: 14px 16px; font-weight: 600; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted);
+      border-bottom: 1px solid var(--border); cursor: pointer; user-select: none;
+      white-space: nowrap;
+    }
+    thead th:hover { color: var(--text); }
+    thead th .sort-arrow { margin-left: 4px; font-size: 0.7rem; }
+    tbody td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--surface-alt); }
+    .no-coords { color: var(--text-muted); font-style: italic; font-size: 0.8rem; }
+
+    /* Badges */
+    .d-badge {
+      display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; padding: 2px 7px; border-radius: 4px;
+    }
+    .d-badge.dealer { background: rgba(192,57,43,0.15); color: var(--red); }
+    .d-badge.regional-dealer { background: rgba(232,168,56,0.15); color: var(--amber); }
+    .d-badge.sales-rep { background: rgba(77,166,232,0.15); color: var(--blue); }
+    .d-badge.online-dealer { background: rgba(39,174,96,0.15); color: var(--green); }
+    .d-badge.temporary-dealer { background: rgba(135,140,153,0.15); color: var(--text-muted); }
+
+    /* Action buttons in table */
+    .actions { display: flex; gap: 6px; }
+    .act-btn {
+      padding: 5px 10px; font-size: 0.78rem; font-weight: 500; font-family: inherit;
+      border: 1px solid var(--border); border-radius: 4px;
+      background: transparent; color: var(--text-muted); cursor: pointer;
+    }
+    .act-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .act-btn.del:hover { border-color: var(--red); color: var(--red); }
+
+    /* Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); width: 100%; max-width: 560px;
+      max-height: 90vh; overflow-y: auto; padding: 32px;
+    }
+    .modal h2 { font-size: 1.2rem; margin-bottom: 24px; }
+    .form-row { margin-bottom: 16px; }
+    .form-row label {
+      display: block; font-size: 0.8rem; font-weight: 600;
+      color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .form-row input, .form-row select {
+      width: 100%; padding: 10px 14px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text); font-family: inherit; font-size: 0.9rem; outline: none;
+    }
+    .form-row input:focus, .form-row select:focus { border-color: var(--red); }
+    .form-row input[type="checkbox"] { width: auto; margin-right: 8px; accent-color: var(--red); }
+    .form-row .checkbox-label {
+      display: inline-flex; align-items: center; font-size: 0.9rem;
+      color: var(--text); cursor: pointer;
+    }
+    .form-row-inline { display: flex; gap: 12px; }
+    .form-row-inline .form-row { flex: 1; margin-bottom: 0; }
+    .geocode-row { display: flex; gap: 8px; align-items: flex-end; }
+    .geocode-row .form-row { flex: 1; margin-bottom: 0; }
+    .geocode-msg { font-size: 0.8rem; margin-top: 6px; }
+    .geocode-msg.ok { color: var(--green); }
+    .geocode-msg.err { color: var(--red); }
+    .form-error { color: var(--red); font-size: 0.8rem; margin-top: 4px; }
+    .modal-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
+
+    /* Status bar */
+    .status-bar {
+      position: sticky; bottom: 0; z-index: 50;
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 24px; margin-top: 32px;
+      background: rgba(27,30,36,0.95); backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .status-text { font-size: 0.85rem; color: var(--text-muted); flex: 1; }
+    .status-text .changed { color: var(--amber); font-weight: 600; }
+    .draft-banner {
+      display: none; padding: 14px 20px; margin-bottom: 20px;
+      background: rgba(232,168,56,0.1); border: 1px solid rgba(232,168,56,0.3);
+      border-radius: var(--radius-sm); font-size: 0.88rem; color: var(--amber);
+      align-items: center; gap: 12px;
+    }
+    .draft-banner.show { display: flex; }
+    .draft-banner .btn { margin-left: auto; }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+      .toolbar { flex-direction: column; }
+      .toolbar-search { min-width: 100%; }
+      table { font-size: 0.8rem; }
+      thead th, tbody td { padding: 10px 12px; }
+      .modal { padding: 24px 20px; }
+      .form-row-inline { flex-direction: column; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="getting-started.html">Getting Started</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="enclosure-guide.html">Enclosure Guide</a></li>
+        <li><a href="water-care.html">Water Care</a></li>
+        <li><a href="maintenance.html">Maintenance</a></li>
+        <li><a href="dealer-locator.html">Find a Dealer</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1>Dealer Management</h1>
+      <p class="page-sub">Add, edit, and manage Aquafire authorized dealers. Download the updated file to deploy changes.</p>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container page-body">
+
+    <!-- Draft restore banner -->
+    <div class="draft-banner" id="draftBanner">
+      <span>You have unsaved changes from a previous session.</span>
+      <button class="btn btn-sm btn-secondary" onclick="discardDraft()">Discard</button>
+      <button class="btn btn-sm btn-primary" onclick="restoreDraft()">Restore Draft</button>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <input type="text" class="toolbar-search" id="searchInput" placeholder="Search by name, address, or phone...">
+      <select id="filterType">
+        <option value="">All Types</option>
+        <option value="Dealer">Dealer</option>
+        <option value="Regional Dealer">Regional Dealer</option>
+        <option value="Sales Rep">Sales Rep</option>
+        <option value="Online Dealer">Online Dealer</option>
+        <option value="Temporary Dealer">Temporary Dealer</option>
+      </select>
+      <select id="filterCountry">
+        <option value="">All Countries</option>
+        <option value="US">USA</option>
+        <option value="CA">Canada</option>
+      </select>
+      <button class="btn btn-primary" onclick="openModal(null)">+ Add Dealer</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortBy('name')">Name <span class="sort-arrow" id="sort-name"></span></th>
+            <th onclick="sortBy('type')">Type <span class="sort-arrow" id="sort-type"></span></th>
+            <th onclick="sortBy('address')">Address <span class="sort-arrow" id="sort-address"></span></th>
+            <th onclick="sortBy('country')">Country <span class="sort-arrow" id="sort-country"></span></th>
+            <th onclick="sortBy('phone')">Phone <span class="sort-arrow" id="sort-phone"></span></th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="dealerBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span class="status-text" id="statusText">No changes</span>
+      <button class="btn btn-sm btn-secondary" onclick="resetAll()">Reset</button>
+      <button class="btn btn-sm btn-success" onclick="downloadDealersJS()">Download dealers.js</button>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <h2 id="modalTitle">Add Dealer</h2>
+      <input type="hidden" id="editIndex" value="">
+
+      <div class="form-row">
+        <label for="fName">Dealer Name *</label>
+        <input type="text" id="fName" placeholder="e.g. Acme Fireplaces">
+      </div>
+
+      <div class="form-row-inline">
+        <div class="form-row">
+          <label for="fType">Type *</label>
+          <select id="fType">
+            <option value="Dealer">Dealer</option>
+            <option value="Regional Dealer">Regional Dealer</option>
+            <option value="Sales Rep">Sales Rep</option>
+            <option value="Online Dealer">Online Dealer</option>
+            <option value="Temporary Dealer">Temporary Dealer</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="fCountry">Country *</label>
+          <select id="fCountry">
+            <option value="US">USA</option>
+            <option value="CA">Canada</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="geocode-row">
+        <div class="form-row">
+          <label for="fAddress">Address</label>
+          <input type="text" id="fAddress" placeholder="Full street address or city, state">
+        </div>
+        <button class="btn btn-sm btn-secondary" onclick="geocodeAddress()" id="geocodeBtn" style="margin-bottom:0;">Geocode</button>
+      </div>
+      <div class="geocode-msg" id="geocodeMsg"></div>
+
+      <div class="form-row-inline" style="margin-top:16px;">
+        <div class="form-row">
+          <label for="fLat">Latitude</label>
+          <input type="number" id="fLat" step="any" placeholder="e.g. 40.7454">
+        </div>
+        <div class="form-row">
+          <label for="fLng">Longitude</label>
+          <input type="number" id="fLng" step="any" placeholder="e.g. -73.9936">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label for="fPhone">Phone *</label>
+        <input type="text" id="fPhone" placeholder="e.g. 212-555-1234">
+      </div>
+
+      <div class="form-row">
+        <label for="fEmail">Email</label>
+        <input type="email" id="fEmail" placeholder="e.g. info@dealer.com">
+      </div>
+
+      <div class="form-row">
+        <label for="fWebsite">Website</label>
+        <input type="url" id="fWebsite" placeholder="e.g. https://dealer.com">
+      </div>
+
+      <div class="form-row">
+        <label class="checkbox-label">
+          <input type="checkbox" id="fAppt"> By Appointment Only
+        </label>
+      </div>
+
+      <div id="formErrors"></div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveDealer()">Save Dealer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="embed.js"></script>
+  <script src="dealers.js"></script>
+  <script>
+  // ─── State ───
+  var workingDealers = JSON.parse(JSON.stringify(DEALERS));
+  var sortField = 'name';
+  var sortAsc = true;
+  var STORAGE_KEY = 'aquafire-dealer-draft';
+
+  function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
+
+  // ─── Render Table ───
+  function renderTable() {
+    var q = document.getElementById('searchInput').value.trim().toLowerCase();
+    var typeFilter = document.getElementById('filterType').value;
+    var countryFilter = document.getElementById('filterCountry').value;
+
+    var filtered = workingDealers.filter(function(d) {
+      if (typeFilter && d.type !== typeFilter) return false;
+      if (countryFilter && d.country !== countryFilter) return false;
+      if (q) {
+        return d.name.toLowerCase().indexOf(q) !== -1 ||
+          d.address.toLowerCase().indexOf(q) !== -1 ||
+          d.phone.toLowerCase().indexOf(q) !== -1 ||
+          (d.email && d.email.toLowerCase().indexOf(q) !== -1);
+      }
+      return true;
+    });
+
+    // Sort
+    filtered.sort(function(a, b) {
+      var va = (a[sortField] || '').toString().toLowerCase();
+      var vb = (b[sortField] || '').toString().toLowerCase();
+      if (va < vb) return sortAsc ? -1 : 1;
+      if (va > vb) return sortAsc ? 1 : -1;
+      return 0;
+    });
+
+    // Update sort arrows
+    document.querySelectorAll('.sort-arrow').forEach(function(el) { el.textContent = ''; });
+    var arrow = document.getElementById('sort-' + sortField);
+    if (arrow) arrow.textContent = sortAsc ? '\u25B2' : '\u25BC';
+
+    var tbody = document.getElementById('dealerBody');
+    tbody.innerHTML = '';
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:32px;">No dealers match your filters.</td></tr>';
+      return;
+    }
+
+    filtered.forEach(function(d) {
+      var realIdx = workingDealers.indexOf(d);
+      var tr = document.createElement('tr');
+
+      var coordInfo = '';
+      if (d.lat == null || d.lng == null) {
+        coordInfo = ' <span class="no-coords" title="No map coordinates">*</span>';
+      }
+
+      tr.innerHTML =
+        '<td><strong>' + esc(d.name) + '</strong>' + coordInfo +
+          (d.appt ? ' <span style="color:var(--text-muted);font-size:0.75rem;">(appt)</span>' : '') +
+        '</td>' +
+        '<td><span class="d-badge ' + slugify(d.type) + '">' + esc(d.type) + '</span></td>' +
+        '<td>' + (d.address ? esc(d.address) : '<span class="no-coords">--</span>') + '</td>' +
+        '<td>' + (d.country === 'CA' ? 'Canada' : 'USA') + '</td>' +
+        '<td>' + esc(d.phone) + '</td>' +
+        '<td><div class="actions">' +
+          '<button class="act-btn" onclick="openModal(' + realIdx + ')">Edit</button>' +
+          '<button class="act-btn del" onclick="deleteDealer(' + realIdx + ')">Delete</button>' +
+        '</div></td>';
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  function esc(s) {
+    if (!s) return '';
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  // ─── Sort ───
+  function sortBy(field) {
+    if (sortField === field) {
+      sortAsc = !sortAsc;
+    } else {
+      sortField = field;
+      sortAsc = true;
+    }
+    renderTable();
+  }
+
+  // ─── Modal ───
+  function openModal(idx) {
+    var modal = document.getElementById('modal');
+    var title = document.getElementById('modalTitle');
+    document.getElementById('formErrors').innerHTML = '';
+    document.getElementById('geocodeMsg').textContent = '';
+
+    if (idx != null) {
+      title.textContent = 'Edit Dealer';
+      document.getElementById('editIndex').value = idx;
+      var d = workingDealers[idx];
+      document.getElementById('fName').value = d.name;
+      document.getElementById('fType').value = d.type;
+      document.getElementById('fCountry').value = d.country;
+      document.getElementById('fAddress').value = d.address;
+      document.getElementById('fLat').value = d.lat != null ? d.lat : '';
+      document.getElementById('fLng').value = d.lng != null ? d.lng : '';
+      document.getElementById('fPhone').value = d.phone;
+      document.getElementById('fEmail').value = d.email || '';
+      document.getElementById('fWebsite').value = d.website || '';
+      document.getElementById('fAppt').checked = d.appt;
+    } else {
+      title.textContent = 'Add Dealer';
+      document.getElementById('editIndex').value = '';
+      document.getElementById('fName').value = '';
+      document.getElementById('fType').value = 'Dealer';
+      document.getElementById('fCountry').value = 'US';
+      document.getElementById('fAddress').value = '';
+      document.getElementById('fLat').value = '';
+      document.getElementById('fLng').value = '';
+      document.getElementById('fPhone').value = '';
+      document.getElementById('fEmail').value = '';
+      document.getElementById('fWebsite').value = '';
+      document.getElementById('fAppt').checked = false;
+    }
+
+    modal.classList.add('open');
+    document.getElementById('fName').focus();
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+
+  // Close modal on overlay click
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Close modal on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ─── Save ───
+  function saveDealer() {
+    var errors = [];
+    var name = document.getElementById('fName').value.trim();
+    var type = document.getElementById('fType').value;
+    var country = document.getElementById('fCountry').value;
+    var address = document.getElementById('fAddress').value.trim();
+    var latVal = document.getElementById('fLat').value.trim();
+    var lngVal = document.getElementById('fLng').value.trim();
+    var phone = document.getElementById('fPhone').value.trim();
+    var email = document.getElementById('fEmail').value.trim();
+    var website = document.getElementById('fWebsite').value.trim();
+    var appt = document.getElementById('fAppt').checked;
+
+    if (!name) errors.push('Name is required.');
+    if (!phone) errors.push('Phone is required.');
+
+    var lat = latVal ? parseFloat(latVal) : null;
+    var lng = lngVal ? parseFloat(lngVal) : null;
+
+    if (latVal && (isNaN(lat) || lat < 24 || lat > 72)) errors.push('Latitude must be between 24 and 72.');
+    if (lngVal && (isNaN(lng) || lng < -170 || lng > -50)) errors.push('Longitude must be between -170 and -50.');
+
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('Invalid email format.');
+    if (website && !/^https?:\/\/.+/.test(website)) errors.push('Website must start with http:// or https://');
+
+    if (errors.length > 0) {
+      document.getElementById('formErrors').innerHTML = errors.map(function(e) {
+        return '<div class="form-error">' + esc(e) + '</div>';
+      }).join('');
+      return;
+    }
+
+    var dealer = {
+      name: name,
+      type: type,
+      address: address,
+      lat: lat,
+      lng: lng,
+      phone: phone,
+      email: email,
+      website: website,
+      appt: appt,
+      country: country
+    };
+
+    var idx = document.getElementById('editIndex').value;
+    if (idx !== '') {
+      workingDealers[parseInt(idx)] = dealer;
+    } else {
+      workingDealers.push(dealer);
+    }
+
+    closeModal();
+    saveToLocalStorage();
+    renderTable();
+    updateStatus();
+  }
+
+  // ─── Delete ───
+  function deleteDealer(idx) {
+    var d = workingDealers[idx];
+    if (!confirm('Delete "' + d.name + '"?\nThis cannot be undone (until you reset).')) return;
+    workingDealers.splice(idx, 1);
+    saveToLocalStorage();
+    renderTable();
+    updateStatus();
+  }
+
+  // ─── Reset ───
+  function resetAll() {
+    if (!confirm('Discard all changes and reload original dealer data?')) return;
+    workingDealers = JSON.parse(JSON.stringify(DEALERS));
+    localStorage.removeItem(STORAGE_KEY);
+    renderTable();
+    updateStatus();
+  }
+
+  // ─── Geocode ───
+  function geocodeAddress() {
+    var address = document.getElementById('fAddress').value.trim();
+    if (!address) {
+      showGeoMsg('Enter an address first.', false);
+      return;
+    }
+
+    var btn = document.getElementById('geocodeBtn');
+    btn.textContent = 'Looking up...';
+    btn.disabled = true;
+
+    var country = document.getElementById('fCountry').value.toLowerCase();
+
+    fetch('https://nominatim.openstreetmap.org/search?format=json&countrycodes=' + country + '&limit=1&q=' + encodeURIComponent(address))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        btn.textContent = 'Geocode';
+        btn.disabled = false;
+        if (data.length > 0) {
+          document.getElementById('fLat').value = parseFloat(data[0].lat).toFixed(4);
+          document.getElementById('fLng').value = parseFloat(data[0].lon).toFixed(4);
+          showGeoMsg('Coordinates found: ' + data[0].display_name.split(',').slice(0, 3).join(','), true);
+        } else {
+          showGeoMsg('No results found for this address.', false);
+        }
+      })
+      .catch(function() {
+        btn.textContent = 'Geocode';
+        btn.disabled = false;
+        showGeoMsg('Geocoding failed. Check your connection.', false);
+      });
+  }
+
+  function showGeoMsg(msg, ok) {
+    var el = document.getElementById('geocodeMsg');
+    el.textContent = msg;
+    el.className = 'geocode-msg ' + (ok ? 'ok' : 'err');
+  }
+
+  // ─── Status ───
+  function updateStatus() {
+    var orig = JSON.stringify(DEALERS);
+    var curr = JSON.stringify(workingDealers);
+    var el = document.getElementById('statusText');
+
+    if (orig === curr) {
+      el.innerHTML = 'No changes';
+    } else {
+      var diff = workingDealers.length - DEALERS.length;
+      var parts = [];
+      parts.push('<span class="changed">' + workingDealers.length + ' dealers</span>');
+      if (diff > 0) parts.push(diff + ' added');
+      else if (diff < 0) parts.push(Math.abs(diff) + ' removed');
+      parts.push('modified');
+      el.innerHTML = parts.join(' &middot; ') + ' &middot; <span class="changed">unsaved</span>';
+    }
+  }
+
+  // ─── localStorage ───
+  function saveToLocalStorage() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        timestamp: Date.now(),
+        dealers: workingDealers
+      }));
+    } catch(e) {}
+  }
+
+  function checkForDraft() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var draft = JSON.parse(raw);
+      if (!draft.dealers || JSON.stringify(draft.dealers) === JSON.stringify(DEALERS)) {
+        localStorage.removeItem(STORAGE_KEY);
+        return;
+      }
+      document.getElementById('draftBanner').classList.add('show');
+    } catch(e) {}
+  }
+
+  function restoreDraft() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var draft = JSON.parse(raw);
+        workingDealers = draft.dealers;
+        renderTable();
+        updateStatus();
+      }
+    } catch(e) {}
+    document.getElementById('draftBanner').classList.remove('show');
+  }
+
+  function discardDraft() {
+    localStorage.removeItem(STORAGE_KEY);
+    document.getElementById('draftBanner').classList.remove('show');
+  }
+
+  // ─── Download ───
+  function downloadDealersJS() {
+    var lines = [];
+    lines.push('// \u2500\u2500\u2500 Dealer Type Colors \u2500\u2500\u2500');
+    lines.push('var COLORS = {');
+    var colorKeys = Object.keys(COLORS);
+    colorKeys.forEach(function(key, i) {
+      lines.push("  '" + key + "': '" + COLORS[key] + "'" + (i < colorKeys.length - 1 ? ',' : ''));
+    });
+    lines.push('};');
+    lines.push('');
+    lines.push('// \u2500\u2500\u2500 Dealer Database \u2500\u2500\u2500');
+    lines.push('var DEALERS = [');
+
+    workingDealers.forEach(function(d, i) {
+      var parts = [];
+      parts.push('name:' + jsStr(d.name));
+      parts.push('type:' + jsStr(d.type));
+      parts.push('address:' + jsStr(d.address));
+      parts.push('lat:' + (d.lat != null ? d.lat : 'null'));
+      parts.push('lng:' + (d.lng != null ? d.lng : 'null'));
+      parts.push('phone:' + jsStr(d.phone));
+      parts.push('email:' + jsStr(d.email || ''));
+      parts.push('website:' + jsStr(d.website || ''));
+      parts.push('appt:' + d.appt);
+      parts.push('country:' + jsStr(d.country));
+
+      var comma = i < workingDealers.length - 1 ? ',' : '';
+      lines.push('  { ' + parts.join(', ') + ' }' + comma);
+    });
+
+    lines.push('];');
+    lines.push('');
+
+    var content = lines.join('\n');
+    var blob = new Blob([content], { type: 'application/javascript' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'dealers.js';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function jsStr(s) {
+    if (s == null) s = '';
+    return '"' + s.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+  }
+
+  // ─── Init ───
+  document.addEventListener('DOMContentLoaded', function() {
+    checkForDraft();
+    renderTable();
+    updateStatus();
+
+    // Filter listeners
+    document.getElementById('searchInput').addEventListener('input', renderTable);
+    document.getElementById('filterType').addEventListener('change', renderTable);
+    document.getElementById('filterCountry').addEventListener('change', renderTable);
+
+    // Nav toggle
+    var tog = document.querySelector('.nav-toggle');
+    var links = document.querySelector('.nav-links');
+    if (tog) tog.addEventListener('click', function() {
+      var open = links.classList.toggle('open');
+      tog.setAttribute('aria-expanded', open);
+    });
+  });
+  </script>
+</body>
+</html>

@@ -224,59 +224,9 @@
   </footer>
 
   <script src="embed.js"></script>
+  <script src="dealers.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script>
-  // ─── Real Dealer Data ───
-  var COLORS = {
-    'Dealer': '#c0392b',
-    'Regional Dealer': '#e8a838',
-    'Sales Rep': '#4da6e8',
-    'Online Dealer': '#27ae60',
-    'Temporary Dealer': '#878c99'
-  };
-  var DEALERS = [
-    { name:"Bear Creative Group", type:"Regional Dealer", address:"Boca Raton, FL", lat:26.3683, lng:-80.1289, phone:"954-531-7322", email:"brad@bearcreativegroup.com", website:"https://www.bearcreativegroup.com/", appt:true, country:"US" },
-    { name:"Bear Creative Group", type:"Regional Dealer", address:"Chicago, IL", lat:41.8781, lng:-87.6298, phone:"847-404-3147", email:"joe@bearcreativegroup.com", website:"https://www.bearcreativegroup.com/", appt:true, country:"US" },
-    { name:"HearthCabinets Ventless Fireplaces", type:"Dealer", address:"250 W 26th St 2nd Floor, New York, NY 10001", lat:40.7454, lng:-73.9936, phone:"212-242-1485", email:"contact@hearthcabinet.com", website:"https://hearthcabinet.com/", appt:false, country:"US" },
-    { name:"DJ's Custom Remodel & Design", type:"Regional Dealer", address:"Peoria, AZ", lat:33.5806, lng:-112.2374, phone:"480-490-9778", email:"djshomerescue@gmail.com", website:"https://www.facebook.com/DJscustomremodel/", appt:true, country:"US" },
-    { name:"Fab Fires", type:"Regional Dealer", address:"", lat:null, lng:null, phone:"910-200-7688", email:"brett@fabfires.com", website:"", appt:true, country:"US" },
-    { name:"That's Fire!", type:"Regional Dealer", address:"", lat:null, lng:null, phone:"970-305-7994", email:"kevin@thatsfire.net", website:"", appt:true, country:"US" },
-    { name:"House Supply and Co", type:"Dealer", address:"7200 W Post Rd Unit 135, Las Vegas, NV 89113", lat:36.0652, lng:-115.2841, phone:"702-805-7700", email:"candmhomedesigns@gmail.com", website:"https://housesupplyandco.com/", appt:false, country:"US" },
-    { name:"DSA Atlanta", type:"Sales Rep", address:"Atlanta, GA", lat:33.7490, lng:-84.3880, phone:"404-218-9911", email:"steve@dsa-atl.com", website:"https://www.dsa-atl.com/", appt:true, country:"US" },
-    { name:"Electric Fireplaces Depot", type:"Online Dealer", address:"", lat:null, lng:null, phone:"1-888-957-4010", email:"support@electricfireplacesdepot.com", website:"https://electricfireplacesdepot.com/", appt:false, country:"US" },
-    { name:"Milano Smart Living", type:"Dealer", address:"200 Lexington Ave #103, New York, NY 10016", lat:40.7445, lng:-73.9810, phone:"212-729-1938", email:"info@milanosmartliving.com", website:"https://www.milanosmartliving.com/", appt:false, country:"US" },
-    { name:"Frederick Flameworks", type:"Dealer", address:"1728 Shookstown Rd, Frederick, MD 21702", lat:39.4443, lng:-77.4494, phone:"240-663-5263", email:"info@flameonfire.com", website:"https://frederickflameworks.com/", appt:false, country:"US" },
-    { name:"Todays Kitchen and Bath", type:"Temporary Dealer", address:"2476 Nissen Dr, Livermore, CA 94551", lat:37.6819, lng:-121.7680, phone:"925-523-7114", email:"ej@todayskb.com", website:"https://www.todayskb.com/", appt:false, country:"US" },
-    { name:"Natural Stone & Tile", type:"Dealer", address:"5282 E 65th St, Indianapolis, IN 46220", lat:39.8543, lng:-86.0956, phone:"317-863-5926", email:"lauras@naturalstonetilegallery.com", website:"https://naturalstonetile.co/", appt:false, country:"US" },
-    { name:"Belle Flame - Groupe Belleflamme", type:"Dealer", address:"175 rue Jean-Adam #100, Saint-Sauveur, QC J0R 1R6", lat:45.9350, lng:-74.1697, phone:"514-893-1641", email:"ventes@belleflamme.ca", website:"https://www.belleflamme.ca/en/", appt:false, country:"CA" },
-    { name:"Direct Air Systems", type:"Dealer", address:"162 Bullock Drive Unit 13, Markham, ON L3P 1W2", lat:43.8828, lng:-79.2890, phone:"416-268-1115", email:"info@directairsystems.ca", website:"https://directairsystems.ca/", appt:false, country:"CA" },
-    { name:"Direct Air Systems", type:"Dealer", address:"290 Healy Rd, Unit 3, Bolton, ON L7E 1C9", lat:43.8762, lng:-79.7352, phone:"905-951-8080", email:"info@directairsystems.ca", website:"https://directairsystems.ca/", appt:false, country:"CA" },
-    { name:"Erindale Fireplace", type:"Dealer", address:"1230 Corporate Dr, Burlington, ON L7L 5R6", lat:43.3460, lng:-79.7898, phone:"905-847-8907", email:"info@erindalefireplace.ca", website:"https://www.erindalefireplace.ca/", appt:false, country:"CA" },
-    { name:"Fine Line Fireplace", type:"Dealer", address:"45 Durward Pl, Waterloo, ON N2L 4E5", lat:43.4643, lng:-80.5204, phone:"519-725-3055", email:"info@finelinefireplaces.ca", website:"https://www.finelinefireplaces.ca/", appt:false, country:"CA" },
-    { name:"Fireplace Junction / Nestie Inc.", type:"Dealer", address:"132 Cartwright Ave, North York, ON M6A 1V2", lat:43.7054, lng:-79.4505, phone:"(647) 955-8557", email:"info@fireplacejunction.com", website:"https://www.fireplacejunction.com/", appt:false, country:"CA" },
-    { name:"Fireplace Gallery", type:"Dealer", address:"1210 Broadhollow Rd, Farmingdale, NY 11735", lat:40.7343, lng:-73.4254, phone:"631-270-4232", email:"fireplacegalleryny@gmail.com", website:"https://fireplacegalleryny.com/", appt:false, country:"US" },
-    { name:"Forrest Glade Fireplace", type:"Dealer", address:"11400 Tecumseh Rd E, Windsor, ON N8P 1N3", lat:42.2873, lng:-82.9136, phone:"519-735-2229", email:"info@forestgladefireplaces.com", website:"https://forestgladefireplaces.com/", appt:false, country:"CA" },
-    { name:"Foyer Universal", type:"Dealer", address:"8155 Boul. Saint-Laurent, Montr\u00e9al, QC H2P 2M1", lat:45.5399, lng:-73.6527, phone:"514-382-8222", email:"infos@foyeruniversel.ca", website:"https://www.foyeruniversel.ca/en/", appt:false, country:"CA" },
-    { name:"Frost and Flame", type:"Dealer", address:"621 Main St, Gorham, ME 04038", lat:43.6795, lng:-70.4440, phone:"207-856-1000", email:"info@frostandflame.com", website:"https://frostandflame.com/", appt:false, country:"US" },
-    { name:"Hearth and Home - Calgary", type:"Dealer", address:"5740 1a St SW, Calgary, AB T2H 0A6", lat:50.9970, lng:-114.0677, phone:"403-258-3732", email:"info@hearthandhomefireplace.com", website:"https://hearthandhomefireplace.com/", appt:false, country:"CA" },
-    { name:"Heat Savers", type:"Dealer", address:"2519 Government St, Victoria, BC V8T 4P6", lat:48.4380, lng:-123.3534, phone:"250-383-3512", email:"info@heatsavers.ca", website:"https://heatsavers.ca/", appt:false, country:"CA" },
-    { name:"Home Safe Hearth and Chimney Inc.", type:"Dealer", address:"504 S St Francis Ave, Wichita, KS 67202", lat:37.6858, lng:-97.3375, phone:"316-265-9828", email:"", website:"https://homesafeks.com/", appt:false, country:"US" },
-    { name:"Lux Fireplace", type:"Dealer", address:"Stuart Center, 1855 Kirschner Rd #183b, Kelowna, BC V1Y 4N7", lat:49.8713, lng:-119.4771, phone:"778-821-3473", email:"don@luxfireplaces.ca", website:"https://luxfireplaces.ca/", appt:false, country:"CA" },
-    { name:"Mainland Fireplaces", type:"Dealer", address:"20771 Langley Bypass #201, Langley, BC V3A 5E8", lat:49.1042, lng:-122.6604, phone:"604-533-2198", email:"info@mainlandfireplaces.com", website:"https://www.mainlandfireplaces.com/", appt:false, country:"CA" },
-    { name:"Maxwell Fireplace", type:"Dealer", address:"1380 Pemberton Ave, North Vancouver, BC V7P 2R7", lat:49.3178, lng:-123.0669, phone:"604-987-1293", email:"info@maxwellfireplace.ca", website:"https://www.maxwellfireplace.ca/", appt:false, country:"CA" },
-    { name:"MHC Home Comfort", type:"Dealer", address:"44 Dundas St W, Mississauga, ON L5B 1H3", lat:43.5890, lng:-79.6441, phone:"905-615-0880", email:"info@mhchomecomfort.com", website:"https://mhchomecomfort.com/", appt:false, country:"CA" },
-    { name:"Muskoka Stone", type:"Dealer", address:"721 Manitoba St, Bracebridge, ON P1L 1B3", lat:44.9960, lng:-79.3130, phone:"705-645-7528", email:"sales@muskokastoneandhearth.com", website:"https://www.muskokastoneandhearth.com/", appt:false, country:"CA" },
-    { name:"Napert Quebec", type:"Dealer", address:"1078 Bd Vachon N, Sainte-Marie, QC G6E 1M7", lat:46.4452, lng:-71.0266, phone:"418-387-8488", email:"patrick@groupenapert.com", website:"https://groupenapert.com/", appt:false, country:"CA" },
-    { name:"Norea Foyer Montreal", type:"Dealer", address:"950 Rue B\u00e9gin, Saint-Laurent, QC H4R 1V4", lat:45.5026, lng:-73.7010, phone:"514-254-4131", email:"wwhite@noreafoyersgm.com", website:"https://noreafoyersgm.com/en/", appt:false, country:"CA" },
-    { name:"Odyssey Fireplace", type:"Dealer", address:"3-11 Steinway Blvd, Etobicoke, ON M9W 6S9", lat:43.6721, lng:-79.5862, phone:"416-213-1888", email:"info@odysseyfireplaces.com", website:"https://www.odysseyfireplaces.com/", appt:false, country:"CA" },
-    { name:"Ontario Hearth", type:"Dealer", address:"3425 Laird Rd Unit 2, Mississauga, ON L5L 5R8", lat:43.5393, lng:-79.6787, phone:"905-569-2404", email:"info@ontariohearth.com", website:"https://www.ontariohearth.com/", appt:false, country:"CA" },
-    { name:"Real Lighting and Fireplace", type:"Dealer", address:"12824 Anvil Way #101/102, Surrey, BC V3W 8E7", lat:49.1396, lng:-122.8320, phone:"604-593-5393", email:"info@realfireplace.ca", website:"https://realfireplace.ca/", appt:false, country:"CA" },
-    { name:"Texas Flameworks", type:"Dealer", address:"2408 Mare Road, Carrollton, TX 75010", lat:33.0365, lng:-96.8903, phone:"214-551-7714", email:"texasflameworks@gmail.com", website:"https://www.facebook.com/61578313613190/", appt:false, country:"US" },
-    { name:"Toronto Home Comfort", type:"Dealer", address:"70 Don Park Rd Unit 11, Markham, ON L3R 1G4", lat:43.8396, lng:-79.3618, phone:"416-755-8624", email:"info@torontohomecomfort.com", website:"https://torontohomecomfort.com/", appt:false, country:"CA" },
-    { name:"Urban Fireplace", type:"Dealer", address:"328-17 Fawcett Rd, Coquitlam, BC V3K 6V2", lat:49.2395, lng:-122.8558, phone:"604-424-8300", email:"info@urbanfp.ca", website:"https://urbanfp.ca/", appt:false, country:"CA" },
-    { name:"Zoroast The Fireplace Store", type:"Dealer", address:"Unit 2, 535 Millway Avenue, Concord, ON", lat:43.7984, lng:-79.4902, phone:"416-899-9998", email:"info@thefireplacestore.ca", website:"https://www.thefireplacestore.ca/", appt:false, country:"CA" }
-  ];
-
   // Only dealers with map coordinates
   var MAPPABLE = DEALERS.filter(function(d) { return d.lat != null && d.lng != null; });
 
