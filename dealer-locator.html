@@ -328,9 +328,8 @@
       layerGroup.addLayer(m);
     });
     if (mappable.length > 0) {
-      var b = L.latLngBounds(mappable.map(function(d) { return [d.lat, d.lng]; }));
-      if (center) b.extend(center);
-      map.fitBounds(b, { padding: [40, 40], maxZoom: 10 });
+      var target = center ? center : [mappable[0].lat, mappable[0].lng];
+      map.setView(target, 10);
     }
   }
 
