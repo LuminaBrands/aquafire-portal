@@ -78,7 +78,9 @@
     }
     .card-list::-webkit-scrollbar { width: 6px; }
     .card-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    .card-count { font-size: 0.85rem; color: var(--text-muted); padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .card-count { font-size: 0.85rem; color: var(--text-muted); padding-bottom: 8px; border-bottom: 1px solid var(--border); line-height: 1.5; }
+    .card-count a { color: var(--blue); text-decoration: none; }
+    .card-count a:hover { color: var(--text); }
 
     /* Cards */
     .d-card {
@@ -298,11 +300,13 @@
     var ct = document.getElementById('count');
     while (el.children.length > 1) el.removeChild(el.lastChild);
 
+    var helpMsg = ' Not finding what you\'re looking for? Try a new search or contact <a href="mailto:sales@aquafire.com">sales@aquafire.com</a> to find your nearest authorized Aquafire dealer.';
+
     if (dealers.length === 0) {
-      ct.textContent = 'No dealers found';
+      ct.innerHTML = 'No dealers found.' + helpMsg;
       return;
     }
-    ct.textContent = dealers.length + ' dealer' + (dealers.length !== 1 ? 's' : '') + (hasDist ? ' nearby' : ' found');
+    ct.innerHTML = 'Showing ' + dealers.length + ' Aquafire dealer' + (dealers.length !== 1 ? 's' : '') + (hasDist ? ' nearby.' : '.') + helpMsg;
 
     dealers.forEach(function(d, i) {
       var c = document.createElement('div');
