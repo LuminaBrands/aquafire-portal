@@ -110,9 +110,9 @@
     /* Map */
     .map-wrap {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden; min-height: 400px;
+      border-radius: var(--radius); overflow: hidden; height: 600px;
     }
-    #map { width: 100%; height: 100%; min-height: 400px; }
+    #map { width: 100%; height: 100%; }
 
     /* Leaflet overrides for dark theme */
     .leaflet-popup-content-wrapper { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; }
@@ -127,8 +127,7 @@
     /* Responsive */
     @media (max-width: 800px) {
       .locator-grid { grid-template-columns: 1fr; }
-      .map-wrap { order: -1; min-height: 300px; }
-      #map { min-height: 300px; }
+      .map-wrap { order: -1; height: 300px; }
       .card-list { max-height: none; }
     }
     @media (max-width: 600px) {
@@ -171,7 +170,7 @@
 
   <!-- Main -->
   <main class="container page-body">
-    <div style="text-align:center; margin-bottom:32px;">
+    <div style="text-align:center; margin-bottom:32px; margin-top:16px;">
       <div class="search-row">
         <div class="search-wrap">
           <input type="text" id="q" placeholder="Enter ZIP code, city, or dealer name..." maxlength="60" autocomplete="off">
@@ -495,6 +494,7 @@
       subdomains: 'abcd', maxZoom: 19
     }).addTo(map);
     layerGroup = L.layerGroup().addTo(map);
+    setTimeout(function() { map.invalidateSize(); }, 0);
 
     // Show all dealer pins on load
     initAllPins();
