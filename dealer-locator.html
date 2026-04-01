@@ -345,12 +345,16 @@
   }
 
   // ─── Search ───
-  function searchByCoords(coords) {
-    var nearby = DEALERS.filter(function(d) { return d.lat != null; }).map(function(d) {
+  function nearestDealers(coords) {
+    return DEALERS.filter(function(d) { return d.lat != null; }).map(function(d) {
       var copy = {}; for (var k in d) copy[k] = d[k];
       copy._mi = haversine(coords[0], coords[1], d.lat, d.lng);
       return copy;
     }).sort(function(a, b) { return a._mi - b._mi; }).slice(0, 4);
+  }
+
+  function searchByCoords(coords) {
+    var nearby = nearestDealers(coords);
 
     if (userDot) map.removeLayer(userDot);
     userDot = L.circleMarker(coords, { radius: 7, fillColor: '#c0392b', fillOpacity: 1, color: '#fff', weight: 2 })
@@ -495,17 +499,27 @@
     // Show all dealer pins on load
     initAllPins();
 
-    // Auto-detect user location, fall back to HQ
+    // Show 4 closest dealers to starting location
+    function showNearest(coords) {
+      var nearby = nearestDealers(coords);
+      buildCards(nearby, true);
+      showOnMap(nearby, coords);
+    }
+
+    showNearest(HQ);
+
+    // Auto-detect user location, update results if successful
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        function(p) { map.setView([p.coords.latitude, p.coords.longitude], 10); },
+        function(p) {
+          var loc = [p.coords.latitude, p.coords.longitude];
+          map.setView(loc, 10);
+          showNearest(loc);
+        },
         function() {},
         { enableHighAccuracy: false, timeout: 5000, maximumAge: 300000 }
       );
     }
-
-    var ct = document.getElementById('count');
-    ct.textContent = DEALERS.length + ' dealers \u2014 search above to find dealers near you';
 
     var qEl = document.getElementById('q');
     document.getElementById('go').addEventListener('click', function() { search(); });
