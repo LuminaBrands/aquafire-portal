@@ -373,7 +373,7 @@
         var copy = {}; for (var k in d) copy[k] = d[k];
         copy._mi = haversine(coords[0], coords[1], d.lat, d.lng);
         return copy;
-      }).sort(function(a, b) { return a._mi - b._mi; }).slice(0, 8);
+      }).sort(function(a, b) { return a._mi - b._mi; }).slice(0, 4);
 
       if (userDot) map.removeLayer(userDot);
       userDot = L.circleMarker(coords, { radius: 7, fillColor: '#c0392b', fillOpacity: 1, color: '#fff', weight: 2 })
