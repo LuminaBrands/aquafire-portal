@@ -242,6 +242,7 @@
 
   // ─── Map & Markers ───
   var map, layerGroup, userDot;
+  var currentDealers = [];
 
   function pinSVG(color) {
     return '<svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">' +
@@ -269,22 +270,31 @@
     return h;
   }
 
-  function showOnMap(dealers, center) {
-    layerGroup.clearLayers();
-    var mappable = dealers.filter(function(d) { return d.lat != null && d.lng != null; });
-    mappable.forEach(function(d, i) {
+  function initAllPins() {
+    MAPPABLE.forEach(function(d) {
       var m = L.marker([d.lat, d.lng], { icon: makeIcon(d.type) }).bindPopup(popupHTML(d));
-      m.on('click', function() { highlightCard(i); });
       layerGroup.addLayer(m);
+      d._marker = m;
     });
+  }
+
+  function showOnMap(dealers, center) {
+    var mappable = dealers.filter(function(d) { return d.lat != null && d.lng != null; });
     if (mappable.length > 0) {
-      var target = center ? center : [mappable[0].lat, mappable[0].lng];
-      map.setView(target, 10);
+      if (center) {
+        map.setView(center, 10);
+      } else if (mappable.length === 1) {
+        map.setView([mappable[0].lat, mappable[0].lng], 12);
+      } else {
+        var bounds = L.latLngBounds(mappable.map(function(d) { return [d.lat, d.lng]; }));
+        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+      }
     }
   }
 
   // ─── Cards ───
   function buildCards(dealers, hasDist) {
+    currentDealers = dealers;
     var el = document.getElementById('cards');
     var ct = document.getElementById('count');
     while (el.children.length > 1) el.removeChild(el.lastChild);
@@ -327,10 +337,10 @@
     document.querySelectorAll('.d-card').forEach(function(c, j) { c.classList.toggle('active', j === i); });
     var card = document.querySelector('.d-card[data-i="' + i + '"]');
     if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    var layers = layerGroup.getLayers();
-    if (layers[i]) {
-      layers[i].openPopup();
-      map.panTo(layers[i].getLatLng());
+    var d = currentDealers[i];
+    if (d && d._marker) {
+      d._marker.openPopup();
+      map.panTo(d._marker.getLatLng());
     }
   }
 
@@ -386,12 +396,10 @@
           searchByCoords([parseFloat(data[0].lat), parseFloat(data[0].lon)]);
         } else {
           buildCards([], false);
-          layerGroup.clearLayers();
         }
       })
       .catch(function() {
         buildCards([], false);
-        layerGroup.clearLayers();
       });
   }
 
@@ -475,17 +483,22 @@
 
   // ─── Init ───
   document.addEventListener('DOMContentLoaded', function() {
-    // Map starts zoomed in (not showing all dealers)
-    map = L.map('map', { scrollWheelZoom: true }).setView([39.5, -98.35], 10);
+    map = L.map('map', { scrollWheelZoom: true }).setView([39.5, -98.35], 4);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution: '\u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a> \u00a9 <a href="https://carto.com/">CARTO</a>',
       subdomains: 'abcd', maxZoom: 19
     }).addTo(map);
     layerGroup = L.layerGroup().addTo(map);
 
-    // No pins on initial load — search to reveal dealers
+    // Show all dealer pins on load
+    initAllPins();
+    if (MAPPABLE.length > 0) {
+      var bounds = L.latLngBounds(MAPPABLE.map(function(d) { return [d.lat, d.lng]; }));
+      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 5 });
+    }
+
     var ct = document.getElementById('count');
-    ct.textContent = 'Search above to find dealers near you';
+    ct.textContent = DEALERS.length + ' dealers \u2014 search above to find dealers near you';
 
     var qEl = document.getElementById('q');
     document.getElementById('go').addEventListener('click', function() { search(); });
