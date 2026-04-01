@@ -503,6 +503,7 @@
       if (e.key === 'Enter' && acIdx < 0) search();
     });
     qEl.addEventListener('input', onInput);
+    qEl.addEventListener('focus', function() { if (qEl.value === 'My Location') qEl.value = ''; });
     qEl.addEventListener('blur', function() { setTimeout(closeAC, 150); });
     document.getElementById('geo').addEventListener('click', geolocate);
 
