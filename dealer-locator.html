@@ -483,7 +483,7 @@
 
   // ─── Init ───
   document.addEventListener('DOMContentLoaded', function() {
-    map = L.map('map', { scrollWheelZoom: true }).setView([39.5, -98.35], 4);
+    map = L.map('map', { scrollWheelZoom: true }).setView([39.5, -98.35], 10);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution: '\u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a> \u00a9 <a href="https://carto.com/">CARTO</a>',
       subdomains: 'abcd', maxZoom: 19
@@ -492,10 +492,6 @@
 
     // Show all dealer pins on load
     initAllPins();
-    if (MAPPABLE.length > 0) {
-      var bounds = L.latLngBounds(MAPPABLE.map(function(d) { return [d.lat, d.lng]; }));
-      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 5 });
-    }
 
     var ct = document.getElementById('count');
     ct.textContent = DEALERS.length + ' dealers \u2014 search above to find dealers near you';
