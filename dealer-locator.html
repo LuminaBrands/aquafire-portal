@@ -309,7 +309,7 @@
     if (mappable.length > 0) {
       var b = L.latLngBounds(mappable.map(function(d) { return [d.lat, d.lng]; }));
       if (center) b.extend(center);
-      map.fitBounds(b, { padding: [40, 40], maxZoom: 12 });
+      map.fitBounds(b, { padding: [40, 40], maxZoom: 6 });
     }
   }
 
