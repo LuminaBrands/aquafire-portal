@@ -54,5 +54,7 @@ var DEALERS = [
   { name:"NYC Fireplaces", type:"Dealer", address:"58-30 Maspeth Ave, Maspeth, NY 11378", lat:40.7228, lng:-73.9109, phone:"718-326-4328", email:"sales@nycfireplaces.com", website:"https://www.nycfireplaces.com/", appt:false, country:"US" },
   { name:"AMS Fireplace", type:"Dealer", address:"2864 Whiptail Loop E #100, Carlsbad, CA 92010", lat:33.1426739901331, lng:-117.24775216887076, phone:"855-513-9867", email:"sales@amsfireplace.com", website:"https://amsfireplace.com/", appt:false, country:"US" },
   { name:"Blackstone Fireplaces", type:"Dealer", address:"3631 US-22, Somerville, NJ 08876", lat:40.5814, lng:-74.6163, phone:"908-823-4080", email:"blackstonefireplaces@gmail.com", website:"https://www.blackstonefireplaces.com/", appt:false, country:"US" },
-  { name:"Home Safe Hearth & Chimney", type:"Dealer", address:"504 S St Francis Ave, Wichita, KS 67202", lat:37.6437, lng:-97.3311, phone:"3162659828", email:"bart@homesafeks.com", website:"https://www.homesafeks.com/", appt:false, country:"US" }
+  { name:"Home Safe Hearth & Chimney", type:"Dealer", address:"504 S St Francis Ave, Wichita, KS 67202", lat:37.6437, lng:-97.3311, phone:"3162659828", email:"bart@homesafeks.com", website:"https://www.homesafeks.com/", appt:false, country:"US" },
+  { name:"FabFires", type:"Regional Dealer", address:"Wilmington, NC", lat:34.264574413888354, lng:-77.90050525064268, phone:"910-200-7688", email:"brett@fabfires.com", website:"", appt:true, country:"US" },
+  { name:"High Country Fireplaces", type:"Dealer", address:"4400 Stuart Andrew Blvd, Charlotte, NC 28217", lat:35.189, lng:-80.89, phone:"3369365656", email:"info@highcountryfireplaces.com", website:"https://www.highcountryfireplaces.com/", appt:false, country:"US" }
 ];
