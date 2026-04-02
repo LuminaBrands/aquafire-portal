@@ -422,12 +422,36 @@
   }
 
   function fetchSuggestions(q) {
-    fetch('https://nominatim.openstreetmap.org/search?format=json&countrycodes=us,ca&limit=5&q=' + encodeURIComponent(q))
+    var el = document.getElementById('ac');
+    el.innerHTML = '';
+    var lo = q.toLowerCase();
+
+    // Dealer name/address matches first
+    var dealerHits = DEALERS.filter(function(d) {
+      return d.name.toLowerCase().indexOf(lo) !== -1 ||
+        d.address.toLowerCase().indexOf(lo) !== -1;
+    }).slice(0, 4);
+
+    dealerHits.forEach(function(d) {
+      var div = document.createElement('div');
+      div.className = 'ac-item';
+      div.innerHTML = d.name + '<small>' + (d.address || d.type) + '</small>';
+      div.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        document.getElementById('q').value = d.name;
+        closeAC();
+        search();
+      });
+      el.appendChild(div);
+    });
+
+    // Show dealer matches immediately
+    if (dealerHits.length > 0) { el.classList.add('open'); acIdx = -1; }
+
+    // Then location suggestions from Nominatim
+    fetch('https://nominatim.openstreetmap.org/search?format=json&countrycodes=us,ca&limit=' + (5 - dealerHits.length) + '&q=' + encodeURIComponent(q))
       .then(function(r) { return r.json(); })
       .then(function(data) {
-        var el = document.getElementById('ac');
-        el.innerHTML = '';
-        if (data.length === 0) { el.classList.remove('open'); return; }
         data.forEach(function(item) {
           var div = document.createElement('div');
           div.className = 'ac-item';
@@ -441,7 +465,11 @@
           });
           el.appendChild(div);
         });
-        el.classList.add('open');
+        if (el.children.length > 0) {
+          el.classList.add('open');
+        } else {
+          el.classList.remove('open');
+        }
         acIdx = -1;
       })
       .catch(function() { closeAC(); });
