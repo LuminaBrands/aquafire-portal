@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build Your Fireplace | Aquafire</title>
+  <meta name="description" content="Configure your perfect Aquafire water vapor fireplace. Choose your model, size, enclosure type, and accessories.">
+  <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="apple-touch-icon" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #121417; --surface: #1b1e24; --surface-alt: #22262e;
+      --border: #2c3038; --text: #e4e5e9; --text-muted: #878c99;
+      --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
+      --amber: #e8a838; --amber-dim: #c78820;
+      --blue: #4da6e8; --blue-dim: #2980b9;
+      --ember: #d45a20;
+      --radius: 14px; --radius-sm: 8px;
+    }
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  </style>
+  <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="builder.css">
+</head>
+<body>
+  <!-- ── Nav ── -->
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="builder.html" class="active">Build Yours</a></li>
+        <li><a href="enclosure-guide.html">Enclosure Guide</a></li>
+        <li><a href="water-care.html">Water Care</a></li>
+        <li><a href="dealer-locator.html">Find a Dealer</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── Page Header ── -->
+  <header class="page-header builder-header">
+    <div class="container">
+      <h1>Build Your Fireplace</h1>
+      <p class="page-sub">Configure your perfect Aquafire in a few simple steps</p>
+    </div>
+  </header>
+
+  <!-- ── Builder ── -->
+  <main class="container">
+    <!-- Progress Bar -->
+    <div class="builder-progress" id="builder-progress">
+      <div class="progress-step active" data-step="1">
+        <div class="progress-dot">1</div>
+        <span class="progress-label">Model</span>
+        <div class="progress-line"></div>
+      </div>
+      <div class="progress-step" data-step="2">
+        <div class="progress-dot">2</div>
+        <span class="progress-label">Size</span>
+        <div class="progress-line"></div>
+      </div>
+      <div class="progress-step" data-step="3">
+        <div class="progress-dot">3</div>
+        <span class="progress-label">Enclosure</span>
+        <div class="progress-line"></div>
+      </div>
+      <div class="progress-step" data-step="4">
+        <div class="progress-dot">4</div>
+        <span class="progress-label">Config</span>
+        <div class="progress-line"></div>
+      </div>
+      <div class="progress-step" data-step="5">
+        <div class="progress-dot">5</div>
+        <span class="progress-label">Install</span>
+        <div class="progress-line"></div>
+      </div>
+      <div class="progress-step" data-step="6">
+        <div class="progress-dot">6</div>
+        <span class="progress-label">Extras</span>
+        <div class="progress-line"></div>
+      </div>
+      <div class="progress-step" data-step="7">
+        <div class="progress-dot">7</div>
+        <span class="progress-label">Summary</span>
+      </div>
+    </div>
+
+    <div class="builder-layout">
+      <!-- ── Left: Step Panels ── -->
+      <div class="builder-steps">
+
+        <!-- Step 1: Model -->
+        <section class="builder-step active" id="step-1">
+          <div class="step-header">
+            <h2>Choose Your Model</h2>
+            <p>Select the Aquafire fireplace that's right for you.</p>
+          </div>
+          <div class="selection-grid cols-3" id="step-1-content">
+            <!-- Populated by JS -->
+          </div>
+          <div class="step-nav">
+            <div></div>
+            <button class="btn-next" id="next-1" disabled>Next: Choose Size <span>&rarr;</span></button>
+          </div>
+        </section>
+
+        <!-- Step 2: Size -->
+        <section class="builder-step" id="step-2">
+          <div class="step-header">
+            <h2>Choose Your Size</h2>
+            <p>Available in three sizes to fit any space.</p>
+          </div>
+          <div class="selection-grid cols-3" id="step-2-content">
+            <!-- Populated by JS -->
+          </div>
+          <div class="step-nav">
+            <button class="btn-back" id="back-2"><span>&larr;</span> Back</button>
+            <button class="btn-next" id="next-2" disabled>Next: Enclosure Type <span>&rarr;</span></button>
+          </div>
+        </section>
+
+        <!-- Step 3: Enclosure Type -->
+        <section class="builder-step" id="step-3">
+          <div class="step-header">
+            <h2>Choose Your Enclosure</h2>
+            <p>Use our pre-made AquafireBox insert or build your own custom enclosure.</p>
+          </div>
+          <div class="selection-grid cols-2" id="step-3-content">
+            <!-- Populated by JS -->
+          </div>
+          <div class="step-nav">
+            <button class="btn-back" id="back-3"><span>&larr;</span> Back</button>
+            <button class="btn-next" id="next-3" disabled>Next <span>&rarr;</span></button>
+          </div>
+        </section>
+
+        <!-- Step 4: Enclosure Configuration (site-built only) -->
+        <section class="builder-step" id="step-4">
+          <div class="step-header">
+            <h2>Configure Your Enclosure</h2>
+            <p>Set the dimensions for your custom enclosure to ensure proper light trapping.</p>
+          </div>
+          <div class="config-sliders" id="step-4-content">
+            <div class="slider-group">
+              <label>
+                Front Setback
+                <span class="slider-value" id="setback-val">6.0"</span>
+              </label>
+              <input type="range" id="setback-slider" min="0" max="21" step="0.5" value="6">
+              <p class="slider-hint">Distance from front of enclosure to front of insert</p>
+            </div>
+            <div class="slider-group">
+              <label>
+                Back Setback
+                <span class="slider-value" id="back-setback-val">2.0"</span>
+              </label>
+              <input type="range" id="back-setback-slider" min="0" max="21" step="0.5" value="2">
+              <p class="slider-hint">Distance from back of insert to back of enclosure</p>
+            </div>
+            <div class="slider-group">
+              <label>
+                Opening Height
+                <span class="slider-value" id="opening-val">15.0"</span>
+              </label>
+              <input type="range" id="opening-slider" min="13" max="50" step="0.5" value="15">
+              <p class="slider-hint">Height of the viewing opening</p>
+            </div>
+            <div class="max-opening-notice" id="max-opening-notice">
+              <span class="notice-icon">&#9888;</span>
+              <div>
+                <p class="notice-text">Maximum recommended opening height: <span class="notice-value" id="max-opening-value">--</span></p>
+                <p class="notice-text" style="margin-top:4px;font-size:0.75rem;">Exceeding this may allow LED light to escape the enclosure.</p>
+              </div>
+            </div>
+          </div>
+          <div class="step-nav">
+            <button class="btn-back" id="back-4"><span>&larr;</span> Back</button>
+            <button class="btn-next" id="next-4">Next: Installation Type <span>&rarr;</span></button>
+          </div>
+        </section>
+
+        <!-- Step 5: Installation Type -->
+        <section class="builder-step" id="step-5">
+          <div class="step-header">
+            <h2>Installation Type</h2>
+            <p>How will your fireplace be viewed?</p>
+          </div>
+          <div class="selection-grid cols-2" id="step-5-content">
+            <!-- Populated by JS -->
+          </div>
+          <div class="step-nav">
+            <button class="btn-back" id="back-5"><span>&larr;</span> Back</button>
+            <button class="btn-next" id="next-5" disabled>Next: Accessories <span>&rarr;</span></button>
+          </div>
+        </section>
+
+        <!-- Step 6: Accessories -->
+        <section class="builder-step" id="step-6">
+          <div class="step-header">
+            <h2>Add Accessories</h2>
+            <p>Enhance your Aquafire experience with these add-ons.</p>
+          </div>
+          <div class="accessory-grid" id="step-6-content">
+            <!-- Populated by JS -->
+          </div>
+          <div class="step-nav">
+            <button class="btn-back" id="back-6"><span>&larr;</span> Back</button>
+            <button class="btn-next" id="next-6">Review Configuration <span>&rarr;</span></button>
+          </div>
+        </section>
+
+        <!-- Step 7: Summary -->
+        <section class="builder-step" id="step-7">
+          <div class="step-header">
+            <h2>Your Configuration</h2>
+            <p>Review your Aquafire fireplace setup.</p>
+          </div>
+          <div id="step-7-content">
+            <!-- Populated by JS -->
+          </div>
+          <div class="step-nav">
+            <button class="btn-back" id="back-7"><span>&larr;</span> Back</button>
+            <div></div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ── Right: Preview Panel ── -->
+      <div class="builder-preview" id="builder-preview">
+        <div class="preview-header">
+          <h3>Preview</h3>
+          <span class="preview-badge" id="preview-size-badge">--</span>
+        </div>
+        <div class="preview-diagram" id="preview-diagram">
+          <div class="preview-placeholder">
+            <span class="placeholder-icon">&#128293;</span>
+            <p>Select a model to see your<br>fireplace preview</p>
+          </div>
+        </div>
+        <div class="preview-specs" id="preview-specs">
+          <div class="spec-item">
+            <span class="spec-label">Model</span>
+            <span class="spec-value" id="preview-model-name">--</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Width</span>
+            <span class="spec-value" id="preview-width">--</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Depth</span>
+            <span class="spec-value" id="preview-depth">--</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Height</span>
+            <span class="spec-value" id="preview-height">--</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Preview Toggle -->
+  <button class="mobile-preview-toggle" id="mobile-preview-toggle">View Preview</button>
+  <div class="mobile-preview-overlay" id="mobile-preview-overlay">
+    <button class="mobile-preview-close" id="mobile-preview-close">&times;</button>
+    <div class="builder-preview" id="mobile-preview-clone">
+      <!-- Cloned preview content inserted by JS -->
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" height="20">
+          <p>The world's most advanced water vapor fireplace technology.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <a href="enclosure-guide.html">Enclosure Guide</a>
+            <a href="water-care.html">Water Care</a>
+            <a href="aquafire-pro.html">Aquafire Pro Guide</a>
+          </div>
+          <div class="footer-col">
+            <h4>Support</h4>
+            <a href="support.html">Help Center</a>
+            <a href="quick-start.html">Quick Start</a>
+            <a href="dealer-locator.html">Find a Dealer</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Lumina Brands. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="embed.js"></script>
+  <script src="builder.js"></script>
+</body>
+</html>
