@@ -32,25 +32,33 @@
     .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
     /* Search */
-    .search-row { display: flex; gap: 12px; max-width: 520px; margin: 0 auto; }
+    .search-row { display: flex; gap: 10px; width: 100%; align-items: stretch; }
     .search-row input {
-      flex: 1; padding: 14px 20px; background: var(--surface); border: 1px solid var(--border);
+      width: 100%; padding: 14px 20px; background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 1rem; outline: none;
     }
     .search-row input::placeholder { color: var(--text-muted); }
     .search-row input:focus { border-color: var(--red); }
-    .search-row button {
+    .search-row #go {
       padding: 14px 28px; background: var(--red); color: #fff; font-family: 'Poppins', sans-serif;
       font-size: 0.9rem; font-weight: 600; border: none; border-radius: var(--radius-sm); cursor: pointer;
       white-space: nowrap;
     }
-    .search-row button:hover { background: var(--red-dark); }
-    .geo-btn {
-      display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 8px 20px;
-      font-size: 0.82rem; font-weight: 500; font-family: inherit; background: transparent;
-      border: 1px solid var(--border); border-radius: 20px; color: var(--text-muted); cursor: pointer;
+    .search-row #go:hover { background: var(--red-dark); }
+    .geo-icon-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 48px; flex-shrink: 0; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text-muted); cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
     }
-    .geo-btn:hover { border-color: var(--red); color: var(--text); }
+    .geo-icon-btn:hover { border-color: var(--red); color: var(--red); }
+    .geo-icon-btn:disabled { opacity: 0.5; cursor: default; }
+    .distance-select {
+      padding: 0 14px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 0.9rem;
+      outline: none; cursor: pointer; flex-shrink: 0;
+    }
+    .distance-select:focus { border-color: var(--red); }
 
     /* Autocomplete */
     .search-wrap { position: relative; flex: 1; }
@@ -134,8 +142,11 @@
       .card-list { max-height: none; }
     }
     @media (max-width: 600px) {
-      .search-row { flex-direction: column; }
-      .search-row button { width: 100%; }
+      .search-row { flex-wrap: wrap; }
+      .search-wrap { flex: 1 1 100%; order: 1; }
+      .geo-icon-btn { order: 2; }
+      .distance-select { order: 3; flex: 1; }
+      .search-row #go { order: 4; flex: 0 0 auto; }
     }
   </style>
 </head>
@@ -173,18 +184,26 @@
 
   <!-- Main -->
   <main class="container page-body">
-    <div style="text-align:center; margin-bottom:32px; margin-top:16px;">
+    <div style="margin-bottom:32px; margin-top:16px;">
       <div class="search-row">
         <div class="search-wrap">
           <input type="text" id="q" placeholder="Enter ZIP code, city, or dealer name..." maxlength="60" autocomplete="off">
           <div class="ac-list" id="ac"></div>
         </div>
+        <button type="button" id="geo" class="geo-icon-btn" title="Use my location" aria-label="Use my location">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg>
+        </button>
+        <select id="distance" class="distance-select" title="Search radius">
+          <option value="0">Any distance</option>
+          <option value="10">Within 10 mi</option>
+          <option value="25">Within 25 mi</option>
+          <option value="50">Within 50 mi</option>
+          <option value="100">Within 100 mi</option>
+          <option value="250">Within 250 mi</option>
+          <option value="500">Within 500 mi</option>
+        </select>
         <button type="button" id="go">Search</button>
       </div>
-      <button type="button" id="geo" class="geo-btn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg>
-        Use My Location
-      </button>
     </div>
 
     <div class="locator-grid">
@@ -245,6 +264,7 @@
   // ─── Map & Markers ───
   var map, layerGroup, userDot;
   var currentDealers = [];
+  var lastCoords = null;
 
   function pinSVG(color) {
     return '<svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">' +
@@ -301,7 +321,7 @@
     var ct = document.getElementById('count');
     while (el.children.length > 1) el.removeChild(el.lastChild);
 
-    var helpMsg = ' Not finding what you\'re looking for? Try a new search or contact <a href="mailto:sales@aquafire.com">sales@aquafire.com</a> to find your nearest authorized Aquafire dealer.';
+    var helpMsg = ' Not what you\'re looking for? Try a new search or contact <a href="mailto:sales@aquafire.com">sales@aquafire.com</a> to locate a dealer near you.';
 
     if (dealers.length === 0) {
       ct.innerHTML = 'No dealers found.' + helpMsg;
@@ -349,15 +369,27 @@
   }
 
   // ─── Search ───
+  function getMaxDistance() {
+    var sel = document.getElementById('distance');
+    return sel ? parseInt(sel.value, 10) : 0;
+  }
+
   function nearestDealers(coords) {
-    return DEALERS.filter(function(d) { return d.lat != null; }).map(function(d) {
+    var maxDist = getMaxDistance();
+    var scored = DEALERS.filter(function(d) { return d.lat != null; }).map(function(d) {
       var copy = {}; for (var k in d) copy[k] = d[k];
       copy._mi = haversine(coords[0], coords[1], d.lat, d.lng);
       return copy;
-    }).sort(function(a, b) { return a._mi - b._mi; }).slice(0, 4);
+    }).sort(function(a, b) { return a._mi - b._mi; });
+
+    if (maxDist > 0) {
+      return scored.filter(function(d) { return d._mi <= maxDist; });
+    }
+    return scored.slice(0, 4);
   }
 
   function searchByCoords(coords) {
+    lastCoords = coords;
     var nearby = nearestDealers(coords);
 
     if (userDot) map.removeLayer(userDot);
@@ -505,14 +537,14 @@
   function geolocate() {
     if (!navigator.geolocation) return;
     var btn = document.getElementById('geo');
-    btn.textContent = 'Locating\u2026'; btn.disabled = true;
+    btn.disabled = true;
     navigator.geolocation.getCurrentPosition(
       function(p) {
-        btn.textContent = 'Use My Location'; btn.disabled = false;
+        btn.disabled = false;
         document.getElementById('q').value = 'My Location';
         search([p.coords.latitude, p.coords.longitude]);
       },
-      function() { btn.textContent = 'Use My Location'; btn.disabled = false; },
+      function() { btn.disabled = false; },
       { enableHighAccuracy: true, timeout: 8000 }
     );
   }
@@ -532,8 +564,9 @@
     // Show all dealer pins on load
     initAllPins();
 
-    // Show 4 closest dealers to starting location
+    // Show closest dealers to starting location
     function showNearest(coords) {
+      lastCoords = coords;
       var nearby = nearestDealers(coords);
       buildCards(nearby, true);
       showOnMap(nearby, coords);
@@ -564,6 +597,9 @@
     qEl.addEventListener('focus', function() { if (qEl.value === 'My Location') qEl.value = ''; });
     qEl.addEventListener('blur', function() { setTimeout(closeAC, 150); });
     document.getElementById('geo').addEventListener('click', geolocate);
+    document.getElementById('distance').addEventListener('change', function() {
+      if (lastCoords) showNearest(lastCoords);
+    });
 
     // Nav toggle
     var tog = document.querySelector('.nav-toggle');
