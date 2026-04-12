@@ -1,0 +1,2304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Original | Quick Start Guide</title>
+  <meta name="description" content="Aquafire Original water vapor electric fireplace — the classic model with specs, features, and a complete quick start guide.">
+  <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="apple-touch-icon" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #121417; --surface: #1b1e24; --surface-alt: #22262e; --border: #2c3038;
+      --text: #e4e5e9; --text-muted: #878c99;
+      --amber: #e8a838; --amber-dim: #c78820; --amber-glow: rgba(232,168,56,0.10);
+      --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
+      --radius: 14px; --radius-sm: 8px;
+    }
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Hub Dashboard Hero ── */
+    .hub-hero {
+      padding: 40px 0 56px;
+      text-align: center;
+    }
+    .hub-hero .breadcrumb {
+      font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;
+    }
+    .hub-hero .breadcrumb a {
+      text-decoration: none; color: var(--text-muted); transition: color 0.15s;
+    }
+    .hub-hero .breadcrumb a:hover { color: var(--text); }
+    .hub-hero h1 {
+      font-size: 2.2rem; font-weight: 700; letter-spacing: -0.5px;
+      line-height: 1.15; margin-bottom: 4px;
+    }
+    .hub-hero .hub-tagline {
+      font-size: 0.95rem; color: var(--text-muted); margin-bottom: 28px;
+    }
+
+    /* Primary CTA card — emphasized */
+    .hub-cta-card {
+      display: flex; align-items: center; gap: 20px;
+      background: linear-gradient(135deg, rgba(192,57,43,0.08) 0%, var(--surface) 60%);
+      border: 1.5px solid rgba(192,57,43,0.35);
+      border-radius: var(--radius); padding: 18px 22px;
+      text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 14px; text-align: left;
+      box-shadow: 0 2px 16px var(--red-glow);
+    }
+    .hub-cta-card:hover {
+      border-color: var(--red); box-shadow: 0 6px 32px rgba(192,57,43,0.25);
+    }
+    .hub-cta-thumb {
+      flex-shrink: 0; width: 100px; height: 64px; border-radius: var(--radius-sm);
+      object-fit: cover; background: #000;
+    }
+    .hub-cta-body { flex: 1; min-width: 0; }
+    .hub-cta-badge {
+      display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+      padding: 2px 9px; border-radius: 20px; font-size: 0.67rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      background: rgba(192,57,43,0.18); color: var(--red); margin-bottom: 4px;
+    }
+    .hub-cta-badge svg { flex-shrink: 0; }
+    .hub-cta-title {
+      font-family: 'Poppins', sans-serif; font-size: 1.05rem;
+      font-weight: 700; margin-bottom: 1px;
+    }
+    .hub-cta-meta { font-size: 0.8rem; color: var(--text-muted); }
+    .hub-cta-arrow {
+      flex-shrink: 0; color: var(--red); opacity: 0.6;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .hub-cta-card:hover .hub-cta-arrow { opacity: 1; transform: translateX(3px); }
+
+    /* Progress dots */
+    .hub-cta-progress {
+      display: flex; gap: 4px; margin-top: 6px;
+    }
+    .hub-cta-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--border);
+    }
+    .hub-cta-dot.filled { background: var(--red); }
+
+    /* Dashboard nav grid — horizontal card layout */
+    .hub-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 10px; margin-bottom: 10px;
+    }
+    .hub-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); text-decoration: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .hub-card:hover {
+      border-color: rgba(192,57,43,0.4); box-shadow: 0 2px 16px var(--red-glow);
+    }
+    .hub-card-icon {
+      width: 32px; height: 32px; border-radius: 6px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.04); color: var(--text-muted);
+      transition: color 0.2s, background 0.2s;
+    }
+    .hub-card:hover .hub-card-icon { color: var(--red); background: rgba(192,57,43,0.1); }
+    .hub-card-label {
+      font-weight: 600; font-size: 0.84rem; color: var(--text); line-height: 1.3;
+      white-space: nowrap;
+    }
+    .hub-card-desc {
+      font-size: 0.74rem; color: var(--text-muted); line-height: 1.35;
+      margin-left: auto; text-align: right; white-space: nowrap; flex-shrink: 0;
+    }
+
+    /* Bottom row — same 2-col grid */
+    .hub-grid-full {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+      margin-bottom: 0;
+    }
+
+    /* ── Sticky Section Nav ── */
+    .sticky-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 800;
+      background: rgba(18,20,23,0.95); backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 var(--border);
+      transform: translateY(-100%); transition: transform 0.3s ease;
+      padding: 0;
+    }
+    .sticky-nav.visible { transform: translateY(0); }
+    .sticky-nav-inner {
+      max-width: 1120px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; gap: 4px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .sticky-nav-inner::-webkit-scrollbar { display: none; }
+    .sticky-nav-brand {
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem;
+      white-space: nowrap; padding: 12px 12px 12px 0;
+      border-right: 1px solid var(--border); margin-right: 4px; flex-shrink: 0;
+    }
+    .sticky-nav-link {
+      padding: 12px 12px; font-size: 0.78rem; font-weight: 500;
+      color: var(--text-muted); text-decoration: none; white-space: nowrap;
+      transition: color 0.15s; position: relative; flex-shrink: 0;
+    }
+    .sticky-nav-link:hover { color: var(--text); }
+    .sticky-nav-link.active { color: var(--text); }
+    .sticky-nav-link.active::after {
+      content: ''; position: absolute; bottom: 0; left: 12px; right: 12px;
+      height: 2px; background: var(--red); border-radius: 1px;
+    }
+
+    /* ── Back-to-Top ── */
+    .back-to-top {
+      position: fixed; bottom: 28px; right: 28px; z-index: 900;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text-muted); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s, border-color 0.2s, color 0.2s, transform 0.15s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .back-to-top.visible { opacity: 1; pointer-events: auto; }
+    .back-to-top:hover { border-color: var(--text-muted); color: var(--text); transform: translateY(-2px); }
+
+    /* ── Resources Section ── */
+    .resources-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .resources-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;
+    }
+    .resource-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 22px 20px; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .resource-card:hover { border-color: var(--red); box-shadow: 0 2px 12px var(--red-glow); }
+    .resource-card .resource-icon { flex-shrink: 0; color: var(--text-muted); transition: color 0.2s; margin-top: 2px; }
+    .resource-card:hover .resource-icon { color: var(--red); }
+    .resource-card .resource-info { display: flex; flex-direction: column; gap: 3px; }
+    .resource-card .resource-title { font-weight: 600; font-size: 0.92rem; color: var(--text); }
+    .resource-card .resource-type { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ── Specs Section ── */
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 28px;
+      letter-spacing: -0.3px;
+    }
+    .section-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(192,57,43,0.15); color: var(--red);
+      font-size: 0.75rem; font-weight: 700; margin-right: 8px;
+      vertical-align: middle;
+    }
+    .specs-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .spec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+    }
+    .spec-card h3 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .spec-table { width: 100%; }
+    .spec-table tr { border-bottom: 1px solid var(--border); }
+    .spec-table tr:last-child { border-bottom: none; }
+    .spec-table td {
+      padding: 10px 0;
+      font-size: 0.88rem;
+      vertical-align: top;
+    }
+    .spec-table td:first-child { color: var(--text-muted); padding-right: 16px; white-space: nowrap; }
+    .spec-table td:last-child { color: var(--text); text-align: right; }
+
+    /* ── Features List ── */
+    .features-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .feature-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px 22px;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+    .feature-item strong { color: var(--text); }
+
+    /* ── Video Section ── */
+    .video-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+      border-radius: var(--radius);
+    }
+
+    /* ── Interactive Video Guide ── */
+    .guide-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .guide-section .section-title { margin-bottom: 8px; }
+    .guide-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 28px; }
+
+    /* Step progress bar */
+    .guide-progress { display: flex; align-items: center; gap: 0; margin-bottom: 24px; }
+    .guide-progress-step {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--surface); border: 2px solid var(--border);
+      font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
+      cursor: pointer; transition: all 0.25s; flex-shrink: 0;
+      position: relative; z-index: 1;
+    }
+    .guide-progress-step:hover { border-color: var(--text-muted); color: var(--text); }
+    .guide-progress-step.active {
+      background: var(--red); border-color: var(--red); color: #fff;
+      box-shadow: 0 0 12px var(--red-glow);
+    }
+    .guide-progress-step.completed {
+      background: #1a3a2a; border-color: #2d7a4f; color: #4ade80;
+    }
+    .guide-progress-bar {
+      flex: 1; height: 2px; background: var(--border); position: relative;
+    }
+    .guide-progress-bar .bar-fill {
+      position: absolute; top: 0; left: 0; height: 100%;
+      background: #2d7a4f; transition: width 0.4s ease;
+      width: 0;
+    }
+
+    /* Video + info layout */
+    .guide-player {
+      display: grid; grid-template-columns: 1fr; gap: 24px;
+    }
+    .guide-video-wrap {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+      border-radius: var(--radius); background: #000;
+      border: 1px solid var(--border);
+    }
+    .guide-video-wrap iframe {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      border: none; border-radius: var(--radius);
+    }
+
+    /* Overlay shown when segment ends */
+    .guide-overlay {
+      position: absolute; inset: 0; z-index: 5;
+      display: none; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      border-radius: var(--radius); flex-direction: column; gap: 12px;
+    }
+    .guide-overlay.visible { display: flex; }
+    .guide-overlay-text { color: #fff; font-size: 0.9rem; font-weight: 500; }
+    .guide-overlay-btn {
+      padding: 12px 36px; background: var(--red); color: #fff;
+      font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600;
+      border: none; border-radius: var(--radius-sm); cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      box-shadow: 0 2px 12px var(--red-glow);
+    }
+    .guide-overlay-btn:hover {
+      background: var(--red-dark); box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+      transform: translateY(-1px);
+    }
+    .guide-overlay-replay {
+      background: none; border: none; color: rgba(255,255,255,0.7);
+      font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: color 0.15s; padding: 4px 8px;
+    }
+    .guide-overlay-replay:hover { color: #fff; }
+
+    /* Step info card below video */
+    .guide-info {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+    }
+    .guide-step-label {
+      font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--red); margin-bottom: 6px;
+    }
+    .guide-step-title {
+      font-family: 'Poppins', sans-serif; font-size: 1.25rem;
+      font-weight: 700; margin-bottom: 8px;
+    }
+    .guide-step-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+    /* Nav buttons */
+    .guide-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);
+    }
+    .guide-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 24px; font-family: 'Inter', sans-serif; font-size: 0.88rem;
+      font-weight: 600; border-radius: var(--radius-sm); border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .guide-btn:hover { background: rgba(255,255,255,0.04); border-color: var(--text-muted); }
+    .guide-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+    .guide-btn-next {
+      background: var(--red); border-color: var(--red); color: #fff;
+      box-shadow: 0 2px 12px var(--red-glow);
+    }
+    .guide-btn-next:hover {
+      background: var(--red-dark); border-color: var(--red-dark);
+      box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+    }
+    .guide-btn-replay { border: none; background: none; padding: 10px 12px; color: var(--text-muted); }
+    .guide-btn-replay:hover { color: var(--text); background: none; }
+
+    @media (max-width: 600px) {
+      .guide-progress-step { width: 28px; height: 28px; font-size: 0.72rem; }
+      .guide-step-title { font-size: 1.1rem; }
+      .guide-nav { gap: 8px; }
+      .guide-btn { padding: 10px 16px; font-size: 0.82rem; }
+    }
+
+    @media (max-width: 700px) {
+      .hub-hero { padding: 32px 0 48px; }
+      .hub-hero h1 { font-size: 1.8rem; }
+      .hub-hero .hub-tagline { font-size: 0.88rem; margin-bottom: 20px; }
+      .hub-cta-card { padding: 14px; gap: 14px; }
+      .hub-cta-card--large { padding: 20px; gap: 18px; }
+      .hub-cta-card--large .hub-cta-thumb { width: 110px; height: 72px; }
+      .hub-cta-card--large .hub-cta-title { font-size: 1.15rem; }
+      .hub-cta-thumb { width: 72px; height: 48px; }
+      .hub-cta-title { font-size: 0.92rem; }
+      .hub-cta-arrow { display: none; }
+      .hub-grid, .hub-grid-full, .hub-grid-extra { gap: 8px; grid-template-columns: 1fr; }
+      .hub-card {
+        flex-direction: row; align-items: center;
+        padding: 12px 14px; gap: 10px;
+      }
+      .hub-card-desc {
+        margin-left: 0; text-align: left; font-size: 0.7rem;
+      }
+      .hub-chapters-content--open { max-height: 2000px; }
+    }
+
+    /* ── Troubleshooting Guide ── */
+    .troubleshoot-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .troubleshoot-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 28px; }
+
+    /* Category tabs */
+    .ts-categories {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;
+    }
+    .ts-cat-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text-muted);
+      font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .ts-cat-btn:hover { border-color: var(--text-muted); color: var(--text); }
+    .ts-cat-btn.active {
+      background: var(--red); border-color: var(--red); color: #fff;
+      box-shadow: 0 2px 12px var(--red-glow);
+    }
+    .ts-cat-btn svg { flex-shrink: 0; }
+
+    /* Problem accordion */
+    .ts-problems { display: flex; flex-direction: column; gap: 10px; }
+    .ts-problem {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .ts-problem.open { border-color: rgba(192,57,43,0.4); box-shadow: 0 2px 12px var(--red-glow); }
+    .ts-problem-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; cursor: pointer; gap: 12px;
+      transition: background 0.15s;
+    }
+    .ts-problem-header:hover { background: rgba(255,255,255,0.02); }
+    .ts-problem-title {
+      font-size: 0.9rem; font-weight: 600; color: var(--text); line-height: 1.4;
+    }
+    .ts-problem-chevron {
+      flex-shrink: 0; color: var(--text-muted); transition: transform 0.25s;
+    }
+    .ts-problem.open .ts-problem-chevron { transform: rotate(180deg); }
+
+    .ts-problem-body {
+      max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+    }
+    .ts-problem.open .ts-problem-body { max-height: 800px; }
+
+    .ts-solutions {
+      padding: 0 20px 20px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .ts-solution {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      padding: 14px 16px; background: rgba(255,255,255,0.02);
+      border-radius: 6px; border-left: 3px solid var(--border);
+    }
+    .ts-solution-cause, .ts-solution-fix { font-size: 0.84rem; line-height: 1.55; }
+    .ts-solution-label {
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.8px; margin-bottom: 4px;
+    }
+    .ts-solution-cause .ts-solution-label { color: var(--text-muted); }
+    .ts-solution-fix .ts-solution-label { color: #4ade80; }
+    .ts-solution-cause p { color: var(--text-muted); }
+    .ts-solution-fix p { color: var(--text); }
+
+    /* Alerts reference table */
+    .ts-alerts { display: flex; flex-direction: column; gap: 10px; }
+    .ts-alert-row {
+      display: grid; grid-template-columns: auto 1fr 1fr 1fr; gap: 16px;
+      align-items: center; padding: 14px 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 0.84rem;
+    }
+    .ts-alert-lights { display: flex; gap: 6px; }
+    .ts-alert-light {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .ts-alert-label {
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 2px;
+    }
+    .ts-alert-value { color: var(--text); line-height: 1.45; }
+    .ts-alert-cause { color: var(--text-muted); line-height: 1.45; }
+
+    @media (max-width: 600px) {
+      .ts-solution { grid-template-columns: 1fr; gap: 8px; }
+      .ts-alert-row { grid-template-columns: 1fr; gap: 8px; }
+      .ts-cat-btn { padding: 8px 14px; font-size: 0.8rem; }
+    }
+
+    /* ── Shop Accessories ── */
+    .shop-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .shop-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;
+    }
+    .shop-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+      display: flex; flex-direction: column;
+    }
+    .shop-card:hover { border-color: var(--red); box-shadow: 0 4px 16px var(--red-glow); transform: translateY(-2px); }
+    .shop-card-img {
+      width: 100%; aspect-ratio: 1 / 1; object-fit: cover;
+      background: #1a1c20; display: block;
+    }
+    .shop-card-body { padding: 16px; display: flex; flex-direction: column; gap: 4px; }
+    .shop-card-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+    .shop-card-meta { font-size: 0.78rem; color: var(--text-muted); }
+    .shop-card-badge {
+      display: inline-block; padding: 3px 8px; border-radius: 4px;
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+      background: rgba(192,57,43,0.12); color: var(--red); width: fit-content;
+    }
+    .shop-card-badge.coming-soon {
+      background: rgba(255,255,255,0.06); color: var(--text-muted);
+    }
+    .shop-card.disabled { opacity: 0.6; pointer-events: none; }
+
+    /* ── Safety Callout ── */
+    .safety-callout {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 4px solid var(--amber); border-radius: var(--radius);
+      padding: 20px 24px; margin-bottom: 40px;
+    }
+    .safety-callout-icon {
+      flex-shrink: 0; color: var(--amber); margin-top: 2px;
+    }
+    .safety-callout-body { flex: 1; }
+    .safety-callout-title {
+      font-weight: 700; font-size: 0.95rem; color: var(--amber); margin-bottom: 10px;
+    }
+    .safety-callout-list {
+      list-style: none; padding: 0; margin: 0 0 12px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .safety-callout-list li {
+      font-size: 0.84rem; color: var(--text-muted); line-height: 1.5;
+      padding-left: 18px; position: relative;
+    }
+    .safety-callout-list li::before {
+      content: ''; position: absolute; left: 0; top: 7px;
+      width: 6px; height: 6px; border-radius: 50%; background: var(--amber-dim);
+    }
+    .safety-callout-link {
+      font-size: 0.8rem; font-weight: 600; color: var(--amber);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .safety-callout-link:hover { color: var(--text); }
+
+    /* ── Maintenance Schedule ── */
+    .maint-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    .maint-frequency {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .maint-frequency.open { border-color: rgba(192,57,43,0.4); box-shadow: 0 2px 12px var(--red-glow); }
+    .maint-frequency-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; cursor: pointer; gap: 12px; transition: background 0.15s;
+    }
+    .maint-frequency-header:hover { background: rgba(255,255,255,0.02); }
+    .maint-frequency-label {
+      font-size: 0.95rem; font-weight: 700; color: var(--text);
+    }
+    .maint-frequency-badge {
+      font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 4px;
+      background: rgba(192,57,43,0.12); color: var(--red); margin-left: 10px;
+    }
+    .maint-frequency .ts-problem-chevron { flex-shrink: 0; color: var(--text-muted); transition: transform 0.25s; }
+    .maint-frequency.open .ts-problem-chevron { transform: rotate(180deg); }
+    .maint-frequency-body {
+      max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+    }
+    .maint-frequency.open .maint-frequency-body { max-height: 600px; }
+    .maint-task-list {
+      padding: 0 20px 20px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .maint-task {
+      padding: 12px 16px; background: rgba(255,255,255,0.02);
+      border-radius: 6px; border-left: 3px solid var(--border);
+    }
+    .maint-task-name {
+      font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 4px;
+    }
+    .maint-task-tip {
+      font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;
+    }
+
+    /* ── FAQ Section ── */
+    .faq-section { padding: 48px 0; border-top: 1px solid var(--border); }
+    @media (max-width: 600px) {
+      .safety-callout { flex-direction: column; padding: 16px; gap: 10px; }
+    }
+
+    /* ── Tour Your Aquafire ── */
+    .tour-section { margin: 48px 0; }
+    .tour-section .section-title { margin-bottom: 6px; }
+    .tour-subtitle { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px; }
+    .tour-layout {
+      display: grid; grid-template-columns: 1fr 280px;
+      gap: 32px; align-items: start;
+    }
+    .tour-diagram-area {
+      background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 24px; position: relative; min-height: 240px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tour-view-label {
+      position: absolute; top: 10px; left: 14px;
+      font-size: 0.68rem; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.7;
+    }
+    .tour-svg { width: 100%; max-height: 220px; display: none; opacity: 0; transition: opacity 0.35s ease; }
+    .tour-svg--active { display: block; opacity: 1; }
+    .tour-hotspot { cursor: pointer; pointer-events: all; }
+    .tour-info-panel { display: flex; flex-direction: column; gap: 8px; }
+    .tour-stop-count {
+      font-size: 0.72rem; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.6px;
+    }
+    .tour-stop-title {
+      font-family: 'Poppins', sans-serif; font-size: 1.15rem;
+      font-weight: 600; color: var(--text); margin: 4px 0 0;
+    }
+    .tour-stop-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin: 4px 0 16px; }
+    .tour-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-top: auto;
+    }
+    .tour-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+      background: var(--surface-alt); color: var(--text-muted);
+      font-family: inherit; font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .tour-btn:hover { border-color: var(--amber-dim); color: var(--text); background: var(--surface); }
+    .tour-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .tour-btn:disabled:hover { border-color: var(--border); color: var(--text-muted); background: var(--surface-alt); }
+    .tour-dots { display: flex; gap: 6px; align-items: center; }
+    .tour-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--border);
+      border: none; padding: 0; cursor: pointer; transition: background 0.2s, transform 0.2s;
+    }
+    .tour-dot:hover { background: #4a4f5c; }
+    .tour-dot--active { background: var(--amber); transform: scale(1.25); box-shadow: 0 0 8px var(--amber-glow); }
+    .tour-tabs {
+      display: flex; gap: 0; margin-bottom: 20px; border-bottom: 1px solid var(--border);
+    }
+    .tour-tab {
+      padding: 10px 20px; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+      color: var(--text-muted); background: none; border: none; border-bottom: 2px solid transparent;
+      cursor: pointer; transition: color 0.2s, border-color 0.2s;
+    }
+    .tour-tab:hover { color: var(--text); }
+    .tour-tab--active { color: var(--text); border-bottom-color: var(--red); }
+    .tour-tab-panel { display: none; }
+    .tour-tab-panel--active { display: block; }
+    /* Large CTA variant */
+    .hub-cta-card--large { padding: 28px 32px; gap: 28px; }
+    .hub-cta-card--large .hub-cta-thumb { width: 160px; height: 100px; }
+    .hub-cta-card--large .hub-cta-title { font-size: 1.35rem; }
+    .hub-cta-card--large .hub-cta-meta { font-size: 0.88rem; }
+
+    /* Collapsible chapters */
+    .hub-chapters-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 12px 16px;
+      color: var(--text-muted); font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      cursor: pointer; margin: 14px 0 0;
+      transition: border-color 0.2s, background 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .hub-chapters-toggle:hover { border-color: rgba(192,57,43,0.3); background: var(--surface-alt); }
+    .hub-chapters-chevron { transition: transform 0.3s; flex-shrink: 0; }
+    .hub-chapters-toggle[aria-expanded="true"] .hub-chapters-chevron { transform: rotate(180deg); }
+    .hub-chapters-content {
+      max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+    }
+    .hub-chapters-content--open { max-height: 1200px; }
+    .hub-chapters-content .hub-grid { margin-top: 10px; }
+
+    /* Extra links row below chapters */
+    .hub-grid-extra-wrap {
+      position: relative; margin-top: 14px; padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .hub-grid-extra-label {
+      position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+      background: var(--bg); padding: 0 10px;
+      font-family: inherit; font-size: 0.7rem; font-weight: 600;
+      color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .hub-grid-extra {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    }
+    @media (max-width: 700px) {
+      .hub-grid-extra { grid-template-columns: 1fr; gap: 8px; }
+    }
+
+    /* Sticky chapter nav */
+    .chapter-nav {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 28px; padding: 6px 8px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      z-index: 900; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .chapter-nav--visible { opacity: 1; pointer-events: auto; }
+    .chapter-nav-btn {
+      display: flex; align-items: center; gap: 5px;
+      background: none; border: 1px solid var(--border); border-radius: 20px;
+      color: var(--text); font-size: 0.72rem; font-weight: 600;
+      padding: 6px 14px; cursor: pointer; white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .chapter-nav-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(192,57,43,0.4); }
+    .chapter-nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .chapter-nav-btn:disabled:hover { background: none; border-color: var(--border); }
+    .chapter-nav-btn svg { flex-shrink: 0; }
+    .chapter-nav-label {
+      font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.5px; padding: 0 4px;
+    }
+    @media (max-width: 700px) {
+      .tour-layout { grid-template-columns: 1fr; }
+      .tour-info-panel { order: -1; }
+      .chapter-nav { bottom: 12px; padding: 5px 6px; gap: 4px; }
+      .chapter-nav-btn { font-size: 0.65rem; padding: 5px 10px; }
+      .chapter-nav-label { display: none; }
+    }
+  </style>
+  <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="rewards.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="getting-started.html">Getting Started</a></li>
+        <li><a href="quick-start.html" class="active">Quick Start</a></li>
+
+        <li><a href="enclosure-guide.html?model=original">Enclosure Guide</a></li>
+        <li><a href="water-care.html">Water Care</a></li>
+        <li><a href="dealer-locator.html">Find a Dealer</a></li>
+        <li><a href="https://aquafire.gorgias.help/en-US" target="_blank" rel="noopener">Support</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Sticky Section Nav (appears on scroll) -->
+  <div class="sticky-nav" id="stickyNav">
+    <div class="sticky-nav-inner">
+      <span class="sticky-nav-brand">Aquafire Original</span>
+      <a href="#tour" class="sticky-nav-link" data-section="tour">Tour</a>
+      <a href="#guide" class="sticky-nav-link" data-section="guide">Setup Guide</a>
+      <a href="#troubleshoot" class="sticky-nav-link" data-section="troubleshoot">Troubleshoot</a>
+      <a href="#maintenance" class="sticky-nav-link" data-section="maintenance">Maintenance</a>
+      <a href="#specs" class="sticky-nav-link" data-section="specs">Specs</a>
+      <a href="#features" class="sticky-nav-link" data-section="features">Features</a>
+      <a href="#faq" class="sticky-nav-link" data-section="faq">FAQ</a>
+      <a href="#resources" class="sticky-nav-link" data-section="resources">Resources</a>
+      <a href="#shop" class="sticky-nav-link" data-section="shop">Shop</a>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- Hub Dashboard Hero -->
+    <section class="hub-hero" id="hub-top">
+      <p class="breadcrumb"><a href="quick-start.html">Quick Start</a> / Aquafire Original</p>
+      <h1>Aquafire Original</h1>
+      <p class="hub-tagline">Your interactive owner's guide</p>
+
+      <!-- Primary CTA: Setup Guide -->
+      <a href="#tour" class="hub-cta-card hub-cta-card--large">
+        <img class="hub-cta-thumb" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ORIGINAL.png?v=1768251742" alt="Aquafire Original">
+        <div class="hub-cta-body">
+          <span class="hub-cta-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Interactive Guide
+          </span>
+          <div class="hub-cta-title">Begin Setup Guide</div>
+          <div class="hub-cta-meta">8 chapters &middot; follow along at your own pace</div>
+          <div class="hub-cta-progress">
+            <div class="hub-cta-dot"></div><div class="hub-cta-dot"></div><div class="hub-cta-dot"></div>
+            <div class="hub-cta-dot"></div><div class="hub-cta-dot"></div><div class="hub-cta-dot"></div>
+            <div class="hub-cta-dot"></div><div class="hub-cta-dot"></div>
+          </div>
+        </div>
+        <svg class="hub-cta-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+
+      <!-- Collapsible Chapter Navigation -->
+      <button class="hub-chapters-toggle" id="chaptersToggle" aria-expanded="false">
+        <span>Jump to chapter</span>
+        <svg class="hub-chapters-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="hub-chapters-content" id="chaptersContent">
+        <div class="hub-grid">
+          <a href="#tour" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            </div>
+            <span class="hub-card-label">1. Tour Your Aquafire</span>
+            <span class="hub-card-desc">Explore key features</span>
+          </a>
+          <a href="#guide" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <span class="hub-card-label">2. Setup Guide</span>
+            <span class="hub-card-desc">Step-by-step video walkthrough</span>
+          </a>
+          <a href="#video" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/></svg>
+            </div>
+            <span class="hub-card-label">3. Full Video</span>
+            <span class="hub-card-desc">Complete quick start video</span>
+          </a>
+          <a href="#troubleshoot" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            </div>
+            <span class="hub-card-label">4. Troubleshooting</span>
+            <span class="hub-card-desc">Diagnose &amp; fix common issues</span>
+          </a>
+          <a href="#specs" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            </div>
+            <span class="hub-card-label">5. Specifications</span>
+            <span class="hub-card-desc">Dimensions, power, capabilities</span>
+          </a>
+          <a href="#features" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <span class="hub-card-label">6. Key Features</span>
+            <span class="hub-card-desc">What makes Aquafire unique</span>
+          </a>
+          <a href="#resources" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <span class="hub-card-label">7. Resources</span>
+            <span class="hub-card-desc">Manuals &amp; downloads</span>
+          </a>
+          <a href="#shop" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </div>
+            <span class="hub-card-label">8. Accessories</span>
+            <span class="hub-card-desc">Shop add-ons &amp; parts</span>
+          </a>
+        </div>
+        <div class="hub-grid-extra-wrap">
+          <span class="hub-grid-extra-label">Useful Stuff</span>
+          <div class="hub-grid-extra">
+          <a href="water-care.html" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            </div>
+            <span class="hub-card-label">Water Care</span>
+            <span class="hub-card-desc">Hardness guide &amp; maintenance</span>
+          </a>
+          <a href="enclosure-guide.html?model=original" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="22" height="12" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+            <span class="hub-card-label">Enclosure Builder</span>
+            <span class="hub-card-desc">Build specs &amp; requirements</span>
+          </a>
+          <a href="#maintenance" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <span class="hub-card-label">Maintenance</span>
+            <span class="hub-card-desc">Schedules &amp; care tips</span>
+          </a>
+          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" class="hub-card">
+            <div class="hub-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <span class="hub-card-label">Contact Support</span>
+            <span class="hub-card-desc">Get help from our team</span>
+          </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tour Your Aquafire -->
+    <section class="tour-section" id="tour">
+      <h2 class="section-title"><span class="section-num">1</span> Tour Your Aquafire</h2>
+      <p class="tour-subtitle">Get familiar with the key features of your unit before installation.</p>
+
+      <!-- Tabs -->
+      <div class="tour-tabs">
+        <button class="tour-tab tour-tab--active" data-tour-tab="fireplace">Fireplace</button>
+        <button class="tour-tab" data-tour-tab="controller">Remote Controller</button>
+      </div>
+
+      <!-- === FIREPLACE TAB === -->
+      <div class="tour-tab-panel tour-tab-panel--active" id="tour-panel-fireplace">
+        <div class="tour-layout">
+          <div class="tour-diagram-area">
+            <div class="tour-view-label" id="tour-view-label">Top View</div>
+
+            <!-- TOP VIEW -->
+            <svg id="tour-view-top" class="tour-svg tour-svg--active" viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg">
+              <image href="tour-top-view-awa.svg" x="0" y="0" width="520" height="200"/>
+              <g id="hotspot-ctrl" class="tour-hotspot" style="display:none">
+                <rect x="409" y="124" width="72" height="36" rx="12" fill="rgba(232,168,56,0.1)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+                  <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+                </rect>
+              </g>
+              <g id="hotspot-fill" class="tour-hotspot" style="display:none">
+                <circle cx="488" cy="139.5" r="12" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
+                  <animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="488" cy="139.5" r="3" fill="#e8a838"/>
+              </g>
+              <g id="hotspot-vents-top" class="tour-hotspot" style="display:none">
+                <rect x="22" y="73" width="474" height="11" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
+                  <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+                </rect>
+                <rect x="22" y="109" width="474" height="7" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
+                  <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+                </rect>
+              </g>
+            </svg>
+
+            <!-- FRONT VIEW -->
+            <svg id="tour-view-front" class="tour-svg" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+              <rect x="10" y="10" width="500" height="150" rx="3" fill="#1b1e24" stroke="#3a3e48" stroke-width="1.5"/>
+              <rect x="18" y="18" width="484" height="134" fill="#1a1c20" stroke="none"/>
+              <line x1="10" y1="10" x2="510" y2="10" stroke="#3a3e48" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <rect x="10" y="148" width="500" height="12" fill="#22262e" stroke="#3a3e48" stroke-width="1"/>
+              <rect x="10" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
+              <rect x="502" y="10" width="8" height="150" fill="#22262e" stroke="#3a3e48" stroke-width="0.5"/>
+              <g opacity="0.45" stroke="#3a3e48" stroke-width="0.8" fill="none">
+                <rect x="40" y="50" width="30" height="3" rx="1.5"/><rect x="78" y="50" width="30" height="3" rx="1.5"/><rect x="116" y="50" width="30" height="3" rx="1.5"/><rect x="154" y="50" width="30" height="3" rx="1.5"/><rect x="192" y="50" width="30" height="3" rx="1.5"/><rect x="230" y="50" width="30" height="3" rx="1.5"/><rect x="268" y="50" width="30" height="3" rx="1.5"/><rect x="306" y="50" width="30" height="3" rx="1.5"/><rect x="344" y="50" width="30" height="3" rx="1.5"/><rect x="382" y="50" width="30" height="3" rx="1.5"/><rect x="420" y="50" width="30" height="3" rx="1.5"/><rect x="458" y="50" width="30" height="3" rx="1.5"/>
+                <rect x="40" y="57" width="30" height="3" rx="1.5"/><rect x="78" y="57" width="30" height="3" rx="1.5"/><rect x="116" y="57" width="30" height="3" rx="1.5"/><rect x="154" y="57" width="30" height="3" rx="1.5"/><rect x="192" y="57" width="30" height="3" rx="1.5"/><rect x="230" y="57" width="30" height="3" rx="1.5"/><rect x="268" y="57" width="30" height="3" rx="1.5"/><rect x="306" y="57" width="30" height="3" rx="1.5"/><rect x="344" y="57" width="30" height="3" rx="1.5"/><rect x="382" y="57" width="30" height="3" rx="1.5"/><rect x="420" y="57" width="30" height="3" rx="1.5"/><rect x="458" y="57" width="30" height="3" rx="1.5"/>
+                <rect x="40" y="64" width="30" height="3" rx="1.5"/><rect x="78" y="64" width="30" height="3" rx="1.5"/><rect x="116" y="64" width="30" height="3" rx="1.5"/><rect x="154" y="64" width="30" height="3" rx="1.5"/><rect x="192" y="64" width="30" height="3" rx="1.5"/><rect x="230" y="64" width="30" height="3" rx="1.5"/><rect x="268" y="64" width="30" height="3" rx="1.5"/><rect x="306" y="64" width="30" height="3" rx="1.5"/><rect x="344" y="64" width="30" height="3" rx="1.5"/><rect x="382" y="64" width="30" height="3" rx="1.5"/><rect x="420" y="64" width="30" height="3" rx="1.5"/><rect x="458" y="64" width="30" height="3" rx="1.5"/>
+              </g>
+              <g opacity="0.06" stroke="#3a3e48" stroke-width="0.5">
+                <line x1="30" y1="90" x2="490" y2="90"/><line x1="30" y1="110" x2="490" y2="110"/>
+                <line x1="30" y1="130" x2="490" y2="130"/>
+              </g>
+              <text x="260" y="175" text-anchor="middle" fill="#878c99" font-size="8" font-family="Inter, sans-serif">Front View</text>
+              <g id="hotspot-vents-front" class="tour-hotspot" style="display:none">
+                <rect x="36" y="46" width="458" height="25" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
+                  <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+                </rect>
+              </g>
+            </svg>
+
+            <!-- BACK VIEW -->
+            <svg id="tour-view-back" class="tour-svg" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+              <image href="tour-back-view.svg" x="0" y="0" width="520" height="180"/>
+              <g id="hotspot-vents-back" class="tour-hotspot" style="display:none">
+                <rect x="109" y="96" width="390" height="21" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
+                  <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+                </rect>
+              </g>
+              <g id="hotspot-power" class="tour-hotspot" style="display:none">
+                <circle cx="50.5" cy="105.7" r="14" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
+                  <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="50.5" cy="105.7" r="3" fill="#e8a838"/>
+              </g>
+              <g id="hotspot-dry" class="tour-hotspot" style="display:none">
+                <circle cx="81.5" cy="105.7" r="14" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
+                  <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="81.5" cy="105.7" r="3" fill="#e8a838"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="tour-info-panel">
+            <span class="tour-stop-count" id="tour-stop-count">1 / 5</span>
+            <h3 class="tour-stop-title" id="tour-stop-title">Control Panel</h3>
+            <p class="tour-stop-desc" id="tour-stop-desc">Loading...</p>
+            <div class="tour-nav">
+              <button class="tour-btn" id="tour-prev" aria-label="Previous">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                Prev
+              </button>
+              <div class="tour-dots" id="tour-dots"></div>
+              <button class="tour-btn" id="tour-next" aria-label="Next">
+                Next
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- === CONTROLLER TAB === -->
+      <div class="tour-tab-panel" id="tour-panel-controller">
+        <div class="tour-layout">
+          <div class="tour-diagram-area">
+            <div class="tour-view-label" id="ctrl-view-label">Remote Controller</div>
+
+            <!-- CONTROLLER VIEW -->
+            <svg id="tour-view-controller" class="tour-svg tour-svg--active" viewBox="0 0 300 440" xmlns="http://www.w3.org/2000/svg">
+              <image href="tour-controller-awa.svg" x="0" y="0" width="300" height="440"/>
+              <!-- Power button hotspot -->
+              <g id="hotspot-rc-power" class="tour-hotspot" style="display:none">
+                <circle cx="100" cy="60" r="22" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.5">
+                  <animate attributeName="r" values="22;26;22" dur="2s" repeatCount="indefinite"/>
+                </circle>
+              </g>
+              <!-- Height controls hotspot -->
+              <g id="hotspot-rc-height" class="tour-hotspot" style="display:none">
+                <rect x="118" y="38" width="120" height="44" rx="22" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+                  <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+                </rect>
+              </g>
+              <!-- Speed controls hotspot -->
+              <g id="hotspot-rc-speed" class="tour-hotspot" style="display:none">
+                <rect x="98" y="86" width="120" height="44" rx="22" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+                  <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+                </rect>
+              </g>
+              <!-- Color buttons hotspot -->
+              <g id="hotspot-rc-colors" class="tour-hotspot" style="display:none">
+                <rect x="78" y="140" width="134" height="240" rx="8" fill="rgba(232,168,56,0.08)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+                  <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+                </rect>
+              </g>
+              <!-- LED on/off hotspot -->
+              <g id="hotspot-rc-led" class="tour-hotspot" style="display:none">
+                <rect x="212" y="140" width="44" height="92" rx="22" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+                  <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+                </rect>
+              </g>
+              <!-- Brightness hotspot -->
+              <g id="hotspot-rc-bright" class="tour-hotspot" style="display:none">
+                <rect x="212" y="236" width="44" height="92" rx="22" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+                  <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+                </rect>
+              </g>
+              <!-- Fade hotspot -->
+              <g id="hotspot-rc-fade" class="tour-hotspot" style="display:none">
+                <circle cx="234" cy="354" r="22" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.5">
+                  <animate attributeName="r" values="22;26;22" dur="2s" repeatCount="indefinite"/>
+                </circle>
+              </g>
+            </svg>
+          </div>
+
+          <div class="tour-info-panel">
+            <span class="tour-stop-count" id="ctrl-stop-count">1 / 6</span>
+            <h3 class="tour-stop-title" id="ctrl-stop-title">Power Button</h3>
+            <p class="tour-stop-desc" id="ctrl-stop-desc">Loading...</p>
+            <div class="tour-nav">
+              <button class="tour-btn" id="ctrl-prev" aria-label="Previous">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                Prev
+              </button>
+              <div class="tour-dots" id="ctrl-dots"></div>
+              <button class="tour-btn" id="ctrl-next" aria-label="Next">
+                Next
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Safety Callout -->
+    <div class="safety-callout">
+      <svg class="safety-callout-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div class="safety-callout-body">
+        <div class="safety-callout-title">Important Safety Information</div>
+        <ul class="safety-callout-list">
+          <li><strong>Electrical:</strong> Indoor use only. Ensure proper grounding &mdash; do not use extension cords.</li>
+          <li><strong>Water:</strong> Always maintain the water level. Use ClearShield or Vapor Pure to treat hard water.</li>
+          <li><strong>Installation:</strong> Follow all clearance requirements. Enclosure must use non-combustible materials only.</li>
+          <li><strong>Supervision:</strong> Keep children and pets away from the mist output area during operation.</li>
+        </ul>
+        <a class="safety-callout-link" href="https://www.aquafire.com/pages/aquafire-original-installation-manual" target="_blank" rel="noopener">Read Full Installation Manual &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Interactive Step-by-Step Guide -->
+    <section class="guide-section" id="guide">
+      <h2 class="section-title"><span class="section-num">2</span> Interactive Setup Guide</h2>
+      <p class="guide-subtitle">Follow along at your own pace. Each step plays a short clip — press Next when you're ready to continue.</p>
+
+      <!-- Step progress indicator -->
+      <div class="guide-progress" id="guideProgress"></div>
+
+      <!-- Video player + overlay -->
+      <div class="guide-player">
+        <div class="guide-video-wrap">
+          <div id="guidePlayer"></div>
+          <div class="guide-overlay" id="guideOverlay">
+            <p class="guide-overlay-text" id="overlayText">Step complete</p>
+            <button class="guide-overlay-btn" id="overlayBtn">Next Step</button>
+            <button class="guide-overlay-replay" id="overlayReplay">Replay Step</button>
+          </div>
+        </div>
+
+        <!-- Step info + nav -->
+        <div class="guide-info">
+          <p class="guide-step-label" id="guideStepLabel">Step 1 of 6</p>
+          <h3 class="guide-step-title" id="guideStepTitle">Loading...</h3>
+          <p class="guide-step-desc" id="guideStepDesc"></p>
+          <div class="guide-nav">
+            <button class="guide-btn" id="guidePrev" disabled>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Back
+            </button>
+            <button class="guide-btn guide-btn-replay" id="guideReplay" title="Replay this step">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 4v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 15a9 9 0 105.64-11.36L1 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Replay
+            </button>
+            <button class="guide-btn guide-btn-next" id="guideNext">
+              Next
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full Video (collapsed) -->
+    <section class="video-section" id="video">
+      <h2 class="section-title"><span class="section-num">3</span> Full Quick Start Video</h2>
+      <div class="video-wrapper">
+        <iframe src="https://www.youtube.com/embed/tJxpL1tJTIU" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Aquafire Original quick start video"></iframe>
+      </div>
+    </section>
+
+    <!-- Interactive Troubleshooting Guide -->
+    <section class="troubleshoot-section" id="troubleshoot">
+      <h2 class="section-title"><span class="section-num">4</span> Troubleshooting Guide</h2>
+      <p class="troubleshoot-subtitle">Select a category below, then tap a problem to see possible causes and solutions.</p>
+
+      <div class="ts-categories" id="tsCategories">
+        <button class="ts-cat-btn active" data-cat="power">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Power
+        </button>
+        <button class="ts-cat-btn" data-cat="water">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          Water
+        </button>
+        <button class="ts-cat-btn" data-cat="remote">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+          Remote Control
+        </button>
+        <button class="ts-cat-btn" data-cat="flame">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4-3-8-7.5-8-12a8 8 0 0 1 16 0c0 4.5-4 9-8 12z"/><circle cx="12" cy="10" r="3"/></svg>
+          Flame Appearance
+        </button>
+        <button class="ts-cat-btn" data-cat="led">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+          LED Lights
+        </button>
+        <button class="ts-cat-btn" data-cat="alerts">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Lights &amp; Beeps
+        </button>
+      </div>
+
+      <div id="tsContent"></div>
+    </section>
+
+    <!-- Maintenance Schedule -->
+    <section class="maint-section" id="maintenance">
+      <h2 class="section-title">Maintenance Schedule</h2>
+      <p class="guide-subtitle">Keep your Aquafire Original running at peak performance with regular care. Tap a frequency to see tasks.</p>
+      <div id="maintContent" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </section>
+
+    <!-- Specifications -->
+    <section class="specs-section" id="specs">
+      <h2 class="section-title"><span class="section-num">5</span> Specifications</h2>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>Dimensions</h3>
+          <table class="spec-table">
+            <tr><td>Small 20"</td><td>20" W x 8 5/16" H x 12 15/16" D</td></tr>
+            <tr><td>Medium 40"</td><td>40" W x 8 5/16" H x 12 15/16" D</td></tr>
+            <tr><td>Large 60"</td><td>60" W x 8 5/16" H x 12 15/16" D</td></tr>
+          </table>
+        </div>
+        <div class="spec-card">
+          <h3>Weight</h3>
+          <table class="spec-table">
+            <tr><td>Small 20"</td><td>22 lbs</td></tr>
+            <tr><td>Medium 40"</td><td>44 lbs</td></tr>
+            <tr><td>Large 60"</td><td>66 lbs</td></tr>
+          </table>
+        </div>
+        <div class="spec-card">
+          <h3>Tank Capacity</h3>
+          <table class="spec-table">
+            <tr><td>Small 20"</td><td>2 Liters</td></tr>
+            <tr><td>Medium 40"</td><td>4 Liters</td></tr>
+            <tr><td>Large 60"</td><td>6 Liters</td></tr>
+          </table>
+        </div>
+        <div class="spec-card">
+          <h3>Power</h3>
+          <table class="spec-table">
+            <tr><td>Voltage</td><td>110 &ndash; 120V (60 Hz)</td></tr>
+            <tr><td>Adapter</td><td>24V adapter included</td></tr>
+            <tr><td>Runtime</td><td>Up to 14 hours</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Features -->
+    <section class="features-section" id="features">
+      <h2 class="section-title"><span class="section-num">6</span> Key Features</h2>
+      <div class="features-grid">
+        <div class="feature-item"><strong>Classic Orange Flame</strong> &mdash; Warm, natural amber-orange flame effect that captures the timeless look of a traditional fire.</div>
+        <div class="feature-item"><strong>Single LED Light Bar</strong> &mdash; Illuminates the water mist with even, warm light for an authentic flame presentation.</div>
+        <div class="feature-item"><strong>No Venting Required</strong> &mdash; No chimney, no gas line. Install virtually anywhere with just a standard outlet.</div>
+        <div class="feature-item"><strong>Direct Plumbing Ready</strong> &mdash; Connect to a water line for continuous operation without manual refills.</div>
+        <div class="feature-item"><strong>Home Automation</strong> &mdash; Dry contact terminal for integration with smart home systems and external switches.</div>
+        <div class="feature-item"><strong>Gang Units Together</strong> &mdash; Combine multiple inserts for up to 40 ft of continuous flame on a single control unit.</div>
+      </div>
+    </section>
+
+    <!-- Frequently Asked Questions -->
+    <section class="faq-section" id="faq">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div id="faqContent" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </section>
+
+    <!-- Resources / Downloads -->
+    <section class="resources-section" id="resources">
+      <h2 class="section-title"><span class="section-num">7</span> Resources</h2>
+      <div class="resources-grid">
+        <a class="resource-card" href="https://www.aquafire.com/pages/aquafire-original-installation-manual" target="_blank" rel="noopener">
+          <svg class="resource-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span class="resource-info">
+            <span class="resource-title">Full Installation Manual</span>
+            <span class="resource-type">PDF Download</span>
+          </span>
+        </a>
+        <a class="resource-card" href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">
+          <svg class="resource-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span class="resource-info">
+            <span class="resource-title">Warranty</span>
+            <span class="resource-type">PDF Download</span>
+          </span>
+        </a>
+        <a class="resource-card" href="https://www.aquafire.com/pages/aquafire-original-drawings" target="_blank" rel="noopener">
+          <svg class="resource-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          <span class="resource-info">
+            <span class="resource-title">Drawings</span>
+            <span class="resource-type">PDF Download</span>
+          </span>
+        </a>
+        <a class="resource-card" href="https://www.aquafire.com/pages/aquafire-original-user-manual" target="_blank" rel="noopener">
+          <svg class="resource-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span class="resource-info">
+            <span class="resource-title">User Manual</span>
+            <span class="resource-type">PDF Download</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Shop Accessories -->
+    <section class="shop-section" id="shop">
+      <h2 class="section-title"><span class="section-num">8</span> Shop Accessories</h2>
+      <div class="shop-grid">
+        <a class="shop-card" href="https://www.aquafire.com/products/aquafire-clearshield" target="_blank" rel="noopener">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/all_clearshirlds_972897a2-c366-453b-b658-258e86a282ea.png?v=1761142736" alt="ClearShield">
+          <div class="shop-card-body">
+            <span class="shop-card-name">ClearShield</span>
+            <span class="shop-card-meta">Water treatment solution</span>
+          </div>
+        </a>
+        <a class="shop-card" href="https://www.aquafire.com/products/vapor-pure-filter-softener-system" target="_blank" rel="noopener">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/2_b168e3d1-f78d-473d-aa8e-9e047c4a2cb2.png?v=1772220296" alt="Vapor Pure Water Softener">
+          <div class="shop-card-body">
+            <span class="shop-card-name">Vapor Pure Water Softener</span>
+            <span class="shop-card-meta">Inline water softener system</span>
+          </div>
+        </a>
+        <a class="shop-card" href="https://www.aquafire.com/products/aquafire-scent-diffuser" target="_blank" rel="noopener">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/scent_main.jpg?v=1756829244" alt="Scent Diffuser">
+          <div class="shop-card-body">
+            <span class="shop-card-name">Scent Diffuser</span>
+            <span class="shop-card-meta">Add fragrance to your flame</span>
+          </div>
+        </a>
+        <a class="shop-card" href="https://www.aquafire.com/products/tank-guard" target="_blank" rel="noopener">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/5A378C65-4102-4BFE-AD88-05D186CA4746.png?v=1772986051" alt="Tank Guard">
+          <div class="shop-card-body">
+            <span class="shop-card-name">Tank Guard</span>
+            <span class="shop-card-meta">Reservoir protection</span>
+          </div>
+        </a>
+        <a class="shop-card" href="https://www.aquafire.com/collections/replacement-parts" target="_blank" rel="noopener">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/DSC01145copy_2.jpg?v=1679684307" alt="Replacement Parts">
+          <div class="shop-card-body">
+            <span class="shop-card-name">Replacement Parts</span>
+            <span class="shop-card-meta">Browse all parts</span>
+          </div>
+        </a>
+        <div class="shop-card disabled">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/IMG_1319.jpg?v=1772985985" alt="AquafireBox Inserts">
+          <div class="shop-card-body">
+            <span class="shop-card-name">AquafireBox Inserts</span>
+            <span class="shop-card-badge coming-soon">Coming Soon</span>
+          </div>
+        </div>
+        <div class="shop-card disabled">
+          <img class="shop-card-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/IMG_1292.jpg?v=1772985886" alt="Free Standing Fireplaces">
+          <div class="shop-card-body">
+            <span class="shop-card-name">Free Standing Fireplaces</span>
+            <span class="shop-card-badge coming-soon">Coming Soon</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Sticky Chapter Nav -->
+  <div class="chapter-nav" id="chapterNav">
+    <button class="chapter-nav-btn" id="chapterPrev" disabled>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      <span id="chapterPrevLabel">Prev</span>
+    </button>
+    <span class="chapter-nav-label" id="chapterCurrent"></span>
+    <button class="chapter-nav-btn" id="chapterNext">
+      <span id="chapterNextLabel">Next</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" height="20">
+        <p>The complete guide to your Aquafire water vapor fireplace.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Guides</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="quick-start.html">Quick Start</a>
+          <a href="enclosure-guide.html?model=original">Enclosure Guide</a>
+          <a href="water-care.html">Water Care</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="https://aquafire.gorgias.help/en-US" target="_blank" rel="noopener">Support Hub</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom container"><p>&copy; 2026 Aquafire. All rights reserved.</p></div>
+  </footer>
+
+  <script src="embed.js"></script>
+  <script src="rewards.js"></script>
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle?.addEventListener('click', () => {
+      const open = navLinks?.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+
+    // Back to top
+    const btt = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      btt.classList.toggle('visible', window.scrollY > window.innerHeight);
+    }, { passive: true });
+    btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Sticky section nav
+    const stickyNav = document.getElementById('stickyNav');
+    const hubHero = document.getElementById('hub-top');
+    const stickyLinks = stickyNav.querySelectorAll('.sticky-nav-link');
+    const sections = Array.from(stickyLinks).map(l => ({
+      id: l.dataset.section,
+      el: document.getElementById(l.dataset.section),
+      link: l
+    })).filter(s => s.el);
+
+    function updateStickyNav() {
+      // Show/hide sticky nav
+      const heroBottom = hubHero.getBoundingClientRect().bottom;
+      stickyNav.classList.toggle('visible', heroBottom < 0);
+
+      // Highlight active section
+      let activeId = sections[0]?.id;
+      for (const s of sections) {
+        if (s.el.getBoundingClientRect().top <= 80) activeId = s.id;
+      }
+      stickyLinks.forEach(l => l.classList.toggle('active', l.dataset.section === activeId));
+    }
+    window.addEventListener('scroll', updateStickyNav, { passive: true });
+  </script>
+
+  <!-- Interactive Video Guide -->
+  <script>
+    // ── Step definitions ──
+    // Adjust timestamps (in seconds) to match your video.
+    const GUIDE_STEPS = [
+      {
+        title: 'Unbox & Install into Enclosure',
+        desc: 'Remove the Aquafire Original from its packaging and slide the insert into your site-built enclosure. Make sure the unit is level and properly seated.',
+        start: 0,
+        end: 16
+      },
+      {
+        title: 'Connect to Water Line',
+        desc: 'Attach the water supply line to the unit\u2019s inlet for continuous, hands-free operation. Ensure the connection is secure and leak-free.',
+        start: 17,
+        end: 23
+      },
+      {
+        title: 'Or Manually Fill with Water',
+        desc: 'If not using a water line, use the integrated fill pump to fill Aquafire with distilled water using included fill tube. Submerge the filter basket end of the tube into your water source and connect the other end to the drain/fill port. Press and hold B1 button until pump engages. The pump will begin filling end turn off automatically when complete.',
+        start: 28,
+        end: 40
+      },
+      {
+        title: 'Connect Power Supply',
+        desc: 'Plug the 24V power adapter into a standard 110\u2013120V outlet and connect it to the unit. Do not use an extension cord.',
+        start: 23,
+        end: 28
+      },
+      {
+        title: 'Power On Device',
+        desc: 'Press the On/Off button on the unit or use the included remote control. The red LED indicator will confirm the unit is on and ready to produce mist.',
+        start: 40,
+        end: 46
+      },
+      {
+        title: 'Don\u2019t Forget the Light Trap',
+        desc: 'Make sure to construct an on-spec light trap to conceal the vertical LED light path and create a more realistic flame effect. This is an important finishing step for the best visual result.',
+        start: 47,
+        end: 54
+      }
+    ];
+
+    const VIDEO_ID = 'tJxpL1tJTIU';
+    let player = null;
+    let currentStep = 0;
+    let pollTimer = null;
+
+    // ── DOM refs ──
+    const progressEl = document.getElementById('guideProgress');
+    const overlayEl = document.getElementById('guideOverlay');
+    const overlayTextEl = document.getElementById('overlayText');
+    const overlayBtnEl = document.getElementById('overlayBtn');
+    const stepLabelEl = document.getElementById('guideStepLabel');
+    const stepTitleEl = document.getElementById('guideStepTitle');
+    const stepDescEl = document.getElementById('guideStepDesc');
+    const prevBtn = document.getElementById('guidePrev');
+    const nextBtn = document.getElementById('guideNext');
+    const replayBtn = document.getElementById('guideReplay');
+    const overlayReplayBtn = document.getElementById('overlayReplay');
+
+    // ── Build progress dots ──
+    function buildProgress() {
+      progressEl.innerHTML = '';
+      GUIDE_STEPS.forEach((step, i) => {
+        if (i > 0) {
+          const bar = document.createElement('div');
+          bar.className = 'guide-progress-bar';
+          const fill = document.createElement('div');
+          fill.className = 'bar-fill';
+          bar.appendChild(fill);
+          progressEl.appendChild(bar);
+        }
+        const dot = document.createElement('button');
+        dot.className = 'guide-progress-step';
+        dot.textContent = i + 1;
+        dot.title = step.title;
+        dot.addEventListener('click', () => goToStep(i));
+        progressEl.appendChild(dot);
+      });
+    }
+
+    // ── Update UI for current step ──
+    function updateUI() {
+      const step = GUIDE_STEPS[currentStep];
+      stepLabelEl.textContent = `Step ${currentStep + 1} of ${GUIDE_STEPS.length}`;
+      stepTitleEl.textContent = step.title;
+      stepDescEl.textContent = step.desc;
+      prevBtn.disabled = currentStep === 0;
+
+      const isLast = currentStep === GUIDE_STEPS.length - 1;
+      nextBtn.innerHTML = isLast
+        ? 'Finish'
+        : 'Next <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+      // Update progress dots
+      const dots = progressEl.querySelectorAll('.guide-progress-step');
+      const bars = progressEl.querySelectorAll('.guide-progress-bar');
+      dots.forEach((dot, i) => {
+        dot.classList.remove('active', 'completed');
+        if (i < currentStep) dot.classList.add('completed');
+        else if (i === currentStep) dot.classList.add('active');
+      });
+      bars.forEach((bar, i) => {
+        const fill = bar.querySelector('.bar-fill');
+        fill.style.width = i < currentStep ? '100%' : '0';
+      });
+    }
+
+    // ── Play the current step's segment ──
+    function playStep() {
+      const step = GUIDE_STEPS[currentStep];
+      overlayEl.classList.remove('visible');
+      if (player && player.seekTo) {
+        player.seekTo(step.start, true);
+        player.playVideo();
+        startPolling();
+      }
+    }
+
+    // ── Poll to detect when segment ends ──
+    function startPolling() {
+      stopPolling();
+      pollTimer = setInterval(() => {
+        if (!player || !player.getCurrentTime) return;
+        const t = player.getCurrentTime();
+        const step = GUIDE_STEPS[currentStep];
+        if (t >= step.end - 0.3) {
+          player.pauseVideo();
+          stopPolling();
+          showOverlay();
+        }
+      }, 250);
+    }
+
+    function stopPolling() {
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    }
+
+    // ── Show the "step complete" overlay ──
+    function showOverlay() {
+      const isLast = currentStep === GUIDE_STEPS.length - 1;
+      overlayTextEl.textContent = isLast ? 'Setup complete!' : 'Step complete';
+      overlayBtnEl.textContent = isLast ? 'Replay Guide' : 'Next Step';
+      overlayEl.classList.add('visible');
+    }
+
+    // ── Navigation ──
+    function goToStep(i) {
+      if (i < 0 || i >= GUIDE_STEPS.length) return;
+      currentStep = i;
+      updateUI();
+      playStep();
+    }
+
+    prevBtn.addEventListener('click', () => goToStep(currentStep - 1));
+    nextBtn.addEventListener('click', () => {
+      if (currentStep < GUIDE_STEPS.length - 1) {
+        goToStep(currentStep + 1);
+      } else {
+        goToStep(0);
+      }
+    });
+    replayBtn.addEventListener('click', () => playStep());
+    overlayReplayBtn.addEventListener('click', () => playStep());
+    overlayBtnEl.addEventListener('click', () => {
+      if (currentStep < GUIDE_STEPS.length - 1) {
+        goToStep(currentStep + 1);
+      } else {
+        goToStep(0);
+      }
+    });
+
+    // ── YouTube IFrame API ──
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+
+    window.onYouTubeIframeAPIReady = function () {
+      player = new YT.Player('guidePlayer', {
+        videoId: VIDEO_ID,
+        playerVars: {
+          rel: 0,
+          modestbranding: 1,
+          controls: 1,
+          disablekb: 0,
+          start: GUIDE_STEPS[0].start
+        },
+        events: {
+          onReady: function () {
+            buildProgress();
+            updateUI();
+          },
+          onStateChange: function (e) {
+            // If user manually seeks past the end, re-sync
+            if (e.data === YT.PlayerState.PLAYING) {
+              startPolling();
+            }
+          }
+        }
+      });
+    };
+  </script>
+
+  <!-- Troubleshooting Guide -->
+  <script>
+  (function() {
+    const TS_DATA = {
+      power: [
+        {
+          problem: 'Unit fails to turn on when using the power button',
+          solutions: [
+            { cause: 'Power supply not properly plugged in', fix: 'Check power supply connections and look for green LED on power supply indicating that it\u2019s powered.' },
+            { cause: 'Wall outlet may not be powered', fix: 'Check breaker main panel in building to see if breaker has been tripped or turned off.' }
+          ]
+        },
+        {
+          problem: 'Power supply indicator light is green, but unit still won\u2019t turn on',
+          solutions: [
+            { cause: 'Main fuse inside the fireplace may be blown', fix: 'Contact support for assistance.' }
+          ]
+        },
+        {
+          problem: 'Power supply indicator light is red',
+          solutions: [
+            { cause: 'Power supply has somehow been damaged', fix: 'Contact support for assistance.' }
+          ]
+        },
+        {
+          problem: 'Unit turns on, but power button flashes and immediately shuts off',
+          solutions: [
+            { cause: 'Possible internal component failure due to rough handling during shipping', fix: 'Contact support for assistance.' }
+          ]
+        },
+        {
+          problem: 'Unit appears to have power, but a "buzzing" sound is heard',
+          solutions: [
+            { cause: 'Power supply may not be fully plugged in on the back of the unit', fix: 'Check that 90 degree fitting is securely plugged in on the back of the unit. If it is and buzzing continues, contact support.' },
+            { cause: 'Power supply is fully plugged in on the back of the unit, but buzzing persists', fix: 'Main power outlet may be loose. Contact support for assistance.' }
+          ]
+        }
+      ],
+      water: [
+        {
+          problem: 'Musty or stale smell when unit is running',
+          solutions: [
+            { cause: 'Old or stale water generally created from lack of use', fix: 'Drain and refill with fresh water. Consider cleaning per the PM maintenance guidelines.' }
+          ]
+        },
+        {
+          problem: 'Leak detected after unit has been unused for an extended period of time',
+          solutions: [
+            { cause: 'Float sensor in mist tank may be stuck creating above normal water level in mist tube', fix: 'Drain excess water to proper level. Lift and plunge mist maker rack vigorously 10\u201315 times to free up float sensor in mist tank. Allow unit to run and recheck to make sure correct water level is maintained.' }
+          ]
+        },
+        {
+          problem: 'Unit beeps then turns off',
+          solutions: [
+            { cause: 'Low water level', fix: 'Refill unit manually or verify that water feed is on if unit is permanently plumbed.' }
+          ]
+        }
+      ],
+      remote: [
+        {
+          problem: 'Remote control does not turn fireplace on/off',
+          solutions: [
+            { cause: 'Possible dead battery', fix: 'Install new CR-2032 battery (Lithium).' },
+            { cause: 'Remote may not be synced to this particular fireplace', fix: 'Push and hold the power button on the fireplace until it flashes, then hit any button on the remote. Use this process to sync multiple fireplaces to a single remote.' }
+          ]
+        },
+        {
+          problem: 'Remote control powers the fireplace on/off, but doesn\u2019t seem to respond to flame adjustments or color changes',
+          solutions: [
+            { cause: 'Possible low battery', fix: 'Install new CR-2032 battery (Lithium).' },
+            { cause: 'Possible sync issue', fix: 'Push and hold the power button on the fireplace until it flashes, then hit any button on the remote to re-sync.' }
+          ]
+        },
+        {
+          problem: 'Remote does not work despite trying all steps listed above',
+          solutions: [
+            { cause: 'Remote may be malfunctioning', fix: 'Contact support for further assistance.' }
+          ]
+        }
+      ],
+      flame: [
+        {
+          problem: 'Flame height is less than 6" high in all sections',
+          solutions: [
+            { cause: 'Possible air flow issue due to enclosure design or ambient room currents', fix: 'Verify that fireplace is getting sufficient air and that no AC vents, fans, or air currents are impacting the mist from rising vertically.' },
+            { cause: 'Flame volume may be low', fix: 'Use remote (or phone app) to increase volume of mist by pressing the "+".' }
+          ]
+        },
+        {
+          problem: 'Flame height is less than 6" high in one section only',
+          solutions: [
+            { cause: 'Mist maker may need to be cleaned', fix: 'Follow PM instructions for cleaning mist maker. Consider cleaning all mist makers.' },
+            { cause: 'Water level in mist tube may be too high', fix: 'Remove excess water to proper level which is the height of the black mushroom cap.' }
+          ]
+        },
+        {
+          problem: 'Flames appear more "smoky" than desired',
+          solutions: [
+            { cause: 'Excess mist is being generated', fix: 'Use remote (or phone app) to decrease volume of mist by pressing the "\u2212".' }
+          ]
+        },
+        {
+          problem: 'Slower flame movement is desired',
+          solutions: [
+            { cause: 'Flame speed setting is too high', fix: 'Use remote (or phone app) to decrease speed of mist by pressing the "\u2212".' }
+          ]
+        },
+        {
+          problem: 'Faster flame movement is desired',
+          solutions: [
+            { cause: 'Flame speed setting is too low', fix: 'Use remote (or phone app) to increase speed of mist by pressing the "+".' }
+          ]
+        }
+      ],
+      led: [
+        {
+          problem: 'LED light bar is not on when unit is on',
+          solutions: [
+            { cause: 'Loose connection on the LED light bar', fix: 'Check the connection on the right end of the LED bar to make sure it is securely plugged in.' },
+            { cause: 'Possible problem with the LED bar or driver card', fix: 'Contact support for further assistance.' }
+          ]
+        },
+        {
+          problem: 'One or more light cells are not working on the LED bar',
+          solutions: [
+            { cause: 'There is a problem with the LED light bar', fix: 'Contact support for further assistance.' }
+          ]
+        }
+      ],
+      alerts: 'alerts'
+    };
+
+    const ALERTS_DATA = [
+      {
+        lights: ['#c0392b', '#c0392b', '#4ade80'],
+        beeps: 'Two quick beeps, every two seconds',
+        alert: 'Low / No Water',
+        causes: ['The water supply hasn\u2019t been turned on.', 'Water needs to be added.']
+      },
+      {
+        lights: ['blink', 'blink', 'blink'],
+        beeps: 'None',
+        alert: 'Maintenance Reminder',
+        causes: ['Due for preventative maintenance cleaning \u2014 press and hold middle and left buttons together to reset.']
+      },
+      {
+        lights: ['cycle', 'cycle', 'cycle'],
+        beeps: 'Three long beeps, every second',
+        alert: 'Overflow / High Water Alert',
+        causes: ['Water level is too high.', 'Float sensor is stuck.']
+      },
+      {
+        lights: ['flash', 'flash', 'flash'],
+        beeps: 'One short beep, every two seconds',
+        alert: 'Voltage Alert',
+        causes: ['Possible shortage.', 'Faulty power adapter.']
+      }
+    ];
+
+    const contentEl = document.getElementById('tsContent');
+    const catBtns = document.querySelectorAll('.ts-cat-btn');
+
+    function renderProblems(catKey) {
+      if (catKey === 'alerts' || TS_DATA[catKey] === 'alerts') {
+        return renderAlerts();
+      }
+      const problems = TS_DATA[catKey] || [];
+      let html = '<div class="ts-problems">';
+      problems.forEach((p, i) => {
+        html += `
+          <div class="ts-problem" data-idx="${i}">
+            <div class="ts-problem-header" onclick="this.parentElement.classList.toggle('open')">
+              <span class="ts-problem-title">${p.problem}</span>
+              <svg class="ts-problem-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="ts-problem-body">
+              <div class="ts-solutions">
+                ${p.solutions.map(s => `
+                  <div class="ts-solution">
+                    <div class="ts-solution-cause">
+                      <div class="ts-solution-label">Possible Cause</div>
+                      <p>${s.cause}</p>
+                    </div>
+                    <div class="ts-solution-fix">
+                      <div class="ts-solution-label">Solution</div>
+                      <p>${s.fix}</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>`;
+      });
+      html += '</div>';
+      return html;
+    }
+
+    function renderAlerts() {
+      let html = '<div class="ts-alerts">';
+      ALERTS_DATA.forEach(a => {
+        const lightsHtml = a.lights.map(c => {
+          if (c === 'blink') return '<div class="ts-alert-light" style="background:var(--text-muted);opacity:0.6"></div>';
+          if (c === 'cycle') return '<div class="ts-alert-light" style="background:linear-gradient(135deg,#c0392b,#f39c12,#4ade80)"></div>';
+          if (c === 'flash') return '<div class="ts-alert-light" style="background:var(--text-muted);animation:none"></div>';
+          return `<div class="ts-alert-light" style="background:${c}"></div>`;
+        }).join('');
+
+        html += `
+          <div class="ts-alert-row">
+            <div class="ts-alert-lights">${lightsHtml}</div>
+            <div>
+              <div class="ts-alert-label">Beeps</div>
+              <div class="ts-alert-value">${a.beeps}</div>
+            </div>
+            <div>
+              <div class="ts-alert-label">Alert</div>
+              <div class="ts-alert-value">${a.alert}</div>
+            </div>
+            <div>
+              <div class="ts-alert-label">Possible Cause</div>
+              <div class="ts-alert-cause">${a.causes.join('<br>')}</div>
+            </div>
+          </div>`;
+      });
+      html += '</div>';
+      return html;
+    }
+
+    function setCategory(catKey) {
+      catBtns.forEach(b => b.classList.toggle('active', b.dataset.cat === catKey));
+      contentEl.innerHTML = renderProblems(catKey);
+    }
+
+    catBtns.forEach(btn => {
+      btn.addEventListener('click', () => setCategory(btn.dataset.cat));
+    });
+
+    // Initialize with power category
+    setCategory('power');
+  })();
+
+  // ── Maintenance Schedule ──
+  (function() {
+    const MAINT_DATA = [
+      {
+        frequency: 'Weekly',
+        badge: 'Routine',
+        tasks: [
+          { name: 'Check water level', tip: 'Ensure the tank is at least half full. Top off with distilled or softened water as needed.' },
+          { name: 'Wipe down exterior surfaces', tip: 'Use a soft, dry microfiber cloth. Avoid abrasive cleaners or sprays near the mist output.' }
+        ]
+      },
+      {
+        frequency: 'Monthly',
+        badge: '30 Days',
+        tasks: [
+          { name: 'Clean mist maker disc', tip: 'Gently wipe the ceramic disc with a soft cotton cloth. Do not use metal tools or abrasive pads.' },
+          { name: 'Inspect water clarity', tip: 'If water appears cloudy or discolored, drain and refill. Consider adding ClearShield water treatment.' },
+          { name: 'Check LED bar function', tip: 'Toggle the LED light bar on and off to verify the single LED bar illuminates evenly along its full length.' }
+        ]
+      },
+      {
+        frequency: 'Quarterly',
+        badge: '90 Days',
+        tasks: [
+          { name: 'Drain and refill tank completely', tip: 'Power off and unplug. Remove the drain plug or use the included siphon. Refill with fresh treated water.' },
+          { name: 'Clean tank interior', tip: 'Wipe the inside walls with a soft cloth and mild soap solution. Rinse thoroughly before refilling.' },
+          { name: 'Inspect water line connections', tip: 'For plumbed units, check all fittings for drips or mineral buildup. Tighten if needed.' }
+        ]
+      },
+      {
+        frequency: 'Annually',
+        badge: '12 Months',
+        tasks: [
+          { name: 'Replace mist maker disc', tip: 'Order a replacement disc from the Accessories shop. Swap out the old disc and test vapor output.' },
+          { name: 'Deep clean tank and water line', tip: 'Soak tank components in a mild vinegar solution (1:4 ratio) for 30 minutes, then rinse thoroughly.' },
+          { name: 'Inspect power adapter and wiring', tip: 'Check the 24V adapter for damage or excessive heat marks. Inspect wiring connections at the unit.' }
+        ]
+      }
+    ];
+
+    const container = document.getElementById('maintContent');
+    let html = '';
+    MAINT_DATA.forEach((group, gi) => {
+      html += `
+        <div class="maint-frequency${gi === 0 ? ' open' : ''}" data-freq="${gi}">
+          <div class="maint-frequency-header" onclick="this.parentElement.classList.toggle('open')">
+            <span>
+              <span class="maint-frequency-label">${group.frequency}</span>
+              <span class="maint-frequency-badge">${group.badge}</span>
+            </span>
+            <svg class="ts-problem-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="maint-frequency-body">
+            <div class="maint-task-list">
+              ${group.tasks.map(t => `
+                <div class="maint-task">
+                  <div class="maint-task-name">${t.name}</div>
+                  <div class="maint-task-tip">${t.tip}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>`;
+    });
+    container.innerHTML = html;
+  })();
+
+  // ── FAQ Section ──
+  (function() {
+    const FAQ_DATA = [
+      {
+        q: 'What is the Aquafire Original?',
+        a: "The Aquafire Original is the classic water vapor fireplace insert that started the Aquafire lineup. It uses ultrasonic mist technology combined with a single LED light bar to create a realistic, warm amber-orange flame effect — without any heat, flames, or fuel. It's the ideal choice for homeowners and designers who want an authentic flame appearance with timeless styling at an accessible price point."
+      },
+      {
+        q: 'What sizes does the Aquafire Original come in?',
+        a: 'The Original is available in three sizes: Small (20"), Medium (40"), and Large (60"). All three share the same classic feature set, so you get the full Original experience regardless of the size you choose.'
+      },
+      {
+        q: 'How much does the Aquafire Original cost?',
+        a: 'The Aquafire Original is the most affordable model in the Aquafire lineup. Pricing varies by size. Visit <a href="https://www.aquafire.com" target="_blank" rel="noopener" style="color:var(--blue)">aquafire.com</a> for the most current pricing.'
+      },
+      {
+        q: 'What are the exact dimensions and weight of each Original size?',
+        a: '<strong>20" Model:</strong> 20"W × 8 5/16"H × 12 15/16"D — weighs 22 lbs<br><strong>40" Model:</strong> 40"W × 8 5/16"H × 12 15/16"D — weighs 44 lbs<br><strong>60" Model:</strong> 60"W × 8 5/16"H × 12 15/16"D — weighs 66 lbs'
+      },
+      {
+        q: 'What makes the Aquafire Original different from the Pro?',
+        a: 'The Original is the classic entry point to the Aquafire lineup. Compared to the Pro, the Original features a single LED light bar (versus the Pro\u2019s dual bars), a natural amber-orange flame (versus the Pro\u2019s 30+ customizable colors), and a more compact 8 5/16"H profile (versus the Pro\u2019s taller 11 5/16"H). The Original is controlled entirely with the included remote — there is no dedicated smartphone app. For most buyers, the Original delivers the authentic vapor-flame experience at a lower price point.'
+      },
+      {
+        q: 'What flame color does the Aquafire Original produce?',
+        a: 'The Original produces a warm, natural amber-orange flame that closely mimics the look of a traditional wood fire. It does not offer the 30+ customizable colors available on the Pro model — instead, it focuses on a classic, realistic flame appearance with timeless appeal.'
+      },
+      {
+        q: 'Does the Aquafire Original have a smartphone app?',
+        a: 'No. The Original is controlled via the included remote only. If app-based control is important to you, consider the Aquafire Pro, which includes a dedicated iOS and Android app with full remote control.'
+      },
+      {
+        q: 'Is the Aquafire Original compatible with smart home systems?',
+        a: 'The Original includes a dry contact terminal on the back of the unit, which allows integration with home automation systems or external switches for remote on/off control. Direct voice-assistant compatibility (Alexa, Google Home) is on the Aquafire product roadmap.'
+      },
+      {
+        q: 'How long does the Aquafire Original run on a single tank fill?',
+        a: 'The Original offers up to 14 hours of continuous runtime on a full tank. Tank capacities are 2 liters (20"), 4 liters (40"), and 6 liters (60"). For continuous operation, the Original also supports direct water line connection.'
+      },
+      {
+        q: "Can I connect the Aquafire Original to my home's water line?",
+        a: 'Yes. The Aquafire Original is compatible with the Direct Plumb Kit, which lets you connect the unit to a standard water line for continuous, hands-free operation — no manual refilling required. This is especially useful for commercial installations or spaces where frequent access to the fill port is inconvenient.'
+      },
+      {
+        q: 'Does the Aquafire Original produce any heat?',
+        a: 'No. Like all Aquafire models, the Original produces zero heat. The flame is created entirely from water mist and LED light and is cool to the touch. This makes it safe for children and pets and allows year-round operation without affecting your room temperature or HVAC workload.'
+      },
+      {
+        q: 'What power supply does the Aquafire Original need?',
+        a: 'The Original requires a standard 110–120V (60 Hz) electrical outlet. A 24V adapter is included. No special electrical work is required beyond ensuring an outlet is accessible behind or near the installation location. Do not use an extension cord.'
+      },
+      {
+        q: "How realistic is the Aquafire Original's flame effect?",
+        a: 'The Original produces a convincing, realistic amber-orange flame that looks remarkably like a real fire. The single LED light bar illuminates the ultrasonic water mist from below, creating natural flickering motion and warm color. Visitors frequently mistake it for a real flame — especially from a distance or at night.'
+      },
+      {
+        q: 'Can I install the Aquafire Original in a commercial space?',
+        a: "Absolutely. Aquafire's units are manufactured by A-Fire Design, a European manufacturer with installations in major hospitality brands including Hilton, Ritz-Carlton, Marriott, Disney, and Chase Sapphire properties. The Original's commercial-grade build quality and direct plumbing support make it ideal for hotel lobbies, restaurants, retail environments, and office spaces. Commercial installations are covered by a 1-year warranty."
+      },
+      {
+        q: 'What maintenance does the Aquafire Original require?',
+        a: 'The primary maintenance is replacing the ultrasonic mist makers, which wear down after approximately 2,000–3,000 hours of use. A 60" Original uses three mist makers. At four hours of daily use, expect to replace them roughly every 18–24 months. Using filtered or softened water significantly extends their lifespan. Basic weekly and monthly cleaning is also recommended — see the Maintenance section above for a full schedule.'
+      },
+      {
+        q: 'How do I install the Aquafire Original?',
+        a: "The Original is a built-in insert. You'll need a framed firebox built to the Original's specified dimensions, a standard 120V electrical outlet, and proper access for tank refilling or water-line connection. Total installation cost (framing, electrical, and finishing — excluding the unit) typically ranges from $500 to $2,500 depending on complexity and local labor rates. See the Enclosure Guide for exact cutout dimensions."
+      },
+      {
+        q: 'Is the Original safe for bedrooms and enclosed spaces?',
+        a: 'Yes. There is no combustion, no emissions, no carbon monoxide, and no heat. The Original is safe to operate in any enclosed room, including bedrooms with doors closed.'
+      },
+      {
+        q: 'Can I adjust the mist intensity on the Aquafire Original?',
+        a: 'Yes. The Original allows you to control both mist density and flame speed via the included remote. This lets you fine-tune the flame height and movement to match your preference — from a subtle, low flicker to a full, dramatic flame display.'
+      },
+      {
+        q: 'Can I gang multiple Aquafire Original units together?',
+        a: 'Yes. Multiple Aquafire Original inserts can be combined end-to-end for up to 40 ft of continuous flame, all controlled from a single remote. This is popular for large commercial installations, feature walls, and custom residential applications where a standard 60" insert isn\u2019t wide enough.'
+      },
+      {
+        q: 'What warranty does the Aquafire Original come with?',
+        a: 'The Original is covered by a 2-year factory warranty for residential use and a 1-year warranty for commercial applications, covering defects in materials and workmanship under normal use. Aquafire provides remote technical support via phone, FaceTime, or Zoom to diagnose and resolve any issues.'
+      }
+    ];
+
+    const container = document.getElementById('faqContent');
+    let html = '';
+    FAQ_DATA.forEach((item, i) => {
+      html += `
+        <div class="ts-problem" data-idx="${i}">
+          <div class="ts-problem-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="ts-problem-title">${item.q}</span>
+            <svg class="ts-problem-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="ts-problem-body">
+            <div class="ts-solutions">
+              <div style="padding:4px 0;font-size:0.88rem;line-height:1.6;color:var(--text-muted);">${item.a}</div>
+            </div>
+          </div>
+        </div>`;
+    });
+    container.innerHTML = html;
+  })();
+  </script>
+
+  <!-- Tour Your Aquafire -->
+  <script>
+  (function() {
+    /* ── Tab switching ── */
+    var tabs = document.querySelectorAll('.tour-tab');
+    var panels = document.querySelectorAll('.tour-tab-panel');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        tabs.forEach(function(t) { t.classList.remove('tour-tab--active'); });
+        panels.forEach(function(p) { p.classList.remove('tour-tab-panel--active'); });
+        tab.classList.add('tour-tab--active');
+        var panel = document.getElementById('tour-panel-' + tab.dataset.tourTab);
+        if (panel) panel.classList.add('tour-tab-panel--active');
+      });
+    });
+
+    /* ── Fireplace tour ── */
+    var FP_STOPS = [
+      { title: 'Control Panel', desc: 'Located on the top-right of the unit. Two buttons: B1 (fill) and On/Off (with red LED indicator). The B1 button activates the integrated fill pump, and the On/Off button powers the unit on and off.', view: 'top', hotspot: 'hotspot-ctrl' },
+      { title: 'Water Fill Port', desc: 'Located directly to the right of the control panel on the top surface. Use this port to manually add water to the reservoir using the included fill tube, or connect a water line for automatic fill.', view: 'top', hotspot: 'hotspot-fill' },
+      { title: 'Venting', desc: 'The unit has vents on the front panel, back panel, and two vent strips on the top lid. These allow airflow for the ultrasonic mist system. Keep all vents unobstructed in your enclosure design.', view: 'back', hotspot: 'hotspot-vents-back' },
+      { title: 'Power Port', desc: 'The DC power input is in a recessed area on the far left side of the back panel. Connect the included 24V power adapter here. Route the cable out through your enclosure before finishing.', view: 'back', hotspot: 'hotspot-power' },
+      { title: 'Dry Contact', desc: 'Located next to the power port in the recessed area on the back panel. This terminal block allows integration with home automation systems or external switches for remote on/off control.', view: 'back', hotspot: 'hotspot-dry' }
+    ];
+    var fpCurrent = 0;
+    var fpTitle = document.getElementById('tour-stop-title');
+    var fpDesc = document.getElementById('tour-stop-desc');
+    var fpCount = document.getElementById('tour-stop-count');
+    var fpLabel = document.getElementById('tour-view-label');
+    var fpDots = document.getElementById('tour-dots');
+    var fpPrev = document.getElementById('tour-prev');
+    var fpNext = document.getElementById('tour-next');
+    var fpPanel = document.getElementById('tour-panel-fireplace');
+
+    if (fpTitle) {
+      FP_STOPS.forEach(function(_, i) {
+        var dot = document.createElement('button');
+        dot.className = 'tour-dot' + (i === 0 ? ' tour-dot--active' : '');
+        dot.setAttribute('aria-label', 'Go to stop ' + (i + 1));
+        dot.addEventListener('click', function() { fpGoTo(i); });
+        fpDots.appendChild(dot);
+      });
+
+      var FP_LABELS = { top: 'Top View', front: 'Front View', back: 'Back View' };
+
+      function fpGoTo(idx) {
+        fpCurrent = idx;
+        var stop = FP_STOPS[fpCurrent];
+        fpTitle.textContent = stop.title;
+        fpDesc.textContent = stop.desc;
+        fpCount.textContent = (fpCurrent + 1) + ' / ' + FP_STOPS.length;
+        fpPanel.querySelectorAll('.tour-svg').forEach(function(svg) { svg.classList.remove('tour-svg--active'); });
+        var v = document.getElementById('tour-view-' + stop.view);
+        if (v) v.classList.add('tour-svg--active');
+        fpLabel.textContent = FP_LABELS[stop.view] || '';
+        fpPanel.querySelectorAll('.tour-hotspot').forEach(function(h) { h.style.display = 'none'; });
+        var hs = document.getElementById(stop.hotspot);
+        if (hs) hs.style.display = '';
+        fpDots.querySelectorAll('.tour-dot').forEach(function(d, i) { d.classList.toggle('tour-dot--active', i === fpCurrent); });
+        fpPrev.disabled = fpCurrent === 0;
+        fpNext.disabled = false;
+      }
+
+      fpPrev.addEventListener('click', function() { if (fpCurrent > 0) fpGoTo(fpCurrent - 1); });
+      fpNext.addEventListener('click', function() {
+        if (fpCurrent < FP_STOPS.length - 1) {
+          fpGoTo(fpCurrent + 1);
+        } else {
+          // At last fireplace stop — switch to controller tab
+          var ctrlTab = document.querySelector('.tour-tab[data-tour-tab="controller"]');
+          if (ctrlTab) ctrlTab.click();
+        }
+      });
+      fpGoTo(0);
+    }
+
+    /* ── Controller tour ── */
+    var RC_STOPS = [
+      { title: 'Pairing the Remote', desc: 'Before first use, pair the remote to your fireplace. With the fireplace off, press and hold the On/Off button on the unit until you hear a beep. Then press any button on the remote to complete pairing.', hotspot: '' },
+      { title: 'Power Button', desc: 'The top-left button turns the fireplace mist effect on and off. Press once to start, press again to stop. The unit will begin producing vapor within a few seconds of powering on.', hotspot: 'hotspot-rc-power' },
+      { title: 'Flame Density', desc: 'Use the flame icon and +/\u2013 buttons in the top row to adjust the density of the mist effect. The minus button reduces the density, the plus button increases it. Adjust to suit your enclosure depth.', hotspot: 'hotspot-rc-height' },
+      { title: 'Flame Speed', desc: 'The second row controls the speed and movement of the flame effect. Use +/\u2013 to increase or decrease how quickly the mist flickers and dances. The wave icon in the center represents the current mode.', hotspot: 'hotspot-rc-speed' },
+      { title: 'LED On/Off', desc: 'The On/Off button on the right side toggles the single LED light bar that illuminates the mist. The Aquafire Original features one LED bar for a classic, warm amber-orange flame appearance.', hotspot: 'hotspot-rc-led' },
+      { title: 'Brightness', desc: 'The sun icons with +/\u2013 adjust the brightness of the LED light bar. Press the top button to increase brightness, the bottom to decrease. Fine-tune the glow to match your room lighting.', hotspot: 'hotspot-rc-bright' }
+    ];
+    var rcCurrent = 0;
+    var rcTitle = document.getElementById('ctrl-stop-title');
+    var rcDesc = document.getElementById('ctrl-stop-desc');
+    var rcCount = document.getElementById('ctrl-stop-count');
+    var rcDots = document.getElementById('ctrl-dots');
+    var rcPrev = document.getElementById('ctrl-prev');
+    var rcNext = document.getElementById('ctrl-next');
+    var rcPanel = document.getElementById('tour-panel-controller');
+
+    if (rcTitle) {
+      RC_STOPS.forEach(function(_, i) {
+        var dot = document.createElement('button');
+        dot.className = 'tour-dot' + (i === 0 ? ' tour-dot--active' : '');
+        dot.setAttribute('aria-label', 'Go to stop ' + (i + 1));
+        dot.addEventListener('click', function() { rcGoTo(i); });
+        rcDots.appendChild(dot);
+      });
+
+      function rcGoTo(idx) {
+        rcCurrent = idx;
+        var stop = RC_STOPS[rcCurrent];
+        rcTitle.textContent = stop.title;
+        rcDesc.textContent = stop.desc;
+        rcCount.textContent = (rcCurrent + 1) + ' / ' + RC_STOPS.length;
+        rcPanel.querySelectorAll('.tour-hotspot').forEach(function(h) { h.style.display = 'none'; });
+        var hs = document.getElementById(stop.hotspot);
+        if (hs) hs.style.display = '';
+        rcDots.querySelectorAll('.tour-dot').forEach(function(d, i) { d.classList.toggle('tour-dot--active', i === rcCurrent); });
+        rcPrev.disabled = rcCurrent === 0;
+        rcNext.disabled = rcCurrent === RC_STOPS.length - 1;
+      }
+
+      rcPrev.addEventListener('click', function() { if (rcCurrent > 0) rcGoTo(rcCurrent - 1); });
+      rcNext.addEventListener('click', function() { if (rcCurrent < RC_STOPS.length - 1) rcGoTo(rcCurrent + 1); });
+      rcGoTo(0);
+    }
+
+    /* ── Arrow key nav for whichever tab is active ── */
+    document.getElementById('tour').addEventListener('keydown', function(e) {
+      var fpActive = fpPanel.classList.contains('tour-tab-panel--active');
+      if (fpActive) {
+        if (e.key === 'ArrowLeft' && fpCurrent > 0) fpGoTo(fpCurrent - 1);
+        if (e.key === 'ArrowRight') {
+          if (fpCurrent < FP_STOPS.length - 1) fpGoTo(fpCurrent + 1);
+          else { var ct = document.querySelector('.tour-tab[data-tour-tab="controller"]'); if (ct) ct.click(); }
+        }
+      } else {
+        if (e.key === 'ArrowLeft' && rcCurrent > 0) rcGoTo(rcCurrent - 1);
+        if (e.key === 'ArrowRight' && rcCurrent < RC_STOPS.length - 1) rcGoTo(rcCurrent + 1);
+      }
+    });
+  })();
+
+  // ── Collapsible Chapters Toggle ──
+  (function() {
+    var toggle = document.getElementById('chaptersToggle');
+    var content = document.getElementById('chaptersContent');
+    if (!toggle || !content) return;
+    toggle.addEventListener('click', function() {
+      var open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', !open);
+      content.classList.toggle('hub-chapters-content--open', !open);
+    });
+  })();
+
+  // ── Sticky Chapter Navigation ──
+  (function() {
+    var CHAPTERS = [
+      { id: 'tour', label: '1. Tour' },
+      { id: 'guide', label: '2. Setup Guide' },
+      { id: 'video', label: '3. Full Video' },
+      { id: 'troubleshoot', label: '4. Troubleshooting' },
+      { id: 'specs', label: '5. Specs' },
+      { id: 'features', label: '6. Features' },
+      { id: 'resources', label: '7. Resources' },
+      { id: 'shop', label: '8. Accessories' }
+    ];
+
+    var nav = document.getElementById('chapterNav');
+    var prevBtn = document.getElementById('chapterPrev');
+    var nextBtn = document.getElementById('chapterNext');
+    var prevLabel = document.getElementById('chapterPrevLabel');
+    var nextLabel = document.getElementById('chapterNextLabel');
+    var currentLabel = document.getElementById('chapterCurrent');
+    if (!nav) return;
+
+    var currentChapter = -1;
+
+    function getActiveChapter() {
+      var scrollY = window.scrollY || window.pageYOffset;
+      var viewH = window.innerHeight;
+      var best = -1;
+      for (var i = 0; i < CHAPTERS.length; i++) {
+        var el = document.getElementById(CHAPTERS[i].id);
+        if (!el) continue;
+        var top = el.getBoundingClientRect().top + scrollY;
+        if (top <= scrollY + viewH * 0.4) best = i;
+      }
+      return best;
+    }
+
+    function update() {
+      var idx = getActiveChapter();
+      // Show nav once user scrolls past hero
+      var heroBottom = document.getElementById('hub-top');
+      var pastHero = heroBottom && (heroBottom.getBoundingClientRect().bottom < 0);
+      nav.classList.toggle('chapter-nav--visible', pastHero && idx >= 0);
+
+      if (idx === currentChapter) return;
+      currentChapter = idx;
+
+      currentLabel.textContent = idx >= 0 ? CHAPTERS[idx].label : '';
+
+      prevBtn.disabled = idx <= 0;
+      prevLabel.textContent = idx > 0 ? CHAPTERS[idx - 1].label : 'Prev';
+
+      nextBtn.disabled = idx >= CHAPTERS.length - 1;
+      nextLabel.textContent = idx < CHAPTERS.length - 1 ? CHAPTERS[idx + 1].label : 'Next';
+    }
+
+    function scrollTo(idx) {
+      var el = document.getElementById(CHAPTERS[idx].id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    prevBtn.addEventListener('click', function() {
+      if (currentChapter > 0) scrollTo(currentChapter - 1);
+    });
+    nextBtn.addEventListener('click', function() {
+      if (currentChapter < CHAPTERS.length - 1) scrollTo(currentChapter + 1);
+    });
+
+    var ticking = false;
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(function() { update(); ticking = false; });
+        ticking = true;
+      }
+    });
+    update();
+  })();
+  </script>
+</body>
+</html>
