@@ -1615,7 +1615,9 @@
       if (currentStep < GUIDE_STEPS.length - 1) {
         goToStep(currentStep + 1);
       } else {
-        goToStep(0);
+        // Finish — scroll the user down to the next section
+        const nextSection = document.getElementById('troubleshoot');
+        if (nextSection) nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
     replayBtn.addEventListener('click', () => playStep());
