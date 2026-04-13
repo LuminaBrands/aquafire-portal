@@ -1041,33 +1041,27 @@
             <!-- CONTROLLER VIEW -->
             <svg id="tour-view-controller" class="tour-svg tour-svg--active" viewBox="0 0 300 440" xmlns="http://www.w3.org/2000/svg">
               <image href="tour-controller-awa.svg" x="0" y="0" width="300" height="440"/>
-              <!-- Power button hotspot -->
+              <!-- Power button hotspot (Original remote: cx=74.5, cy=87.9) -->
               <g id="hotspot-rc-power" class="tour-hotspot" style="display:none">
-                <circle cx="89.4" cy="60" r="22" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.5">
-                  <animate attributeName="r" values="22;26;22" dur="2s" repeatCount="indefinite"/>
+                <circle cx="74.5" cy="87.9" r="26" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.5">
+                  <animate attributeName="r" values="26;30;26" dur="2s" repeatCount="indefinite"/>
                 </circle>
               </g>
-              <!-- Height/Density controls hotspot (top row: cx=141.5 & cx=221.5, cy=60.9) -->
+              <!-- Flame Density row hotspot (cy~136, minus cx=126.3, plus cx=230.2) -->
               <g id="hotspot-rc-height" class="tour-hotspot" style="display:none">
-                <rect x="120" y="40" width="122" height="42" rx="21" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+                <rect x="100" y="113" width="156" height="46" rx="23" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
                   <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
                 </rect>
               </g>
-              <!-- Speed controls hotspot (second row: cx=142.5 & cx=222.5, cy=108) -->
+              <!-- Flame Speed row hotspot (cy~184) -->
               <g id="hotspot-rc-speed" class="tour-hotspot" style="display:none">
-                <rect x="121" y="88" width="122" height="42" rx="21" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+                <rect x="100" y="161" width="156" height="46" rx="23" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
                   <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
                 </rect>
               </g>
-              <!-- LED on/off hotspot (right column top: cx=223.4, cy=162) -->
-              <g id="hotspot-rc-led" class="tour-hotspot" style="display:none">
-                <circle cx="223.4" cy="162" r="22" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.5">
-                  <animate attributeName="r" values="22;26;22" dur="2s" repeatCount="indefinite"/>
-                </circle>
-              </g>
-              <!-- Brightness hotspot (right column: cx=223.4, cy=258 & cy=306) -->
+              <!-- Brightness row hotspot (cy~232) -->
               <g id="hotspot-rc-bright" class="tour-hotspot" style="display:none">
-                <rect x="202" y="240" width="42" height="86" rx="21" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+                <rect x="100" y="209" width="156" height="46" rx="23" fill="rgba(232,168,56,0.15)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
                   <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
                 </rect>
               </g>
@@ -1075,7 +1069,7 @@
           </div>
 
           <div class="tour-info-panel">
-            <span class="tour-stop-count" id="ctrl-stop-count">1 / 6</span>
+            <span class="tour-stop-count" id="ctrl-stop-count">1 / 5</span>
             <h3 class="tour-stop-title" id="ctrl-stop-title">Power Button</h3>
             <p class="tour-stop-desc" id="ctrl-stop-desc">Loading...</p>
             <div class="tour-nav">
@@ -2128,8 +2122,7 @@
       { title: 'Power Button', desc: 'The top-left button turns the fireplace mist effect on and off. Press once to start, press again to stop. The unit will begin producing vapor within a few seconds of powering on.', hotspot: 'hotspot-rc-power' },
       { title: 'Flame Density', desc: 'Use the flame icon and +/\u2013 buttons in the top row to adjust the density of the mist effect. The minus button reduces the density, the plus button increases it. Adjust to suit your enclosure depth.', hotspot: 'hotspot-rc-height' },
       { title: 'Flame Speed', desc: 'The second row controls the speed and movement of the flame effect. Use +/\u2013 to increase or decrease how quickly the mist flickers and dances. The wave icon in the center represents the current mode.', hotspot: 'hotspot-rc-speed' },
-      { title: 'LED On/Off', desc: 'The On/Off button on the right side toggles the single LED light bar that illuminates the mist. The Aquafire Original features one LED bar for a classic, warm amber-orange flame appearance.', hotspot: 'hotspot-rc-led' },
-      { title: 'Brightness', desc: 'The sun icons with +/\u2013 adjust the brightness of the LED light bar. Press the top button to increase brightness, the bottom to decrease. Fine-tune the glow to match your room lighting.', hotspot: 'hotspot-rc-bright' }
+      { title: 'Brightness', desc: 'The third row with the sun icon and +/\u2013 buttons adjusts the brightness of the LED light bar. Press + to increase brightness, \u2013 to decrease. Fine-tune the glow to match your room lighting.', hotspot: 'hotspot-rc-bright' }
     ];
     var rcCurrent = 0;
     var rcTitle = document.getElementById('ctrl-stop-title');
