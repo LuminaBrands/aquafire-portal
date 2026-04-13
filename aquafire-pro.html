@@ -1487,6 +1487,7 @@
     const VIDEO_ID = 'tJxpL1tJTIU';
     let player = null;
     let currentStep = 0;
+    let hasStarted = false;
     let pollTimer = null;
 
     // ── DOM refs ──
@@ -1532,9 +1533,14 @@
       prevBtn.disabled = currentStep === 0;
 
       const isLast = currentStep === GUIDE_STEPS.length - 1;
-      nextBtn.innerHTML = isLast
-        ? 'Finish'
-        : 'Next <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      const arrowSvg = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      if (!hasStarted) {
+        nextBtn.innerHTML = 'Start ' + arrowSvg;
+      } else if (isLast) {
+        nextBtn.innerHTML = 'Finish';
+      } else {
+        nextBtn.innerHTML = 'Next ' + arrowSvg;
+      }
 
       // Update progress dots
       const dots = progressEl.querySelectorAll('.guide-progress-step');
@@ -1591,6 +1597,7 @@
     // ── Navigation ──
     function goToStep(i) {
       if (i < 0 || i >= GUIDE_STEPS.length) return;
+      hasStarted = true;
       currentStep = i;
       updateUI();
       playStep();
@@ -1598,6 +1605,13 @@
 
     prevBtn.addEventListener('click', () => goToStep(currentStep - 1));
     nextBtn.addEventListener('click', () => {
+      if (!hasStarted) {
+        // First click: play step 1 in place, then the button becomes "Next"
+        hasStarted = true;
+        updateUI();
+        playStep();
+        return;
+      }
       if (currentStep < GUIDE_STEPS.length - 1) {
         goToStep(currentStep + 1);
       } else {
