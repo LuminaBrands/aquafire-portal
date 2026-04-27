@@ -73,23 +73,24 @@
 
   .afc-{{ section.id }} .afc-head-brand {
     position: relative;
-    padding: 22px 14px 20px;
+    padding: 14px 14px 20px;
     border-radius: 22px 22px 0 0;
     background:
       radial-gradient(circle at 50% 35%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 55%),
       linear-gradient(165deg, var(--afc-brand-1) 0%, var(--afc-brand-2) 55%, var(--afc-brand-3) 100%);
     box-shadow: 0 18px 40px -20px rgba(148, 30, 20, 0.55);
-    overflow: hidden;
+    overflow: visible;
   }
   .afc-{{ section.id }} .afc-head-brand > * { position: relative; z-index: 1; }
 
   .afc-{{ section.id }} .afc-brand-photo {
-    width: 120px;
-    height: 120px;
-    display: block;
-    margin: 0 auto 10px;
+    width: auto;
+    height: 150px;
+    max-width: 92%;
     object-fit: contain;
-    filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.35));
+    display: block;
+    margin: -75px auto 10px;
+    filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.35));
   }
   .afc-{{ section.id }} .afc-head-brand .afc-label {
     font-family: 'Poppins', sans-serif;
@@ -191,7 +192,7 @@
     .afc-{{ section.id }} .afc-heads { grid-template-columns: 0.9fr 1.4fr 1fr; }
     .afc-{{ section.id }} .afc-table { grid-template-columns: 0.9fr 1.4fr 1fr; }
     .afc-{{ section.id }} .afc-brand-col-bg { left: 27.27%; width: 42.42%; }
-    .afc-{{ section.id }} .afc-brand-photo { width: 96px; height: 96px; }
+    .afc-{{ section.id }} .afc-brand-photo { height: 110px; max-width: 96%; margin-top: -55px; }
     .afc-{{ section.id }} .afc-other-icon { width: 52px; height: 52px; }
     .afc-{{ section.id }} .afc-head-brand .afc-label { font-size: 1.15rem; }
     .afc-{{ section.id }} .afc-head-other .afc-label { font-size: 1rem; }
