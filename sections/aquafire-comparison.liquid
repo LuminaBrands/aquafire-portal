@@ -225,15 +225,15 @@
       <div class="afc-head-empty" aria-hidden="true"></div>
       <div class="afc-head-brand">
         {%- if section.settings.brand_image != blank -%}
-          <img
-            class="afc-brand-photo"
-            src="{{ section.settings.brand_image | image_url: width: 480 }}"
-            srcset="{{ section.settings.brand_image | image_url: width: 240 }} 240w, {{ section.settings.brand_image | image_url: width: 480 }} 480w"
-            sizes="240px"
-            width="240"
-            height="240"
-            alt="{{ section.settings.brand_name | escape }}"
-            loading="lazy">
+          {{ section.settings.brand_image
+            | image_url: width: 480
+            | image_tag:
+              class: 'afc-brand-photo',
+              alt: section.settings.brand_name,
+              loading: 'lazy',
+              widths: '240, 480',
+              sizes: '240px'
+          }}
         {%- else -%}
           <img
             class="afc-brand-photo"
@@ -245,13 +245,15 @@
       </div>
       <div class="afc-head-other">
         {%- if section.settings.other_image != blank -%}
-          <img
-            class="afc-other-icon"
-            src="{{ section.settings.other_image | image_url: width: 256 }}"
-            width="128"
-            height="128"
-            alt="{{ section.settings.other_name | escape }}"
-            loading="lazy">
+          {{ section.settings.other_image
+            | image_url: width: 256
+            | image_tag:
+              class: 'afc-other-icon',
+              alt: section.settings.other_name,
+              loading: 'lazy',
+              widths: '128, 256',
+              sizes: '128px'
+          }}
         {%- else -%}
           <svg class="afc-other-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
             <rect x="6" y="10" width="52" height="44" rx="4" fill="#c9c2b3"/>
