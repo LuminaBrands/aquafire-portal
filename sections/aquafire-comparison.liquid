@@ -81,18 +81,6 @@
     box-shadow: 0 18px 40px -20px rgba(148, 30, 20, 0.55);
     overflow: hidden;
   }
-  .afc-{{ section.id }} .afc-head-brand::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url('{{ section.settings.brand_image | default: "https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png" }}');
-    background-size: 70% auto;
-    background-position: center 85%;
-    background-repeat: no-repeat;
-    opacity: 0.18;
-    filter: blur(0.5px);
-    pointer-events: none;
-  }
   .afc-{{ section.id }} .afc-head-brand > * { position: relative; z-index: 1; }
 
   .afc-{{ section.id }} .afc-brand-photo {
@@ -154,17 +142,6 @@
       linear-gradient(180deg, var(--afc-brand-1) 0%, var(--afc-brand-2) 55%, var(--afc-brand-3) 100%);
     pointer-events: none;
     z-index: 0;
-  }
-  .afc-{{ section.id }} .afc-brand-col-bg::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url('{{ section.settings.brand_image | default: "https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png" }}');
-    background-size: 68% auto;
-    background-position: center 60%;
-    background-repeat: no-repeat;
-    opacity: 0.08;
-    mix-blend-mode: screen;
   }
 
   .afc-{{ section.id }} .afc-cell {
