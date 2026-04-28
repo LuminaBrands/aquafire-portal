@@ -21,13 +21,17 @@
     --afc-card-bg: #ffffff;
     --afc-card-border: #e6e4de;
     --afc-row-border: #eeece6;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
     padding: 72px 20px 96px;
     background: linear-gradient(180deg, var(--afc-bg-top) 0%, var(--afc-bg-bot) 100%);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--afc-ink);
+    overflow-x: clip;
   }
 
-  .afc-{{ section.id }} * { box-sizing: border-box; }
+  .afc-{{ section.id }}, .afc-{{ section.id }} * { box-sizing: border-box; }
 
   .afc-{{ section.id }} .afc-wrap {
     max-width: 720px;
