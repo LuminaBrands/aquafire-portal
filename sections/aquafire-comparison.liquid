@@ -34,8 +34,17 @@
 
   .afc-{{ section.id }} .afc-wrap {
     max-width: {{ section.settings.max_width | default: 1040 }}px;
-    margin: 0 auto;
-    text-align: center;
+    {%- case section.settings.content_alignment -%}
+      {%- when 'left' -%}
+        margin: 0 auto 0 0;
+        text-align: left;
+      {%- when 'right' -%}
+        margin: 0 0 0 auto;
+        text-align: right;
+      {%- else -%}
+        margin: 0 auto;
+        text-align: center;
+    {%- endcase -%}
   }
 
   .afc-{{ section.id }} .afc-title {
@@ -325,6 +334,17 @@
       "step": 20,
       "unit": "px",
       "default": 1040
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
     },
     {
       "type": "header",
