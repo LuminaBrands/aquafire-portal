@@ -33,7 +33,7 @@
   .afc-{{ section.id }}, .afc-{{ section.id }} * { box-sizing: border-box; }
 
   .afc-{{ section.id }} .afc-wrap {
-    max-width: 720px;
+    max-width: {{ section.settings.max_width | default: 1040 }}px;
     margin: 0 auto;
     text-align: center;
   }
@@ -156,10 +156,10 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-size: 1rem;
-    line-height: 1.35;
+    font-size: 1.05rem;
+    line-height: 1.4;
     border-top: 1px solid var(--afc-row-border);
-    min-height: 90px;
+    min-height: 96px;
   }
   .afc-{{ section.id }} .afc-row:first-child .afc-cell { border-top: none; }
 
@@ -311,6 +311,20 @@
       "id": "subtitle",
       "label": "Subtitle",
       "default": "Aquafire outperforms in safety, design, and ambience."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max content width",
+      "min": 720,
+      "max": 1400,
+      "step": 20,
+      "unit": "px",
+      "default": 1040
     },
     {
       "type": "header",
