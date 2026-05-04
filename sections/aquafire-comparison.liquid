@@ -5,10 +5,6 @@
   Add via Theme Editor: "Add section" → "Aquafire vs Others".
 {% endcomment %}
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
-
 <style>
   .afc-{{ section.id }} {
     --afc-bg-top: {{ section.settings.bg_top }};
@@ -38,14 +34,26 @@
         --afc-align: flex-start;
         --afc-text-align: left;
         --afc-img-margin-x: 0 auto 0 0;
+        --afc-cell-pad-start: 44px;
+        --afc-cell-pad-end: 18px;
+        --afc-head-pad-start: 36px;
+        --afc-head-pad-end: 14px;
       {%- when 'right' -%}
         --afc-align: flex-end;
         --afc-text-align: right;
         --afc-img-margin-x: 0 0 0 auto;
+        --afc-cell-pad-start: 18px;
+        --afc-cell-pad-end: 44px;
+        --afc-head-pad-start: 14px;
+        --afc-head-pad-end: 36px;
       {%- else -%}
         --afc-align: center;
         --afc-text-align: center;
         --afc-img-margin-x: 0 auto;
+        --afc-cell-pad-start: 18px;
+        --afc-cell-pad-end: 18px;
+        --afc-head-pad-start: 14px;
+        --afc-head-pad-end: 14px;
     {%- endcase -%}
   }
 
@@ -70,7 +78,7 @@
     font-size: clamp(1rem, 2vw, 1.15rem);
     font-weight: 400;
     color: var(--afc-ink-soft);
-    margin: 0 0 56px;
+    margin: 0 0 110px;
     line-height: 1.5;
   }
 
@@ -93,7 +101,7 @@
 
   .afc-{{ section.id }} .afc-head-brand {
     position: relative;
-    padding: 14px 14px 20px;
+    padding: 14px var(--afc-head-pad-end) 20px var(--afc-head-pad-start);
     border-radius: 22px 22px 0 0;
     background:
       radial-gradient(circle at 50% 35%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 55%),
@@ -123,7 +131,7 @@
   }
 
   .afc-{{ section.id }} .afc-head-other {
-    padding: 0 14px 20px;
+    padding: 0 var(--afc-head-pad-end) 20px var(--afc-head-pad-start);
   }
   .afc-{{ section.id }} .afc-other-icon {
     width: 64px;
@@ -171,7 +179,7 @@
   .afc-{{ section.id }} .afc-cell {
     position: relative;
     z-index: 1;
-    padding: 26px 18px;
+    padding: 26px var(--afc-cell-pad-end) 26px var(--afc-cell-pad-start);
     display: flex;
     align-items: center;
     justify-content: var(--afc-align);
@@ -210,7 +218,7 @@
   /* ── Mobile: keep the original look, slightly tighter ── */
   @media (max-width: 720px) {
     .afc-{{ section.id }} { padding: 48px 14px 64px; }
-    .afc-{{ section.id }} .afc-subtitle { margin-bottom: 40px; }
+    .afc-{{ section.id }} .afc-subtitle { margin-bottom: 80px; }
     .afc-{{ section.id }} .afc-heads { grid-template-columns: 0.9fr 1.4fr 1fr; }
     .afc-{{ section.id }} .afc-table { grid-template-columns: 0.9fr 1.4fr 1fr; }
     .afc-{{ section.id }} .afc-brand-col-bg { left: 27.27%; width: 42.42%; }
