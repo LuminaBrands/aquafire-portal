@@ -32,19 +32,27 @@
 
   .afc-{{ section.id }}, .afc-{{ section.id }} * { box-sizing: border-box; }
 
-  .afc-{{ section.id }} .afc-wrap {
-    max-width: {{ section.settings.max_width | default: 1040 }}px;
+  .afc-{{ section.id }} {
     {%- case section.settings.content_alignment -%}
       {%- when 'left' -%}
-        margin: 0 auto 0 0;
-        text-align: left;
+        --afc-align: flex-start;
+        --afc-text-align: left;
+        --afc-img-margin-x: 0 auto 0 0;
       {%- when 'right' -%}
-        margin: 0 0 0 auto;
-        text-align: right;
+        --afc-align: flex-end;
+        --afc-text-align: right;
+        --afc-img-margin-x: 0 0 0 auto;
       {%- else -%}
-        margin: 0 auto;
-        text-align: center;
+        --afc-align: center;
+        --afc-text-align: center;
+        --afc-img-margin-x: 0 auto;
     {%- endcase -%}
+  }
+
+  .afc-{{ section.id }} .afc-wrap {
+    max-width: {{ section.settings.max_width | default: 1040 }}px;
+    margin: 0 auto;
+    text-align: center;
   }
 
   .afc-{{ section.id }} .afc-title {
@@ -79,7 +87,7 @@
   .afc-{{ section.id }} .afc-head-other {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: var(--afc-align);
     justify-content: flex-end;
   }
 
@@ -101,7 +109,9 @@
     max-width: 92%;
     object-fit: contain;
     display: block;
-    margin: -75px auto 10px;
+    margin: var(--afc-img-margin-x);
+    margin-top: -75px;
+    margin-bottom: 10px;
     filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.35));
   }
   .afc-{{ section.id }} .afc-head-brand .afc-label {
@@ -119,7 +129,8 @@
     width: 64px;
     height: 64px;
     display: block;
-    margin: 0 auto 14px;
+    margin: var(--afc-img-margin-x);
+    margin-bottom: 14px;
     object-fit: contain;
     opacity: 0.7;
   }
@@ -163,8 +174,8 @@
     padding: 26px 18px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    justify-content: var(--afc-align);
+    text-align: var(--afc-text-align);
     font-size: 1.05rem;
     line-height: 1.4;
     border-top: 1px solid var(--afc-row-border);
@@ -178,7 +189,6 @@
     font-size: 1.1rem;
     color: var(--afc-ink);
     background: var(--afc-card-bg);
-    justify-content: center;
   }
 
   .afc-{{ section.id }} .afc-cell-brand {
