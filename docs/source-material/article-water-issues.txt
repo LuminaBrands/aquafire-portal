@@ -1,0 +1,71 @@
+Source PDF: a96546e0-Water_Issues.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 10:01 PM                                                              Water Issues
+
+
+
+
+                         All articles                     Maintenance & Troubleshooting       Help & Troubleshooting
+
+                Water                  Water Issues
+
+               Search
+
+
+
+
+        Water Issues
+        Updated 3 months ago
+
+
+        Got water problems? Review the chart below to find a solution!
+
+
+
+
+                                                                                                         Chat with us
+
+
+https://aquafire.gorgias.help/en-US/water-issues-232520                                                                 1/2
+5/12/26, 10:01 PM                                                                     Water Issues
+
+        *Important Tip: Most common issues can be prevented with a whole insert cleaning. We
+        recommend cleaning your insert(s) 2-3 times a year depending on frequency of use and water
+        quality. Please start with our Preventative Maintenance Guide to see if that solves your
+        problem
+
+
+                      Problem                                    Possible Cause                                    Solution
+
+          Musty or stale smell when                       Old or stale water generally created          Drain and refill with fresh water.
+               unit is running                                      from lack of use                     Consider cleaning per the PM
+                                                                                                          maintenance guidelines
+
+            Leak detected after unit                 Float sensor in mist tank may be stuck            Drain excess water to proper level;
+            has been unused for an                    creating above normal water level in               Lift and plunge mist maker rack
+            extended period of time                                 mist tube                           vigorously 10-15 times to free up
+                                                                                                     float sensor in mist tank. Allow unit to
+                                                                                                     run and recheck to make sure correct
+                                                                                                             water level is maintained
+
+           Unit beeps then turns off                                Low water level                    Refill unit manually or verify that
+                                                                                                     water feed is on if unit is permanently
+                                                                                                                    plumbed
+
+
+
+
+        Was this article helpful?                                                                                       Yes            No
+
+
+
+
+                                                               Contact Us     Home        Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/water-issues-232520                                                                                         2/2
+

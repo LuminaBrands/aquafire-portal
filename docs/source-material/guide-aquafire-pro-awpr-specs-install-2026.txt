@@ -1,0 +1,1018 @@
+Source PDF: dd69eb5c-AquafireProAWPRSpecsInstallGuide2026Compressed.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+                                                        Pro                                  REVISED: January 2026
+
+
+
+
+    Specifications &
+    Installation Guidelines
+      FOR AQUAFIRE PRO SERIES
+
+
+
+
+       Highlights
+      • Select from 30+ preset flame colors.
+      • Can be plumbed directly to water source
+        or filled manually via integrated water pump.
+      • Available in 3 sizes and can be ganged together
+        to create continuous ribbons of flame.
+      • Air Intake through the top, sides, and bottom
+        for flexibility in hearth design.
+      • Flush mount, drop-in install.
+      • Internal UV-C Lighting sanitizes water & vapor.
+      • Adjust flame color, brightness, density and speed.
+
+                                                                                      Shown: AWPR3-40-100 40”
+
+
+
+
+    Aquafire Pro Series
+    AWPR2-20 / AWPR2-40 / AWPR2-60
+    AWPR3-20 / AWPR3-40 / AWPR3-60
+
+
+
+
+                                                              orders@aquafire.com |   (877) 888-4260 |   aquafire.com
+1
+                                               Pro
+                                                                                                              Aquafire Pro Series
+                                                                                                                       AWPRx-20
+                                                                                                                       AWPRx-40
+                                                                                                                       AWPRx-60
+
+
+
+
+Table of Contents
+
+Considerations .......................................................................................... 3
+Quick Start Guide ...................................................................................... 4
+Technical Specifications ........................................................................... 5
+Enclosure Designs .................................................................................... 6
+   Enclosure Types................................................................................... 6
+   Enclosure Guidelines .......................................................................... 7
+   Light Trap Design ................................................................................. 8
+   Other Considerations ........................................................................... 9
+Maintenance & Cleaning... ....................................................................... 10
+   Hard Water .......................................................................................... 10
+   Water Softener Installation ................................................................ 11
+Troubleshooting Guide ............................................................................ 12
+
+
+
+
+Fireplace components                                                       Packing Contents
+
+
+
+
+                                                                           Aquafire Insert         Fill/Drain Tube
+
+
+
+
+    1   2 3 4                                    5 6
+
+ 1. Mist Maker Tube                                                        Remote Control        Siphon Hand Pump
+ 2. Water Tank
+ 3. Amber LED Light Strip
+ 4. RGB LED Light Strip
+ 5. Power / Control Panel
+                                           Water Softener
+ 6. Fill/Drain Port                     (Shipped Separately)
+                                                                          AC Power Adapter           User Manual
+
+
+
+2                                                                                                 www.aquafire.com
+                                              Pro
+                                                                                                          Aquafire Pro Series
+                                                                                                                   AWPRx-20
+                                                                                                                   AWPRx-40
+                                                                                                                   AWPRx-60
+
+
+
+
+Considerations
+Aquafire Pro water vapor fireplace inserts have been designed to be extremely easy to install, simple to
+operate, and easy to maintain. When designing your fireplace, feel free to send your plans in for review and
+suggestions by our professional design staff.
+
+Considerations:
+• Accessibility to electricity and 1/4’’ water line, similar to ice maker in fridge.
+• Recessed into wall, sitting proud of a wall or completely free-standing - your only limit is your creativity!
+• If light cast upwards to ceiling is undesirable, consider recessing into the wall for a traditional hearth
+  appearance. (we advise to create a ‘light trap’. see Light Trap page for details.      9
+• Determine decorative materials and finishes you expect to use. Since there is no heat, there are virtually no
+  limitations.
+• Plan to make it easy to remove fireplace insert should maintenance or repairs become necessary.
+• Avoid or prevent air currents from doors, windows, and existing HVAC system which affect flame quality.
+
+Installation:
+Prepare the housing for your fireplace insert(s) and make sure the cutout has sharp corners (not rounded)
+and dimensions are exactly as specified. These dimensions are critical because the modules are suspended on
+flanges that span the opening. Too small, and fireplace will not fit, too large of opening, and fireplace insert will
+look sloppy or may even fall through the opening. Using the built in ‘lifting loops’, lower Aquafire Pro into
+the cutout after plugging in electric power converter(s) and connecting the 1/4’’ waterline if direct plumb kit
+is installed. If not, simply fill tank using tap water via the integrated pumping system once installed into enclosure.
+
+That’s it!– the installation is complete. Now start your fireplace and enjoy an extraordinary fireplace
+experience every day of the year!
+
+
+
+
+World’s most advanced
+water vapor fireplace
+technology.
+
+
+                                                                                             www.aquafire.com
+  3
+                                               Pro
+                                                                                                                                                                   Aquafire Pro Series
+                                                                                                                                                                            AWPRx-20
+                                                                                                                                                                            AWPRx-40
+                                                                                                                                                                            AWPRx-60
+
+
+
+
+Quick Start Guide
+ STEP 1 Install into enclosure                                                                                                                        Top Lid
+
+
+
+
+  1 Remove the media plate for easy access to lift points.                                         Rests on
+                                                                                                   support
+
+  2 Connect 24V power adapter (located on the back side of the unit).
+                                                                                                   flanges
+                                                                                                                                  Aqua
+                                                                                                                                         fire P
+                                                                                                                                                  ro fro
+                                                                                                                                                          nt
+
+
+  3 Connect Water Line (optional).
+                                                                                                                            Wat
+                                                                                                                                  er
+                                                                                                                                               Elec
+  4 Install Vapor Pure Water Softener (if applicable).       12
+                                                                                                                                                    tric
+
+
+
+
+  5 Connect plumbing (if applicable) and electrical to enclosure/hearth .
+                                                                                                                   Cus
+                                                                                                                      tom
+                                                                                                                            Enc
+  6 Drop Aquafire into enclosure, resting on support flanges.                                                                  losu
+                                                                                                                                        re (
+                                                                                                                                            not
+                                                                                                                                                  inclu
+                                                                                                                                                        ded
+                                                                                                                                                               )
+
+
+
+
+ STEP 2 Fill with water                                                                                                                B1                                  Tube Port
+
+
+
+
+ Option 1: Fill manually with integrated pump.                                                Option 1
+                                                                                                                                                                          Tube
+
+
+
+     1 When the water tank is empty, you will see the lights blinking
+       and you will hear small beeps.
+     2 Connect the fill tube to the water connector and press and
+       hold the “B1” button for 5 seconds.
+     3 The filling will start automatically and will end automatically
+       when the water tank is full.
+                                                                                                          BA
+                                                                                                              CK
+
+
+ Option 2: Connect directly to water line.
+                                                                                                                                                                       Exit One (side)
+     1 Connect a suitable reducer to the water network.
+       (Reducer = water network tube dimensions to 1/4")
+                                                                                                                                                                       Exit Two (underneath)
+
+
+
+
+     2 Connect the 1/4" OD pipe to Aquafire. Two possible                                                            Water Tap Switch
+       connection points: Bottom exit or side exit.                                           Option 2                                    1/4” OD Tube
+
+     3 Filling will start automatically when unit its turned on
+       and will end when the water tank is full.
+
+
+STEP 3 Pair remote
+                                                                                                                                                                                       ON/OFF
+
+
+                                                                   On/Off   Density   Speed
+
+
+
+
+  1 Press and hold the On/Off button on the unit for
+    5 seconds or until the button will begins flashing.
+                                                                                          Orange Lights
+                                                                                          On/Off
+                                                                                          RGB Lights
+                                                                                                                             FR
+                                                                                          On/Off                                  ON
+
+
+ 2 Press any button on the remote, you will hear a beep.
+                                                                                                                                    T
+                                                                                          Brightness
+
+
+                                                                                          Color cycle
+
+ 3 Beep confirms the control is paired to the unit.
+
+
+ 4                                                                                                                  www.aquafire.com
+                                                            Pro
+                                                                                                                                                                Aquafire Pro Series
+                                                                                                                                                                         AWPRx-20
+                                                                                                                                                                         AWPRx-40
+                                                                                                                                                                         AWPRx-60
+
+
+
+
+Technical Specifications
+
+Aquafire Pro Dimensions                                                                                                   13
+                                                                                                                                ”
+
+
+                                                              ”
+
+
+
+
+                                                                                                                  11⅜
+                                                            13                                                                                                60
+                                                                                                                                                                 ”
+                                                                            40
+             ”                                                                ”
+
+
+
+
+                                                      11⅜
+        13           20
+                       ”
+  11⅜
+
+
+
+
+                                                                                                                                                60
+                                 11⅜
+
+
+
+
+                                                                                           11⅜
+
+
+
+
+                                                                                                                                                                                              11⅜
+                                                                                                                                                  ”
+                                                                  40
+                                                                    ”
+        20
+          ”
+                             ”                                                           ”
+                           12                                                         12                                                                                                   ”
+                                                                                                                                                                                         12
+
+ 20’’ AWPRx-20-50:                                     40’’ AWPRx-40-100:                                               60’’ AWPRx-60-150:
+ Power: 60 W (Standard wall receptacle)                Power: 120 W (Standard wall receptacle)                          Power: 180 W (Standard wall receptacle)
+ Tank Capacity: 2.0 Liters / Run Time 20 Hours         Tank Capacity: 4.0 Liters / Run Time 20 Hours                    Tank Capacity: 6.5 Liters / Run Time 20 Hours
+ Direct Plumbed: 1/4’’ water line                      Direct Plumbed: 1/4’’ water line                                 Direct Plumbed: 1/4’’ water line
+ Weight: 29 lbs / Crated Weight 53 lbs                 Weight: 58 lbs / Crated Weight 90 lbs                            Weight: 89 lbs / Crated Weight 123 lbs
+
+
+
+
+Other Common Dimensions
+ Seamlessly gang multiple fireplace inserts together                               Up to 20 Feet (240 Inches) of flames
+ to create up to 20 feet of continuous flame.                                      controlled on a single remote
+
+ SIZE                                        W      D     H
+ 80’’ (2) AWAx-40-100                       80’’ x 12” x 11 ⅜ ’’
+ 100’’ AWAx-40 + AWAx-60                   100’’ x 12” x 11 ⅜ ’’
+ 120’’ (2) AWAx-60-150                     120’’ x 12” x 11 ⅜ ’’
+
+
+
+Cutout/Housing Dimensions
+                                                                                                                     Firep
+                                                                                                                          lace
+                                          W       D     H
+                                                                                                                                    Inse
+SIZE                                                                                                                                      rt
+
+
+20’’ AWAx-20-50                        20 ¼’’ x 12 ¼” x 14’’min.
+40’’ AWAx-40-100                       40 ¼’’ x 12 ¼” x 14’’min.                     D
+60’’ AWAx-60-150                       60 ¼’’ x 12 ¼” x 14’’min.                                                                                      Exit for water supply (optional)
+                                                                                                                                                              Exit for electrical
+                                                                                                                                                                            Installation surface
+
+
+
+
+    !   Important!                                                                                                        Enc
+                                                                                                                             losu
+                                                                                                                                     re
+  Cutout dimensions are critical! Fireplace inserts                                                                                                                                  H
+                                                                                                 W
+  are suspended in cutout opening from the attached
+  flanges so be sure to measure carefully!
+                                                                                                     Air flow inlet
+                                                                                             (if top vents are covered)
+
+
+
+
+    5                                                                                                                                          www.aquafire.com
+                                              Pro
+                                                                                                              Aquafire Pro Series
+                                                                                                                       AWPRx-20
+                                                                                                                       AWPRx-40
+                                                                                                                       AWPRx-60
+
+
+
+
+Enclosure Design
+
+ Types of Enclosures
+
+     Type 1: Recessed Hearth              Type 2: Split Hearth (against wall)   Type 3: Open Hearth (against wall)
+
+
+
+
+     Type 4: Room Divider/Floating Wall   Type 5: 3-Sided Peninsula             Type 6: Wall Hung
+
+
+
+
+     Type 7: Bar Top                      Type 8: Dining Table                  Type 9: Coffee Table
+
+
+
+
+ 6                                                                                            www.aquafire.com
+                                                                                                                            Pro
+                                                                                                                                                                                                                                               Aquafire Pro Series
+                                                                                                                                                                                                                                                        AWPRx-20
+                                                                                                                                                                                                                                                        AWPRx-40
+                                                                                                                                                                                                                                                        AWPRx-60
+
+
+
+
+Enclosure Design
+
+Ideal Enclosure Guidelines
+Minimum finishing dimensions to finish to prevent light from escaping enclosure and illuminating onto ceiling.
+
+SIDE VIEW
+Single-sided hearth                                                                                                                     Double-sided hearth
+                                                                                                                                                                                                                                  Pro Tip!
+
+                                                                                                                                                                                                                             A well-built enclosure consists of:
+
+                                                                                                                                                                                                                              1     Recessed light trap.
+ INTERIOIR WALL
+
+
+
+
+                                                                                                                                                                                                                              2     Matte black interior walls.
+                                                                                                                                                                                                                              3     Proper setback (fireplace
+                                                                                                                                                                                                                                    edge to light trap edge).
+                                                                                                                                                                                                                              4     Sealed off from interior
+                                                                                                                                                                                                                                    walls and floor.
+                                                                                                                                                                                                                              5     Allow for air flow through
+                                                                                              2 Non-reflective,
+                                 19” min.                                                                                                                                                                                           top vents or toe kick.
+                                                                                                matte finish                                           21” min.
+                                                                                                                                                                                                                              6     Space under fireplace.
+
+                              Recessed light trap                                                                                                 1    Recessed light trap                                                    7     Correct viewing area height
+                                                                                                 1-4” min.
+                                                                                                                                                                                                                                    to avoid light escaping.
+                                                                ath
+
+
+
+
+                                                                                                                                                                                     ath
+                                                               tp
+
+
+
+
+                                                                                                                                                                                    tp
+                                                              igh
+
+
+
+
+                                                                                                                                                                                   igh
+                                                                    ath
+
+
+
+
+                                                                                                                                                                                         ath
+                                                          eL
+
+
+
+
+                                                                                                                                                                               eL
+                                                                tp
+
+
+
+
+                                                                                                                                                                                     tp
+                                                         ng
+
+
+
+
+                                                                                                                                                                              ng
+                                                               igh
+
+
+
+
+                                                                                                                                                                                    igh
+
+
+
+
+                                                                               Front                                     Rear                                                                   Front
+                                                        Ora
+
+
+
+
+                                                                                                                                                                             Ora
+                                                              BL
+
+
+
+
+                                                                                                                                                                                   BL
+                                                          RG
+
+
+
+
+                                                                                                                                                                               RG
+
+
+
+
+                                                                             3                                                                                                                  Setback
+                                                                               Setback                                   Setback
+ Potential downdrafts
+
+
+
+
+                                                                                             7   14” max.                                                                                                                         Design Review!
+                         1”                                                                      viewing area
+                         min.                             6”                                                                             3-4”                                  6”
+                                                          min.                                                                           min.                                  min.                                          When you have your design
+                                 68°         53°                                                                                                       68°         58°
+                                                                                                                                                                                                                             schematic or working drawings,
+                                Aquafire Pro                                                                                                          Aquafire Pro
+                                                                                                                                                                                                                             it’s a good idea to get a review
+                                                                                                                                                                                                                             by an Aquafire professional. We
+                                                 11⅜”
+
+
+
+
+                                                                                                                                                                      11⅜”
+
+
+
+
+                                                                                                 14” min.                                                                                                                    are here to help!
+                                       12”                                                                                                                   12”
+                                   24v Adapter                                                                                                          24v Adapter
+                                                                                                                                                                                                                             Contact us sales@aquafire.com
+                                Sealed, to prevent downdraft                                 Air flow through toe kick
+                          4                                                              5                                               6 Room for power adapter
+                                in interior walls or floor                                   if top vents are covered
+
+
+
+
+Side Light Considerations
+Installing Aquafire too close to a side wall may cause lateral light reflection onto adjacent surfaces. Maintain a
+minimum 6-inch clearance on each side, or utilize an open-ended or blind-corner design to mitigate light bleed.
+
+                  FRONT VIEW                                                                                               PLAN VIEW
+                                                                          Blind corner                                                            Blind corner (optional)                            Installation surface
+                                                                      horizontal
+                                                                      light-path                                                                                      6” min.                                                     19” min.
+                                                                                                                                                                                                                                                       Side wall
+                                                                                                                            Side wall
+
+
+
+
+                                                                                                                                        6” min.                                                   Aquafire
+
+
+                        Aquafire                                                     6” min.
+
+                                                                                                                                                                      1” min.
+                                                                                                                                                                                               Interior wall
+
+
+                         7                                                                                                                                                                                                  www.aquafire.com
+                                                                                                                                                                      Aquafire Pro Series
+                                                                                                                                                                               AWPRx-20
+                                                                                                                                                                               AWPRx-40
+                                                                                                                                                                               AWPRx-60
+
+
+
+
+Enclosure Design
+Light Trap Design
+Light from the Aquafire may project above the enclosure, illuminating the ceiling. To reduce this effect, incorpo-
+rate a light trap in your enclosure design. Use the chart below to determine optimal finished dimensions.
+
+
+
+
+                                                                                              INTERIOIR WALL
+           INTERIOIR WALL
+
+
+
+
+                                                                                                                                                                   light bleed
+
+
+                                     non-reflective,
+                                     matte finish
+                                     recessed light trap
+                                                                                                                          reflective finish
+                                                                                                                          flat light trap
+                                                                        A                                                                                         A
+                                                                      Viewing                                                                                   Viewing
+                                                    th
+
+
+
+
+                                                                      Height                                                                                    Height
+                                                pa
+
+
+
+
+                                                                                                                                          th
+                                                                                                                                               3 Setback
+                                               ht
+
+
+
+
+                                                               3
+
+
+                                                                                                                                      pa
+                                              Lig
+
+
+
+
+                                                                                                                                     ht
+                            1”
+                            min.                                                                                                    Lig
+                                                     4”                                                                              4”
+                                                     min.                                                                            min.
+                               68°      58°                                                                        68°    58°
+
+                                       Aquafire                                                                          Aquafire
+
+
+                                         12”        B                                                                     12”          B
+                                               Setback                                                                            Setback
+
+
+
+
+AQUAFIRE PRO SERIES (AWPRx)                                        AQUAFIRE SERIES (AWAx)                                              AQUAFIRE LITE SERIES (AWLx)
+              A *                                           B **            A                                  B                                   A                      B
+  Viewing Height                         Setback (min.)            Viewing Height        Setback (min.)                                     Viewing Height      Setback (min.)
+          x                                              x              12”                                2”                                    12”                      2”
+          x                                              x              13”                                3-1/2””                               13”                      3-1/2””
+          14 ”                                           6”             14 ”                               4”                                    14 ”                     4”
+          15”                                            6-1/2”         15”                                4-1/2”                                15”                      4-1/2”
+          16”                                            7”             16”                                5”                                    16”                      5”
+          17”                                            8”             17”                                6”                                    17”                      6”
+          18”                                            9”             18”                                7”                                    18”                      7”
+          19”                                            9-1/2”         19”                                7-1/2”                                19”                      7-1/2”
+          20”                                            10”            20”                                8”                                    20”                      8”
+          21”                                            11”            21”                                9”                                    21”                      9”
+*Vertical distance extending from Aquafire’s media tray to bottom edge of enclosure/hearth’s light trap.
+**Horizontal distance from Aquafire’s front edge to the point directly below the inside edge of the light trap.
+
+   8                                                                                                                                                       www.aquafire.com
+                                                                        Pro
+                                                                                                                                        Aquafire Pro Series
+                                                                                                                                                 AWPRx-20
+                                                                                                                                                 AWPRx-40
+                                                                                                                                                 AWPRx-60
+
+
+
+
+Other Considerations
+
+ Air Flow Considerations
+
+                  SIDE VIEW
+                  SINGLE-SIDED HEARTH
+
+
+
+
+                                                                                                     HVAC Vent
+
+
+
+                      !
+                    Down-
+                    drafts
+                                                Optional TV / Art
+
+
+
+
+                    We strongly recommend
+                    sealing any open wall
+  Interior Wall
+
+
+
+
+                    cavities within the
+                    enclosure to prevent
+                    downdrafts.
+
+                    Open wall cavities behind
+                    or beneath the fireplace
+
+
+                                                                    Air currents
+                    can create airflow that
+                    pulls the flame downward.
+                    This can affect flame
+                    height and appearance,
+                    and may cause excess
+                                                                    Avoid blowing air currents from HVAC units directly toward
+                    vapor to build up on                            the Aquafire insert. Direct air currents can prevent vapor from
+                    components—potentially
+                    leading to damage over                          rising vertically as designed and limit the flame height.
+                    time.
+
+
+
+
+                                                                    Air intake requirements
+                                                                    Aquafire inserts require at least 50 square inches of
+                             Fireplace                              air intake within the enclosure for every 20 inches of unit
+                                                                    length. This is achieved by venting through either the top
+                                                                    lid or, if covered, via a toe kick beneath the enclosure.
+
+
+
+
+ Venting                                                                                                                    air vents
+
+
+ Air vents are situated atop the insert to enable airflow
+ when the device is placed within an enclosure. Should
+ there be a preference for a decorative top or media
+ obstructing these vents, the enclosure design needs to
+ facilitate adequate airflow through the sides or bottom.
+                                                                                                             air vents
+
+                                                                                                                                         air vents
+
+
+
+
+  9                                                                                                                               www.aquafire.com
+                                                Pro
+                                                                                               Aquafire Pro Series
+                                                                                                        AWPRx-20
+                                                                                                        AWPRx-40
+                                                                                                        AWPRx-60
+
+
+
+
+Maintenance and Cleaning Guidelines
+
+  Hard Water Guidelines
+
+
+
+
+                   Slightly Hard   Moderately Hard   Hard        Very Hard    Extremely Hard
+
+
+
+
+  For best results, descale your fireplace every three months
+  or more frequently if you live in an area with hard water.
+
+  3.5 to 8.5 Grains Per Gallon, Ideal is 7.0 (moderately hard)
+
+  • Hard may produce scaling, shorten transducer life, and require more frequent cleaning.
+  • If water hardness needs to be adjusted, consult local water conditioning professional.
+  • Water that is too soft will have reduced flame effect.
+
+  Reverse Osmosis is not recommended, it removes all minerals
+  and vapor flame effect will be greatly diminished.
+
+        For complete cleaning instruction visit www.aquafire.com/cleaning
+
+
+
+   10                                                                                www.aquafire.com
+                                                                                                                                                                           OR SCAN THIS QR CODE
+
+                                                                                                                          WATCH ASSEMBLY VIDEO
+
+
+
+                                                                                                                          https://youtu.be/ir3aeb3v_WA
+
+
+
+Assembly Instructions - Vapor Pure™ Water Softening Kit
+     !                  READ ENTIRE INSTRUCTION FIRST! Questions? Please call 877-888-4260.
+ IMPORTANT              A plumber is responsible for ensuring water pressure will not exceed 100 PSI.
+
+ PART LIST                                                                                                                        TOOLS NEEDED
+                                                                                             1
+     1. (1) Head Mount                                                                                            2
+     2. (1) Mounting Bracket
+     3. (1) Vapor Pure Cartridge
+                                                                                  3                                                     Phillips Screwdriver or Drill
+     4. (1) 6’ Length of tubing
+     5. (4) Short 1/2” Screws                                                                                     4
+     6. (2) Long 1” Screws
+     7. (2) Horseshoe Clips                                                                                                            Utility Knife                   Marker
+     8. (1) Water Test Kit containing
+        12 Hardness & Iron Test Strips
+                                                                                                                                                Teflon Tape (optional)
+                                                            5 6                              7                8
+                                          Installation Bracket
+ QUICK START                                                                                                                       Lift Aquafire lid to
+                                     Install Bracket                                                                              use water test strips
+                                                                              B
+    DIAGRAM 1                    A                                                    Flow
+                                                                  Inlet (I)                      Outlet (O)
+
+
+   Wall                                                                                                                           Water Test Strips
+                                                                                                                                                                           Aquafire
+                          D
+                          Cold water
+                          supply (existing)
+                                                                                                                                                  E
+                                                                     C
+                                                           Vapor Pure
+                                                         replacement
+                                                             cartridge
+                                                                                                              DIAGRAM 2                                 Shutoff Valve &
+          DIAGRAM 3                                                                                                       Body                            Water Line                       Aquafir
+                               Closed
+                                                                                                                          (POM)                          (Pre-Installed)                     (Bac
+          Open
+                                                                                                                                        Locking Clips
+
+
+
+                                                                                                                                             Collet
+                                                                                                                                             (POM)
+                                                                                                              1/4” OD
+                                                                                                              Tubing
+  INSTALLATION QUICK START GUIDE                                                                                        O-Ring
+  This is intended as a quick reference one-page installation guide.                                                    (EPDM)
+
+  Please read the full and complete installation instructions and
+  plumbing considerations found in the Vapor Pure User Manual.
+                                                                                                         ATTACH TUBING
+  MOUNT BRACKET                                                                                        • Cut provided tubing at a no less than 2” lengths and begin following
+  • Attach Bracket tA to Head B using provide 1/2” screws.                                               Diagram 1 from left to right, inserting the tubing ends into the valve
+  • Mount bracket and head to wall allowing a minimum 9” for AF300                                       collects and securing with locking clips, as shown in Diagram 2.
+    and 17” for AF700 under the head to allow for removal.
+                                                                                                         TURN ON WATER
+  INSTALL CARTRIDGE                                                                                    • With the Aquafire shutoff valve E closed, slowly open cold water
+                                                                                                         supply D allowing water to fill cartridge. Check for potential leaks.
+  • Align unlock icon on cartridge label with inlet fitting of Head
+    and insert cartridge, twisting cartridge C to the right until secure.                              • Slowly open Aquafire shutoff valve completely allowing water
+ • Be sure to note the Flow direction indicated by an arrow on the top                                   to flow freely to fireplace. Check for leaks.
+   of the cartridge Head.                                                                                s
+                                                                                                       • Check  for any possible leaks for next 24 hours.
+
+
+                                                                                                                                    www.aquafire.com/vaporpure
+                                                            Pro
+                                                                                                                                     Aquafire Pro Series
+                                                                                                                                              AWPRx-20
+                                                                                                                                              AWPRx-40
+                                                                                                                                              AWPRx-60
+
+
+
+
+Troubleshooting Guide
+
+                    PROBLEM                                  POSSIBLE CAUSE                                     SOLUTION
+     Power
+                                                  Power supply not properly plugged in          Check power supply connections and look
+                                                                                                for green LED on power supply indicating
+     Unit fails to turn on when using the power
+                                                                                                that it's powered
+     button on the ﬁreplace
+                                                  Wall outlet may not be powered                Check breaker main panel in building to see
+                                                                                                if breaker has been tripped or turned off
+     Power supply indicator light is green, but Main fuse inside the ﬁreplace may be blown Contact support for assistance
+     unit still won't turn on
+     Power supply indicator light is red          Power supply has somehow been damaged Contact support for assistance
+     Unit turns on, but power button flashes      Possible internal component failure due to    Contact support for assistance
+     and immediately shuts off                    rough handling during shipping
+                                                  Power supply may not be fully plugged in on Check that 90 degree ﬁtting is securely
+ 1 Unit appears to have power, but a              the back of the unit                        plugged in on the back of the unit. If it is and
+ 1                                                                                            buzzing continues, contact support
+ 2"buzzing" sound is heard                        Power supply is fully plugged in on the back Main power outlet may be loose. Contact
+ 2                                                of the unit, but buzzing persists            support for assistance
+
+
+
+     Water
+     Musty or stale smell when unit is running Old or stale water generally created from        Drain and reﬁll with fresh water. Consider
+                                               lack of use                                      cleaning per the PM maintenance guidelines
+
+     Leak detected after unit has been unused Float sensor in mist tank may be stuck            Drain excess water to proper level; Lift and
+     for an extended period of time           creating above normal water level in mist         plunge mist maker rack vigorously 10 -15
+                                              tube                                              times to free up float sensor in mist tank.
+                                                                                                Allow unit to run and recheck to make sure
+                                                                                                correct water level is maintained
+     Unit beeps then turns off                    Low water level                               Reﬁll unit manually or verify that water feed
+                                                                                                is on if unit is permanently plumbed
+
+
+     Remote Control
+                                                  Possible dead battery                         Install new CR-2032 battery (Lithium)
+                                                  Remote may not be synced to this particular Push and hold the power button on the
+     Remote control does not turn ﬁreplace
+                                                  ﬁreplace                                    ﬁreplace until it flashes, then hit any button
+     on/off
+                                                                                              on the remote. Use this process to sync
+                                                                                              multiple ﬁreplaces to a single remote
+                                                  Possible low battery                          Install new CR-2032 battery (Lithium)
+     Remote control powers the ﬁreplace
+     on/off, but doesn't seem to respond to
+     flame adjustments or color changes           Possible sync issue                           Follow instructions above to re-sync the
+                                                                                                remote
+     Remote does not work despite trying all      Remote may be malfunctioning                  Contact support for further assistance
+     steps listed above
+
+
+
+
+12                                                                                                            www.aquafire.com
+                                                           Pro
+                                                                                                                                   Aquafire Pro Series
+                                                                                                                                            AWPRx-20
+                                                                                                                                            AWPRx-40
+                                                                                                                                            AWPRx-60
+
+
+
+
+Troubleshooting Guide (cont’d)
+
+                          PROBLEM                           POSSIBLE CAUSE                                  SOLUTION
+ Mist Makers/Flame Appearance
+                                                 Possible air flow issue due to enclosure   Verify that ﬁreplace is getting sufﬁcient air
+                                                 design or ambient room currents            and that no AC vents, fans, or air currents
+ Flame height is less than 6" high in all                                                   are impacting the mist from rising vertically
+ sections                                        Flame volume may be low                    Use remote (or phone app) to
+                                                                                            increase volume of mist by
+                                                                                            pressing the "+"
+                                                 Mist maker may need to be cleaned          Follow PM instructions for cleaning mist
+                                                                                            maker.
+ Flame height is less than 6" high in one                                                   Consider cleaning all mist makers
+ section only
+                                                 Water level in mist tube may be too high   Remove excess water to proper level which
+                                                                                            is the height of the black mushroom cap
+ Flames appear more "smoky" than                 Excess mist is being generated             Use remote (or phone app) to
+ desired                                                                                    decrease volume of mist by
+                                                                                            pressing the "-"
+ Slower flame movement is desired                Flame speed setting is too high            Use remote (or phone app) to
+                                                                                            decrease speed of mist by
+                                                                                            pressing the "-"
+ Faster flame movement is desired                Flame speed setting is too low             Use remote (or phone app) to
+                                                                                            increase speed of mist by
+                                                                                            pressing the "+"
+
+
+ LED Lights
+                                                 Loose connection on light strip(s)         Check connection on right end of light strip
+                                                                                            to make sure it is securely connected
+ Lights are not on when unit is on
+                                            Possible problem with the light strip or LED Contact support for further assistance
+                                            driver card
+ One or more light cells are not working on There is a problem with the light strip      Contact support for further assistance
+ an individual light strip
+
+
+ Lights and Beeps Key
+      Lights                        Beeps                     Alert                          Possible cause
+
+                                                                                             The water supply hasn’t been turned on.
+          B2    B1    ON/OFF
+                                    Two quick beeps,
+                                                              Low / No Water
+                                    every two seconds                                        Water needs to be added.
+
+                                                                                             Due for preventative maintenance
+                                    None                      Maintenance Reminder           cleaning - press and hold middle
+                                                                                             and left buttons together to reset.
+         Flashes for 30 sec
+
+
+
+                                    Three long beeps,                                        Water level is too high.
+                                                              Overflow / High Water Alert
+         Lights Cycling
+                                    every second                                             Float sensor is stuck.
+
+                                    One short beep,                                          Possible shortage.
+                                                              Voltage Alert
+        Flashing together           every two seconds                                        Faulty power adapter.
+
+
+
+13                                                                                                         www.aquafire.com
+                              Contact Us
+                       sales@aquafire.com
+                        www.aquafire.com
+                         (877) 888-4260
+
+
+
+
+Aquafire® Inc is the Exclusive North American Distribution Partner for A|Fire LTD
+
+
+
+
+                               www.aquafire.com
+

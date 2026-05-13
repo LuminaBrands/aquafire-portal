@@ -1,0 +1,102 @@
+Source PDF: 5877d033-Flame_Appearance_Troubleshooting.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 9:46 PM                                                              Flame Appearance Troubleshooting
+
+
+
+
+                         All articles                 Maintenance & Troubleshooting                              Help & Troubleshooting
+
+                Flame/Vapor                      Flame Appearance Troubleshooting
+
+               Search
+
+
+
+
+        Flame Appearance
+        Troubleshooting
+        Updated 3 months ago
+
+
+        Is your vapor flame not behaving as it should? Review the chart below to find a solution!
+
+
+
+
+                                                                                                                            Chat with us
+
+
+https://aquafire.gorgias.help/en-US/flame-appearance-troubleshooting-232521                                                                1/3
+5/12/26, 9:46 PM                                                              Flame Appearance Troubleshooting
+
+        *Important Tip: Most common issues can be prevented with a whole insert cleaning. We
+        recommend cleaning your insert(s) 2-3 times a year depending on frequency of use and water
+        quality. Please start with our Preventative Maintenance Guide to see if that solves your
+        problem
+
+
+                      Problem                                    Possible Cause                                      Solution
+
+          Flame height is less than                      Possible air flow issue due to                     Verify that fireplace is getting
+            6" high in all sections                    enclosure design or ambient room                  sufficient air and that no AC vents,
+                                                                   currents                            fans, or air currents are impacting the
+                                                                                                               mist from rising vertically
+
+                                                            Flame volume may be low                        Use remote (or phone app) to
+                                                                                                        increase volume of mist by pressing
+                                                                                                                      the "+"
+
+
+
+
+          Flame height is less than                   Mist maker may need to be cleaned                  Follow PM instructions for cleaning
+         6" high in one section only                                                                      mist maker. Consider cleaning all
+                                                                                                                   mist makers
+
+                                                      Water level in mist tube may be too              Remove excess water to proper level
+                                                                      high                               which is the height of the black
+                                                                                                         mushroom cap - Reference this
+                                                                                                                 related article
+
+              Flames appear more                         Excess mist is being generated                    Use remote (or phone app) to
+             "smoky" than desired                                                                       decrease volume of mist by pressing
+                                                                                                                      the "-"
+
+
+
+
+         Slower flame movement is                        Flame speed setting is too high                  Use remote (or phone app) to
+                   desired                                                                              decrease speed of mist by pressing
+                                                                                                                     the "-"
+
+
+
+
+https://aquafire.gorgias.help/en-US/flame-appearance-troubleshooting-232521                                                                      2/3
+5/12/26, 9:46 PM                                                              Flame Appearance Troubleshooting
+
+
+                      Problem                                    Possible Cause                                     Solution
+
+          Faster flame movement is                       Flame speed setting is too low                     Use remote (or phone app) to
+                    desired                                                                              increase speed of mist by pressing
+                                                                                                                      the "+"
+
+
+
+
+        Was this article helpful?                                                                                        Yes           No
+
+
+
+
+                                                             Contact Us         Home         Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/flame-appearance-troubleshooting-232521                                                                   3/3
+

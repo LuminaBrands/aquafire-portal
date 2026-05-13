@@ -1,0 +1,69 @@
+Source PDF: 0ed8c3b9-Aquafire_Pro__Phone_App_not_connecting.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 9:47 PM                                                              Aquafire Pro - Phone App not connecting
+
+
+
+
+                         All articles                 Maintenance & Troubleshooting                                     Help & Troubleshooting
+
+                Phone App                     Aquafire Pro - Phone App not connecting
+
+               Search
+
+
+
+
+        Aquafire Pro - Phone App not
+        connecting
+        Updated 3 months ago
+
+
+        Congratulations on installing your new Aquafire Pro! If you choose to operate your Aquafire Pro
+        via the AFIREWATER Prestige App, there are a couple details to consider before you connect:
+
+            The Aquafire Pro will only connect to a 2.4 Ghz router network. 4G and 5G home wifi
+            networks generally have the ability to create a 3G network that runs on 2.4 Ghz. These water
+            vapor fireplace inserts are sold all over the world and not all locations have the USA's faster
+            networks so our international manufacturer still uses a 3G card.
+
+            Once you have the correct 2.4 Ghz router network, the instructions for downloading and
+            connecting to the app need to be followed precisely. Customers who download the app and
+            try to connect out of sequence have more problems than those that follow the step-by-step
+            guidelines in the Owner's Manual (it can be found on page 9 and 10) and/or YouTube video:
+
+
+
+
+                                                                                                                                   Chat with us
+
+
+https://aquafire.gorgias.help/en-US/aquafire-pro---phone-app-not-connecting-272087                                                                1/2
+5/12/26, 9:47 PM                                                              Aquafire Pro - Phone App not connecting
+
+
+                              How to Connect the AFIRE App to Your Aquafire Water Vapor
+                              Aquafire
+
+
+
+
+                                                                                                               Watch on
+
+
+
+
+        Was this article helpful?                                                                                         Yes   No
+
+
+
+
+                                                              Contact Us             Home       Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/aquafire-pro---phone-app-not-connecting-272087                                                   2/2
+

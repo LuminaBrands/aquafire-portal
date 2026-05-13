@@ -1,0 +1,74 @@
+Source PDF: ce783f59-Remote_Control_Issues.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 10:01 PM                                                        Remote Control Issues
+
+
+
+
+                         All articles                  Maintenance & Troubleshooting             Help & Troubleshooting
+
+                Power/Electrical                       Remote Control Issues
+
+               Search
+
+
+
+
+        Remote Control Issues
+        Updated 3 months ago
+
+
+        The chart below contains easy solutions for common issues you may encounter with the remote
+        control for your Aquafire and Aquafire Pro
+
+
+
+
+                                                                                                            Chat with us
+
+
+https://aquafire.gorgias.help/en-US/remote-control-issues-232524                                                           1/2
+5/12/26, 10:01 PM                                                                  Remote Control Issues
+
+
+
+
+                      Problem                                      Possible Cause                                    Solution
+
+           Remote control does not                                 Possible dead battery               Install new CR-2032 battery (Lithium)
+             turn fireplace on/off
+                                                        Remote may not be synced to this                Push and hold the power button on
+                                                              particular fireplace                      the fireplace until it flashes, then hit
+                                                                                                         any button on the remote. Use this
+                                                                                                       process to sync multiple fireplaces to
+                                                                                                                   a single remote
+
+         Remote control powers the                                 Possible low battery                Install new CR-2032 battery (Lithium)
+         fireplace on/off, but doesn't
+           seem to respond to flame                                Possible sync issue                  Push and hold the power button on
+             adjustments or color                                                                       the fireplace until it flashes, then hit
+                   changes                                                                               any button on the remote. Use this
+                                                                                                       process to sync multiple fireplaces to
+                                                                                                                   a single remote
+
+            Remote does not work                          Remote may be malfunctioning                     Contact support for assistance
+            despite trying all steps
+                 listed above
+
+
+
+
+        Was this article helpful?                                                                                         Yes             No
+
+
+
+
+                                                              Contact Us       Home        Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/remote-control-issues-232524                                                                                   2/2
+

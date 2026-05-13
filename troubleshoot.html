@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Support Hub | Aquafire Hub</title>
-  <meta name="description" content="Warranty registration, troubleshooting, and support for your Aquafire fireplace.">
+  <title>Troubleshooter | Aquafire Hub</title>
+  <meta name="description" content="Guided troubleshooting for your Aquafire water vapor fireplace — answer a few questions and get the fix, a how-to video, or the right person to contact.">
   <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
   <link rel="apple-touch-icon" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,9 +13,13 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #121417; --surface: #1b1e24; --border: #2c3038;
+      --bg: #121417; --surface: #1b1e24; --surface-alt: #22262e;
+      --border: #2c3038; --border-warm: #3a3229;
       --text: #e4e5e9; --text-muted: #878c99;
       --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
+      --amber: #e8a838; --amber-dim: #c78820;
+      --blue: #4da6e8; --blue-dim: #2980b9;
+      --ember: #d45a20;
       --radius: 14px; --radius-sm: 8px;
     }
     html { scroll-behavior: smooth; scroll-padding-top: 72px; }
@@ -27,25 +31,9 @@
     h1, h2 { font-family: 'Poppins', sans-serif; }
     a { color: inherit; }
     .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
-
-    .support-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-    }
-    .support-card {
-      display: flex; flex-direction: column; align-items: center;
-      text-align: center; padding: 36px 24px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); text-decoration: none; color: var(--text);
-      transition: border-color 0.2s, transform 0.15s;
-    }
-    .support-card:hover { transform: translateY(-2px); border-color: rgba(192,57,43,0.3); }
-    .support-icon { font-size: 2rem; margin-bottom: 12px; }
-    .support-card h2 { font-size: 1rem; margin-bottom: 6px; }
-    .support-card p { color: var(--text-muted); font-size: 0.85rem; }
   </style>
   <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="troubleshoot.css">
   <link rel="stylesheet" href="rewards.css">
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -64,45 +52,34 @@
         <li><a href="/">Home</a></li>
         <li><a href="getting-started.html">Getting Started</a></li>
         <li><a href="quick-start.html">Quick Start</a></li>
-
         <li><a href="enclosure-guide.html">Enclosure Guide</a></li>
         <li><a href="water-care.html">Water Care</a></li>
-        <li><a href="troubleshoot.html">Troubleshoot</a></li>
+        <li><a href="troubleshoot.html" class="active">Troubleshoot</a></li>
         <li><a href="dealer-locator.html">Find a Dealer</a></li>
-        <li><a href="support.html" class="active">Support</a></li>
+        <li><a href="support.html">Support</a></li>
       </ul>
     </div>
   </nav>
 
   <header class="page-header">
     <div class="container">
-      <h1>Support Hub</h1>
-      <p class="page-sub">Warranty, troubleshooting, and everything you need to keep your Aquafire running perfectly.</p>
+      <h1>Aquafire Troubleshooter</h1>
+      <p class="page-sub">Answer a few quick questions — we'll walk you to the fix, a how-to video, or the right person to contact.</p>
     </div>
   </header>
 
   <main class="container page-body">
-    <div class="support-grid" data-reward="support-hub">
-      <a href="#" class="support-card" data-reward="register-warranty">
-        <span class="support-icon">&#x1f4dd;</span>
-        <h2>Register Warranty</h2>
-        <p>Activate your warranty coverage.</p>
-      </a>
-      <a href="#" class="support-card">
-        <span class="support-icon">&#x1f527;</span>
-        <h2>Submit a Claim</h2>
-        <p>File a warranty or service claim.</p>
-      </a>
-      <a href="troubleshoot.html" class="support-card">
-        <span class="support-icon">&#x2753;</span>
-        <h2>Troubleshooting</h2>
-        <p>Guided diagnosis &mdash; answer a few questions, get the fix.</p>
-      </a>
-      <a href="#" class="support-card">
-        <span class="support-icon">&#x1f4da;</span>
-        <h2>FAQs</h2>
-        <p>Frequently asked questions.</p>
-      </a>
+    <div class="ts-wrap">
+      <div id="ts-app" data-reward="troubleshoot">
+        <noscript>
+          <div class="ts-card">
+            <h2 class="ts-q-prompt">JavaScript required</h2>
+            <p class="ts-q-help">This troubleshooter needs JavaScript. In the meantime, browse the
+              <a href="https://aquafire.gorgias.help/en-US" target="_blank" rel="noopener">Aquafire Help Center</a>
+              or <a href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">submit a service request</a>.</p>
+          </div>
+        </noscript>
+      </div>
     </div>
   </main>
 
@@ -124,8 +101,9 @@
         <div class="footer-col">
           <h4>Resources</h4>
           <a href="support.html">Support Hub</a>
+          <a href="https://aquafire.gorgias.help/en-US" target="_blank" rel="noopener">Help Center</a>
+          <a href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">Service Request</a>
           <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
-          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact Sales</a>
         </div>
       </div>
     </div>
@@ -133,6 +111,7 @@
   </footer>
 
   <script src="embed.js"></script>
+  <script src="troubleshoot.js"></script>
   <script src="rewards.js"></script>
   <script>
     const toggle = document.querySelector('.nav-toggle');

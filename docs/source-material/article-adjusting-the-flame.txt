@@ -1,0 +1,89 @@
+Source PDF: 87f2e1da-Adjusting_the_Aquafire_Flame.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 9:46 PM                                                          Adjusting the Aquafire Flame
+
+
+
+
+                          All articles                 Maintenance & Troubleshooting                     Help & Troubleshooting
+
+                Flame/Vapor                       Adjusting the Aquafire Flame
+
+               Search
+
+
+
+
+        Adjusting the Aquafire Flame
+        Updated a month ago
+
+
+        Your Aquafire flames need to be customized to your specific environment. Every Aquafire home
+        has its own air flow and humidity levels which will affect the vapor flames differently. You can
+        perform small tweaks to the Aquafire to get it looking perfect in your individual space.
+
+        1. Adjust the Flame Density and Flame Speed on the remote control. We suggest setting them
+        to the lowest settings and then adjusting density and speed separately. You'll press the - button
+        until the beeping stops, that means you've reached the lowest setting.
+
+
+
+
+                                                                                                                    Chat with us
+
+
+https://aquafire.gorgias.help/en-US/adjusting-the-aquafire-flame-483763                                                            1/3
+5/12/26, 9:46 PM                                                             Adjusting the Aquafire Flame
+
+         View: Aquafire Remote Control. The Aquafire Pro remote control will have additional features but the density
+                                                                and speed icons are the same
+
+
+        2. Check and adjust the humidity levels in your room. You may need to adjust the HVAC in the
+        room to lower humidity levels as high humidity levels can produce a foggy effect. Also reference
+        this article if you are experiencing a foggy or smoky flame.
+
+
+        3. Note and adjust the airflow in your room. Is an HVAC vent pointed directly at the Aquafire? Is
+        a door constantly opening and closing near the flame? Does the vapor seem to be pulled down
+        every time the HVAC turns on (this is called down-drafting)? All of these airflow situations can
+        affect the vapor flame and need to be adjusted to prevent excess vapor from being pushed onto
+        the insert which can cause electrical shorts and internal damage to the Aquafire.
+
+        4. Check the ring lift covering the front fans. First, ensure they are fully seated in the holder,
+        then you can lift up by a centimeter at a time to adjust the flame. Please note that adjusting up
+        by even a 1/4" can release an excess of vapor and cause. Please adjust these with caution.
+
+
+
+
+                      View: Aquafire Pro Top Plate Removed, looking down into the interior of the AWPR2-20-50
+
+
+
+
+https://aquafire.gorgias.help/en-US/adjusting-the-aquafire-flame-483763                                                 2/3
+5/12/26, 9:46 PM                                                            Adjusting the Aquafire Flame
+
+
+
+
+                View: Aquafire Pro, Front Panel Removed and Top Plate removed looking at front of AWPR2-20-50
+
+
+
+
+        Was this article helpful?                                                                          Yes   No
+
+
+
+
+                                                               Contact Us   Home         Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/adjusting-the-aquafire-flame-483763                                               3/3
+

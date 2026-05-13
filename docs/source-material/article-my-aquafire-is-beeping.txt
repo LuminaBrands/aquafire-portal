@@ -1,0 +1,114 @@
+Source PDF: 06ea4505-My_Aquafire_is_beeping.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 10:01 PM                                                         My Aquafire is beeping!
+
+
+
+
+                         All articles                 Maintenance & Troubleshooting                 Help & Troubleshooting
+
+                Power/Electrical                       My Aquafire is beeping!
+
+               Search
+
+
+
+
+        My Aquafire is beeping!
+        Updated 3 months ago
+
+
+        Do not stress, your Aquafire is trying to communicate it's water level or power issue with you!
+
+        Beeping can signal a few things:
+
+        1. 2 quick beeps = low/no water. It will beep and turn off when it is low and/or out of water.
+        Please refill your Aquafire and turn it on again.
+
+        Important note: It can take multiple fills to completely fill your Aquafire the first time. This is
+        completely normal. Your Aquafire will fill correctly and completely on subsequent refills.
+
+
+
+
+                                                                                                               Chat with us
+
+
+https://aquafire.gorgias.help/en-US/my-aquafire-is-beeping-608536                                                             1/4
+5/12/26, 10:01 PM                                                   My Aquafire is beeping!
+
+
+                         What the Beep? Low/no Water Beeps
+                         Aquafire
+
+
+
+
+                                                                                              Watch on
+
+
+
+
+        2. 3 long beeps = overflow protection or high water in the mist tube. If it's our newer
+        models - AWA2 or AWPR2 - when high water is detected in the mist tube the insert will go
+        through a series of alarm beeping, flashing lights and then eventually turn off. This is a
+        protection feature to prevent water overflow and is usually caused by a stuck float sensor.
+        Please reference THIS ARTICLE to remedy a stuck float sensor.
+
+
+
+
+https://aquafire.gorgias.help/en-US/my-aquafire-is-beeping-608536                                        2/4
+5/12/26, 10:01 PM                                                   My Aquafire is beeping!
+
+
+                         What the Beep? Overflow Beeps
+                         Aquafire
+
+
+
+
+                                                                                              Watch on
+
+
+
+
+        3. 1 short beep = shortage or an issue with the power adaptor. Short, quick beeps can
+        signal there is a power issue with the AC Power Adaptor. First, check that the power adaptor is
+        fully plugged into the wall outlet, the back of the Aquafire and the power block itself. If
+        everything seems tightly connected, there may be an issue with the power adaptor itself. Please
+        contact our Customer Experience Team, ces@aquafire.com, for further maintenance
+        instructions.
+
+
+
+
+https://aquafire.gorgias.help/en-US/my-aquafire-is-beeping-608536                                         3/4
+5/12/26, 10:01 PM                                                           My Aquafire is beeping!
+
+
+                         What the Beep? Voltage or Transformer Beeps
+                         Aquafire
+
+
+
+
+                                                                                                      Watch on
+
+
+
+
+        Was this article helpful?                                                                                Yes   No
+
+
+
+
+                                                              Contact Us   Home      Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/my-aquafire-is-beeping-608536                                                           4/4
+

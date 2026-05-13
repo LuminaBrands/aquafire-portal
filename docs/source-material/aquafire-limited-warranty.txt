@@ -1,0 +1,157 @@
+Source PDF: 9c854a3f-Aquafire_Limited_Warranty.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+​
+Aquafire Inc.
+
+LIMITED WARRANTY
+​
+IMPORTANT: To validate your warranty, you must complete the warranty registration form at
+www.aquafire.com/warranty within thirty (30) days of receiving your vapor appliance. Failure to register
+within this period will prevent you from submitting any warranty claims for your Aquafire product.
+
+1. Limited Warranty Coverage
+Aquafire Inc. (“Aquafire”) warrants to the original end-user purchaser that its water vapor fireplaces and fire
+feature products (the “Product”) shall be free from defects in materials and workmanship under normal use
+and service for the following periods:
+
+Residential Applications: Two (2) years from the date of purchase
+
+Commercial Applications: One (1) year from the date of purchase
+
+This Limited Warranty applies only to Products purchased through an authorized Aquafire dealer and is
+non-transferable, except where otherwise required by applicable law.
+
+2. Exclusive Remedy – Repair First Policy
+Repair is the primary and preferred remedy under this Limited Warranty. Before any replacement will be
+considered, the Online Dealer and/or customer must:
+
+   •​   Complete all required troubleshooting steps
+   •​   Participate in remote diagnostics with Aquafire Technical Support
+   •​   Install replacement components when directed by Aquafire Technical Support
+   •​   Make reasonable efforts to perform field repair as instructed by Aquafire Technical Support
+​
+Only if an Aquafire Technical Support Technician determines, in their sole professional judgment, that the
+Product cannot be effectively repaired in the field, will replacement be considered.
+
+3. Replacement Authorization Requirements
+Replacement is not automatic and will only be authorized if all of the following conditions are met:
+
+   1.​ The Product is within the applicable warranty period
+   2.​ Required troubleshooting and diagnostics have been completed in good faith
+   3.​ Aquafire Technical Support determines that repair cannot reasonably be completed in the field
+   4.​ Written replacement authorization is issued by Aquafire Inc. (email authorization is sufficient)
+
+Verbal statements do not constitute authorization. Aquafire reserves the sole discretion to determine whether
+repair or replacement is appropriate.
+4. No Advance Replacement or Cross-Shipment
+Aquafire does not authorize advance replacement, cross-shipment, or shipment of replacement units prior to
+receipt and inspection of the original unit unless express written authorization is provided by Aquafire.
+
+No Online Dealer, employee, or third party is authorized to promise or imply advance replacement.
+
+If an Online Dealer provides a replacement unit to its customer without Aquafire’s prior written approval,
+Aquafire shall have no obligation to reimburse the Online Dealer, and the Online Dealer assumes full financial
+responsibility for such action.
+
+5. Return Material Authorization (RMA)
+If replacement is approved, Aquafire will issue a Return Material Authorization (RMA).
+
+   •​ No Product may be returned without an RMA.
+   •​ Unauthorized returns will be refused and returned at the sender’s expense.
+   •​ Returned Products must be prepared for shipment in accordance with Aquafire’s packaging and
+      drainage instructions.​
+
+Failure to properly prepare the unit for return shipment may void warranty coverage.
+
+6. Warranty Exclusions
+This Limited Warranty does not apply to Products that have been damaged or adversely affected by:
+
+   •​ Modification, alteration, tampering, or unauthorized repair.
+   •​ Failure to follow installation instructions.
+   •​ Improper maintenance, including the use of dirty or contaminated water, mineral scaling, or failure of
+      components (such as fans, vents, or sensors) resulting from the accumulation of dirt, dust, or other
+      debris within the unit.
+   •​ Failure to maintain recommended water treatment or filtration.
+   •​ Abuse, negligence, accidental damage, or misuse.
+   •​ Normal wear and tear.
+   •​ Acts of God, including but not limited to floods, fires, lightning, or natural disasters.
+   •​ Damage caused during transportation by third-party carriers.​
+
+If shipping damage is evident at delivery, the damage must be reported to the carrier immediately and
+documented with photographs.
+
+Cosmetic issues that do not affect functional performance are not covered under warranty.
+
+7. Consumable / Wear Components
+Certain components are considered normal wear items, including:
+
+   •​ Transducer mist makers
+   •​ LED lighting components
+These items are covered only during initial installation testing. However, if such components are found to be
+defective during setup or within ninety (90) days from the date of purchase, they will be covered under this
+Limited Warranty.
+8. Costs Not Covered
+This Limited Warranty does not cover the following costs unless expressly authorized in writing by Aquafire:
+
+   •​   Labor costs
+   •​   Installation or reinstallation costs
+   •​   Removal of installed units
+   •​   On-site service calls
+   •​   Travel time or technician expenses
+   •​   Shipping costs
+   •​   Loss of use
+   •​   Loss of profits
+   •​   Property damage
+   •​   Incidental or consequential damages
+
+The Online Dealer and/or customer is responsible for all such costs unless otherwise agreed in writing by
+Aquafire.
+
+9. Limitation of Liability
+Repair or replacement of the Product, as determined by Aquafire, shall be the sole and exclusive remedy
+under this Limited Warranty. Aquafire shall not be liable for any incidental, indirect, or consequential damages
+arising from the use of the Product or from any breach of this warranty, except to the extent prohibited by
+applicable law. Any implied warranties, including merchantability or fitness for a particular purpose, are limited
+in duration to the term of this Limited Warranty to the extent permitted by law.
+
+10. Warranty Claim Procedure
+To initiate a warranty claim, contact Aquafire Customer Service:
+
+Phone: 877-888-4260​
+Email: ces@aquafire.com​
+​
+When requesting warranty service, please provide:
+
+• Product model number
+• Serial number
+• Customer name
+• Address
+• City, State, Zip Code
+• Contact phone number
+The above information can be submitted via this link on the Aquafire website:​
+https://www.aquafire.com/pages/service-request
+
+Technical Support will guide the troubleshooting and repair process.
+
+11. Water Quality Requirement​
+Operation of the Product requires proper water quality and maintenance. Failure to maintain water quality in
+accordance with the Aquafire Owner’s Manual, including use of recommended filtration or water softening
+systems where required, may result in scaling or component damage and may void warranty coverage.​
+​
+The included Vapor Pure™ Water Softening System must be installed and in operation prior to
+operating the Aquafire Vapor Fireplace for this warranty to remain valid. If the installation utilizes an
+existing whole-house water softening system in lieu of the supplied Vapor Pure™ system, the brand,
+model, and technical specifications of that system must be submitted to Aquafire for written approval
+prior to operation of the appliance. Failure to obtain such approval may void warranty coverage.​
+​
+12. Consumer Rights
+For consumers covered by consumer protection laws in their country or jurisdiction of residence, the benefits
+provided by this Limited Warranty are in addition to any rights and remedies provided under applicable
+consumer protection laws.
+
+
+
+Revised: January 2026
+
