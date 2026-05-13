@@ -41,7 +41,7 @@
     aBeep:           { label: 'Help article: My Aquafire is beeping!', url: 'https://aquafire.gorgias.help/en-US/my-aquafire-is-beeping-608536' },
     aSerial:         { label: 'Help article: Identifying your serial number', url: 'https://aquafire.gorgias.help/en-US/identifying-serial-number-275552' }
   };
-  var SUPPORT_EMAIL = 'ces@aquafire.com';
+  var SUPPORT_EMAIL = 'support@aquafire.com';
   var SUPPORT_PHONE = '(877) 888-4260';
   var SUPPORT_PHONE_TEL = '+18778884260';
 
@@ -49,15 +49,15 @@
      ⚠️ TODO: paste the Aquafire YouTube URLs here. While `url` is empty the
      tool shows a "video coming soon" placeholder so the slot stays visible. */
   var VIDEOS = {
-    appConnect:      { label: 'How to connect the AFIRE app to your Aquafire', url: '' },
-    locateMistMaker: { label: 'How to locate & remove the mist maker', url: '' },
-    cleanMM1:        { label: 'Mist maker cleaning — Part 1 (the disc)', url: '' },
-    cleanMM2:        { label: 'Mist maker cleaning — Part 2 (lower tank & float sensor)', url: '' },
-    agitateFloat:    { label: 'Freeing a stuck float sensor (agitating the mist rack)', url: '' },
+    appConnect:      { label: 'How to connect the AFIRE app to your Aquafire', url: 'https://youtu.be/exr4qep4cyA' },
+    locateMistMaker: { label: 'How to locate & remove the mist maker', url: 'https://youtu.be/cJ1LZDUxzu4' },
+    cleanMM1:        { label: 'Mist maker cleaning — Part 1 (the disc)', url: 'https://youtu.be/gQx12sy2Npg' },
+    cleanMM2:        { label: 'Mist maker cleaning — Part 2 (lower tank & float sensor)', url: 'https://youtu.be/8Jaj3N2YUKI' },
+    agitateFloat:    { label: 'Freeing a stuck float sensor (agitating the mist rack)', url: 'https://youtu.be/Y_caX56hz-k' },
     spongeTest:      { label: 'Sponge-filter thickness test for a foggy flame', url: '' },
-    beepLowWater:    { label: 'What the Beep? — Low / No Water', url: '' },
-    beepOverflow:    { label: 'What the Beep? — Overflow / High Water', url: '' },
-    beepVoltage:     { label: 'What the Beep? — Voltage / Power Adapter', url: '' }
+    beepLowWater:    { label: 'What the Beep? — Low / No Water', url: 'https://youtu.be/elCwmtnKpZo?si=xVhTzZ5bV6DjF4I1' },
+    beepOverflow:    { label: 'What the Beep? — Overflow / High Water', url: 'https://youtu.be/FqJP-wLYBhY?si=sNnv205TiLkWmEr3' },
+    beepVoltage:     { label: 'What the Beep? — Voltage / Power Adapter', url: 'https://youtu.be/Dk-9FRpVdzk?si=VTLzYbgCEtqRskjJ' }
   };
 
   /* ── Models ─────────────────────────────────────────────────────────── */
