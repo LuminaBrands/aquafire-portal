@@ -1,0 +1,179 @@
+Source PDF: 6ffaf49a-General_Cleaning_for_Aquafire_and_Aquafire_Pro.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 9:44 PM                                                            General Cleaning for Aquafire and Aquafire Pro
+
+
+
+
+                          All articles                 Maintenance & Troubleshooting                                   Device Maintenance
+
+                General Cleaning for Aquafire and Aquafire Pro
+
+               Search
+
+
+
+
+        General Cleaning for Aquafire
+        and Aquafire Pro
+        Updated 3 months ago
+
+
+        In order for the fireplace inserts to operate properly and ensure a long, healthy life, they need to
+        be descaled and cleaned regularly. How often will depend on the quality of your water, how
+        often the inserts are in operation and if you have a Vapor Pure water softener installed. The
+        Vapor Pure water softener was engineered alongside water quality experts to be specifically
+        used with the Aquafire and Aquafire Pro to not only reduce or eliminate water hardness but to
+        also filter out iron (which causes "sludge" to accumulate in the tanks and mist makers) and
+        magnesium and eliminate odors such as chlorine. Without the Vapor Pure water softener, the
+        minerals present in hard water can cling to the electrical components as well as the interior
+        tanks walls which will require increased maintenance, decreased overall performance and
+        ultimately shorten the life of your Aquafire.
+
+        Cleaning your mist makers and insert should not be a daunting task! Once practiced, it can be a
+        quick 10-15 minute process.
+
+
+        Our recommended cleaning schedule for an Aquafire or Aquafire Pro running an average of 20
+        hours a week with moderate water hardness is:
+
+
+        Mist Maker Cleaning: Every 3 months
+
+        Whole Insert Cleaning: Every 6 months
+
+                                                                                                                                 Chat with us
+        Steps for cleaning only the mist makers:
+
+https://aquafire.gorgias.help/en-US/general-cleaning-for-aquafire-and-aquafire-pro-340453                                                       1/5
+5/12/26, 9:44 PM                                                            General Cleaning for Aquafire and Aquafire Pro
+
+               Turn your fireplace off then unplug the mist maker wire from the power port located at each
+               of the large round mist tube housings
+               Remove mist maker racks from the mist tubes. For small to moderate scale or buildup,
+               apply a few drops of white vinegar directly onto the white disc at center of mist maker. Let it
+               sit for 3 minutes before rinsing it off and returning the rack to the mist tube. Don't forget to
+               re-attach the power cord.
+               If you notice heavier buildup or visble calcification deposits, follow steps above to remove
+               the mist maker from the mist tube, then remove the 4 screws that attach the mist maker to
+               the rack and soak the mist maker by submerging directly into white vinegar for 10-20
+               minutes. You can use a soft small brush (toothbrush, paint brush, etc...) to loosen any
+               stubborn deposits. Remember to clean the bottom of the mist maker as well. Take care not
+               to submerge the power cord attached to the mist maker.
+               When the soaking period is complete, rinse thoroughly with water. You can use a soft small
+               brush to gently brush the white surface of the mist maker as well as metal casing and the
+               bottom to remove any visible stains. Do not use a stiff bristle brush or a Scotch-brite pad on
+               the mist makers as this can cause permanent damage to them
+               Re-attach the mist maker to the rack and then place the mist maker rack back into the mist
+               tube
+
+               Reconnect the mist maker power feed to the power port being sure to push the wire all the
+               way down the slot in the side of the mist tube before putting the cap back on.
+
+
+                          Aquafire Mist Maker Maintenance Guide (Part 1): How to Clean
+                          Aquafire
+
+
+
+
+                                                                                                                 Watch on
+
+
+
+https://aquafire.gorgias.help/en-US/general-cleaning-for-aquafire-and-aquafire-pro-340453                                    2/5
+5/12/26, 9:44 PM                                                            General Cleaning for Aquafire and Aquafire Pro
+
+
+
+
+        Steps for cleaning the entire system:
+
+               Use the flexible hose that came with your fireplace and connect it to the drain port on the
+               front of the unit (AWA/AWP models) or on the top if you have the AWPR series
+               Put the other end of the hose in a 3-5 gal. bucket and push and hold the left button (B2)
+               which starts the draining process. When the drain cycle stops, there will still be some water
+               in the lower tank reservoirs. This is normal and if possible, remove the remaining few cups
+               of water from the each of the mist tubes by using a smaller 1/4" siphon hose, a large
+               “turkey baster”, or a small sponge. Avoid using any material that could flake off or leave
+               debris in the lower tank
+               Once the water is out, add approximately 1/2 gallon of vinegar by using your fill/drain hose
+               and pressing the B1 button to run the manual fill cycle or simply pour equal amounts of
+               vinegar directly into the mist tubes being careful not to overfill. The system will have
+               enough in it when the vinegar level in the mist tube is just above the top of the mist maker
+               itself (approx. 2”). Overfilling may result in excess vinegar leaking out of the front fans.
+               Like the mist maker soak above, let the vinegar sit in the tanks for approx. 10-20 minutes to
+               loosen hard water scaling that may have collected on the float sensors
+
+               Do Not operate the fireplace during this vinegar cleaning process
+               After the soak period is complete (and before you drain it), agitate the vinegar in each of
+               the lower tanks to help break up any remaining residue on the float sensors. Do this by
+               raising and lowering the mist maker rack vigorously so you can hear it splashing in the
+               lower tank. Do this 10-15 times in each of the mist tubes in your unit
+               For inserts produced before 2019 (will not apply to the Premium), you can remove the float
+               sensor from the bottom tank to check for buildup. They can be easily unscrewed from each
+               tank. A pair of long needle-nose pliers is recommended to make it easier. See photo below
+               for location of float sensor removal
+
+
+
+
+https://aquafire.gorgias.help/en-US/general-cleaning-for-aquafire-and-aquafire-pro-340453                                    3/5
+5/12/26, 9:44 PM                                                            General Cleaning for Aquafire and Aquafire Pro
+
+
+
+
+               Drain the vinegar just as you did the water using the drain hose, hose bib, and B2 button
+
+               Once the vinegar is out, fill the unit with fresh water either by turning the water back on (if
+               permanently plumbed), or by using the hose and fill cycle (B1) button
+
+               You’ll want to fill and drain the entire system twice to ensure that you’ve removed all the
+               vinegar and contaminates suspended in the water. After you’ve filled the system back up for
+               the 3rd time, go ahead and run the unit as you would normally.
+
+
+                          Aquafire Mist Maker Maintenance Guide (Part 2): Lower Tank &
+                          Aquafire
+
+
+
+
+                                                                                                                 Watch on
+
+
+
+
+https://aquafire.gorgias.help/en-US/general-cleaning-for-aquafire-and-aquafire-pro-340453                                    4/5
+5/12/26, 9:44 PM                                                            General Cleaning for Aquafire and Aquafire Pro
+
+        IMPORTANT NOTE: 2-3 days after a cleaning you may experience mist issues. This is most
+        likely caused by leftover debris from your initial cleaning. Debris can continue to slough off
+        days after a deep vinegar clean. This is completely normal! If you continue to experience mist
+        issues, please open the mist tubes, check for debris and re-agitate the mist rack and float
+        sensor. At this point, you may need to flush out the water to rid the tank of debris or complete
+        another full clean.
+
+
+        The more frequently you clean the insert, the less likely you are to experience delayed debris
+        after a cleaning. Once you get into a cleaning schedule, mist and float sensor issues should
+        dissipate.
+
+
+
+
+        Was this article helpful?                                                                                            Yes   No
+
+
+
+
+                                                               Contact Us           Home          Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/general-cleaning-for-aquafire-and-aquafire-pro-340453                                               5/5
+

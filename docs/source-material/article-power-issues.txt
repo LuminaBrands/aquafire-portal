@@ -1,0 +1,91 @@
+Source PDF: bbb0c998-Power_Issues.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 10:01 PM                                                          Power Issues
+
+
+
+
+                         All articles                 Maintenance & Troubleshooting       Help & Troubleshooting
+
+                Power/Electrical                          Power Issues
+
+               Search
+
+
+
+
+        Power Issues
+        Updated 3 months ago
+
+
+        Is your Aquafire not turning on? Review the chart below to find a solution!
+
+
+
+
+                                                                                                     Chat with us
+
+
+https://aquafire.gorgias.help/en-US/power-issues-227728                                                             1/3
+5/12/26, 10:01 PM                                                                   Power Issues
+
+        *Important Tip: Most common issues can be prevented with a whole insert cleaning. We
+        recommend cleaning your insert(s) 2-3 times a year depending on frequency of use and water
+        quality. Please start with our Preventative Maintenance Guide to see if that solves your
+        problem
+
+
+
+
+                      Problem                                   Possible Cause                                  Solution
+
+          Unit fails to turn on when                 Power supply not properly plugged in Check power supply connections and
+          using the power button on                                                       look for green LED on power supply
+                 the fireplace                                                                 indicating that it's powered
+
+                                                          Wall outlet may not be powered           Check breaker main panel in building
+                                                                                                   to see if breaker has been tripped or
+                                                                                                                 turned off
+
+            Power supply indicator                   Main fuse inside the fireplace may be            Contact support for assistance
+          light is green, but unit still                            blown
+                  won't turn on
+
+            Power supply indicator                        Power supply has somehow been               Contact support for assistance
+                 light is red                                       damaged
+
+           Unit turns on, but power                   Possible internal component failure             Contact support for assistance
+             button flashes and                      due to rough handling during shipping
+            immediately shuts off
+
+             Unit appears to have                           Power supply may not be fully             Check that 90 degree fitting is
+            power, but a "buzzing"                        plugged in on the back of the unit        securely plugged in on the back of
+               sound is heard                                                                          the unit. If it is and buzzing
+                                                                                                       continues, contact support
+
+                                                    Power supply is fully plugged in on the          Main power outlet may be loose.
+                                                     back of the unit, but buzzing persists           Contact support for assistance
+
+
+
+
+        Was this article helpful?                                                                                   Yes           No
+
+
+
+
+https://aquafire.gorgias.help/en-US/power-issues-227728                                                                                    2/3
+5/12/26, 10:01 PM                                                             Power Issues
+
+
+
+
+                                                          Contact Us   Home       Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/power-issues-227728                                      3/3
+

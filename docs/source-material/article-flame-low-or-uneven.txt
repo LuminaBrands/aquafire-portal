@@ -1,0 +1,132 @@
+Source PDF: da938988-Flame_Issues__Low_or_Uneven__Flame_.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 9:45 PM                                                              Flame Issues - Low or Uneven "Flame"
+
+
+
+
+                         All articles                 Maintenance & Troubleshooting                                  Help & Troubleshooting
+
+                Flame/Vapor                      Flame Issues - Low or Uneven "Flame"
+
+               Search
+
+
+
+
+        Flame Issues - Low or Uneven
+        "Flame"
+        Updated 7 days ago
+
+
+        Flames uneven?
+
+        Flames non-existent?
+
+        Flames not as tall as they normally are?
+
+
+        If you have ever turned on your Aquafire or Aquafire Pro and the flames don't look quite right,
+        then this article is for you!
+
+        The common culprit for uneven or low mist is high water levels in the mist tanks. First and
+        foremost, your insert needs to be cleaned multiple times a year and run regularly to turn over
+        fresh water. Please follow our Preventative Maintenance Guide to keep your insert running
+        optimally! If preventative maintenance didn't solve the issue or your insert is within the first 90
+        days, then high water is usually caused by a stuck float sensor or a mist maker that needs to be
+        cleaned or replaced.
+
+
+        To check the float sensor:
+
+               Take off the top lid
+               Open the mist maker tanks, there will be 1 tank per 20". A 20" water vapor fireplace insert
+                                                                                             Chat below
+               will have 1 Mist Maker Tank, a 40" will have 2 and a 60" will have 3. The example  with usis
+               for an Aquafire Original 40" (AWA-40-100) insert:
+
+https://aquafire.gorgias.help/en-US/flame-issues---low-or-uneven-"flame"-271574                                                               1/4
+5/12/26, 9:45 PM                                                              Flame Issues - Low or Uneven "Flame"
+
+
+
+
+               Compare the water levels, ideally, the water should just barely come to the top of the black
+               mushroom cap. Does the water look higher in the one that has uneven mist?
+
+
+
+
+               If it looks a bit high, you'll need to remove some of that water. Then agitate the mist maker
+               by lifting the mist maker up and down to create an internal wave to unstick the float sensor
+               in the lower mist maker tank. This video shows that process starting at the 3:40 minute
+               mark.
+
+        If that doesn't solve the issue, please check the condition of your mist maker:
+
+
+               Take off the top lid
+               Open the mist maker tanks. The example below is for an Aquafire Original 40" (AWA-40-
+               100) insert:
+
+
+
+
+https://aquafire.gorgias.help/en-US/flame-issues---low-or-uneven-"flame"-271574                                      2/4
+5/12/26, 9:45 PM                                                              Flame Issues - Low or Uneven "Flame"
+
+
+
+
+               Unplug the mist maker and carefully remove the interior rack.
+
+               When you are close to the top, tip the rack into the mist maker tank to empty excess water
+               and prevent water spillage.
+
+                                 How to Locate & Remove the Mist Maker on Your Aquafire W
+                                 Aquafire
+
+
+
+
+                                                                                                             Watch on
+
+
+               Examine the mist maker, does it look like it needs to be cleaned - it should be free of debris
+               and you should be able to see space between the bottom of the mist maker and the rack it
+               is attached to.
+
+
+
+
+https://aquafire.gorgias.help/en-US/flame-issues---low-or-uneven-"flame"-271574                                         3/4
+5/12/26, 9:45 PM                                                              Flame Issues - Low or Uneven "Flame"
+
+
+
+
+               If it has buildup or sediment attached, the mist maker is not able to operate as it should and
+               that results in a low or uneven mist. Please follow our mist maker cleaning videos, Part
+               1 and Part 2 and try turning on your insert again.
+
+        If none of these processes solve the issue, please reach out to our Technical Support by
+        completing this request form: https://www.aquafire.com/pages/service-request. They will be
+        happy go over additional troubleshooting techniques.
+
+
+
+
+        Was this article helpful?                                                                                    Yes   No
+
+
+
+
+                                                              Contact Us          Home         Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/flame-issues---low-or-uneven-"flame"-271574                                                 4/4
+

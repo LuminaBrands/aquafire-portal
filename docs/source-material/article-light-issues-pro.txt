@@ -1,0 +1,77 @@
+Source PDF: 0e14d558-Light_Issues__Aquafire_Pro.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 9:47 PM                                                         Light Issues - Aquafire Pro
+
+
+
+
+                          All articles                  Maintenance & Troubleshooting                  Help & Troubleshooting
+
+                 Light Bar                   Light Issues - Aquafire Pro
+
+                Search
+
+
+
+
+        Light Issues - Aquafire Pro
+        Updated 3 months ago
+
+
+        The chart below contains easy solutions for common light issues you may encounter with your
+        Aquafire Pro (AWPR)
+
+
+
+
+                                                                                                                  Chat with us
+
+
+https://aquafire.gorgias.help/en-US/light-issues---aquafire-pro-232522                                                           1/2
+5/12/26, 9:47 PM                                                               Light Issues - Aquafire Pro
+
+
+                       Problem                                     Possible Cause                                     Solution
+
+         Lights are not on when unit                      Loose connection on light strip(s)              Check connection on right end of
+                    is on                                                                               light strip to make sure it is securely
+                                                                                                                       connected
+
+                                                      Possible problem with the light strip or Contact support for further assistance
+                                                                 LED driver card
+
+                                                       Orange button and RBG Button may                 Use remote or phone
+                                                                  be turned off                         app to turn light strips
+                                                                                                          on/off for desired
+                                                                                                                effect.
+           Orange lights are not on                       Orange button on remote may be
+                                                                                                       RGB button must be on
+               when unit is on                                       turned off
+                                                                                                         to select RGB colors
+
+
+           Colored lights are not on                  RGB button on remote may be turned
+               when unit is on                                        off
+
+
+          One or more light cells are                  There is a problem with the light strip               Contact support for assistance
+             not working on an                                  or LED driver card
+            individual light strip
+
+
+
+
+        Was this article helpful?                                                                                          Yes            No
+
+
+
+
+                                                                Contact Us   Home          Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/light-issues---aquafire-pro-232522                                                                            2/2
+

@@ -1,0 +1,2324 @@
+Source PDF: 6fc465cf-usermanualwatervaporfireplaceaquafireafire.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+
+
+
+                                                By
+
+
+🔧
+
+– Manuel d’utilisation
+
+– User Manual
+
+– Manuale d’Uso
+
+– Manual del Usuario
+
+– Gebruiksaanwijzing
+
+– Benutzerhandbuch
+
+– 使用说明书
+
+
+
+📘 Langues disponibles / Available languages :
+
+       FRANÇAIS (1–8 )
+
+       ENGLISH ( 9–15)
+
+       ITALIANO (16–22 )
+
+       ESPAÑOL (pages 23–29)
+
+       DEUTSCH (pages 30–36)
+
+       NEDERLANDS (pages 37–43)
+
+       中文 (pages 44-50)
+
+
+                                                            1
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+
+
+FRANCAIS
+SOMMAIRE
+
+  1. Avertissements et sécurité générale
+       1.1 Sécurité de l’utilisateur
+       1.2 Sécurité technique
+       1.3 Télécommande et piles
+       1.4 Avertissement FCC
+
+  2. Conditions d’utilisation et d’installation
+      2.1 Température et humidité ambiantes
+      2.2 Encastrement et accès
+
+  3. Alimentation électrique
+       3.1 Tension et protection
+       3.2 Raccordement électrique
+       3.3 Encastrement et accessibilité
+       3.4 Mise hors tension
+
+  4. Alimentation en eau
+       4.1 Qualité de l’eau requise
+       4.2 Remplissage manuel avec pompe intégrée
+       4.3 Raccordement automatique au réseau d’eau
+
+  5. Mise en service de votre appareil
+       ➤ Guide de démarrage spécifique par gamme
+       ➤ Référence au guide fourni et à la fiche technique
+
+  6. Entretien des appareils
+       ➤ Fréquence recommandée selon usage
+       ➤ Lien vers la page dédiée maintenance et vidéos
+
+  7. Garantie
+      ➤ Conditions générales
+       ➤ Éléments non couverts
+       ➤ Importance du respect du manuel
+
+
+                                                             2
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+          ➤ Procédure en cas d’incident
+          ➤ Service technique AFIRE & assistance continue
+          ➤ Rôle du revendeur agréé
+
+
+
+
+        NOTICE D’INSTALLATION, D’UTILISATION ET
+                     D’ENTRETIEN
+Conformités aux normes des appareils AFIRE
+Gamme ADVANCE AWA : AWA 20-50, AWA 40-100, AWA 60-150, AWA 80-200, AWA
+100-250,
+AWA 120-300, AWA 140-350, AWA 160-400, AWA 180-450,
+AWA 200-500, AWA 220-550, AWA 240-600.
+Gamme PRESTIGE AWPR : AWPR 20-50, AWPR 40-100, AWPR 60-150, AWPR 80-
+200, AWPR 100-250,
+AWPR 120-300, AWPR 140-350, AWPR 160-400, AWPR 180-450,
+AWPR 200-500, AWPR 220-550, AWPR 240-600.
+Gamme LITE AWL : AWL 16-42, AWL 20-50, AWL 40-100, AWL 60-150.
+Conformité :
+Les appareils mentionnés ci-dessus sont conformes :
+• Aux Directives européennes :
+  o 2004/108/EC
+  o EN 55014-1 : 2006 + A1 : 2009 + A2 : 2011
+  o EN 55014-2 : 1997 + A1 : 2001 + A2 : 2008
+  o EN 61000-3-2 : 2006 + A1 : 2009 + A2 : 2009
+  o EN 61000-3-3 : 2013
+• À la partie 15 des règlements de la FCC
+
+1. AVERTISSEMENTS ET SÉCURITÉ GÉNÉRALE
+1.1 Sécurité de l’utilisateur
+• Ne jamais utiliser l’appareil s’il est endommagé (chute, choc…).
+👉 Contacter le service après-vente AFIRE.
+• Ne pas laisser des enfants ou des personnes vulnérables l’utiliser sans surveillance.
+• Utilisation strictement en intérieur.
+• Ne pas exposer à des projections d’eau, à une chaleur excessive ou à un froid
+extrême.
+• Ne poser aucun objet sur l’appareil en fonctionnement.
+• Couper l’alimentation électrique avant toute ouverture ou déplacement de l’appareil
+• Vidangez l’appareil avant de le déplacer ou de le transporter.
+• Si l’appareil n’est pas utilisé pendant plus d’une semaine, le vidanger pour éviter les
+eaux stagnantes.
+👉 Des dépôts peuvent obstruer les capteurs de niveau et provoquer des fuites.
+
+                                                                                            3
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+1.2 Sécurité technique
+⚠️ Important :
+L’utilisation exclusive d’accessoires d’origine est obligatoire.
+L’utilisation d’accessoires non certifiés par le fabricant annule immédiatement la garantie
+et peut entraîner un dysfonctionnement ou une détérioration de l’appareil.
+• Ne pas modifier l’appareil. Toute modification, ajout ou altération matérielle ou logicielle
+non approuvée au préalable par le fabricant peut entraîner un dysfonctionnement et
+annule la garantie.
+• Les systèmes de ventilation de l’appareil (plaque haute et sur les côtés) doivent rester
+libres et fonctionnels.
+• Si le câble d’alimentation est endommagé il ne faut pas le réparer mais le remplacer
+par un neuf.
+• Les appareils sont équipés de lampes LED puissantes. ⚠️ Ne jamais regarder
+directement la lumière émise par le dessus de l’appareil, sous peine d’éblouissement.
+1.3 Télécommande et piles
+• Tenir la télécommande hors de portée des enfants.
+• En cas d’ingestion d’une pile, consulter un médecin en urgence.
+• Utiliser uniquement des piles neuves non rechargeables, correctement insérées.
+1.4 Avertissement FCC
+Toute modification non expressément autorisée par la partie responsable de la
+conformité annule le droit d’utilisation de l’appareil.
+
+2. CONDITIONS D’UTILISATION ET D’INSTALLATION
+En cas de doute sur les conditions d’installation et utilisation
+contactez notre service technique
+2.1 Température et humidité
+• Plage de température ambiante à respecter : 10 °C à 35 °C (50 à 100 °F)
+• Hygrométrie intérieure : 30 % – 60 % HR, sans condensation, dans un environnement
+normalement ventilé
+👉 Ne pas installer dans :
+• Une pièce trop chaude ou trop humide (ex. : hammam, spa, sauna, serre non ventilée
+et similaires)
+• Un espace exposé à des courants d’air directs si l’appareil n’en est pas protégé (ex. :
+soufflage de climatisation, ventilateurs, conduit de cheminée ouvert, appel d’air dans la
+réservation d’encastrement).
+2.2 Encastrement et accès
+• Installer sur une surface stable et parfaitement horizontale.
+• Possibilité d’encastrement dans un meuble ou une niche en respectant les consignes
+propres au modèle.
+• Ne jamais obstruer les orifices d’entrée ou de sortie d’air ou de vapeur (côtés ou
+dessus).
+• Aucune grille de ventilation additionnelle n’est requise sauf indication contraire.
+• Prévoir un accès libre pour la maintenance, le remplissage, la vidange et l’utilisation
+des commandes.
+
+                                                                                            4
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+
+3. ALIMENTATION ÉLECTRIQUE
+3.1 Tension et protection
+• Tension d’alimentation : 100–240 V – 50/60 Hz (cf. étiquette signalétique du modèle)
+• L’installation doit être protégée par un disjoncteur différentiel de 30 mA.
+• La prise électrique utilisée doit obligatoirement être reliée à la terre.
+3.2 Raccordement électrique
+• Brancher l’appareil sur une prise facilement accessible, afin de pouvoir couper
+rapidement l’alimentation si nécessaire.
+• Ne jamais utiliser de multiprise, de rallonge ou de variateur.
+• Ne pas coincer, plier ni comprimer le câble d’alimentation.
+• Éviter tout contact du câble avec des surfaces chaudes, humides ou abrasives.
+3.3 Encastrement et accessibilité
+• En cas d’encastrement ou d’installation fixe, le raccordement doit être réalisé par un
+électricien qualifié et prévoir un dispositif de coupure externe (interrupteur bipolaire,
+disjoncteur dédié ou prise commandée) accessible à tout moment hors du volume
+encastré.
+• Aucune modification du circuit électrique, ni ajout de transformateur ou adaptateur, ne
+doit être effectué sans l’accord du fabricant.
+3.4 Mise hors tension
+Débrancher l’appareil dans les situations suivantes :
+• Avant toute ouverture ou intervention sur l'appareil
+• Avant tout déplacement ou transport
+• En cas d’orage ou d’absence prolongée
+
+4. ALIMENTATION EN EAU
+4.1 Qualité de l’eau requise
+• Utiliser uniquement de l’eau du robinet ou de l’eau minérale, propre, claire et non
+stagnante.
+• L’eau ne doit contenir aucune impureté visible, ni présenter de concentrations
+excessives en minéraux (notamment calcaire) ou en métaux dissous tels que : cuivre,
+fer, zinc, manganèse, etc.
+👉 L’eau du robinet est généralement compatible avec l’appareil, à condition qu’elle ne
+soit pas très dure (dureté inférieure à 30 °f, soit 300 mg/L de CaCO₃ ).
+👉 Des niveaux excessifs de minéraux ou de métaux peuvent entraîner la corrosion
+des composants internes, altérer les capteurs de niveau et provoquer des fuites.
+• En cas de doute sur la qualité de l’eau disponible, il est recommandé de la faire
+tester et d’installer un filtre à particules ou un adoucisseur en amont de l’appareil.
+❌ Ne pas utiliser :
+• Eau distillée ou déminéralisée
+• Eau parfumée ou contenant des additifs
+• Eau de puits, de pluie, de citerne ou de source non contrôlée
+• Eau stagnante ou stockée trop longtemps
+⚠️ Drainage obligatoire en cas de non-utilisation
+
+                                                                                            5
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• ATTENTION ! Si vous n’utilisez pas votre appareil pendant plus de 7 jours, il est
+obligatoire de le vidanger.
+• L’eau stagnante peut générer des particules qui :
+obstruent les détecteurs de niveau
+entraînent des erreurs de fonctionnement ou des fuites
+• 👉 Le drainage est simple et ne nécessite aucun raccordement au réseau d’eaux
+usées.
+4.2 Remplissage manuel avec pompe intégrée
+• Installer le tuyau de remplissage au connecteur à eau de l’appareil et dans un
+contenant rempli d’eau
+• Presser le bouton de remplissage "B1" pendant 5 sencondes, la pompe de
+remplissage s'activera et le remplissage commencera.
+• Une fois le niveau maximal atteint, la pompe s’arrête automatiquement.
+• ⚠️ Attention : lors de la première utilisation ou après chaque vidange, les
+modèles à deux réservoirs (gammes ADVANCE et PRESTIGE) nécessitent un double
+remplissage.
+Effectuez un premier remplissage, puis attendez au moins 2 minutes avant
+d’effectuer un deuxième remplissage.
+
+• Utiliser uniquement une eau conforme aux critères du point 4.1.• Retirer le tuyau de
+remplissage
+• Nettoyer les éclaboussures éventuelles.
+4.3 Raccordement automatique au réseau d’eau
+• L’eau utilisée doit répondre aux exigences définies au point 4.1.
+• Avant la première mise en service :
+👉 Purger les canalisations pour éliminer sable, boues ou particules solides.
+• Installer en amont :
+Un robinet d’arrêt manuel, ou
+Une électrovanne accessible qui permettent de couper l’alimentation pour effectuer la
+vidange ou si l’appareil ne fonctionne pas pendant plus d’une semaine.
+• Le flexible d’alimentation doit être conforme aux normes sanitaires en vigueur.
+❌ Ne jamais raccorder l’appareil à une source d’eau non filtrée, non potable ou issue
+d’un système autonome non contrôlé.
+
+5. MISE EN SERVICE DE VOTRE APPAREIL
+Les chapitres précédents ont défini les conditions générales d’installation, de sécurité,
+d’alimentation électrique et en eau, communes à tous les appareils AFIRE.
+Chaque gamme de produit (LITE AWL, ADVANCE AWA, PRESTIGE AWPR, …)
+dispose de procédures de démarrage spécifiques, détaillées dans un guide de mise en
+service propre à chaque modèle.
+👉 Veuillez-vous référer au guide de démarrage rapide fourni avec votre appareil pour
+réaliser correctement la première mise en route.
+📎 Ces fiches techniques sont jointes à la livraison et disponibles sur simple demande
+auprès du service client AFIRE https://www.a-fireplace.com/fr/contact/
+
+
+                                                                                            6
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+6. ENTRETIEN DES APPAREILS
+La maintenance et l’entretien réguliers de votre cheminée à vapeur d’eau sont essentiels
+pour garantir un fonctionnement optimal et préserver la qualité visuelle des flammes.
+Un bon entretien prolonge également la durée de vie de l’appareil, que ce soit dans un
+cadre résidentiel (maisons, appartements) ou professionnel (hôtels, restaurants, lieux
+publics).
+👉 La fréquence de maintenance dépend de l’usage :
+• Usage résidentiel : une maintenance annuelle est généralement suffisante.
+• Usage intensif (hôtels, restaurants, lieux publics) : il est recommandé d’effectuer un
+entretien toutes les 2500 à 3000 heures de fonctionnement.
+📎 Pour plus d’informations sur :
+• les opérations d’entretien général
+• le remplacement périodique des Mist Makers (pièces d’usure)
+👉 Veuillez consulter les tutoriels vidéo et les explications sur la page dédiée:
+www.a-fireplace.com/fr/maintenance-entretien-cheminees-vapeur-d-eau/
+7. GARANTIE
+Les appareils AFIRE bénéficient d’une garantie limitée de deux ans à compter de la
+date d’achat, sur présentation de la facture originale. Cette garantie s’applique
+uniquement à l’acheteur initial et n’est pas transférable.
+Elle couvre les défauts de fabrication ou de fonctionnement survenant
+malgré un usage conforme aux instructions du présent manuel.
+⛔️ Important – Conditions de garantie
+Les appareils ne fonctionneront pas correctement si les instructions du manuel ne sont
+pas rigoureusement respectées.
+En conséquence, la garantie ne couvre pas :
+• Les pièces d’usure telles que le Mist Maker (ultrasonique), les LED et les
+télécommandes
+• Les dommages résultant d’une installation incorrecte, d’une eau de mauvaise qualité,
+de courants d’air ou d’un air chargé en particules (ex. : poussières de plâtre ou autres
+poussières fines aspirées par les ventilateurs), d’une utilisation abusive, d’une
+négligence ou d’un défaut d’entretien
+• L’utilisation de pièces non certifiées d’origine AFIRE
+👉 Le non-respect des recommandations du manuel peut entraîner des
+dysfonctionnements non couverts par la garantie.
+
+
+💡 En cas d’incident ou de dysfonctionnement, rendez-vous sur la page SAV AFIRE
+:
+
+
+
+                                                                                           7
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+👉 www.a-fireplace.com/fr/service-apres-vente-afire
+et remplissez le formulaire d’assistance en ligne.
+Nos techniciens spécialisés vous recontacteront dans les plus brefs délais pour
+analyser la situation, déterminer l’origine du problème et vous accompagner dans sa
+résolution.
+✅ Si le problème est d’origine matérielle et couvert par la garantie, AFIRE vous
+expédiera gratuitement la pièce défectueuse, accompagnée d’un guide illustré et
+d’une vidéo explicative pour en faciliter le remplacement.
+Nos appareils sont conçus pour permettre à tout utilisateur, sans compétence
+technique, d’effectuer cette opération facilement et en quelques minutes.
+
+📞 Le service technique Aquafire – AFIRE reste à votre disposition pour vous
+accompagner tout au long de la vie de votre appareil : assistance à distance, conseils
+personnalisés et supports vidéo.
+
+👉 Si vous avez acheté votre appareil auprès d’un revendeur agréé, celui-ci reste
+également à votre disposition pour vous accompagner tout au long de la vie de
+l’appareil.
+
+
+
+
+                                                                                      8
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+
+
+
+ENGLISH
+CONTENTS
+1. WARNINGS AND GENERAL SAFETY
+   1.1 User Safety
+   1.2 Technical Safety
+   1.3 Remote Control and Batteries
+   1.4 FCC Warning
+2. CONDITIONS OF USE AND INSTALLATION
+   2.1 Ambient Temperature and Humidity
+   2.2 Recessed Installation and Access
+3. ELECTRICAL POWER SUPPLY
+   3.1 Voltage and Protection
+   3.2 Electrical Connection
+   3.3 Recessed Installation and Accessibility
+   3.4 Power Shutdown
+4. WATER SUPPLY
+   4.1 Required Water Quality
+   4.2 Manual Filling with Integrated Pump
+   4.3 Automatic Connection to the Water Supply
+5. COMMISSIONING YOUR DEVICE
+   ➤ Start-up Guide Specific to Each Range
+  ➤   Reference to the Supplied Guide and Technical Sheet
+
+
+
+
+                                                            9
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+6. DEVICE MAINTENANCE
+   ➤ Recommended Frequency According to Usage
+  ➤   Link to the Dedicated Maintenance and Video Page
+7. WARRANTY
+   ➤ General Conditions
+  ➤   Non-Covered Components
+  ➤   Importance of Following the Manual
+  ➤   Procedure in Case of Incident
+  ➤   AFIRE Technical Support & Ongoing Assistance
+  ➤   Role of the Authorized Reseller
+            INSTALLATION, USE AND MAINTENANCE MANUAL
+
+
+Compliance with AFIRE appliance standards
+ADVANCE AWA range: AWA 20-50, AWA 40-100, AWA 60-150, AWA 80-200,
+AWA 100-250,
+AWA 120-300, AWA 140-350, AWA 160-400, AWA 180-450,
+AWA 200-500, AWA 220-550, AWA 240-600.
+PRESTIGE AWPR range: AWPR 20-50, AWPR 40-100, AWPR 60-150, AWPR
+80-200, AWPR 100-250,
+AWPR 120-300, AWPR 140-350, AWPR 160-400, AWPR 180-450,
+AWPR 200-500, AWPR 220-550, AWPR 240-600.
+LITE AWL range: AWL 16-42, AWL 20-50, AWL 40-100, AWL 60-150.
+Compliance:
+The devices listed above comply with:
+• European Directives:
+   o 2004/108/EC
+   o EN 55014-1: 2006 + A1: 2009 + A2: 2011
+   o EN 55014-2: 1997 + A1: 2001 + A2: 2008
+   o EN 61000-3-2: 2006 + A1: 2009 + A2: 2009
+   o EN 61000-3-3: 2013
+• Part 15 of FCC regulations
+
+
+
+
+                                                                10
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+1. WARNINGS AND GENERAL SAFETY
+1.1 User Safety
+• Never use the device if it is damaged (fall, shock, etc.).
+👉 Contact AFIRE after-sales service.
+• Do not allow children or vulnerable individuals to use it unsupervised.
+• Indoor use only.
+• Do not expose to water splashes, excessive heat, or extreme cold.
+• Do not place any objects on the device while it is operating.
+• Always disconnect the power supply before opening or moving the device.
+• Drain the device before moving or transporting it.
+• If the device is not used for more than one week, it must be drained to avoid stagnant
+water.
+👉 Deposits may block level sensors and cause leaks.
+
+1.2 Technical Safety
+⚠️ Important:
+Only original accessories must be used.
+The use of accessories not certified by the manufacturer immediately voids the
+warranty and may result in malfunction or damage to the device.
+• Do not modify the device. Any modification, addition or hardware/software alteration
+not previously approved by the manufacturer may cause malfunction and void the
+warranty.
+• The device’s ventilation systems (top plate and side openings) must remain clear and
+operational.
+• If the power cable is damaged, it must not be repaired but replaced with a new one.
+• The devices are equipped with high-intensity LED lamps. ⚠️ Never look directly at the
+light emitted from the top of the device, to avoid eye strain or glare.
+
+1.3 Remote Control and Batteries
+• Keep the remote control out of reach of children.
+• In case of accidental ingestion of a battery, consult a doctor immediately.
+• Use only new, non-rechargeable batteries, correctly inserted.
+
+1.4 FCC Warning
+Any modification not expressly approved by the party responsible for compliance voids
+the user's authority to operate the equipment .
+
+2. CONDITIONS OF USE AND INSTALLATION
+If in doubt about installation or operating conditions, please contact our technical
+support.
+
+
+                                                                                        11
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+2.1 Ambient Temperature and Humidity
+• Recommended ambient temperature range: 10 °C to 35 °C (50 to 100 °F)
+• Indoor humidity: 30% – 60% RH, without condensation, in a normally ventilated
+environment
+👉 Do not install in:
+• A room that is too hot or too humid (e.g.: steam room, spa, sauna, unventilated
+greenhouse, etc.)
+• A space exposed to direct air currents if the appliance is not protected from them (e.g.:
+air conditioning vents, fans, open chimney flue, or airflow entering the enclosure space)
+
+2.2 Recessed Installation and Access
+• Install on a stable and perfectly level surface.
+• Recessed installation in furniture or a niche is possible, provided model-specific
+guidelines are followed.
+• Never obstruct the air or vapor inlets or outlets (sides or top).
+• No additional ventilation grilles are required unless otherwise indicated.
+• Ensure clear access for maintenance, filling, draining, and use of controls.
+
+
+
+3. ELECTRICAL POWER SUPPLY
+3.1 Voltage and Protection
+• Power supply voltage: 100–240 V – 50/60 Hz (refer to the device label)
+• The installation must be protected by a 30 mA residual current device (RCD).
+• The power outlet must be grounded.
+
+3.2 Electrical Connection
+• Plug the appliance into an easily accessible socket to allow quick disconnection if
+needed.
+• Do not use power strips, extension cords, or dimmers.
+• Do not pinch, bend, or compress the power cable.
+• Avoid contact between the cable and hot, damp, or abrasive surfaces.
+
+3.3 Recessed Installation and Accessibility
+• In case of recessed or fixed installation, the connection must be made by a qualified
+electrician and include an external cutoff device (double-pole switch, dedicated breaker,
+or controlled socket) accessible at all times outside the enclosure.
+• No modification of the electrical circuit or addition of transformers/adapters is allowed
+without the manufacturer’s approval.
+
+3.4 Power Disconnection
+Unplug the device in the following situations:
+
+                                                                                         12
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• Before any opening or intervention on the unit
+• Before any transport or relocation
+• In case of storms or prolonged absence
+
+
+
+4. WATER SUPPLY
+4.1 Required Water Quality
+• Use only tap water or bottled mineral water that is clean, clear, and not stagnant.
+• Water must not contain visible impurities or high concentrations of dissolved minerals
+(notably lime) or metals such as copper, iron, zinc, manganese, etc.
+👉 Tap water is generally compatible with the device, provided it is not very hard (below
+30 °f or 300 mg/L CaCO₃ ).
+👉 Excessive levels of minerals or metals may cause internal corrosion, damage to level
+sensors, and leaks.
+• If in doubt about water quality, it is recommended to have it tested and install a particle
+filter or water softener upstream of the device.
+
+❌ Do not use:
+• Distilled or demineralized water
+• Scented water or water with additives
+• Well water, rainwater, tank or uncontrolled spring water
+• Stagnant water or water stored too long
+
+⚠️ Mandatory Draining if Not in Use
+• WARNING! If the device is not used for more than 7 days, it must be drained.
+• Stagnant water may generate particles that:
+   – Block level sensors
+   – Cause malfunctions or leaks
+👉 Draining is simple and does not require connection to the wastewater system.
+
+4.2 Manual Filling with Integrated Pump
+• Connect the filling hose to the water connector on the appliance and place the other
+end in a container filled with water.
+• Press the "B1" fill button for 5 seconds; the filling pump will activate and the process
+will begin.
+• Once the maximum level is reached, the pump will stop automatically.
+⚠️ Important: For first use or after draining, models with two tanks (ADVANCE and
+PRESTIGE ranges) require a double fill.
+   Perform a first fill, wait at least 2 minutes, then perform a second fill.
+• Use only water that meets the criteria outlined in section 4.1.
+
+
+                                                                                             13
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• Disconnect the filling hose.
+• Wipe up any splashes.
+
+4.3 Automatic Connection to the Water Supply
+• Water used must meet the requirements defined in section 4.1.
+• Before first start-up:
+👉 Flush the pipes to remove sand, mud, or solid particles.
+• Upstream installation must include:
+   – A manual shut-off valve, or
+   – An accessible solenoid valve to cut water supply for draining or when the unit is
+unused for more than one week.
+• The water hose must comply with applicable sanitary standards.
+❌ Never connect the appliance to an unfiltered, non-potable, or uncontrolled
+autonomous water source.
+
+5. COMMISSIONING YOUR DEVICE
+The previous chapters have defined the general conditions for installation, safety,
+electrical and water supply, which apply to all AFIRE units.
+Each product range (LITE AWL, ADVANCE AWA, PRESTIGE AWPR, etc.) has specific
+start-up procedures, detailed in a commissioning guide provided with each model.
+👉 Please refer to the quick start guide supplied with your unit to correctly complete the
+initial start-up.
+📎 These technical datasheets are included in the delivery and are also available upon
+request from AFIRE customer support:
+https://www.a-fireplace.com/contact-us/
+
+
+
+6. MAINTENANCE OF THE DEVICES
+Regular maintenance of your water vapor fireplace is essential to ensure optimal
+operation and maintain the visual quality of the flames.
+Proper maintenance also extends the lifespan of the appliance, whether in a residential
+setting (houses, apartments) or a commercial context (hotels, restaurants, public
+spaces).
+👉 Maintenance frequency depends on usage:
+• Residential use: annual maintenance is generally sufficient.
+• Intensive use (hotels, restaurants, public venues): it is recommended to perform
+maintenance every 2500 to 3000 hours of operation.
+
+📎 For more information on:
+• General maintenance tasks
+
+                                                                                         14
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• Periodic replacement of Mist Makers (wear parts)
+👉 Please consult the video tutorials and explanations on the dedicated maintenance
+page:
+https://www.a-fireplace.com/maintenance-care-water-vapor-fireplaces-inserts/
+
+
+
+
+7. WARRANTY
+AFIRE devices come with a limited two-year warranty from the date of purchase, upon
+presentation of the original invoice.
+This warranty applies only to the original purchaser and is non-transferable.
+It covers manufacturing or operational defects occurring despite proper use in
+accordance with this manual.
+
+⛔️ Important – Warranty Conditions
+The devices will not function properly if the manual’s instructions are not strictly followed.
+Therefore, the warranty does not cover:
+• Wear parts such as the Mist Maker (ultrasonic), LEDs, and remote controls
+• Damage resulting from improper installation, poor water quality, drafts, or air loaded
+with particles (e.g.: plaster dust or other fine dust drawn in by the fans), misuse,
+negligence, or lack of maintenance
+• Use of non-original AFIRE-certified parts
+👉 Failure to follow the recommendations of the manual may result in malfunctions not
+covered by the warranty.
+
+
+💡 In case of incident or malfunction, go to the AFIRE after-sales service page:
+👉 https://www.a-fireplace.com/after-sales-service-afire/
+and fill out the online support form.
+Our specialized technicians will contact you as soon as possible to analyze the issue,
+identify the cause, and assist in resolving it.
+
+✅ If the issue is material-related and covered under warranty, AFIRE will send the
+defective part free of charge, along with a detailed guide and explanatory video to
+facilitate the replacement.
+Our appliances are designed so that any user, even without technical skills, can easily
+perform this operation in just a few minutes.
+
+
+
+                                                                                           15
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+📞 The Aquafire – AFIRE technical team remains at your disposal to assist you
+throughout the life of your unit: remote assistance, personalized advice, and video
+support.
+
+
+👉 If you purchased your unit through an authorized reseller, they also remain at
+your service to support you throughout the life of the product.
+
+
+
+
+ITALIANO
+SOMMARIO
+   1. Avvertenze e sicurezza generale
+        1.1 Sicurezza dell’utente
+        1.2 Sicurezza tecnica
+        1.3 Telecomando e batterie
+        1.4 Avvertenza FCC
+   2. Condizioni di utilizzo e installazione
+       2.1 Temperatura e umidità ambientali
+       2.2 Incasso e accesso
+   3. Alimentazione elettrica
+        3.1 Tensione e protezione
+        3.2 Collegamento elettrico
+        3.3 Incasso e accessibilità
+        3.4 Spegnimento
+   4. Alimentazione dell’acqua
+        4.1 Qualità dell’acqua richiesta
+        4.2 Riempimento manuale con pompa integrata
+        4.3 Collegamento automatico alla rete idrica
+   5. Messa in servizio del dispositivo
+       ➤ Guida all’avvio specifica per ogni gamma
+          ➤ Riferimento alla guida fornita e alla scheda tecnica
+
+
+
+
+                                                                                      16
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+   6. Manutenzione dei dispositivi
+       ➤ Frequenza consigliata in base all’utilizzo
+          ➤ Link alla pagina dedicata a manutenzione e video
+   7. Garanzia
+       ➤ Condizioni generali
+          ➤ Elementi non coperti
+          ➤ Importanza del rispetto del manuale
+          ➤ Procedura in caso di guasto
+          ➤ Servizio tecnico AFIRE e assistenza continuativa
+          ➤ Ruolo del rivenditore autorizzato
+
+MANUALE DI INSTALLAZIONE, USO E MANUTENZIONE
+Conformità alle norme degli apparecchi AFIRE
+Gamma ADVANCE AWA: AWA 20-50, AWA 40-100, AWA 60-150, AWA 80-200, AWA
+100-250,
+AWA 120-300, AWA 140-350, AWA 160-400, AWA 180-450,
+AWA 200-500, AWA 220-550, AWA 240-600.
+Gamma PRESTIGE AWPR: AWPR 20-50, AWPR 40-100, AWPR 60-150, AWPR 80-
+200, AWPR 100-250,
+AWPR 120-300, AWPR 140-350, AWPR 160-400, AWPR 180-450,
+AWPR 200-500, AWPR 220-550, AWPR 240-600.
+Gamma LITE AWL: AWL 16-42, GATSBY, AWL 20-50, AWL 40-100, AWL 60-150.
+Conformità:
+I dispositivi sopra menzionati sono conformi:
+• Alle Direttive europee:
+o 2004/108/EC
+o EN 55014-1: 2006 + A1 : 2009 + A2 : 2011
+o EN 55014-2: 1997 + A1 : 2001 + A2 : 2008
+o EN 61000-3-2: 2006 + A1 : 2009 + A2 : 2009
+o EN 61000-3-3: 2013
+• Alla Parte 15 delle norme FCC
+
+
+
+1. AVVERTENZE E SICUREZZA GENERALE
+1.1 Sicurezza dell’utente
+• Non utilizzare mai il dispositivo se è danneggiato (caduta, urto, ecc.).
+
+                                                                             17
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+👉 Contattare il servizio post-vendita AFIRE.
+• Non lasciare bambini o persone vulnerabili utilizzare il dispositivo senza supervisione.
+• Utilizzo esclusivamente in ambienti interni.
+• Non esporre a spruzzi d’acqua, calore eccessivo o freddo estremo.
+• Non appoggiare alcun oggetto sull’apparecchio in funzione.
+• Spegnere l’alimentazione elettrica prima di aprire o spostare il dispositivo.
+• Svuotare il dispositivo prima di qualsiasi trasporto o spostamento.
+• Se il dispositivo non viene utilizzato per più di una settimana, svuotarlo per evitare
+acqua stagnante.
+👉 I depositi possono ostruire i sensori di livello e causare perdite.
+
+1.2 Sicurezza tecnica
+⚠️ Importante:
+L’uso esclusivo di accessori originali è obbligatorio.
+L’utilizzo di accessori non certificati dal produttore invalida immediatamente la garanzia
+e può causare malfunzionamenti o danni all’apparecchio.
+• Non modificare il dispositivo. Qualsiasi modifica, aggiunta o alterazione hardware o
+software non approvata preventivamente dal produttore invalida la garanzia.
+• I sistemi di ventilazione dell’apparecchio (parte superiore e laterale) devono rimanere
+liberi e funzionanti.
+• Se il cavo di alimentazione è danneggiato, deve essere sostituito con uno nuovo, non
+riparato.
+• Gli apparecchi sono dotati di potenti lampade LED. ⚠️ Non guardare mai direttamente
+la luce emessa dalla parte superiore del dispositivo per evitare abbagliamenti.
+
+1.3 Telecomando e batterie
+• Tenere il telecomando fuori dalla portata dei bambini.
+• In caso di ingestione di una batteria, consultare immediatamente un medico.
+• Utilizzare solo batterie nuove non ricaricabili, inserite correttamente.
+
+1.4 Avvertenza FCC
+Qualsiasi modifica non espressamente autorizzata dalla parte responsabile della
+conformità invalida il diritto all’uso del dispositivo.
+
+
+
+2. CONDIZIONI DI UTILIZZO E INSTALLAZIONE
+In caso di dubbio sulle condizioni di installazione e utilizzo, contattare il nostro servizio
+tecnico.
+
+2.1 Temperatura e umidità
+• Gamma di temperatura ambiente: da 10 °C a 35 °C (50–100 °F)
+
+
+                                                                                                18
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• Umidità relativa: 30 % – 60 % UR, senza condensa, in un ambiente normalmente
+ventilato
+👉 Non installare in:
+• Ambienti troppo caldi o troppo umidi (es. hammam, spa, sauna, serre non ventilate)
+• Spazi esposti a correnti d’aria dirette se l’apparecchio non è protetto (es. soffiaggio
+diretto da climatizzatori, ventilatori, camini aperti, o risucchio d’aria nell’incasso)
+
+2.2 Incasso e accesso
+• Installare su una superficie stabile e perfettamente orizzontale.
+• Possibile l’incasso in un mobile o nicchia, rispettando le istruzioni specifiche del
+modello.
+• Non ostruire mai le aperture di ingresso o uscita dell’aria o del vapore (lati o parte
+superiore).
+• Non è necessaria alcuna griglia di ventilazione aggiuntiva salvo diversa indicazione.
+• Prevedere accesso libero per manutenzione, riempimento, svuotamento e utilizzo dei
+comandi.
+
+
+
+3. ALIMENTAZIONE ELETTRICA
+3.1 Tensione e protezione
+• Tensione di alimentazione: 100–240 V – 50/60 Hz (vedi etichetta del modello)
+• L’impianto deve essere protetto da un interruttore differenziale da 30 mA.
+• La presa utilizzata deve essere collegata a terra.
+
+3.2 Collegamento elettrico
+• Collegare l’apparecchio a una presa facilmente accessibile per poterlo disconnettere
+rapidamente se necessario.
+• Non utilizzare mai prese multiple, prolunghe o dimmer.
+• Non schiacciare, piegare o comprimere il cavo di alimentazione.
+• Evitare il contatto del cavo con superfici calde, umide o abrasive.
+
+3.3 Incasso e accessibilità
+• In caso di incasso o installazione fissa, il collegamento deve essere eseguito da un
+elettricista qualificato e prevedere un dispositivo di disconnessione esterno (interruttore
+bipolare, interruttore dedicato o presa comandata), accessibile al di fuori del volume
+incassato.
+• Non effettuare modifiche all’impianto elettrico né aggiungere trasformatori o adattatori
+senza l’approvazione del produttore.
+
+3.4 Spegnimento
+Scollegare il dispositivo nei seguenti casi:
+
+                                                                                            19
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• Prima di aprire o intervenire sull’apparecchio
+• Prima di spostamenti o trasporti
+• In caso di temporali o assenze prolungate
+
+
+
+4. ALIMENTAZIONE IDRICA
+4.1 Qualità dell’acqua richiesta
+• Utilizzare solo acqua del rubinetto o acqua minerale, pulita, limpida e non stagnante.
+• L’acqua non deve contenere impurità visibili, né presentare concentrazioni eccessive di
+minerali (in particolare calcare) o metalli disciolti come: rame, ferro, zinco, manganese,
+ecc.
+👉 L’acqua del rubinetto è generalmente compatibile, purché non sia troppo dura
+(durezza inferiore a 30 °f, cioè 300 mg/L di CaCO₃ ).
+👉 Concentrazioni eccessive di minerali o metalli possono corrodere i componenti
+interni, danneggiare i sensori di livello e causare perdite.
+• In caso di dubbio sulla qualità dell’acqua disponibile, si consiglia di farla analizzare e
+installare un filtro a particelle o un addolcitore a monte dell’apparecchio.
+❌ Non utilizzare:
+• Acqua distillata o demineralizzata
+• Acqua profumata o con additivi
+• Acqua di pozzo, piovana, di cisterne o sorgenti non controllate
+• Acqua stagnante o conservata troppo a lungo
+⚠️ Scarico obbligatorio in caso di non utilizzo
+• ATTENZIONE! Se non si utilizza il dispositivo per più di 7 giorni, è obbligatorio
+svuotarlo.
+• L’acqua stagnante può generare particelle che:
+– ostruiscono i sensori di livello
+– causano malfunzionamenti o perdite
+👉 Lo scarico è semplice e non richiede collegamento alla rete fognaria.
+
+4.2 Riempimento manuale con pompa integrata
+• Inserire il tubo di riempimento nel connettore dell’acqua dell’apparecchio e
+nell’apposito contenitore.
+• Premere il pulsante "B1" per 5 secondi: la pompa si attiverà e inizierà il riempimento.
+• Una volta raggiunto il livello massimo, la pompa si arresterà automaticamente.
+• ⚠️ Attenzione: alla prima accensione o dopo ogni svuotamento, i modelli con doppio
+serbatoio (ADVANCE e PRESTIGE) richiedono un doppio riempimento.
+Effettuare un primo riempimento, attendere almeno 2 minuti, quindi effettuare un
+
+                                                                                            20
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+secondo riempimento.
+• Utilizzare solo acqua conforme ai criteri del punto 4.1.
+• Rimuovere il tubo e asciugare eventuali gocce.
+
+4.3 Collegamento automatico alla rete idrica
+• L’acqua deve rispettare i requisiti indicati al punto 4.1.
+• Prima della prima accensione:
+👉 Spurgare le tubature per eliminare sabbia, fango o particelle solide.
+• Installare a monte:
+– Un rubinetto manuale, oppure
+– Una elettrovalvola accessibile, per interrompere l’alimentazione idrica in caso di
+svuotamento o inutilizzo superiore a una settimana.
+• Il tubo di alimentazione deve essere conforme alle normative sanitarie vigenti.
+❌ Non collegare mai il dispositivo a una fonte d’acqua non filtrata, non potabile o
+proveniente da un impianto autonomo non controllato.
+
+
+
+5. MESSA IN SERVIZIO DEL DISPOSITIVO
+I capitoli precedenti hanno definito le condizioni generali di installazione, sicurezza,
+alimentazione elettrica e idrica comuni a tutti i dispositivi AFIRE.
+Ogni gamma di prodotto (LITE AWL, ADVANCE AWA, PRESTIGE AWPR, …) dispone
+di procedure di avvio specifiche, dettagliate in una guida di messa in servizio dedicata a
+ciascun modello.
+👉 Fare riferimento alla guida di avvio rapido fornita con il dispositivo per effettuare
+correttamente la prima accensione.
+📎 Queste schede tecniche sono fornite alla consegna e disponibili su semplice richiesta
+al servizio clienti AFIRE:
+https://www.a-fireplace.com/it/contatti/
+
+
+
+6. MANUTENZIONE DEI DISPOSITIVI
+La manutenzione regolare del caminetto a vapore d’acqua è essenziale per garantire un
+funzionamento ottimale e preservare la qualità visiva delle fiamme.
+Una buona manutenzione prolunga anche la durata del dispositivo, sia in ambito
+residenziale (case, appartamenti) sia in ambito professionale (hotel, ristoranti, spazi
+pubblici).
+👉 La frequenza della manutenzione dipende dall’utilizzo:
+• Uso residenziale: è generalmente sufficiente una manutenzione annuale.
+• Uso intensivo (hotel, ristoranti, spazi pubblici): si consiglia una manutenzione ogni
+2500–3000 ore di funzionamento.
+
+                                                                                        21
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+📎 Per maggiori informazioni su:
+• le operazioni di manutenzione generale
+• la sostituzione periodica degli ultrasoni (Mist Makers), componenti soggetti a usura
+👉 Consultare i video tutorial e le spiegazioni disponibili sulla pagina dedicata:
+https://www.a-fireplace.com/it/manutenzione-cura-dei-camini-elettrici-ad-acqua/
+
+
+
+7. GARANZIA
+I dispositivi AFIRE sono coperti da una garanzia limitata di due anni dalla data di
+acquisto, previa presentazione della fattura originale.
+Tale garanzia si applica esclusivamente all’acquirente iniziale e non è trasferibile.
+Copre i difetti di fabbricazione o di funzionamento che si verificano nonostante un uso
+conforme alle istruzioni del presente manuale.
+
+⛔️ Importante – Condizioni di garanzia
+Il dispositivo non funzionerà correttamente se le istruzioni del manuale non vengono
+scrupolosamente rispettate.
+Di conseguenza, la garanzia non copre:
+• Parti soggette a usura come l’ultrasuono (Mist Maker), i LED e i telecomandi
+• Danni derivanti da:
+– installazione scorretta
+– acqua di bassa qualità
+– correnti d’aria
+– aria carica di particelle (es. polvere di gesso o altre polveri fini aspirate dai ventilatori)
+– uso improprio, negligenza o mancanza di manutenzione
+• L’uso di componenti non certificati originali AFIRE
+👉 Il mancato rispetto delle raccomandazioni del manuale può causare
+malfunzionamenti non coperti dalla garanzia.
+
+
+💡 In caso di guasto o malfunzionamento, visitare la pagina di assistenza AFIRE:
+👉 https://www.a-fireplace.com/it/servizio-post-vendita-afire/
+e compilare il modulo di assistenza online.
+I nostri tecnici specializzati vi ricontatteranno il prima possibile per analizzare la
+situazione, identificare l’origine del problema e guidarvi nella risoluzione.
+✅ Se il problema è di natura materiale e coperto dalla garanzia, AFIRE vi invierà
+gratuitamente il componente difettoso, accompagnato da una guida illustrata e da un
+video esplicativo per agevolarne la sostituzione.
+
+
+                                                                                               22
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+I nostri dispositivi sono progettati per permettere a qualsiasi utente, anche senza
+competenze tecniche, di effettuare l’operazione in modo semplice e rapido.
+📞 Il servizio tecnico Aquafire – AFIRE rimane a vostra disposizione per
+accompagnarvi durante tutta la vita del dispositivo: assistenza da remoto, consigli
+personalizzati e supporti video.
+👉 Se avete acquistato il dispositivo tramite un rivenditore autorizzato, anche
+quest’ultimo rimane a vostra disposizione per assistervi durante tutta la durata di vita
+dell’apparecchio.
+
+
+
+
+ESPAÑOL
+ÍNDICE
+   1. Advertencias y seguridad general
+       1.1 Seguridad del usuario
+       1.2 Seguridad técnica
+       1.3 Mando a distancia y pilas
+       1.4 Advertencia FCC
+   2. Condiciones de uso e instalación
+       2.1 Temperatura y humedad ambiente
+       2.2 Empotrado y acceso
+   3. Alimentación eléctrica
+        3.1 Tensión y protección
+        3.2 Conexión eléctrica
+        3.3 Empotrado y accesibilidad
+        3.4 Corte de alimentación
+   4. Alimentación de agua
+        4.1 Calidad del agua requerida
+        4.2 Llenado manual con bomba integrada
+        4.3 Conexión automática a la red de agua
+   5. Puesta en marcha del aparato
+        ➤ Guía de inicio específica por gama
+          ➤ Referencia a la guía incluida y a la ficha técnica
+
+                                                                                           23
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+   6. Mantenimiento del aparato
+       ➤ Frecuencia recomendada según el uso
+          ➤ Enlace a la página de mantenimiento y vídeos
+   7. Garantía
+       ➤ Condiciones generales
+          ➤ Elementos no cubiertos
+          ➤ Importancia del cumplimiento del manual
+          ➤ Procedimiento en caso de incidencia
+          ➤ Servicio técnico AFIRE y asistencia continua
+          ➤ Papel del distribuidor autorizado
+
+MANUAL DE INSTALACIÓN, USO Y MANTENIMIENTO
+Conformidad con las normas de los aparatos AFIRE
+Gama ADVANCE AWA: AWA 20-50, AWA 40-100, AWA 60-150, AWA 80-200, AWA
+100-250,
+AWA 120-300, AWA 140-350, AWA 160-400, AWA 180-450,
+AWA 200-500, AWA 220-550, AWA 240-600.
+Gama PRESTIGE AWPR: AWPR 20-50, AWPR 40-100, AWPR 60-150, AWPR 80-200,
+AWPR 100-250,
+AWPR 120-300, AWPR 140-350, AWPR 160-400, AWPR 180-450,
+AWPR 200-500, AWPR 220-550, AWPR 240-600.
+Gama LITE AWL: AWL 16-42, GATSBY, AWL 20-50, AWL 40-100, AWL 60-150.
+Conformidad:
+Los aparatos mencionados anteriormente cumplen con:
+• Las Directivas europeas:
+o 2004/108/CE
+o EN 55014-1 : 2006 + A1 : 2009 + A2 : 2011
+o EN 55014-2 : 1997 + A1 : 2001 + A2 : 2008
+o EN 61000-3-2 : 2006 + A1 : 2009 + A2 : 2009
+o EN 61000-3-3 : 2013
+• La parte 15 del reglamento de la FCC
+
+
+
+1. ADVERTENCIAS Y SEGURIDAD GENERAL
+1.1 Seguridad del usuario
+• No utilice nunca el aparato si está dañado (caída, golpe, etc.).
+
+                                                                       24
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+👉 Contacte con el servicio posventa de AFIRE.
+• No permita que niños o personas vulnerables lo usen sin supervisión.
+• Solo para uso en interiores.
+• No exponga el aparato a salpicaduras de agua, calor excesivo o frío extremo.
+• No coloque ningún objeto sobre el aparato mientras está en funcionamiento.
+• Corte la alimentación eléctrica antes de abrir o mover el aparato.
+• Vacíe el aparato antes de transportarlo o moverlo.
+• Si el aparato no se utiliza durante más de una semana, vacíelo para evitar agua
+estancada.
+👉 Los depósitos pueden obstruir los sensores de nivel y provocar fugas.
+
+1.2 Seguridad técnica
+⚠️ Importante:
+El uso exclusivo de accesorios originales es obligatorio.
+El uso de accesorios no certificados por el fabricante anula automáticamente la garantía
+y puede provocar fallos o daños.
+• No modifique el aparato. Cualquier modificación, adición o alteración no aprobada por
+el fabricante anula la garantía.
+• Los sistemas de ventilación del aparato (placa superior y laterales) deben permanecer
+libres y funcionales.
+• Si el cable de alimentación está dañado, no lo repare: reemplácelo por uno nuevo.
+• Los aparatos están equipados con potentes lámparas LED. ⚠️ No mire directamente
+la luz emitida desde la parte superior del aparato.
+
+1.3 Mando a distancia y pilas
+• Mantenga el mando fuera del alcance de los niños.
+• En caso de ingestión de una pila, acuda al médico de inmediato.
+• Utilice únicamente pilas nuevas no recargables e insertadas correctamente.
+
+1.4 Advertencia FCC
+Cualquier modificación no expresamente autorizada por la parte responsable de la
+conformidad anula el derecho de uso del aparato.
+
+
+
+2. CONDICIONES DE USO E INSTALACIÓN
+Si tiene dudas sobre las condiciones de instalación o uso, contacte con nuestro servicio
+técnico.
+
+2.1 Temperatura y humedad
+• Temperatura ambiente permitida: 10 °C a 35 °C (50 a 100 °F)
+• Humedad interior: 30 % – 60 % HR, sin condensación, en un entorno ventilado
+
+
+                                                                                      25
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+👉 No instalar en:
+• Habitaciones demasiado calientes o húmedas (ej. hammam, spa, sauna, invernadero
+sin ventilación)
+• Zonas con corrientes de aire directo si el aparato no está protegido (ej. ventilación, aire
+acondicionado, chimenea abierta).
+
+2.2 Empotramiento y acceso
+• Instalar sobre una superficie estable y perfectamente horizontal.
+• Puede empotrarse en muebles o nichos respetando las recomendaciones del modelo.
+• No obstruya las aberturas de entrada/salida de aire o vapor.
+• No se necesita rejilla de ventilación adicional salvo indicación contraria.
+• Prever acceso libre para mantenimiento, llenado, vaciado y uso de controles.
+
+
+
+3. ALIMENTACIÓN ELÉCTRICA
+3.1 Tensión y protección
+• Tensión de alimentación: 100–240 V – 50/60 Hz (ver etiqueta del modelo)
+• Debe estar protegido por un disyuntor diferencial de 30 mA.
+• El enchufe debe tener toma de tierra.
+
+3.2 Conexión eléctrica
+• Conectar el aparato a una toma accesible, para cortar la alimentación si es necesario.
+• No usar regletas, alargadores ni variadores.
+• No apriete ni doble el cable de alimentación.
+• Evite el contacto del cable con superficies calientes, húmedas o abrasivas.
+
+3.3 Empotramiento y accesibilidad
+• En caso de instalación fija o empotrada, debe realizarse por un electricista cualificado.
+• Prever un sistema de corte externo accesible (interruptor bipolar, disyuntor dedicado o
+toma controlada).
+• No modificar el circuito eléctrico ni añadir transformadores o adaptadores sin
+autorización del fabricante.
+
+3.4 Corte de alimentación
+Desconectar el aparato en los siguientes casos:
+• Antes de abrirlo o manipularlo
+• Antes de mover o transportar
+• En caso de tormenta o ausencia prolongada
+
+
+
+
+                                                                                          26
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+4. ALIMENTACIÓN DE AGUA
+4.1 Calidad del agua requerida
+• Utilice únicamente agua potable del grifo o agua mineral, limpia, clara y no estancada.
+• No debe contener impurezas visibles ni niveles excesivos de minerales (especialmente
+cal) o metales disueltos como cobre, hierro, zinc, manganeso, etc.
+👉 El agua del grifo es generalmente compatible si no es muy dura (dureza inferior a 30
+°f, es decir 300 mg/L de CaCO₃ ).
+👉 Niveles elevados de minerales o metales pueden corroer los componentes, afectar
+sensores de nivel y causar fugas.
+• Si duda de la calidad del agua, se recomienda analizarla e instalar un filtro o
+descalcificador.
+
+❌ No usar:
+• Agua destilada o desmineralizada
+• Agua perfumada o con aditivos
+• Agua de pozo, lluvia, cisterna o fuente no controlada
+• Agua estancada o almacenada durante mucho tiempo
+⚠️ Vaciado obligatorio si no se utiliza:
+• Si el aparato no se usa durante más de 7 días, debe vaciarse.
+• El agua estancada puede:
+      Obstruir sensores
+      Provocar errores de funcionamiento o fugas
+       👉 El vaciado es simple y no requiere conexión a red de aguas residuales.
+
+4.2 Llenado manual con bomba integrada
+• Conectar el tubo de llenado a la entrada de agua del aparato y colocarlo en un
+recipiente con agua
+• Pulsar el botón “B1” durante 5 segundos: se activará la bomba y comenzará el llenado
+• La bomba se detiene automáticamente cuando se alcanza el nivel máximo
+⚠️ En modelos con doble depósito (ADVANCE y PRESTIGE), realizar dos llenados
+separados con 2 minutos de intervalo.
+• Usar solo agua conforme al punto 4.1
+• Retirar el tubo y limpiar posibles salpicaduras
+4.3 Conexión automática a la red de agua
+• El agua debe cumplir los criterios del punto 4.1
+• Antes del primer uso:
+👉 Purgar las tuberías para eliminar arena o sedimentos
+• Instalar antes de la entrada de agua:
+
+
+                                                                                       27
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+      Una válvula de corte manual, o
+      Una electroválvula accesible para interrumpir el suministro si el aparato no se
+       utiliza por más de una semana
+       • La manguera de conexión debe cumplir las normas sanitarias
+       ❌ No conectar el aparato a fuentes de agua no potable o no filtrada
+
+
+
+5. PUESTA EN MARCHA DE SU APARATO
+Los capítulos anteriores han definido las condiciones generales de instalación,
+seguridad, alimentación eléctrica y de agua, comunes a todos los aparatos AFIRE.
+Cada gama de producto (LITE AWL, ADVANCE AWA, PRESTIGE AWPR, …) dispone
+de procedimientos de puesta en marcha específicos, detallados en una guía dedicada a
+cada modelo.
+👉 Por favor, consulte la guía de inicio rápido proporcionada con su aparato para
+realizar correctamente la primera puesta en marcha.
+📎 Estas fichas técnicas se entregan con el producto y están disponibles bajo petición en
+el servicio de atención al cliente de AFIRE:
+https://www.a-fireplace.com/es/contacto/
+
+
+
+6. MANTENIMIENTO DE LOS APARATOS
+El mantenimiento regular de su chimenea de vapor de agua es esencial para garantizar
+un funcionamiento óptimo y conservar la calidad visual de las llamas.
+Un buen mantenimiento también prolonga la vida útil del aparato, ya sea en un entorno
+residencial (casas, apartamentos) o profesional (hoteles, restaurantes, espacios
+públicos).
+👉 La frecuencia de mantenimiento depende del uso:
+• Uso residencial: un mantenimiento anual suele ser suficiente.
+• Uso intensivo (hoteles, restaurantes, lugares públicos): se recomienda realizar un
+mantenimiento cada 2500 a 3000 horas de funcionamiento.
+📎 Para más información sobre:
+• las operaciones de mantenimiento general
+• el reemplazo periódico de los Mist Makers (piezas de desgaste)
+👉 Consulte los tutoriales en vídeo y las explicaciones en la página dedicada:
+https://www.a-fireplace.com/es/mantenimiento-cuidado-chimeneas-vapor-agua/
+
+
+
+
+                                                                                         28
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+7. GARANTÍA
+Los aparatos AFIRE están cubiertos por una garantía limitada de dos años a partir de la
+fecha de compra, previa presentación de la factura original. Esta garantía se aplica
+únicamente al comprador original y no es transferible.
+Cubre los defectos de fabricación o funcionamiento que ocurran a pesar de un uso
+conforme a las instrucciones de este manual.
+
+⛔️ Importante – Condiciones de la garantía
+Los aparatos no funcionarán correctamente si no se respetan estrictamente las
+instrucciones del manual.
+En consecuencia, la garantía no cubre:
+• Las piezas de desgaste como el Mist Maker (ultrasónico), los LED y los mandos a
+distancia
+• Los daños derivados de una instalación incorrecta, agua de mala calidad, corrientes de
+aire o aire cargado de partículas (ej. polvo de yeso u otras partículas finas aspiradas por
+los ventiladores), uso inadecuado, negligencia o falta de mantenimiento
+• El uso de piezas no certificadas de origen AFIRE
+👉 El incumplimiento de las recomendaciones del manual puede provocar fallos no
+cubiertos por la garantía.
+
+
+💡 En caso de incidente o mal funcionamiento, visite la página de servicio posventa de
+AFIRE:
+👉 https://www.a-fireplace.com/es/servicio-postventa-afire/
+y complete el formulario de asistencia en línea.
+Nuestros técnicos especializados le contactarán lo antes posible para analizar la
+situación, determinar el origen del problema y asistirle en su resolución.
+
+✅ Si el problema es de origen técnico y está cubierto por la garantía, AFIRE le enviará
+gratuitamente la pieza defectuosa, acompañada de una guía ilustrada y un vídeo
+explicativo para facilitar su sustitución.
+Nuestros aparatos están diseñados para que cualquier usuario, sin conocimientos
+técnicos, pueda realizar esta operación fácilmente y en pocos minutos.
+📞 El servicio técnico Aquafire – AFIRE está a su disposición para acompañarle durante
+toda la vida útil del aparato: asistencia remota, asesoramiento personalizado y soporte
+en vídeo.
+👉 Si ha adquirido su aparato a través de un distribuidor autorizado, éste también
+está a su disposición para asistirle durante todo el ciclo de vida del producto.
+
+
+
+                                                                                        29
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+
+
+
+DEUTSCH
+INHALTSVERZEICHNIS
+  1. Warnhinweise und allgemeine Sicherheit
+      1.1 Sicherheit für den Benutzer
+      1.2 Technische Sicherheit
+      1.3 Fernbedienung und Batterien
+      1.4 FCC-Hinweis
+  2. Nutzungs- und Installationsbedingungen
+      2.1 Umgebungstemperatur und Luftfeuchtigkeit
+      2.2 Einbau und Zugänglichkeit
+  3. Stromversorgung
+       3.1 Spannung und Schutz
+       3.2 Elektrischer Anschluss
+       3.3 Einbau und Erreichbarkeit
+       3.4 Spannungsfreischaltung
+  4. Wasserversorgung
+      4.1 Erforderliche Wasserqualität
+      4.2 Manuelles Befüllen mit integrierter Pumpe
+      4.3 Automatischer Anschluss an das Wassernetz
+
+
+
+
+                                                           30
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+   5. Inbetriebnahme Ihres Geräts
+        ➤ Startanleitung je nach Baureihe
+         ➤ Verweis auf die mitgelieferte Anleitung und das technische Datenblatt
+   6. Wartung der Geräte
+       ➤ Empfohlene Wartungshäufigkeit je nach Nutzung
+         ➤ Link zur Wartungsseite mit Videos
+   7. Garantie
+       ➤ Allgemeine Bedingungen
+         ➤ Nicht abgedeckte Elemente
+         ➤ Bedeutung der Einhaltung des Handbuchs
+         ➤ Vorgehensweise im Falle einer Störung
+         ➤ AFIRE-Technischer Kundendienst & fortlaufende Unterstützung
+         ➤ Rolle des autorisierten Händlers
+
+INSTALLATIONS-, BEDIENUNGS- UND WARTUNGSANLEITUNG
+Normkonformität der Geräte von AFIRE
+Advance-Serie AWA: AWA 20-50, AWA 40-100, AWA 60-150, AWA 80-200, AWA 100-
+250,
+AWA 120-300, AWA 140-350, AWA 160-400, AWA 180-450,
+AWA 200-500, AWA 220-550, AWA 240-600.
+Prestige-Serie AWPR: AWPR 20-50, AWPR 40-100, AWPR 60-150, AWPR 80-200,
+AWPR 100-250,
+AWPR 120-300, AWPR 140-350, AWPR 160-400, AWPR 180-450,
+AWPR 200-500, AWPR 220-550, AWPR 240-600.
+Lite-Serie AWL: AWL 16-42, GATSBY, AWL 20-50, AWL 40-100, AWL 60-150.
+Konformität
+Die oben genannten Geräte entsprechen:
+• den europäischen Richtlinien:
+o 2004/108/EG
+o EN 55014-1: 2006 + A1: 2009 + A2: 2011
+o EN 55014-2: 1997 + A1: 2001 + A2: 2008
+o EN 61000-3-2: 2006 + A1: 2009 + A2: 2009
+o EN 61000-3-3: 2013
+• Teil 15 der FCC-Vorschriften
+
+
+
+
+                                                                              31
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+1. WARNHINWEISE UND ALLGEMEINE SICHERHEIT
+1.1 Sicherheit für den Benutzer
+• Gerät niemals verwenden, wenn es beschädigt ist (Sturz, Stoß usw.).
+👉 Wenden Sie sich an den AFIRE-Kundendienst.
+• Kinder oder schutzbedürftige Personen dürfen das Gerät nicht unbeaufsichtigt
+benutzen.
+• Nur für den Innenbereich vorgesehen.
+• Nicht direkter Wasserbesprühung, übermäßiger Hitze oder extremer Kälte aussetzen.
+• Keine Gegenstände auf das laufende Gerät legen.
+• Vor dem Öffnen oder Bewegen des Geräts die Stromzufuhr unterbrechen.
+• Gerät vor dem Transport vollständig entleeren.
+• Wird das Gerät länger als eine Woche nicht genutzt, muss es entleert werden.
+👉 Ablagerungen können die Füllstandssensoren blockieren und Leckagen
+verursachen.
+
+1.2 Technische Sicherheit
+⚠️ Wichtig:
+Nur Originalzubehör verwenden.
+Nicht zertifiziertes Zubehör führt zum Garantieverlust und kann zu Schäden oder
+Fehlfunktionen führen.
+• Keine baulichen oder softwareseitigen Änderungen am Gerät vornehmen.
+• Lüftungsöffnungen (oben und seitlich) stets freihalten.
+• Beschädigte Netzkabel dürfen nicht repariert, sondern müssen ersetzt werden.
+• Das Gerät enthält leistungsstarke LEDs. ⚠️ Niemals direkt in das Licht an der
+Oberseite blicken – Blendgefahr!
+
+1.3 Fernbedienung und Batterien
+• Fernbedienung außerhalb der Reichweite von Kindern aufbewahren.
+• Bei Verschlucken einer Batterie sofort einen Arzt aufsuchen.
+• Nur neue, nicht wiederaufladbare Batterien korrekt einsetzen.
+
+1.4 FCC-Hinweis
+Nicht genehmigte Änderungen am Gerät führen zum Verlust des Nutzungsrechts gemäß
+FCC-Bestimmungen.
+
+2. BETRIEBS- UND INSTALLATIONSBEDINGUNGEN
+Bei Unsicherheiten bezüglich Installation oder Nutzung wenden Sie sich bitte an unseren
+technischen Support.
+
+2.1 Temperatur und Luftfeuchtigkeit
+• Umgebungstemperatur: 10 °C bis 35 °C (50 bis 100 °F)
+
+                                                                                    32
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• Luftfeuchtigkeit: 30 %–60 % rel. Feuchte, ohne Kondensation, bei normaler Belüftung
+👉 Nicht installieren in:
+• zu warmen oder feuchten Räumen (z. B. Hammam, Spa, Sauna, ungeheiztes
+Gewächshaus usw.)
+• Bereichen mit direkter Zugluft ohne Schutz (z. B. Klimaanlagenauslass, offene Kamine,
+Lüftungsschacht)
+
+2.2 Einbau und Zugang
+• Auf stabiler, waagerechter Fläche installieren.
+• Einbau in Möbel oder Nischen möglich, unter Beachtung der modellbezogenen
+Vorgaben.
+• Dampf- und Luftauslässe (oben und seitlich) nicht blockieren.
+• Keine zusätzlichen Lüftungsgitter erforderlich (sofern nicht anders angegeben).
+• Freier Zugang für Wartung, Befüllung, Entleerung und Bedienung sicherstellen.
+
+3. STROMVERSORGUNG
+3.1 Spannung und Schutz
+• Betriebsspannung: 100–240 V – 50/60 Hz (siehe Typenschild)
+• Anschluss über FI-Schutzschalter mit 30 mA Fehlerstromschutz
+• Anschluss nur an geerdete Steckdose
+
+3.2 Elektrischer Anschluss
+• Gerät an leicht zugängliche Steckdose anschließen
+• Keine Mehrfachsteckdosen, Verlängerungen oder Dimmer verwenden
+• Kabel nicht knicken, quetschen oder über scharfe Kanten legen
+• Kabelkontakt mit heißen, feuchten oder scheuernden Oberflächen vermeiden
+
+3.3 Einbau und Zugänglichkeit
+• Beim Festeinbau muss ein externer Schalter (z. B. zweipoliger Trennschalter,
+separater Leistungsschalter oder fernbedienbare Steckdose) installiert werden,
+außerhalb des Einbauraums leicht erreichbar
+• Elektrischer Anschluss nur durch qualifiziertes Fachpersonal
+• Keine unautorisierten Veränderungen am Stromkreis oder Einsatz von
+Transformatoren/Adaptern
+
+3.4 Stromabschaltung
+Gerät ausschalten bzw. abstecken:
+• Vor dem Öffnen oder Arbeiten am Gerät
+• Vor einem Ortswechsel oder Transport
+• Bei Gewitter oder längerer Abwesenheit
+
+
+
+
+                                                                                     33
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+4. WASSERVERSORGUNG
+4.1 Erforderliche Wasserqualität
+• Nur sauberes, klares und nicht abgestandenes Leitungs- oder Mineralwasser
+verwenden
+• Kein Wasser mit sichtbaren Partikeln oder hohem Gehalt an Kalk/Mineralien/Metallen
+(z. B. Kupfer, Eisen, Zink, Mangan)
+👉 Leitungswasser ist in der Regel geeignet, sofern es nicht zu hart ist (unter 30 °f bzw.
+300 mg/L CaCO₃ )
+👉 Zu viele Mineralien oder Metalle können Korrosion verursachen, Sensoren stören
+und Leckagen auslösen
+• Bei Zweifel Wasser testen lassen und ggf. Filter oder Enthärter installieren
+
+❌ Nicht verwenden:
+• Destilliertes oder demineralisiertes Wasser
+• Parfümiertes oder mit Zusätzen versetztes Wasser
+• Brunnen-, Regen-, Tank- oder unbehandeltes Quellwasser
+• Längere Zeit abgestandenes Wasser
+⚠️ Entleerung bei Nichtbenutzung erforderlich
+• Wird das Gerät länger als 7 Tage nicht verwendet, muss es entleert werden
+• Abgestandenes Wasser kann:
+– Füllstandssensoren blockieren
+– Fehlfunktionen oder Leckagen verursachen
+👉 Entleerung ist einfach und erfordert keinen Abwasseranschluss
+
+4.2 Manuelles Befüllen mit integrierter Pumpe
+• Füllschlauch an den Wasseranschluss des Geräts anschließen und in einen
+Wasserbehälter einführen
+• „B1“-Taste für 5 Sekunden drücken – die Pumpe startet automatisch und beginnt mit
+dem Befüllen
+• Sobald der maximale Füllstand erreicht ist, stoppt die Pumpe automatisch
+• ⚠️ Achtung: Bei Erstinbetriebnahme oder nach vollständiger Entleerung ist bei
+Modellen mit zwei Tanks (ADVANCE und PRESTIGE) ein doppeltes Befüllen notwendig:
+Erstbefüllung durchführen, mindestens 2 Minuten warten, dann erneut befüllen
+• Nur Wasser gemäß Abschnitt 4.1 verwenden
+• Füllschlauch nach Befüllung entfernen
+• Eventuelle Wasserspritzer abwischen
+
+4.3 Automatischer Anschluss an das Wassernetz
+• Es darf ausschließlich Wasser verwendet werden, das den Anforderungen in Abschnitt
+4.1 entspricht
+
+                                                                                       34
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• Vor dem ersten Einschalten:
+👉 Leitungen spülen, um Sand, Schlamm oder feste Partikel zu entfernen
+• Folgende Elemente müssen installiert werden:
+– Manuelles Absperrventil oder
+– Zugängliches Magnetventil zur Unterbrechung der Wasserversorgung für Wartung
+oder längere Stillstandzeiten
+• Der Wasseranschlussschlauch muss den geltenden Hygienestandards entsprechen
+❌ Gerät niemals an nicht gefiltertes, nicht trinkbares oder autonomes Wassersystem
+anschließen
+
+
+
+5. INBETRIEBNAHME IHRES GERÄTS
+Die vorherigen Kapitel haben die allgemeinen Bedingungen für Installation, Sicherheit,
+Strom- und Wasserversorgung beschrieben, die für alle AFIRE-Geräte gelten.
+Jede Produktreihe (LITE AWL, ADVANCE AWA, PRESTIGE AWPR, …) verfügt über
+spezifische Startverfahren, die in einem eigenen Inbetriebnahme-Leitfaden für jedes
+Modell erläutert sind.
+👉 Bitte beziehen Sie sich auf die Schnellstartanleitung, die Ihrem Gerät beiliegt, um
+den ersten Start korrekt durchzuführen.
+📎 Diese technischen Datenblätter liegen der Lieferung bei und sind auf einfache Anfrage
+beim AFIRE-Kundendienst erhältlich: https://www.a-fireplace.com/de/kontakt/
+
+
+
+6. WARTUNG DER GERÄTE
+Die regelmäßige Wartung und Pflege Ihres Wasserdampfkamins ist unerlässlich, um
+einen optimalen Betrieb sicherzustellen und die visuelle Qualität der Flammen zu
+erhalten.
+Eine gute Wartung verlängert auch die Lebensdauer des Geräts, sei es in privaten
+(Häuser, Wohnungen) oder gewerblichen Bereichen (Hotels, Restaurants, öffentliche
+Orte).
+👉 Die Wartungshäufigkeit hängt von der Nutzung ab:
+• Privatgebrauch: Eine jährliche Wartung ist in der Regel ausreichend.
+• Intensive Nutzung (Hotels, Restaurants, öffentliche Orte): Eine Wartung alle 2500 bis
+3000 Betriebsstunden wird empfohlen.
+📎 Weitere Informationen zu:
+• allgemeinen Wartungsarbeiten
+• dem regelmäßigen Austausch der Mist Maker (Verschleißteile)
+👉 Bitte konsultieren Sie die Video-Tutorials und Erklärungen auf der speziellen
+
+
+
+                                                                                          35
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+Wartungsseite:
+https://www.a-fireplace.com/de/wasserdampfkamine-wartung-und-pflege/
+
+
+
+7. GARANTIE
+AFIRE-Geräte verfügen über eine auf zwei Jahre begrenzte Garantie ab dem
+Kaufdatum, gegen Vorlage der Originalrechnung. Diese Garantie gilt nur für den
+Erstkäufer und ist nicht übertragbar.
+Sie deckt Herstellungs- oder Funktionsfehler ab, die trotz ordnungsgemäßer Nutzung
+gemäß den Anweisungen in diesem Handbuch auftreten.
+
+⛔️ Wichtig – Garantiebedingungen
+Das Gerät funktioniert nur einwandfrei, wenn die Anweisungen im Handbuch strikt
+eingehalten werden.
+Daher sind folgende Punkte nicht von der Garantie abgedeckt:
+• Verschleißteile wie der Mist Maker (Ultraschallmodul), LED-Lampen und
+Fernbedienungen
+• Schäden durch falsche Installation, schlechte Wasserqualität, Luftzüge oder
+luftgetragene Partikel (z. B. Gipsstaub oder andere feine Stäube, die von den Lüftern
+angesaugt werden), unsachgemäßen Gebrauch, Nachlässigkeit oder mangelnde
+Wartung
+• Verwendung von nicht zertifizierten Originalteilen, die nicht von AFIRE stammen
+👉 Die Missachtung der Empfehlungen im Handbuch kann zu Fehlfunktionen führen,
+die nicht unter die Garantie fallen.
+
+
+💡 Im Falle einer Störung oder eines Problems:
+👉 Besuchen Sie die AFIRE-Supportseite:
+https://www.a-fireplace.com/de/kundendienst-afire/
+und füllen Sie das Online-Supportformular aus.
+Unsere spezialisierten Techniker werden Sie so schnell wie möglich kontaktieren, um
+das Problem zu analysieren, die Ursache zu identifizieren und Sie bei der Lösung zu
+unterstützen.
+
+✅ Falls ein Materialfehler vorliegt und dieser unter die Garantie fällt, sendet Ihnen
+AFIRE das defekte Teil kostenlos zu, zusammen mit einer bebilderten Anleitung und
+einem Video, das den Austausch erleichtert.
+Unsere Geräte sind so konzipiert, dass jeder Benutzer – auch ohne technische
+Kenntnisse – diesen Austausch einfach und in wenigen Minuten selbst durchführen
+kann.
+
+
+                                                                                        36
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+📞 Der technische Kundendienst von Aquafire – AFIRE steht Ihnen während der
+gesamten Lebensdauer Ihres Geräts zur Verfügung: Fernunterstützung, individuelle
+Beratung und Videoanleitungen.
+👉 Wenn Sie Ihr Gerät bei einem autorisierten Händler gekauft haben, steht auch
+dieser Ihnen für die gesamte Nutzungsdauer unterstützend zur Seite.
+
+
+
+
+NEDERLANDS
+INHOUDSOPGAVE
+   1. Algemene waarschuwingen en veiligheid
+        1.1 Veiligheid van de gebruiker
+        1.2 Technische veiligheid
+        1.3 Afstandsbediening en batterijen
+        1.4 FCC-waarschuwing
+   2. Gebruiks- en installatievoorwaarden
+       2.1 Omgevingstemperatuur en luchtvochtigheid
+       2.2 Inbouw en toegang
+
+
+
+                                                                               37
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+   3. Elektra-aansluiting
+        3.1 Spanning en beveiliging
+        3.2 Elektrische aansluiting
+        3.3 Inbouw en toegankelijkheid
+        3.4 Uitschakeling
+   4. Watertoevoer
+       4.1 Vereiste waterkwaliteit
+       4.2 Handmatig vullen met geïntegreerde pomp
+       4.3 Automatische aansluiting op het waternet
+   5. Inbedrijfstelling van uw toestel
+        ➤ Specifieke startgids per productlijn
+        ➤ Verwijzing naar meegeleverde gids en technische fiche
+   6. Onderhoud van de toestellen
+       ➤ Aanbevolen frequentie volgens gebruik
+        ➤ Link naar onderhoudspagina en video’s
+   7. Garantie
+       ➤ Algemene voorwaarden
+        ➤ Niet-gedekte elementen
+        ➤ Belang van het volgen van de handleiding
+        ➤ Procedure bij een incident
+        ➤ Technische dienst AFIRE & continue ondersteuning
+        ➤ Rol van de erkende wederverkoper
+
+INSTALLATIE-, GEBRUIKS- EN
+ONDERHOUDSHANDLEIDING
+Normconformiteit van AFIRE-toestellen
+ADVANCE AWA-serie: AWA 20-50, AWA 40-100, AWA 60-150, AWA 80-200, AWA
+100-250,
+AWA 120-300, AWA 140-350, AWA 160-400, AWA 180-450,
+AWA 200-500, AWA 220-550, AWA 240-600.
+PRESTIGE AWPR-serie: AWPR 20-50, AWPR 40-100, AWPR 60-150, AWPR 80-200,
+AWPR 100-250,
+AWPR 120-300, AWPR 140-350, AWPR 160-400, AWPR 180-450,
+AWPR 200-500, AWPR 220-550, AWPR 240-600.
+
+
+                                                                        38
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+LITE AWL-serie: AWL 16-42, GATSBY, AWL 20-50, AWL 40-100, AWL 60-150.
+Conformiteit:
+De hierboven vermelde toestellen zijn conform:
+• Europese richtlijnen:
+   o 2004/108/EG
+   o EN 55014-1 : 2006 + A1 : 2009 + A2 : 2011
+   o EN 55014-2 : 1997 + A1 : 2001 + A2 : 2008
+   o EN 61000-3-2 : 2006 + A1 : 2009 + A2 : 2009
+   o EN 61000-3-3 : 2013
+• Deel 15 van de FCC-voorschriften
+
+
+
+1. ALGEMENE WAARSCHUWINGEN EN VEILIGHEID
+1.1 Veiligheid van de gebruiker
+• Gebruik het toestel nooit als het beschadigd is (val, schok, enz.).
+👉 Neem contact op met de AFIRE klantenservice.
+• Laat kinderen of kwetsbare personen het toestel niet zonder toezicht gebruiken.
+• Alleen voor gebruik binnenshuis.
+• Niet blootstellen aan opspattend water, overmatige hitte of extreme kou.
+• Plaats geen enkel voorwerp op het toestel tijdens gebruik.
+• Schakel de stroomtoevoer uit voordat u het toestel opent of verplaatst.
+• Leeg het toestel voordat u het verplaatst of transporteert.
+• Als het toestel langer dan een week niet wordt gebruikt, moet het worden geleegd om
+stilstaand water te vermijden.
+👉 Afzettingen kunnen de niveausensoren blokkeren en lekkages veroorzaken.
+
+1.2 Technische veiligheid
+⚠️ Belangrijk:
+Gebruik uitsluitend originele accessoires.
+Het gebruik van niet-gecertificeerde accessoires vervalt onmiddellijk de garantie en kan
+leiden tot storingen of schade aan het toestel.
+• Wijzig het toestel niet. Elke wijziging of aanpassing zonder voorafgaande goedkeuring
+van de fabrikant kan een storing veroorzaken en maakt de garantie ongeldig.
+• De ventilatieopeningen van het toestel (bovenplaat en zijkanten) moeten vrij blijven en
+goed functioneren.
+• Als het netsnoer beschadigd is, mag het niet worden gerepareerd, maar moet het
+worden vervangen.
+• De toestellen zijn uitgerust met krachtige LED-lampen. ⚠️ Kijk nooit rechtstreeks in het
+licht dat uit de bovenkant van het toestel komt om verblinding te voorkomen.
+
+
+                                                                                       39
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+1.3 Afstandsbediening en batterijen
+• Houd de afstandsbediening buiten het bereik van kinderen.
+• Raadpleeg onmiddellijk een arts bij het inslikken van een batterij.
+• Gebruik uitsluitend nieuwe niet-oplaadbare batterijen die correct zijn geplaatst.
+
+1.4 FCC-waarschuwing
+Elke wijziging die niet uitdrukkelijk is goedgekeurd door de verantwoordelijke voor de
+conformiteit, maakt het gebruik van het toestel ongeldig.
+
+
+
+2. GEBRUIKS- EN INSTALLATIEVOORWAARDEN
+Neem bij twijfel over de installatie- of gebruiksomstandigheden contact op met onze
+technische dienst.
+
+2.1 Temperatuur en luchtvochtigheid
+• Te respecteren omgevingstemperatuur: 10 °C tot 35 °C (50 tot 100 °F)
+• Interne luchtvochtigheid: 30% – 60% RH, zonder condensatie, in een normaal
+geventileerde ruimte
+👉 Niet installeren in:
+• Een te warme of te vochtige ruimte (bijv. hamam, spa, sauna, onverwarmde serre enz.)
+• Een ruimte die wordt blootgesteld aan directe luchtstromen indien het toestel hier niet
+tegen beschermd is (bijv. airconditioning, ventilatoren, open schoorsteen, luchtstroom in
+de inbouwopening)
+
+2.2 Inbouw en toegang
+• Installeer op een stabiele en perfect horizontale ondergrond.
+• Inbouw in een meubel of nis is mogelijk, mits de voorschriften van het model worden
+nageleefd.
+• Blokkeer nooit de in- of uitlaatopeningen voor lucht of damp (zijkanten of bovenkant).
+• Geen extra ventilatieroosters vereist, tenzij anders aangegeven.
+• Zorg voor vrije toegang voor onderhoud, vullen, ledigen en gebruik van de
+bedieningselementen.
+
+
+
+3. ELEKTRISCHE VOEDING
+3.1 Spanning en beveiliging
+• Voedingsspanning: 100–240 V – 50/60 Hz (zie het typeplaatje van het model)
+• De installatie moet beveiligd zijn met een aardlekschakelaar van 30 mA.
+• Het gebruikte stopcontact moet geaard zijn.
+
+
+
+                                                                                           40
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+3.2 Elektrische aansluiting
+• Sluit het toestel aan op een gemakkelijk bereikbaar stopcontact, zodat de stroom
+indien nodig snel kan worden uitgeschakeld.
+• Gebruik nooit een stekkerdoos, verlengkabel of dimmer.
+• Knijp, buig of druk het netsnoer niet samen.
+• Vermijd elk contact van de kabel met warme, vochtige of schurende oppervlakken.
+
+3.3 Inbouw en toegankelijkheid
+• Bij inbouw of vaste installatie moet de aansluiting worden uitgevoerd door een erkend
+elektricien, met een extern uitschakelmechanisme (dubbele schakelaar, speciale
+zekering of bedienbaar stopcontact) dat te allen tijde buiten de inbouwopening
+bereikbaar is.
+• Er mogen geen wijzigingen aan het elektrische circuit worden aangebracht en geen
+transformator of adapter worden toegevoegd zonder toestemming van de fabrikant.
+
+3.4 Uitschakeling
+Schakel het toestel uit in de volgende gevallen:
+• Voor elke opening of ingreep op het toestel
+• Voor elk transport of verplaatsing
+• Bij onweer of langdurige afwezigheid
+
+
+
+4. WATERTOEVOER
+4.1 Vereiste waterkwaliteit
+• Gebruik uitsluitend leidingwater of mineraalwater dat schoon, helder en niet stilstaand
+is.
+• Het water mag geen zichtbare onzuiverheden bevatten en geen overmatige
+concentraties mineralen (met name kalk) of opgeloste metalen zoals: koper, ijzer, zink,
+mangaan enz.
+👉 Kraanwater is over het algemeen compatibel met het toestel, zolang het niet te hard
+is (hardheid onder 30 °f, oftewel 300 mg/L CaCO₃ ).
+👉 Overmatige niveaus van mineralen of metalen kunnen interne corrosie veroorzaken,
+de niveausensoren aantasten en lekken veroorzaken.
+• Bij twijfel over de waterkwaliteit wordt aanbevolen deze te laten testen en eventueel
+een deeltjesfilter of waterverzachter te installeren vóór het toestel.
+
+❌ Gebruik geen:
+• Gedestilleerd of gedeïoniseerd water
+• Geparfumeerd water of water met toevoegingen
+
+
+
+                                                                                       41
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• Water uit een put, regenwater, cisterne of ongecontroleerde bron
+• Stilstaand water of water dat te lang bewaard is
+⚠️ Verplicht ledigen bij niet-gebruik
+• LET OP! Als u uw toestel langer dan 7 dagen niet gebruikt, moet het worden geleegd.
+• Stilstaand water kan deeltjes genereren die:
+   – niveaudetectoren verstoppen
+   – storingen of lekkages veroorzaken
+👉 Het ledigen is eenvoudig en vereist geen aansluiting op het afvalwatersysteem.
+
+4.2 Handmatig vullen met geïntegreerde pomp
+• Sluit de vulslang aan op de waterinlaat van het toestel en plaats het andere uiteinde in
+een bak met water.
+• Druk gedurende 5 seconden op de vulknop "B1", waarna de pomp wordt geactiveerd
+en het vullen begint.
+• Zodra het maximale niveau is bereikt, stopt de pomp automatisch.
+• ⚠️ Opgelet: bij eerste ingebruikname of na elk ledigen hebben modellen met twee
+reservoirs (ADVANCE- en PRESTIGE-series) een dubbele vulling nodig.
+   – Voer een eerste vulling uit, wacht dan minstens 2 minuten en doe vervolgens een
+tweede vulling.
+• Gebruik uitsluitend water dat voldoet aan de criteria in punt 4.1.
+• Koppel de vulslang los.
+• Reinig eventuele gemorste waterdruppels.
+
+4.3 Automatische aansluiting op het waternet
+• Het gebruikte water moet voldoen aan de vereisten van punt 4.1.
+• Voor de eerste ingebruikname:
+👉 Spoel de leidingen door om zand, slib of vaste deeltjes te verwijderen.
+• Installeer voorafgaand aan het toestel:
+   – een handmatige afsluitkraan, of
+   – een toegankelijke elektromagnetische klep om de toevoer af te sluiten voor
+onderhoud of als het toestel langer dan een week niet wordt gebruikt.
+• De aanvoerslang moet voldoen aan de geldende hygiënische normen.
+❌ Sluit het toestel nooit aan op een ongefilterde, niet-drinkbare of ongecontroleerde
+autonome waterbron.
+
+
+
+5. INBEDRIJFSTELLING VAN UW TOESTEL
+De vorige hoofdstukken beschrijven de algemene voorwaarden voor installatie,
+veiligheid, elektrische voeding en watertoevoer die van toepassing zijn op alle AFIRE-
+toestellen.
+
+                                                                                         42
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+Elke productlijn (LITE AWL, ADVANCE AWA, PRESTIGE AWPR, …) heeft specifieke
+opstartprocedures, gedetailleerd in een eigen installatiehandleiding per model.
+👉 Raadpleeg de bijgeleverde quickstart-gids om de eerste ingebruikname correct uit te
+voeren.
+📎 Deze technische fiches worden bij de levering gevoegd en zijn ook op eenvoudig
+verzoek verkrijgbaar via de klantenservice van AFIRE: https://www.a-
+fireplace.com/nl/contact/
+
+
+
+6. ONDERHOUD VAN DE TOESTELLEN
+Regelmatig onderhoud van uw waterdamp haard is essentieel voor een optimale
+werking en om de visuele kwaliteit van de vlammen te behouden.
+Goed onderhoud verlengt ook de levensduur van het toestel, zowel in particuliere
+omgevingen (huizen, appartementen) als in professionele settings (hotels, restaurants,
+openbare ruimtes).
+👉 De onderhoudsfrequentie is afhankelijk van het gebruik:
+• Residentieel gebruik: jaarlijks onderhoud is doorgaans voldoende.
+• Intensief gebruik (hotels, restaurants, openbare ruimtes): onderhoud wordt aanbevolen
+om de 2500 tot 3000 gebruiksuren.
+
+📎 Voor meer informatie over:
+• algemeen onderhoud
+• periodieke vervanging van de Mist Makers (slijtageonderdelen)
+👉 Raadpleeg de videotutorials en uitleg op de speciale onderhoudspagina:
+https://www.a-fireplace.com/nl/onderhoud-verzorging-van-waterdamp-haarden/
+
+
+
+7. GARANTIE
+AFIRE-toestellen hebben een beperkte garantie van twee jaar vanaf de aankoopdatum,
+op vertoon van de originele factuur.
+Deze garantie geldt uitsluitend voor de oorspronkelijke koper en is niet overdraagbaar.
+De garantie dekt fabricage- of functioneringsfouten die optreden ondanks gebruik
+volgens de instructies in deze handleiding.
+
+⛔️ Belangrijk – Garantievoorwaarden
+De toestellen zullen niet correct functioneren als de instructies in de handleiding niet
+strikt worden nageleefd.
+Daarom valt het volgende niet onder de garantie:
+• Slijtageonderdelen zoals de Mist Maker (ultrasoon), LED’s en afstandsbedieningen
+• Schade als gevolg van onjuiste installatie, slechte waterkwaliteit, luchtstromen of lucht
+
+
+                                                                                          43
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+die rijk is aan stofdeeltjes (bv. gipsstof of fijnstof aangezogen door de ventilatoren),
+misbruik, nalatigheid of onvoldoende onderhoud
+• Gebruik van niet-gecertificeerde onderdelen die niet van AFIRE afkomstig zijn
+👉 Het niet naleven van de aanbevelingen in deze handleiding kan leiden tot storingen
+die niet onder de garantie vallen.
+
+
+💡 In geval van een storing of defect, ga naar de AFIRE-servicepagina:
+👉 https://www.a-fireplace.com/nl/service-na-verkoop-afire/
+en vul het online ondersteuningsformulier in.
+Onze gespecialiseerde technici nemen zo snel mogelijk contact met u op om de situatie
+te analyseren, de oorzaak van het probleem te bepalen en u te begeleiden bij de
+oplossing.
+
+✅ Als het probleem een defect onderdeel betreft dat onder garantie valt, stuurt AFIRE
+u kosteloos het vervangingsonderdeel toe, samen met een geïllustreerde handleiding en
+een uitleggende video voor eenvoudige vervanging.
+Onze toestellen zijn ontworpen zodat elke gebruiker, zonder technische kennis, deze
+handeling eenvoudig in enkele minuten kan uitvoeren.
+📞 De technische dienst van Aquafire – AFIRE staat tot uw beschikking om u tijdens de
+gehele levensduur van het toestel te begeleiden: hulp op afstand, persoonlijk advies en
+videosupport.
+👉 Als u uw toestel via een erkende dealer hebt gekocht, staat deze ook tot uw
+beschikking om u gedurende de hele levensduur van het toestel te begeleiden.
+
+
+
+
+中文         目录
+
+   1.   警告与通用安全须知
+         1.1 用户安全
+         1.2 技术安全
+
+
+                                                                                       44
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+        1.3 遥控器与电池
+        1.4 FCC 警告
+
+  2.   使用与安装条件
+        2.1 环境温度与湿度
+        2.2 嵌入安装与操作空间
+
+  3.   电源连接
+        3.1 电压与保护
+        3.2 电源连接
+        3.3 嵌入式安装与辅助
+        3.4 断电
+
+  4.   供水系统
+        4.1 所需水质
+        4.2 内置泵手动加水
+        4.3 连接自来水网络
+
+  5.   设备启用
+       ➤ 各系列产品的开启指南
+       ➤ 请参考随附的快速指南与技术手册
+
+  6.   设备维护
+       ➤ 根据使用频率建议的维护周期
+       ➤ 维护与教学视频专页链接
+
+  7.   保修
+       ➤ 一般条款
+       ➤ 不在保修范围内的项目
+       ➤ 遵守说明书的重要性
+       ➤ 出现问题时的操作流程
+       ➤ AFIRE 技术服务与持续支持
+
+       ➤ 授权经销商的作用
+
+
+
+
+📘 安装、使用与维护说明书
+
+AFIRE 设备的合规性说明
+
+
+                                                           45
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+ADVANCE AWA 系列：AWA 20-50、AWA 40-100、AWA 60-150、AWA 80-200、AWA
+100-250、AWA 120-300、AWA 140-350、AWA 160-400、AWA 180-450、AWA 200-500
+、AWA 220-550、AWA 240-600。
+PRESTIGE AWPR 系列：AWPR 20-50、AWPR 40-100、AWPR 60-150、AWPR 80-200
+、AWPR 100-250、AWPR 120-300、AWPR 140-350、AWPR 160-400、AWPR 180-450、
+AWPR 200-500、AWPR 220-550、AWPR 240-600。
+LITE AWL 系列：AWL 16-42、GATSBY、AWL 20-50、AWL 40-100、AWL 60-150。
+
+📎 合规性声明：
+上述产品符合以下标准：
+
+• 欧盟指令：
+ o 2004/108/EC
+ o EN 55014-1:2006 + A1:2009 + A2:2011
+ o EN 55014-2:1997 + A1:2001 + A2:2008
+ o EN 61000-3-2:2006 + A1:2009 + A2:2009
+ o EN 61000-3-3:2013
+
+• 符合美国 FCC 第15部分规定
+
+
+
+1. 警告与通用安全须知
+
+1.1 用户安全
+
+• 如设备有损坏（如跌落、撞击等），请勿使用。
+👉 请联系 AFIRE 售后服务。
+• 儿童或无行为能力人士不得在无人监管的情况下使用本设备。
+
+• 仅限室内使用。
+• 请勿暴露在水喷溅、极端高温或极端低温环境中。
+• 设备运行时禁止在其表面放置任何物品。
+
+• 在拆开或移动设备前必须切断电源。
+
+
+
+                                                                  46
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• 移动或运输设备前必须先排空水箱。
+• 如果超过一周不使用设备，请务必排空水箱
+👉 水垢或灰尘沉积物可能会堵塞液位传感器而导致泄漏。
+
+1.2 技术安全
+
+⚠️ 重要提示：
+必须仅使用原厂配件。
+使用未经制造商认证的配件将立即导致保修失效，并可能导致设备故障或损坏。
+
+• 请勿擅自修改设备。任何未经 AFIRE 事先批准的硬件或软件更改、添加或修改都将导致
+故障，并取消保修。
+• 设备的通风系统（顶部和侧面）必须保持畅通无阻。
+
+• 如果电源线损坏，严禁修理，必须更换为新电源线。
+• 本设备配备高亮度 LED 灯。⚠️ 请勿直视设备顶部发出的光线，以免造成强烈炫目。
+
+1.3 遥控器与电池
+
+• 将遥控器放在儿童接触不到的地方。
+• 如不慎吞食电池，请立即就医。
+• 仅使用全新、不可充电的电池，并正确安装。
+
+1.4 FCC 警告
+
+任何未经授权的修改，都将取消本设备的保修。
+
+
+2. 使用与安装条件
+如对安装和使用条件有任何疑问，请联系 AFIRE 技术服务团队。
+
+2.1 温度与湿度
+
+• 环境温度范围：10 °C 至 35 °C（50 至 100 °F）
+• 室内湿度范围：30%–60% 相对湿度，无冷凝，且通风良好
+
+                                                           47
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+👉 请勿在以下环境中安装本设备：
+• 温度过高或过于潮湿的房间（例如：蒸汽浴室、水疗中心、桑拿房、未通风的温室等）
+• 暴露于直接气流的位置（如：空调出风口、风扇、打开的烟囱、通风口等）除非设备有相
+
+应保护
+
+2.2 嵌入式安装与操作空间
+
+• 请将设备安装在稳定、水平的平面上
+
+• 可嵌入家具或墙体凹槽中，须遵循各型号的具体安装要求
+• 切勿遮挡设备的进气口或出雾口（位于侧面或顶部）
+• 无需额外通风格栅，除非说明另有要求
+
+• 须留出足够空间以便于设备日后的维护、加水、排水及操作控制按钮
+
+
+
+
+3. 电源连接
+
+3.1 电压与保护
+
+• 电源电压：100–240 V – 50/60 Hz（请参见设备铭牌）
+• 安装必须配备 30 mA 漏电保护断路器
+• 使用的插座必须接地
+
+3.2 电源连接
+
+• 将设备插头插入易于插拔的插座，以便在需要时可快速断开连接
+• 禁止使用插线板、延长线或调压器
+
+• 禁止挤压、弯折或压迫电源线
+• 避免电源线与高温、潮湿或粗糙表面接触
+
+3.3 嵌入式安装与辅助
+
+
+
+                                                           48
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• 如为嵌入式或固定安装，必须由专业电工进行连接，并设置外部断电装置（如双极开
+关、专用断路器或带开关插座），确保可随时断电
+• 未经制造商授权，不得对设备电路进行改造或添加变压器、适配器等设备
+
+3.4 断电操作
+
+在以下情况下请断开设备电源：
+• 在拆开或移动设备之前
+• 在搬动或运输设备之前
+
+• 在雷雨天气或长时间不使用时
+
+
+
+4. 供水系统
+
+4.1 所需水质
+
+• 仅使用干净、清澈、不含杂质的自来水或矿泉水
+• 水中不得含有可见杂质，也不得含有高浓度的矿物质（尤其是钙）或溶解金属（如铜、
+铁、锌、锰等）
+
+👉 一般来说，只要水质不硬（硬度 < 30°f，即 300 mg/L CaCO₃ ），自来水即可使用
+👉 矿物质或金属含量过高会腐蚀内部元件、干扰液位传感器并导致漏水
+
+• 如对水质有疑虑，建议进行检测，并在设备前端安装颗粒过滤器或软水装置
+
+❌ 请勿使用以下水源：
+• 蒸馏水或去离子水
+• 含香料或添加剂的水
+• 井水、雨水、蓄水池或未经处理的天然水
+
+• 长时间储存的水或静置水
+
+⚠️ 长时间不使用需强制排水
+
+• 注意：如设备超过 7 天未使用，必须进行排水
+
+                                                           49
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+• 静置水可能产生沉淀物，导致：
+ → 液位传感器堵塞
+ → 运行异常或设备漏水
+
+• 👉 排水操作简单，无需连接下水道
+
+
+
+4.2 内置泵手动加水
+
+• 将注水软管连接至设备注水口，并插入装有水的容器中
+• 长按注水按钮 “B1” 5 秒，内置泵将启动，开始加水
+• 当达到最大水位时，泵将自动停止
+• ⚠️ 注意：首次使用或每次排水后，如为双水箱型号（ADVANCE 和 PRESTIGE 系
+列），需进行两次加水
+
+   → 第一次注水后等待至少 2 分钟，再进行第二次注水
+• 仅使用符合 4.1 条件的水源
+• 注水完毕后请拔出软管，并擦干任何溅出的水渍
+
+
+
+4.3 自动连接自来水系统
+
+• 所用水源必须满足 4.1 条件
+• 首次使用前：
+👉 冲洗水管，清除砂石、淤泥或颗粒杂质
+
+• 安装前端需设置：
+– 一个外置水龙头，或
+
+– 一个外置电磁阀，以便于排水或长时间不使用时断水
+
+• 供水软管必须符合当前卫生标准
+❌ 严禁将设备连接至未经过滤、非饮用或来源不明的水源
+
+
+
+
+                                                           50
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+
+5. 启动您的设备
+前几章介绍了所有 AFIRE 设备通用的安装、安全、电源和供水条件。
+每个产品系列（LITE AWL、ADVANCE AWA、PRESTIGE AWPR 等）都有各自的启动
+流程，详细说明见各型号配套的启动指南。
+
+👉 请参阅随设备附带的快速启动指南，以正确完成首次启动。
+📎 这些技术资料随设备一同交付，亦可通过 AFIRE 客服索取：
+https://www.a-fireplace.com/contact-us/
+
+
+
+6. 设备维护
+定期对水壁炉进行维护和保养，对于确保其最佳运行状态和火焰视觉效果至关重要。
+良好的保养同样有助于延长设备寿命，无论是在住宅环境（如公寓、住宅）还是商业场所
+（如酒店、餐厅、公共空间）。
+
+👉 保养频率取决于使用场景：
+• 家用场景：每年保养一次通常已足够。
+
+• 高强度使用（酒店、餐厅、公共场所）：建议每运行 2500 至 3000 小时保养一次。
+
+📎 更多信息请参阅：
+
+• 常规维护操作
+• 雾化器（易损件）的周期性更换
+
+👉 视频教程与说明详见专属页面：
+https://www.a-fireplace.com/maintenance-care-water-vapor-fireplaces-inserts/
+
+
+
+7. 保修政策
+
+
+
+
+                                                                               51
+🔧 Manuel d’utilisation – User Manual – Manuale d’Uso – Manual
+del Usuario – Gebruiksaanwijzing – Benutzerhandbuch – 使用说
+明书
+
+AFIRE 设备自购买之日起享有为期两年的有限保修，需提供原始发票。
+本保修仅适用于初始购买者，且不可转让。
+保修涵盖在按照本手册正确使用的前提下出现的生产或功能故障。
+
+⛔️ 重要提示 – 保修条件
+若未严格遵循本手册说明，设备将无法正常运行。
+因此，以下情况不在保修范围内：
+• 雾化器（超声波）、LED 灯和遥控器等易损件
+
+• 由于安装不当、水质差、空气对流或空气中含尘（如石膏粉尘等细微颗粒被风扇吸入）、
+错误使用、疏忽或缺乏维护造成的损坏
+• 使用非 AFIRE 原厂认证配件
+
+👉 未遵循手册建议可能导致设备故障，此类情况不属于保修范围。
+
+
+
+💡 若出现故障或问题，请访问 AFIRE 售后页面：
+👉 https://www.a-fireplace.com/after-sales-service-afire/
+填写在线技术支持表格。
+
+AFIRE 专业技术人员将在最短时间内与您联系，分析问题原因并协助您解决。
+
+✅ 若问题为保修范围内的硬件故障，AFIRE 将免费寄送故障部件，并附上图示说明与操
+作视频，方便您自行更换。
+本设备设计便于任何用户在无专业技术背景的情况下，轻松完成更换，仅需数分钟。
+
+📞 Aquafire – AFIRE 技术团队将始终为您提供全程支持，包括远程协助、个性化建议及
+
+视频资料。
+
+👉 若您通过授权经销商购买设备，该经销商亦可在设备整个使用期间为您提供协助。
+
+
+
+
+                                                           52
+

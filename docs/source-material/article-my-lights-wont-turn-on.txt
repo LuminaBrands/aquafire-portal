@@ -1,0 +1,83 @@
+Source PDF: 9cb16b54-My_Lights_Wont_Turn_On.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 9:47 PM                                                       My Lights Won't Turn On
+
+
+
+
+                         All articles                 Maintenance & Troubleshooting              Help & Troubleshooting
+
+                Light Bar                  My Lights Won't Turn On
+
+               Search
+
+
+
+
+        My Lights Won't Turn On
+        Updated 3 months ago
+
+
+        First check that the light connections are tight and the proper buttons on the remote control are
+        activated. See the appropriate Light Issues Help Article for your Aquafire Model.
+
+        If they are still not turning on, the most likely answer is they have shorted out and need to be
+        replaced. LED lights in a wet environment will cut the lifespan and therefore do need to be
+        replaced periodically, which is why we consider them a wear item. We sell replacement LED
+        lights directly through our website: https://www.aquafire.com/collections/replacement-parts
+
+
+        If you feel the lights have shorted prematurely, the top 3 causes of lights not functioning properly
+        are:
+
+               Excess mist falling back onto the light connection. The most common causes of this are:
+                   Strong air currents in the room that push the vapor onto the lighting connections
+                      Down-drafting - which is when the vapor is pulled down into the interior of the Aquafire
+                      when the HVAC turns on. It is caused by openings within the walls behind/underneath
+                      the Aquafire enclosure
+
+
+               Scaling accumulating on the light connection
+               Any kind of water leaking onto the light connection due to improper manual filling or other
+               customer interaction.
+
+
+        Once the lights have shorted, it is hard to bring them back to life. However, you can prevent the
+        excess vapor and scaling with:                                                      Chat with us
+
+
+https://aquafire.gorgias.help/en-US/my-lights-wont-turn-on-981511                                                         1/2
+5/12/26, 9:47 PM                                                            My Lights Won't Turn On
+
+               Regular cleaning
+               A water softener, such as the Vapor Pure
+               Redirecting any strong air currents in the room so vapor is not being pushed back onto the
+               lights.
+               Insulating or installing a barrier in the open wall space underneath and behind your
+               Aquafire enclosure.
+               Refrain from operating the Aquafires 24/7. Constant operation will cause excess vapor to
+               settle on the lighting connections.
+               Set the flame settings (density and speed) to a lower setting
+
+
+
+
+               Adjust the flame for your environment
+
+
+
+
+        Was this article helpful?                                                                     Yes   No
+
+
+
+
+                                                              Contact Us   Home       Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/my-lights-wont-turn-on-981511                                                2/2
+

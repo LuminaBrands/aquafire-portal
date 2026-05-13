@@ -18,7 +18,8 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 | `water-care.html` | Water hardness lookup (ZIP code DB) and softener replacement calculator |
 | `quick-start.html` | Model selection page linking to individual guides |
 | `getting-started.html` | Placeholder — "coming soon" |
-| `support.html` | Support hub with stub cards (warranty, claims, troubleshooting, FAQs) |
+| `support.html` | Support hub — cards link to Troubleshooter + (stub) warranty/claims/FAQs |
+| `troubleshoot.html` | **Interactive Troubleshooter** — model-aware guided decision-tree wizard |
 
 ### Stylesheets
 
@@ -27,6 +28,7 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 | `hub.css` | **Shared** — site nav, footer, page headers, bento tiles, common components |
 | `styles.css` | Enclosure guide — forms, SVG diagram, cards, step layout |
 | `water-care-styles.css` | Water care — hardness scale, map tiles, calculator UI |
+| `troubleshoot.css` | Troubleshooter — wizard cards, option buttons, breadcrumb, outcome/escalation styling |
 
 ### JavaScript
 
@@ -34,7 +36,14 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 |------|-------|
 | `app.js` | Enclosure guide — model data, dimension math, SVG/Canvas rendering, slider controls |
 | `water-care-app.js` | Water care — 2,000+ ZIP code hardness DB, autocomplete, US map, replacement timeline |
+| `troubleshoot.js` | Troubleshooter — `TREE` decision-tree data + wizard render/nav engine; `LINKS`/`VIDEOS` maps |
 | `embed.js` | Strips nav/footer when page loaded in iframe (`?embed` query param) |
+
+### Docs
+
+| Path | Contents |
+|------|----------|
+| `docs/source-material/` | Plain-text extracts of the Aquafire help-center articles, install/spec guides, warranty, and manuals the Troubleshooter tree is built from (+ `README.md` index) |
 
 ## Architecture
 
@@ -45,6 +54,8 @@ Root (flat — no subdirectories)
 ├── Product Guide: aquafire-pro.html (self-contained CSS/JS inline)
 ├── Enclosure Tool: enclosure-guide.html + styles.css + app.js
 ├── Water Care Tool: water-care.html + water-care-styles.css + water-care-app.js
+├── Troubleshooter: troubleshoot.html + troubleshoot.css + troubleshoot.js
+├── Source docs: docs/source-material/ (help-article / manual extracts)
 └── Stubs: quick-start.html, getting-started.html, support.html
 ```
 
@@ -95,10 +106,14 @@ Radius:         --radius: 14px | --radius-sm: 8px
 All pages share the same nav bar (defined inline in each HTML file):
 
 ```
-Home → Getting Started → Quick Start → Enclosure Guide → Water Care → Support
+Home → Getting Started → Quick Start → Enclosure Guide → Water Care → Troubleshoot → Find a Dealer → Support
 ```
 
-Footer links also appear on index.html and aquafire-pro.html.
+(A few pages also slot **Maintenance** before Find a Dealer; `builder.html` adds **Build Yours**. The exact list varies slightly per page — match the page you're editing.)
+
+On the `aquafire-pro.html` / `aquafire-original.html` guide pages, the Troubleshoot nav link carries a `?model=pro` / `?model=original` param so the wizard pre-selects that model (same pattern as the Enclosure Guide link there).
+
+Footer "Guides" columns (most pages) and the homepage bento grid also link to the Troubleshooter.
 
 ## Key Conventions
 
@@ -108,9 +123,10 @@ Footer links also appear on index.html and aquafire-pro.html.
 - **Nav is duplicated** across all HTML files (no templating). When changing nav links, update every page.
 - **Model data lives in `app.js`** as the `MODELS` object — Original, Pro, Lite each with 3 sizes (18", 24", 30"/36"). Update there for spec changes.
 - **Water hardness DB is in `water-care-app.js`** — `WATER_HARDNESS_DB` array of `[zip_prefix, city, state, ppm]` tuples.
-- **Embed mode:** Append `?embed` to any page URL to hide nav/footer (for Shopify iframe embedding).
+- **Embed mode:** Append `?embed` to any page URL to hide nav/footer (for Shopify iframe embedding). The Troubleshooter wizard lives in `<main>` so it survives embed mode.
 - **SVG diagrams** are generated in JS via string concatenation (app.js `drawCutoutDiagram` and isometric renderer).
 - **Fractions** are displayed as proper fractions (e.g., 14 1/8") via `toFrac()` in app.js.
+- **Troubleshooter decision tree lives in `troubleshoot.js`** as the `TREE` object — a map of `nodeId → node`. Nodes are either `question` (prompt + options/quickPicks) or `outcome` (steps, caution, video, article links, escalation). Model-specific copy uses functions that receive the model id (`'pro' | 'original' | 'lite' | 'unknown'`). `app_entry` is a `router` node that resolves Pro → `app_connect`, others → `app_not_pro`. URL params: `?model=pro|original|lite` pre-selects the model; `?node=<id>` deep-links a node (useful for support emails). Resource URLs are in the `LINKS` map; **how-to video URLs are TODO placeholders in the `VIDEOS` map** — until filled in, the tool shows a "video coming soon" chip. When the underlying help articles change, update the tree and the matching file in `docs/source-material/`.
 
 ## Development History
 
@@ -123,11 +139,13 @@ This portal evolved through iterative Claude Code sessions:
 5. **Embed support** — iframe-friendly mode for Shopify integration
 6. **Product images** — Shopify CDN integration for model cards and accessories
 7. **AR Cutout Visualizer** — Camera overlay tool (built → iterated → removed; browser-based AR without depth sensing was unreliable)
+8. **Interactive Troubleshooter** — Model-aware guided decision-tree wizard (`troubleshoot.html`), built from the Aquafire help-center articles + 2026 install/spec guides + warranty + manuals (extracts archived in `docs/source-material/`). Endpoints offer inline step-by-step fixes, how-to-video slots (TODO URLs), help-article links, and an escalate-to-support block.
 
 ## Gotchas
 
-- **Nav duplication:** There's no shared template. Changing navigation means editing 7+ HTML files.
-- **aquafire-pro.html is large** (~1,400 lines with inline CSS/JS). Read specific sections rather than the whole file.
+- **Nav duplication:** There's no shared template. Changing navigation means editing ~13 HTML files (and several have a footer "Guides" column too).
+- **aquafire-pro.html is large** (~1,400 lines with inline CSS/JS). Read specific sections rather than the whole file. It still has its own in-page category-accordion troubleshooting section (`TS_DATA` / `ALERTS_DATA`) — that's separate from the standalone Troubleshooter; the new tool didn't replace it.
 - **styles.css is enclosure-specific** despite the generic name. Shared styles are in `hub.css`.
+- **troubleshoot.css uses theme tokens with fallbacks** (e.g. `var(--blue, #4da6e8)`) — the per-page inline `:root` blocks only define a subset of the tokens listed in the Design System section, so the CSS can't rely on `--blue`/`--amber`/`--surface-alt` being present everywhere.
 - **No local dev server configured.** Open files directly or use any static server (`python -m http.server`, etc.).
 - **Images are all on Shopify CDN** — no local image assets in the repo.

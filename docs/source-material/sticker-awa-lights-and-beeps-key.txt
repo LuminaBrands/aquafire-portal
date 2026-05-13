@@ -1,0 +1,30 @@
+Source PDF: bfdb03f3-AWA_lights_sticker.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+        Lights & Beeps Key
+
+Lights                Beeps               Alert                         Probable cause
+  B2    B1   ON/OFF
+                      Two quick beeps,    Low / No Water                The water supply hasn’t been turned
+ Logo                 every two seconds                                 on or water needs to be added.
+
+
+
+
+ Logo                 None                Maintenance Reminder          Due for preventative maintenance
+                                                                        cleaning - press and hold middle
+Flashes for 30 sec                                                      and left buttons together to reset.
+
+
+
+ Logo                 Three long beeps    Overflow / High Water Alert   If not overflowing, this alert typically
+                      every second                                      indicates stuck float sensor.
+ Lights Cycling
+
+
+
+ Logo                 One short beep,     Voltage Alert                 Possible shortage or a problem with
+                      every two seconds                                 the power adapter.
+Flashing together
+

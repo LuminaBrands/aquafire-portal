@@ -1,0 +1,65 @@
+Source PDF: 2ee5dfcb-Light_Issues__Aquafire.pdf
+Extracted via pdftotext -layout for the Aquafire troubleshooter.
+----------------------------------------------------------------------
+
+5/12/26, 9:47 PM                                                          Light Issues - Aquafire
+
+
+
+
+                          All articles                  Maintenance & Troubleshooting               Help & Troubleshooting
+
+                 Light Bar                   Light Issues - Aquafire
+
+                Search
+
+
+
+
+        Light Issues - Aquafire
+        Updated 3 months ago
+
+
+        The chart below contains easy solutions for common light issues you may encounter with your
+        Aquafire (AWA)
+
+
+
+
+                                                                                                               Chat with us
+
+
+https://aquafire.gorgias.help/en-US/light-issues---aquafire-232523                                                            1/2
+5/12/26, 9:47 PM                                                                Light Issues - Aquafire
+
+
+
+
+                       Problem                                       Possible Cause                                    Solution
+
+         Lights are not on when unit                      Loose connection on light strip(s)                Check connection on right end of
+                    is on                                                                                 light strip to make sure it is securely
+                                                                                                                         connected
+
+                                                      Possible problem with the light strip or                 Contact support for further
+                                                                 LED driver card                                      assistance
+
+          One or more light cells are                  There is a problem with the light strip                 Contact support for further
+             not working on an                                                                                        assistance
+            individual light strip
+
+
+
+
+        Was this article helpful?                                                                                           Yes              No
+
+
+
+
+                                                                Contact Us   Home         Contact
+
+
+
+
+https://aquafire.gorgias.help/en-US/light-issues---aquafire-232523                                                                                  2/2
+
