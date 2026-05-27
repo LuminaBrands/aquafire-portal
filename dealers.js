@@ -74,5 +74,6 @@ var DEALERS = [
   { name:"Unlimited Furniture Group", type:"Dealer", address:"129 48th St, Brooklyn, NY 11232", lat:40.6513, lng:-74.0171, phone:"(800) 275-4148", email:"jeffk@unlimitedfurnituregroup.com", website:"https://www.unlimitedfurnituregroup.com", appt:false, country:"US" },
   { name:"High Country Fireplaces", type:"Dealer", address:"4400-I Stuart Andrew Blvd, Charlotte, NC 28217", lat:35.2080121408845, lng:-80.88364838145148, phone:"980-920-5200", email:"", website:"https://www.highcountryfireplaces.com/", appt:false, country:"US" },
   { name:"High Country Fireplaces", type:"Dealer", address:"1426 Industrial Dr, Statesville, NC 28625", lat:35.7688, lng:-80.8516, phone:"7048768765", email:"", website:"https://www.highcountryfireplaces.com/", appt:false, country:"US" },
-  { name:"Perry's Fireplace", type:"Dealer", address:"712 S Arizona Ave, Butte, MT 59701", lat:46.0048, lng:-112.5274, phone:"406-299-3870", email:"", website:"https://www.buttefireplaces.com/", appt:false, country:"US" }
+  { name:"Perry's Fireplace", type:"Dealer", address:"712 S Arizona Ave, Butte, MT 59701", lat:46.0048, lng:-112.5274, phone:"406-299-3870", email:"", website:"https://www.buttefireplaces.com/", appt:false, country:"US" },
+  { name:"Home & Hearth Fireplaces", type:"Dealer", address:"1750 45th St S, Fargo, ND 58103", lat:46.8537, lng:-96.8617, phone:"701-893-9300", email:"", website:"https://www.homeandhearthfireplaces.com/", appt:false, country:"US" }
 ];
