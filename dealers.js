@@ -75,5 +75,6 @@ var DEALERS = [
   { name:"High Country Fireplaces", type:"Dealer", address:"4400-I Stuart Andrew Blvd, Charlotte, NC 28217", lat:35.2080121408845, lng:-80.88364838145148, phone:"980-920-5200", email:"", website:"https://www.highcountryfireplaces.com/", appt:false, country:"US" },
   { name:"High Country Fireplaces", type:"Dealer", address:"1426 Industrial Dr, Statesville, NC 28625", lat:35.7688, lng:-80.8516, phone:"7048768765", email:"", website:"https://www.highcountryfireplaces.com/", appt:false, country:"US" },
   { name:"Perry's Fireplace", type:"Dealer", address:"712 S Arizona Ave, Butte, MT 59701", lat:46.0048, lng:-112.5274, phone:"406-299-3870", email:"", website:"https://www.buttefireplaces.com/", appt:false, country:"US" },
-  { name:"Home & Hearth Fireplaces", type:"Dealer", address:"1750 45th St S, Fargo, ND 58103", lat:46.8537, lng:-96.8617, phone:"701-893-9300", email:"", website:"https://www.homeandhearthfireplaces.com/", appt:false, country:"US" }
+  { name:"Home & Hearth Fireplaces", type:"Dealer", address:"1750 45th St S, Fargo, ND 58103", lat:46.8537, lng:-96.8617, phone:"701-893-9300", email:"", website:"https://www.homeandhearthfireplaces.com/", appt:false, country:"US" },
+  { name:"The Fireplace Stop", type:"Dealer", address:"6048 ON-9 Unit #3, Schomberg, ON L0G 1T0", lat:44.01161467499556, lng:-79.67955772883606, phone:"905-939-8758", email:"", website:"http://www.fireplacestop.com/", appt:false, country:"CA" }
 ];
