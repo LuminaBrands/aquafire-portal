@@ -76,5 +76,10 @@ var DEALERS = [
   { name:"High Country Fireplaces", type:"Dealer", address:"1426 Industrial Dr, Statesville, NC 28625", lat:35.7688, lng:-80.8516, phone:"7048768765", email:"", website:"https://www.highcountryfireplaces.com/", appt:false, country:"US" },
   { name:"Perry's Fireplace", type:"Dealer", address:"712 S Arizona Ave, Butte, MT 59701", lat:46.0048, lng:-112.5274, phone:"406-299-3870", email:"", website:"https://www.buttefireplaces.com/", appt:false, country:"US" },
   { name:"Home & Hearth Fireplaces", type:"Dealer", address:"1750 45th St S, Fargo, ND 58103", lat:46.8537, lng:-96.8617, phone:"701-893-9300", email:"", website:"https://www.homeandhearthfireplaces.com/", appt:false, country:"US" },
-  { name:"The Fireplace Stop", type:"Dealer", address:"6048 ON-9 Unit #3, Schomberg, ON L0G 1T0", lat:44.01161467499556, lng:-79.67955772883606, phone:"905-939-8758", email:"", website:"http://www.fireplacestop.com/", appt:false, country:"CA" }
+  { name:"The Fireplace Stop", type:"Dealer", address:"6048 ON-9 Unit #3, Schomberg, ON L0G 1T0", lat:44.01161467499556, lng:-79.67955772883606, phone:"905-939-8758", email:"", website:"http://www.fireplacestop.com/", appt:false, country:"CA" },
+  { name:"Fireplaces Plus", type:"Dealer", address:"12169 Kirkham Rd, Poway, CA 92064", lat:32.9376, lng:-117.0498, phone:"760-421-6162", email:"", website:"https://www.fireplacesplus.com/", appt:false, country:"US" },
+  { name:"Fireside Appliance", type:"Dealer", address:"21140 Ventura Blvd. Woodland Hills, CA", lat:34.167, lng:-118.5942, phone:"8189992174", email:"", website:"https://www.firesideappliance.com/", appt:false, country:"US" },
+  { name:"Fireside Appliance", type:"Dealer", address:"9400 Eton Ave. Chatsworth CA", lat:34.2412, lng:-118.5959, phone:"747-277-1778", email:"", website:"https://www.firesideappliance.com/", appt:false, country:"US" },
+  { name:"Fireside Appliance", type:"Dealer", address:"2975 Thousand Oaks Blvd. Thousand Oaks CA", lat:37.8972, lng:-122.2771, phone:"805-497-5881", email:"", website:"https://www.firesideappliance.com/", appt:false, country:"US" },
+  { name:"Fireside Appliance", type:"Dealer", address:"839 N La Cienega Blvd. Los Angeles CA", lat:34.086, lng:-118.3766, phone:"310-982-4442", email:"", website:"https://www.firesideappliance.com/", appt:false, country:"US" }
 ];
