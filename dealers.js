@@ -10,11 +10,10 @@ var COLORS = {
 // ─── Dealer Database ───
 var DEALERS = [
   { name:"Bear Creative Group", type:"Regional Dealer", address:"Boca Raton, FL", lat:26.3683, lng:-80.1289, phone:"954-531-7322", email:"brad@bearcreativegroup.com", website:"https://www.bearcreativegroup.com/", appt:true, country:"US" },
-  { name:"Bear Creative Group", type:"Regional Dealer", address:"Chicago, IL", lat:41.8781, lng:-87.6298, phone:"847-404-3147", email:"joe@bearcreativegroup.com", website:"https://www.bearcreativegroup.com/", appt:true, country:"US" },
+  { name:"Bear Creative Group", type:"Dealer", address:"Chicago, IL", lat:41.8781, lng:-87.6298, phone:"847-404-3147", email:"joe@bearcreativegroup.com", website:"https://www.bearcreativegroup.com/", appt:true, country:"US" },
   { name:"HearthCabinets Ventless Fireplaces", type:"Dealer", address:"250 W 26th St 2nd Floor, New York, NY 10001", lat:40.7454, lng:-73.9936, phone:"212-242-1485", email:"contact@hearthcabinet.com", website:"https://hearthcabinet.com/", appt:false, country:"US" },
-  { name:"DJ's Custom Remodel & Design", type:"Regional Dealer", address:"Peoria, AZ", lat:33.5806, lng:-112.2374, phone:"480-490-9778", email:"djshomerescue@gmail.com", website:"https://www.facebook.com/DJscustomremodel/", appt:true, country:"US" },
-  { name:"Fab Fires", type:"Regional Dealer", address:"", lat:null, lng:null, phone:"910-200-7688", email:"brett@fabfires.com", website:"", appt:true, country:"US" },
-  { name:"That's Fire!", type:"Regional Dealer", address:"", lat:null, lng:null, phone:"970-305-7994", email:"kevin@thatsfire.net", website:"", appt:true, country:"US" },
+  { name:"DJ's Custom Remodel & Design", type:"Dealer", address:"Peoria, AZ", lat:33.5806, lng:-112.2374, phone:"480-490-9778", email:"djshomerescue@gmail.com", website:"https://www.facebook.com/DJscustomremodel/", appt:true, country:"US" },
+  { name:"That's Fire!", type:"Dealer", address:"", lat:null, lng:null, phone:"970-305-7994", email:"kevin@thatsfire.net", website:"", appt:true, country:"US" },
   { name:"House Supply and Co", type:"Dealer", address:"7200 W Post Rd Unit 135, Las Vegas, NV 89113", lat:36.0652, lng:-115.2841, phone:"702-805-7700", email:"candmhomedesigns@gmail.com", website:"https://housesupplyandco.com/", appt:false, country:"US" },
   { name:"DSA Atlanta", type:"Sales Rep", address:"Atlanta, GA", lat:33.749, lng:-84.388, phone:"404-218-9911", email:"steve@dsa-atl.com", website:"https://www.dsa-atl.com/", appt:true, country:"US" },
   { name:"Electric Fireplaces Depot", type:"Online Dealer", address:"", lat:null, lng:null, phone:"1-888-957-4010", email:"support@electricfireplacesdepot.com", website:"https://electricfireplacesdepot.com/", appt:false, country:"US" },
@@ -54,7 +53,7 @@ var DEALERS = [
   { name:"AMS Fireplace", type:"Dealer", address:"2864 Whiptail Loop E #100, Carlsbad, CA 92010", lat:33.1426739901331, lng:-117.24775216887076, phone:"855-513-9867", email:"sales@amsfireplace.com", website:"https://amsfireplace.com/", appt:false, country:"US" },
   { name:"Blackstone Fireplaces", type:"Dealer", address:"3631 US-22, Somerville, NJ 08876", lat:40.5814, lng:-74.6163, phone:"908-823-4080", email:"blackstonefireplaces@gmail.com", website:"https://www.blackstonefireplaces.com/", appt:false, country:"US" },
   { name:"Home Safe Hearth & Chimney", type:"Dealer", address:"504 S St Francis Ave, Wichita, KS 67202", lat:37.6437, lng:-97.3311, phone:"3162659828", email:"bart@homesafeks.com", website:"https://www.homesafeks.com/", appt:false, country:"US" },
-  { name:"FabFires", type:"Regional Dealer", address:"Wilmington, NC", lat:34.264574413888354, lng:-77.90050525064268, phone:"910-200-7688", email:"brett@fabfires.com", website:"", appt:true, country:"US" },
+  { name:"FabFires", type:"Dealer", address:"Wilmington, NC", lat:34.264574413888354, lng:-77.90050525064268, phone:"910-200-7688", email:"brett@fabfires.com", website:"", appt:true, country:"US" },
   { name:"High Country Fireplaces", type:"Dealer", address:"1426 Industrial Dr, Statesville, NC 28625", lat:35.7688, lng:-80.8516, phone:"3369365656", email:"info@highcountryfireplaces.com", website:"https://www.highcountryfireplaces.com/", appt:false, country:"US" },
   { name:"Churchill's Fireside & Patio", type:"Dealer", address:"3300 Bee Caves Rd, Austin, TX 78746", lat:30.2752, lng:-97.8006, phone:"+15123289356", email:"info@churchillsaustin.com", website:"https://www.churchillsaustin.com/", appt:false, country:"US" },
   { name:"Cité Du Feu", type:"Dealer", address:"1361 Rue Denison O, Saint-Alphonse-de-Granby, QC J0E 2A0, Canada", lat:45.35286965402466, lng:-72.77944874232787, phone:"+14507702483", email:"info@citedufeu.com", website:"https://www.citedufeu.com/", appt:false, country:"US" },
