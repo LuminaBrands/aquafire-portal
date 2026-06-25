@@ -81,5 +81,6 @@ var DEALERS = [
   { name:"Fireside Appliance", type:"Dealer", address:"9400 Eton Ave. Chatsworth CA", lat:34.2412, lng:-118.5959, phone:"747-277-1778", email:"", website:"https://www.firesideappliance.com/", appt:false, country:"US" },
   { name:"Fireside Appliance", type:"Dealer", address:"2975 Thousand Oaks Blvd. Thousand Oaks CA", lat:37.8972, lng:-122.2771, phone:"805-497-5881", email:"", website:"https://www.firesideappliance.com/", appt:false, country:"US" },
   { name:"Fireside Appliance", type:"Dealer", address:"839 N La Cienega Blvd. Los Angeles CA", lat:34.086, lng:-118.3766, phone:"310-982-4442", email:"", website:"https://www.firesideappliance.com/", appt:false, country:"US" },
-  { name:"Centre du Foyer", type:"Dealer", address:"", lat:45.76369164880066, lng:-74.02141824291691, phone:"450-565-0085", email:"", website:"https://lecentredufoyer.com/", appt:false, country:"CA" }
+  { name:"Centre du Foyer", type:"Dealer", address:"", lat:45.76369164880066, lng:-74.02141824291691, phone:"450-565-0085", email:"", website:"https://lecentredufoyer.com/", appt:false, country:"CA" },
+  { name:"Fireplace & Gas Services", type:"Dealer", address:"3975 Forrestal Ave #100Orlando, FL 32806", lat:28.50015715923497, lng:-81.37789158650699, phone:"4078567770", email:"", website:"https://fireplaceandgas.com", appt:false, country:"US" }
 ];
