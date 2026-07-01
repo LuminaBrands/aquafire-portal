@@ -83,5 +83,6 @@ var DEALERS = [
   { name:"Centre du Foyer", type:"Dealer", address:"", lat:45.76369164880066, lng:-74.02141824291691, phone:"450-565-0085", email:"", website:"https://lecentredufoyer.com/", appt:false, country:"CA" },
   { name:"Fireplace & Gas Services", type:"Dealer", address:"3975 Forrestal Ave #100Orlando, FL 32806", lat:28.50015715923497, lng:-81.37789158650699, phone:"4078567770", email:"", website:"https://fireplaceandgas.com", appt:false, country:"US" },
   { name:"East Coast Supply", type:"Dealer", address:"167 W Cedar St Norwalk CT", lat:41.1041, lng:-73.4358, phone:"203-856-0845", email:"", website:"https://www.matteraconstruction.com/", appt:false, country:"US" },
-  { name:"Archies Stone and Fireplace", type:"Dealer", address:"4700 Old Broadway, Knoxville, TN 37918", lat:36.02072363345147, lng:-83.92417814571056, phone:"865-688-0123", email:"", website:"http://www.archiesweb.com/", appt:false, country:"US" }
+  { name:"Archies Stone and Fireplace", type:"Dealer", address:"4700 Old Broadway, Knoxville, TN 37918", lat:36.02072363345147, lng:-83.92417814571056, phone:"865-688-0123", email:"", website:"http://www.archiesweb.com/", appt:false, country:"US" },
+  { name:"Earth Energy's Hearth & Patio", type:"Dealer", address:"3948 W Costco Dr, Tucson, AZ 85741", lat:32.32994412774485, lng:-111.04802387491874, phone:"520-888-8867", email:"info@eehpatio.com", website:"https://eehpatio.com/", appt:false, country:"US" }
 ];
