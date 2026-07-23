@@ -262,13 +262,19 @@
         hint.innerHTML =
           '<h3>&#x1f527; No data yet (' + (e && e.code ? e.code : 'error') + ')</h3>' +
           '<p style="font-size:0.85rem;color:var(--text-muted);">Reading <code>chatEvents</code> failed. ' +
-          'If this is <code>permission-denied</code>, add the rules below in the Firebase console ' +
-          '(<strong>aquafire-portal &rarr; Firestore &rarr; Rules</strong>) &mdash; the widget writes anonymously, only signed-in team members read:</p>' +
+          'If this is <code>permission-denied</code>, add the rules below inside the existing ' +
+          '<code>match /databases/{database}/documents { &hellip; }</code> block in the Firebase console ' +
+          '(<strong>aquafire-portal &rarr; Firestore &rarr; Rules</strong>), then Publish. ' +
+          'The widget writes anonymously; reads are limited to verified team emails ' +
+          '(adjust the domain to match yours &mdash; you may also be seeing this because your ' +
+          'sign-in doesn’t match the allowed domain):</p>' +
           '<pre>match /chatEvents/{id} {\n' +
           '  allow create: if request.resource.data.keys().hasOnly(\n' +
           '    [\'v\',\'type\',\'convo\',\'ts\',\'page\',\'host\',\'model\',\n' +
           '     \'text\',\'intent\',\'vote\',\'comment\',\'mode\']);\n' +
-          '  allow read: if request.auth != null;\n' +
+          '  allow read: if request.auth != null\n' +
+          '    &amp;&amp; request.auth.token.email_verified\n' +
+          '    &amp;&amp; request.auth.token.email.matches(\'.*@luminabrands[.]com\');\n' +
           '  allow update, delete: if false;\n' +
           '}</pre>' +
           '<p style="font-size:0.85rem;color:var(--text-muted);margin-top:8px;">Full setup: <code>docs/chat-assistant.md</code></p>';

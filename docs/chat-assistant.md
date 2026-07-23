@@ -245,22 +245,28 @@ only personal data is whatever the customer types.
 
 ### One-time setup: Firestore rules
 
-In the Firebase console (**aquafire-portal → Firestore → Rules**) add — widget writes
-anonymously (create-only, schema-restricted), only signed-in team members read:
+In the Firebase console (**aquafire-portal → Firestore → Rules**), add this *inside*
+the existing `match /databases/{database}/documents { ... }` block, as a sibling of
+the `users` rule, then **Publish**. The widget writes anonymously (create-only,
+schema-restricted); reads are limited to verified team sign-ins — **not** just any
+signed-in account, since rewards customers hold Firebase accounts in this project too:
 
 ```
 match /chatEvents/{id} {
   allow create: if request.resource.data.keys().hasOnly(
     ['v','type','convo','ts','page','host','model',
      'text','intent','vote','comment','mode']);
-  allow read: if request.auth != null;
+  allow read: if request.auth != null
+    && request.auth.token.email_verified
+    && request.auth.token.email.matches('.*@luminabrands[.]com');
   allow update, delete: if false;
 }
 ```
 
-Until the rule is in place, writes are silently rejected — the chat itself is never
-affected (all telemetry is fire-and-forget). To tighten reads to specific staff,
-swap `request.auth != null` for a UID allowlist. **Privacy:** transcripts can contain
+Adjust the domain pattern to whatever your team signs in with (e.g.
+`'.*@(luminabrands|aquafire)[.]com'`), or swap it for an explicit UID allowlist.
+Until the rule is published, writes are silently rejected — the chat itself is never
+affected (all telemetry is fire-and-forget). **Privacy:** transcripts can contain
 customer-typed details — treat logs as customer data and set a retention policy
 (Firestore TTL on the `ts` field, e.g. 180 days, does this automatically).
 
