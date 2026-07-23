@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Insights | Aquafire</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="hub.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #121417; --surface: #1b1e24; --surface-alt: #22262e;
+      --border: #2c3038; --text: #e4e5e9; --text-muted: #878c99;
+      --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
+      --amber: #e8a838; --blue: #4da6e8; --green: #27ae60;
+      --radius: 14px; --radius-sm: 8px;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 18px 0; border-bottom: 1px solid var(--border); }
+    .topbar h1 { font-size: 1.3rem; }
+    .topbar .sub { color: var(--text-muted); font-size: 0.82rem; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px;
+      font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 600;
+      border: none; border-radius: var(--radius-sm); cursor: pointer; }
+    .btn-primary { background: var(--red); color: #fff; box-shadow: 0 2px 12px var(--red-glow); }
+    .btn-primary:hover { background: var(--red-dark); }
+    .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--red); }
+
+    /* Auth gate */
+    .auth-card { max-width: 400px; margin: 64px auto; padding: 36px 32px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .auth-card h2 { margin-bottom: 6px; }
+    .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px; }
+    .auth-card input { width: 100%; margin-bottom: 10px; padding: 11px 14px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text);
+      font-family: inherit; font-size: 0.9rem; outline: none; }
+    .auth-card input:focus { border-color: var(--red); }
+    .auth-card .btn { width: 100%; justify-content: center; margin-bottom: 10px; }
+    .auth-err { color: #e77; font-size: 0.8rem; min-height: 18px; }
+
+    /* Stats */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;
+      margin: 24px 0; }
+    .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px 18px; }
+    .stat .num { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; }
+    .stat .lbl { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.6px; }
+    .stat.good .num { color: var(--green); } .stat.warn .num { color: var(--amber); }
+
+    /* Controls */
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
+    .fchip { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text-muted); font-size: 0.8rem; cursor: pointer; }
+    .fchip.active { border-color: var(--red); color: var(--text); background: var(--red-glow); }
+    .controls input[type=search] { flex: 1; min-width: 180px; padding: 9px 14px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text);
+      font-family: inherit; font-size: 0.85rem; outline: none; }
+    .controls input[type=search]:focus { border-color: var(--red); }
+
+    /* Unanswered */
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 18px 20px; margin-bottom: 18px; }
+    .panel h3 { font-size: 0.95rem; margin-bottom: 10px; }
+    .panel h3 span { color: var(--text-muted); font-weight: 400; font-size: 0.78rem; }
+    .miss { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0;
+      border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .miss:last-child { border-bottom: none; }
+    .miss .cnt { color: var(--amber); font-weight: 600; flex-shrink: 0; }
+
+    /* Convo browser */
+    .browser { display: grid; grid-template-columns: 340px 1fr; gap: 16px; margin-bottom: 48px; }
+    .clist { max-height: 640px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+    .citem { text-align: left; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; color: var(--text);
+      font-family: inherit; }
+    .citem:hover { border-color: rgba(192,57,43,0.5); }
+    .citem.active { border-color: var(--red); background: var(--surface-alt); }
+    .citem .when { font-size: 0.72rem; color: var(--text-muted); }
+    .citem .prev { font-size: 0.83rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tags { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
+    .tag { font-size: 0.66rem; padding: 2px 8px; border-radius: 999px; background: var(--surface-alt);
+      border: 1px solid var(--border); color: var(--text-muted); }
+    .tag.bad { color: #e77; border-color: rgba(220,80,80,0.4); }
+    .tag.warn { color: var(--amber); border-color: rgba(232,168,56,0.4); }
+    .tag.info { color: var(--blue); border-color: rgba(77,166,232,0.4); }
+
+    .detail { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 20px; max-height: 640px; overflow-y: auto; }
+    .detail .empty { color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 60px 0; }
+    .ev { margin-bottom: 12px; }
+    .ev .meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 2px; }
+    .ev .body { display: inline-block; padding: 9px 13px; border-radius: 12px; font-size: 0.87rem;
+      max-width: 85%; }
+    .ev.user .body { background: rgba(192,57,43,0.18); border: 1px solid rgba(192,57,43,0.4); }
+    .ev.bot .body { background: var(--surface-alt); border: 1px solid var(--border); }
+    .ev.sys .body { background: none; border: 1px dashed var(--border); color: var(--text-muted);
+      font-size: 0.78rem; }
+    .ev .intent { font-size: 0.68rem; color: var(--blue); }
+    .ev .intent.fallback { color: var(--amber); }
+
+    .setup-hint { border-color: rgba(232,168,56,0.5); }
+    .setup-hint code, .setup-hint pre { background: var(--bg); border-radius: 6px; font-size: 0.78rem; }
+    .setup-hint pre { padding: 12px; overflow-x: auto; margin-top: 8px; }
+
+    @media (max-width: 800px) { .browser { grid-template-columns: 1fr; } .clist { max-height: 300px; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div>
+        <h1>&#x1f4ac; Chat Insights</h1>
+        <span class="sub">Ember conversations, feedback &amp; unanswered questions &middot; internal</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <span id="who" class="sub"></span>
+        <button class="btn btn-secondary" id="exportBtn" style="display:none;">Export CSV</button>
+        <button class="btn btn-secondary" id="refreshBtn" style="display:none;">Refresh</button>
+        <button class="btn btn-secondary" id="signOutBtn" style="display:none;">Sign out</button>
+      </div>
+    </div>
+
+    <!-- Auth gate -->
+    <div class="auth-card" id="authCard">
+      <h2>Team sign-in</h2>
+      <p>Chat logs may contain customer-provided details &mdash; team access only.</p>
+      <button class="btn btn-primary" id="googleBtn">Continue with Google</button>
+      <input type="email" id="email" placeholder="Email" autocomplete="username">
+      <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+      <button class="btn btn-secondary" id="emailBtn">Sign in with email</button>
+      <div class="auth-err" id="authErr"></div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dash" style="display:none;">
+      <div class="stats">
+        <div class="stat"><div class="num" id="sConvos">&ndash;</div><div class="lbl">Conversations</div></div>
+        <div class="stat"><div class="num" id="sMsgs">&ndash;</div><div class="lbl">User messages</div></div>
+        <div class="stat good"><div class="num" id="sAnswered">&ndash;</div><div class="lbl">Answered rate</div></div>
+        <div class="stat good"><div class="num" id="sSat">&ndash;</div><div class="lbl">&#x1f44d; rate</div></div>
+        <div class="stat warn"><div class="num" id="sHandoff">&ndash;</div><div class="lbl">Handoffs</div></div>
+      </div>
+
+      <div class="panel" id="missPanel" style="display:none;">
+        <h3>&#x26a0;&#xfe0f; Top unanswered questions <span>&mdash; add these to the KB in assistant.js</span></h3>
+        <div id="missList"></div>
+      </div>
+
+      <div class="controls">
+        <button class="fchip active" data-f="all">All</button>
+        <button class="fchip" data-f="fallback">Unanswered</button>
+        <button class="fchip" data-f="down">&#x1f44e; Negative</button>
+        <button class="fchip" data-f="handoff">Handoffs</button>
+        <button class="fchip" data-f="llm">AI replies</button>
+        <input type="search" id="search" placeholder="Search messages&hellip;">
+      </div>
+
+      <div class="browser">
+        <div class="clist" id="clist"></div>
+        <div class="detail" id="detail"><div class="empty">Select a conversation</div></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      if (typeof firebase === 'undefined') {
+        document.getElementById('authErr').textContent =
+          'Could not load the Firebase SDK — check your network or ad-blocker and reload.';
+        return;
+      }
+
+      // Same project as rewards.js / assistant.js telemetry
+      var firebaseConfig = {
+        apiKey: "AIzaSyAAeoOt4NJxh_ITaWNMBV-Ed-mM5Ac5a7Q",
+        authDomain: "aquafire-portal.firebaseapp.com",
+        projectId: "aquafire-portal",
+        storageBucket: "aquafire-portal.firebasestorage.app",
+        messagingSenderId: "589960398521",
+        appId: "1:589960398521:web:3c5852186e59fdf0847d68"
+      };
+      if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+      var auth = firebase.auth();
+      var db = firebase.firestore();
+
+      var $ = function (id) { return document.getElementById(id); };
+      var convos = {};      // convoId -> { events:[], last, first }
+      var activeConvo = null;
+      var filter = 'all';
+
+      /* ── Auth ── */
+      $('googleBtn').onclick = function () {
+        auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+          .catch(function (e) { $('authErr').textContent = e.message; });
+      };
+      $('emailBtn').onclick = function () {
+        auth.signInWithEmailAndPassword($('email').value, $('password').value)
+          .catch(function (e) { $('authErr').textContent = e.message; });
+      };
+      $('signOutBtn').onclick = function () { auth.signOut(); };
+
+      auth.onAuthStateChanged(function (user) {
+        var authed = !!user;
+        $('authCard').style.display = authed ? 'none' : '';
+        $('dash').style.display = authed ? '' : 'none';
+        $('signOutBtn').style.display = authed ? '' : 'none';
+        $('refreshBtn').style.display = authed ? '' : 'none';
+        $('exportBtn').style.display = authed ? '' : 'none';
+        $('who').textContent = authed ? (user.email || user.displayName || '') : '';
+        if (authed) load();
+      });
+
+      /* ── Data ── */
+      function load() {
+        $('clist').innerHTML = '<div class="empty" style="color:var(--text-muted);padding:20px;">Loading&hellip;</div>';
+        db.collection('chatEvents').orderBy('ts', 'desc').limit(2000).get()
+          .then(function (snap) {
+            convos = {};
+            snap.forEach(function (doc) {
+              var d = doc.data();
+              if (!d.convo) return;
+              var c = convos[d.convo] || (convos[d.convo] = { id: d.convo, events: [] });
+              c.events.push(d);
+            });
+            Object.keys(convos).forEach(function (k) {
+              var c = convos[k];
+              c.events.sort(function (a, b) { return (a.ts || '') < (b.ts || '') ? -1 : 1; });
+              c.first = c.events[0] || {};
+              c.last = c.events[c.events.length - 1] || {};
+            });
+            render();
+          })
+          .catch(function (e) {
+            $('clist').innerHTML = '';
+            showSetupHint(e);
+          });
+      }
+      $('refreshBtn').onclick = load;
+
+      function showSetupHint(e) {
+        var hint = document.createElement('div');
+        hint.className = 'panel setup-hint';
+        hint.innerHTML =
+          '<h3>&#x1f527; No data yet (' + (e && e.code ? e.code : 'error') + ')</h3>' +
+          '<p style="font-size:0.85rem;color:var(--text-muted);">Reading <code>chatEvents</code> failed. ' +
+          'If this is <code>permission-denied</code>, add the rules below in the Firebase console ' +
+          '(<strong>aquafire-portal &rarr; Firestore &rarr; Rules</strong>) &mdash; the widget writes anonymously, only signed-in team members read:</p>' +
+          '<pre>match /chatEvents/{id} {\n' +
+          '  allow create: if request.resource.data.keys().hasOnly(\n' +
+          '    [\'v\',\'type\',\'convo\',\'ts\',\'page\',\'host\',\'model\',\n' +
+          '     \'text\',\'intent\',\'vote\',\'comment\',\'mode\']);\n' +
+          '  allow read: if request.auth != null;\n' +
+          '  allow update, delete: if false;\n' +
+          '}</pre>' +
+          '<p style="font-size:0.85rem;color:var(--text-muted);margin-top:8px;">Full setup: <code>docs/chat-assistant.md</code></p>';
+        $('detail').innerHTML = '';
+        $('detail').appendChild(hint);
+      }
+
+      /* ── Filters ── */
+      document.querySelectorAll('.fchip').forEach(function (b) {
+        b.onclick = function () {
+          document.querySelectorAll('.fchip').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          filter = b.getAttribute('data-f');
+          render();
+        };
+      });
+      $('search').oninput = function () { render(); };
+
+      function convoFlags(c) {
+        var f = { fallback: 0, down: 0, handoff: 0, llm: 0, msgs: 0, up: 0 };
+        c.events.forEach(function (e) {
+          if (e.type === 'user_message') { f.msgs++; if (e.intent === 'fallback') f.fallback++; }
+          if (e.type === 'feedback' && e.vote === 'down') f.down++;
+          if (e.type === 'feedback' && e.vote === 'up') f.up++;
+          if (e.type === 'handoff') f.handoff++;
+          if (e.type === 'llm_reply') f.llm++;
+        });
+        return f;
+      }
+
+      /* ── Render ── */
+      function render() {
+        var q = ($('search').value || '').toLowerCase();
+        var list = Object.keys(convos).map(function (k) { return convos[k]; });
+        list.sort(function (a, b) { return (a.last.ts || '') < (b.last.ts || '') ? 1 : -1; });
+
+        // stats (unfiltered)
+        var t = { convos: 0, msgs: 0, fallback: 0, up: 0, down: 0, handoff: 0 };
+        var missCounts = {};
+        list.forEach(function (c) {
+          var f = convoFlags(c);
+          t.convos++; t.msgs += f.msgs; t.fallback += f.fallback;
+          t.up += f.up; t.down += f.down; t.handoff += f.handoff;
+          c.events.forEach(function (e) {
+            if (e.type === 'user_message' && e.intent === 'fallback' && e.text) {
+              var key = e.text.toLowerCase().trim();
+              missCounts[key] = (missCounts[key] || 0) + 1;
+            }
+          });
+        });
+        $('sConvos').textContent = t.convos;
+        $('sMsgs').textContent = t.msgs;
+        $('sAnswered').textContent = t.msgs ? Math.round(100 * (t.msgs - t.fallback) / t.msgs) + '%' : '–';
+        $('sSat').textContent = (t.up + t.down) ? Math.round(100 * t.up / (t.up + t.down)) + '%' : '–';
+        $('sHandoff').textContent = t.handoff;
+
+        var misses = Object.keys(missCounts)
+          .sort(function (a, b) { return missCounts[b] - missCounts[a]; }).slice(0, 8);
+        $('missPanel').style.display = misses.length ? '' : 'none';
+        $('missList').innerHTML = misses.map(function (m) {
+          return '<div class="miss"><span>' + esc(m) + '</span><span class="cnt">&times;' + missCounts[m] + '</span></div>';
+        }).join('');
+
+        // list (filtered)
+        var el = $('clist');
+        el.innerHTML = '';
+        var shown = 0;
+        list.forEach(function (c) {
+          var f = convoFlags(c);
+          if (filter === 'fallback' && !f.fallback) return;
+          if (filter === 'down' && !f.down) return;
+          if (filter === 'handoff' && !f.handoff) return;
+          if (filter === 'llm' && !f.llm) return;
+          if (q && !c.events.some(function (e) {
+            return (e.text || '').toLowerCase().indexOf(q) !== -1 ||
+                   (e.comment || '').toLowerCase().indexOf(q) !== -1;
+          })) return;
+          shown++;
+          var firstMsg = '';
+          for (var i = 0; i < c.events.length; i++) {
+            if (c.events[i].type === 'user_message') { firstMsg = c.events[i].text || ''; break; }
+          }
+          var btn = document.createElement('button');
+          btn.className = 'citem' + (activeConvo === c.id ? ' active' : '');
+          var tags = '';
+          if (f.fallback) tags += '<span class="tag warn">unanswered &times;' + f.fallback + '</span>';
+          if (f.down) tags += '<span class="tag bad">&#x1f44e; &times;' + f.down + '</span>';
+          if (f.up) tags += '<span class="tag">&#x1f44d; &times;' + f.up + '</span>';
+          if (f.handoff) tags += '<span class="tag info">handoff</span>';
+          if (f.llm) tags += '<span class="tag info">AI</span>';
+          if (c.first.model) tags += '<span class="tag">' + esc(c.first.model) + '</span>';
+          if (c.first.host) tags += '<span class="tag">' + esc(c.first.host) + '</span>';
+          btn.innerHTML =
+            '<div class="when">' + fmtTs(c.last.ts) + ' &middot; ' + f.msgs + ' msg' + (f.msgs === 1 ? '' : 's') + '</div>' +
+            '<div class="prev">' + (esc(firstMsg) || '<em style="color:var(--text-muted)">opened, no message</em>') + '</div>' +
+            '<div class="tags">' + tags + '</div>';
+          btn.onclick = function () { activeConvo = c.id; render(); showConvo(c); };
+          el.appendChild(btn);
+        });
+        if (!shown) el.innerHTML = '<div style="color:var(--text-muted);padding:20px;font-size:0.85rem;">No conversations' + (t.convos ? ' match this filter.' : ' logged yet &mdash; events appear here as customers chat with Ember.') + '</div>';
+      }
+
+      function showConvo(c) {
+        var d = $('detail');
+        d.innerHTML = '';
+        c.events.forEach(function (e) {
+          var div = document.createElement('div');
+          if (e.type === 'user_message') {
+            div.className = 'ev user';
+            div.innerHTML = '<div class="meta">' + fmtTs(e.ts) + ' &middot; customer &middot; ' +
+              '<span class="intent' + (e.intent === 'fallback' ? ' fallback' : '') + '">' +
+              (e.intent === 'fallback' ? '&#x26a0;&#xfe0f; unanswered' : 'answered by: ' + esc(e.intent || '')) + '</span></div>' +
+              '<div class="body">' + esc(e.text || '') + '</div>';
+          } else if (e.type === 'llm_reply') {
+            div.className = 'ev bot';
+            div.innerHTML = '<div class="meta">' + fmtTs(e.ts) + ' &middot; Ember (AI)</div>' +
+              '<div class="body">' + esc(e.text || '') + '</div>';
+          } else if (e.type === 'feedback') {
+            div.className = 'ev sys';
+            div.innerHTML = '<div class="body">' + (e.vote === 'up' ? '&#x1f44d;' : '&#x1f44e;') +
+              ' feedback on <strong>' + esc(e.intent || '?') + '</strong></div>';
+          } else if (e.type === 'feedback_comment') {
+            div.className = 'ev sys';
+            div.innerHTML = '<div class="body">&#x1f4dd; &ldquo;' + esc(e.comment || '') + '&rdquo;</div>';
+          } else if (e.type === 'handoff') {
+            div.className = 'ev sys';
+            div.innerHTML = '<div class="body">&#x1f91d; handoff shown (' + esc(e.mode || 'support') + ')</div>';
+          } else if (e.type === 'convo_start') {
+            div.className = 'ev sys';
+            div.innerHTML = '<div class="body">conversation started &middot; ' + esc(e.page || '') + ' @ ' + esc(e.host || '') + '</div>';
+          } else if (e.type === 'llm_error') {
+            div.className = 'ev sys';
+            div.innerHTML = '<div class="body">&#x26a0;&#xfe0f; AI endpoint failed &rarr; local fallback used</div>';
+          } else { return; }
+          d.appendChild(div);
+        });
+      }
+
+      /* ── Export ── */
+      $('exportBtn').onclick = function () {
+        var rows = [['convo', 'ts', 'type', 'intent', 'text', 'vote', 'comment', 'mode', 'model', 'page', 'host']];
+        Object.keys(convos).forEach(function (k) {
+          convos[k].events.forEach(function (e) {
+            rows.push([e.convo, e.ts, e.type, e.intent, e.text, e.vote, e.comment, e.mode, e.model, e.page, e.host]
+              .map(function (v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }));
+          });
+        });
+        var blob = new Blob([rows.map(function (r) { return r.join(','); }).join('\n')], { type: 'text/csv' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'ember-chat-logs-' + new Date().toISOString().slice(0, 10) + '.csv';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      };
+
+      /* ── Utils ── */
+      function esc(s) {
+        return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+      function fmtTs(ts) {
+        if (!ts) return '';
+        try {
+          var d = new Date(ts);
+          return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' ' +
+                 d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+        } catch (e) { return ts; }
+      }
+    })();
+  </script>
+</body>
+</html>

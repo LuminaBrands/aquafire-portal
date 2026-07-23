@@ -856,15 +856,67 @@
   var state = { open: false, nudged: false, msgs: [], ctx: { model: null, awaiting: null } };
   try {
     var saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; }
+    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; }
   } catch (e) { /* private mode etc. */ }
 
   function persist() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open
+        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid
       }));
     } catch (e) { /* ignore */ }
+  }
+
+  /* ── Telemetry (chat monitoring) ──────────────────────────────────────
+     Anonymous usage events — user messages + matched intent, fallbacks,
+     feedback votes/comments, handoffs — reviewed in chat-insights.html.
+     Fire-and-forget: failures never affect the chat. Requires the Firestore
+     rule documented in docs/chat-assistant.md; disable with config
+     telemetry:false, or point logEndpoint at any JSON webhook instead. */
+  var WIDGET_VERSION = '1.1.0';
+  var TELEMETRY = cfg.telemetry !== false;
+  var FS = cfg.firestore !== undefined ? cfg.firestore : {
+    projectId: 'aquafire-portal',
+    apiKey: 'AIzaSyAAeoOt4NJxh_ITaWNMBV-Ed-mM5Ac5a7Q' // public web config, same as rewards.js
+  };
+  var lastIntentId = '';
+
+  if (!state.cid) state.cid = 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+
+  function fsFields(obj) {
+    var f = {};
+    Object.keys(obj).forEach(function (k) {
+      f[k] = { stringValue: String(obj[k] == null ? '' : obj[k]) };
+    });
+    return f;
+  }
+
+  function logEvent(type, data) {
+    if (!TELEMETRY) return;
+    try {
+      var ev = {
+        v: WIDGET_VERSION, type: type, convo: state.cid,
+        ts: new Date().toISOString(),
+        page: location.pathname, host: location.hostname,
+        model: state.ctx.model || ''
+      };
+      Object.keys(data || {}).forEach(function (k) { ev[k] = data[k]; });
+      if (cfg.logEndpoint) {
+        fetch(cfg.logEndpoint, {
+          method: 'POST', keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ev)
+        }).catch(function () {});
+      }
+      if (FS && FS.projectId && FS.apiKey) {
+        fetch('https://firestore.googleapis.com/v1/projects/' + FS.projectId +
+          '/databases/(default)/documents/chatEvents?key=' + FS.apiKey, {
+          method: 'POST', keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields: fsFields(ev) })
+        }).catch(function () {});
+      }
+    } catch (e) { /* never break the chat */ }
   }
 
   /* ── Styles ───────────────────────────────────────────────────────────── */
@@ -958,6 +1010,11 @@
     '.afa-fb{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--afa-muted);}',
     '.afa-fb button{font-size:13px;padding:3px 7px;border-radius:7px;border:1px solid var(--afa-border);transition:background .15s;}',
     '.afa-fb button:hover{background:var(--afa-surface2);}',
+    '.afa-fb{flex-wrap:wrap;}',
+    '.afa-fb-form{display:flex;gap:6px;flex:1;min-width:180px;}',
+    '.afa-fb-form input{flex:1;background:var(--afa-surface2);border:1px solid var(--afa-border);border-radius:8px;padding:6px 10px;color:var(--afa-text);font-size:12px;font-family:inherit;outline:none;}',
+    '.afa-fb-form input:focus{border-color:rgba(192,57,43,.6);}',
+    '.afa-fb-form button{flex-shrink:0;}',
 
     /* Typing */
     '.afa-typing{display:inline-flex;gap:4px;padding:12px 14px;}',
@@ -1106,6 +1163,7 @@
   }
 
   function greet() {
+    logEvent('convo_start', {});
     pushBot({
       blocks: [
         { t: 'text', html: 'Hi, I\u2019m <strong>Ember</strong> \ud83d\udd25 \u2014 the Aquafire assistant. I can compare models, plan your install, check water care, or walk you through a fix. How can I help?' },
@@ -1174,6 +1232,7 @@
         });
         if (vids.children.length) container.appendChild(vids);
       } else if (b.t === 'contact') {
+        if (!spent) logEvent('handoff', { mode: b.mode || 'support' });
         var email = b.mode === 'sales' ? SALES_EMAIL : b.mode === 'orders' ? ORDERS_EMAIL : SUPPORT_EMAIL;
         var c = el('div', 'afa-contact');
         c.innerHTML = '<h5>' + (b.mode === 'sales' ? 'Sales & design' : b.mode === 'orders' ? 'Orders' : 'Aquafire support') + '</h5>' +
@@ -1204,14 +1263,36 @@
   }
 
   function feedbackEl() {
+    var srcIntent = lastIntentId;
     var fb = el('div', 'afa-fb');
     fb.innerHTML = '<span>Was this helpful?</span>';
     var yes = el('button', null, '\ud83d\udc4d'), no = el('button', null, '\ud83d\udc4e');
     yes.setAttribute('aria-label', 'Helpful'); no.setAttribute('aria-label', 'Not helpful');
-    yes.addEventListener('click', function () { fb.innerHTML = '<span>Thanks for the feedback! \ud83d\udd25</span>'; });
+    yes.addEventListener('click', function () {
+      logEvent('feedback', { vote: 'up', intent: srcIntent });
+      fb.innerHTML = '<span>Thanks for the feedback! \ud83d\udd25</span>';
+    });
     no.addEventListener('click', function () {
-      fb.innerHTML = '<span>Sorry about that \u2014 let\u2019s get you a human.</span>';
+      logEvent('feedback', { vote: 'down', intent: srcIntent });
+      fb.innerHTML = '';
+      var form = el('div', 'afa-fb-form');
+      var inp = el('input');
+      inp.type = 'text'; inp.maxLength = 300;
+      inp.placeholder = 'What went wrong? (optional)';
+      inp.setAttribute('aria-label', 'What went wrong?');
+      var send = el('button', null, 'Send');
+      function submitComment() {
+        var val = inp.value.trim();
+        if (val) logEvent('feedback_comment', { intent: srcIntent, comment: val.slice(0, 300) });
+        fb.innerHTML = '<span>Thanks \u2014 this helps us improve Ember.</span>';
+      }
+      send.addEventListener('click', submitComment);
+      inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitComment(); });
+      form.appendChild(inp); form.appendChild(send);
+      fb.appendChild(el('span', null, 'Sorry about that.'));
+      fb.appendChild(form);
       pushBot({ blocks: [contactBlock('support')] });
+      inp.focus();
     });
     fb.appendChild(yes); fb.appendChild(no);
     return fb;
@@ -1264,11 +1345,15 @@
       state.ctx.awaiting = null;
       if (!m) state.ctx.model = 'unknown';
       persist();
+      lastIntentId = 'ts_menu';
+      logEvent('user_message', { text: text.slice(0, 300), intent: 'ts_model_select' });
       reply(function () { return tsMenu(); });
       return;
     }
 
     var intent = matchIntent(text);
+    lastIntentId = intent ? intent.id : (cfg.apiEndpoint ? 'llm' : 'fallback');
+    logEvent('user_message', { text: text.slice(0, 300), intent: lastIntentId });
 
     if (intent) {
       reply(function () { return intent.answer(norm); });
@@ -1319,6 +1404,7 @@
       clearTimeout(timer);
       hideTyping();
       if (!d || !d.reply) throw new Error('empty');
+      logEvent('llm_reply', { text: String(d.reply).slice(0, 500) });
       pushBot({
         feedback: true,
         blocks: [{ t: 'text', html: mdLite(d.reply) }, { t: 'chips', items: [CHIP_HUMAN] }]
@@ -1326,6 +1412,7 @@
     }).catch(function () {
       clearTimeout(timer);
       hideTyping();
+      logEvent('llm_error', {});
       pushBot(FALLBACK());
     });
   }

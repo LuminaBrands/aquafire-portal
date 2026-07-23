@@ -20,6 +20,7 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 | `getting-started.html` | Placeholder — "coming soon" |
 | `support.html` | Support hub — cards link to Troubleshooter + (stub) warranty/claims/FAQs |
 | `troubleshoot.html` | **Interactive Troubleshooter** — model-aware guided decision-tree wizard |
+| `chat-insights.html` | **Internal** chat-log dashboard for the Ember widget (Firebase-gated; not in nav) — transcripts, unanswered questions, 👍/👎 rates |
 
 ### Stylesheets
 
@@ -130,6 +131,8 @@ Footer "Guides" columns (most pages) and the homepage bento grid also link to th
 - **SVG diagrams** are generated in JS via string concatenation (app.js `drawCutoutDiagram` and isometric renderer).
 - **Fractions** are displayed as proper fractions (e.g., 14 1/8") via `toFrac()` in app.js.
 - **Chat widget lives in `assistant.js`** — one file, no separate CSS (styles are injected, `afa-` prefixed, so it can be dropped into the Shopify theme with a single script tag). Answers come from the `INTENTS` array; product cards/prices from the `PRODUCTS` map (Shopify snapshots — cards link to live pages); video links mirror `VIDEOS` in `troubleshoot.js`. It's included before `</body>` on every customer-facing page (not `dealer-admin.html`), hides itself under `?embed`, and facts must trace to `docs/source-material/`. Optional Claude backend via `AQUAFIRE_ASSISTANT_CONFIG.apiEndpoint` (`docs/chat-assistant.md`).
+- **assistant.js must stay pure-ASCII in string literals** (`\uXXXX` escapes for emoji/typography) — it's served to third-party pages (Shopify) whose charset headers we don't control; raw UTF-8 strings mojibake there. Comments may be UTF-8.
+- **Chat telemetry** — the widget logs anonymous events (messages + matched intent, fallbacks, 👍/👎 + comments, handoffs) to the `chatEvents` Firestore collection in the same `aquafire-portal` Firebase project the rewards system uses; reviewed in `chat-insights.html`. Requires the Firestore rule in `docs/chat-assistant.md`; disable with `AQUAFIRE_ASSISTANT_CONFIG.telemetry = false`.
 - **Troubleshooter decision tree lives in `troubleshoot.js`** as the `TREE` object — a map of `nodeId → node`. Nodes are either `question` (prompt + options/quickPicks) or `outcome` (steps, caution, video, article links, escalation). Model-specific copy uses functions that receive the model id (`'pro' | 'original' | 'lite' | 'unknown'`). `app_entry` is a `router` node that resolves Pro → `app_connect`, others → `app_not_pro`. URL params: `?model=pro|original|lite` pre-selects the model; `?node=<id>` deep-links a node (useful for support emails). Resource URLs are in the `LINKS` map; **how-to video URLs are TODO placeholders in the `VIDEOS` map** — until filled in, the tool shows a "video coming soon" chip. When the underlying help articles change, update the tree and the matching file in `docs/source-material/`.
 
 ## Development History

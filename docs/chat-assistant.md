@@ -218,6 +218,81 @@ cents. Add rate limiting (e.g. Cloudflare's built-in) before going live.
 
 ---
 
+## Monitoring, feedback & improvement
+
+The widget logs anonymous conversation events so the team can see what customers ask,
+what Ember couldn't answer, and how answers were rated — and feed that back into the
+knowledge base. Review everything at **`chat-insights.html`** (internal, sign-in
+gated — same Firebase accounts as the Rewards system).
+
+### What gets logged
+
+One small event per action to the `chatEvents` Firestore collection (project
+`aquafire-portal`, the same one the portal's rewards system already uses):
+
+| Event | Fields | Fired when |
+|---|---|---|
+| `convo_start` | page, host | A visitor opens a fresh conversation |
+| `user_message` | text, intent (`fallback` = unanswered, `llm` = sent to AI) | Every customer message |
+| `feedback` | vote (`up`/`down`), intent | 👍/👎 tapped on an answer |
+| `feedback_comment` | comment, intent | Optional "what went wrong" text after a 👎 |
+| `handoff` | mode (support/sales/orders) | A contact card is shown |
+| `llm_reply` / `llm_error` | text | AI-mode reply / endpoint failure |
+
+Every event also carries a random per-session conversation id, timestamp, page, host,
+and the customer's model (if known). No accounts, no cookies, no fingerprinting — the
+only personal data is whatever the customer types.
+
+### One-time setup: Firestore rules
+
+In the Firebase console (**aquafire-portal → Firestore → Rules**) add — widget writes
+anonymously (create-only, schema-restricted), only signed-in team members read:
+
+```
+match /chatEvents/{id} {
+  allow create: if request.resource.data.keys().hasOnly(
+    ['v','type','convo','ts','page','host','model',
+     'text','intent','vote','comment','mode']);
+  allow read: if request.auth != null;
+  allow update, delete: if false;
+}
+```
+
+Until the rule is in place, writes are silently rejected — the chat itself is never
+affected (all telemetry is fire-and-forget). To tighten reads to specific staff,
+swap `request.auth != null` for a UID allowlist. **Privacy:** transcripts can contain
+customer-typed details — treat logs as customer data and set a retention policy
+(Firestore TTL on the `ts` field, e.g. 180 days, does this automatically).
+
+### Config
+
+| Option | Default | Purpose |
+|---|---|---|
+| `telemetry: false` | on | Kill switch — nothing is logged |
+| `firestore: {projectId, apiKey}` | portal's project | Log to a different Firebase project (`firestore: null` disables Firestore logging) |
+| `logEndpoint: 'https://…'` | unset | Also POST each event (JSON) to any webhook — Zapier, a Worker, Gorgias, your warehouse |
+
+### The improvement loop
+
+Ember doesn't self-modify (by design — a brand voice shouldn't drift unsupervised).
+It improves through a short human-in-the-loop cycle; 15 minutes a week is plenty:
+
+1. **Open Chat Insights** → the "Top unanswered questions" panel is your work queue.
+   Each recurring miss becomes a new intent (or new keywords on an existing one) in
+   the `INTENTS` array in `assistant.js`.
+2. **Filter by 👎** → read the comment, fix the answer's copy, steps, or links.
+3. **Watch the handoff rate** → handoffs after an *answered* question usually mean the
+   answer is right but incomplete — add the missing detail.
+4. **In AI mode**, the same reviews improve the model: fold recurring questions and
+   corrected answers into the proxy's `SYSTEM_PROMPT` facts, and keep the exported
+   CSV as a regression set — after any prompt change, spot-check that previously-good
+   answers still hold.
+5. When Aquafire revises a source doc, update `docs/source-material/` and the
+   affected intents together (see below).
+
+`Export CSV` in the dashboard dumps everything for deeper analysis (or for building
+an eval set if you later want automated answer-quality testing).
+
 ## Maintaining the knowledge base
 
 Answers live in the `INTENTS` array in `assistant.js` — each intent has weighted
