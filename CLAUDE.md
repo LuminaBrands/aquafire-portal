@@ -38,12 +38,14 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 | `water-care-app.js` | Water care — 2,000+ ZIP code hardness DB, autocomplete, US map, replacement timeline |
 | `troubleshoot.js` | Troubleshooter — `TREE` decision-tree data + wizard render/nav engine; `LINKS`/`VIDEOS` maps |
 | `embed.js` | Strips nav/footer when page loaded in iframe (`?embed` query param) |
+| `assistant.js` | **"Ember" AI chat widget** — self-contained (injects own CSS), embeddable on Shopify via one script tag; `INTENTS` knowledge base + optional Claude-API backend hook. See `docs/chat-assistant.md` |
 
 ### Docs
 
 | Path | Contents |
 |------|----------|
 | `docs/source-material/` | Plain-text extracts of the Aquafire help-center articles, install/spec guides, warranty, and manuals the Troubleshooter tree is built from (+ `README.md` index) |
+| `docs/chat-assistant.md` | Chat widget docs — Shopify install, config options, optional Claude-API proxy example, KB maintenance rules |
 
 ## Architecture
 
@@ -55,6 +57,7 @@ Root (flat — no subdirectories)
 ├── Enclosure Tool: enclosure-guide.html + styles.css + app.js
 ├── Water Care Tool: water-care.html + water-care-styles.css + water-care-app.js
 ├── Troubleshooter: troubleshoot.html + troubleshoot.css + troubleshoot.js
+├── Chat widget: assistant.js (self-contained — CSS injected; on all customer pages + embeddable on Shopify)
 ├── Source docs: docs/source-material/ (help-article / manual extracts)
 └── Stubs: quick-start.html, getting-started.html, support.html
 ```
@@ -126,6 +129,7 @@ Footer "Guides" columns (most pages) and the homepage bento grid also link to th
 - **Embed mode:** Append `?embed` to any page URL to hide nav/footer (for Shopify iframe embedding). The Troubleshooter wizard lives in `<main>` so it survives embed mode.
 - **SVG diagrams** are generated in JS via string concatenation (app.js `drawCutoutDiagram` and isometric renderer).
 - **Fractions** are displayed as proper fractions (e.g., 14 1/8") via `toFrac()` in app.js.
+- **Chat widget lives in `assistant.js`** — one file, no separate CSS (styles are injected, `afa-` prefixed, so it can be dropped into the Shopify theme with a single script tag). Answers come from the `INTENTS` array; product cards/prices from the `PRODUCTS` map (Shopify snapshots — cards link to live pages); video links mirror `VIDEOS` in `troubleshoot.js`. It's included before `</body>` on every customer-facing page (not `dealer-admin.html`), hides itself under `?embed`, and facts must trace to `docs/source-material/`. Optional Claude backend via `AQUAFIRE_ASSISTANT_CONFIG.apiEndpoint` (`docs/chat-assistant.md`).
 - **Troubleshooter decision tree lives in `troubleshoot.js`** as the `TREE` object — a map of `nodeId → node`. Nodes are either `question` (prompt + options/quickPicks) or `outcome` (steps, caution, video, article links, escalation). Model-specific copy uses functions that receive the model id (`'pro' | 'original' | 'lite' | 'unknown'`). `app_entry` is a `router` node that resolves Pro → `app_connect`, others → `app_not_pro`. URL params: `?model=pro|original|lite` pre-selects the model; `?node=<id>` deep-links a node (useful for support emails). Resource URLs are in the `LINKS` map; **how-to video URLs are TODO placeholders in the `VIDEOS` map** — until filled in, the tool shows a "video coming soon" chip. When the underlying help articles change, update the tree and the matching file in `docs/source-material/`.
 
 ## Development History
@@ -140,6 +144,7 @@ This portal evolved through iterative Claude Code sessions:
 6. **Product images** — Shopify CDN integration for model cards and accessories
 7. **AR Cutout Visualizer** — Camera overlay tool (built → iterated → removed; browser-based AR without depth sensing was unreliable)
 8. **Interactive Troubleshooter** — Model-aware guided decision-tree wizard (`troubleshoot.html`), built from the Aquafire help-center articles + 2026 install/spec guides + warranty + manuals (extracts archived in `docs/source-material/`). Endpoints offer inline step-by-step fixes, how-to-video slots (TODO URLs), help-article links, and an escalate-to-support block.
+9. **"Ember" AI chat widget** — Gorgias-style customer-service + pre-sale chat bubble (`assistant.js`), self-contained for one-tag embedding on aquafire.com (Shopify). Local intent-matching KB (models/pricing/install/water care/warranty/troubleshooting with guided model→symptom flow, product cards from live store data, human handoff) + optional Claude-API proxy mode (`docs/chat-assistant.md`).
 
 ## Gotchas
 
