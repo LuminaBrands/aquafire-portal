@@ -1437,6 +1437,10 @@
     return out.join('\n');
   }
 
+  // "Thinking" pause before answers land (~2s) — instant replies read as canned
+  var THINK_MS = 1900;
+  function thinkDelay() { return THINK_MS + Math.random() * 600; }
+
   function reply(produce) {
     showTyping();
     setTimeout(function () {
@@ -1444,7 +1448,7 @@
       var res = produce();
       pushBot(res);
       logEvent('bot_reply', { intent: lastIntentId, text: blocksText(res.blocks).slice(0, 600) });
-    }, 450 + Math.random() * 400);
+    }, thinkDelay());
   }
 
   /* ── Optional LLM backend ─────────────────────────────────────────────── */
@@ -1460,6 +1464,11 @@
 
   function remoteReply(text) {
     showTyping();
+    var startedAt = Date.now();
+    // hold the typing dots for at least the think time, even on a fast API
+    function afterThink(fn) {
+      setTimeout(fn, Math.max(0, THINK_MS - (Date.now() - startedAt)));
+    }
     var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
 
@@ -1477,19 +1486,23 @@
       return r.json();
     }).then(function (d) {
       clearTimeout(timer);
-      hideTyping();
       if (!d || !d.reply) throw new Error('empty');
-      logEvent('llm_reply', { text: String(d.reply).slice(0, 500) });
-      pushBot({
-        feedback: true,
-        blocks: [{ t: 'text', html: mdLite(d.reply) }, { t: 'chips', items: [CHIP_HUMAN] }]
+      afterThink(function () {
+        hideTyping();
+        logEvent('llm_reply', { text: String(d.reply).slice(0, 500) });
+        pushBot({
+          feedback: true,
+          blocks: [{ t: 'text', html: mdLite(d.reply) }, { t: 'chips', items: [CHIP_HUMAN] }]
+        });
       });
     }).catch(function () {
       clearTimeout(timer);
-      hideTyping();
       llmDown = true; // don't retry this page load — go straight to local KB
-      logEvent('llm_error', {});
-      pushBot(FALLBACK());
+      afterThink(function () {
+        hideTyping();
+        logEvent('llm_error', {});
+        pushBot(FALLBACK());
+      });
     });
   }
 
