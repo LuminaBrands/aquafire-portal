@@ -852,6 +852,7 @@
     return { t: 'chips', items: [
       { label: '\ud83d\udd25 Compare models', send: 'Compare the models' },
       { label: '\ud83d\udcb2 Pricing', send: 'How much do they cost?' },
+      { label: '\ud83d\udce6 Order status', send: 'Where is my order?' },
       { label: '\ud83d\udee0\ufe0f Fix an issue', send: 'Help me troubleshoot an issue' },
       { label: '\ud83d\udcd0 Plan an install', send: 'How is it installed?' },
       { label: '\ud83d\udee1\ufe0f Warranty', send: 'Tell me about the warranty' },
@@ -1295,7 +1296,7 @@
     logEvent('convo_start', {});
     pushBot({
       blocks: [
-        { t: 'text', html: 'Hi, I\u2019m <strong>Ember</strong> \ud83d\udd25 \u2014 the Aquafire assistant. I can compare models, plan your install, check water care, or walk you through a fix. How can I help?' },
+        { t: 'text', html: 'Hi, I\u2019m <strong>Ember</strong> \ud83d\udd25 \u2014 the Aquafire assistant. I can compare models, plan your install, check water care, track your order, or walk you through a fix. How can I help?' },
         mainChips()
       ]
     });
