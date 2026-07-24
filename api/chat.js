@@ -154,7 +154,10 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'method not allowed' });
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  // ANTHROPIC_API_KEY is the canonical name; `chatbotshopify` is accepted
+  // because that's what the key was saved as in this Vercel project.
+  const apiKey = process.env.ANTHROPIC_API_KEY || process.env.chatbotshopify;
+  if (!apiKey) {
     return res.status(503).json({
       error: 'AI mode not configured — set ANTHROPIC_API_KEY in the Vercel project settings'
     });
@@ -187,7 +190,7 @@ module.exports = async (req, res) => {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'x-api-key': apiKey,
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
