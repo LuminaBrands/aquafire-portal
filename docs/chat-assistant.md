@@ -167,8 +167,8 @@ FACTS:
 - Cutout dimensions are critical (insert hangs from flanges). Enclosure needs a light
   trap, matte black interior, 50 sq in air intake per 20" of insert, sealed wall
   cavities, 6" side clearance. Free design review: sales@aquafire.com.
-- Water: the softer the better -- very soft water is ideal (hard water's minerals
-  scale up the mist makers). Vapor Pure softener must stay installed for warranty.
+- Water: the softer the better -- RO water or a whole-house softener is ideal
+  (hard water's minerals scale up the mist makers). Vapor Pure softener must stay installed for warranty.
   Descale every ~3 months. Mist makers are wear parts (2,000-3,000 hrs, $81).
 - Warranty: 2 yr residential / 1 yr commercial; register within 30 days at
   aquafire.com/warranty; claims via ces@aquafire.com or aquafire.com/pages/service-request.

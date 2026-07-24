@@ -338,7 +338,7 @@
               '<strong>Direct plumb</strong> \u2014 connect a \u00bc\u2033 water line (like a fridge ice-maker) and the unit refills itself automatically. The Pro is direct-plumb ready; the Original uses an optional Direct Plumb Kit; the Lite 40\u2033/60\u2033 are manual-fill only.',
               '<strong>Manual fill</strong> \u2014 every unit has an integrated pump: connect the fill tube, hold <strong>B1</strong> for 5 seconds, and it fills itself and stops automatically.'
             ]},
-            { t: 'text', html: 'Regular tap water works \u2014 and when it comes to water quality, <strong>the softer the better</strong>. Minerals in hard water scale up the mist makers, so the included Vapor Pure\u2122 softener conditions the water automatically (and must stay installed for warranty coverage).' },
+            { t: 'text', html: 'Regular tap water works \u2014 and when it comes to water quality, <strong>the softer the better</strong>. Reverse-osmosis water or a whole-house softener is ideal; otherwise the included Vapor Pure\u2122 softener conditions your tap water automatically. (Using a whole-house system instead of Vapor Pure? Have it approved in writing to keep the warranty valid.)' },
             { t: 'links', items: [{ label: '\ud83d\udca7 Check your water hardness by ZIP', href: pURL('water-care.html') }] }
           ]
         };
@@ -496,7 +496,7 @@
         return {
           feedback: true,
           blocks: [
-            { t: 'text', html: 'Water quality is the #1 factor in Aquafire longevity, and the rule is simple: <strong>the softer the water, the better</strong>. Hard water\u2019s minerals scale up the mist makers and shorten their life. The included <strong>Vapor Pure\u2122 softener</strong> conditions your tap water automatically \u2014 keeping it installed is required for warranty coverage.' },
+            { t: 'text', html: 'Water quality is the #1 factor in Aquafire longevity, and the rule is simple: <strong>the softer the water, the better</strong>. Reverse-osmosis water or a whole-house softener is ideal. Otherwise, the included <strong>Vapor Pure\u2122 softener</strong> conditions your tap water automatically \u2014 keep it installed for warranty coverage (a whole-house system used in its place needs written approval from Aquafire).' },
             { t: 'links', items: [
               { label: '\ud83d\udca7 Water Care tool \u2014 hardness by ZIP + cartridge timeline', href: pURL('water-care.html') },
               { label: '\ud83d\udcc4 Vapor Pure installation guide', href: STORE + '/vaporpure' }
@@ -940,17 +940,28 @@
     '.afa-root a{color:#e8a838;text-decoration:none;}.afa-root a:hover{text-decoration:underline;}',
 
     /* Launcher */
-    '.afa-launcher{position:fixed;right:20px;bottom:20px;z-index:2147483000;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#c0392b 0%,#d45a20 100%);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(192,57,43,.45),0 2px 8px rgba(0,0,0,.35);transition:transform .2s,box-shadow .2s;}',
-    '.afa-launcher svg{width:30px;height:30px;transition:transform .25s;}',
-    '.afa-launcher:hover{transform:scale(1.07);box-shadow:0 8px 30px rgba(192,57,43,.6),0 3px 10px rgba(0,0,0,.4);}',
+    '.afa-launcher{position:fixed;right:20px;bottom:20px;z-index:2147483000;height:56px;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 22px 0 18px;border-radius:999px;background:linear-gradient(135deg,#c0392b 0%,#d45a20 100%);color:#fff;font-family:Poppins,Inter,sans-serif;font-size:14px;font-weight:600;letter-spacing:.2px;box-shadow:0 6px 24px rgba(192,57,43,.45),0 2px 8px rgba(0,0,0,.35);transition:transform .2s,box-shadow .2s;}',
+    '.afa-launcher svg{width:24px;height:24px;transition:transform .25s;}',
+    '.afa-launcher:hover{transform:scale(1.04);box-shadow:0 8px 30px rgba(192,57,43,.6),0 3px 10px rgba(0,0,0,.4);}',
+    '.afa-launcher-label{white-space:nowrap;}',
     '.afa-launcher .afa-ico-close{display:none;}',
-    '.afa-launcher.afa-open .afa-ico-flame{display:none;}.afa-launcher.afa-open .afa-ico-close{display:block;}',
-    '.afa-badge{position:absolute;top:2px;right:2px;width:12px;height:12px;border-radius:50%;background:#e8a838;border:2px solid #15171c;display:none;}',
+    '.afa-launcher.afa-open{width:56px;padding:0;}',
+    '.afa-launcher.afa-open .afa-ico-flame,.afa-launcher.afa-open .afa-launcher-label{display:none;}',
+    '.afa-launcher.afa-open .afa-ico-close{display:block;}',
+    '.afa-badge{position:absolute;top:0;right:8px;width:12px;height:12px;border-radius:50%;background:#e8a838;border:2px solid #15171c;display:none;}',
+    '.afa-launcher.afa-open .afa-badge{right:2px;}',
     '.afa-launcher.afa-unread .afa-badge{display:block;}',
 
-    /* Nudge teaser */
-    '.afa-nudge{position:fixed;right:20px;bottom:92px;z-index:2147483000;max-width:270px;background:#1e2128;color:#e6e7eb;border:1px solid #2f333d;border-radius:14px;padding:12px 34px 12px 14px;box-shadow:0 10px 32px rgba(0,0,0,.45);font-size:13.5px;animation:afaPop .35s ease;cursor:pointer;}',
-    '.afa-nudge-x{position:absolute;top:6px;right:8px;color:#8c91a0;font-size:15px;line-height:1;padding:4px;}',
+    /* Proactive teaser (chat-style invitation card) */
+    '.afa-nudge{position:fixed;right:20px;bottom:92px;z-index:2147483000;width:300px;max-width:calc(100vw - 40px);background:#1e2128;color:#e6e7eb;border:1px solid #2f333d;border-radius:16px;padding:14px;box-shadow:0 14px 44px rgba(0,0,0,.5);font-size:13.5px;animation:afaPop .35s ease;cursor:pointer;}',
+    '.afa-nudge-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}',
+    '.afa-nudge-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#c0392b,#d45a20);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}',
+    '.afa-nudge-avatar svg{width:15px;height:15px;}',
+    '.afa-nudge-name{font-weight:600;font-family:Poppins,Inter,sans-serif;font-size:13.5px;}',
+    '.afa-nudge-x{margin-left:auto;color:#8c91a0;font-size:14px;line-height:1;padding:4px 6px;border-radius:6px;}',
+    '.afa-nudge-x:hover{color:#e6e7eb;background:rgba(255,255,255,.06);}',
+    '.afa-nudge-msg{line-height:1.5;margin-bottom:10px;}',
+    '.afa-nudge-reply{background:#262a33;border:1px solid #2f333d;border-radius:10px;padding:9px 12px;color:#6a6f7d;font-size:12.8px;}',
     '@keyframes afaPop{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}',
 
     /* Panel */
@@ -1078,7 +1089,7 @@
 
     launcher = el('button', 'afa-launcher');
     launcher.setAttribute('aria-label', 'Chat with Aquafire assistant');
-    launcher.innerHTML = '<span class="afa-ico-flame">' + FLAME_SVG + '</span><span class="afa-ico-close">' + CLOSE_SVG + '</span><span class="afa-badge"></span>';
+    launcher.innerHTML = '<span class="afa-ico-flame">' + FLAME_SVG + '</span><span class="afa-launcher-label">Chat with us</span><span class="afa-ico-close">' + CLOSE_SVG + '</span><span class="afa-badge"></span>';
     launcher.classList.add('afa-unread');
     launcher.addEventListener('click', function () { toggle(); });
 
@@ -1132,19 +1143,61 @@
     }
     if (state.open) toggle(true, true);
 
-    // Nudge teaser
-    if (!state.nudged && !state.open) {
-      setTimeout(function () {
-        if (state.open || state.nudged) return;
-        nudge = el('div', 'afa-nudge', '\ud83d\udc4b Questions about Aquafire? I\u2019m here to help.<button class="afa-nudge-x" aria-label="Dismiss">\u2715</button>');
-        nudge.addEventListener('click', function (e) {
-          if (e.target.classList.contains('afa-nudge-x')) { killNudge(); return; }
-          toggle(true);
-        });
-        root.appendChild(nudge);
-        state.nudged = true; persist();
-      }, 4000);
+    // Proactive teaser \u2014 fires once the visitor shows engagement (scrolling
+    // around or a few clicks), with a 30s dwell fallback. Once per session,
+    // never over an open or previously-used chat.
+    if (!state.nudged && !state.open && !state.msgs.length) {
+      var armedAt = Date.now(), scrolled = 0, lastY = window.pageYOffset || 0, clicks = 0, fallbackTimer;
+      var onScroll = function () {
+        var y = window.pageYOffset || 0;
+        scrolled += Math.abs(y - lastY);
+        lastY = y;
+        maybeTease();
+      };
+      var onClick = function (e) {
+        if (root.contains(e.target)) return; // interacting with the widget itself
+        clicks++;
+        maybeTease();
+      };
+      var stopWatching = function () {
+        window.removeEventListener('scroll', onScroll);
+        document.removeEventListener('click', onClick, true);
+        clearTimeout(fallbackTimer);
+      };
+      var fireTease = function () {
+        stopWatching();
+        if (!state.open && !state.nudged) showTeaser();
+      };
+      var maybeTease = function () {
+        if (state.open || state.nudged) { stopWatching(); return; }
+        if (Date.now() - armedAt < 5000) return; // let them land first
+        if (scrolled > 700 || clicks >= 3) fireTease();
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      document.addEventListener('click', onClick, true);
+      fallbackTimer = setTimeout(fireTease, 30000);
     }
+  }
+
+  function showTeaser() {
+    state.nudged = true; persist();
+    logEvent('teaser_shown', {});
+    nudge = el('div', 'afa-nudge');
+    nudge.setAttribute('role', 'complementary');
+    nudge.setAttribute('aria-label', 'Chat invitation');
+    nudge.innerHTML =
+      '<div class="afa-nudge-head">' +
+        '<span class="afa-nudge-avatar">' + FLAME_SVG + '</span>' +
+        '<span class="afa-nudge-name">Ember</span>' +
+        '<button class="afa-nudge-x" aria-label="Dismiss">\u2715</button>' +
+      '</div>' +
+      '<div class="afa-nudge-msg">Hi! \ud83d\udc4b Looking at Aquafire? I can help you compare models, plan your install, or fix an issue \u2014 just ask.</div>' +
+      '<div class="afa-nudge-reply">Click to reply\u2026</div>';
+    nudge.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('.afa-nudge-x')) { killNudge(); return; }
+      toggle(true);
+    });
+    root.appendChild(nudge);
   }
 
   function killNudge() { if (nudge) { nudge.remove(); nudge = null; } }

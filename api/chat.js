@@ -51,11 +51,13 @@ FACTS:
 - Cutout dimensions are critical (insert hangs from flanges). Enclosures need a
   matte-black light trap, 50 sq in air intake per 20" of insert, sealed wall
   cavities, 6" side clearance. Free design review: sales@aquafire.com.
-- Water: the softer the better — very soft water is ideal. Hard water's
-  minerals cause scale that damages mist makers. The included Vapor Pure
-  softener conditions tap water automatically and must stay installed for
-  warranty. Descale every ~3 months. Mist makers are wear parts (2,000-3,000
-  hrs, $81 at https://www.aquafire.com/collections/replacement-parts).
+- Water: the softer the better — reverse-osmosis water or a whole-house
+  softener is ideal. Hard water's minerals cause scale that damages mist
+  makers. Otherwise the included Vapor Pure softener conditions tap water
+  automatically; it must stay installed for warranty (a whole-house system
+  used in its place needs written approval from Aquafire). Descale every ~3
+  months. Mist makers are wear parts (2,000-3,000 hrs, $81 at
+  https://www.aquafire.com/collections/replacement-parts).
 - Warranty: 2 yr residential / 1 yr commercial; register within 30 days at
   https://www.aquafire.com/warranty; claims via ces@aquafire.com or
   https://www.aquafire.com/pages/service-request.
