@@ -102,7 +102,8 @@ is the automatic fallback if the function errors, times out, or isn't configured
 1. Get an Anthropic API key at platform.claude.com (Settings → API keys).
 2. Vercel → `luminabrands-projects/aquafire-portal` → **Settings → Environment
    Variables** → add `ANTHROPIC_API_KEY` (Production), then **Redeploy** the latest
-   deployment so the function picks it up.
+   deployment so the function picks it up. (The legacy name `chatbotshopify` is
+   also accepted — that's what the key was originally saved as in this project.)
 
 Until the key is set, `/api/chat` returns 503 and the widget silently uses the local
 KB — nothing breaks. The key lives only in Vercel; never put it in client code.
