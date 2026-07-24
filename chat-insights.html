@@ -76,10 +76,37 @@
       padding: 18px 20px; margin-bottom: 18px; }
     .panel h3 { font-size: 0.95rem; margin-bottom: 10px; }
     .panel h3 span { color: var(--text-muted); font-weight: 400; font-size: 0.78rem; }
-    .miss { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0;
-      border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .miss { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
     .miss:last-child { border-bottom: none; }
     .miss .cnt { color: var(--amber); font-weight: 600; flex-shrink: 0; }
+    .miss q { flex: 1; quotes: none; }
+    .btn-xs { padding: 5px 12px; font-size: 0.72rem; flex-shrink: 0; }
+
+    /* Knowledge */
+    .kb-item { display: flex; gap: 12px; align-items: flex-start; padding: 9px 0;
+      border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .kb-item:last-child { border-bottom: none; }
+    .kb-item .kb-q { font-weight: 600; }
+    .kb-item .kb-a { color: var(--text-muted); font-size: 0.8rem; }
+    .kb-item .kb-x { margin-left: auto; flex-shrink: 0; color: var(--text-muted);
+      background: none; border: 1px solid var(--border); border-radius: 6px;
+      padding: 3px 9px; cursor: pointer; font-size: 0.72rem; }
+    .kb-item .kb-x:hover { border-color: #e77; color: #e77; }
+
+    /* Teach modal */
+    .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100;
+      display: flex; align-items: flex-start; justify-content: center; padding: 60px 16px; }
+    .modal { width: 100%; max-width: 560px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .modal h3 { margin-bottom: 4px; }
+    .modal p { color: var(--text-muted); font-size: 0.82rem; margin-bottom: 14px; }
+    .modal label { display: block; font-size: 0.78rem; color: var(--text-muted); margin: 10px 0 4px; }
+    .modal input, .modal textarea { width: 100%; padding: 10px 13px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text);
+      font-family: inherit; font-size: 0.88rem; outline: none; resize: vertical; }
+    .modal input:focus, .modal textarea:focus { border-color: var(--red); }
+    .modal .row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
 
     /* Convo browser */
     .browser { display: grid; grid-template-columns: 340px 1fr; gap: 16px; margin-bottom: 48px; }
@@ -156,8 +183,14 @@
       </div>
 
       <div class="panel" id="missPanel" style="display:none;">
-        <h3>&#x26a0;&#xfe0f; Top unanswered questions <span>&mdash; add these to the KB in assistant.js</span></h3>
+        <h3>&#x26a0;&#xfe0f; Top unanswered questions <span>&mdash; click Answer to teach Ember</span></h3>
         <div id="missList"></div>
+      </div>
+
+      <div class="panel" id="kbPanel">
+        <h3>&#x1f4da; Team-added knowledge <span>&mdash; AI answers use these within ~5 minutes</span></h3>
+        <div id="kbList"><span style="color:var(--text-muted);font-size:0.85rem;">Loading&hellip;</span></div>
+        <button class="btn btn-secondary btn-xs" id="kbAddBtn" style="margin-top:12px;">+ Add knowledge</button>
       </div>
 
       <div class="controls">
@@ -172,6 +205,24 @@
       <div class="browser">
         <div class="clist" id="clist"></div>
         <div class="detail" id="detail"><div class="empty">Select a conversation</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Teach Ember modal -->
+  <div class="modal-wrap" id="kbModal" style="display:none;">
+    <div class="modal">
+      <h3>&#x1f525; Teach Ember</h3>
+      <p>Saved knowledge is used by AI answers right away (within ~5 min). Write the answer
+        the way you'd want a customer to read it &mdash; you can include links.</p>
+      <label for="kbQ">Customer question (or topic)</label>
+      <input id="kbQ" maxlength="300" placeholder="e.g. Do you ship to Canada?">
+      <label for="kbA">The correct answer</label>
+      <textarea id="kbA" rows="5" maxlength="1500" placeholder="e.g. Yes — we ship to Canada via&hellip;"></textarea>
+      <div class="auth-err" id="kbErr"></div>
+      <div class="row">
+        <button class="btn btn-secondary" id="kbCancel">Cancel</button>
+        <button class="btn btn-primary" id="kbSave">Save</button>
       </div>
     </div>
   </div>
@@ -226,8 +277,66 @@
         $('refreshBtn').style.display = authed ? '' : 'none';
         $('exportBtn').style.display = authed ? '' : 'none';
         $('who').textContent = authed ? (user.email || user.displayName || '') : '';
-        if (authed) load();
+        if (authed) { load(); loadKb(); }
       });
+
+      /* ── Team knowledge ("Teach Ember") ── */
+      function loadKb() {
+        db.collection('chatKnowledge').get().then(function (snap) {
+          var items = [];
+          snap.forEach(function (doc) { items.push({ id: doc.id, d: doc.data() }); });
+          items.sort(function (a, b) { return (a.d.ts || '') < (b.d.ts || '') ? 1 : -1; });
+          var el = $('kbList');
+          if (!items.length) {
+            el.innerHTML = '<span style="color:var(--text-muted);font-size:0.85rem;">Nothing yet &mdash; ' +
+              'click <strong>Answer</strong> on an unanswered question, or <strong>+ Add knowledge</strong>. ' +
+              '(If saving fails with permission-denied, publish the <code>chatKnowledge</code> rule from docs/chat-assistant.md.)</span>';
+            return;
+          }
+          el.innerHTML = '';
+          items.forEach(function (it) {
+            var row = document.createElement('div');
+            row.className = 'kb-item';
+            row.innerHTML = '<div><div class="kb-q">' + esc(it.d.q || '(general)') + '</div>' +
+              '<div class="kb-a">' + esc(it.d.a || '') + '</div></div>' +
+              '<button class="kb-x">Remove</button>';
+            row.querySelector('.kb-x').onclick = function () {
+              if (!confirm('Remove this knowledge? Ember’s AI answers stop using it within ~5 minutes.')) return;
+              db.collection('chatKnowledge').doc(it.id).delete().then(loadKb)
+                .catch(function (e) { alert('Delete failed: ' + e.message); });
+            };
+            el.appendChild(row);
+          });
+        }).catch(function (e) {
+          $('kbList').innerHTML = '<span style="color:var(--text-muted);font-size:0.85rem;">Couldn’t load knowledge (' +
+            esc(e.code || 'error') + ') &mdash; publish the <code>chatKnowledge</code> rule from docs/chat-assistant.md.</span>';
+        });
+      }
+
+      function openTeach(question) {
+        $('kbQ').value = question || '';
+        $('kbA').value = '';
+        $('kbErr').textContent = '';
+        $('kbModal').style.display = '';
+        (question ? $('kbA') : $('kbQ')).focus();
+      }
+      $('kbAddBtn').onclick = function () { openTeach(''); };
+      $('kbCancel').onclick = function () { $('kbModal').style.display = 'none'; };
+      $('kbModal').addEventListener('click', function (e) {
+        if (e.target === $('kbModal')) $('kbModal').style.display = 'none';
+      });
+      $('kbSave').onclick = function () {
+        var q = $('kbQ').value.trim(), a = $('kbA').value.trim();
+        if (!a) { $('kbErr').textContent = 'Write the answer first.'; return; }
+        db.collection('chatKnowledge').add({
+          q: q, a: a,
+          by: (auth.currentUser && auth.currentUser.email) || '',
+          ts: new Date().toISOString()
+        }).then(function () {
+          $('kbModal').style.display = 'none';
+          loadKb();
+        }).catch(function (e) { $('kbErr').textContent = 'Save failed: ' + e.message; });
+      };
 
       /* ── Data ── */
       function load() {
@@ -334,9 +443,15 @@
         var misses = Object.keys(missCounts)
           .sort(function (a, b) { return missCounts[b] - missCounts[a]; }).slice(0, 8);
         $('missPanel').style.display = misses.length ? '' : 'none';
-        $('missList').innerHTML = misses.map(function (m) {
-          return '<div class="miss"><span>' + esc(m) + '</span><span class="cnt">&times;' + missCounts[m] + '</span></div>';
-        }).join('');
+        $('missList').innerHTML = '';
+        misses.forEach(function (m) {
+          var row = document.createElement('div');
+          row.className = 'miss';
+          row.innerHTML = '<q>' + esc(m) + '</q><span class="cnt">&times;' + missCounts[m] + '</span>' +
+            '<button class="btn btn-primary btn-xs">Answer</button>';
+          row.querySelector('button').onclick = function () { openTeach(m); };
+          $('missList').appendChild(row);
+        });
 
         // list (filtered)
         var el = $('clist');

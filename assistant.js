@@ -47,6 +47,15 @@
 
   function pURL(path) { return PORTAL_BASE + path; }
 
+  // AI answers: unmatched questions go to the portal's /api/chat function
+  // (api/chat.js on Vercel). Override with cfg.apiEndpoint, or set it to null
+  // to disable. If the endpoint fails once (e.g. no API key configured yet),
+  // we stop trying for this page load and use the local KB fallback.
+  var API_ENDPOINT = cfg.apiEndpoint !== undefined
+    ? cfg.apiEndpoint
+    : (PORTAL_BASE ? PORTAL_BASE + 'api/chat' : '');
+  var llmDown = false;
+
   var SUPPORT_EMAIL = 'support@aquafire.com';
   var SALES_EMAIL = 'sales@aquafire.com';
   var ORDERS_EMAIL = 'orders@aquafire.com';
@@ -1352,12 +1361,13 @@
     }
 
     var intent = matchIntent(text);
-    lastIntentId = intent ? intent.id : (cfg.apiEndpoint ? 'llm' : 'fallback');
+    var llmAvailable = API_ENDPOINT && !llmDown;
+    lastIntentId = intent ? intent.id : (llmAvailable ? 'llm' : 'fallback');
     logEvent('user_message', { text: text.slice(0, 300), intent: lastIntentId });
 
     if (intent) {
       reply(function () { return intent.answer(norm); });
-    } else if (cfg.apiEndpoint) {
+    } else if (llmAvailable) {
       remoteReply(text);
     } else {
       reply(FALLBACK);
@@ -1388,7 +1398,7 @@
     var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
 
-    fetch(cfg.apiEndpoint, {
+    fetch(API_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: ctrl ? ctrl.signal : undefined,
@@ -1412,6 +1422,7 @@
     }).catch(function () {
       clearTimeout(timer);
       hideTyping();
+      llmDown = true; // don't retry this page load — go straight to local KB
       logEvent('llm_error', {});
       pushBot(FALLBACK());
     });
