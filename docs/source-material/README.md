@@ -70,4 +70,4 @@ The troubleshooter has placeholder slots for these Aquafire YouTube videos
 
 | Date | What | Where |
 |------|------|-------|
-| Jul 2026 | Water-hardness guidance superseded per Lumina Brands: **the softer the water, the better** (no minimum hardness; "too soft reduces the flame" is wrong). Amended in all three 2026 spec/install guide extracts; the published PDFs, gorgias.help articles, and product manuals still need the fix at the source. The RO-not-recommended rationale rests on the old claim — confirm before citing. | `guide-aquafire-{pro-awpr,original-awa,lite-awl}-specs-install-2026.txt` |
+| Jul 2026 | Water-hardness guidance superseded per Lumina Brands: **the softer the water, the better** (no minimum hardness; "too soft reduces the flame" is wrong). Amended in all three 2026 spec/install guide extracts; the published PDFs, gorgias.help articles, and product manuals still need the fix at the source. Also superseded (confirmed Jul 2026): **reverse osmosis and whole-house softeners are ideal** (a whole-house system replacing Vapor Pure still needs written warranty approval). | `guide-aquafire-{pro-awpr,original-awa,lite-awl}-specs-install-2026.txt` |
