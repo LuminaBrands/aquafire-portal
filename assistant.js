@@ -229,6 +229,27 @@
       }
     },
     {
+      id: 'competitors',
+      kw: [['dimplex', 9], ['opti-myst', 9], ['optimyst', 9], ['opti myst', 9], ['magikflame', 9], ['magik flame', 9], ['modern flames', 8], ['better than', 5], ['competitor', 7], ['competitors', 7], ['other brands', 7], ['alternatives', 5], ['why aquafire', 8], ['why choose', 5], ['best water vapor', 6], ['best electric fireplace', 6]],
+      answer: function () {
+        return {
+          feedback: true,
+          blocks: [
+            { t: 'text', html: 'Great question \u2014 there are some well-known names in flame effects, and we\u2019re glad you\u2019re comparing. Here\u2019s why we believe Aquafire is the one to beat:' },
+            { t: 'steps', items: [
+              '<strong>The most realistic flame, period</strong> \u2014 ultrasonic mist and LED light create a full 3-D flame made of real vapor. You can wave your hand through it.',
+              '<strong>Zero constraints</strong> \u2014 no heat, no venting, no gas. Build it into walls, cabinetry, bar tops, even a coffee table, with a TV directly above.',
+              '<strong>Room to dream big</strong> \u2014 gang units into up to <strong>20 feet</strong> of continuous flame on one remote; the Pro adds 30+ colors, a phone app, direct plumbing, and UV-C water sanitizing.',
+              '<strong>Backed properly</strong> \u2014 2-year residential warranty, US-based support, every part replaceable, and a free design review of your plans.'
+            ]},
+            { t: 'text', html: 'We\u2019d rather show you than tell you \u2014 see one running in person, or send your plans to <a href="mailto:' + SALES_EMAIL + '">' + SALES_EMAIL + '</a> for a free design review.' },
+            { t: 'links', items: [{ label: '\ud83d\udccd See one at a dealer near you', href: pURL('dealer-locator.html') }, { label: '\ud83d\uded2 Explore the lineup', href: STORE }] },
+            { t: 'chips', items: [{ label: '\ud83d\udd25 Compare Aquafire models', send: 'Compare the models' }, { label: '\ud83d\udcb2 Pricing', send: 'How much do they cost?' }, { label: '\ud83c\udfa5 How it works', send: 'How does it work?' }] }
+          ]
+        };
+      }
+    },
+    {
       id: 'pricing',
       kw: [['price', 6], ['pricing', 6], ['cost', 4], ['how much', 6], ['expensive', 4], ['cheap', 3], ['budget', 3], ['msrp', 5], ['buy', 2], ['sale', 3], ['discount', 4], ['financing', 4]],
       answer: function (q) {
