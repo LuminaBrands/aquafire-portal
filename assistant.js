@@ -222,7 +222,8 @@
           blocks: [
             { t: 'text', html: 'Here\u2019s the lineup at a glance:' },
             productCards(['pro', 'original', 'lite', 'gatsby']),
-            { t: 'text', html: '<strong>Pro (AWPR)</strong> is the flagship \u2014 30+ preset flame colors, AFIRE phone app, internal UV-C sanitizing, and it can be plumbed straight to a water line. <strong>Original (AWA)</strong> gives you the classic amber flame with a remote; a Direct Plumb Kit is optional. <strong>Lite (AWL)</strong> is the value pick \u2014 amber flame, manual fill, 8\u201310\u00a0hr per tank. <strong>Gatsby</strong> is freestanding, so there\u2019s no enclosure to build at all.' },
+            { t: 'text', html: '<strong>Pro (AWPR)</strong> is the flagship \u2014 30+ preset flame colors, AFIRE phone app, internal UV-C sanitizing, and it connects straight to a water line out of the box. <strong>Original (AWA)</strong> gives you the classic amber flame with a remote; the Direct Plumb Kit add-on (sold separately) enables a water-line connection. <strong>Lite (AWL)</strong> is the value pick \u2014 amber flame, manual fill, 8\u201310\u00a0hr per tank. <strong>Gatsby</strong> is freestanding, so there\u2019s no enclosure to build at all.' },
+            { t: 'links', items: [{ label: '\u2696\ufe0f Full spec table \u2014 Why Aquafire?', href: STORE + '/pages/compare-vs-aquafire' }] },
             { t: 'chips', items: [{ label: 'Sizes & dimensions', send: 'What sizes are available?' }, { label: 'Pricing', send: 'How much do they cost?' }, { label: 'Installation basics', send: 'How is it installed?' }] }
           ]
         };
@@ -238,12 +239,13 @@
             { t: 'text', html: 'Great question \u2014 there are some well-known names in flame effects, and we\u2019re glad you\u2019re comparing. Here\u2019s why we believe Aquafire is the one to beat:' },
             { t: 'steps', items: [
               '<strong>The most realistic flame, period</strong> \u2014 ultrasonic mist and LED light create a full 3-D flame made of real vapor. You can wave your hand through it.',
-              '<strong>Zero constraints</strong> \u2014 no heat, no venting, no gas. Build it into walls, cabinetry, bar tops, even a coffee table, with a TV directly above.',
-              '<strong>Room to dream big</strong> \u2014 gang units into up to <strong>20 feet</strong> of continuous flame on one remote; the Pro adds 30+ colors, a phone app, direct plumbing, and UV-C water sanitizing.',
+              '<strong>Zero constraints</strong> \u2014 no heat, no venting, no gas. Build it into walls, cabinetry, bar tops, even a coffee table \u2014 or under a TV (just add a mantel shelf between).',
+              '<strong>Room to dream big</strong> \u2014 gang units into up to <strong>20 feet</strong> of continuous flame on one remote; the Pro adds 30+ colors, a phone app, out-of-the-box direct plumbing, and UV-C water sanitizing.',
+              '<strong>Proven where it counts</strong> \u2014 built by A-Fire Design, whose water-vapor technology runs in Hilton, Ritz-Carlton, Marriott, and Disney properties.',
               '<strong>Backed properly</strong> \u2014 2-year residential warranty, US-based support, every part replaceable, and a free design review of your plans.'
             ]},
             { t: 'text', html: 'We\u2019d rather show you than tell you \u2014 see one running in person, or send your plans to <a href="mailto:' + SALES_EMAIL + '">' + SALES_EMAIL + '</a> for a free design review.' },
-            { t: 'links', items: [{ label: '\ud83d\udccd See one at a dealer near you', href: pURL('dealer-locator.html') }, { label: '\ud83d\uded2 Explore the lineup', href: STORE }] },
+            { t: 'links', items: [{ label: '\u2696\ufe0f Why Aquafire? Side-by-side comparisons', href: STORE + '/pages/compare-vs-aquafire' }, { label: '\ud83d\udcd6 The 2026 Water Vapor Fireplace Buying Guide', href: STORE + '/blogs/learn/the-complete-water-vapor-fireplace-buying-guide-for-2026' }, { label: '\ud83d\udccd See one at a dealer near you', href: pURL('dealer-locator.html') }, { label: '\ud83d\uded2 Explore the lineup', href: STORE }] },
             { t: 'chips', items: [{ label: '\ud83d\udd25 Compare Aquafire models', send: 'Compare the models' }, { label: '\ud83d\udcb2 Pricing', send: 'How much do they cost?' }, { label: '\ud83c\udfa5 How it works', send: 'How does it work?' }] }
           ]
         };
@@ -354,10 +356,11 @@
         return {
           feedback: true,
           blocks: [
-            { t: 'text', html: 'Two ways to keep the tank full:' },
+            { t: 'text', html: 'Two ways to keep the tank full \u2014 and it depends on the model:' },
             { t: 'steps', items: [
-              '<strong>Direct plumb</strong> \u2014 connect a \u00bc\u2033 water line (like a fridge ice-maker) and the unit refills itself automatically. The Pro is direct-plumb ready; the Original uses an optional Direct Plumb Kit; the Lite 40\u2033/60\u2033 are manual-fill only.',
-              '<strong>Manual fill</strong> \u2014 every unit has an integrated pump: connect the fill tube, hold <strong>B1</strong> for 5 seconds, and it fills itself and stops automatically.'
+              '<strong>Direct plumb</strong> \u2014 a \u00bc\u2033 water line (like a fridge ice-maker) refills the unit automatically. The <strong>Pro</strong> connects to a water line right out of the box; the <strong>Original</strong> adds it with the Direct Plumb Kit \u2014 an easy install, sold and shipped separately; the <strong>Lite and Gatsby</strong> are manual-fill only (no upgrade option currently).',
+              '<strong>Manual fill</strong> \u2014 every model has an integrated water pump port on the top right corner of the burner: connect the fill tube, hold <strong>B1</strong> for 5 seconds, and it fills itself and stops automatically.',
+              '<strong>Emptying</strong> \u2014 the Pro also includes a dispensing pump, so you can empty the unit at the press of a button (the Lite drains via its bottom plug).'
             ]},
             { t: 'text', html: 'Regular tap water works \u2014 and when it comes to water quality, <strong>the softer the better</strong>. Reverse-osmosis water or a whole-house softener is ideal; otherwise the included Vapor Pure\u2122 softener conditions your tap water automatically. (Using a whole-house system instead of Vapor Pure? Have it approved in writing to keep the warranty valid.)' },
             { t: 'links', items: [{ label: '\ud83d\udca7 Check your water hardness by ZIP', href: pURL('water-care.html') }] }
@@ -457,7 +460,7 @@
         return {
           feedback: true,
           blocks: [
-            { t: 'text', html: 'Yes \u2014 since Aquafire produces <strong>no heat</strong>, mounting a TV or artwork directly above it is completely fine. One design tip: add a recessed <strong>light trap</strong> above the flame so LED light doesn\u2019t wash onto the screen or ceiling. The Enclosure Guide shows exactly how.' },
+            { t: 'text', html: 'Yes \u2014 Aquafire produces <strong>no heat</strong>, so artwork above is completely fine, and a TV works great too: just put a <strong>mantel shelf</strong> between the flame and the screen so the light mist has room to dissipate. Design tip: add a recessed <strong>light trap</strong> above the flame so LED light doesn\u2019t wash onto the screen or ceiling. The Enclosure Guide shows exactly how.' },
             { t: 'links', items: [{ label: '\ud83d\udcd0 Light trap design in the Enclosure Guide', href: pURL('enclosure-guide.html') }] }
           ]
         };
