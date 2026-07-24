@@ -125,18 +125,26 @@ Shopify token never reaches the browser.
 
 **To activate (one-time):**
 
-1. Shopify admin → **Settings → Apps and sales channels → Develop apps → Create
-   app** (in the newer Dev Dashboard flow, choose **"Start from Dev Dashboard"** —
-   not the CLI, which scaffolds a full hosted app you don't need). Name it e.g.
-   *Ember order lookup*.
-2. Give it ONLY the **`read_orders`** Admin API scope. Add **`read_all_orders`**
-   too if customers should be able to look up orders older than 60 days.
-3. Install the app on the store and copy its **Admin API access token**.
+1. In the Shopify **Dev Dashboard**, create an app (choose **"Start from Dev
+   Dashboard"** — not the CLI, which scaffolds a full hosted app you don't
+   need). Name it e.g. *Ember AI Chat*.
+2. Scopes: **`read_orders,read_all_orders`** — `read_all_orders` (lookups on
+   orders older than 60 days) is only valid *alongside* `read_orders`, never
+   alone (the scope box shows red otherwise). `read_orders` by itself is fine
+   for a 60-day window. **Release** the version.
+3. **Install the app on the store**, then open the app's **Settings** page and
+   copy its **Client ID** and **Client secret**. (Dev Dashboard apps don't
+   show a static "Admin API access token" — the function exchanges these
+   credentials for short-lived tokens itself and renews them automatically.)
 4. Vercel → `luminabrands-projects/aquafire-portal` → **Settings → Environment
-   Variables** → add `SHOPIFY_ORDERS_TOKEN` (Production + Preview), then
-   **Redeploy**. The token lives only in Vercel — never in client code or chat.
+   Variables** → add `SHOPIFY_CLIENT_ID` and `SHOPIFY_CLIENT_SECRET`
+   (Production + Preview), then **Redeploy**. The secret lives only in
+   Vercel — never in client code or chat.
 
-Until the token is set, the endpoint returns 503 and Ember falls back to the
+(A static token from a legacy admin custom app also works, as
+`SHOPIFY_ORDERS_TOKEN` — it takes precedence when set.)
+
+Until credentials are set, the endpoint returns 503 and Ember falls back to the
 "check your account / email orders@" answer — nothing breaks.
 
 **Security & privacy:**
