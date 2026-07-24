@@ -56,6 +56,16 @@
     : (PORTAL_BASE ? PORTAL_BASE + 'api/chat' : '');
   var llmDown = false;
 
+  // Order & tracking lookup: the order_status flow POSTs { order, email } to
+  // the portal's /api/order-status function (a Shopify Admin API proxy —
+  // api/order-status.js). Override with cfg.orderEndpoint, or set it to null
+  // to disable. Until that function has its Shopify token it 503s, and the
+  // flow falls back to the email-the-orders-team answer for this page load.
+  var ORDER_ENDPOINT = cfg.orderEndpoint !== undefined
+    ? cfg.orderEndpoint
+    : (PORTAL_BASE ? PORTAL_BASE + 'api/order-status' : '');
+  var orderDown = false;
+
   var SUPPORT_EMAIL = 'support@aquafire.com';
   var SALES_EMAIL = 'sales@aquafire.com';
   var ORDERS_EMAIL = 'orders@aquafire.com';
@@ -413,17 +423,21 @@
     },
     {
       id: 'order_status',
-      kw: [['order status', 8], ['my order', 6], ['where is my order', 9], ['wheres my order', 9], ['order number', 5], ['track my', 6], ['hasn\u2019t arrived', 6], ['hasnt arrived', 6], ['not arrived', 5]],
+      kw: [['order status', 8], ['my order', 6], ['where is my order', 9], ['wheres my order', 9], ['order number', 5], ['track my', 6], ['tracking', 6], ['tracking number', 9], ['status of my order', 9], ['shipped yet', 7], ['hasn\u2019t arrived', 6], ['hasnt arrived', 6], ['not arrived', 5]],
       answer: function () {
+        if (!ORDER_ENDPOINT || orderDown) return orderFallback();
+        // fresh flow start \u2014 drop leftovers from an abandoned lookup, then
+        // keep whatever this message already contained
+        state.ctx.orderNum = lastSeenOrderNum || null;
+        state.ctx.orderEmail = lastSeenEmail || null;
+        state.ctx.awaiting = 'order_lookup';
+        persist();
+        var need = [];
+        if (!state.ctx.orderNum) need.push('your <strong>order number</strong> (e.g. #1234, from your confirmation email)');
+        if (!state.ctx.orderEmail) need.push('the <strong>email address</strong> you used at checkout');
         return {
-          feedback: true,
           blocks: [
-            { t: 'text', html: 'I can\u2019t look up individual orders from here yet, but two quick options:' },
-            { t: 'steps', items: [
-              'Log in to <a href="' + STORE + '/account" target="_blank" rel="noopener">your aquafire.com account</a> \u2014 every order shows live status and tracking.',
-              'Or email <a href="mailto:' + ORDERS_EMAIL + '">' + ORDERS_EMAIL + '</a> with your order number and the team will check right away.'
-            ]},
-            contactBlock('orders')
+            { t: 'text', html: 'I can check on that right here \u2014 just send me ' + need.join(' and ') + '.' }
           ]
         };
       }
@@ -935,6 +949,13 @@
         model: state.ctx.model || ''
       };
       Object.keys(data || {}).forEach(function (k) { ev[k] = data[k]; });
+      // Privacy: never let email addresses reach the telemetry store
+      // (customers type theirs during the order-lookup flow).
+      ['text', 'comment'].forEach(function (k) {
+        if (typeof ev[k] === 'string') {
+          ev[k] = ev[k].replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[email]');
+        }
+      });
       if (cfg.logEndpoint) {
         fetch(cfg.logEndpoint, {
           method: 'POST', keepalive: true,
@@ -1459,6 +1480,48 @@
       return;
     }
 
+    // Order lookup: parse from the RAW text (normalize strips @ and #)
+    lastSeenEmail = (text.match(EMAIL_RE) || [])[0] || null;
+    lastSeenOrderNum = extractOrderNum(text, state.ctx.awaiting === 'order_lookup');
+
+    if (ORDER_ENDPOINT && !orderDown) {
+      if (state.ctx.awaiting === 'order_lookup') {
+        if (/\b(cancel|nevermind|never mind|stop|forget it)\b/i.test(text)) {
+          state.ctx.awaiting = null; state.ctx.orderNum = null; state.ctx.orderEmail = null; persist();
+          lastIntentId = 'order_lookup';
+          logEvent('user_message', { text: text.slice(0, 300), intent: 'order_lookup_cancel' });
+          reply(function () { return { blocks: [{ t: 'text', html: 'No problem \u2014 what else can I help with?' }] }; });
+          return;
+        }
+        if (lastSeenEmail || lastSeenOrderNum) {
+          if (lastSeenEmail) state.ctx.orderEmail = lastSeenEmail;
+          if (lastSeenOrderNum) state.ctx.orderNum = lastSeenOrderNum;
+          persist();
+          lastIntentId = 'order_lookup';
+          logEvent('user_message', { text: text.slice(0, 300), intent: 'order_lookup' });
+          if (state.ctx.orderNum && state.ctx.orderEmail) {
+            orderLookup();
+          } else {
+            reply(function () {
+              return { blocks: [{ t: 'text', html: state.ctx.orderNum
+                ? 'Got it \u2014 and the <strong>email address</strong> you used at checkout?'
+                : 'Thanks \u2014 and your <strong>order number</strong>? It\u2019s in your confirmation email (e.g. #1234).' }] };
+            });
+          }
+          return;
+        }
+        // no order info in this message — treat it as a normal question instead
+        state.ctx.awaiting = null; state.ctx.orderNum = null; state.ctx.orderEmail = null; persist();
+      } else if (lastSeenEmail && lastSeenOrderNum) {
+        // both volunteered in one message (e.g. after an AI answer suggested it)
+        state.ctx.orderEmail = lastSeenEmail; state.ctx.orderNum = lastSeenOrderNum; persist();
+        lastIntentId = 'order_lookup';
+        logEvent('user_message', { text: text.slice(0, 300), intent: 'order_lookup' });
+        orderLookup();
+        return;
+      }
+    }
+
     var intent = matchIntent(text);
     var llmAvailable = API_ENDPOINT && !llmDown;
     lastIntentId = intent ? intent.id : (llmAvailable ? 'llm' : 'fallback');
@@ -1561,7 +1624,158 @@
       .replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
   }
 
-  /* ── Boot ─────────────────────────────────────────────────────────────── */
+  /* ── Order & tracking lookup (api/order-status.js) ────────────────────────
+     Guided collect of order number + checkout email, verified server-side.
+     Telemetry logs outcomes only — never the number or the email. */
+  var EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/;
+  var lastSeenEmail = null, lastSeenOrderNum = null;
+
+  function extractOrderNum(text, loose) {
+    var m = text.match(/#\s*([A-Za-z]{0,6}-?\d{1,10})\b/);
+    if (m) return m[1];
+    m = text.match(/\border(?:\s+number|\s+no\.?|\s*#)?\s*[:\-]?\s*([A-Za-z]{0,6}-?\d{1,10})\b/i);
+    if (m) return m[1];
+    if (loose) {
+      // mid-collect a bare number counts (but never digits inside the email)
+      m = text.replace(EMAIL_RE, ' ').match(/\b([A-Za-z]{0,6}-?\d{3,10})\b/);
+      if (m) return m[1];
+    }
+    return null;
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function fmtDate(iso) {
+    try {
+      return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    } catch (e) { return ''; }
+  }
+
+  function orderFallback() {
+    return {
+      feedback: true,
+      blocks: [
+        { t: 'text', html: 'I can\u2019t look up individual orders right now, but two quick options:' },
+        { t: 'steps', items: [
+          'Log in to <a href="' + STORE + '/account" target="_blank" rel="noopener">your aquafire.com account</a> \u2014 every order shows live status and tracking.',
+          'Or email <a href="mailto:' + ORDERS_EMAIL + '">' + ORDERS_EMAIL + '</a> with your order number and the team will check right away.'
+        ]},
+        contactBlock('orders')
+      ]
+    };
+  }
+
+  function orderCard(o) {
+    var statusMap = {
+      FULFILLED: 'Shipped', UNFULFILLED: 'Being prepared', IN_PROGRESS: 'Being prepared',
+      PARTIALLY_FULFILLED: 'Partially shipped', SCHEDULED: 'Scheduled', ON_HOLD: 'On hold',
+      PENDING_FULFILLMENT: 'Being prepared', OPEN: 'Being prepared'
+    };
+    var status = o.cancelled ? 'Cancelled' : (statusMap[o.status] || 'In progress');
+    var head = '<strong>Order ' + escHtml(o.name) + '</strong> \u00b7 placed ' + fmtDate(o.placedAt) +
+      '<br>Status: <strong>' + status + '</strong>';
+    if (o.shipTo) head += ' \u00b7 shipping to ' + escHtml(o.shipTo);
+    var blocks = [{ t: 'text', html: head }];
+    if (o.items && o.items.length) {
+      blocks.push({ t: 'steps', items: o.items.slice(0, 6).map(function (i) {
+        return escHtml(i.title) + (i.qty > 1 ? ' \u00d7 ' + i.qty : '');
+      }) });
+    }
+    var links = [], delivered = null, eta = null;
+    (o.shipments || []).forEach(function (s) {
+      if (s.deliveredAt) delivered = s.deliveredAt;
+      if (s.eta) eta = s.eta;
+      (s.tracking || []).forEach(function (t) {
+        if (t.url) {
+          links.push({
+            label: '\ud83d\udce6 Track ' + (t.company ? escHtml(t.company) + ' ' : '') + 'shipment' +
+              (t.number ? ' (' + escHtml(t.number) + ')' : ''),
+            href: t.url
+          });
+        }
+      });
+    });
+    if (delivered) blocks.push({ t: 'text', html: '\u2705 Delivered ' + fmtDate(delivered) + '.' });
+    else if (eta) blocks.push({ t: 'text', html: 'Estimated delivery: <strong>' + fmtDate(eta) + '</strong>.' });
+    if (links.length) blocks.push({ t: 'links', items: links });
+    else if (!o.cancelled && status !== 'Shipped') {
+      blocks.push({ t: 'text', html: 'Tracking will appear here as soon as it ships \u2014 you\u2019ll also get it by email.' });
+    }
+    if (o.cancelled) blocks.push(contactBlock('orders'));
+    blocks.push({ t: 'chips', items: [{ label: '\ud83d\udd0d Check another order', send: 'Where is my order?' }, CHIP_HUMAN] });
+    return { feedback: true, blocks: blocks };
+  }
+
+  function orderLookup() {
+    var num = state.ctx.orderNum, email = state.ctx.orderEmail;
+    state.ctx.awaiting = null;
+    persist();
+    showTyping();
+    var startedAt = Date.now();
+    function afterThink(fn) { setTimeout(fn, Math.max(0, THINK_MS - (Date.now() - startedAt))); }
+    function done() { state.ctx.orderNum = null; state.ctx.orderEmail = null; persist(); }
+    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
+
+    fetch(ORDER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: ctrl ? ctrl.signal : undefined,
+      body: JSON.stringify({ order: num, email: email })
+    }).then(function (r) {
+      clearTimeout(timer);
+      if (r.status === 404) return { notFound: true };
+      if (r.status === 503) { orderDown = true; return { down: true }; }
+      if (!r.ok) throw new Error('bad status');
+      return r.json().then(function (d) {
+        if (!d || !d.order) throw new Error('empty');
+        return d;
+      });
+    }).then(function (d) {
+      afterThink(function () {
+        hideTyping();
+        if (d.down) {
+          logEvent('order_lookup', { outcome: 'unconfigured' });
+          done();
+          pushBot(orderFallback());
+        } else if (d.notFound) {
+          logEvent('order_lookup', { outcome: 'not_found' });
+          // let them retry with corrected details
+          state.ctx.orderNum = null; state.ctx.orderEmail = null;
+          state.ctx.awaiting = 'order_lookup';
+          persist();
+          pushBot({
+            feedback: true,
+            blocks: [
+              { t: 'text', html: 'Hmm \u2014 I couldn\u2019t find an order matching that number and email. Double-check both against your confirmation email and send them again (or type <strong>cancel</strong>), and I\u2019ll take another look.' },
+              contactBlock('orders')
+            ]
+          });
+        } else {
+          logEvent('order_lookup', { outcome: 'found' });
+          done();
+          pushBot(orderCard(d.order));
+        }
+      });
+    }).catch(function () {
+      clearTimeout(timer);
+      afterThink(function () {
+        hideTyping();
+        logEvent('order_lookup', { outcome: 'error' });
+        done();
+        pushBot({
+          feedback: true,
+          blocks: [
+            { t: 'text', html: 'I hit a snag reaching the order system just now \u2014 sorry about that. The orders team can check right away:' },
+            contactBlock('orders')
+          ]
+        });
+      });
+    });
+  }
+
+  /* \u2500\u2500 Boot \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', buildUI);
   } else {
