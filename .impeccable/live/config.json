@@ -1,0 +1,7 @@
+{
+  "files": ["*.html"],
+  "exclude": ["lumina-dashboard-snapshot-2026-05-12.html"],
+  "insertBefore": "</body>",
+  "commentSyntax": "html",
+  "cspChecked": true
+}
