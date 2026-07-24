@@ -1,128 +1,115 @@
 # Fix: page jump when selecting a product variation (Shopify store)
 
 **Where the code lives:** the live Impact theme on `tryaquafire.myshopify.com`
-(`Updated copy of Updated copy of…`, theme ID `185926418752`), file
-`layout/theme.liquid`. The adjustment is the `variant:change`
-`<script>` block near the bottom of that file (right above the
-`assistant.js` tag), commented *"Product gallery: show the selected
-variant's image as soon as the customer interacts with the options."*
+(theme ID `185926418752`), file `layout/theme.liquid` — the `variant:change`
+`<script>` block near the bottom (right above the `assistant.js` tag).
 
-This is not part of the portal site in this repo — the repo only archives the
-fix so it can be reviewed and pasted into the theme editor
+This is not part of the portal site in this repo — the repo archives the fix
+so it can be reviewed and pasted into the theme editor
 (**Online Store → Themes → Edit code → `layout/theme.liquid`**).
 
-> **Rev 3.** Adds the actual root-cause fix for the remaining "thrown toward
-> add to cart" scroll on desktop (see below): the theme's post-rerender
-> `focus()` call, which lacks `preventScroll: true`. Verified against the
-> theme's `assets/theme.js` source — the gallery code itself never scrolls the
-> page vertically.
->
-> **Rev 2.** The first revision of this fix pinned the clicked option button by
-> counter-scrolling on every animation frame. That fights smooth scrolling and
-> the sticky header (which resizes as the page scrolls), producing a violent
-> jitter — the browser's scroll animation pulls each frame and the pin loop
-> pushes back. Rev 2+ never scrolls in a loop.
+## Root cause (verified against the theme's `assets/theme.js`)
 
-## Why the page jumped originally
+The theme's variant → gallery path never scrolls the page vertically. What
+scrolls it is the **rerender stage**: on every option click, Impact fetches
+the section HTML, swaps the product-info blocks in place, and then restores
+focus to the re-rendered option input with `element.focus()` — **without
+`preventScroll: true`**. The browser's default focus behavior scrolls the
+page to that visually-hidden input near the buy buttons. This runs *before*
+the `variant:change` event fires.
 
-The original script switched the gallery to the variant image and then tried to
-cancel the resulting scroll shift with one immediate `window.scrollBy` call.
-Three things defeated that:
+That focus scroll was very likely the original "strange page jump" all along.
+Earlier revisions of this fix added compensation machinery on the gallery side
+(per-frame scroll pinning → jitter; height freeze + delayed release +
+scroll corrections → new jumps of their own). Rev 4 removes all of it.
 
-1. **The theme keeps moving the page after the script is done.** Impact's own
-   variant handler runs later and scrolls the selected media into view, and the
-   `media-carousel`'s `adaptive-height` behavior *animates* the gallery height
-   over several hundred milliseconds — long after the one-shot compensation ran.
-2. **The compensation scroll itself animates** when smooth scrolling is active
-   (`scroll-behavior: smooth`), reading as a jump of its own.
-3. **In grid layout the swap is a large reflow with no height guard**, and the
-   promoted image may still be lazy-loading, shifting layout again when it
-   arrives.
+## The fix (rev 4 — minimal)
 
-## The remaining desktop scroll (root cause, found in theme.js)
+Two well-understood pieces, nothing else:
 
-Reading the theme's `assets/theme.js` shows the variant → gallery path never
-scrolls the page: `ProductGallery._onVariantChanged` calls
-`carousel.select(pos, { animate: false })`, which is horizontal-only and
-early-returns entirely in desktop grid mode. The page scroll comes from the
-**rerender stage** instead:
+1. **Focus guard** — programmatic `focus()` on elements inside
+   `<product-rerender>` is forced to `preventScroll: true`. This kills the
+   theme's rerender focus scroll. Native Tab-key focus and focus calls
+   elsewhere on the page are unaffected.
+2. **Gallery switch** — unchanged from the original adjustment: on
+   `variant:change`, select the variant's image (instant horizontal move in
+   carousel layouts; promote-to-highlight in desktop grid layout, with a
+   single instant scroll correction so the reflow doesn't move the options
+   under the cursor).
 
-1. Clicking an option dispatches `product:rerender` *before* `variant:change`.
-   The theme fetches the section HTML (first selection of each combination is
-   a network round-trip; repeats hit a ~5-minute cache) and replaces the
-   product-info DOM (`ProductRerender.onRerender_fn`).
-2. It then restores focus to the re-rendered option input with
-   `element.focus()` — **without `{ preventScroll: true }`**. The browser's
-   default focus behavior instantly scrolls the page to bring that (visually
-   hidden, `sr-only`) input into view, near the buy buttons.
+There are **no timers, no frozen heights, no delayed releases, no
+scrollIntoView patches** — nothing that can move the page later or fight the
+theme.
 
-That is the instant "thrown down the page" on the first selection of each
-variation: the fetch makes the rerender + focus land *after* any settle
-window, once the gallery reflow has already moved the input out of view — so
-`focus()` yanks the page. On cached repeats the timing differs and the input
-is usually still in view, so nothing visible happens.
-
-The fix guards it directly and timing-independently: programmatic `focus()`
-on elements inside a `<product-rerender>` gets `preventScroll: true` forced.
-Native keyboard tabbing is unaffected (it doesn't go through `.focus()`), and
-so are focus calls elsewhere on the page (e.g. the skip-to-content link).
-
-## The fix (rev 3)
-
-Replace the whole existing `variant:change` `<script>` block in
-`layout/theme.liquid` (including the `{%- comment -%}` above it) with the
-version below. Same behavior — the variant image is promoted/selected on any
-option change — but with no scroll tug-of-war:
-
-- **The gallery box is frozen** (`height` + `overflow: hidden` on the
-  media-list wrapper) for ~450 ms, so neither the swap, the adaptive-height
-  animation, nor a lazy-loading image can change the page height mid-switch;
-- **The theme's scroll-to-gallery is suppressed** during that window
-  (`scrollIntoView` becomes a no-op for elements inside this gallery only) —
-  that scroll *was* the original jump, so it's blocked rather than corrected;
-- **Exactly two instant corrections** (never a loop): one right after the swap
-  for whatever the reflow shifted, one when the frozen height is released;
-- rapid re-selections are safe: a new selection finishes the previous settle
-  window first;
-- **(new in rev 3)** the theme's post-rerender focus restore can no longer
-  scroll the page: `focus()` on elements inside `<product-rerender>` is forced
-  to `preventScroll: true`.
+It also has a **debug mode**: load any product page with `?jumpdebug` in the
+URL (e.g. `…/products/aquafire-pro?jumpdebug`), open the browser console
+(F12 → Console), click a variation, and every programmatic scroll/focus call
+is logged with a stack trace, plus any sudden change in scroll position or
+page height. If any jump remains, a screenshot of that console output
+identifies the culprit definitively — no more guessing.
 
 ```html
 {%- comment -%}
   Product gallery: show the selected variant's image as soon as the customer
-  interacts with the options, without the page jumping. variant:change only
-  fires on user interaction (never on first load), so the gallery keeps showing
-  the first gallery image on load (set in snippets/product-gallery.liquid via
-  product.selected_variant), then switches to the variant image once options
-  are chosen — even when the theme's own logic would skip the switch (e.g.
-  changing only the Cutout Size).
+  interacts with the options, and stop the page from jumping when they do.
 
-  Anti-jump strategy (rev 3): freeze the gallery box while the media swap and
-  the theme's adaptive-height animation settle, block scrollIntoView for this
-  gallery during that window, and — the desktop root cause — force
-  preventScroll on the theme's post-rerender focus() restore, which otherwise
-  scrolls the page to the re-rendered option input (theme.js ProductRerender
-  calls focus() without preventScroll after replacing the product-info DOM).
-  No per-frame counter-scrolling — a correction loop fights the browser's
-  smooth-scroll animation and jitters.
+  The jump: Impact's ProductRerender swaps the product-info blocks on every
+  option click and then restores focus with element.focus() WITHOUT
+  preventScroll — the browser scrolls the page to the sr-only option input.
+  We force preventScroll for focus() calls inside <product-rerender> only.
+
+  The gallery switch: variant:change only fires on user interaction (never on
+  first load), so the gallery keeps showing the first image on load, then
+  switches to the variant image once options are chosen — even when the
+  theme's own logic would skip the switch (e.g. changing only Cutout Size).
+
+  Debug: append ?jumpdebug to a product URL and watch the console — all
+  programmatic scroll/focus calls are logged with stack traces, plus any
+  sudden scroll-position or page-height change.
 {%- endcomment -%}
 <script>
   (() => {
-    const SETTLE_MS = 450;
-    let cleanup = null;
+    const DEBUG = new URLSearchParams(location.search).has('jumpdebug');
+    const log = (...args) => DEBUG && console.log('[jumpdebug]', ...args);
 
-    // The theme re-renders the product info on every option click and then
-    // restores focus without preventScroll — the browser scrolls the page to
-    // the sr-only input near the buy buttons. Force preventScroll for focus
-    // calls inside the rerendered area only; native Tab focus is unaffected.
+    // 1. Focus guard — the actual jump fix.
     const realFocus = HTMLElement.prototype.focus;
     HTMLElement.prototype.focus = function (options) {
       if (this.closest && this.closest('product-rerender')) {
         options = Object.assign({}, options, { preventScroll: true });
+        log('focus() inside product-rerender (preventScroll forced)', this);
+      } else if (DEBUG) {
+        log('focus() outside product-rerender (may scroll)', this, new Error().stack);
       }
       realFocus.call(this, options);
     };
+
+    if (DEBUG) {
+      const wrap = (obj, name, label) => {
+        const real = obj[name];
+        obj[name] = function () {
+          console.log('[jumpdebug]', label, 'on', this, 'args:', arguments, new Error().stack);
+          return real.apply(this, arguments);
+        };
+      };
+      wrap(Element.prototype, 'scrollIntoView', 'scrollIntoView');
+      wrap(Element.prototype, 'scrollTo', 'Element.scrollTo');
+      wrap(window, 'scrollTo', 'window.scrollTo');
+      wrap(window, 'scrollBy', 'window.scrollBy');
+
+      let lastY = window.scrollY;
+      let lastH = document.documentElement.scrollHeight;
+      setInterval(() => {
+        if (Math.abs(window.scrollY - lastY) > 40) {
+          console.log('[jumpdebug] scrollY jumped:', lastY, '->', window.scrollY);
+        }
+        if (Math.abs(document.documentElement.scrollHeight - lastH) > 40) {
+          console.log('[jumpdebug] page height changed:', lastH, '->', document.documentElement.scrollHeight);
+        }
+        lastY = window.scrollY;
+        lastH = document.documentElement.scrollHeight;
+      }, 100);
+    }
 
     const instantScrollBy = (delta) => {
       if (!delta) return;
@@ -133,6 +120,7 @@ option change — but with no scroll tug-of-war:
       root.style.scrollBehavior = previous;
     };
 
+    // 2. Gallery switch on variant change.
     document.addEventListener('variant:change', (event) => {
       const variant = event.detail && event.detail.variant;
       const media = variant && variant.featured_media;
@@ -149,52 +137,27 @@ option change — but with no scroll tug-of-war:
       const slide = slides[index];
       if (!slide) return;
 
-      // If a previous selection is still settling, finish it first.
-      if (cleanup) cleanup();
-
       const anchor = (event.target && event.target.getBoundingClientRect) ? event.target : null;
       const beforeTop = anchor ? anchor.getBoundingClientRect().top : 0;
-
-      // Freeze the gallery box so neither the swap, the theme's adaptive-height
-      // animation, nor a late-loading image can change the page height.
-      const wrapper = gallery.querySelector('.product-gallery__media-list-wrapper') || gallery;
-      wrapper.style.height = wrapper.getBoundingClientRect().height + 'px';
-      wrapper.style.overflow = 'hidden';
-
-      // While things settle, stop the theme from scrolling the page to the
-      // gallery — its scroll-to-selected-media is the original "jump".
-      const realScrollIntoView = Element.prototype.scrollIntoView;
-      Element.prototype.scrollIntoView = function () {
-        if (!gallery.contains(this)) realScrollIntoView.apply(this, arguments);
-      };
 
       const isScrollableCarousel = carousel.offsetParent && (carousel.scrollWidth - carousel.clientWidth > 5);
 
       slides.forEach((s) => { s.style.order = ''; s.style.gridColumn = ''; });
 
       if (isScrollableCarousel && typeof carousel.select === 'function') {
+        log('carousel select', index);
         carousel.select(index, { animate: false });
       } else if (slide !== carousel.firstElementChild) {
         // Grid layout: promote the variant image to the top highlight slot.
+        log('grid promote', index);
         slide.style.order = '-1';
         slide.style.gridColumn = 'span 2';
         carousel.firstElementChild.style.gridColumn = 'span 1';
       }
 
-      // Single instant correction for whatever the swap itself shifted.
+      // Single instant correction for whatever the reflow shifted (measured
+      // synchronously; nothing runs later).
       if (anchor) instantScrollBy(anchor.getBoundingClientRect().top - beforeTop);
-
-      let timer = null;
-      cleanup = () => {
-        clearTimeout(timer);
-        Element.prototype.scrollIntoView = realScrollIntoView;
-        const releaseTop = anchor ? anchor.getBoundingClientRect().top : 0;
-        wrapper.style.height = '';
-        wrapper.style.overflow = '';
-        if (anchor) instantScrollBy(anchor.getBoundingClientRect().top - releaseTop);
-        cleanup = null;
-      };
-      timer = setTimeout(cleanup, SETTLE_MS);
     }, true);
   })();
 </script>
@@ -208,15 +171,28 @@ option change — but with no scroll tug-of-war:
    comment plus the `<script>…</script>` right after it (just above the
    `<script src="https://aquafire.app/assistant.js" defer></script>` line).
 4. Paste the block above in its place and save.
-5. Test on a product page: switch Cutout Size / model options on desktop
-   (grid gallery) and on a phone (carousel), including several selections in
-   quick succession — and specifically the *first* selection of each
-   combination in a fresh tab (hard-reload first), since that path goes
-   through a network fetch before the theme re-renders and restores focus.
-   The image should swap with the option list staying put under the
-   cursor/finger, no oscillation, and no lurch toward the add-to-cart area.
+5. Hard-reload a product page and click through the variations, desktop and
+   mobile, including the first click of each combination in a fresh tab.
 
-If any jump remains on mobile only, the leftover motion is the theme's
-carousel resizing between photos of different aspect ratios — cropping the
-variant images to a consistent aspect ratio (or setting the gallery's mobile
-media size to the non-expanded option) removes that entirely.
+## If a jump remains
+
+Open the same product page with `?jumpdebug` appended to the URL, open the
+browser console (F12 → Console), click the variation that jumps, and
+screenshot the console output. The log lines pinpoint whether the movement is
+a scroll call (and from whose code, via the stack trace), a focus call, or a
+page-height change (layout reflow) — which is everything needed to fix it in
+one step.
+
+## Revision history
+
+- **Rev 1** — gallery switch + one-shot `scrollBy` compensation, then a
+  per-frame scroll "pin". The pin loop fought smooth scrolling and the sticky
+  header → violent jitter. Removed.
+- **Rev 2** — height freeze + 450 ms delayed release + gallery-scoped
+  `scrollIntoView` no-op + two-stage corrections. Stopped the jitter but the
+  delayed release/corrections could themselves move the page after the fact.
+  Removed.
+- **Rev 3** — added the `preventScroll` focus guard (correct, kept) on top of
+  the rev 2 machinery (removed).
+- **Rev 4** — focus guard + plain gallery switch with one synchronous
+  correction, plus `?jumpdebug` diagnostics. Nothing runs on a timer.
