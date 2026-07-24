@@ -969,9 +969,13 @@
     ':where(.afa-root) a:hover{text-decoration:underline;}',
 
     /* Launcher */
-    '.afa-launcher{position:fixed;right:20px;bottom:20px;top:auto;left:auto;z-index:2147483000;height:56px;min-height:56px;width:auto;min-width:0;margin:0;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 22px 0 18px;border-radius:999px;border:1.5px solid rgba(255,255,255,.35);background:linear-gradient(135deg,#c0392b 0%,#d45a20 100%);color:#fff;opacity:1;filter:none;font-family:Poppins,Inter,sans-serif;font-size:14px;font-weight:600;letter-spacing:.2px;line-height:1;text-transform:none;text-decoration:none;box-shadow:0 6px 24px rgba(192,57,43,.5),0 2px 10px rgba(0,0,0,.45);transition:transform .2s,box-shadow .2s;}',
+    /* Liquid-glass launcher: translucent dark base + backdrop blur/saturation,
+       specular top highlight, hairline light border. Browsers without
+       backdrop-filter just get the translucent dark pill. */
+    '.afa-launcher{position:fixed;right:20px;bottom:20px;top:auto;left:auto;z-index:2147483000;height:56px;min-height:56px;width:auto;min-width:0;margin:0;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 22px 0 18px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 40%,rgba(255,255,255,0) 100%),rgba(21,24,30,.68);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);color:#fff;opacity:1;filter:none;font-family:Poppins,Inter,sans-serif;font-size:14px;font-weight:600;letter-spacing:.2px;line-height:1;text-transform:none;text-decoration:none;box-shadow:0 10px 32px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 1px rgba(255,255,255,.05);transition:transform .2s,box-shadow .2s,border-color .2s;}',
     '.afa-launcher svg{width:24px;height:24px;transition:transform .25s;}',
-    '.afa-launcher:hover{transform:scale(1.04);box-shadow:0 8px 30px rgba(192,57,43,.6),0 3px 10px rgba(0,0,0,.4);}',
+    '.afa-launcher .afa-ico-flame{color:#e8703a;}',
+    '.afa-launcher:hover{transform:scale(1.04);border-color:rgba(255,255,255,.34);background:linear-gradient(180deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.06) 40%,rgba(255,255,255,0) 100%),rgba(26,29,36,.74);box-shadow:0 12px 38px rgba(0,0,0,.5),0 3px 10px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 1px rgba(255,255,255,.05);}',
     '.afa-launcher-label{white-space:nowrap;}',
     '.afa-launcher .afa-ico-close{display:none;}',
     '.afa-launcher.afa-open{width:56px;padding:0;}',
