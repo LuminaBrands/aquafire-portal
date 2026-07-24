@@ -351,17 +351,18 @@
     },
     {
       id: 'plumbing',
-      kw: [['plumb', 6], ['plumbed', 6], ['plumbing', 6], ['water line', 7], ['waterline', 7], ['direct plumb', 8], ['hook up to water', 7], ['fill', 2], ['refill', 3], ['manual fill', 5], ['tap water', 4], ['distilled', 4]],
+      kw: [['plumb', 6], ['plumbed', 6], ['plumbing', 6], ['plumb kit', 9], ['water line', 7], ['waterline', 7], ['direct plumb', 8], ['hook up to water', 7], ['connect', 3], ['connected', 3], ['fill', 2], ['refill', 3], ['manual fill', 5], ['tap water', 4], ['distilled', 4]],
       answer: function () {
         return {
           feedback: true,
           blocks: [
-            { t: 'text', html: 'Two ways to keep the tank full \u2014 and it depends on the model:' },
+            { t: 'text', html: 'It depends on the model \u2014 here\u2019s the water-line rundown:' },
             { t: 'steps', items: [
-              '<strong>Direct plumb</strong> \u2014 a \u00bc\u2033 water line (like a fridge ice-maker) refills the unit automatically. The <strong>Pro</strong> connects to a water line right out of the box; the <strong>Original</strong> adds it with the Direct Plumb Kit \u2014 an easy install, sold and shipped separately; the <strong>Lite and Gatsby</strong> are manual-fill only (no upgrade option currently).',
-              '<strong>Manual fill</strong> \u2014 every model has an integrated water pump port on the top right corner of the burner: connect the fill tube, hold <strong>B1</strong> for 5 seconds, and it fills itself and stops automatically.',
-              '<strong>Emptying</strong> \u2014 the Pro also includes a dispensing pump, so you can empty the unit at the press of a button (the Lite drains via its bottom plug).'
+              '<strong>Pro</strong> \u2014 connects directly to a water line right out of the box (a \u00bc\u2033 line, like a fridge ice-maker, and it refills itself). It also includes a dispensing pump, so you can empty the unit at the press of a button.',
+              '<strong>Original</strong> \u2014 no water-line connection out of the box; the <strong>Direct Plumb Kit</strong> add-on enables one \u2014 an easy install, sold and shipped separately.',
+              '<strong>Lite &amp; Gatsby</strong> \u2014 manual fill only; there\u2019s currently no direct-plumb option or upgrade for these.'
             ]},
+            { t: 'text', html: 'Every model can also be filled manually via the integrated water pump port on the top right corner of the burner: connect the fill tube, hold <strong>B1</strong> for 5 seconds, and it fills itself and stops automatically.' },
             { t: 'text', html: 'Regular tap water works \u2014 and when it comes to water quality, <strong>the softer the better</strong>. Reverse-osmosis water or a whole-house softener is ideal; otherwise the included Vapor Pure\u2122 softener conditions your tap water automatically. (Using a whole-house system instead of Vapor Pure? Have it approved in writing to keep the warranty valid.)' },
             { t: 'links', items: [{ label: '\ud83d\udca7 Check your water hardness by ZIP', href: pURL('water-care.html') }] }
           ]
