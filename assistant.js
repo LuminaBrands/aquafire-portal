@@ -338,7 +338,7 @@
               '<strong>Direct plumb</strong> \u2014 connect a \u00bc\u2033 water line (like a fridge ice-maker) and the unit refills itself automatically. The Pro is direct-plumb ready; the Original uses an optional Direct Plumb Kit; the Lite 40\u2033/60\u2033 are manual-fill only.',
               '<strong>Manual fill</strong> \u2014 every unit has an integrated pump: connect the fill tube, hold <strong>B1</strong> for 5 seconds, and it fills itself and stops automatically.'
             ]},
-            { t: 'text', html: 'Regular tap water is what you want \u2014 ideally moderately hard (around 7 grains/gallon). Avoid reverse-osmosis or distilled water: with no minerals, the flame effect is greatly diminished. The included Vapor Pure\u2122 softener handles hard-water areas.' },
+            { t: 'text', html: 'Regular tap water works \u2014 and when it comes to water quality, <strong>the softer the better</strong>. Minerals in hard water scale up the mist makers, so the included Vapor Pure\u2122 softener conditions the water automatically (and must stay installed for warranty coverage).' },
             { t: 'links', items: [{ label: '\ud83d\udca7 Check your water hardness by ZIP', href: pURL('water-care.html') }] }
           ]
         };
@@ -496,7 +496,7 @@
         return {
           feedback: true,
           blocks: [
-            { t: 'text', html: 'Water quality is the #1 factor in Aquafire longevity. The sweet spot is <strong>3.5\u20138.5 grains per gallon (ideal \u22487)</strong> \u2014 too hard causes scaling and shortens mist-maker life; too soft (or RO/distilled water) weakens the flame. The included <strong>Vapor Pure\u2122 softener</strong> conditions your water automatically, and keeping it installed is required for warranty coverage.' },
+            { t: 'text', html: 'Water quality is the #1 factor in Aquafire longevity, and the rule is simple: <strong>the softer the water, the better</strong>. Hard water\u2019s minerals scale up the mist makers and shorten their life. The included <strong>Vapor Pure\u2122 softener</strong> conditions your tap water automatically \u2014 keeping it installed is required for warranty coverage.' },
             { t: 'links', items: [
               { label: '\ud83d\udca7 Water Care tool \u2014 hardness by ZIP + cartridge timeline', href: pURL('water-care.html') },
               { label: '\ud83d\udcc4 Vapor Pure installation guide', href: STORE + '/vaporpure' }
@@ -1374,11 +1374,23 @@
     }
   }
 
+  // Plain-text extract of an answer's text/steps blocks (for transcripts)
+  function blocksText(blocks) {
+    var out = [];
+    (blocks || []).forEach(function (b) {
+      if (b.t === 'text') out.push(b.html.replace(/<[^>]+>/g, ''));
+      else if (b.t === 'steps') out.push(b.items.map(function (s) { return s.replace(/<[^>]+>/g, ''); }).join(' | '));
+    });
+    return out.join('\n');
+  }
+
   function reply(produce) {
     showTyping();
     setTimeout(function () {
       hideTyping();
-      pushBot(produce());
+      var res = produce();
+      pushBot(res);
+      logEvent('bot_reply', { intent: lastIntentId, text: blocksText(res.blocks).slice(0, 600) });
     }, 450 + Math.random() * 400);
   }
 
