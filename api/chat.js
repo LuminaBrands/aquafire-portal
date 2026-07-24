@@ -51,8 +51,9 @@ FACTS:
 - Cutout dimensions are critical (insert hangs from flanges). Enclosures need a
   matte-black light trap, 50 sq in air intake per 20" of insert, sealed wall
   cavities, 6" side clearance. Free design review: sales@aquafire.com.
-- Water: ideal hardness 3.5-8.5 gpg (7 ideal). No RO/distilled water (kills the
-  flame effect). The included Vapor Pure softener must stay installed for
+- Water: the softer the better — very soft water is ideal. Hard water's
+  minerals cause scale that damages mist makers. The included Vapor Pure
+  softener conditions tap water automatically and must stay installed for
   warranty. Descale every ~3 months. Mist makers are wear parts (2,000-3,000
   hrs, $81 at https://www.aquafire.com/collections/replacement-parts).
 - Warranty: 2 yr residential / 1 yr commercial; register within 30 days at
@@ -65,7 +66,11 @@ FACTS:
   https://aquafire.app/enclosure-guide.html (cutout calculator),
   https://aquafire.app/water-care.html (water hardness by ZIP).`;
 
-/* ── Team-added knowledge (Firestore, cached ~5 min per instance) ───────── */
+/* ── Team-added knowledge & corrections (Firestore, cached ~5 min) ──────
+   chatKnowledge docs come from the "Teach Ember" flow in chat-insights.html:
+     kind "fact" (default): { q, a }            — team-added Q&A knowledge
+     kind "correction":     { q, wrong, a }     — a bad answer + what's right;
+   corrections outrank everything and are rephrased, never quoted. */
 let kbCache = { at: 0, text: '' };
 
 async function teamKnowledge() {
@@ -73,18 +78,37 @@ async function teamKnowledge() {
   try {
     const r = await fetch(
       'https://firestore.googleapis.com/v1/projects/' + FS_PROJECT +
-      '/databases/(default)/documents/chatKnowledge?pageSize=200&key=' + FS_KEY,
+      '/databases/(default)/documents/chatKnowledge?pageSize=300&key=' + FS_KEY,
       { signal: AbortSignal.timeout(4000) }
     );
     if (!r.ok) throw new Error('firestore ' + r.status);
     const data = await r.json();
-    const lines = (data.documents || []).map((d) => {
+    const sv = (f, k) => (f[k] && f[k].stringValue ? f[k].stringValue : '');
+    const facts = [], fixes = [];
+    (data.documents || []).forEach((d) => {
       const f = d.fields || {};
-      const q = f.q && f.q.stringValue ? f.q.stringValue : '';
-      const a = f.a && f.a.stringValue ? f.a.stringValue : '';
-      return a ? (q ? 'Q: ' + q + '\nA: ' + a : '- ' + a) : '';
-    }).filter(Boolean);
-    kbCache = { at: Date.now(), text: lines.join('\n\n') };
+      const q = sv(f, 'q'), a = sv(f, 'a'), wrong = sv(f, 'wrong');
+      if (!a) return;
+      if (sv(f, 'kind') === 'correction') {
+        fixes.push('- Topic: ' + (q || '(general)') +
+          (wrong ? '\n  Ember previously said (WRONG, never repeat this): "' + wrong + '"' : '') +
+          '\n  The correct information: ' + a);
+      } else {
+        facts.push(q ? 'Q: ' + q + '\nA: ' + a : '- ' + a);
+      }
+    });
+    let text = '';
+    if (facts.length) {
+      text += '\n\nTEAM-ADDED KNOWLEDGE (authoritative, added by Aquafire staff):\n' +
+        facts.join('\n\n');
+    }
+    if (fixes.length) {
+      text += '\n\nTEAM CORRECTIONS (highest authority — these override every other ' +
+        'fact above, including the base facts. The "correct information" below is ' +
+        'staff shorthand, not customer copy: rephrase it naturally in your own warm, ' +
+        'on-tone voice and weave it into the conversation.):\n' + fixes.join('\n');
+    }
+    kbCache = { at: Date.now(), text };
   } catch (e) {
     if (!kbCache.text) kbCache = { at: Date.now(), text: '' }; // retry in 5 min
   }
@@ -136,9 +160,7 @@ module.exports = async (req, res) => {
     .map((m) => ({ role: m.role, content: m.content.slice(0, 1500) }));
 
   const kb = await teamKnowledge();
-  const systemText = BASE_FACTS + (kb
-    ? '\n\nTEAM-ADDED KNOWLEDGE (authoritative, added by Aquafire staff):\n' + kb
-    : '');
+  const systemText = BASE_FACTS + kb;
 
   const userContent =
     (context.model ? '[Customer owns: Aquafire ' + context.model + '] ' : '') + message;

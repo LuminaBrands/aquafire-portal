@@ -167,9 +167,9 @@ FACTS:
 - Cutout dimensions are critical (insert hangs from flanges). Enclosure needs a light
   trap, matte black interior, 50 sq in air intake per 20" of insert, sealed wall
   cavities, 6" side clearance. Free design review: sales@aquafire.com.
-- Water: ideal hardness 3.5-8.5 gpg (7 ideal). No RO/distilled (kills the flame
-  effect). Vapor Pure softener must stay installed for warranty. Descale every ~3
-  months. Mist makers are wear parts (2,000-3,000 hrs, $81).
+- Water: the softer the better -- very soft water is ideal (hard water's minerals
+  scale up the mist makers). Vapor Pure softener must stay installed for warranty.
+  Descale every ~3 months. Mist makers are wear parts (2,000-3,000 hrs, $81).
 - Warranty: 2 yr residential / 1 yr commercial; register within 30 days at
   aquafire.com/warranty; claims via ces@aquafire.com or aquafire.com/pages/service-request.
 - Beep codes: 2 quick = low water; 3 long = overflow/stuck float; 1 short every 2 s =
@@ -258,6 +258,7 @@ One small event per action to the `chatEvents` Firestore collection (project
 |---|---|---|
 | `convo_start` | page, host | A visitor opens a fresh conversation |
 | `user_message` | text, intent (`fallback` = unanswered, `llm` = sent to AI) | Every customer message |
+| `bot_reply` | text, intent | Every local-KB answer (so transcripts show both sides) |
 | `feedback` | vote (`up`/`down`), intent | 👍/👎 tapped on an answer |
 | `feedback_comment` | comment, intent | Optional "what went wrong" text after a 👎 |
 | `handoff` | mode (support/sales/orders) | A contact card is shown |
@@ -321,18 +322,25 @@ It improves through a short human-in-the-loop cycle; 15 minutes a week is plenty
    (the function caches knowledge briefly). Use **+ Add knowledge** for anything
    proactive (shipping policies, promos, new products); **Remove** retires stale
    entries. Everything here is customer-visible material — never secrets.
-2. **Filter by 👎** → read the comment, then fix via Teach Ember (AI answers) or the
+2. **Correct a bad answer:** every bot answer in a transcript has a **🔧 Correct this**
+   button — it captures the question and what Ember said, and you write plain notes on
+   what's actually correct (no need to draft customer copy). Saved as a `correction`
+   in `chatKnowledge`; corrections **override everything else the AI knows** and are
+   rephrased in Ember's own voice, never quoted. Note: if a *KB* answer (blue
+   "KB · intent" label) keeps being wrong, the correction fixes the AI path but the
+   instant answer comes from `INTENTS` in `assistant.js` — fix that copy too.
+3. **Filter by 👎** → read the comment, then fix via a correction (AI answers) or the
    intent's copy in `assistant.js` (instant KB answers).
-3. **Watch the handoff rate** → handoffs after an *answered* question usually mean the
+4. **Watch the handoff rate** → handoffs after an *answered* question usually mean the
    answer is right but incomplete — add the missing detail.
-4. **Promote hot topics to instant answers:** questions that recur constantly deserve
+5. **Promote hot topics to instant answers:** questions that recur constantly deserve
    a keyword-matched intent in the `INTENTS` array in `assistant.js` — instant, free,
    and works even if the AI endpoint is down. Teach Ember is the fast path; intents
    are the optimized path.
-5. **Baked-in facts:** the AI's core product facts live in `BASE_FACTS` in
+6. **Baked-in facts:** the AI's core product facts live in `BASE_FACTS` in
    `api/chat.js` — update them when specs/pricing change, and keep the exported CSV
    as a regression set to spot-check answers after changes.
-6. When Aquafire revises a source doc, update `docs/source-material/` and the
+7. When Aquafire revises a source doc, update `docs/source-material/` and the
    affected intents together (see below).
 
 `Export CSV` in the dashboard dumps everything for deeper analysis (or for building
