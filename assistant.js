@@ -936,11 +936,15 @@
   var CSS = [
     '.afa-root{--afa-bg:#15171c;--afa-surface:#1e2128;--afa-surface2:#262a33;--afa-border:#2f333d;--afa-text:#e6e7eb;--afa-muted:#8c91a0;--afa-red:#c0392b;--afa-red2:#d45a20;--afa-amber:#e8a838;--afa-radius:16px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}',
     '.afa-root,.afa-root *{box-sizing:border-box;margin:0;padding:0;}',
-    '.afa-root button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}',
-    '.afa-root a{color:#e8a838;text-decoration:none;}.afa-root a:hover{text-decoration:underline;}',
+    /* :where() keeps these resets at zero specificity so component rules always
+       win, while the injected !important still shields against theme globals */
+    ':where(.afa-root) button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;margin:0;padding:0;appearance:none;-webkit-appearance:none;text-transform:none;letter-spacing:normal;line-height:inherit;font-size:inherit;opacity:1;box-shadow:none;border-radius:0;}',
+    ':where(.afa-root) input{margin:0;appearance:none;-webkit-appearance:none;box-shadow:none;text-transform:none;letter-spacing:normal;opacity:1;}',
+    ':where(.afa-root) a{color:#e8a838;text-decoration:none;}',
+    ':where(.afa-root) a:hover{text-decoration:underline;}',
 
     /* Launcher */
-    '.afa-launcher{position:fixed;right:20px;bottom:20px;z-index:2147483000;height:56px;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 22px 0 18px;border-radius:999px;background:linear-gradient(135deg,#c0392b 0%,#d45a20 100%);color:#fff;font-family:Poppins,Inter,sans-serif;font-size:14px;font-weight:600;letter-spacing:.2px;box-shadow:0 6px 24px rgba(192,57,43,.45),0 2px 8px rgba(0,0,0,.35);transition:transform .2s,box-shadow .2s;}',
+    '.afa-launcher{position:fixed;right:20px;bottom:20px;top:auto;left:auto;z-index:2147483000;height:56px;min-height:56px;width:auto;min-width:0;margin:0;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 22px 0 18px;border-radius:999px;border:1.5px solid rgba(255,255,255,.35);background:linear-gradient(135deg,#c0392b 0%,#d45a20 100%);color:#fff;opacity:1;filter:none;font-family:Poppins,Inter,sans-serif;font-size:14px;font-weight:600;letter-spacing:.2px;line-height:1;text-transform:none;text-decoration:none;box-shadow:0 6px 24px rgba(192,57,43,.5),0 2px 10px rgba(0,0,0,.45);transition:transform .2s,box-shadow .2s;}',
     '.afa-launcher svg{width:24px;height:24px;transition:transform .25s;}',
     '.afa-launcher:hover{transform:scale(1.04);box-shadow:0 8px 30px rgba(192,57,43,.6),0 3px 10px rgba(0,0,0,.4);}',
     '.afa-launcher-label{white-space:nowrap;}',
@@ -1060,7 +1064,20 @@
     '.afa-panel{right:0;bottom:0;width:100vw;max-width:100vw;height:100dvh;border-radius:0;border:none;}',
     '.afa-nudge{right:16px;bottom:88px;}',
     '}'
-  ].join('\n');
+  ];
+
+  // Host pages (Shopify themes especially) style <button>/<input>/<a> globally,
+  // often with !important — which washes out the launcher and inputs. Every
+  // declaration gets !important; with our class specificity that wins against
+  // any theme rule. Keyframe bodies are skipped (!important is invalid there).
+  function hardenedCSS() {
+    return CSS.map(function (rule) {
+      if (rule.indexOf('@keyframes') === 0) return rule;
+      return rule
+        .replace(/\s*!important/g, '')
+        .replace(/([a-zA-Z-]+):([^;{}]+);/g, '$1:$2 !important;');
+    }).join('\n');
+  }
 
   /* ── DOM construction ─────────────────────────────────────────────────── */
   function el(tag, cls, html) {
@@ -1081,7 +1098,7 @@
       document.head.appendChild(pre); document.head.appendChild(f);
     }
 
-    var style = el('style'); style.textContent = CSS;
+    var style = el('style'); style.textContent = hardenedCSS();
     document.head.appendChild(style);
 
     root = el('div', 'afa-root');
