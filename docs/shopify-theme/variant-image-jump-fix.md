@@ -11,13 +11,17 @@ This is not part of the portal site in this repo — the repo only archives the
 fix so it can be reviewed and pasted into the theme editor
 (**Online Store → Themes → Edit code → `layout/theme.liquid`**).
 
+> **Rev 3.** Adds the actual root-cause fix for the remaining "thrown toward
+> add to cart" scroll on desktop (see below): the theme's post-rerender
+> `focus()` call, which lacks `preventScroll: true`. Verified against the
+> theme's `assets/theme.js` source — the gallery code itself never scrolls the
+> page vertically.
+>
 > **Rev 2.** The first revision of this fix pinned the clicked option button by
-> counter-scrolling on every animation frame. That fights the theme's own
-> smooth scroll-to-media (and the sticky header, which resizes as the page
-> scrolls), producing a violent jitter — the browser's smooth-scroll animation
-> pulls toward its target each frame and the pin loop pushes back. Rev 2 never
-> scrolls in a loop: it *prevents* the theme's page scroll instead of
-> correcting it after the fact.
+> counter-scrolling on every animation frame. That fights smooth scrolling and
+> the sticky header (which resizes as the page scrolls), producing a violent
+> jitter — the browser's scroll animation pulls each frame and the pin loop
+> pushes back. Rev 2+ never scrolls in a loop.
 
 ## Why the page jumped originally
 
@@ -35,7 +39,35 @@ Three things defeated that:
    promoted image may still be lazy-loading, shifting layout again when it
    arrives.
 
-## The fix (rev 2)
+## The remaining desktop scroll (root cause, found in theme.js)
+
+Reading the theme's `assets/theme.js` shows the variant → gallery path never
+scrolls the page: `ProductGallery._onVariantChanged` calls
+`carousel.select(pos, { animate: false })`, which is horizontal-only and
+early-returns entirely in desktop grid mode. The page scroll comes from the
+**rerender stage** instead:
+
+1. Clicking an option dispatches `product:rerender` *before* `variant:change`.
+   The theme fetches the section HTML (first selection of each combination is
+   a network round-trip; repeats hit a ~5-minute cache) and replaces the
+   product-info DOM (`ProductRerender.onRerender_fn`).
+2. It then restores focus to the re-rendered option input with
+   `element.focus()` — **without `{ preventScroll: true }`**. The browser's
+   default focus behavior instantly scrolls the page to bring that (visually
+   hidden, `sr-only`) input into view, near the buy buttons.
+
+That is the instant "thrown down the page" on the first selection of each
+variation: the fetch makes the rerender + focus land *after* any settle
+window, once the gallery reflow has already moved the input out of view — so
+`focus()` yanks the page. On cached repeats the timing differs and the input
+is usually still in view, so nothing visible happens.
+
+The fix guards it directly and timing-independently: programmatic `focus()`
+on elements inside a `<product-rerender>` gets `preventScroll: true` forced.
+Native keyboard tabbing is unaffected (it doesn't go through `.focus()`), and
+so are focus calls elsewhere on the page (e.g. the skip-to-content link).
+
+## The fix (rev 3)
 
 Replace the whole existing `variant:change` `<script>` block in
 `layout/theme.liquid` (including the `{%- comment -%}` above it) with the
@@ -51,7 +83,10 @@ option change — but with no scroll tug-of-war:
 - **Exactly two instant corrections** (never a loop): one right after the swap
   for whatever the reflow shifted, one when the frozen height is released;
 - rapid re-selections are safe: a new selection finishes the previous settle
-  window first.
+  window first;
+- **(new in rev 3)** the theme's post-rerender focus restore can no longer
+  scroll the page: `focus()` on elements inside `<product-rerender>` is forced
+  to `preventScroll: true`.
 
 ```html
 {%- comment -%}
@@ -63,17 +98,31 @@ option change — but with no scroll tug-of-war:
   are chosen — even when the theme's own logic would skip the switch (e.g.
   changing only the Cutout Size).
 
-  Anti-jump strategy (rev 2): freeze the gallery box while the media swap and
-  the theme's adaptive-height animation settle, and make scrollIntoView a
-  no-op for this gallery during that window so the theme cannot scroll the
-  page to the selected media (that scroll was the original jump). No per-frame
-  counter-scrolling — a correction loop fights the browser's smooth-scroll
-  animation and jitters.
+  Anti-jump strategy (rev 3): freeze the gallery box while the media swap and
+  the theme's adaptive-height animation settle, block scrollIntoView for this
+  gallery during that window, and — the desktop root cause — force
+  preventScroll on the theme's post-rerender focus() restore, which otherwise
+  scrolls the page to the re-rendered option input (theme.js ProductRerender
+  calls focus() without preventScroll after replacing the product-info DOM).
+  No per-frame counter-scrolling — a correction loop fights the browser's
+  smooth-scroll animation and jitters.
 {%- endcomment -%}
 <script>
   (() => {
     const SETTLE_MS = 450;
     let cleanup = null;
+
+    // The theme re-renders the product info on every option click and then
+    // restores focus without preventScroll — the browser scrolls the page to
+    // the sr-only input near the buy buttons. Force preventScroll for focus
+    // calls inside the rerendered area only; native Tab focus is unaffected.
+    const realFocus = HTMLElement.prototype.focus;
+    HTMLElement.prototype.focus = function (options) {
+      if (this.closest && this.closest('product-rerender')) {
+        options = Object.assign({}, options, { preventScroll: true });
+      }
+      realFocus.call(this, options);
+    };
 
     const instantScrollBy = (delta) => {
       if (!delta) return;
@@ -161,8 +210,11 @@ option change — but with no scroll tug-of-war:
 4. Paste the block above in its place and save.
 5. Test on a product page: switch Cutout Size / model options on desktop
    (grid gallery) and on a phone (carousel), including several selections in
-   quick succession. The image should swap with the option list staying put
-   under the cursor/finger and no oscillation.
+   quick succession — and specifically the *first* selection of each
+   combination in a fresh tab (hard-reload first), since that path goes
+   through a network fetch before the theme re-renders and restores focus.
+   The image should swap with the option list staying put under the
+   cursor/finger, no oscillation, and no lurch toward the add-to-cart area.
 
 If any jump remains on mobile only, the leftover motion is the theme's
 carousel resizing between photos of different aspect ratios — cropping the
