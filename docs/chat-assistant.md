@@ -83,6 +83,7 @@ on the tag itself:
 |---|---|---|---|
 | `portalBase` | `data-portal-base` | script's own directory | Absolute base URL used for portal deep links |
 | `apiEndpoint` | — | `portalBase + 'api/chat'` | POST endpoint for Claude-powered replies (below). Set `null` to disable AI mode |
+| `orderEndpoint` | — | `portalBase + 'api/order-status'` | POST endpoint for order & tracking lookup (below). Set `null` to disable the lookup flow |
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
 
 ---
@@ -112,6 +113,43 @@ Function behavior: CORS-restricted to aquafire.app / aquafire.com / the project'
 Vercel previews; basic per-instance rate limiting (12 req/min/IP); 10-turn history
 window; refusal-safe; prompt caching on the system prompt (typical reply costs a few
 cents). For heavier abuse protection, enable Vercel's WAF/rate limiting.
+
+## Order & tracking lookup (`api/order-status.js`)
+
+When a customer asks "where's my order?", Ember collects their **order number and
+the email used at checkout**, POSTs them to **`/api/order-status`**
+(`api/order-status.js` — a second zero-dependency Vercel function), and shows a
+status card: fulfillment state, items, ship-to city, and a tracking button per
+shipment. The function queries the Shopify Admin GraphQL API server-side; the
+Shopify token never reaches the browser.
+
+**To activate (one-time):**
+
+1. Shopify admin → **Settings → Apps and sales channels → Develop apps → Create
+   app** (in the newer Dev Dashboard flow, choose **"Start from Dev Dashboard"** —
+   not the CLI, which scaffolds a full hosted app you don't need). Name it e.g.
+   *Ember order lookup*.
+2. Give it ONLY the **`read_orders`** Admin API scope. Add **`read_all_orders`**
+   too if customers should be able to look up orders older than 60 days.
+3. Install the app on the store and copy its **Admin API access token**.
+4. Vercel → `luminabrands-projects/aquafire-portal` → **Settings → Environment
+   Variables** → add `SHOPIFY_ORDERS_TOKEN` (Production + Preview), then
+   **Redeploy**. The token lives only in Vercel — never in client code or chat.
+
+Until the token is set, the endpoint returns 503 and Ember falls back to the
+"check your account / email orders@" answer — nothing breaks.
+
+**Security & privacy:**
+
+- Data is returned **only when both the order number and email match** the order
+  (order numbers are sequential — number alone would allow enumeration). A
+  mismatch is indistinguishable from "not found".
+- The response contains only customer-safe fields: status, items, tracking,
+  city/state. No payment details, no full address.
+- Stricter rate limit than chat (6 lookups/min/IP), same CORS allowlist.
+- Chat telemetry logs the lookup **outcome only** (`found` / `not_found` /
+  `error`) — and the widget masks email addresses out of every logged message,
+  so no order numbers or emails ever land in `chatEvents`.
 
 ### Alternative: self-hosted proxy
 
