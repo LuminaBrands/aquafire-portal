@@ -82,17 +82,41 @@ on the tag itself:
 | Option | Attribute | Default | Purpose |
 |---|---|---|---|
 | `portalBase` | `data-portal-base` | script's own directory | Absolute base URL used for portal deep links |
-| `apiEndpoint` | — | *(unset)* | POST endpoint for Claude-powered replies (below) |
+| `apiEndpoint` | — | `portalBase + 'api/chat'` | POST endpoint for Claude-powered replies (below). Set `null` to disable AI mode |
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
 
 ---
 
-## Optional: Claude-powered answers
+## Claude-powered answers (`api/chat.js`)
 
-Out of the box, unrecognized questions get a graceful "here's what I can help with"
-fallback. Point `apiEndpoint` at a small proxy and those questions go to Claude
-instead, with the local KB still handling instant answers and outages. The API key
-lives only on the server — never in the browser.
+Questions the local KB can't match are sent to the portal's own serverless function,
+**`/api/chat`** (`api/chat.js` — deployed automatically by Vercel with the rest of the
+repo; zero dependencies, so no package.json/build step is introduced). It answers with
+the Claude API (`claude-opus-4-8`), grounded in the product facts baked into the
+function **plus team-added knowledge from the `chatKnowledge` Firestore collection**
+(see "Teach Ember" below). The local KB still answers common questions instantly and
+is the automatic fallback if the function errors, times out, or isn't configured.
+
+**To activate AI mode (one-time):**
+
+1. Get an Anthropic API key at platform.claude.com (Settings → API keys).
+2. Vercel → `luminabrands-projects/aquafire-portal` → **Settings → Environment
+   Variables** → add `ANTHROPIC_API_KEY` (Production), then **Redeploy** the latest
+   deployment so the function picks it up.
+
+Until the key is set, `/api/chat` returns 503 and the widget silently uses the local
+KB — nothing breaks. The key lives only in Vercel; never put it in client code.
+
+Function behavior: CORS-restricted to aquafire.app / aquafire.com / the project's
+Vercel previews; basic per-instance rate limiting (12 req/min/IP); 10-turn history
+window; refusal-safe; prompt caching on the system prompt (typical reply costs a few
+cents). For heavier abuse protection, enable Vercel's WAF/rate limiting.
+
+### Alternative: self-hosted proxy
+
+If you ever move the widget somewhere without the Vercel function, point
+`AQUAFIRE_ASSISTANT_CONFIG.apiEndpoint` at any endpoint that speaks the same
+contract — the original Cloudflare Worker example below still works.
 
 **Widget → endpoint request** (`POST`, JSON):
 
@@ -261,6 +285,14 @@ match /chatEvents/{id} {
     && request.auth.token.email.matches('.*@luminabrands[.]com');
   allow update, delete: if false;
 }
+match /chatKnowledge/{id} {
+  // world-readable: /api/chat reads it to ground AI answers (content is
+  // public-facing FAQ material by definition — never put secrets here)
+  allow read: if true;
+  allow create, update, delete: if request.auth != null
+    && request.auth.token.email_verified
+    && request.auth.token.email.matches('.*@luminabrands[.]com');
+}
 ```
 
 Adjust the domain pattern to whatever your team signs in with (e.g.
@@ -283,17 +315,24 @@ customer-typed details — treat logs as customer data and set a retention polic
 Ember doesn't self-modify (by design — a brand voice shouldn't drift unsupervised).
 It improves through a short human-in-the-loop cycle; 15 minutes a week is plenty:
 
-1. **Open Chat Insights** → the "Top unanswered questions" panel is your work queue.
-   Each recurring miss becomes a new intent (or new keywords on an existing one) in
-   the `INTENTS` array in `assistant.js`.
-2. **Filter by 👎** → read the comment, fix the answer's copy, steps, or links.
+1. **Teach Ember (no code):** in Chat Insights, every entry in "Top unanswered
+   questions" has an **Answer** button — type the correct answer and save. It lands
+   in the `chatKnowledge` Firestore collection and the AI uses it within ~5 minutes
+   (the function caches knowledge briefly). Use **+ Add knowledge** for anything
+   proactive (shipping policies, promos, new products); **Remove** retires stale
+   entries. Everything here is customer-visible material — never secrets.
+2. **Filter by 👎** → read the comment, then fix via Teach Ember (AI answers) or the
+   intent's copy in `assistant.js` (instant KB answers).
 3. **Watch the handoff rate** → handoffs after an *answered* question usually mean the
    answer is right but incomplete — add the missing detail.
-4. **In AI mode**, the same reviews improve the model: fold recurring questions and
-   corrected answers into the proxy's `SYSTEM_PROMPT` facts, and keep the exported
-   CSV as a regression set — after any prompt change, spot-check that previously-good
-   answers still hold.
-5. When Aquafire revises a source doc, update `docs/source-material/` and the
+4. **Promote hot topics to instant answers:** questions that recur constantly deserve
+   a keyword-matched intent in the `INTENTS` array in `assistant.js` — instant, free,
+   and works even if the AI endpoint is down. Teach Ember is the fast path; intents
+   are the optimized path.
+5. **Baked-in facts:** the AI's core product facts live in `BASE_FACTS` in
+   `api/chat.js` — update them when specs/pricing change, and keep the exported CSV
+   as a regression set to spot-check answers after changes.
+6. When Aquafire revises a source doc, update `docs/source-material/` and the
    affected intents together (see below).
 
 `Export CSV` in the dashboard dumps everything for deeper analysis (or for building
