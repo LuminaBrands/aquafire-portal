@@ -84,6 +84,7 @@ on the tag itself:
 | `portalBase` | `data-portal-base` | script's own directory | Absolute base URL used for portal deep links |
 | `apiEndpoint` | — | `portalBase + 'api/chat'` | POST endpoint for Claude-powered replies (below). Set `null` to disable AI mode |
 | `orderEndpoint` | — | `portalBase + 'api/order-status'` | POST endpoint for order & tracking lookup (below). Set `null` to disable the lookup flow |
+| `notifyEndpoint` | — | `portalBase + 'api/notify-handoff'` | POST endpoint for team handoff notifications (below). Set `null` to disable |
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
 
 ---
@@ -158,6 +159,26 @@ Until credentials are set, the endpoint returns 503 and Ember falls back to the
 - Chat telemetry logs the lookup **outcome only** (`found` / `not_found` /
   `error`) — and the widget masks email addresses out of every logged message,
   so no order numbers or emails ever land in `chatEvents`.
+
+## Team handoff notifications (`api/notify-handoff.js`)
+
+The first time a conversation shows a contact card (customer asked for a human,
+hit a 👎 flow, or reached an escalation), the widget pings
+**`/api/notify-handoff`**, which forwards a short summary to a chat webhook:
+where they were, their model, their last few messages (emails masked), and a
+link to Chat Insights for the full transcript. At most one notification per
+conversation.
+
+**To activate (one-time):**
+
+1. In Slack: **Apps → Incoming Webhooks → Add** (or api.slack.com → Create app
+   → Incoming Webhooks), pick the channel (e.g. `#ember-chat`), copy the
+   webhook URL. (Any service accepting a `{ "text": ... }` POST works too.)
+2. Vercel → **Settings → Environment Variables** → add `HANDOFF_WEBHOOK_URL`
+   (Production + Preview) → **Redeploy**.
+
+Until it's set, the endpoint 503s and the widget silently stops trying for the
+page load — customers never see any of this.
 
 ### Alternative: self-hosted proxy
 

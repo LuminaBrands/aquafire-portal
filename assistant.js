@@ -66,6 +66,37 @@
     : (PORTAL_BASE ? PORTAL_BASE + 'api/order-status' : '');
   var orderDown = false;
 
+  // Team notification on human handoff: fire-and-forget POST to the portal's
+  // /api/notify-handoff function (Slack webhook relay). Sent at most once per
+  // conversation. Override with cfg.notifyEndpoint, or null to disable; a 503
+  // (webhook not configured yet) stops attempts for this page load.
+  var NOTIFY_ENDPOINT = cfg.notifyEndpoint !== undefined
+    ? cfg.notifyEndpoint
+    : (PORTAL_BASE ? PORTAL_BASE + 'api/notify-handoff' : '');
+  var notifyDown = false;
+
+  function notifyHandoff(mode) {
+    if (!NOTIFY_ENDPOINT || notifyDown || state.notified) return;
+    state.notified = true;
+    persist();
+    try {
+      var recent = state.msgs.filter(function (m) { return m.who === 'user'; })
+        .slice(-3).map(function (m) {
+          return String(m.text || '').replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[email]').slice(0, 200);
+        });
+      fetch(NOTIFY_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+        body: JSON.stringify({
+          mode: mode, page: location.pathname, host: location.hostname,
+          model: state.ctx.model || '', recent: recent
+        })
+      }).then(function (r) { if (r.status === 503) notifyDown = true; })
+        .catch(function () { /* never bother the customer over this */ });
+    } catch (e) { /* ignore */ }
+  }
+
   var SUPPORT_EMAIL = 'support@aquafire.com';
   var SALES_EMAIL = 'sales@aquafire.com';
   var ORDERS_EMAIL = 'orders@aquafire.com';
@@ -905,13 +936,13 @@
   var state = { open: false, nudged: false, msgs: [], ctx: { model: null, awaiting: null } };
   try {
     var saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; state.started = !!p.started; }
+    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; state.started = !!p.started; state.notified = !!p.notified; }
   } catch (e) { /* private mode etc. */ }
 
   function persist() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid, started: state.started
+        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid, started: state.started, notified: state.notified
       }));
     } catch (e) { /* ignore */ }
   }
@@ -1363,7 +1394,10 @@
         });
         if (vids.children.length) container.appendChild(vids);
       } else if (b.t === 'contact') {
-        if (!spent) logEvent('handoff', { mode: b.mode || 'support' });
+        if (!spent) {
+          logEvent('handoff', { mode: b.mode || 'support' });
+          notifyHandoff(b.mode || 'support');
+        }
         var email = b.mode === 'sales' ? SALES_EMAIL : b.mode === 'orders' ? ORDERS_EMAIL : SUPPORT_EMAIL;
         var c = el('div', 'afa-contact');
         c.innerHTML = '<h5>' + (b.mode === 'sales' ? 'Sales & design' : b.mode === 'orders' ? 'Orders' : 'Aquafire support') + '</h5>' +
