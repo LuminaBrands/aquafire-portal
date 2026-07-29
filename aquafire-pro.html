@@ -770,7 +770,7 @@
 <body>
   <nav class="site-nav">
     <div class="container nav-inner">
-      <a href="/" class="nav-logo">
+      <a href="https://www.aquafire.com" class="nav-logo">
         <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
       </a>
       <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
@@ -778,12 +778,23 @@
       </button>
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
-        <li><a href="getting-started.html">Getting Started</a></li>
-        <li><a href="quick-start.html" class="active">Quick Start</a></li>
-
-        <li><a href="enclosure-guide.html?model=pro">Enclosure Guide</a></li>
-        <li><a href="water-care.html">Water Care</a></li>
-        <li><a href="troubleshoot.html?model=pro">Troubleshoot</a></li>
+        <li class="nav-drop">
+          <button type="button" class="nav-drop-btn active" aria-haspopup="true">Guides</button>
+          <ul class="nav-drop-menu">
+            <li><a href="getting-started.html">Getting Started</a></li>
+            <li><a href="quick-start.html" class="active">Quick Start</a></li>
+            <li><a href="builder.html">Build Yours</a></li>
+            <li><a href="enclosure-guide.html?model=pro">Enclosure Guide</a></li>
+          </ul>
+        </li>
+        <li class="nav-drop">
+          <button type="button" class="nav-drop-btn" aria-haspopup="true">Care</button>
+          <ul class="nav-drop-menu">
+            <li><a href="water-care.html">Water Care</a></li>
+            <li><a href="maintenance.html">Maintenance</a></li>
+            <li><a href="troubleshoot.html?model=pro">Troubleshoot</a></li>
+          </ul>
+        </li>
         <li><a href="dealer-locator.html">Find a Dealer</a></li>
         <li><a href="https://aquafire.gorgias.help/en-US" target="_blank" rel="noopener">Support</a></li>
       </ul>
