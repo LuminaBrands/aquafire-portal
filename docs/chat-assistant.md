@@ -324,7 +324,7 @@ One small event per action to the `chatEvents` Firestore collection (project
 
 | Event | Fields | Fired when |
 |---|---|---|
-| `convo_start` | page, host | Logged with a visitor's **first message** (not on panel open, so browsing visitors don't create empty conversations; the insights list and CSV export also only include conversations with at least one `user_message`) |
+| `convo_start` | page, host, device, journey, product, cart | Logged with a visitor's **first message** (not on panel open, so browsing visitors don't create empty conversations; the insights list and CSV export also only include conversations with at least one `user_message`). Carries anonymous browsing context: device class, pages visited this session, the product page being viewed, and (on the Shopify storefront) cart contents — also fed to the AI and to handoff notifications. No PII. |
 | `user_message` | text, intent (`fallback` = unanswered, `llm` = sent to AI) | Every customer message |
 | `bot_reply` | text, intent | Every local-KB answer (so transcripts show both sides) |
 | `feedback` | vote (`up`/`down`), intent | 👍/👎 tapped on an answer |

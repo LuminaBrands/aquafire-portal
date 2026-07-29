@@ -558,7 +558,13 @@
             div.innerHTML = '<div class="body">&#x1f91d; handoff shown (' + esc(e.mode || 'support') + ')</div>';
           } else if (e.type === 'convo_start') {
             div.className = 'ev sys';
-            div.innerHTML = '<div class="body">conversation started &middot; ' + esc(e.page || '') + ' @ ' + esc(e.host || '') + '</div>';
+            var cb = [];
+            if (e.device) cb.push(esc(e.device));
+            if (e.product) cb.push('viewing: ' + esc(e.product));
+            if (e.cart) cb.push('&#x1f6d2; ' + esc(e.cart));
+            if (e.journey) cb.push('journey: ' + esc(e.journey));
+            div.innerHTML = '<div class="body">conversation started &middot; ' + esc(e.page || '') + ' @ ' + esc(e.host || '') +
+              (cb.length ? '<br>' + cb.join(' &middot; ') : '') + '</div>';
           } else if (e.type === 'llm_error') {
             div.className = 'ev sys';
             div.innerHTML = '<div class="body">&#x26a0;&#xfe0f; AI endpoint failed &rarr; local fallback used</div>';
