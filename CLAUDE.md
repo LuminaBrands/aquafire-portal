@@ -41,6 +41,7 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 | `embed.js` | Strips nav/footer when page loaded in iframe (`?embed` query param) |
 | `assistant.js` | **"Ember" AI chat widget** — self-contained (injects own CSS), embeddable on Shopify via one script tag; `INTENTS` knowledge base + Claude-API backend (`/api/chat` by default). See `docs/chat-assistant.md` |
 | `api/chat.js` | **Vercel serverless function** for Ember's AI answers — Claude API (`claude-opus-4-8`), zero npm deps (raw fetch, keeps the repo build-free); grounded in `BASE_FACTS` + the `chatKnowledge` Firestore collection; needs `ANTHROPIC_API_KEY` env var in Vercel |
+| `api/notify-handoff.js` | **Vercel serverless function** — relays Ember human-handoff alerts to a chat webhook (Slack incoming-webhook `{text}` shape); once per conversation, emails masked; needs `HANDOFF_WEBHOOK_URL` env var, 503s gracefully until set |
 | `api/order-status.js` | **Vercel serverless function** for Ember's order & tracking lookup — Shopify Admin GraphQL proxy (`tryaquafire.myshopify.com`), zero npm deps; verifies order number + checkout email together, returns minimal safe fields; needs `SHOPIFY_CLIENT_ID` + `SHOPIFY_CLIENT_SECRET` env vars (Dev Dashboard app "Ember AI Chat", `read_orders` scope; tokens fetched via client-credentials grant and auto-renewed; legacy static `SHOPIFY_ORDERS_TOKEN` also accepted) — 503s gracefully until set (see `docs/chat-assistant.md`) |
 
 ### Docs
