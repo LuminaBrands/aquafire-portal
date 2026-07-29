@@ -73,6 +73,12 @@ FACTS:
 - Beep codes: 2 quick = low water; 3 long = overflow/stuck float sensor;
   1 short every 2 s = voltage/power adapter; light flashing ~30 s with no beeps
   = maintenance reminder (reset: hold middle + left buttons).
+- Contact routing (always write addresses out plainly): sales@aquafire.com for
+  dealer-related and sales questions, design reviews, and technical drawings
+  (CAD/DWG/BIM/spec files); ces@aquafire.com for customer-service questions
+  (including warranty claims); support@aquafire.com for support and
+  service/troubleshooting questions; orders@aquafire.com for order questions;
+  (877) 888-4260 for everything by phone.
 - Good to know: humidity impact is minimal (~1-2 liters of water per 10 hrs —
   less than a small humidifier on low); near-silent (a faint hum, quieter than
   a laptop fan); safe for bedrooms, even with the door closed. Never add oils

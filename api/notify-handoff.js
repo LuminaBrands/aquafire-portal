@@ -34,7 +34,9 @@ function rateLimited(ip) {
 }
 
 const clean = (s, max) =>
-  String(s || '').replace(EMAIL_RE, '[email]').replace(/\s+/g, ' ').trim().slice(0, max);
+  String(s || '')
+    .replace(EMAIL_RE, (m) => (/@(aquafire|luminabrands)\.com$/i.test(m) ? m : '[email]'))
+    .replace(/\s+/g, ' ').trim().slice(0, max);
 
 module.exports = async (req, res) => {
   const origin = req.headers.origin || '';
