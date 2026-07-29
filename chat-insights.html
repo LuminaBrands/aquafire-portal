@@ -443,7 +443,13 @@
       /* ── Render ── */
       function render() {
         var q = ($('search').value || '').toLowerCase();
-        var list = Object.keys(convos).map(function (k) { return convos[k]; });
+        // Only conversations where the customer actually asked something —
+        // panel-opens and teaser impressions (incl. historical events from
+        // before the widget logged lazily) would otherwise swamp the list.
+        var list = Object.keys(convos).map(function (k) { return convos[k]; })
+          .filter(function (c) {
+            return c.events.some(function (e) { return e.type === 'user_message'; });
+          });
         list.sort(function (a, b) { return (a.last.ts || '') < (b.last.ts || '') ? 1 : -1; });
 
         // stats (unfiltered)
@@ -565,6 +571,7 @@
       $('exportBtn').onclick = function () {
         var rows = [['convo', 'ts', 'type', 'intent', 'text', 'vote', 'comment', 'mode', 'model', 'page', 'host']];
         Object.keys(convos).forEach(function (k) {
+          if (!convos[k].events.some(function (e) { return e.type === 'user_message'; })) return;
           convos[k].events.forEach(function (e) {
             rows.push([e.convo, e.ts, e.type, e.intent, e.text, e.vote, e.comment, e.mode, e.model, e.page, e.host]
               .map(function (v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }));

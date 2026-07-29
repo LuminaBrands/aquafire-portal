@@ -303,7 +303,7 @@ One small event per action to the `chatEvents` Firestore collection (project
 
 | Event | Fields | Fired when |
 |---|---|---|
-| `convo_start` | page, host | A visitor opens a fresh conversation |
+| `convo_start` | page, host | Logged with a visitor's **first message** (not on panel open, so browsing visitors don't create empty conversations; the insights list and CSV export also only include conversations with at least one `user_message`) |
 | `user_message` | text, intent (`fallback` = unanswered, `llm` = sent to AI) | Every customer message |
 | `bot_reply` | text, intent | Every local-KB answer (so transcripts show both sides) |
 | `feedback` | vote (`up`/`down`), intent | 👍/👎 tapped on an answer |

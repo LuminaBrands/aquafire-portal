@@ -905,13 +905,13 @@
   var state = { open: false, nudged: false, msgs: [], ctx: { model: null, awaiting: null } };
   try {
     var saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; }
+    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; state.started = !!p.started; }
   } catch (e) { /* private mode etc. */ }
 
   function persist() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid
+        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid, started: state.started
       }));
     } catch (e) { /* ignore */ }
   }
@@ -1292,8 +1292,9 @@
     greet();
   }
 
+  // convo_start is logged lazily on the first user message (not on panel
+  // open) so browsing visitors don't create empty conversations in insights
   function greet() {
-    logEvent('convo_start', {});
     pushBot({
       blocks: [
         { t: 'text', html: 'Hi, I\u2019m <strong>Ember</strong> \ud83d\udd25 \u2014 the Aquafire assistant. I can compare models, plan your install, check water care, track your order, or walk you through a fix. How can I help?' },
@@ -1464,6 +1465,11 @@
 
   function handleUserText(text) {
     pushUser(text);
+    if (!state.started) {
+      state.started = true;
+      persist();
+      logEvent('convo_start', {});
+    }
     var norm = normalize(text);
 
     // model mentions update context anywhere in the conversation
