@@ -90,10 +90,10 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         keepalive: true,
-        body: JSON.stringify({
+        body: JSON.stringify(Object.assign({
           mode: mode, page: location.pathname, host: location.hostname,
           model: state.ctx.model || '', recent: recent
-        })
+        }, visitorCtx()))
       }).then(function (r) { if (r.status === 503) notifyDown = true; })
         .catch(function () { /* never bother the customer over this */ });
     } catch (e) { /* ignore */ }
@@ -938,13 +938,56 @@
   var state = { open: false, nudged: false, msgs: [], ctx: { model: null, awaiting: null } };
   try {
     var saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; state.started = !!p.started; state.notified = !!p.notified; }
+    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; state.started = !!p.started; state.notified = !!p.notified; state.journey = p.journey || []; }
   } catch (e) { /* private mode etc. */ }
+
+  /* ── Visitor context — anonymous browsing signals (no PII) ─────────────
+     Journey (pages this session), device class, current product page, and
+     on the Shopify storefront the cart contents. Fed to the AI so answers
+     fit what the customer is looking at, logged with convo_start for the
+     insights dashboard, and attached to handoff notifications. */
+  state.journey = state.journey || [];
+  if (state.journey[state.journey.length - 1] !== location.pathname) {
+    state.journey.push(location.pathname);
+    if (state.journey.length > 10) state.journey = state.journey.slice(-10);
+    persist(); // journey accrues while browsing, before any chat interaction
+  }
+
+  var cartCache = '';
+  function loadCart() {
+    // /cart.js exists only on the Shopify storefront — skip on the portal
+    try {
+      if (!PORTAL_BASE || location.origin === new URL(PORTAL_BASE).origin) return;
+    } catch (e) { return; }
+    fetch('/cart.js', { credentials: 'same-origin' }).then(function (r) {
+      if (!r.ok) throw new Error('no cart');
+      return r.json();
+    }).then(function (c) {
+      if (!c || !c.items || !c.items.length) return;
+      cartCache = c.items.slice(0, 5).map(function (i) {
+        return i.quantity + 'x ' + String(i.product_title || i.title || '').slice(0, 60);
+      }).join(', ');
+      if (typeof c.total_price === 'number') {
+        cartCache += ' ($' + Math.round(c.total_price / 100) + ')';
+      }
+    }).catch(function () { /* empty cart or non-Shopify host */ });
+  }
+  loadCart();
+
+  function visitorCtx() {
+    var m = location.pathname.match(/\/products\/([^\/?#]+)/);
+    return {
+      device: Math.min(window.innerWidth, window.innerHeight) < 700 ? 'mobile' : 'desktop',
+      journey: state.journey.join(' > ').slice(0, 300),
+      product: m ? m[1] : '',
+      cart: cartCache
+    };
+  }
 
   function persist() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid, started: state.started, notified: state.notified
+        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid, started: state.started, notified: state.notified, journey: state.journey
       }));
     } catch (e) { /* ignore */ }
   }
@@ -1507,7 +1550,7 @@
     if (!state.started) {
       state.started = true;
       persist();
-      logEvent('convo_start', {});
+      logEvent('convo_start', visitorCtx());
     }
     var norm = normalize(text);
 
@@ -1634,7 +1677,7 @@
       body: JSON.stringify({
         message: text,
         history: historyForApi().slice(0, -1),
-        context: { model: state.ctx.model, page: location.href }
+        context: Object.assign({ model: state.ctx.model, page: location.href }, visitorCtx())
       })
     }).then(function (r) {
       if (!r.ok) throw new Error('bad status');

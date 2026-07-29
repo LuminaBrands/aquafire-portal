@@ -69,10 +69,18 @@ module.exports = async (req, res) => {
     .map((m) => clean(m, 200))
     .filter(Boolean);
 
+  const device = clean(body.device, 10);
+  const product = clean(body.product, 60);
+  const cart = clean(body.cart, 200);
+  const journey = clean(body.journey, 250);
+
   const lines = [
     ':fire: *Ember handed a customer to the team* (' + mode + ')',
-    (host || page) ? 'Where: ' + host + page : null,
+    (host || page) ? 'Where: ' + host + page + (device ? ' (' + device + ')' : '') : null,
     model ? 'Their model: Aquafire ' + model : null,
+    product ? 'Viewing product: ' + product : null,
+    cart ? 'Cart: ' + cart : null,
+    journey ? 'Journey: ' + journey : null,
     recent.length ? 'They asked:\n' + recent.map((m) => '> ' + m).join('\n') : null,
     'Full transcript: ' + INSIGHTS_URL
   ].filter(Boolean);

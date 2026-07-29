@@ -34,6 +34,10 @@ and only from the facts below. Simple markdown is supported: **bold**, [links](u
 line breaks. If you don't know something, say so and point the customer to
 support@aquafire.com or (877) 888-4260 — never invent prices, policies, or specs.
 Politely decline anything unrelated to Aquafire and steer back to fireplaces.
+Messages may open with a [Customer context - ...] block: the model they own,
+the product page they're viewing, their device, cart contents, and pages
+visited this session. Use it to tailor the answer naturally (e.g. speak to the
+model in their cart) — never recite it back robotically or mention "context".
 
 FACTS:
 - Aquafire creates a realistic flame illusion from cool water vapor (ultrasonic
@@ -229,8 +233,15 @@ module.exports = async (req, res) => {
   const kb = await teamKnowledge();
   const systemText = BASE_FACTS + kb;
 
+  const cs = (v, max) => String(v || '').replace(/[\[\]]/g, '').slice(0, max);
+  const ctxBits = [];
+  if (context.model) ctxBits.push('owns: Aquafire ' + cs(context.model, 20));
+  if (context.product) ctxBits.push('currently viewing product: ' + cs(context.product, 60));
+  if (context.device) ctxBits.push('on ' + cs(context.device, 10));
+  if (context.cart) ctxBits.push('cart: ' + cs(context.cart, 200));
+  if (context.journey) ctxBits.push('pages visited: ' + cs(context.journey, 250));
   const userContent =
-    (context.model ? '[Customer owns: Aquafire ' + context.model + '] ' : '') + message;
+    (ctxBits.length ? '[Customer context - ' + ctxBits.join('; ') + '] ' : '') + message;
 
   let upstream;
   try {
