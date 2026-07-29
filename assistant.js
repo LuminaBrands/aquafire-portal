@@ -82,7 +82,9 @@
     try {
       var recent = state.msgs.filter(function (m) { return m.who === 'user'; })
         .slice(-3).map(function (m) {
-          return String(m.text || '').replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[email]').slice(0, 200);
+          return String(m.text || '').replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, function (e) {
+            return /@(aquafire|luminabrands)\.com$/i.test(e) ? e : '[email]';
+          }).slice(0, 200);
         });
       fetch(NOTIFY_ENDPOINT, {
         method: 'POST',
@@ -981,11 +983,14 @@
         model: state.ctx.model || ''
       };
       Object.keys(data || {}).forEach(function (k) { ev[k] = data[k]; });
-      // Privacy: never let email addresses reach the telemetry store
-      // (customers type theirs during the order-lookup flow).
+      // Privacy: never let customer email addresses reach the telemetry
+      // store (they type theirs during the order-lookup flow). Aquafire's
+      // own contact addresses pass through so transcripts stay readable.
       ['text', 'comment'].forEach(function (k) {
         if (typeof ev[k] === 'string') {
-          ev[k] = ev[k].replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[email]');
+          ev[k] = ev[k].replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, function (m) {
+            return /@(aquafire|luminabrands)\.com$/i.test(m) ? m : '[email]';
+          });
         }
       });
       if (cfg.logEndpoint) {
