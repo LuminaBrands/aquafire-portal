@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<!--
+DIRECTION CONTRACT — v4 "Vapor Glass"
+THESIS: The owner's manual as conversation: everything floats as frosted vapor
+capsules around one question box, because the product itself is made of mist and
+light. Refuses the docs-portal default of sectioned card grids — the page is a
+sparse field of capsules over drifting smoke.
+OWN-WORLD: Graphite smoke ground (#101216→#1a1d23) with slow-drifting blurred
+vapor and faint window-light shading; every control is a frosted glass capsule
+(blur 18px, 1px white-alpha stroke, full-round); monochrome white/gray; Figtree;
+the single color note is Ember's warm spark. Recognizable with content removed:
+glass pills floating in smoke.
+STORY: A visitor asks Ember (the portal's real AI assistant) or taps a capsule;
+guides, models, and support are clusters of capsules, not sections.
+FIRST VIEWPORT: Centered stack — sparkle button, "Ask Ember anything" capsule,
+quick-question capsules; glass nav capsule top; the Guides capsule cluster
+begins below. Primary action = the Ask capsule.
+FORM: User-pinned direction (reference image 4, frosted-glass capsule UI).
+Pinned brief beats the concept roll; no seed. Staging: conversational field.
+Glass/blur is the committed world here, not decoration.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Owner's Guide — Vapor Glass</title>
+  <meta name="description" content="The complete guide to your Aquafire water vapor fireplace.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --smoke: #101216;
+      --smoke-2: #16191f;
+      --glass: rgba(255, 255, 255, 0.055);
+      --glass-hi: rgba(255, 255, 255, 0.10);
+      --stroke: rgba(255, 255, 255, 0.12);
+      --stroke-hi: rgba(255, 255, 255, 0.22);
+      --white: #f3f4f6;
+      --gray: #b9bec8;
+      --gray-2: #8d939f;
+      --spark: #ff9d45;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--smoke);
+      color: var(--white);
+      font-family: "Figtree", system-ui, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--white); outline-offset: 3px; border-radius: 999px; }
+
+    /* ── Atmosphere ──────────────────────────────────── */
+    .atmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .atmos::before {
+      /* faint window-light falling through the smoke */
+      content: ""; position: absolute; inset: 0;
+      background:
+        linear-gradient(107deg, transparent 18%, rgba(255, 255, 255, 0.028) 19%, rgba(255, 255, 255, 0.028) 30%, transparent 31%),
+        linear-gradient(107deg, transparent 36%, rgba(255, 255, 255, 0.022) 37%, rgba(255, 255, 255, 0.022) 48%, transparent 49%),
+        linear-gradient(107deg, transparent 58%, rgba(255, 255, 255, 0.016) 59%, rgba(255, 255, 255, 0.016) 72%, transparent 73%),
+        linear-gradient(180deg, #14171c 0%, var(--smoke) 55%, #0b0d10 100%);
+    }
+    .puff {
+      position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.5;
+      will-change: transform;
+    }
+    .puff-a { width: 560px; height: 420px; left: -8%; top: 8%; background: radial-gradient(closest-side, #262b34, transparent 72%); animation: drift-a 46s ease-in-out infinite alternate; }
+    .puff-b { width: 640px; height: 460px; right: -12%; top: 30%; background: radial-gradient(closest-side, #22262e, transparent 70%); animation: drift-b 58s ease-in-out infinite alternate; }
+    .puff-c { width: 460px; height: 380px; left: 28%; bottom: -6%; background: radial-gradient(closest-side, #1f242c, transparent 74%); animation: drift-a 52s ease-in-out infinite alternate-reverse; }
+    @keyframes drift-a { from { transform: translate(0, 0) scale(1); } to { transform: translate(70px, -40px) scale(1.12); } }
+    @keyframes drift-b { from { transform: translate(0, 0) scale(1.06); } to { transform: translate(-90px, 50px) scale(0.96); } }
+    @media (prefers-reduced-motion: reduce) { .puff { animation: none; } }
+
+    .page { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Capsule primitives ──────────────────────────── */
+    .cap {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--glass);
+      border: 1px solid var(--stroke);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-radius: 999px;
+      color: var(--gray);
+      text-decoration: none;
+      transition: background-color 0.28s, border-color 0.28s, color 0.28s, transform 0.32s var(--ease);
+    }
+    .cap:hover { background: var(--glass-hi); border-color: var(--stroke-hi); color: var(--white); transform: translateY(-2px); }
+    .cap svg { flex: none; }
+    .cap-ico {
+      width: 30px; height: 30px; border-radius: 50%; flex: none;
+      background: rgba(255, 255, 255, 0.07);
+      display: grid; place-items: center; color: var(--gray);
+    }
+    .cap:hover .cap-ico { color: var(--white); }
+
+    /* ── Top bar ─────────────────────────────────────── */
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 26px 0 0; flex-wrap: wrap; }
+    .bar .brand { padding: 12px 22px; }
+    .bar .brand img { height: 18px; display: block; }
+    .bar-tabs { display: flex; gap: 6px; padding: 5px; }
+    .bar-tabs a {
+      border: 0; background: transparent; backdrop-filter: none;
+      padding: 9px 18px; font-size: 0.9rem; font-weight: 600;
+      border-radius: 999px; text-decoration: none; color: var(--gray);
+    }
+    .bar-tabs a.on { background: rgba(255, 255, 255, 0.12); color: var(--white); }
+    .bar-tabs a:hover { transform: none; }
+
+    /* ── Ask field ───────────────────────────────────── */
+    .ask-zone {
+      min-height: 62vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 60px 0 40px;
+    }
+    .sparkle {
+      width: 66px; height: 66px; border-radius: 50%;
+      background: var(--glass); border: 1px solid var(--stroke);
+      backdrop-filter: blur(18px);
+      display: grid; place-items: center; color: var(--white);
+      margin-bottom: 26px;
+    }
+    .sparkle svg { display: block; }
+    .sparkle .flick { color: var(--spark); }
+    .ask-zone h1 {
+      font-size: clamp(1.9rem, 3.6vw, 2.7rem); font-weight: 600; letter-spacing: -0.025em;
+      max-width: 22ch; text-wrap: balance; line-height: 1.15;
+    }
+    .ask-zone .sub { color: var(--gray-2); margin-top: 12px; font-size: 1rem; max-width: 46ch; }
+    .ask {
+      margin-top: 30px; width: min(640px, 100%);
+      display: flex; align-items: center; gap: 14px;
+      padding: 10px 10px 10px 26px;
+      border-radius: 999px; cursor: pointer;
+      background: var(--glass); border: 1px solid var(--stroke);
+      backdrop-filter: blur(18px);
+      text-decoration: none;
+      box-shadow: 0 28px 60px -24px rgba(0, 0, 0, 0.65);
+      transition: border-color 0.28s, transform 0.32s var(--ease);
+    }
+    .ask:hover { border-color: var(--stroke-hi); transform: translateY(-2px); }
+    .ask .plus {
+      width: 22px; height: 22px; color: var(--gray); flex: none;
+    }
+    .ask .ph { flex: 1; text-align: left; color: var(--gray-2); font-size: 1.02rem; }
+    .ask .send {
+      flex: none; display: inline-flex; align-items: center; gap: 9px;
+      background: rgba(255, 255, 255, 0.12); border: 1px solid var(--stroke);
+      color: var(--white); font-weight: 600; font-size: 0.92rem;
+      padding: 12px 22px; border-radius: 999px;
+      transition: background-color 0.25s;
+    }
+    .ask:hover .send { background: rgba(255, 255, 255, 0.18); }
+    .quick { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 22px; max-width: 720px; }
+    .quick .cap { padding: 10px 18px; font-size: 0.88rem; font-weight: 500; }
+    .ember-note { margin-top: 26px; color: var(--gray-2); font-size: 0.82rem; display: inline-flex; align-items: baseline; gap: 8px; max-width: 40ch; }
+    .ember-note .dotpip { width: 6px; height: 6px; border-radius: 50%; background: var(--spark); }
+
+    /* ── Clusters ────────────────────────────────────── */
+    .cluster { margin: 54px 0; }
+    .cluster-tag {
+      display: inline-flex; align-items: center; gap: 9px;
+      color: var(--gray-2); font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .cluster-tag::after { content: ""; width: 48px; height: 1px; background: var(--stroke); }
+    .caps { display: flex; flex-wrap: wrap; gap: 12px; }
+    .caps .cap { padding: 13px 22px 13px 13px; font-size: 0.95rem; font-weight: 600; color: var(--white); }
+    .caps .cap small { display: block; font-weight: 500; font-size: 0.8rem; color: var(--gray-2); }
+    .caps .cap:hover small { color: var(--gray); }
+    .cluster.right { text-align: right; }
+    .cluster.right .caps { justify-content: flex-end; }
+    .cluster.mid { text-align: center; }
+    .cluster.mid .caps { justify-content: center; }
+    .cluster.mid .cluster-tag::after { display: none; }
+    .cluster.right .cluster-tag { flex-direction: row-reverse; }
+
+    /* model capsules */
+    .mcap { padding: 12px 24px 12px 12px !important; }
+    .mcap .thumb {
+      width: 58px; height: 44px; border-radius: 999px; overflow: hidden; flex: none;
+      background: rgba(255, 255, 255, 0.07);
+      display: grid; place-items: center;
+    }
+    .mcap .thumb img { width: 52px; height: 36px; object-fit: contain; }
+    .mcap .soon { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray-2); border: 1px solid var(--stroke); border-radius: 999px; padding: 3px 10px; margin-left: 8px; }
+
+    /* the wide troubleshoot capsule */
+    .wide-cap {
+      display: flex; align-items: center; gap: 16px;
+      width: min(680px, 100%);
+      padding: 14px 14px 14px 26px; border-radius: 999px;
+      background: var(--glass); border: 1px solid var(--stroke);
+      backdrop-filter: blur(18px); text-decoration: none;
+      transition: border-color 0.28s, transform 0.32s var(--ease);
+    }
+    .wide-cap:hover { border-color: var(--stroke-hi); transform: translateY(-2px); }
+    .wide-cap .wtxt { flex: 1; text-align: left; }
+    .wide-cap .wtxt b { display: block; font-size: 1.02rem; font-weight: 600; color: var(--white); }
+    .wide-cap .wtxt span { font-size: 0.85rem; color: var(--gray-2); }
+    .wide-cap .warrow {
+      width: 46px; height: 46px; border-radius: 50%; flex: none;
+      background: rgba(255, 255, 255, 0.12); display: grid; place-items: center; color: var(--white);
+      transition: background-color 0.25s;
+    }
+    .wide-cap:hover .warrow { background: rgba(255, 255, 255, 0.2); }
+    .cluster.mid .wide-cap { margin: 0 auto; }
+
+    /* quote capsule */
+    .quote-cap {
+      width: min(720px, 100%); margin: 0 auto;
+      background: var(--glass); border: 1px solid var(--stroke);
+      backdrop-filter: blur(18px); border-radius: 34px;
+      padding: 34px 40px; text-align: center;
+    }
+    .quote-cap .stars { color: var(--spark); letter-spacing: 3px; font-size: 0.9rem; }
+    .quote-cap blockquote { font-size: 1.25rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.5; margin-top: 14px; text-wrap: balance; }
+    .quote-cap figcaption { color: var(--gray-2); font-size: 0.86rem; margin-top: 14px; }
+
+    /* ── Footer ──────────────────────────────────────── */
+    .foot {
+      margin: 70px 0 40px; display: flex; flex-direction: column; gap: 18px; align-items: center;
+    }
+    .foot .caps { justify-content: center; }
+    .foot .caps .cap { padding: 10px 18px; font-size: 0.85rem; color: var(--gray); font-weight: 500; }
+    .foot .fine { color: var(--gray-2); font-size: 0.8rem; }
+    .foot img { height: 16px; opacity: 0.65; }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 720px) {
+      .bar { justify-content: center; }
+      .ask-zone { min-height: 56vh; padding-top: 40px; }
+      .ask { padding-left: 18px; }
+      .ask .send span { display: none; }
+      .cluster.right { text-align: left; }
+      .cluster.right .caps { justify-content: flex-start; }
+      .cluster.right .cluster-tag { flex-direction: row; }
+      .caps .cap { flex: 1 1 100%; justify-content: flex-start; }
+      .quick .cap { flex: initial; }
+      .quote-cap { padding: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="atmos" aria-hidden="true">
+    <span class="puff puff-a"></span>
+    <span class="puff puff-b"></span>
+    <span class="puff puff-c"></span>
+  </div>
+
+  <div class="page">
+    <header class="bar">
+      <a class="cap brand" href="../index.html" aria-label="Aquafire home">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <nav class="cap bar-tabs" aria-label="Sections">
+        <a href="#" class="on">Guide</a>
+        <a href="#models">Models</a>
+        <a href="#care">Care</a>
+        <a href="#support">Support</a>
+      </nav>
+      <a class="cap" style="padding: 12px 20px; font-size: 0.9rem; font-weight: 600;" href="../dealer-locator.html">Find a Dealer</a>
+    </header>
+
+    <section class="ask-zone">
+      <div class="sparkle" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/><path class="flick" d="M19 15l.9 3.1L23 19l-3.1.9L19 23l-.9-3.1L15 19l3.1-.9z"/></svg>
+      </div>
+      <h1>Your Aquafire, answered.</h1>
+      <p class="sub">The interactive owner&rsquo;s guide for your water vapor fireplace &mdash; ask anything, or drift to a guide below.</p>
+      <a class="ask" href="../support.html" title="Ember, the Aquafire assistant, opens in the corner of every portal page">
+        <svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="ph">Ask Ember&hellip; &ldquo;why is my flame low?&rdquo;</span>
+        <span class="send">
+          <span>Ask</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </span>
+      </a>
+      <div class="quick">
+        <a class="cap" href="../troubleshoot.html">My Aquafire is beeping</a>
+        <a class="cap" href="../troubleshoot.html">Flame looks smoky or foggy</a>
+        <a class="cap" href="../maintenance.html">How do I clean the mist maker?</a>
+        <a class="cap" href="../water-care.html">Is my water too hard?</a>
+      </div>
+      <p class="ember-note"><span class="dotpip"></span>Ember, the Aquafire assistant, floats on every page of the portal</p>
+    </section>
+
+    <section class="cluster" id="care" aria-label="Guides">
+      <span class="cluster-tag">Plan &amp; care</span>
+      <div class="caps">
+        <a class="cap" href="../enclosure-guide.html">
+          <span class="cap-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V4h8v3M9 12h6"/></svg></span>
+          <span>Enclosure Builder<small>Cutouts &amp; light trap, calculated</small></span>
+        </a>
+        <a class="cap" href="../water-care.html">
+          <span class="cap-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3.5 4-6 6.5-6 10a6 6 0 0 0 12 0c0-3.5-2.5-6-6-10z"/></svg></span>
+          <span>Water Care<small>Hardness by ZIP &middot; Vapor Pure</small></span>
+        </a>
+        <a class="cap" href="../maintenance.html">
+          <span class="cap-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.1-.6-.6-2.1z"/></svg></span>
+          <span>Maintenance<small>Every 3 mo &middot; flush every 6 mo</small></span>
+        </a>
+        <a class="cap" href="../quick-start.html">
+          <span class="cap-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></span>
+          <span>Quick Start<small>First fill to first flame</small></span>
+        </a>
+        <a class="cap" href="../getting-started.html">
+          <span class="cap-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a6 6 0 0 0 6-6c0-3-2-4.5-6-9-4 4.5-6 6-6 9a6 6 0 0 0 6 6z"/></svg></span>
+          <span>Getting Started<small>Unboxing &amp; setup</small></span>
+        </a>
+      </div>
+    </section>
+
+    <section class="cluster right" id="models" aria-label="Models">
+      <span class="cluster-tag">Your model</span>
+      <div class="caps">
+        <a class="cap mcap" href="../aquafire-pro.html">
+          <span class="thumb"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt=""></span>
+          <span>Aquafire Pro<small>Color LEDs &middot; app &middot; direct-plumb</small></span>
+        </a>
+        <a class="cap mcap" href="../aquafire-original.html">
+          <span class="thumb"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ORIGINAL.png?v=1768251742" alt=""></span>
+          <span>Aquafire Original<small>The classic &middot; 20&Prime; / 40&Prime; / 60&Prime;</small></span>
+        </a>
+        <span class="cap mcap" aria-disabled="true">
+          <span class="thumb"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/LITE.png?v=1768251746" alt=""></span>
+          <span>Aquafire Lite<small>Compact &middot; manual fill</small></span>
+          <span class="soon">Guide soon</span>
+        </span>
+      </div>
+    </section>
+
+    <section class="cluster mid" id="support" aria-label="Support">
+      <span class="cluster-tag">When something&rsquo;s off</span>
+      <a class="wide-cap" href="../troubleshoot.html">
+        <span class="wtxt">
+          <b>Troubleshooter</b>
+          <span>Answer a few questions &mdash; get the fix, a how-to video, or the right person. Tailored to your model.</span>
+        </span>
+        <span class="warrow" aria-hidden="true">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </span>
+      </a>
+      <div class="caps" style="margin-top: 14px;">
+        <a class="cap" href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">
+          <span class="cap-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/></svg></span>
+          <span>Register warranty</span>
+        </a>
+        <a class="cap" href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">
+          <span class="cap-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M9 16h4M14 3H5a1.5 1.5 0 0 0-1.5 1.5v15A1.5 1.5 0 0 0 5 21h14a1.5 1.5 0 0 0 1.5-1.5V10z"/></svg></span>
+          <span>Service request</span>
+        </a>
+        <a class="cap" href="../support.html">
+          <span class="cap-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 21l1.5-4.6A8.5 8.5 0 1 1 21 12z"/></svg></span>
+          <span>Support Hub</span>
+        </a>
+        <a class="cap" href="https://www.aquafire.com" target="_blank" rel="noopener">
+          <span class="cap-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5zM9 7a3 3 0 0 1 6 0"/></svg></span>
+          <span>Shop parts</span>
+        </a>
+      </div>
+    </section>
+
+    <figure class="quote-cap">
+      <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+      <blockquote>&ldquo;Absolutely stunning &mdash; guests always ask if it&rsquo;s real fire. The water vapor effect is incredibly realistic.&rdquo;</blockquote>
+      <figcaption>Sarah M. &middot; Aquafire Pro owner &middot; <a href="https://judge.me/product_reviews/9498b1ae-d6c2-4e5b-b06b-78b0906a168f/new?source=shareable-link" target="_blank" rel="noopener" style="color: var(--gray);">write yours</a></figcaption>
+    </figure>
+
+    <footer class="foot">
+      <div class="caps">
+        <a class="cap" href="../rewards.html">Rewards</a>
+        <a class="cap" href="../dealer-locator.html">Find a Dealer</a>
+        <a class="cap" href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener">Instagram</a>
+        <a class="cap" href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener">YouTube</a>
+        <a class="cap" href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact sales</a>
+      </div>
+      <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      <p class="fine">&copy; 2026 Aquafire &middot; Design direction v4 &ldquo;Vapor Glass&rdquo;</p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<!--
+DIRECTION CONTRACT — v5 "Insight Console"
+THESIS: The owner's manual as a personal analytics console: your fireplace's care
+schedule, water quality, and guide progress rendered as instrumentation.
+Refuses the docs-portal default of prose sections — knowledge is charted.
+OWN-WORLD: Ribbed charcoal ground (#0f1013 with 1px vertical ribs), glassy panels
+with fine strokes, one flat violet accent (#9d7bff), Archivo display + Martian
+Mono for every number, an icon rail down the left. Recognizable with content
+removed: fine-lined charcoal console with violet data marks.
+STORY: An owner logs in mentally: sees the care cadence as a timeline, water
+hardness as a scale, guides as modules with progress, and acts from the console.
+FIRST VIEWPORT: Icon rail left; topbar with search + rewards chip; "Welcome
+back." headline; two instrument panels side by side (Care timeline chart, Water
+hardness scale) over a row of three real-number stat tiles. Primary action =
+Troubleshoot in rail + timeline panel CTA.
+FORM: User-pinned direction (reference image 3, violet analytics dashboard).
+Pinned brief beats the concept roll; no seed. Stat tiles and mono numerals are
+the pinned world's native grammar. Violet kept flat — no gradients, no glow.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Owner's Guide — Insight Console</title>
+  <meta name="description" content="The complete guide to your Aquafire water vapor fireplace.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1013;
+      --rib: rgba(255, 255, 255, 0.022);
+      --panel: rgba(255, 255, 255, 0.033);
+      --panel-2: rgba(255, 255, 255, 0.055);
+      --stroke: #26282e;
+      --stroke-2: #33363e;
+      --text: #ecedf1;
+      --dim: #989eab;
+      --faint: #6b7280;
+      --violet: #9d7bff;
+      --violet-deep: #7c5cd6;
+      --mono: "Martian Mono", monospace;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background:
+        repeating-linear-gradient(90deg, var(--rib) 0 1px, transparent 1px 7px),
+        linear-gradient(180deg, #121317 0%, var(--bg) 30%, #0b0c0f 100%);
+      color: var(--text);
+      font-family: "Archivo", system-ui, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; border-radius: 6px; }
+
+    .frame {
+      max-width: 1280px; margin: 26px auto; padding: 0 20px;
+      display: grid; grid-template-columns: 68px 1fr; gap: 18px;
+    }
+
+    /* ── Icon rail ───────────────────────────────────── */
+    .rail {
+      background: var(--panel); border: 1px solid var(--stroke);
+      border-radius: 20px; padding: 16px 0;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      position: sticky; top: 26px; height: calc(100vh - 52px); min-height: 560px;
+    }
+    .rail .mark {
+      width: 40px; height: 40px; display: grid; place-items: center;
+      margin-bottom: 14px;
+    }
+    .rail .mark img { width: 26px; height: 26px; object-fit: contain; }
+    .rail a.ri {
+      position: relative;
+      width: 44px; height: 44px; border-radius: 13px;
+      display: grid; place-items: center; color: var(--faint);
+      transition: color 0.22s, background-color 0.22s;
+    }
+    .rail a.ri:hover { color: var(--text); background: var(--panel-2); }
+    .rail a.ri.on { color: var(--violet); background: rgba(157, 123, 255, 0.10); }
+    .rail a.ri.on::before {
+      content: ""; position: absolute; left: -13px; width: 3px; height: 22px;
+      border-radius: 2px; background: var(--violet);
+    }
+    .rail .spacer { flex: 1; }
+
+    /* ── Main ────────────────────────────────────────── */
+    .main { min-width: 0; }
+    .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+    .search {
+      flex: 1; max-width: 420px;
+      display: flex; align-items: center; gap: 10px;
+      background: var(--panel); border: 1px solid var(--stroke);
+      border-radius: 12px; padding: 10px 16px;
+      color: var(--faint); font-size: 0.9rem; text-decoration: none;
+      transition: border-color 0.22s;
+    }
+    .search:hover { border-color: var(--stroke-2); color: var(--dim); }
+    .search kbd {
+      margin-left: auto; font-family: var(--mono); font-size: 0.68rem;
+      border: 1px solid var(--stroke-2); border-radius: 5px; padding: 2px 7px; color: var(--faint);
+    }
+    .top-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px; text-decoration: none; white-space: nowrap;
+      background: var(--panel); border: 1px solid var(--stroke);
+      border-radius: 12px; padding: 10px 16px;
+      font-size: 0.86rem; font-weight: 500; color: var(--dim);
+      transition: border-color 0.22s, color 0.22s;
+    }
+    .chip:hover { border-color: var(--stroke-2); color: var(--text); }
+    .chip .pts { font-family: var(--mono); font-size: 0.78rem; color: var(--violet); }
+    .chip.solid { background: var(--violet); border-color: var(--violet); color: #14101f; font-weight: 600; }
+    .chip.solid:hover { background: #ab8dff; color: #14101f; }
+
+    .welcome { margin-bottom: 22px; }
+    .welcome h1 { font-size: clamp(1.7rem, 2.8vw, 2.3rem); font-weight: 700; letter-spacing: -0.025em; }
+    .welcome p { color: var(--dim); font-size: 0.98rem; margin-top: 4px; }
+    .welcome p b { color: var(--text); font-weight: 600; }
+
+    /* ── Panels ──────────────────────────────────────── */
+    .grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 16px; }
+    .panel {
+      background: var(--panel); border: 1px solid var(--stroke);
+      border-radius: 18px; padding: 22px 24px;
+      min-width: 0;
+    }
+    .panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 6px 14px; margin-bottom: 6px; flex-wrap: wrap; }
+    .panel-head h2 { white-space: nowrap; }
+    .panel-head h2 { font-size: 1.02rem; font-weight: 600; letter-spacing: -0.01em; }
+    .panel-head .kpi { font-family: var(--mono); font-size: 0.74rem; color: var(--dim); }
+    .panel-head .kpi b { color: var(--violet); font-weight: 600; }
+    .panel-sub { color: var(--faint); font-size: 0.84rem; margin-bottom: 14px; }
+    .panel-cta {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 14px;
+      font-size: 0.88rem; font-weight: 600; color: var(--violet); text-decoration: none;
+    }
+    .panel-cta:hover { color: #b9a2ff; }
+    .chart { width: 100%; height: auto; display: block; }
+    .chart text { font-family: var(--mono); font-size: 8.5px; fill: var(--faint); }
+    .chart .lbl { font-size: 8px; fill: var(--dim); }
+
+    /* hardness scale */
+    .scale-rows { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
+    .scale-row { display: grid; grid-template-columns: 92px 1fr 56px; gap: 12px; align-items: center; }
+    .scale-row .nm { font-size: 0.84rem; font-weight: 500; color: var(--dim); }
+    .scale-row .bar { height: 8px; border-radius: 4px; background: var(--panel-2); overflow: hidden; }
+    .scale-row .bar i { display: block; height: 100%; border-radius: 4px; background: var(--violet); opacity: 0.9; }
+    .scale-row .ppm { font-family: var(--mono); font-size: 0.7rem; color: var(--faint); text-align: right; }
+    .scale-row.hot .bar i { background: #ff8d66; }
+
+    /* stat tiles */
+    .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+    .tile {
+      background: var(--panel); border: 1px solid var(--stroke); border-radius: 18px;
+      padding: 20px 22px; text-decoration: none; position: relative;
+      transition: border-color 0.25s, transform 0.3s var(--ease);
+    }
+    a.tile:hover { border-color: var(--stroke-2); transform: translateY(-2px); }
+    .tile .t-label { display: block; font-size: 0.78rem; font-weight: 500; color: var(--faint); letter-spacing: 0.02em; }
+    .tile .t-num { display: block; font-family: var(--mono); font-size: 1.7rem; font-weight: 600; letter-spacing: -0.04em; margin-top: 6px; }
+    .tile .t-num small { font-size: 0.9rem; color: var(--dim); font-weight: 400; }
+    .tile .t-foot { display: block; font-size: 0.8rem; color: var(--dim); margin-top: 6px; }
+    .tile .t-go { position: absolute; top: 18px; right: 18px; color: var(--faint); }
+    a.tile:hover .t-go { color: var(--violet); }
+    .cycle-dots { display: flex; gap: 5px; margin-top: 10px; }
+    .cycle-dots i { width: 16px; height: 5px; border-radius: 3px; background: var(--panel-2); }
+    .cycle-dots i.f { background: var(--violet); }
+
+    /* ── Modules ─────────────────────────────────────── */
+    .sect { display: flex; align-items: baseline; justify-content: space-between; margin: 34px 0 14px; }
+    .sect h2 { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.015em; }
+    .sect a { font-size: 0.86rem; font-weight: 500; color: var(--dim); text-decoration: none; }
+    .sect a:hover { color: var(--violet); }
+    .modules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .mod {
+      background: var(--panel); border: 1px solid var(--stroke); border-radius: 18px;
+      padding: 20px 22px; text-decoration: none; display: flex; flex-direction: column; gap: 8px;
+      transition: border-color 0.25s, transform 0.3s var(--ease);
+    }
+    .mod:hover { border-color: var(--violet-deep); transform: translateY(-2px); }
+    .mod .m-top { display: flex; align-items: center; justify-content: space-between; }
+    .mod .m-ico {
+      width: 38px; height: 38px; border-radius: 11px;
+      background: var(--panel-2); display: grid; place-items: center; color: var(--violet);
+    }
+    .mod .m-tag { font-family: var(--mono); font-size: 0.66rem; color: var(--faint); border: 1px solid var(--stroke); border-radius: 999px; padding: 3px 9px; }
+    .mod h3 { font-size: 1rem; font-weight: 600; }
+    .mod p { color: var(--dim); font-size: 0.85rem; flex: 1; }
+    .mod .m-open { font-size: 0.85rem; font-weight: 600; color: var(--violet); display: inline-flex; align-items: center; gap: 7px; }
+
+    /* models strip */
+    .mstrip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .mrow {
+      display: flex; align-items: center; gap: 16px; text-decoration: none;
+      background: var(--panel); border: 1px solid var(--stroke); border-radius: 18px;
+      padding: 16px 20px;
+      transition: border-color 0.25s, transform 0.3s var(--ease);
+    }
+    a.mrow:hover { border-color: var(--stroke-2); transform: translateY(-2px); }
+    .mrow img { width: 84px; height: 56px; object-fit: contain; flex: none; }
+    .mrow b { display: block; font-size: 0.95rem; font-weight: 600; }
+    .mrow span { display: block; font-size: 0.8rem; color: var(--dim); }
+    .mrow .st { margin-left: auto; font-family: var(--mono); font-size: 0.66rem; color: var(--violet); border: 1px solid rgba(157, 123, 255, 0.4); border-radius: 999px; padding: 3px 9px; flex: none; }
+    .mrow .st.off { color: var(--faint); border-color: var(--stroke); }
+
+    /* quote + foot */
+    .endrow { display: grid; grid-template-columns: 1.55fr 1fr; gap: 16px; margin-top: 34px; }
+    .quote { display: flex; flex-direction: column; }
+    .quote blockquote { font-size: 1.15rem; font-weight: 500; line-height: 1.5; letter-spacing: -0.01em; }
+    .quote .stars { color: var(--violet); letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 10px; }
+    .quote figcaption { color: var(--faint); font-size: 0.84rem; margin-top: 12px; }
+    .quote a { color: var(--dim); }
+    .linklist { display: flex; flex-direction: column; }
+    .linklist a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 11px 2px; text-decoration: none; color: var(--dim);
+      font-size: 0.9rem; font-weight: 500;
+      border-bottom: 1px solid var(--stroke);
+      transition: color 0.2s, transform 0.25s var(--ease);
+    }
+    .linklist a:last-child { border-bottom: 0; }
+    .linklist a:hover { color: var(--text); transform: translateX(6px); }
+    .linklist svg { color: var(--faint); }
+
+    .foot {
+      margin: 40px 0 20px; display: flex; align-items: center; justify-content: space-between;
+      color: var(--faint); font-size: 0.8rem; flex-wrap: wrap; gap: 12px;
+    }
+    .foot img { height: 15px; opacity: 0.7; }
+    .foot .mono { font-family: var(--mono); font-size: 0.68rem; }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 1000px) {
+      .grid, .endrow { grid-template-columns: 1fr; }
+      .modules, .mstrip, .tiles { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .frame { grid-template-columns: 1fr; margin-top: 14px; }
+      .rail {
+        position: static; height: auto; min-height: 0;
+        flex-direction: row; padding: 10px 12px; border-radius: 16px;
+        overflow-x: auto;
+      }
+      .rail .mark { margin: 0 6px 0 0; }
+      .rail a.ri.on::before { display: none; }
+      .rail .spacer { display: none; }
+      .search { display: none; }
+      .topbar { flex-wrap: wrap; }
+      .modules, .mstrip, .tiles { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <nav class="rail" aria-label="Portal sections">
+      <span class="mark"><img src="../favicon.png" alt="Aquafire"></span>
+      <a class="ri on" href="#" aria-label="Console home" title="Console">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+      </a>
+      <a class="ri" href="../quick-start.html" aria-label="Guides" title="Guides">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a1.5 1.5 0 0 1 1.5-1.5H19V21H5.5A1.5 1.5 0 0 1 4 19zM19 17H5.5A1.5 1.5 0 0 0 4 18.5"/></svg>
+      </a>
+      <a class="ri" href="../enclosure-guide.html" aria-label="Enclosure builder" title="Enclosure">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V4h8v3M9 12h6"/></svg>
+      </a>
+      <a class="ri" href="../water-care.html" aria-label="Water care" title="Water">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3.5 4-6 6.5-6 10a6 6 0 0 0 12 0c0-3.5-2.5-6-6-10z"/></svg>
+      </a>
+      <a class="ri" href="../maintenance.html" aria-label="Maintenance" title="Maintenance">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.1-.6-.6-2.1z"/></svg>
+      </a>
+      <a class="ri" href="../troubleshoot.html" aria-label="Troubleshooter" title="Troubleshoot">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </a>
+      <span class="spacer"></span>
+      <a class="ri" href="../support.html" aria-label="Support" title="Support">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 21l1.5-4.6A8.5 8.5 0 1 1 21 12z"/></svg>
+      </a>
+      <a class="ri" href="https://www.aquafire.com" target="_blank" rel="noopener" aria-label="Shop Aquafire" title="Shop">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5zM9 7a3 3 0 0 1 6 0"/></svg>
+      </a>
+    </nav>
+
+    <main class="main">
+      <div class="topbar">
+        <a class="search" href="../troubleshoot.html">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          Describe a symptom&hellip; &ldquo;beeping&rdquo;, &ldquo;foggy flame&rdquo;
+          <kbd>troubleshoot</kbd>
+        </a>
+        <div class="top-actions">
+          <a class="chip" href="../rewards.html">Rewards <span class="pts">0 pts</span></a>
+          <a class="chip" href="../dealer-locator.html">Find a Dealer</a>
+          <a class="chip solid" href="../getting-started.html">Get started</a>
+        </div>
+      </div>
+
+      <div class="welcome">
+        <h1>Welcome back, owner.</h1>
+        <p>Your console for the <b>Aquafire water vapor fireplace</b> &mdash; plan, install, maintain, and fix.</p>
+      </div>
+
+      <div class="grid">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Care timeline</h2>
+            <span class="kpi">cycle <b>12 mo</b> &middot; recommended</span>
+          </div>
+          <p class="panel-sub">Preventative schedule from the Aquafire maintenance guide.</p>
+          <svg class="chart" viewBox="0 0 560 150" role="img" aria-label="Recommended care schedule across 12 months: mist maker cleaning at months 3, 6, 9 and 12; full system flush at months 6 and 12">
+            <line x1="30" y1="118" x2="545" y2="118" stroke="#26282e" stroke-width="1"/>
+            <line x1="30" y1="80" x2="545" y2="80" stroke="#1c1e23" stroke-width="1"/>
+            <line x1="30" y1="42" x2="545" y2="42" stroke="#1c1e23" stroke-width="1"/>
+            <text x="8" y="121">now</text>
+            <text class="lbl" x="34" y="36">Mist maker &middot; 3 mo</text>
+            <text class="lbl" x="34" y="74">Flush &middot; 6 mo</text>
+            <!-- mist maker: months 3,6,9,12 -->
+            <polyline points="30,118 152,118 152,42 158,42 158,118 280,118 280,42 286,42 286,118 408,118 408,42 414,42 414,118 536,118 536,42" fill="none" stroke="#9d7bff" stroke-width="2" stroke-linejoin="round"/>
+            <circle cx="155" cy="42" r="4.5" fill="#9d7bff"/>
+            <circle cx="283" cy="42" r="4.5" fill="#9d7bff"/>
+            <circle cx="411" cy="42" r="4.5" fill="#9d7bff"/>
+            <circle cx="536" cy="42" r="4.5" fill="#9d7bff"/>
+            <!-- flush: months 6,12 -->
+            <circle cx="283" cy="80" r="4.5" fill="none" stroke="#ff8d66" stroke-width="2"/>
+            <circle cx="536" cy="80" r="4.5" fill="none" stroke="#ff8d66" stroke-width="2"/>
+            <text x="146" y="136">3 mo</text>
+            <text x="272" y="136">6 mo</text>
+            <text x="400" y="136">9 mo</text>
+            <text x="524" y="136">12 mo</text>
+          </svg>
+          <a class="panel-cta" href="../maintenance.html">Open the maintenance guide
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Water hardness</h2>
+            <span class="kpi"><b>2,000+</b> ZIPs</span>
+          </div>
+          <p class="panel-sub">Hard water shortens mist-maker life. Where does yours sit?</p>
+          <div class="scale-rows">
+            <div class="scale-row"><span class="nm">Soft</span><span class="bar"><i style="width: 18%"></i></span><span class="ppm">&lt;60</span></div>
+            <div class="scale-row"><span class="nm">Moderate</span><span class="bar"><i style="width: 42%"></i></span><span class="ppm">60&ndash;120</span></div>
+            <div class="scale-row"><span class="nm">Hard</span><span class="bar"><i style="width: 68%"></i></span><span class="ppm">120&ndash;180</span></div>
+            <div class="scale-row hot"><span class="nm">Very hard</span><span class="bar"><i style="width: 92%"></i></span><span class="ppm">180+</span></div>
+          </div>
+          <a class="panel-cta" href="../water-care.html">Check your ZIP code
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </section>
+      </div>
+
+      <div class="tiles">
+        <a class="tile" href="../maintenance.html">
+          <span class="t-label">Mist-maker cleaning cycle</span>
+          <span class="t-num">3<small> months</small></span>
+          <span class="cycle-dots" aria-hidden="true"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i></span>
+          <span class="t-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
+        <a class="tile" href="../enclosure-guide.html">
+          <span class="t-label">Insert widths, every model</span>
+          <span class="t-num">20&middot;40&middot;60<small> in</small></span>
+          <span class="t-foot">Enclosure cutouts calculated per model</span>
+          <span class="t-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
+        <a class="tile" href="../rewards.html">
+          <span class="t-label">Guide modules to explore</span>
+          <span class="t-num">17<small> modules</small></span>
+          <span class="t-foot">Earn points as you complete them</span>
+          <span class="t-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
+      </div>
+
+      <div class="sect">
+        <h2>Guide modules</h2>
+        <a href="../quick-start.html">All guides &rarr;</a>
+      </div>
+      <div class="modules">
+        <a class="mod" href="../troubleshoot.html">
+          <span class="m-top">
+            <span class="m-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+            <span class="m-tag">3&ndash;5 min</span>
+          </span>
+          <h3>Troubleshooter</h3>
+          <p>Symptom in, fix out &mdash; guided diagnosis tailored to your model.</p>
+          <span class="m-open">Run diagnosis
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </a>
+        <a class="mod" href="../enclosure-guide.html">
+          <span class="m-top">
+            <span class="m-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V4h8v3M9 12h6"/></svg></span>
+            <span class="m-tag">interactive</span>
+          </span>
+          <h3>Enclosure Builder</h3>
+          <p>Cutout sizes and light-trap configuration, computed live.</p>
+          <span class="m-open">Open builder
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </a>
+        <a class="mod" href="../water-care.html">
+          <span class="m-top">
+            <span class="m-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3.5 4-6 6.5-6 10a6 6 0 0 0 12 0c0-3.5-2.5-6-6-10z"/></svg></span>
+            <span class="m-tag">by ZIP</span>
+          </span>
+          <h3>Water Care</h3>
+          <p>Hardness lookup and Vapor Pure softener replacement timeline.</p>
+          <span class="m-open">Check water
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </a>
+        <a class="mod" href="../getting-started.html">
+          <span class="m-top">
+            <span class="m-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a6 6 0 0 0 6-6c0-3-2-4.5-6-9-4 4.5-6 6-6 9a6 6 0 0 0 6 6z"/></svg></span>
+            <span class="m-tag">10 min</span>
+          </span>
+          <h3>Getting Started</h3>
+          <p>Unboxing, first fill, and your first flame.</p>
+          <span class="m-open">Begin setup
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </a>
+        <a class="mod" href="../maintenance.html">
+          <span class="m-top">
+            <span class="m-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.1-.6-.6-2.1z"/></svg></span>
+            <span class="m-tag">tracked</span>
+          </span>
+          <h3>Maintenance</h3>
+          <p>Step-by-step preventative care with progress checklists.</p>
+          <span class="m-open">Open guide
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </a>
+        <a class="mod" href="../support.html">
+          <span class="m-top">
+            <span class="m-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 21l1.5-4.6A8.5 8.5 0 1 1 21 12z"/></svg></span>
+            <span class="m-tag">humans</span>
+          </span>
+          <h3>Support Hub</h3>
+          <p>Warranty registration, claims, service requests, and FAQs.</p>
+          <span class="m-open">Get help
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </a>
+      </div>
+
+      <div class="sect">
+        <h2>Model guides</h2>
+        <a href="../quick-start.html">Which do I have?</a>
+      </div>
+      <div class="mstrip">
+        <a class="mrow" href="../aquafire-pro.html">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt="Aquafire Pro">
+          <span><b>Aquafire Pro</b><span>Color LEDs &middot; app &middot; direct-plumb</span></span>
+          <span class="st">guide</span>
+        </a>
+        <a class="mrow" href="../aquafire-original.html">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ORIGINAL.png?v=1768251742" alt="Aquafire Original">
+          <span><b>Aquafire Original</b><span>The classic &middot; 20/40/60&Prime;</span></span>
+          <span class="st">guide</span>
+        </a>
+        <span class="mrow">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/LITE.png?v=1768251746" alt="Aquafire Lite">
+          <span><b>Aquafire Lite</b><span>Compact &middot; manual fill</span></span>
+          <span class="st off">soon</span>
+        </span>
+      </div>
+
+      <div class="endrow">
+        <figure class="panel quote">
+          <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+          <blockquote>&ldquo;The maintenance guide on the portal saved me a service call. Mist maker cleaning was easy and took 10 minutes.&rdquo;</blockquote>
+          <figcaption>Linda P. &middot; Aquafire 40 owner &middot; <a href="https://judge.me/product_reviews/9498b1ae-d6c2-4e5b-b06b-78b0906a168f/new?source=shareable-link" target="_blank" rel="noopener">write a review</a></figcaption>
+        </figure>
+        <nav class="panel linklist" aria-label="More">
+          <a href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">Register your warranty
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+          <a href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">Submit a service request
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Custom &amp; commercial quotes
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+          <a href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener">@aquafire on Instagram
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+          <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener">Aquafire on YouTube
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+        </nav>
+      </div>
+
+      <footer class="foot">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+        <span class="mono">v5 &ldquo;insight console&rdquo;</span>
+        <span>&copy; 2026 Aquafire. All rights reserved.</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
