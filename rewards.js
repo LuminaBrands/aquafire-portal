@@ -473,8 +473,14 @@
     } else if (path.includes('water-care')) {
       setupWaterCareTracking();
     } else if (path.includes('quick-start')) {
-      // Award points when visiting the quick start page
-      setTimeout(function () { awardPoints('quick-start'); }, 3000);
+      // Award points when visiting the quick start page. 'setup-guide' used to
+      // live on getting-started.html, which is a "coming soon" placeholder and
+      // never awarded anything — the badge there was unearnable. Both now land
+      // on the Quick Start guide.
+      setTimeout(function () {
+        awardPoints('quick-start');
+        awardPoints('setup-guide');
+      }, 3000);
     } else if (path.includes('support')) {
       setTimeout(function () { awardPoints('support-hub'); }, 3000);
     }
