@@ -52,8 +52,12 @@ async function getToken(force) {
   return d.access_token;
 }
 
-const ALLOWED_ORIGIN =
-  /^https:\/\/((www\.)?aquafire\.(app|com)|[a-z0-9-]+-luminabrands-projects\.vercel\.app)$/;
+// CORS/origin enforcement + rate limiting live in api/_guard.js (shared).
+const { cors, throttle } = require('./_guard');
+
+// Endpoint-wide daily ceiling — bounds order/email guessing across rotating IPs
+// (only enforced once Upstash is configured; see api/_guard.js).
+const DAILY_CAP = Number(process.env.ORDER_LOOKUP_DAILY_CAP || 500);
 
 const QUERY = `query OrderLookup($q: String!) {
   orders(first: 5, query: $q) {
@@ -76,29 +80,9 @@ const QUERY = `query OrderLookup($q: String!) {
   }
 }`;
 
-/* ── Best-effort per-instance rate limit (stricter than /api/chat — these
-      are account lookups, not chat) ─────────────────────────────────────── */
-const hits = new Map();
-function rateLimited(ip) {
-  const now = Date.now();
-  const arr = (hits.get(ip) || []).filter((t) => now - t < 60 * 1000);
-  arr.push(now);
-  hits.set(ip, arr);
-  if (hits.size > 5000) hits.clear();
-  return arr.length > 6;
-}
-
 /* ── Handler ────────────────────────────────────────────────────────────── */
 module.exports = async (req, res) => {
-  const origin = req.headers.origin || '';
-  if (ALLOWED_ORIGIN.test(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-  }
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'method not allowed' });
+  if (!cors(req, res)) return;
 
   if (!process.env.SHOPIFY_ORDERS_TOKEN &&
       !(process.env.SHOPIFY_CLIENT_ID && process.env.SHOPIFY_CLIENT_SECRET)) {
@@ -107,8 +91,10 @@ module.exports = async (req, res) => {
     });
   }
 
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if (rateLimited(ip)) return res.status(429).json({ error: 'slow down' });
+  // Stricter than /api/chat — these are account lookups, not chat.
+  if (await throttle(req, 'order', 6, DAILY_CAP)) {
+    return res.status(429).json({ error: 'slow down' });
+  }
 
   const body = req.body || {};
   // Order number: digits with an optional letter prefix ("#1049", "AF1049").

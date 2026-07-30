@@ -24,8 +24,13 @@ const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const FS_PROJECT = 'aquafire-portal';
 const FS_KEY = 'AIzaSyAAeoOt4NJxh_ITaWNMBV-Ed-mM5Ac5a7Q';
 
-const ALLOWED_ORIGIN =
-  /^https:\/\/((www\.)?aquafire\.(app|com)|[a-z0-9-]+-luminabrands-projects\.vercel\.app)$/;
+// CORS/origin enforcement + rate limiting live in api/_guard.js (shared).
+const { cors, throttle } = require('./_guard');
+
+// Endpoint-wide ceiling on Claude API calls per day — a cost circuit breaker
+// for the case where someone spoofs the Origin header and rotates IPs. Only
+// enforced once Upstash is configured (see api/_guard.js).
+const DAILY_CAP = Number(process.env.CHAT_DAILY_CAP || 3000);
 
 const BASE_FACTS = `You are Ember, the friendly AI assistant for Aquafire water
 vapor fireplaces (by Lumina Brands), chatting on aquafire.com / aquafire.app.
@@ -34,6 +39,10 @@ and only from the facts below. Simple markdown is supported: **bold**, [links](u
 line breaks. If you don't know something, say so and point the customer to
 support@aquafire.com or (877) 888-4260 — never invent prices, policies, or specs.
 Politely decline anything unrelated to Aquafire and steer back to fireplaces.
+Messages may open with a [Customer context - ...] block: the model they own,
+the product page they're viewing, their device, cart contents, and pages
+visited this session. Use it to tailor the answer naturally (e.g. speak to the
+model in their cart) — never recite it back robotically or mention "context".
 
 FACTS:
 - Aquafire creates a realistic flame illusion from cool water vapor (ultrasonic
@@ -73,6 +82,12 @@ FACTS:
 - Beep codes: 2 quick = low water; 3 long = overflow/stuck float sensor;
   1 short every 2 s = voltage/power adapter; light flashing ~30 s with no beeps
   = maintenance reminder (reset: hold middle + left buttons).
+- Contact routing (always write addresses out plainly): sales@aquafire.com for
+  dealer-related and sales questions, design reviews, and technical drawings
+  (CAD/DWG/BIM/spec files); ces@aquafire.com for customer-service questions
+  (including warranty claims); support@aquafire.com for support and
+  service/troubleshooting questions; orders@aquafire.com for order questions;
+  (877) 888-4260 for everything by phone.
 - Good to know: humidity impact is minimal (~1-2 liters of water per 10 hrs —
   less than a small humidifier on low); near-silent (a faint hum, quieter than
   a laptop fan); safe for bedrooms, even with the door closed. Never add oils
@@ -173,28 +188,9 @@ async function teamKnowledge() {
   return kbCache.text;
 }
 
-/* ── Best-effort per-instance rate limit ────────────────────────────────── */
-const hits = new Map();
-function rateLimited(ip) {
-  const now = Date.now();
-  const arr = (hits.get(ip) || []).filter((t) => now - t < 60 * 1000);
-  arr.push(now);
-  hits.set(ip, arr);
-  if (hits.size > 5000) hits.clear();
-  return arr.length > 12;
-}
-
 /* ── Handler ────────────────────────────────────────────────────────────── */
 module.exports = async (req, res) => {
-  const origin = req.headers.origin || '';
-  if (ALLOWED_ORIGIN.test(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-  }
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'method not allowed' });
+  if (!cors(req, res)) return;
 
   // ANTHROPIC_API_KEY is the canonical name; `chatbotshopify` is accepted
   // because that's what the key was saved as in this Vercel project.
@@ -205,8 +201,9 @@ module.exports = async (req, res) => {
     });
   }
 
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if (rateLimited(ip)) return res.status(429).json({ error: 'slow down' });
+  if (await throttle(req, 'chat', 12, DAILY_CAP)) {
+    return res.status(429).json({ error: 'slow down' });
+  }
 
   const body = req.body || {};
   const message = typeof body.message === 'string' ? body.message.trim() : '';
@@ -223,8 +220,15 @@ module.exports = async (req, res) => {
   const kb = await teamKnowledge();
   const systemText = BASE_FACTS + kb;
 
+  const cs = (v, max) => String(v || '').replace(/[\[\]]/g, '').slice(0, max);
+  const ctxBits = [];
+  if (context.model) ctxBits.push('owns: Aquafire ' + cs(context.model, 20));
+  if (context.product) ctxBits.push('currently viewing product: ' + cs(context.product, 60));
+  if (context.device) ctxBits.push('on ' + cs(context.device, 10));
+  if (context.cart) ctxBits.push('cart: ' + cs(context.cart, 200));
+  if (context.journey) ctxBits.push('pages visited: ' + cs(context.journey, 250));
   const userContent =
-    (context.model ? '[Customer owns: Aquafire ' + context.model + '] ' : '') + message;
+    (ctxBits.length ? '[Customer context - ' + ctxBits.join('; ') + '] ' : '') + message;
 
   let upstream;
   try {

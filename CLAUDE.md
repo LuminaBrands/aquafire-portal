@@ -41,7 +41,16 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 | `embed.js` | Strips nav/footer when page loaded in iframe (`?embed` query param) |
 | `assistant.js` | **"Ember" AI chat widget** — self-contained (injects own CSS), embeddable on Shopify via one script tag; `INTENTS` knowledge base + Claude-API backend (`/api/chat` by default). See `docs/chat-assistant.md` |
 | `api/chat.js` | **Vercel serverless function** for Ember's AI answers — Claude API (`claude-opus-4-8`), zero npm deps (raw fetch, keeps the repo build-free); grounded in `BASE_FACTS` + the `chatKnowledge` Firestore collection; needs `ANTHROPIC_API_KEY` env var in Vercel |
+| `api/notify-handoff.js` | **Vercel serverless function** — relays Ember human-handoff alerts to a chat webhook (Slack incoming-webhook `{text}` shape); once per conversation, emails masked; needs `HANDOFF_WEBHOOK_URL` env var, 503s gracefully until set |
 | `api/order-status.js` | **Vercel serverless function** for Ember's order & tracking lookup — Shopify Admin GraphQL proxy (`tryaquafire.myshopify.com`), zero npm deps; verifies order number + checkout email together, returns minimal safe fields; needs `SHOPIFY_CLIENT_ID` + `SHOPIFY_CLIENT_SECRET` env vars (Dev Dashboard app "Ember AI Chat", `read_orders` scope; tokens fetched via client-credentials grant and auto-renewed; legacy static `SHOPIFY_ORDERS_TOKEN` also accepted) — 503s gracefully until set (see `docs/chat-assistant.md`) |
+| `api/_guard.js` | **Shared library** for the three functions above (underscore = not a route) — CORS **and** origin enforcement (403 on a missing/foreign `Origin`), plus rate limiting that survives cold starts via Upstash Redis REST (`UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`), falling back to the old per-instance counter when unset |
+
+### Config
+
+| File | Purpose |
+|------|---------|
+| `vercel.json` | Security headers only (no routing/build config) — CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `COOP`; plus `noindex` + `X-Frame-Options: DENY` + `no-store` on the two internal pages and `/api/*` |
+| `robots.txt` | Keeps `chat-insights.html`, `dealer-admin.html`, and `/api/` out of search indexes |
 
 ### Docs
 
@@ -49,6 +58,7 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 |------|----------|
 | `docs/source-material/` | Plain-text extracts of the Aquafire help-center articles, install/spec guides, warranty, and manuals the Troubleshooter tree is built from (+ `README.md` index) |
 | `docs/chat-assistant.md` | Chat widget docs — Shopify install, config options, optional Claude-API proxy example, KB maintenance rules |
+| `docs/firestore-rules.md` | **Source of truth for the Firestore security rules** (`users` / `chatEvents` / `chatKnowledge`) — they're published by hand in the Firebase console, so update this file in the same PR; also covers App Check and the rewards-points limitation |
 
 ## Architecture
 
@@ -153,8 +163,38 @@ This portal evolved through iterative Claude Code sessions:
 8. **Interactive Troubleshooter** — Model-aware guided decision-tree wizard (`troubleshoot.html`), built from the Aquafire help-center articles + 2026 install/spec guides + warranty + manuals (extracts archived in `docs/source-material/`). Endpoints offer inline step-by-step fixes, how-to-video slots (TODO URLs), help-article links, and an escalate-to-support block.
 9. **"Ember" AI chat widget** — Gorgias-style customer-service + pre-sale chat bubble (`assistant.js`), self-contained for one-tag embedding on aquafire.com (Shopify). Local intent-matching KB (models/pricing/install/water care/warranty/troubleshooting with guided model→symptom flow, product cards from live store data, human handoff) + optional Claude-API proxy mode (`docs/chat-assistant.md`).
 
+## Security
+
+Everything in the repo root is publicly served at `https://aquafire.app/<filename>` —
+Vercel serves the tree flat, and the custom domain is exempt from the project's Vercel
+SSO protection (which only covers `*.vercel.app` preview URLs). **A file committed here
+is a published file, whether or not anything links to it.** Never commit business
+exports, dashboards, snapshots, or customer data.
+
+- **The two internal pages are gated in the browser** (`chat-insights.html`,
+  `dealer-admin.html`): Firebase Auth, verified `@luminabrands.com` only. Rewards
+  customers hold accounts in the same Firebase project, so `request.auth != null` /
+  "is signed in" is never a sufficient check — always test the email domain.
+  `dealer-admin.html` gates the *editing tool*; `dealers.js` itself is public data that
+  powers the customer-facing locator.
+- **Firestore rules are the real access control** for anything in Firebase, and they
+  live in the console, not the repo — `docs/firestore-rules.md` is the source of truth.
+- **The `api/*` functions enforce their origin and rate-limit through `api/_guard.js`.**
+  Use `cors(req, res)` + `throttle(req, bucket, perIpPerMin, dailyCap)` in any new
+  function rather than rolling per-file copies. Origin headers are spoofable, so the
+  rate limits (and the daily caps: `CHAT_DAILY_CAP`, `ORDER_LOOKUP_DAILY_CAP`,
+  `HANDOFF_DAILY_CAP`) are what actually bound cost and abuse.
+- **Customer-supplied text must be escaped before `innerHTML`** — `mdLite()` in
+  `assistant.js` (escape-then-linkify, so AI/LLM output can't inject markup) and `esc()`
+  in `chat-insights.html` (transcripts are attacker-controlled input to an admin page).
+
 ## Gotchas
 
+- **CSP will block new external resources.** `vercel.json` pins the allowlist
+  (`www.gstatic.com` + `apis.google.com` for Firebase, `unpkg.com` for Leaflet,
+  `fonts.googleapis.com`/`fonts.gstatic.com`, `cdn.shopify.com`, Carto/OSM tiles,
+  `nominatim.openstreetmap.org`). Adding a CDN script, font, image host, or `fetch()`
+  target means adding it there too, or it silently fails in production only.
 - **Nav duplication:** There's no shared template. Changing navigation means editing ~13 HTML files (and several have a footer "Guides" column too).
 - **aquafire-pro.html is large** (~1,400 lines with inline CSS/JS). Read specific sections rather than the whole file. It still has its own in-page category-accordion troubleshooting section (`TS_DATA` / `ALERTS_DATA`) — that's separate from the standalone Troubleshooter; the new tool didn't replace it.
 - **styles.css is enclosure-specific** despite the generic name. Shared styles are in `hub.css`.

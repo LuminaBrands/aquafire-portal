@@ -66,6 +66,39 @@
     : (PORTAL_BASE ? PORTAL_BASE + 'api/order-status' : '');
   var orderDown = false;
 
+  // Team notification on human handoff: fire-and-forget POST to the portal's
+  // /api/notify-handoff function (Slack webhook relay). Sent at most once per
+  // conversation. Override with cfg.notifyEndpoint, or null to disable; a 503
+  // (webhook not configured yet) stops attempts for this page load.
+  var NOTIFY_ENDPOINT = cfg.notifyEndpoint !== undefined
+    ? cfg.notifyEndpoint
+    : (PORTAL_BASE ? PORTAL_BASE + 'api/notify-handoff' : '');
+  var notifyDown = false;
+
+  function notifyHandoff(mode) {
+    if (!NOTIFY_ENDPOINT || notifyDown || state.notified) return;
+    state.notified = true;
+    persist();
+    try {
+      var recent = state.msgs.filter(function (m) { return m.who === 'user'; })
+        .slice(-3).map(function (m) {
+          return String(m.text || '').replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, function (e) {
+            return /@(aquafire|luminabrands)\.com$/i.test(e) ? e : '[email]';
+          }).slice(0, 200);
+        });
+      fetch(NOTIFY_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+        body: JSON.stringify(Object.assign({
+          mode: mode, page: location.pathname, host: location.hostname,
+          model: state.ctx.model || '', recent: recent
+        }, visitorCtx()))
+      }).then(function (r) { if (r.status === 503) notifyDown = true; })
+        .catch(function () { /* never bother the customer over this */ });
+    } catch (e) { /* ignore */ }
+  }
+
   var SUPPORT_EMAIL = 'support@aquafire.com';
   var SALES_EMAIL = 'sales@aquafire.com';
   var ORDERS_EMAIL = 'orders@aquafire.com';
@@ -905,13 +938,56 @@
   var state = { open: false, nudged: false, msgs: [], ctx: { model: null, awaiting: null } };
   try {
     var saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; state.started = !!p.started; }
+    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; state.started = !!p.started; state.notified = !!p.notified; state.journey = p.journey || []; }
   } catch (e) { /* private mode etc. */ }
+
+  /* ── Visitor context — anonymous browsing signals (no PII) ─────────────
+     Journey (pages this session), device class, current product page, and
+     on the Shopify storefront the cart contents. Fed to the AI so answers
+     fit what the customer is looking at, logged with convo_start for the
+     insights dashboard, and attached to handoff notifications. */
+  state.journey = state.journey || [];
+  if (state.journey[state.journey.length - 1] !== location.pathname) {
+    state.journey.push(location.pathname);
+    if (state.journey.length > 10) state.journey = state.journey.slice(-10);
+    persist(); // journey accrues while browsing, before any chat interaction
+  }
+
+  var cartCache = '';
+  function loadCart() {
+    // /cart.js exists only on the Shopify storefront — skip on the portal
+    try {
+      if (!PORTAL_BASE || location.origin === new URL(PORTAL_BASE).origin) return;
+    } catch (e) { return; }
+    fetch('/cart.js', { credentials: 'same-origin' }).then(function (r) {
+      if (!r.ok) throw new Error('no cart');
+      return r.json();
+    }).then(function (c) {
+      if (!c || !c.items || !c.items.length) return;
+      cartCache = c.items.slice(0, 5).map(function (i) {
+        return i.quantity + 'x ' + String(i.product_title || i.title || '').slice(0, 60);
+      }).join(', ');
+      if (typeof c.total_price === 'number') {
+        cartCache += ' ($' + Math.round(c.total_price / 100) + ')';
+      }
+    }).catch(function () { /* empty cart or non-Shopify host */ });
+  }
+  loadCart();
+
+  function visitorCtx() {
+    var m = location.pathname.match(/\/products\/([^\/?#]+)/);
+    return {
+      device: Math.min(window.innerWidth, window.innerHeight) < 700 ? 'mobile' : 'desktop',
+      journey: state.journey.join(' > ').slice(0, 300),
+      product: m ? m[1] : '',
+      cart: cartCache
+    };
+  }
 
   function persist() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid, started: state.started
+        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid, started: state.started, notified: state.notified, journey: state.journey
       }));
     } catch (e) { /* ignore */ }
   }
@@ -950,11 +1026,14 @@
         model: state.ctx.model || ''
       };
       Object.keys(data || {}).forEach(function (k) { ev[k] = data[k]; });
-      // Privacy: never let email addresses reach the telemetry store
-      // (customers type theirs during the order-lookup flow).
+      // Privacy: never let customer email addresses reach the telemetry
+      // store (they type theirs during the order-lookup flow). Aquafire's
+      // own contact addresses pass through so transcripts stay readable.
       ['text', 'comment'].forEach(function (k) {
         if (typeof ev[k] === 'string') {
-          ev[k] = ev[k].replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[email]');
+          ev[k] = ev[k].replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, function (m) {
+            return /@(aquafire|luminabrands)\.com$/i.test(m) ? m : '[email]';
+          });
         }
       });
       if (cfg.logEndpoint) {
@@ -1363,7 +1442,10 @@
         });
         if (vids.children.length) container.appendChild(vids);
       } else if (b.t === 'contact') {
-        if (!spent) logEvent('handoff', { mode: b.mode || 'support' });
+        if (!spent) {
+          logEvent('handoff', { mode: b.mode || 'support' });
+          notifyHandoff(b.mode || 'support');
+        }
         var email = b.mode === 'sales' ? SALES_EMAIL : b.mode === 'orders' ? ORDERS_EMAIL : SUPPORT_EMAIL;
         var c = el('div', 'afa-contact');
         c.innerHTML = '<h5>' + (b.mode === 'sales' ? 'Sales & design' : b.mode === 'orders' ? 'Orders' : 'Aquafire support') + '</h5>' +
@@ -1468,7 +1550,7 @@
     if (!state.started) {
       state.started = true;
       persist();
-      logEvent('convo_start', {});
+      logEvent('convo_start', visitorCtx());
     }
     var norm = normalize(text);
 
@@ -1595,7 +1677,7 @@
       body: JSON.stringify({
         message: text,
         history: historyForApi().slice(0, -1),
-        context: { model: state.ctx.model, page: location.href }
+        context: Object.assign({ model: state.ctx.model, page: location.href }, visitorCtx())
       })
     }).then(function (r) {
       if (!r.ok) throw new Error('bad status');

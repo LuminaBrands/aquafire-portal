@@ -178,9 +178,26 @@
       .modal { padding: 24px 20px; }
       .form-row-inline { flex-direction: column; gap: 16px; }
     }
+
+    /* Team sign-in gate (same pattern as chat-insights.html) */
+    .auth-card { max-width: 400px; margin: 64px auto; padding: 36px 32px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .auth-card h2 { margin-bottom: 6px; }
+    .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px; }
+    .auth-card input { width: 100%; margin-bottom: 10px; padding: 11px 14px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text);
+      font-family: inherit; font-size: 0.9rem; outline: none; }
+    .auth-card input:focus { border-color: var(--red); }
+    .auth-card .btn { width: 100%; justify-content: center; margin-bottom: 10px; }
+    .auth-err { color: #e77; font-size: 0.8rem; min-height: 18px; }
+    /* Gated by default — the class is removed once a team account signs in, so
+       the tool never flashes into view for an unauthenticated visitor. */
+    #authGate { display: none; }
+    body.gated #authGate { display: block; }
+    body.gated .page-header, body.gated main { display: none; }
   </style>
 </head>
-<body>
+<body class="gated">
 
   <!-- Nav -->
   <nav class="site-nav">
@@ -218,6 +235,20 @@
       </ul>
     </div>
   </nav>
+
+  <!-- Auth gate (team accounts only) -->
+  <div class="container" id="authGate">
+    <div class="auth-card">
+      <h2>Team sign-in</h2>
+      <p>Dealer management is an internal tool &mdash; Lumina Brands accounts only.</p>
+      <button class="btn btn-primary" id="googleBtn">Continue with Google</button>
+      <input type="email" id="gateEmail" placeholder="Email" autocomplete="username">
+      <input type="password" id="gatePassword" placeholder="Password" autocomplete="current-password">
+      <button class="btn btn-secondary" id="emailBtn">Sign in with email</button>
+      <div class="auth-err" id="authErr"></div>
+      <button class="btn btn-secondary" id="switchBtn" style="display:none;margin-top:10px;">Sign out &amp; use a team account</button>
+    </div>
+  </div>
 
   <!-- Header -->
   <header class="page-header">
@@ -375,6 +406,77 @@
 
   <script src="embed.js"></script>
   <script src="dealers.js"></script>
+
+  <!-- Team sign-in gate. Firebase Auth, same project as rewards.js /
+       chat-insights.html, limited to verified @luminabrands.com accounts.
+       Note: the dealer list itself (dealers.js) is public data — it powers the
+       customer-facing locator — so this gates the editing tool, not the data. -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    var $ = function (id) { return document.getElementById(id); };
+
+    if (typeof firebase === 'undefined') {
+      $('authErr').textContent =
+        'Could not load the Firebase SDK — check your network or ad-blocker and reload.';
+      return;
+    }
+
+    firebase.initializeApp({
+      apiKey: "AIzaSyAAeoOt4NJxh_ITaWNMBV-Ed-mM5Ac5a7Q",
+      authDomain: "aquafire-portal.firebaseapp.com",
+      projectId: "aquafire-portal",
+      storageBucket: "aquafire-portal.firebasestorage.app",
+      messagingSenderId: "589960398521",
+      appId: "1:589960398521:web:3c5852186e59fdf0847d68"
+    });
+    var auth = firebase.auth();
+
+    var TEAM_EMAIL = /@luminabrands\.com$/i;
+    function isTeam(user) {
+      return !!user && !!user.email && user.emailVerified && TEAM_EMAIL.test(user.email);
+    }
+
+    $('googleBtn').onclick = function () {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      // Always offer the account chooser, so someone already signed in with a
+      // personal account can pick their team address without signing out.
+      provider.setCustomParameters({ prompt: 'select_account' });
+      auth.signInWithPopup(provider)
+        .catch(function (e) { $('authErr').textContent = e.message; });
+    };
+    $('emailBtn').onclick = function () {
+      auth.signInWithEmailAndPassword($('gateEmail').value, $('gatePassword').value)
+        .catch(function (e) { $('authErr').textContent = e.message; });
+    };
+    $('switchBtn').onclick = function () {
+      $('authErr').textContent = '';
+      auth.signOut();
+    };
+
+    auth.onAuthStateChanged(function (user) {
+      // Rewards customers hold accounts in this same Firebase project, so
+      // "signed in" is not enough — the account has to be a team address.
+      //
+      // A signed-in non-team account gets the gate, never the tool — but we
+      // deliberately do NOT sign them out: rewards runs on the same Firebase
+      // project and origin, so signing out here would drop a customer's
+      // rewards session just because they opened this URL.
+      var authed = isTeam(user);
+      if (user && !authed) {
+        $('authErr').textContent = user.emailVerified
+          ? 'Signed in as ' + user.email + ' — not a Lumina Brands team account.'
+          : 'Verify ' + (user.email || 'your email address') + ' first, then sign in again.';
+      }
+      $('switchBtn').style.display = (user && !authed) ? '' : 'none';
+      document.body.classList.toggle('gated', !authed);
+      if (authed) $('authErr').textContent = '';
+    });
+  })();
+  </script>
+
   <script>
   // ─── State ───
   var workingDealers = JSON.parse(JSON.stringify(DEALERS));
