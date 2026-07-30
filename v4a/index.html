@@ -101,17 +101,17 @@ Structure 1: chat-app shell with tour sidebar. No seed roll — pinned brief.
     .tour:hover, .tour.on { background: rgba(255,255,255,0.07); border-color: var(--stroke); }
     .tour .t-ico { width: 36px; height: 36px; flex: none; border-radius: 12px; background: rgba(255,255,255,0.07); display: grid; place-items: center; color: var(--gray); }
     .tour.on .t-ico { color: var(--spark); }
-    .tour b { display: block; font-size: 0.92rem; font-weight: 600; color: var(--white); }
+    .tour b { display: block; font-size: 0.95rem; font-weight: 600; color: var(--white); }
     .tour span { display: block; font-size: 0.78rem; color: var(--gray-2); }
     .side .qs { display: flex; flex-direction: column; gap: 6px; }
     .side .qs a {
-      font-size: 0.85rem; color: var(--gray); text-decoration: none;
+      font-size: 0.88rem; color: var(--gray); text-decoration: none;
       padding: 8px 10px; border-radius: 12px;
       transition: background-color 0.22s, color 0.22s;
     }
     .side .qs a:hover { background: rgba(255,255,255,0.06); color: var(--white); }
     .side .foot { margin-top: 4px; border-top: 1px solid var(--stroke); padding: 14px 8px 2px; display: flex; flex-direction: column; gap: 8px; }
-    .side .foot a { font-size: 0.82rem; color: var(--gray-2); text-decoration: none; }
+    .side .foot a { font-size: 0.78rem; color: var(--gray-2); text-decoration: none; }
     .side .foot a:hover { color: var(--white); }
 
     /* Chat column */
@@ -122,8 +122,8 @@ Structure 1: chat-app shell with tour sidebar. No seed roll — pinned brief.
       border-radius: 999px; padding: 12px 20px 12px 12px;
     }
     .chat-head .orb { width: 40px; height: 40px; }
-    .chat-head b { display: block; font-size: 0.98rem; font-weight: 700; }
-    .chat-head span { display: block; font-size: 0.8rem; color: var(--gray-2); }
+    .chat-head b { display: block; font-size: 0.95rem; font-weight: 700; }
+    .chat-head span { display: block; font-size: 0.78rem; color: var(--gray-2); }
     .chat-head .status { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; font-size: 0.78rem; color: var(--gray-2); white-space: nowrap; }
     .chat-head .status i { width: 7px; height: 7px; border-radius: 50%; background: #79d69a; }
 
@@ -136,7 +136,8 @@ Structure 1: chat-app shell with tour sidebar. No seed roll — pinned brief.
       font-size: 0.95rem; color: var(--white);
     }
     .bubble p + p { margin-top: 8px; }
-    .bubble .fine { color: var(--gray-2); font-size: 0.82rem; }
+    .bubble .hello { display: block; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.022em; line-height: 1.25; margin-bottom: 8px; text-wrap: balance; }
+    .bubble .fine { color: var(--gray-2); font-size: 0.78rem; }
     .msg.you { align-self: flex-end; flex-direction: row-reverse; }
     .msg.you .bubble {
       background: rgba(255,255,255,0.10); border-top-left-radius: 20px; border-top-right-radius: 6px;
@@ -153,12 +154,12 @@ Structure 1: chat-app shell with tour sidebar. No seed roll — pinned brief.
     }
     .tcard:hover { background: rgba(255,255,255,0.09); border-color: var(--stroke-hi); transform: translateY(-2px); }
     .tcard .t-emoji { width: 34px; height: 34px; border-radius: 11px; background: rgba(255,255,255,0.08); display: grid; place-items: center; color: var(--spark); margin-bottom: 10px; }
-    .tcard b { display: block; font-size: 0.9rem; font-weight: 700; }
+    .tcard b { display: block; font-size: 0.95rem; font-weight: 700; }
     .tcard span { display: block; font-size: 0.78rem; color: var(--gray-2); margin-top: 3px; }
     .bubble .linkrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
     .bubble .linkrow a {
       display: inline-flex; align-items: center; gap: 7px;
-      font-size: 0.82rem; font-weight: 600; color: var(--white); text-decoration: none;
+      font-size: 0.78rem; font-weight: 600; color: var(--white); text-decoration: none;
       background: rgba(255,255,255,0.08); border: 1px solid var(--stroke); border-radius: 999px; padding: 7px 14px;
       transition: background-color 0.22s;
     }
@@ -263,7 +264,7 @@ Structure 1: chat-app shell with tour sidebar. No seed roll — pinned brief.
           <div class="msg">
             <span class="orb" aria-hidden="true"></span>
             <div class="bubble">
-              <p>Hi, I&rsquo;m Ember. Welcome to your Aquafire owner&rsquo;s guide. Whether you&rsquo;re still deciding, just unboxed one, or chasing a beep at midnight &mdash; I know the way.</p>
+              <p><span class="hello">Hi, I&rsquo;m Ember. Welcome to your Aquafire owner&rsquo;s guide.</span>Whether you&rsquo;re still deciding, just unboxed one, or chasing a beep at midnight &mdash; I know the way.</p>
               <p class="fine">Pick a tour, tap a question, or just type.</p>
               <div class="tourcards">
                 <a class="tcard" href="#thread">

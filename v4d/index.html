@@ -119,11 +119,11 @@ workspace. No seed roll — pinned brief.
       transition: border-color 0.25s;
     }
     .composer:hover { border-color: var(--stroke-hi); }
-    .composer .ph { flex: 1; color: var(--gray-2); font-size: 0.9rem; }
+    .composer .ph { flex: 1; color: var(--gray-2); font-size: 0.88rem; }
     .composer .send {
       display: inline-flex; align-items: center; gap: 7px; flex: none;
       background: rgba(255,255,255,0.12); border: 1px solid var(--stroke);
-      color: var(--white); font-weight: 600; font-size: 0.85rem;
+      color: var(--white); font-weight: 600; font-size: 0.88rem;
       padding: 9px 16px; border-radius: 999px;
     }
     .chatpane .fine { text-align: center; color: var(--gray-2); font-size: 0.72rem; }
@@ -146,8 +146,8 @@ workspace. No seed roll — pinned brief.
     .tabs button[aria-selected="true"] { background: rgba(255,255,255,0.13); color: var(--white); }
     .pane { display: none; margin-top: 20px; }
     .pane.on { display: block; }
-    .pane h2 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.015em; }
-    .pane .sub { color: var(--gray-2); font-size: 0.9rem; margin-top: 3px; }
+    .pane h2 { font-size: 1.55rem; font-weight: 700; letter-spacing: -0.02em; }
+    .pane .sub { color: var(--gray-2); font-size: 0.95rem; margin-top: 4px; }
 
     .models3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
     .m3 {
@@ -157,13 +157,13 @@ workspace. No seed roll — pinned brief.
     }
     .m3:hover { background: rgba(255,255,255,0.09); transform: translateY(-2px); }
     .m3 img { width: 100%; height: 74px; object-fit: contain; }
-    .m3 b { display: block; font-size: 0.92rem; font-weight: 700; margin-top: 10px; }
+    .m3 b { display: block; font-size: 0.95rem; font-weight: 700; margin-top: 10px; }
     .m3 span { display: block; font-size: 0.78rem; color: var(--gray-2); }
     .factrow { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
-    .factrow .cap { padding: 9px 16px; font-size: 0.84rem; font-weight: 600; color: var(--white); cursor: default; }
+    .factrow .cap { padding: 9px 16px; font-size: 0.88rem; font-weight: 600; color: var(--white); cursor: default; }
     .factrow .cap:hover { transform: none; }
     .caprow { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
-    .caprow .cap { padding: 10px 18px; font-size: 0.87rem; font-weight: 600; color: var(--white); }
+    .caprow .cap { padding: 10px 18px; font-size: 0.88rem; font-weight: 600; color: var(--white); }
     .caprow .cap.prime { background: rgba(255,255,255,0.12); }
 
     .steps { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
@@ -179,8 +179,8 @@ workspace. No seed roll — pinned brief.
       background: rgba(255,255,255,0.08); border: 1px solid var(--stroke);
       display: grid; place-items: center; font-size: 0.85rem; font-weight: 700; color: var(--spark);
     }
-    .step b { display: block; font-size: 0.92rem; font-weight: 700; }
-    .step span { display: block; font-size: 0.8rem; color: var(--gray-2); }
+    .step b { display: block; font-size: 0.95rem; font-weight: 700; }
+    .step span { display: block; font-size: 0.78rem; color: var(--gray-2); }
     .step svg { margin-left: auto; color: var(--gray-2); flex: none; }
 
     .sym { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
@@ -194,9 +194,9 @@ workspace. No seed roll — pinned brief.
     .sym a i { width: 6px; height: 6px; border-radius: 50%; background: var(--spark); flex: none; }
     .cycles { display: flex; gap: 12px; margin-top: 18px; }
     .cycles .c { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--stroke); border-radius: 16px; padding: 14px 16px; }
-    .cycles .c b { font-size: 1.2rem; font-weight: 700; }
-    .cycles .c b small { font-size: 0.8rem; color: var(--gray); font-weight: 500; }
-    .cycles .c span { display: block; font-size: 0.8rem; color: var(--gray-2); margin-top: 2px; }
+    .cycles .c b { font-size: 1.25rem; font-weight: 700; }
+    .cycles .c b small { font-size: 0.78rem; color: var(--gray); font-weight: 500; }
+    .cycles .c span { display: block; font-size: 0.78rem; color: var(--gray-2); margin-top: 2px; }
 
     .foot { display: flex; align-items: center; justify-content: center; gap: 18px; color: var(--gray-2); font-size: 0.78rem; flex-wrap: wrap; }
     .foot img { height: 14px; opacity: 0.65; }
@@ -239,7 +239,7 @@ workspace. No seed roll — pinned brief.
           <div class="msg">
             <span class="orb" aria-hidden="true"></span>
             <div class="bubble">
-              <p>Welcome in. I&rsquo;m Ember &mdash; ask me anything about the Aquafire, and I&rsquo;ll put what you need on the canvas. &#8594;</p>
+              <p>Welcome in. I&rsquo;m Ember. Ask me anything about the Aquafire, and I&rsquo;ll put what you need on the canvas. &#8594;</p>
             </div>
           </div>
 
@@ -247,7 +247,7 @@ workspace. No seed roll — pinned brief.
           <div class="msg">
             <span class="orb" aria-hidden="true"></span>
             <div class="bubble">
-              <p>No &mdash; it&rsquo;s ultrasonic water mist lit from below. Cool to the touch, safe around kids and pets, no venting or gas.</p>
+              <p>No. It&rsquo;s ultrasonic water mist lit from below: cool to the touch, safe around kids and pets, no venting or gas.</p>
               <button class="show" data-tab="explore"><span class="dotpip"></span>Showing: the models</button>
             </div>
           </div>
@@ -256,7 +256,7 @@ workspace. No seed roll — pinned brief.
           <div class="msg">
             <span class="orb" aria-hidden="true"></span>
             <div class="bubble">
-              <p>Day one is four steps &mdash; place it, check your water, first fill, register the warranty. I&rsquo;ve laid them out in order.</p>
+              <p>Day one is four steps: place it, check your water, first fill, register the warranty. I&rsquo;ve laid them out in order.</p>
               <button class="show" data-tab="setup"><span class="dotpip"></span>Showing: your first day</button>
             </div>
           </div>
@@ -265,7 +265,7 @@ workspace. No seed roll — pinned brief.
           <div class="msg">
             <span class="orb" aria-hidden="true"></span>
             <div class="bubble">
-              <p>Beeps are messages &mdash; usually water level or a cleaning that&rsquo;s due. Pick the symptom and I&rsquo;ll route you to the exact fix.</p>
+              <p>Beeps are messages: usually water level or a cleaning that&rsquo;s due. Pick the symptom and I&rsquo;ll route you to the exact fix.</p>
               <button class="show" data-tab="fix"><span class="dotpip"></span>Showing: symptoms &amp; rituals</button>
             </div>
           </div>
@@ -327,7 +327,7 @@ workspace. No seed roll — pinned brief.
             </a>
             <a class="step" href="../water-care.html">
               <span class="n">2</span>
-              <span><b>Check your water</b><span>Hardness by ZIP &mdash; hard water shortens mist-maker life</span></span>
+              <span><b>Check your water</b><span>Hardness by ZIP. Hard water shortens mist-maker life</span></span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
             <a class="step" href="../quick-start.html">
@@ -337,7 +337,7 @@ workspace. No seed roll — pinned brief.
             </a>
             <a class="step" href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">
               <span class="n">4</span>
-              <span><b>Register your warranty</b><span>Two minutes &mdash; coverage &amp; peace of mind</span></span>
+              <span><b>Register your warranty</b><span>Two minutes. Coverage &amp; peace of mind</span></span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
           </div>
@@ -349,7 +349,7 @@ workspace. No seed roll — pinned brief.
 
         <div class="pane" id="pane-fix">
           <h2>Symptoms &amp; rituals</h2>
-          <p class="sub">Pick what you&rsquo;re seeing — the Troubleshooter tailors the fix to your model.</p>
+          <p class="sub">Pick what you&rsquo;re seeing. The Troubleshooter tailors the fix to your model.</p>
           <div class="sym">
             <a href="../troubleshoot.html"><i></i>It&rsquo;s beeping</a>
             <a href="../troubleshoot.html"><i></i>Flame low or uneven</a>
@@ -359,7 +359,7 @@ workspace. No seed roll — pinned brief.
             <a href="../troubleshoot.html"><i></i>No power</a>
           </div>
           <div class="cycles">
-            <div class="c"><b>3 <small>mo</small></b><span>Mist maker cleaning &mdash; 10 minutes</span></div>
+            <div class="c"><b>3 <small>mo</small></b><span>Mist maker cleaning &middot; 10 minutes</span></div>
             <div class="c"><b>6 <small>mo</small></b><span>Full system flush</span></div>
           </div>
           <div class="caprow">
