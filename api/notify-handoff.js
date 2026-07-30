@@ -17,21 +17,15 @@
 
 'use strict';
 
-const ALLOWED_ORIGIN =
-  /^https:\/\/((www\.)?aquafire\.(app|com)|[a-z0-9-]+-luminabrands-projects\.vercel\.app)$/;
+// CORS/origin enforcement + rate limiting live in api/_guard.js (shared).
+const { cors, throttle } = require('./_guard');
+
+// Endpoint-wide daily ceiling — keeps the team's Slack channel from being
+// flooded (only enforced once Upstash is configured; see api/_guard.js).
+const DAILY_CAP = Number(process.env.HANDOFF_DAILY_CAP || 300);
 
 const INSIGHTS_URL = 'https://aquafire.app/chat-insights.html';
 const EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
-
-const hits = new Map();
-function rateLimited(ip) {
-  const now = Date.now();
-  const arr = (hits.get(ip) || []).filter((t) => now - t < 60 * 1000);
-  arr.push(now);
-  hits.set(ip, arr);
-  if (hits.size > 5000) hits.clear();
-  return arr.length > 4;
-}
 
 const clean = (s, max) =>
   String(s || '')
@@ -39,15 +33,7 @@ const clean = (s, max) =>
     .replace(/\s+/g, ' ').trim().slice(0, max);
 
 module.exports = async (req, res) => {
-  const origin = req.headers.origin || '';
-  if (ALLOWED_ORIGIN.test(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-  }
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'method not allowed' });
+  if (!cors(req, res)) return;
 
   const webhook = process.env.HANDOFF_WEBHOOK_URL;
   if (!webhook) {
@@ -56,8 +42,9 @@ module.exports = async (req, res) => {
     });
   }
 
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if (rateLimited(ip)) return res.status(429).json({ error: 'slow down' });
+  if (await throttle(req, 'handoff', 4, DAILY_CAP)) {
+    return res.status(429).json({ error: 'slow down' });
+  }
 
   const body = req.body || {};
   const mode = clean(body.mode, 20) || 'support';

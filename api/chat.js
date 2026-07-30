@@ -24,8 +24,13 @@ const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const FS_PROJECT = 'aquafire-portal';
 const FS_KEY = 'AIzaSyAAeoOt4NJxh_ITaWNMBV-Ed-mM5Ac5a7Q';
 
-const ALLOWED_ORIGIN =
-  /^https:\/\/((www\.)?aquafire\.(app|com)|[a-z0-9-]+-luminabrands-projects\.vercel\.app)$/;
+// CORS/origin enforcement + rate limiting live in api/_guard.js (shared).
+const { cors, throttle } = require('./_guard');
+
+// Endpoint-wide ceiling on Claude API calls per day — a cost circuit breaker
+// for the case where someone spoofs the Origin header and rotates IPs. Only
+// enforced once Upstash is configured (see api/_guard.js).
+const DAILY_CAP = Number(process.env.CHAT_DAILY_CAP || 3000);
 
 const BASE_FACTS = `You are Ember, the friendly AI assistant for Aquafire water
 vapor fireplaces (by Lumina Brands), chatting on aquafire.com / aquafire.app.
@@ -183,28 +188,9 @@ async function teamKnowledge() {
   return kbCache.text;
 }
 
-/* ── Best-effort per-instance rate limit ────────────────────────────────── */
-const hits = new Map();
-function rateLimited(ip) {
-  const now = Date.now();
-  const arr = (hits.get(ip) || []).filter((t) => now - t < 60 * 1000);
-  arr.push(now);
-  hits.set(ip, arr);
-  if (hits.size > 5000) hits.clear();
-  return arr.length > 12;
-}
-
 /* ── Handler ────────────────────────────────────────────────────────────── */
 module.exports = async (req, res) => {
-  const origin = req.headers.origin || '';
-  if (ALLOWED_ORIGIN.test(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-  }
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'method not allowed' });
+  if (!cors(req, res)) return;
 
   // ANTHROPIC_API_KEY is the canonical name; `chatbotshopify` is accepted
   // because that's what the key was saved as in this Vercel project.
@@ -215,8 +201,9 @@ module.exports = async (req, res) => {
     });
   }
 
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if (rateLimited(ip)) return res.status(429).json({ error: 'slow down' });
+  if (await throttle(req, 'chat', 12, DAILY_CAP)) {
+    return res.status(429).json({ error: 'slow down' });
+  }
 
   const body = req.body || {};
   const message = typeof body.message === 'string' ? body.message.trim() : '';
