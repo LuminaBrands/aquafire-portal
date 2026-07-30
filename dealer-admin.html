@@ -233,6 +233,7 @@
       <input type="password" id="gatePassword" placeholder="Password" autocomplete="current-password">
       <button class="btn btn-secondary" id="emailBtn">Sign in with email</button>
       <div class="auth-err" id="authErr"></div>
+      <button class="btn btn-secondary" id="switchBtn" style="display:none;margin-top:10px;">Sign out &amp; use a team account</button>
     </div>
   </div>
 
@@ -426,26 +427,39 @@
     }
 
     $('googleBtn').onclick = function () {
-      auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      var provider = new firebase.auth.GoogleAuthProvider();
+      // Always offer the account chooser, so someone already signed in with a
+      // personal account can pick their team address without signing out.
+      provider.setCustomParameters({ prompt: 'select_account' });
+      auth.signInWithPopup(provider)
         .catch(function (e) { $('authErr').textContent = e.message; });
     };
     $('emailBtn').onclick = function () {
       auth.signInWithEmailAndPassword($('gateEmail').value, $('gatePassword').value)
         .catch(function (e) { $('authErr').textContent = e.message; });
     };
+    $('switchBtn').onclick = function () {
+      $('authErr').textContent = '';
+      auth.signOut();
+    };
 
     auth.onAuthStateChanged(function (user) {
       // Rewards customers hold accounts in this same Firebase project, so
       // "signed in" is not enough — the account has to be a team address.
-      if (user && !isTeam(user)) {
+      //
+      // A signed-in non-team account gets the gate, never the tool — but we
+      // deliberately do NOT sign them out: rewards runs on the same Firebase
+      // project and origin, so signing out here would drop a customer's
+      // rewards session just because they opened this URL.
+      var authed = isTeam(user);
+      if (user && !authed) {
         $('authErr').textContent = user.emailVerified
-          ? 'Dealer management is limited to Lumina Brands team accounts.'
-          : 'Verify your email address first, then sign in again.';
-        auth.signOut();
-        return;
+          ? 'Signed in as ' + user.email + ' — not a Lumina Brands team account.'
+          : 'Verify ' + (user.email || 'your email address') + ' first, then sign in again.';
       }
-      document.body.classList.toggle('gated', !isTeam(user));
-      if (isTeam(user)) $('authErr').textContent = '';
+      $('switchBtn').style.display = (user && !authed) ? '' : 'none';
+      document.body.classList.toggle('gated', !authed);
+      if (authed) $('authErr').textContent = '';
     });
   })();
   </script>
