@@ -125,7 +125,7 @@ All pages share the same nav bar (defined inline in each HTML file). Items are g
 Home → Guides ▾ (Quick Start, Build Yours, Enclosure Guide) → Care ▾ (Water Care, Maintenance, Troubleshoot) → Find a Dealer → Support → Retail Site → Get Started (CTA)
 ```
 
-The nav logo links to the portal homepage (`/`). **The prominent `.nav-cta` button is "Get Started" → `quick-start.html`** — the portal's job is to get customers reading and earning rewards, so the highlighted CTA points inward, not at the store. Selling is the secondary goal: the storefront (`https://www.aquafire.com`) is a plain nav item labelled **"Retail Site"**, sitting with the others just before the CTA. When a page inside a dropdown is active, its link gets `.active` and the parent `.nav-drop-btn` gets `.active` too.
+The nav logo links to the portal homepage (`/`). **The prominent `.nav-cta` button is "Get Started" → `rewards.html`** — the portal's job is to get customers reading and earning rewards, so the highlighted CTA points inward, not at the store, and leads with the rewards programme itself. Selling is the secondary goal: the storefront (`https://www.aquafire.com`) is a plain nav item labelled **"Retail Site"**, sitting with the others just before the CTA. When a page inside a dropdown is active, its link gets `.active` and the parent `.nav-drop-btn` gets `.active` too.
 
 `getting-started.html` is deliberately **not** in the nav — it's still a "coming soon" placeholder, and a "Getting Started" item next to the "Get Started" CTA reads as a duplicate. Don't re-add it until the page has real content.
 
