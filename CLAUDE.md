@@ -119,13 +119,13 @@ Radius:         --radius: 14px | --radius-sm: 8px
 
 ## Navigation Structure
 
-All pages share the same nav bar (defined inline in each HTML file):
+All pages share the same nav bar (defined inline in each HTML file). Items are grouped into dropdowns (`.nav-drop` / `.nav-drop-btn` / `.nav-drop-menu`, styled in `hub.css` — CSS-only: hover/`:focus-within` on desktop, flattened into labeled groups in the mobile hamburger panel):
 
 ```
-Home → Getting Started → Quick Start → Enclosure Guide → Water Care → Troubleshoot → Find a Dealer → Support
+Home → Guides ▾ (Getting Started, Quick Start, Build Yours, Enclosure Guide) → Care ▾ (Water Care, Maintenance, Troubleshoot) → Find a Dealer → Support → Shop Now (CTA)
 ```
 
-(A few pages also slot **Maintenance** before Find a Dealer; `builder.html` adds **Build Yours**. The exact list varies slightly per page — match the page you're editing.)
+The nav logo links to the portal homepage (`/`); the "Shop Now" `.nav-cta` button (on every page, last item) links to the storefront (`https://www.aquafire.com`). When a page inside a dropdown is active, its link gets `.active` and the parent `.nav-drop-btn` gets `.active` too.
 
 On the `aquafire-pro.html` / `aquafire-original.html` guide pages, the Troubleshoot nav link carries a `?model=pro` / `?model=original` param so the wizard pre-selects that model (same pattern as the Enclosure Guide link there).
 
