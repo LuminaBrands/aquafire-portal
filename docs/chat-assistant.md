@@ -180,6 +180,42 @@ conversation.
 Until it's set, the endpoint 503s and the widget silently stops trying for the
 page load — customers never see any of this.
 
+## Abuse & cost controls (`api/_guard.js`)
+
+All three functions share one guard. Two things it does:
+
+**Origin enforcement.** A request whose `Origin` isn't one of ours —
+`aquafire.app`, `aquafire.com`, a `*-luminabrands-projects.vercel.app` preview, or a
+`*.myshopify.com` store domain — gets a `403`. Preflights are still answered
+normally, so a browser on some other site sees a clean CORS failure and the
+widget falls back to its local knowledge base. Set `ALLOW_DEV_ORIGINS=1` in a
+preview environment to also accept `http://localhost:*` while developing.
+
+Origin headers are trivially forged by anything that isn't a browser, so this is
+a speed bump, not a boundary. The rate limits are the real control.
+
+**Rate limits that survive cold starts.** Per-IP, per minute: 12 for
+`/api/chat`, 6 for `/api/order-status`, 4 for `/api/notify-handoff`. Plus a
+per-endpoint daily ceiling so that rotating IPs can't run up a Claude bill or
+flood Slack: `CHAT_DAILY_CAP` (default 3000), `ORDER_LOOKUP_DAILY_CAP` (500),
+`HANDOFF_DAILY_CAP` (300).
+
+Counters live in Upstash Redis when configured, which is what makes them
+meaningful across the several lambda instances Vercel runs concurrently:
+
+1. [console.upstash.com](https://console.upstash.com) → create a free Redis
+   database (pick a region near the functions).
+2. Copy the **REST** URL and token into Vercel → **Settings → Environment
+   Variables** as `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`
+   (Production + Preview) → **Redeploy**.
+
+Without those variables the guard falls back to the original per-instance
+in-memory counter — limits still apply, they're just weaker (each instance
+counts separately, and the count resets on every cold start). The daily caps are
+skipped entirely in that mode, since a per-instance global counter would be
+meaningless. Redis errors fail open to the same fallback: a rate-limiter outage
+must never take the customer-facing chat down with it.
+
 ### Alternative: self-hosted proxy
 
 If you ever move the widget somewhere without the Vercel function, point
@@ -338,38 +374,19 @@ only personal data is whatever the customer types.
 
 ### One-time setup: Firestore rules
 
-In the Firebase console (**aquafire-portal → Firestore → Rules**), add this *inside*
-the existing `match /databases/{database}/documents { ... }` block, as a sibling of
-the `users` rule, then **Publish**. The widget writes anonymously (create-only,
-schema-restricted); reads are limited to verified team sign-ins — **not** just any
-signed-in account, since rewards customers hold Firebase accounts in this project too:
+The full ruleset for this project — `chatEvents`, `chatKnowledge`, and the rewards
+`users` collection — lives in **[`docs/firestore-rules.md`](firestore-rules.md)**.
+Copy it into the Firebase console (**aquafire-portal → Firestore → Rules**) and
+**Publish**. In short: the widget writes anonymously (create-only, field-allowlisted,
+size-capped); reads are limited to verified `@luminabrands.com` sign-ins — **not** just
+any signed-in account, since rewards customers hold Firebase accounts in this project
+too.
 
-```
-match /chatEvents/{id} {
-  allow create: if request.resource.data.keys().hasOnly(
-    ['v','type','convo','ts','page','host','model',
-     'text','intent','vote','comment','mode']);
-  allow read: if request.auth != null
-    && request.auth.token.email_verified
-    && request.auth.token.email.matches('.*@luminabrands[.]com');
-  allow update, delete: if false;
-}
-match /chatKnowledge/{id} {
-  // world-readable: /api/chat reads it to ground AI answers (content is
-  // public-facing FAQ material by definition — never put secrets here)
-  allow read: if true;
-  allow create, update, delete: if request.auth != null
-    && request.auth.token.email_verified
-    && request.auth.token.email.matches('.*@luminabrands[.]com');
-}
-```
-
-Adjust the domain pattern to whatever your team signs in with (e.g.
-`'.*@(luminabrands|aquafire)[.]com'`), or swap it for an explicit UID allowlist.
-Until the rule is published, writes are silently rejected — the chat itself is never
-affected (all telemetry is fire-and-forget). **Privacy:** transcripts can contain
-customer-typed details — treat logs as customer data and set a retention policy
-(Firestore TTL on the `ts` field, e.g. 180 days, does this automatically).
+Until the rules are published, writes are silently rejected — the chat itself is never
+affected (all telemetry is fire-and-forget). That doc also covers **App Check**, which
+is what actually restricts telemetry writes to our own pages, and the retention note:
+transcripts can contain customer-typed details, so treat logs as customer data and set a
+Firestore TTL on the `ts` field (e.g. 180 days).
 
 ### Config
 

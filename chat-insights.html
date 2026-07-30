@@ -275,15 +275,32 @@
       };
       $('signOutBtn').onclick = function () { auth.signOut(); };
 
+      /* Team-only: the Firestore rules are the real gate (verified
+         @luminabrands.com emails only), but rewards customers hold accounts in
+         this same Firebase project — so being signed in is not enough to see
+         the dashboard chrome. Mirror the rule here and sign anyone else back
+         out, instead of showing them empty panels and permission errors. */
+      var TEAM_EMAIL = /@luminabrands\.com$/i;
+      function isTeam(user) {
+        return !!user && !!user.email && user.emailVerified && TEAM_EMAIL.test(user.email);
+      }
+
       auth.onAuthStateChanged(function (user) {
-        var authed = !!user;
+        if (user && !isTeam(user)) {
+          $('authErr').textContent = user.emailVerified
+            ? 'This dashboard is limited to Lumina Brands team accounts.'
+            : 'Verify your email address first, then sign in again.';
+          auth.signOut();
+          return;
+        }
+        var authed = isTeam(user);
         $('authCard').style.display = authed ? 'none' : '';
         $('dash').style.display = authed ? '' : 'none';
         $('signOutBtn').style.display = authed ? '' : 'none';
         $('refreshBtn').style.display = authed ? '' : 'none';
         $('exportBtn').style.display = authed ? '' : 'none';
         $('who').textContent = authed ? (user.email || user.displayName || '') : '';
-        if (authed) { load(); loadKb(); }
+        if (authed) { $('authErr').textContent = ''; load(); loadKb(); }
       });
 
       /* ── Team knowledge ("Teach Ember") ── */
@@ -296,7 +313,7 @@
           if (!items.length) {
             el.innerHTML = '<span style="color:var(--text-muted);font-size:0.85rem;">Nothing yet &mdash; ' +
               'click <strong>Answer</strong> on an unanswered question, or <strong>+ Add knowledge</strong>. ' +
-              '(If saving fails with permission-denied, publish the <code>chatKnowledge</code> rule from docs/chat-assistant.md.)</span>';
+              '(If saving fails with permission-denied, publish the <code>chatKnowledge</code> rule from docs/firestore-rules.md.)</span>';
             return;
           }
           el.innerHTML = '';
@@ -318,7 +335,7 @@
           });
         }).catch(function (e) {
           $('kbList').innerHTML = '<span style="color:var(--text-muted);font-size:0.85rem;">Couldn’t load knowledge (' +
-            esc(e.code || 'error') + ') &mdash; publish the <code>chatKnowledge</code> rule from docs/chat-assistant.md.</span>';
+            esc(e.code || 'error') + ') &mdash; publish the <code>chatKnowledge</code> rule from docs/firestore-rules.md.</span>';
         });
       }
 
@@ -412,7 +429,7 @@
           '    &amp;&amp; request.auth.token.email.matches(\'.*@luminabrands[.]com\');\n' +
           '  allow update, delete: if false;\n' +
           '}</pre>' +
-          '<p style="font-size:0.85rem;color:var(--text-muted);margin-top:8px;">Full setup: <code>docs/chat-assistant.md</code></p>';
+          '<p style="font-size:0.85rem;color:var(--text-muted);margin-top:8px;">Full ruleset: <code>docs/firestore-rules.md</code></p>';
         $('detail').innerHTML = '';
         $('detail').appendChild(hint);
       }
