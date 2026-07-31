@@ -86,6 +86,41 @@ on the tag itself:
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
 | `beam` | `data-beam` | `'input'` | Border Beam target: `'input'` (composer field), `'panel'` (whole window), or `false` to disable |
 | `beamVariant` | `data-beam-variant` | `'colorful'` | Beam palette: `'colorful'` (full spectrum) or `'ember'` (Aquafire fire palette) |
+| `mount` | `data-mount` | unset | CSS selector (or element) to render the panel into, instead of the corner launcher |
+
+### Inline mount
+
+Set `mount` to a selector and the widget renders its panel inside that
+container instead of floating in the corner. The launcher bubble, the nudge
+teaser and the mobile full-screen takeover all switch off; the host owns
+showing and sizing the container.
+
+```js
+window.AQUAFIRE_ASSISTANT_CONFIG = { mount: '#heroChatMount', beam: false };
+```
+
+Drive it through `window.AquafireAssistant`:
+
+| Call | Does |
+|---|---|
+| `.open()` | Open the panel (greets if the transcript is empty) |
+| `.ask(text)` | Open and send `text` as if the visitor typed it |
+| `.close()` | Close it |
+| `.reset()` | Clear the conversation |
+| `.isOpen()` / `.root()` | State, and the mounted element for styling/measuring |
+
+Calls made before the widget finishes loading are queued, so a host never has
+to wait for it. When the visitor closes the panel from its own header or with
+Escape, the widget fires a bubbling `aquafire:close` event so the host can
+collapse its container.
+
+The panel drops its own background and chrome when inline and inherits the
+host's `--afa-*` tokens, so restyling it is a matter of rebinding those on the
+container. One exception: `.afa-head` has a hardcoded gradient rather than a
+token, so override it directly if the host's surface is not dark.
+
+`home/index.html` is the first consumer &mdash; its hero composer expands in
+place into this panel.
 
 ### Border Beam
 

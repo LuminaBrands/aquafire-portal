@@ -38,11 +38,11 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     // The hero composer already carries a Border Beam and is this page's
     // primary action, so the Ember widget must NOT beam here as well -- two
     // animated glows competing for the same action reads worse than either
-    // alone. This page does not load assistant.js yet; the config is set now
-    // so the widget is already correct on the day the rollout adds it.
-    // Merged, not assigned, so it cannot clobber other config set later.
+    // alone. Merged, not assigned, so it cannot clobber config set later.
     window.AQUAFIRE_ASSISTANT_CONFIG = window.AQUAFIRE_ASSISTANT_CONFIG || {};
     window.AQUAFIRE_ASSISTANT_CONFIG.beam = false;
+    // Render Ember inside the hero instead of the corner launcher.
+    window.AQUAFIRE_ASSISTANT_CONFIG.mount = '#heroChatMount';
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -277,6 +277,84 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
        the composer's width and top margin so the hero layout is unchanged. */
     .composer-beam { width: min(620px, 100%); margin-top: 18px; border-radius: 999px; }
     .composer-beam > .composer { width: 100%; margin-top: 0; }
+
+    /* ── Hero chat ────────────────────────────────────────────────────
+       Clicking the composer expands it in place into a chat panel. Ember
+       (assistant.js, mounted at #heroChatMount) owns the conversation;
+       this page owns only the expand/collapse. The composer is a real
+       form now, so it still works without JS -- it submits to
+       support.html, which is where it used to link. */
+    .composer .ph {
+      flex: 1; min-width: 0; padding: 0;
+      background: none; border: none; outline: none;
+      font: inherit; font-size: 0.95rem; color: var(--text-hi);
+    }
+    .composer .ph::placeholder { color: var(--text-dim); }
+    .composer .send { border: none; cursor: pointer; font-family: inherit; }
+
+    /* The greeting furniture folds away as the chat opens. max-height is
+       animatable where height:auto is not; the values only need to exceed
+       the natural height. */
+    .greet .orb, .greet .greet-bubble, .greet .murmur, .composer-beam {
+      max-height: 340px;
+      transition: opacity 0.3s var(--ease), transform 0.44s var(--ease),
+                  max-height 0.5s var(--ease), margin 0.5s var(--ease);
+    }
+    .greet.is-chatting .orb,
+    .greet.is-chatting .greet-bubble {
+      opacity: 0; transform: translateY(-12px) scale(0.96);
+      max-height: 0; margin-top: 0; pointer-events: none;
+    }
+    .greet.is-chatting .murmur {
+      opacity: 0; transform: translateY(10px);
+      max-height: 0; margin-top: 0; pointer-events: none;
+    }
+    /* The composer hands its job to the panel's own input row. */
+    .greet.is-chatting .composer-beam {
+      opacity: 0; transform: translateY(14px) scale(0.97);
+      max-height: 0; margin-top: 0; pointer-events: none;
+    }
+
+    .hero-chat {
+      width: min(760px, 100%); margin-top: 0;
+      max-height: 0; opacity: 0;
+      transform: translateY(16px) scale(0.985);
+      overflow: hidden; text-align: left;
+      border-radius: 26px;
+      background: var(--composer-bg);
+      border: 1px solid var(--composer-border);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      box-shadow: var(--composer-shadow);
+      transition: max-height 0.54s var(--ease), opacity 0.34s var(--ease),
+                  transform 0.54s var(--ease), margin 0.54s var(--ease);
+    }
+    .greet.is-chatting .hero-chat {
+      max-height: clamp(360px, 56vh, 560px);
+      opacity: 1; transform: none; margin-top: 18px;
+    }
+    .hero-chat-mount { height: clamp(360px, 56vh, 560px); }
+
+    /* Ember ships its own dark chrome; rebind its tokens so the panel wears
+       this page's glass and type instead of the corner-widget look. */
+    .hero-chat .afa-root {
+      --afa-bg: transparent;
+      --afa-surface: var(--cap-bg);
+      --afa-surface2: var(--cap-bg-hover);
+      --afa-border: var(--stroke);
+      --afa-text: var(--text-hi);
+      --afa-muted: var(--text-dim);
+      --afa-radius: 18px;
+      font-family: inherit;
+    }
+    /* The header's gradient is hardcoded in assistant.js rather than
+       tokenised, so it has to be overridden here or it lands as a maroon
+       band across the glass. */
+    .hero-chat .afa-head { background: transparent; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .greet .orb, .greet .greet-bubble, .greet .murmur,
+      .composer-beam, .hero-chat { transition-duration: 0.01ms; }
+    }
     .murmur { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px; }
     .murmur .cap { padding: 8px 15px; font-size: 0.82rem; font-weight: 500; }
 
@@ -444,19 +522,31 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         <h1>Hi, I&rsquo;m Ember. What brings you by tonight?</h1>
         <p>I know the manuals, the specs, and every fix &mdash; ask me, or step into your color below.</p>
       </div>
-      <div class="composer-beam af-beam" data-beam-size="md" data-beam-variant="colorful">
-        <a class="composer" href="../support.html" title="Ember opens in the corner of every portal page">
-          <span class="ph">Message Ember&hellip;</span>
-          <span class="send">Ask
+      <!-- The composer expands in place into the chat below it. Ember mounts
+           into #heroChat and owns the conversation; this page owns only the
+           expand/collapse. Without JS the form still submits to support.html,
+           which is where the chat used to link. -->
+      <form class="composer-beam af-beam" id="heroComposer" action="../support.html"
+            method="get" autocomplete="off" data-beam-size="md" data-beam-variant="colorful">
+        <span class="composer">
+          <input class="ph" id="heroInput" name="q" type="text"
+                 placeholder="Message Ember&hellip;" aria-label="Message Ember">
+          <button class="send" type="submit">Ask
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </span>
-        </a>
+          </button>
+        </span>
+      </form>
+
+      <!-- Grows from zero height when the composer is opened. -->
+      <div class="hero-chat" id="heroChat">
+        <div class="hero-chat-mount" id="heroChatMount"></div>
       </div>
+
       <div class="murmur" aria-label="Common questions">
-        <a class="cap" href="../troubleshoot.html">&ldquo;It&rsquo;s beeping&rdquo;</a>
-        <a class="cap" href="../maintenance.html">&ldquo;Cleaning the mist maker?&rdquo;</a>
-        <a class="cap" href="../enclosure-guide.html">&ldquo;What cutout size?&rdquo;</a>
-        <a class="cap" href="../water-care.html">&ldquo;Is my water too hard?&rdquo;</a>
+        <a class="cap" href="../troubleshoot.html" data-ask="It&rsquo;s beeping">&ldquo;It&rsquo;s beeping&rdquo;</a>
+        <a class="cap" href="../maintenance.html" data-ask="How do I clean the mist maker?">&ldquo;Cleaning the mist maker?&rdquo;</a>
+        <a class="cap" href="../enclosure-guide.html" data-ask="What cutout size do I need?">&ldquo;What cutout size?&rdquo;</a>
+        <a class="cap" href="../water-care.html" data-ask="Is my water too hard?">&ldquo;Is my water too hard?&rdquo;</a>
       </div>
     </section>
 
@@ -625,5 +715,69 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     })();
   </script>
   <script src="../beam.js" defer></script>
+  <script src="../assistant.js" defer></script>
+  <script>
+    // Hero composer -> inline chat. This owns only the expand/collapse and
+    // the handoff of the first message; Ember owns the conversation.
+    (function () {
+      var greet = document.querySelector(".greet");
+      var form = document.getElementById("heroComposer");
+      var input = document.getElementById("heroInput");
+      var chat = document.getElementById("heroChat");
+      if (!greet || !form || !input || !chat) return;
+
+      // Ember has to be present, or expanding would open an empty box. Until
+      // it loads, the form still submits to support.html on its own.
+      function ember() { return window.AquafireAssistant || null; }
+
+      var open = false;
+
+      function expand(question) {
+        if (!ember()) return false;
+        if (!open) {
+          open = true;
+          greet.classList.add("is-chatting");
+        }
+        if (question) ember().ask(question);
+        else ember().open();
+        return true;
+      }
+
+      function collapse() {
+        if (!open) return;
+        open = false;
+        greet.classList.remove("is-chatting");
+        input.value = "";
+      }
+
+      // Focusing the field is enough to open -- the click that focused it is
+      // the intent. Typing first then submitting sends that text straight in.
+      input.addEventListener("focus", function () {
+        if (!open) expand();
+      });
+
+      form.addEventListener("submit", function (e) {
+        var q = input.value.trim();
+        if (!ember()) return;            // no JS chat available: let it navigate
+        e.preventDefault();
+        expand(q || null);
+      });
+
+      // Murmur chips seed the conversation instead of navigating away.
+      document.querySelectorAll(".murmur .cap[data-ask]").forEach(function (cap) {
+        cap.addEventListener("click", function (e) {
+          if (!ember()) return;          // fall through to the href
+          e.preventDefault();
+          expand(cap.getAttribute("data-ask"));
+        });
+      });
+
+      // Ember's own header X (and Escape) collapse the hero back.
+      document.addEventListener("aquafire:close", collapse);
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && open) collapse();
+      });
+    })();
+  </script>
 </body>
 </html>

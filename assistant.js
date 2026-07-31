@@ -67,6 +67,12 @@
   //   cfg.beamVariant = 'colorful' full spectrum (default) | 'ember' fire palette
   var BEAM_VARIANT = cfg.beamVariant || dataAttr('beam-variant') || 'colorful';
 
+  // Inline mount: render the panel inside a host container instead of the
+  // corner launcher. The host owns showing/hiding it and drives the widget
+  // through window.AquafireAssistant. Used by the redesign hero composer,
+  // which expands in place into this panel rather than opening a bubble.
+  var MOUNT = cfg.mount || dataAttr('mount') || null;
+
   var SUPPORT_EMAIL = 'support@aquafire.com';
   var SALES_EMAIL = 'sales@aquafire.com';
   var ORDERS_EMAIL = 'orders@aquafire.com';
@@ -1107,12 +1113,20 @@
     '.afa-beam.afa-beam-on,.afa-beam.afa-beam-on::before,.afa-beam.afa-beam-on::after{animation:none !important;--afa-beam-opacity:1;}',
     '}',
 
+    /* Inline mount. The panel is normally position:fixed in the corner; here
+       it fills whatever box the host gives it and drops its own chrome so the
+       host's container provides the surface. */
+    '.afa-root.afa-inline{position:relative;display:block;width:100%;height:100%;}',
+    '.afa-inline .afa-panel{position:relative;right:auto;bottom:auto;z-index:auto;width:100%;max-width:none;height:100%;border:none;border-radius:0;box-shadow:none;background:transparent;}',
+    '.afa-inline .afa-panel.afa-open{animation:none;}',
+    '.afa-inline .afa-launcher,.afa-inline .afa-nudge{display:none!important;}',
+
     '.afa-legal{text-align:center;font-size:10.5px;color:#6a6f7d;padding:0 12px 8px;}',
     '.afa-legal a{color:#8c91a0;}',
 
     /* Mobile */
     '@media (max-width:520px){',
-    '.afa-panel{right:0;bottom:0;width:100vw;max-width:100vw;height:100dvh;border-radius:0;border:none;}',
+    '.afa-root:not(.afa-inline) .afa-panel{right:0;bottom:0;width:100vw;max-width:100vw;height:100dvh;border-radius:0;border:none;}',
     '.afa-nudge{right:16px;bottom:88px;}',
     '}'
   ].join('\n');
@@ -1213,8 +1227,20 @@
       beamEl = panel;
     }
 
-    root.appendChild(panel); root.appendChild(launcher);
-    document.body.appendChild(root);
+    root.appendChild(panel);
+    var host = MOUNT
+      ? (typeof MOUNT === 'string' ? document.querySelector(MOUNT) : MOUNT)
+      : null;
+    if (host) {
+      root.classList.add('afa-inline');
+      host.appendChild(root);
+      // The host decides when the chat is showing, so never restore an open
+      // panel or fire the corner nudge here.
+      state.open = false;
+    } else {
+      root.appendChild(launcher);
+      document.body.appendChild(root);
+    }
 
     inputEl.addEventListener('input', function () { sendBtn.disabled = !inputEl.value.trim(); });
     inputEl.addEventListener('keydown', function (e) { if (e.key === 'Enter' && inputEl.value.trim()) submit(); });
@@ -1228,8 +1254,8 @@
     }
     if (state.open) toggle(true, true);
 
-    // Nudge teaser
-    if (!state.nudged && !state.open) {
+    // Nudge teaser (corner mode only -- inline has no launcher to point at)
+    if (!host && !state.nudged && !state.open) {
       setTimeout(function () {
         if (state.open || state.nudged) return;
         nudge = el('div', 'afa-nudge', '\ud83d\udc4b Questions about Aquafire? I\u2019m here to help.<button class="afa-nudge-x" aria-label="Dismiss">\u2715</button>');
@@ -1246,9 +1272,15 @@
   function killNudge() { if (nudge) { nudge.remove(); nudge = null; } }
 
   function toggle(force, silent) {
+    var was = state.open;
     state.open = force != null ? force : !state.open;
     panel.classList.toggle('afa-open', state.open);
     launcher.classList.toggle('afa-open', state.open);
+    // Inline hosts render their own container, so they need to know when the
+    // widget closed itself (header X, Escape) in order to collapse it.
+    if (MOUNT && was && !state.open && root) {
+      root.dispatchEvent(new CustomEvent('aquafire:close', { bubbles: true }));
+    }
     if (state.open) {
       launcher.classList.remove('afa-unread');
       killNudge();
@@ -1540,10 +1572,48 @@
       .replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
   }
 
+  /* ── Public API ───────────────────────────────────────────────────────────
+     Mainly for inline hosts (see MOUNT): the host owns the container and the
+     show/hide animation, and drives the conversation through here. Safe to
+     call before the UI is built -- calls queue until it is. */
+  var pending = null;
+  var built = false;
+
+  function api(fn) {
+    if (built) { fn(); return; }
+    pending = pending || [];
+    pending.push(fn);
+  }
+
+  window.AquafireAssistant = {
+    open: function () { api(function () { toggle(true); }); },
+    close: function () { api(function () { toggle(false); }); },
+    // Open and immediately send `text` as if the visitor had typed it.
+    ask: function (text) {
+      api(function () {
+        toggle(true);
+        if (text && String(text).trim()) handleUserText(String(text).trim());
+      });
+    },
+    reset: function () { api(function () { resetConversation(); }); },
+    isOpen: function () { return !!state.open; },
+    // The element the panel lives in, so a host can style or measure it.
+    root: function () { return root || null; }
+  };
+
   /* ── Boot ─────────────────────────────────────────────────────────────── */
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', buildUI);
-  } else {
+  function boot() {
     buildUI();
+    built = true;
+    if (pending) {
+      for (var i = 0; i < pending.length; i++) pending[i]();
+      pending = null;
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 })();
