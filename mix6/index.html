@@ -50,6 +50,7 @@ FORM: User-pinned graft (mix4 layout + v2 theme colors + mix4 accents).
     .atmos::before {
       content: ""; position: absolute; inset: 0;
       background:
+        linear-gradient(93deg, transparent 45%, rgba(255,255,255,0.9) 48%, rgba(255,255,255,0.25) 53%, transparent 57%),
         linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.5) 19%, rgba(255,255,255,0.5) 30%, transparent 31%),
         linear-gradient(107deg, transparent 52%, rgba(255,255,255,0.35) 53%, rgba(255,255,255,0.35) 66%, transparent 67%);
     }
@@ -117,14 +118,17 @@ FORM: User-pinned graft (mix4 layout + v2 theme colors + mix4 accents).
     .pts-chip b { color: var(--mag-t); font-weight: 700; }
 
     /* ── Greeting ────────────────────────────────────── */
-    .greet { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 34px 0 0; }
-    .greet .orb { width: 54px; height: 54px; }
-    .greet-bubble {
-      margin-top: 16px; max-width: 560px;
-      background: var(--pane); border: 1px solid var(--hairline); backdrop-filter: blur(14px);
-      border-radius: 24px; padding: 20px 24px; box-shadow: var(--shadow);
+    .greet { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 34px 0 0; position: relative; }
+    .greet::before {
+      content: ""; position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
+      width: 480px; height: 400px; max-width: 92vw; pointer-events: none;
+      background: radial-gradient(closest-side, rgba(255,255,255,0.85), rgba(255,140,74,0.06) 46%, transparent 70%);
+      filter: blur(12px);
     }
-    .greet-bubble h1 { font-size: clamp(1.45rem, 5.4vw, 1.9rem); font-weight: 700; letter-spacing: -0.022em; line-height: 1.22; }
+    .greet > * { position: relative; }
+    .greet .orb { width: 54px; height: 54px; }
+    .greet-bubble { margin-top: 20px; max-width: 620px; position: relative; }
+    .greet-bubble h1 { font-size: clamp(1.6rem, 6vw, 2.25rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.18; text-wrap: balance; }
     .greet-bubble p { color: var(--ink-2); font-size: 0.93rem; margin-top: 8px; }
     .composer {
       margin-top: 18px; width: min(620px, 100%);
@@ -206,7 +210,7 @@ FORM: User-pinned graft (mix4 layout + v2 theme colors + mix4 accents).
       box-shadow: var(--shadow);
     }
     .wing-head { display: flex; align-items: center; gap: 12px; }
-    .wing-head .w-ico { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; flex: none; background: var(--inner); border: 1px solid var(--hairline); }
+    .wing-head .w-ico { width: 30px; height: 30px; display: grid; place-items: center; flex: none; }
     .wing.explore .w-ico { color: var(--frost-t); }
     .wing.begin .w-ico { color: var(--chart-t); }
     .wing.resolve .w-ico { color: var(--ember-t); }
@@ -248,14 +252,14 @@ FORM: User-pinned graft (mix4 layout + v2 theme colors + mix4 accents).
     .rows .row:nth-child(4n+2)::after { background: linear-gradient(90deg, transparent, var(--chart), transparent); }
     .rows .row:nth-child(4n+3)::after { background: linear-gradient(90deg, transparent, var(--ember), transparent); }
     .rows .row:nth-child(4n+4)::after { background: linear-gradient(90deg, transparent, var(--mag), transparent); }
-    .row .r-ico { width: 30px; height: 30px; border-radius: 9px; background: var(--inner); border: 1px solid var(--hairline); display: grid; place-items: center; color: var(--ink-3); flex: none; }
+    .row .r-ico { width: 24px; height: 24px; display: grid; place-items: center; color: var(--ink-3); flex: none; }
     .rows .row:nth-child(4n+1):hover .r-ico { color: var(--frost-t); }
     .rows .row:nth-child(4n+2):hover .r-ico { color: var(--chart-t); }
     .rows .row:nth-child(4n+3):hover .r-ico { color: var(--ember-t); }
     .rows .row:nth-child(4n+4):hover .r-ico { color: var(--mag-t); }
     .row b { display: block; font-size: 0.88rem; font-weight: 600; }
     .row span { display: block; font-size: 0.74rem; color: var(--ink-3); }
-    .row .thumb { width: 38px; height: 28px; border-radius: 8px; overflow: hidden; background: var(--inner); display: grid; place-items: center; flex: none; }
+    .row .thumb { width: 38px; height: 28px; display: grid; place-items: center; flex: none; }
     .row .thumb img { width: 34px; height: 24px; object-fit: contain; }
     .row .badge {
       margin-left: auto; flex: none; font-size: 0.7rem; font-weight: 700;
