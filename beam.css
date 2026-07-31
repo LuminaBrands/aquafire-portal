@@ -449,7 +449,15 @@
    back to md where it is missing. */
 
 .af-beam[data-beam-size="rim"] {
-  --af-comet-size: 160px;
+  --af-comet-size: 170px;
+  /* The look is a soft glow bleeding inward from the rim, matching the
+     package's own demo -- NOT a bright hairline. The blurred band is the
+     dominant layer and the stroke is only faintly visible, just enough to
+     define the edge. Turning the stroke up reads as a neon outline. */
+  --af-comet-band: 15px;
+  --af-comet-blur: 20px;
+  --af-comet-stroke-opacity: 0.34;
+  --af-comet-glow-opacity: 0.5;
 }
 
 .af-beam[data-beam-size="rim"] > .af-beam-rim,
@@ -474,7 +482,9 @@
   mask-composite: intersect;
   pointer-events: none;
   z-index: 2;
-  opacity: calc(var(--af-beam-opacity) * var(--af-beam-strength));
+  opacity: calc(
+    var(--af-beam-opacity) * var(--af-comet-stroke-opacity) * var(--af-beam-strength)
+  );
 }
 
 /* The comet itself. Stop positions carry the palette priority: warm holds the
@@ -487,6 +497,13 @@
   position: absolute;
   width: var(--af-comet-size);
   aspect-ratio: 1;
+  offset-path: inset(0 round var(--af-beam-radius, 16px));
+  offset-distance: 0%;
+  animation: af-beam-comet var(--af-beam-duration) linear infinite;
+}
+
+/* Stroke rides the opaque palette — it is a 1px line, so it needs the density. */
+.af-beam[data-beam-active][data-beam-size="rim"] > .af-beam-rim::before {
   background: linear-gradient(
     to left,
     var(--afb-1) 0%,
@@ -497,9 +514,22 @@
     var(--afb-3) 90%,
     transparent 100%
   );
-  offset-path: inset(0 round var(--af-beam-radius, 16px));
-  offset-distance: 0%;
-  animation: af-beam-comet var(--af-beam-duration) linear infinite;
+}
+
+/* The glow rides the ALPHA palette (--afi-*, 0.45), the same one md's inner
+   glow uses. Blurring the opaque colours instead produces a saturated rainbow
+   slab across the element rather than the soft tint the effect is after. */
+.af-beam[data-beam-active][data-beam-size="rim"] > .af-beam-bloom::before {
+  background: linear-gradient(
+    to left,
+    var(--afi-1) 0%,
+    var(--afi-5) 20%,
+    var(--afi-7) 42%,
+    var(--afi-8) 60%,
+    var(--afi-2) 76%,
+    var(--afi-3) 90%,
+    transparent 100%
+  );
 }
 
 /* Blurred trail. Confined to a band hugging the edge rather than clipped to
@@ -510,7 +540,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  border: var(--af-comet-glow-band, 9px) solid transparent;
+  border: var(--af-comet-band) solid transparent;
   -webkit-mask: linear-gradient(transparent, transparent), linear-gradient(#fff, #fff);
   -webkit-mask-clip: padding-box, border-box;
   -webkit-mask-composite: source-in;
@@ -520,13 +550,12 @@
   pointer-events: none;
   z-index: 1;
   opacity: calc(
-    var(--af-beam-opacity) * var(--af-beam-bloom-opacity) * var(--af-beam-strength)
+    var(--af-beam-opacity) * var(--af-comet-glow-opacity) * var(--af-beam-strength)
   );
 }
 
 .af-beam[data-beam-active][data-beam-size="rim"] > .af-beam-bloom::before {
-  filter: blur(16px) brightness(var(--af-beam-brightness))
-    saturate(var(--af-beam-saturation));
+  filter: blur(var(--af-comet-blur)) saturate(var(--af-beam-saturation));
 }
 
 @keyframes af-beam-comet {
