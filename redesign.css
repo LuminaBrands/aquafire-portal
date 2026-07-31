@@ -262,3 +262,92 @@ a { color: inherit; }
   .page { padding: 0 24px; }
   .bar .links { display: flex; }
 }
+
+/* ── Inner-page chrome ────────────────────────────────────────────────────
+   home/ is a hero page; every other page needs a nav bar with a real link
+   list, a page header, a tile grid and a full footer. These live here so the
+   rollout adds markup, not styles. */
+
+.phead { padding: 40px 0 8px; max-width: 760px; }
+.phead h1 {
+  font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700;
+  letter-spacing: -0.025em; line-height: 1.18; text-wrap: balance;
+}
+.phead p { color: var(--text-mid); font-size: 0.95rem; margin-top: 10px; }
+.pbody { padding: 22px 0 10px; }
+
+/* Card grid used by hub-style pages. */
+.tiles {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+.tile {
+  display: flex; flex-direction: column; gap: 7px;
+  padding: 20px 18px 22px; text-decoration: none;
+  background: var(--row-bg); border: 1px solid var(--row-border);
+  border-radius: 18px; position: relative; overflow: hidden;
+  box-shadow: var(--row-shadow);
+  transition: background-color 0.25s, border-color 0.25s,
+              transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.tile:hover {
+  background: var(--row-bg-hover); border-color: var(--row-border-hover);
+  transform: translateY(-2px); box-shadow: var(--row-shadow-hover);
+}
+.tile .t-ico { width: 26px; height: 26px; display: grid; place-items: center; color: var(--ico-ink); }
+.tile b { font-size: 0.95rem; font-weight: 600; }
+.tile p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
+.tile::after {
+  content: ""; position: absolute; left: 18px; right: 18px; bottom: 0; height: 3px;
+  border-radius: 3px 3px 0 0; opacity: 0; transition: opacity 0.28s;
+}
+.tile:hover::after, .tile:focus-visible::after { opacity: 1; }
+.tiles .tile:nth-child(4n+1)::after { background: linear-gradient(90deg, transparent, var(--frost), transparent); }
+.tiles .tile:nth-child(4n+2)::after { background: linear-gradient(90deg, transparent, var(--chart), transparent); }
+.tiles .tile:nth-child(4n+3)::after { background: linear-gradient(90deg, transparent, var(--ember), transparent); }
+.tiles .tile:nth-child(4n+4)::after { background: linear-gradient(90deg, transparent, var(--mag), transparent); }
+.tiles .tile:nth-child(4n+1):hover .t-ico { color: var(--frost-t); }
+.tiles .tile:nth-child(4n+2):hover .t-ico { color: var(--chart-t); }
+.tiles .tile:nth-child(4n+3):hover .t-ico { color: var(--ember-t); }
+.tiles .tile:nth-child(4n+4):hover .t-ico { color: var(--mag-t); }
+.tile, .phead { position: relative; }
+.tile::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  padding: 1.2px; pointer-events: none; background: var(--rim-conic);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: var(--rim-opacity); transition: opacity 0.3s var(--ease);
+}
+.tile:hover::before { opacity: 1; }
+
+/* Mobile nav. home/ hides its link list under 920px because the hero carries
+   the page; inner pages need the links reachable, so they get a disclosure. */
+.nav-btn { display: inline-flex; padding: 10px 12px; cursor: pointer; font: inherit; }
+.nav-btn svg { display: block; }
+.bar .links.open {
+  display: flex; position: absolute; left: 18px; right: 18px; top: 74px;
+  flex-direction: column; gap: 6px; padding: 12px; z-index: 30;
+  background: var(--row-bg); border: 1px solid var(--row-border);
+  border-radius: 18px; backdrop-filter: blur(18px);
+  box-shadow: var(--row-shadow-hover);
+}
+.bar { position: relative; }
+
+/* Full footer for inner pages (home/ keeps its one-line .foot). */
+.pfoot { margin: 54px 0 34px; padding-top: 26px; border-top: 1px solid var(--stroke); }
+.pfoot-in { display: flex; flex-wrap: wrap; gap: 30px 54px; }
+.pfoot-brand { flex: 1 1 240px; }
+.pfoot-brand img { height: 14px; filter: var(--logo-foot-filter); opacity: var(--logo-foot-opacity); }
+.pfoot-brand p { color: var(--text-dim); font-size: 0.8rem; margin-top: 10px; max-width: 34ch; }
+.pfoot-col { display: flex; flex-direction: column; gap: 7px; }
+.pfoot-col h4 { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-dim); }
+.pfoot-col a { color: var(--text-mid); text-decoration: none; font-size: 0.82rem; }
+.pfoot-col a:hover { color: var(--text-hi); }
+.pfoot-bottom { margin-top: 26px; color: var(--text-dim); font-size: 0.74rem; }
+
+@media (min-width: 920px) {
+  .nav-btn { display: none; }
+  .phead { padding: 52px 0 10px; }
+}
