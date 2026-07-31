@@ -62,23 +62,21 @@ FORM: User-pinned graft (mix4 layout + v2 theme colors + mix4 accents).
 
     .cap {
       display: inline-flex; align-items: center; gap: 10px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.6) 60%, rgba(255,255,255,0.75));
+      background: radial-gradient(140% 130% at 20% -10%, #ffffff, transparent 55%), linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.5) 60%, rgba(255,255,255,0.62));
       border: 1px solid rgba(23,26,31,0.07);
       backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
       border-radius: 999px; color: var(--ink-2); text-decoration: none;
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.95),
         inset 0 -8px 14px -10px rgba(23,26,31,0.16),
-        0 10px 22px -12px rgba(23,26,31,0.22);
+        3px 12px 24px -12px rgba(23,26,31,0.22);
       transition: background-color 0.28s, border-color 0.28s, color 0.28s, transform 0.32s var(--ease), box-shadow 0.32s var(--ease);
     }
     .cap:hover {
-      background: linear-gradient(180deg, #ffffff, rgba(255,255,255,0.82) 60%, rgba(255,255,255,0.92));
+      background: radial-gradient(140% 130% at 20% -10%, #ffffff, transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7) 60%, rgba(255,255,255,0.8));
       border-color: rgba(23,26,31,0.12); color: var(--ink); transform: translateY(-2px);
       box-shadow:
-        inset 0 1px 0 #ffffff,
         inset 0 -8px 14px -10px rgba(23,26,31,0.12),
-        0 16px 30px -14px rgba(23,26,31,0.28);
+        4px 18px 32px -14px rgba(23,26,31,0.28);
     }
     .orb {
       border-radius: 50%; flex: none; position: relative;
@@ -86,6 +84,28 @@ FORM: User-pinned graft (mix4 layout + v2 theme colors + mix4 accents).
       box-shadow: inset 0 -2px 6px rgba(0,0,0,0.3), 0 8px 18px -8px rgba(224,100,30,0.5);
     }
     .orb::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid var(--hairline-2); }
+
+    /* Liquid-glass rim: bevel weight varies around the perimeter — white
+       hot spot upper-left, dark refracted edge lower-right. */
+    .cap, .composer, .journey, .row { position: relative; }
+    .cap::before, .composer::before, .journey::before, .row::before {
+      content: ""; position: absolute; inset: 0; border-radius: inherit;
+      padding: 1.2px; pointer-events: none;
+      background: conic-gradient(
+        rgba(255,255,255,0.9) 0deg,
+        rgba(23,26,31,0.05) 80deg,
+        rgba(23,26,31,0.18) 135deg,
+        rgba(23,26,31,0.04) 205deg,
+        rgba(255,255,255,0.55) 285deg,
+        #ffffff 318deg,
+        rgba(255,255,255,0.9) 360deg);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      opacity: 0.8; transition: opacity 0.3s var(--ease);
+    }
+    .cap:hover::before, .composer:hover::before, .journey:hover::before, .row:hover::before { opacity: 1; }
 
     .page { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 18px; }
     .bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 0 0; }
@@ -109,13 +129,12 @@ FORM: User-pinned graft (mix4 layout + v2 theme colors + mix4 accents).
     .composer {
       margin-top: 18px; width: min(620px, 100%);
       display: flex; align-items: center; gap: 10px;
-      background: linear-gradient(180deg, #ffffff, rgba(255,255,255,0.85) 60%, rgba(255,255,255,0.95));
+      background: radial-gradient(140% 130% at 18% -10%, #ffffff, transparent 55%), linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.74) 60%, rgba(255,255,255,0.85));
       border: 1px solid rgba(23,26,31,0.07);
       border-radius: 999px; padding: 8px 8px 8px 20px;
       box-shadow:
-        inset 0 1px 0 #ffffff,
         inset 0 -10px 18px -12px rgba(23,26,31,0.14),
-        0 18px 40px -18px rgba(23,26,31,0.22);
+        4px 20px 42px -18px rgba(23,26,31,0.22);
       text-decoration: none;
       position: relative; overflow: hidden;
       transition: border-color 0.28s, transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
@@ -143,15 +162,14 @@ FORM: User-pinned graft (mix4 layout + v2 theme colors + mix4 accents).
     /* ── Journey band ────────────────────────────────── */
     .journey {
       margin-top: 30px;
-      background: linear-gradient(180deg, #ffffff, rgba(255,255,255,0.85) 65%, rgba(255,255,255,0.95));
+      background: radial-gradient(150% 140% at 16% -12%, #ffffff, transparent 52%), linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.74) 65%, rgba(255,255,255,0.85));
       border: 1px solid rgba(23,26,31,0.07);
       border-radius: 24px; padding: 18px 20px;
       display: flex; flex-direction: column; gap: 14px;
       text-decoration: none;
       box-shadow:
-        inset 0 1px 0 #ffffff,
         inset 0 -10px 18px -12px rgba(23,26,31,0.12),
-        0 18px 40px -18px rgba(23,26,31,0.2);
+        4px 20px 42px -18px rgba(23,26,31,0.2);
       position: relative; overflow: hidden;
       transition: border-color 0.28s, transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
     }
@@ -205,22 +223,20 @@ FORM: User-pinned graft (mix4 layout + v2 theme colors + mix4 accents).
     .rows { display: flex; flex-direction: column; gap: 8px; }
     .row {
       display: flex; align-items: center; gap: 11px; text-decoration: none;
-      background: linear-gradient(180deg, #ffffff, #f6f7f9 65%, #fbfcfd);
+      background: radial-gradient(150% 140% at 18% -12%, #ffffff, transparent 55%), linear-gradient(180deg, #fafbfc, #f1f3f6 65%, #f7f8fa);
       border: 1px solid rgba(23,26,31,0.06); border-radius: 15px;
       padding: 11px 13px 13px;
       position: relative; overflow: hidden;
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.95),
         inset 0 -8px 14px -10px rgba(23,26,31,0.12),
-        0 8px 18px -12px rgba(23,26,31,0.18);
+        3px 10px 20px -12px rgba(23,26,31,0.18);
       transition: border-color 0.25s, transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
     }
     .row:hover {
       border-color: rgba(23,26,31,0.11); transform: translateY(-2px);
       box-shadow:
-        inset 0 1px 0 #ffffff,
         inset 0 -8px 14px -10px rgba(23,26,31,0.09),
-        0 14px 26px -14px rgba(23,26,31,0.24);
+        4px 16px 28px -14px rgba(23,26,31,0.24);
     }
     .row::after {
       content: ""; position: absolute; left: 13px; right: 13px; bottom: 0; height: 3px;
