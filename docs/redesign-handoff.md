@@ -55,10 +55,12 @@ unchanged (verified: wrapper and composer both 620px).
 script, since the beam ships separate dark/light sweeps. Beam radius is
 auto-detected from the composer's `999px` pill.
 
-The composer uses `data-beam-size="rim"`, which travels the outline by arc
-length via `offset-path`. The conic sweep `sm`/`md` use maps by angle, which
-on this ~10:1 pill lit the whole top edge at once and skipped the rounded
-ends.
+The composer uses `data-beam-size="md"` — the same conic beam the Ember
+widget uses. An `offset-path` `rim` size that travelled the outline by arc
+length was built and then removed: it fixed the uneven travel on this ~10:1
+pill, but read as a hard traveling line rather than the soft diffuse glow the
+effect is meant to have. If the angular sweep becomes a problem again, that
+history is in the branch — the mechanism worked, the look did not.
 
 **Rollout note:** the page's head sets `AQUAFIRE_ASSISTANT_CONFIG.beam =
 false`. Every other customer page loads `assistant.js`, and when this one

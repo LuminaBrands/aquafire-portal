@@ -275,11 +275,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
        own pseudo-elements on the liquid-glass rim and the hover underline, so
        the beam hangs its layers on a wrapper instead. The wrapper takes over
        the composer's width and top margin so the hero layout is unchanged. */
-    .composer-beam { width: min(620px, 100%); margin-top: 18px; border-radius: 999px;
-      /* size="rim": the comet travels the pill outline at constant speed. The
-         conic sweep sm/md use maps by angle, which on this ~10:1 pill lights
-         the whole top edge at once and skips the rounded ends. */
-      --af-comet-size: 155px; }
+    .composer-beam { width: min(620px, 100%); margin-top: 18px; border-radius: 999px; }
     .composer-beam > .composer { width: 100%; margin-top: 0; }
     .murmur { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px; }
     .murmur .cap { padding: 8px 15px; font-size: 0.82rem; font-weight: 500; }
@@ -448,7 +444,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         <h1>Hi, I&rsquo;m Ember. What brings you by tonight?</h1>
         <p>I know the manuals, the specs, and every fix &mdash; ask me, or step into your color below.</p>
       </div>
-      <div class="composer-beam af-beam" data-beam-size="rim" data-beam-variant="colorful">
+      <div class="composer-beam af-beam" data-beam-size="md" data-beam-variant="colorful">
         <a class="composer" href="../support.html" title="Ember opens in the corner of every portal page">
           <span class="ph">Message Ember&hellip;</span>
           <span class="send">Ask
