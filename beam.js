@@ -6,14 +6,18 @@
    Usage — markup only, auto-initialised on DOMContentLoaded:
 
      <link rel="stylesheet" href="beam.css">
-     <div class="af-beam" data-beam-size="md" data-beam-variant="ember">
+     <div class="af-beam" data-beam-size="md" data-beam-variant="colorful">
        <div class="card">...</div>
      </div>
      <script src="beam.js" defer></script>
 
    Options are data attributes on the wrapper (all optional):
-     data-beam-size       sm | md | line | pulse-inner | pulse-outside   (md)
-     data-beam-variant    ember | colorful | ocean | sunset | mono       (ember)
+     data-beam-size       sm | md | rim | line | pulse-inner |
+                          pulse-outside                                 (md)
+                          rim travels the outline at constant speed --
+                          use it for wide elements, where the conic
+                          sweep used by sm/md maps unevenly
+     data-beam-variant    colorful | ember | ocean | sunset | mono  (colorful)
      data-beam-theme      dark | light | auto                            (dark)
      data-beam-radius     px override; otherwise read from the first child
      data-beam-duration   seconds (rotate/travel period)
@@ -35,9 +39,9 @@
 (function (global) {
   'use strict';
 
-  var SIZES = ['sm', 'md', 'line', 'pulse-inner', 'pulse-outside'];
+  var SIZES = ['sm', 'md', 'rim', 'line', 'pulse-inner', 'pulse-outside'];
   var VARIANTS = ['ember', 'colorful', 'ocean', 'sunset', 'mono'];
-  var DEFAULT_RADIUS = { sm: 32, md: 16, line: 16, 'pulse-inner': 16, 'pulse-outside': 16 };
+  var DEFAULT_RADIUS = { sm: 32, md: 16, rim: 16, line: 16, 'pulse-inner': 16, 'pulse-outside': 16 };
 
   var FADE_OUT_MS = 500;
 
@@ -51,6 +55,13 @@
       CSS.supports('mask-composite', 'exclude') ||
       CSS.supports('-webkit-mask-composite', 'xor');
     return hasProperty && hasMask;
+  })();
+
+  /* 'rim' rides the outline with offset-path. Without it there is no way to
+     travel by arc length, so those wrappers fall back to the conic md beam. */
+  var HAS_OFFSET_PATH = (function () {
+    if (typeof CSS === 'undefined' || !CSS.supports) return false;
+    return CSS.supports('offset-path', 'inset(0 round 8px)');
   })();
 
   function pick(value, allowed, fallback) {
@@ -73,7 +84,9 @@
     if (!isNaN(explicit)) return explicit;
 
     var child = el.firstElementChild;
-    while (child && child.classList.contains('af-beam-bloom')) {
+    while (child &&
+           (child.classList.contains('af-beam-bloom') ||
+            child.classList.contains('af-beam-rim'))) {
       child = child.nextElementSibling;
     }
     if (child) {
@@ -99,6 +112,16 @@
     bloom.setAttribute('aria-hidden', 'true');
     el.insertBefore(bloom, el.firstChild);
     return bloom;
+  }
+
+  function ensureRim(el) {
+    var existing = el.querySelector(':scope > .af-beam-rim');
+    if (existing) return existing;
+    var rim = document.createElement('span');
+    rim.className = 'af-beam-rim';
+    rim.setAttribute('aria-hidden', 'true');
+    el.insertBefore(rim, el.firstChild);
+    return rim;
   }
 
   function activate(el) {
@@ -147,6 +170,7 @@
     var opts = options || {};
 
     var size = pick(opts.size || el.getAttribute('data-beam-size'), SIZES, 'md');
+    if (size === 'rim' && !HAS_OFFSET_PATH) size = 'md';
     var variant = pick(
       opts.variant || el.getAttribute('data-beam-variant'),
       VARIANTS,
@@ -172,6 +196,7 @@
     if (el.hasAttribute('data-beam-static')) el.setAttribute('data-beam-static', '');
 
     ensureBloom(el);
+    if (size === 'rim') ensureRim(el);
     el.setAttribute('data-beam-ready', 'true');
 
     var trigger = el.getAttribute('data-beam-trigger') || opts.trigger || 'load';

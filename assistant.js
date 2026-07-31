@@ -1066,12 +1066,15 @@
        values instead of restating every gradient. Default is the full
        spectrum; data-beam-variant="ember" narrows it to the fire palette. */
     '.afa-beam{--afa-beam-w:1px;--afa-beam-dur:4s;--afa-beam-strength:1;--afa-beam-hue:30deg;' +
-      '--afa-b1:rgb(255,50,100);--afa-b2:rgb(40,140,255);--afa-b3:rgb(50,200,80);' +
-      '--afa-b4:rgb(30,185,170);--afa-b5:rgb(100,70,255);--afa-b6:rgb(40,140,255);' +
-      '--afa-b7:rgb(255,120,40);--afa-b8:rgb(240,50,180);--afa-b9:rgb(180,40,240);' +
-      '--afa-i1:rgba(255,50,100,.45);--afa-i2:rgba(40,140,255,.45);--afa-i3:rgba(50,200,80,.45);' +
-      '--afa-i4:rgba(30,185,170,.45);--afa-i5:rgba(100,70,255,.45);--afa-i6:rgba(40,140,255,.45);' +
-      '--afa-i7:rgba(255,120,40,.45);--afa-i8:rgba(240,50,180,.45);--afa-i9:rgba(180,40,240,.45);}',
+      /* Colour priority (mirrors beam.css): red/orange dominant, then
+         blue/magenta, then green. Weighted by blob area, not by count --
+         b5 is the largest blob, b4 the smallest. */
+      '--afa-b5:rgb(255,90,40);--afa-b1:rgb(255,60,60);--afa-b7:rgb(255,140,40);' +
+      '--afa-b9:rgb(150,60,240);--afa-b6:rgb(90,80,255);--afa-b2:rgb(40,140,255);' +
+      '--afa-b8:rgb(240,50,180);--afa-b3:rgb(50,200,80);--afa-b4:rgb(30,185,170);' +
+      '--afa-i5:rgba(255,90,40,.45);--afa-i1:rgba(255,60,60,.45);--afa-i7:rgba(255,140,40,.45);' +
+      '--afa-i9:rgba(150,60,240,.45);--afa-i6:rgba(90,80,255,.45);--afa-i2:rgba(40,140,255,.45);' +
+      '--afa-i8:rgba(240,50,180,.45);--afa-i3:rgba(50,200,80,.45);--afa-i4:rgba(30,185,170,.45);}',
     /* Fire palette. Hue cycle tightened to 10deg -- at 30deg the reds swing
        into magenta and the ambers into olive, which reads off-brand. */
     '.afa-beam[data-beam-variant="ember"]{--afa-beam-hue:10deg;' +

@@ -229,28 +229,43 @@
   --afi-9: rgba(199, 136, 32, 0.45);
 }
 
-/* Full spectrum — the default. */
+/* Full spectrum — the default.
+
+   COLOUR PRIORITY (standing rule for every Aquafire beam palette):
+     red/orange dominant, then blue/magenta, then green.
+
+   Enforced by weight, not by count. Each blob covers a different area, so the
+   colours are assigned to blobs by size. Area = w x h of the --af-blobs-lg
+   ellipses:
+     warm         b5 5760 + b1 2800 + b7 2368  = 10928  (49%)
+     blue/magenta b9 2496 + b6 2210 + b2 2100 + b8 1092 =  7898  (35%)
+     green        b3 2800 + b4  700            =  3500  (16%)
+   Recolour by swapping values here; if you move a colour to a different blob
+   index you change its weight, so re-check the split above. */
 .af-beam,
 .af-beam[data-beam-variant="colorful"] {
-  --afb-1: rgb(255, 50, 100);
+  /* Warm — dominant. b5 is the single largest blob. */
+  --afb-5: rgb(255, 90, 40);
+  --afb-1: rgb(255, 60, 60);
+  --afb-7: rgb(255, 140, 40);
+  /* Blue / magenta — second. */
+  --afb-9: rgb(150, 60, 240);
+  --afb-6: rgb(90, 80, 255);
   --afb-2: rgb(40, 140, 255);
+  --afb-8: rgb(240, 50, 180);
+  /* Green — least. */
   --afb-3: rgb(50, 200, 80);
   --afb-4: rgb(30, 185, 170);
-  --afb-5: rgb(100, 70, 255);
-  --afb-6: rgb(40, 140, 255);
-  --afb-7: rgb(255, 120, 40);
-  --afb-8: rgb(240, 50, 180);
-  --afb-9: rgb(180, 40, 240);
 
-  --afi-1: rgba(255, 50, 100, 0.45);
+  --afi-5: rgba(255, 90, 40, 0.45);
+  --afi-1: rgba(255, 60, 60, 0.45);
+  --afi-7: rgba(255, 140, 40, 0.45);
+  --afi-9: rgba(150, 60, 240, 0.45);
+  --afi-6: rgba(90, 80, 255, 0.45);
   --afi-2: rgba(40, 140, 255, 0.45);
+  --afi-8: rgba(240, 50, 180, 0.45);
   --afi-3: rgba(50, 200, 80, 0.45);
   --afi-4: rgba(30, 185, 170, 0.45);
-  --afi-5: rgba(100, 70, 255, 0.45);
-  --afi-6: rgba(40, 140, 255, 0.45);
-  --afi-7: rgba(255, 120, 40, 0.45);
-  --afi-8: rgba(240, 50, 180, 0.45);
-  --afi-9: rgba(180, 40, 240, 0.45);
 }
 
 .af-beam[data-beam-variant="ocean"] {
@@ -419,6 +434,103 @@
   opacity: calc(
     var(--af-beam-opacity) * var(--af-beam-bloom-opacity) * var(--af-beam-strength)
   );
+}
+
+/* ── Rim: constant-speed comet around the perimeter ──
+   sm/md sweep a conic gradient, which parameterises the beam by ANGLE rather
+   than arc length. That is fine on a roughly square card, but on a wide
+   element it falls apart: for the ~10:1 hero composer the top edge occupies
+   ~169deg of the sweep while each rounded end occupies ~11deg, so the beam
+   crawls along the long edges (reading as the whole edge lighting up at once)
+   and snaps across the short ends, which looks like skipped sections.
+
+   This size instead rides the element's real outline via offset-path, so
+   travel is even at any aspect ratio. Requires offset-path; beam.js falls
+   back to md where it is missing. */
+
+.af-beam[data-beam-size="rim"] {
+  --af-comet-size: 160px;
+}
+
+.af-beam[data-beam-size="rim"] > .af-beam-rim,
+.af-beam[data-beam-size="rim"] > .af-beam-bloom { display: none; }
+
+.af-beam[data-beam-active][data-beam-size="rim"] {
+  animation: af-beam-fade-in 0.6s ease forwards;
+}
+
+/* Border-only ring: border-box minus padding-box. */
+.af-beam[data-beam-active][data-beam-size="rim"] > .af-beam-rim {
+  display: block;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: var(--af-beam-width) solid transparent;
+  -webkit-mask: linear-gradient(transparent, transparent), linear-gradient(#fff, #fff);
+  -webkit-mask-clip: padding-box, border-box;
+  -webkit-mask-composite: source-in;
+  mask: linear-gradient(transparent, transparent), linear-gradient(#fff, #fff);
+  mask-clip: padding-box, border-box;
+  mask-composite: intersect;
+  pointer-events: none;
+  z-index: 2;
+  opacity: calc(var(--af-beam-opacity) * var(--af-beam-strength));
+}
+
+/* The comet itself. Stop positions carry the palette priority: warm holds the
+   head through nearly half the length, blue/magenta form the body, and green
+   is a short tail before it fades. Spacing the stops evenly instead reads as a
+   prism rather than as a warm beam. */
+.af-beam[data-beam-active][data-beam-size="rim"] > .af-beam-rim::before,
+.af-beam[data-beam-active][data-beam-size="rim"] > .af-beam-bloom::before {
+  content: "";
+  position: absolute;
+  width: var(--af-comet-size);
+  aspect-ratio: 1;
+  background: linear-gradient(
+    to left,
+    var(--afb-1) 0%,
+    var(--afb-5) 20%,
+    var(--afb-7) 42%,
+    var(--afb-8) 60%,
+    var(--afb-2) 76%,
+    var(--afb-3) 90%,
+    transparent 100%
+  );
+  offset-path: inset(0 round var(--af-beam-radius, 16px));
+  offset-distance: 0%;
+  animation: af-beam-comet var(--af-beam-duration) linear infinite;
+}
+
+/* Blurred trail. Confined to a band hugging the edge rather than clipped to
+   the whole element — an unbounded inner glow washes straight over the
+   wrapped content, which on a composer means over the text. */
+.af-beam[data-beam-active][data-beam-size="rim"] > .af-beam-bloom {
+  display: block;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: var(--af-comet-glow-band, 9px) solid transparent;
+  -webkit-mask: linear-gradient(transparent, transparent), linear-gradient(#fff, #fff);
+  -webkit-mask-clip: padding-box, border-box;
+  -webkit-mask-composite: source-in;
+  mask: linear-gradient(transparent, transparent), linear-gradient(#fff, #fff);
+  mask-clip: padding-box, border-box;
+  mask-composite: intersect;
+  pointer-events: none;
+  z-index: 1;
+  opacity: calc(
+    var(--af-beam-opacity) * var(--af-beam-bloom-opacity) * var(--af-beam-strength)
+  );
+}
+
+.af-beam[data-beam-active][data-beam-size="rim"] > .af-beam-bloom::before {
+  filter: blur(16px) brightness(var(--af-beam-brightness))
+    saturate(var(--af-beam-saturation));
+}
+
+@keyframes af-beam-comet {
+  to { offset-distance: 100%; }
 }
 
 /* ── Line: bottom-edge traveling beam ── */

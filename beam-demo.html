@@ -168,6 +168,7 @@
     Vanilla port of the <code>border-beam</code> npm package, rebuilt as plain CSS
     so it runs in this build-free portal. Wrap any element in
     <code>.af-beam</code> &mdash; children render untouched, the effect is purely additive.
+    Palette priority: red/orange dominant, then blue/magenta, then green.
   </p>
 
   <div class="fallback" id="fallback">
@@ -185,6 +186,7 @@
       <select id="c-size">
         <option value="md" selected>md</option>
         <option value="sm">sm</option>
+        <option value="rim">rim</option>
         <option value="line">line</option>
         <option value="pulse-inner">pulse-inner</option>
         <option value="pulse-outside">pulse-outside</option>
@@ -296,6 +298,9 @@
   <h2>Sizes</h2>
   <p class="note">
     <code>sm</code> and <code>md</code> rotate a beam around the border;
+    <code>rim</code> travels the outline at constant speed (use it on wide
+    elements &mdash; the conic sweep <code>sm</code>/<code>md</code> use maps by
+    angle, so it skips the short ends of a long pill);
     <code>line</code> travels along the bottom edge;
     the <code>pulse-*</code> pair breathe without rotating.
   </p>
@@ -304,6 +309,12 @@
       <span class="cell-label">size="md"</span>
       <div class="af-beam" data-beam-size="md">
         <div class="card"><h3>Enclosure Guide</h3><p>Get exact cutout dimensions.</p></div>
+      </div>
+    </div>
+    <div class="cell">
+      <span class="cell-label">size="rim" (even travel on wide elements)</span>
+      <div class="af-beam" data-beam-size="rim">
+        <div class="card"><h3>Ask Ember</h3><p>Travels the outline at constant speed.</p></div>
       </div>
     </div>
     <div class="cell">
