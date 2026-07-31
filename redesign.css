@@ -379,6 +379,10 @@ a { color: inherit; }
   --blue-dim: #2f8fd0;
   --radius: 16px;
   --radius-sm: 10px;
+  --amber-glow: rgba(232,168,56,0.10);
+  --blue-glow: rgba(111,195,255,0.10);
+  --ember-glow: rgba(255,138,74,0.10);
+  --shadow: 0 2px 24px rgba(0,0,0,0.35);
 }
 :root[data-theme="light"] {
   --bg: #eef0f3;
@@ -395,4 +399,8 @@ a { color: inherit; }
   --amber-dim: #8f6416;
   --blue: #1c76c9;
   --blue-dim: #135697;
+  --amber-glow: rgba(184,128,31,0.12);
+  --blue-glow: rgba(28,118,201,0.10);
+  --ember-glow: rgba(207,78,22,0.10);
+  --shadow: 0 2px 20px rgba(23,26,31,0.10);
 }
