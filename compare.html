@@ -93,6 +93,8 @@
       { g: "Round 5 — Option B imagery (mix4 world)", id: "b1", name: "b1 · Hero Bleed", d: "Lobby photo bleeds from the top, dissolving into smoke behind Ember — closest to the reference" },
       { g: "Round 5 — Option B imagery (mix4 world)", id: "b2", name: "b2 · Panorama Band", d: "Hero untouched; photo as one framed cinematic band between journey and wings" },
       { g: "Round 5 — Option B imagery (mix4 world)", id: "b3", name: "b3 · Ambient Room", d: "Photo blurred into the whole atmosphere; every glass pane refracts it" },
+      { g: "Round 6 — Committed direction", id: "home", name: "home · Hero Bleed, dark", d: "b1 on a token layer: mix4 smoke theme, theme button in the bar" },
+      { g: "Round 6 — Committed direction", id: "home-light", u: "home/index.html?theme=light", name: "home · Hero Bleed, light", d: "Same page deep-linked to the mix6 showroom theme" },
     ];
     let i = Math.max(0, VERSIONS.findIndex(v => v.id === (location.hash.slice(1) || "mix1")));
 
@@ -114,11 +116,12 @@
     function show(n) {
       i = (n + VERSIONS.length) % VERSIONS.length;
       const v = VERSIONS[i];
-      frame.src = v.id + "/index.html";
+      const src = v.u || (v.id + "/index.html");
+      frame.src = src;
       pick.value = i;
       document.getElementById("desc").textContent = v.d;
       document.getElementById("count").textContent = (i + 1) + " / " + VERSIONS.length;
-      document.getElementById("open").href = v.id + "/index.html";
+      document.getElementById("open").href = src;
       history.replaceState(null, "", "#" + v.id);
       document.title = "Compare — " + v.name;
     }
