@@ -59,12 +59,24 @@ FORM: User-pinned hybrid + pinned palette. Color strategy: neutral glass, per-ca
 
     .cap {
       display: inline-flex; align-items: center; gap: 10px;
-      background: var(--glass); border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,0.085), rgba(255,255,255,0.03) 55%, rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.10);
       backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
       border-radius: 999px; color: var(--gray); text-decoration: none;
-      transition: background-color 0.28s, border-color 0.28s, color 0.28s, transform 0.32s var(--ease);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.16),
+        inset 0 -10px 18px -10px rgba(0,0,0,0.45),
+        0 10px 24px -14px rgba(0,0,0,0.7);
+      transition: background-color 0.28s, border-color 0.28s, color 0.28s, transform 0.32s var(--ease), box-shadow 0.32s var(--ease);
     }
-    .cap:hover { background: var(--glass-hi); border-color: var(--stroke-hi); color: var(--white); transform: translateY(-2px); }
+    .cap:hover {
+      background: linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.05) 55%, rgba(255,255,255,0.075));
+      border-color: rgba(255,255,255,0.18); color: var(--white); transform: translateY(-2px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        inset 0 -10px 18px -10px rgba(0,0,0,0.4),
+        0 16px 30px -14px rgba(0,0,0,0.75);
+    }
     .orb {
       border-radius: 50%; flex: none; position: relative;
       background: radial-gradient(circle at 35% 30%, #ffd9ae, #e0641e 62%, #6e2a08 100%);
@@ -101,12 +113,21 @@ FORM: User-pinned hybrid + pinned palette. Color strategy: neutral glass, per-ca
       transition: border-color 0.28s, transform 0.3s var(--ease);
     }
     .composer:hover { border-color: var(--stroke-hi); transform: translateY(-2px); }
-    .composer { position: relative; overflow: hidden; }
-    .composer::after {
-      content: ""; position: absolute; left: 26px; right: 26px; bottom: 0; height: 2.5px;
-      border-radius: 3px 3px 0 0; opacity: 0.8;
-      background: linear-gradient(90deg, #ff6a3d, #c9e85c 38%, #6fc3ff 68%, #ff5fa8);
+    .composer {
+      position: relative; overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.035) 55%, rgba(255,255,255,0.055));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        inset 0 -12px 20px -12px rgba(0,0,0,0.5),
+        0 26px 54px -22px rgba(0,0,0,0.65);
     }
+    .composer::after {
+      content: ""; position: absolute; left: 26px; right: 26px; bottom: 0; height: 3px;
+      border-radius: 3px 3px 0 0; opacity: 0;
+      background: linear-gradient(90deg, #ff6a3d, #c9e85c 38%, #6fc3ff 68%, #ff5fa8);
+      transition: opacity 0.28s;
+    }
+    .composer:hover::after, .composer:focus-visible::after { opacity: 1; }
     .composer .ph { flex: 1; color: var(--gray-2); font-size: 0.95rem; text-align: left; }
     .composer .send {
       display: inline-flex; align-items: center; gap: 8px; flex: none;
@@ -121,9 +142,13 @@ FORM: User-pinned hybrid + pinned palette. Color strategy: neutral glass, per-ca
     /* ── Journey band (magenta pane) ─────────────────── */
     .journey {
       margin-top: 30px;
-      background: var(--glass);
-      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03) 60%, rgba(255,255,255,0.045));
+      border: 1px solid rgba(255,255,255,0.10);
       position: relative; overflow: hidden;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.15),
+        inset 0 -12px 20px -12px rgba(0,0,0,0.45),
+        0 14px 30px -16px rgba(0,0,0,0.65);
       backdrop-filter: blur(18px); border-radius: 24px; padding: 18px 20px;
       display: flex; flex-direction: column; gap: 14px;
       text-decoration: none;
@@ -134,8 +159,9 @@ FORM: User-pinned hybrid + pinned palette. Color strategy: neutral glass, per-ca
       content: ""; position: absolute; left: 22px; right: 22px; bottom: 0; height: 3px;
       border-radius: 3px 3px 0 0;
       background: linear-gradient(90deg, #ff6a3d, #c9e85c 38%, #6fc3ff 68%, #ff5fa8);
-      opacity: 0.85;
+      opacity: 0; transition: opacity 0.28s;
     }
+    .journey:hover::after, .journey:focus-visible::after { opacity: 1; }
     .j-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
     .j-head b { font-size: 1.02rem; font-weight: 700; }
     .j-head span { font-size: 0.8rem; color: var(--gray-2); }
@@ -176,18 +202,29 @@ FORM: User-pinned hybrid + pinned palette. Color strategy: neutral glass, per-ca
     .rows { display: flex; flex-direction: column; gap: 8px; }
     .row {
       display: flex; align-items: center; gap: 11px; text-decoration: none;
-      background: rgba(16,18,22,0.35); border: 1px solid var(--stroke); border-radius: 15px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(30,33,40,0.35) 60%, rgba(16,18,22,0.45));
+      border: 1px solid rgba(255,255,255,0.09); border-radius: 15px;
       padding: 11px 13px 13px;
       position: relative; overflow: hidden;
-      transition: background-color 0.25s, border-color 0.25s, transform 0.3s var(--ease);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.13),
+        inset 0 -10px 16px -10px rgba(0,0,0,0.5),
+        0 10px 22px -14px rgba(0,0,0,0.65);
+      transition: border-color 0.25s, transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
     }
-    .row:hover { background: rgba(16,18,22,0.55); border-color: var(--stroke-hi); transform: translateY(-2px); }
+    .row:hover {
+      border-color: rgba(255,255,255,0.16); transform: translateY(-2px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.2),
+        inset 0 -10px 16px -10px rgba(0,0,0,0.45),
+        0 16px 28px -14px rgba(0,0,0,0.7);
+    }
     .row::after {
-      content: ""; position: absolute; left: 13px; right: 13px; bottom: 0; height: 2.5px;
-      border-radius: 3px 3px 0 0; opacity: 0.65;
-      transform-origin: bottom; transition: opacity 0.25s, transform 0.25s;
+      content: ""; position: absolute; left: 13px; right: 13px; bottom: 0; height: 3px;
+      border-radius: 3px 3px 0 0; opacity: 0;
+      transition: opacity 0.28s;
     }
-    .row:hover::after { opacity: 1; transform: scaleY(1.4); }
+    .row:hover::after, .row:focus-visible::after, .row:active::after { opacity: 1; }
     .rows .row:nth-child(4n+1)::after { background: linear-gradient(90deg, transparent, #6fc3ff, transparent); }
     .rows .row:nth-child(4n+2)::after { background: linear-gradient(90deg, transparent, #c9e85c, transparent); }
     .rows .row:nth-child(4n+3)::after { background: linear-gradient(90deg, transparent, #ff6a3d, transparent); }
