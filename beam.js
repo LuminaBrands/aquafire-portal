@@ -61,7 +61,8 @@
      travel by arc length, so those wrappers fall back to the conic md beam. */
   var HAS_OFFSET_PATH = (function () {
     if (typeof CSS === 'undefined' || !CSS.supports) return false;
-    return CSS.supports('offset-path', 'inset(0 round 8px)');
+    return CSS.supports('offset-path', 'path("M 0 0 L 10 10")') ||
+      CSS.supports('offset-path', 'inset(0 round 8px)');
   })();
 
   function pick(value, allowed, fallback) {
@@ -112,6 +113,40 @@
     bloom.setAttribute('aria-hidden', 'true');
     el.insertBefore(bloom, el.firstChild);
     return bloom;
+  }
+
+  /* offset-path: path() has years more browser support than the inset()/rect()
+     coord-box forms Safari only shipped recently -- and a silent fallback to
+     the conic md beam on older iOS is exactly the case we cannot see from
+     here. So generate the rounded-rect outline instead of naming a shape.
+     Coordinates are the rim's PADDING box (its own containing block), so the
+     radius loses the border width. */
+  function rimOutline(el) {
+    var rim = el.querySelector(':scope > .af-beam-rim');
+    if (!rim) return '';
+    /* Measure the WRAPPER, not the rim: the rim is display:none until the
+       beam activates, so its own box would read 0x0 here and we would fall
+       back to inset() forever. The rim sits inset:0 inside the wrapper, so
+       its padding box is the wrapper's box less one border width each side. */
+    var bw = parseFloat(global.getComputedStyle(rim).borderTopWidth) || 0;
+    var w = el.clientWidth - bw * 2;
+    var h = el.clientHeight - bw * 2;
+    if (w <= 0 || h <= 0) return '';
+    var r = parseFloat(el.style.getPropertyValue('--af-beam-radius')) ||
+      DEFAULT_RADIUS.rim;
+    r = Math.max(0, Math.min(r - bw, w / 2, h / 2));
+    var n = function (v) { return Math.round(v * 100) / 100; };
+    var arc = ' A ' + n(r) + ' ' + n(r) + ' 0 0 1 ';
+    return 'path("M ' + n(r) + ' 0' +
+      ' H ' + n(w - r) + arc + n(w) + ' ' + n(r) +
+      ' V ' + n(h - r) + arc + n(w - r) + ' ' + n(h) +
+      ' H ' + n(r) + arc + '0 ' + n(h - r) +
+      ' V ' + n(r) + arc + n(r) + ' 0 Z")';
+  }
+
+  function syncRimPath(el) {
+    var path = rimOutline(el);
+    if (path) el.style.setProperty('--af-comet-path', path);
   }
 
   function ensureRim(el) {
@@ -196,7 +231,13 @@
     if (el.hasAttribute('data-beam-static')) el.setAttribute('data-beam-static', '');
 
     ensureBloom(el);
-    if (size === 'rim') ensureRim(el);
+    if (size === 'rim') {
+      ensureRim(el);
+      syncRimPath(el);
+      if (typeof ResizeObserver === 'function') {
+        new ResizeObserver(function () { syncRimPath(el); }).observe(el);
+      }
+    }
     el.setAttribute('data-beam-ready', 'true');
 
     var trigger = el.getAttribute('data-beam-trigger') || opts.trigger || 'load';

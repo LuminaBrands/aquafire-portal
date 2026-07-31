@@ -449,15 +449,15 @@
    back to md where it is missing. */
 
 .af-beam[data-beam-size="rim"] {
-  --af-comet-size: 170px;
+  --af-comet-size: 145px;
   /* The look is a soft glow bleeding inward from the rim, matching the
      package's own demo -- NOT a bright hairline. The blurred band is the
      dominant layer and the stroke is only faintly visible, just enough to
      define the edge. Turning the stroke up reads as a neon outline. */
-  --af-comet-band: 15px;
-  --af-comet-blur: 20px;
-  --af-comet-stroke-opacity: 0.34;
-  --af-comet-glow-opacity: 0.5;
+  --af-comet-band: 9px;
+  --af-comet-blur: 13px;
+  --af-comet-stroke-opacity: 0.45;
+  --af-comet-glow-opacity: 0.44;
 }
 
 .af-beam[data-beam-size="rim"] > .af-beam-rim,
@@ -497,7 +497,9 @@
   position: absolute;
   width: var(--af-comet-size);
   aspect-ratio: 1;
-  offset-path: inset(0 round var(--af-beam-radius, 16px));
+  /* beam.js sets --af-comet-path to a generated path(); the inset() form is
+     only the no-JS fallback, and is supported in fewer browsers. */
+  offset-path: var(--af-comet-path, inset(0 round var(--af-beam-radius, 16px)));
   offset-distance: 0%;
   animation: af-beam-comet var(--af-beam-duration) linear infinite;
 }
