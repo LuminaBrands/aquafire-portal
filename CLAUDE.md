@@ -21,6 +21,7 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 | `support.html` | Support hub — cards link to Troubleshooter + (stub) warranty/claims/FAQs |
 | `troubleshoot.html` | **Interactive Troubleshooter** — model-aware guided decision-tree wizard |
 | `chat-insights.html` | **Internal** chat-log dashboard for the Ember widget (Firebase-gated; not in nav) — transcripts, unanswered questions, 👍/👎 rates |
+| `beam-demo.html` | **Internal** showcase for the Border Beam effect (`beam.css`/`beam.js`) — live playground, all sizes/variants, usage snippet (noindex; not in nav) |
 
 ### Stylesheets
 
@@ -30,6 +31,7 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 | `styles.css` | Enclosure guide — forms, SVG diagram, cards, step layout |
 | `water-care-styles.css` | Water care — hardness scale, map tiles, calculator UI |
 | `troubleshoot.css` | Troubleshooter — wizard cards, option buttons, breadcrumb, outcome/escalation styling |
+| `beam.css` | **Border Beam** — animated border-glow effect (`.af-beam`); opt-in, not loaded by default |
 
 ### JavaScript
 
@@ -40,6 +42,7 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 | `troubleshoot.js` | Troubleshooter — `TREE` decision-tree data + wizard render/nav engine; `LINKS`/`VIDEOS` maps |
 | `embed.js` | Strips nav/footer when page loaded in iframe (`?embed` query param) |
 | `assistant.js` | **"Ember" AI chat widget** — self-contained (injects own CSS), embeddable on Shopify via one script tag; `INTENTS` knowledge base + Claude-API backend (`/api/chat` by default). See `docs/chat-assistant.md` |
+| `beam.js` | **Border Beam** controller — injects the bloom layer, auto-detects the wrapped child's radius, drives activate/deactivate; pairs with `beam.css` |
 | `api/chat.js` | **Vercel serverless function** for Ember's AI answers — Claude API (`claude-opus-4-8`), zero npm deps (raw fetch, keeps the repo build-free); grounded in `BASE_FACTS` + the `chatKnowledge` Firestore collection; needs `ANTHROPIC_API_KEY` env var in Vercel |
 
 ### Docs
@@ -136,6 +139,7 @@ Footer "Guides" columns (most pages) and the homepage bento grid also link to th
 - **Chat telemetry** — the widget logs anonymous events (messages + matched intent, fallbacks, 👍/👎 + comments, handoffs) to the `chatEvents` Firestore collection in the same `aquafire-portal` Firebase project the rewards system uses; reviewed in `chat-insights.html`. Requires the Firestore rule in `docs/chat-assistant.md`; disable with `AQUAFIRE_ASSISTANT_CONFIG.telemetry = false`.
 - **Chat AI mode** — unmatched questions POST to `/api/chat` (`api/chat.js`, the repo's only serverless function — deployed by Vercel automatically, no package.json). Team-editable knowledge lives in the `chatKnowledge` Firestore collection, managed via the "Teach Ember" flow in `chat-insights.html`; the function caches it ~5 min. The widget falls back to the local `INTENTS` KB whenever the endpoint errors (`llmDown` per page load).
 - **Troubleshooter decision tree lives in `troubleshoot.js`** as the `TREE` object — a map of `nodeId → node`. Nodes are either `question` (prompt + options/quickPicks) or `outcome` (steps, caution, video, article links, escalation). Model-specific copy uses functions that receive the model id (`'pro' | 'original' | 'lite' | 'unknown'`). `app_entry` is a `router` node that resolves Pro → `app_connect`, others → `app_not_pro`. URL params: `?model=pro|original|lite` pre-selects the model; `?node=<id>` deep-links a node (useful for support emails). Resource URLs are in the `LINKS` map; **how-to video URLs are TODO placeholders in the `VIDEOS` map** — until filled in, the tool shows a "video coming soon" chip. When the underlying help articles change, update the tree and the matching file in `docs/source-material/`.
+- **Border Beam lives in `beam.css` + `beam.js`** — a vanilla port of the `border-beam` npm package (MIT), rebuilt as plain CSS because the portal has no React/build step. Wrap anything in `<div class="af-beam" data-beam-size="md" data-beam-variant="ember">`; children render untouched, so the effect is purely additive and degrades to a plain container without JS. Sizes `sm | md | line | pulse-inner | pulse-outside`, variants `ember | colorful | ocean | sunset | mono` (`ember` is the brand default and tightens the hue cycle to 10deg so reds don't drift magenta). Needs `@property` + `mask-composite`; `beam.js` feature-gates and no-ops on older browsers. Beams pause when scrolled offscreen, and `prefers-reduced-motion` freezes them lit rather than hiding them. **Both files are opt-in — no page loads them yet except `beam-demo.html`.** The `#fff` literals in the CSS are mask stencils (alpha channels), not palette colors — impeccable's `design-system-color` rule flags them as false positives.
 - **Impeccable design skill** — `.claude/skills/impeccable/` (compiled bundle from [pbakaus/impeccable](https://github.com/pbakaus/impeccable)) gives Claude Code the `/impeccable` design commands (`craft`, `shape`, `audit`, `critique`, `polish`, `init`, …). `.claude/settings.json` wires its hook: deterministic design-quality checks after UI file edits + a deep pass on Stop. Run `/impeccable init` once before a big design pass so it generates project design context; update the skill with `npx impeccable update`. Personal overrides go in `.claude/settings.local.json` (gitignored).
 - **Portal redesign (in progress, PR #66)** — the committed direction is `home/index.html` ("Hero Bleed × Dual Theme": liquid glass over a lobby photograph, dark/light theme switcher). It is the token source of truth, locked into `DESIGN.md` + `.impeccable/design.json`. Exploration comps live in `v1/–v5/`, `v4a/–v4e/`, `mix1/–mix6/`, `b1/–b3/` with the `compare.html` gallery (internal, noindex); screenshot harness in `tools/shoot/`. **Status, pending work, and environment learnings: `docs/redesign-handoff.md`** — read it before resuming redesign work. `index.html` is still the live homepage; rollout to the other pages has not started.
 
