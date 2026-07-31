@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!-- Internal design-review tool: cycles through the redesign exploration comps
+     in an iframe. Not linked from any customer-facing page. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Redesign — Compare Versions</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0c0d10; color: #e8e9ed;
+      font: 14px/1.5 system-ui, sans-serif;
+      height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+    }
+    header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; border-bottom: 1px solid #24262c; flex-wrap: wrap;
+    }
+    .nav-btn {
+      width: 34px; height: 34px; border-radius: 9px; border: 1px solid #33363e;
+      background: #16181d; color: #e8e9ed; cursor: pointer; font-size: 15px;
+      display: grid; place-items: center;
+    }
+    .nav-btn:hover { background: #22252b; }
+    select {
+      background: #16181d; color: #e8e9ed; border: 1px solid #33363e;
+      border-radius: 9px; padding: 7px 10px; font: 600 13px system-ui; cursor: pointer;
+      max-width: 46vw;
+    }
+    .desc { color: #9298a4; font-size: 12.5px; flex: 1; min-width: 200px; }
+    .count { color: #6b7280; font-size: 12px; }
+    .mode { display: flex; gap: 4px; background: #16181d; border: 1px solid #33363e; border-radius: 9px; padding: 3px; }
+    .mode button {
+      border: 0; background: transparent; color: #9298a4; cursor: pointer;
+      font: 600 12px system-ui; padding: 5px 12px; border-radius: 6px;
+    }
+    .mode button.on { background: #2c2f37; color: #fff; }
+    .open-link { color: #9298a4; font-size: 12px; text-decoration: none; border-bottom: 1px solid #33363e; }
+    .open-link:hover { color: #fff; }
+    main { flex: 1; display: grid; place-items: center; background: #08090b; overflow: hidden; }
+    .stage { width: 100%; height: 100%; display: grid; place-items: center; }
+    iframe { border: 0; background: #101216; width: 100%; height: 100%; }
+    .stage.phone { padding: 14px 0; }
+    .stage.phone iframe {
+      width: 390px; height: min(844px, calc(100vh - 90px));
+      border-radius: 28px; border: 1px solid #2c2f37;
+      box-shadow: 0 30px 70px -30px rgba(0,0,0,0.9);
+    }
+    .hint { color: #4b5058; font-size: 11px; padding: 6px 14px; border-top: 1px solid #1a1c21; }
+    @media (max-width: 640px) {
+      .desc { display: none; }
+      .hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="nav-btn" id="prev" aria-label="Previous version">&#8592;</button>
+    <button class="nav-btn" id="next" aria-label="Next version">&#8594;</button>
+    <select id="pick" aria-label="Choose version"></select>
+    <span class="count" id="count"></span>
+    <span class="desc" id="desc"></span>
+    <span class="mode" role="group" aria-label="Viewport">
+      <button id="m-phone" class="on">Phone</button>
+      <button id="m-desk">Desktop</button>
+    </span>
+    <a class="open-link" id="open" href="#" target="_blank" rel="noopener">open in tab &#8599;</a>
+  </header>
+  <main><div class="stage phone" id="stage"><iframe id="frame" title="Design version preview"></iframe></div></main>
+  <p class="hint">&#8592;/&#8594; arrow keys cycle &middot; Phone view shows the mobile-first layout (390px) &middot; comps live in their folders and load the real Shopify imagery when online</p>
+
+  <script>
+    const VERSIONS = [
+      { g: "Round 1 — Visual worlds", id: "v1", name: "v1 · Hearth Console", d: "Warm-dark ops center, animated vapor flame, didone serif" },
+      { g: "Round 1 — Visual worlds", id: "v2", name: "v2 · Showroom", d: "Light product stage, model switcher, real dimensions" },
+      { g: "Round 1 — Visual worlds", id: "v3", name: "v3 · Nightfall", d: "Indigo journey app, search-led, support routes" },
+      { g: "Round 1 — Visual worlds", id: "v4", name: "v4 · Vapor Glass", d: "Frosted capsules over smoke, Ask Ember centerpiece" },
+      { g: "Round 1 — Visual worlds", id: "v5", name: "v5 · Insight Console", d: "Charcoal + violet instrumentation, care timeline" },
+      { g: "Round 2 — Ember layouts (v4 world)", id: "v4a", name: "v4a · Concierge", d: "Chat-app shell; tours as sidebar; sample Q&A" },
+      { g: "Round 2 — Ember layouts (v4 world)", id: "v4b", name: "v4b · Three Doors", d: "Ember greets; three audience reply-cards; composer" },
+      { g: "Round 2 — Ember layouts (v4 world)", id: "v4c", name: "v4c · Guided Tour", d: "Four scroll stations narrated by Ember; docked composer" },
+      { g: "Round 2 — Ember layouts (v4 world)", id: "v4d", name: "v4d · Studio", d: "Chat left, live canvas right with Explore/Set up/Fix tabs" },
+      { g: "Round 2 — Ember layouts (v4 world)", id: "v4e", name: "v4e · Welcome Hall", d: "Front desk + three wings open at once" },
+      { g: "Round 3 — Color studies (v4b × v4e hybrid)", id: "mix1", name: "mix1 · Tinted Panes", d: "Each intent group is a tinted liquid-glass pane" },
+      { g: "Round 3 — Color studies (v4b × v4e hybrid)", id: "mix2", name: "mix2 · Frosted Buttons", d: "Neutral panes; every button a different frosted hue" },
+      { g: "Round 3 — Color studies (v4b × v4e hybrid)", id: "mix3", name: "mix3 · Aurora Wash", d: "Dual LED light-bar element + colored atmosphere" },
+      { g: "Round 3 — Color studies (v4b × v4e hybrid)", id: "mix4", name: "mix4 · Edge-lit", d: "Every card carries its own colored light bar" },
+      { g: "Round 3 — Color studies (v4b × v4e hybrid)", id: "mix5", name: "mix5 · Journey Spectrum", d: "Rewards journey as a color-mix progress gradient" },
+    ];
+    let i = Math.max(0, VERSIONS.findIndex(v => v.id === (location.hash.slice(1) || "mix1")));
+
+    const pick = document.getElementById("pick");
+    let lastGroup = null, groupEl = null;
+    VERSIONS.forEach((v, idx) => {
+      if (v.g !== lastGroup) {
+        groupEl = document.createElement("optgroup");
+        groupEl.label = v.g;
+        pick.appendChild(groupEl);
+        lastGroup = v.g;
+      }
+      const o = document.createElement("option");
+      o.value = idx; o.textContent = v.name;
+      groupEl.appendChild(o);
+    });
+
+    const frame = document.getElementById("frame");
+    function show(n) {
+      i = (n + VERSIONS.length) % VERSIONS.length;
+      const v = VERSIONS[i];
+      frame.src = v.id + "/index.html";
+      pick.value = i;
+      document.getElementById("desc").textContent = v.d;
+      document.getElementById("count").textContent = (i + 1) + " / " + VERSIONS.length;
+      document.getElementById("open").href = v.id + "/index.html";
+      history.replaceState(null, "", "#" + v.id);
+      document.title = "Compare — " + v.name;
+    }
+    document.getElementById("prev").onclick = () => show(i - 1);
+    document.getElementById("next").onclick = () => show(i + 1);
+    pick.onchange = () => show(Number(pick.value));
+    addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") show(i - 1);
+      if (e.key === "ArrowRight") show(i + 1);
+    });
+    const stage = document.getElementById("stage");
+    document.getElementById("m-phone").onclick = function () { stage.classList.add("phone"); this.classList.add("on"); document.getElementById("m-desk").classList.remove("on"); };
+    document.getElementById("m-desk").onclick = function () { stage.classList.remove("phone"); this.classList.add("on"); document.getElementById("m-phone").classList.remove("on"); };
+    show(i);
+  </script>
+</body>
+</html>
