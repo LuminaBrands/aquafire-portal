@@ -190,9 +190,9 @@ FORM: User-pinned graft (mix4 layout + v2 theme colors + mix4 accents).
     .row::after {
       content: ""; position: absolute; left: 13px; right: 13px; bottom: 0; height: 2.5px;
       border-radius: 3px 3px 0 0; opacity: 0.75;
-      transition: opacity 0.25s, height 0.25s;
+      transform-origin: bottom; transition: opacity 0.25s, transform 0.25s;
     }
-    .row:hover::after { opacity: 1; height: 3.5px; }
+    .row:hover::after { opacity: 1; transform: scaleY(1.4); }
     .rows .row:nth-child(4n+1)::after { background: linear-gradient(90deg, transparent, var(--frost), transparent); }
     .rows .row:nth-child(4n+2)::after { background: linear-gradient(90deg, transparent, var(--chart), transparent); }
     .rows .row:nth-child(4n+3)::after { background: linear-gradient(90deg, transparent, var(--ember), transparent); }
