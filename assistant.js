@@ -56,6 +56,16 @@
     : (PORTAL_BASE ? PORTAL_BASE + 'api/chat' : '');
   var llmDown = false;
 
+  // Border Beam (beam.css / beam.js) applied to the widget. Because this file
+  // ships as a single script tag on Shopify it cannot link beam.css, so a
+  // trimmed subset is inlined below under the afa- namespace.
+  //   cfg.beam = 'input'  beam the composer field (default)
+  //            = 'panel'  beam the whole chat window
+  //            = false    off
+  var BEAM = cfg.beam !== undefined ? cfg.beam : (dataAttr('beam') || 'input');
+  if (BEAM === 'off' || BEAM === 'false') BEAM = false;
+  var BEAM_VARIANT = cfg.beamVariant || dataAttr('beam-variant') || 'ember';
+
   var SUPPORT_EMAIL = 'support@aquafire.com';
   var SALES_EMAIL = 'sales@aquafire.com';
   var ORDERS_EMAIL = 'orders@aquafire.com';
@@ -1041,6 +1051,40 @@
     '.afa-send svg{width:18px;height:18px;}',
     '.afa-send:disabled{opacity:.4;cursor:default;}',
     '.afa-send:not(:disabled):hover{transform:scale(1.06);}',
+
+    /* ── Border Beam ──
+       Trimmed port of beam.css (ring + inner glow; no bloom layer, which is
+       imperceptible at this size). Inlined rather than linked because this
+       widget ships as a single script tag on Shopify, where an external
+       stylesheet is not available. Namespaced afa- so it cannot collide with
+       beam.css when both load on a portal page. Position is set per target,
+       never on .afa-beam itself -- .afa-panel must keep position:fixed. */
+    '@property --afa-beam-angle{syntax:"<angle>";initial-value:0deg;inherits:true;}',
+    '@property --afa-beam-opacity{syntax:"<number>";initial-value:0;inherits:true;}',
+    '.afa-beam{--afa-beam-w:1px;--afa-beam-dur:2.6s;--afa-beam-strength:1;--afa-beam-hue:8deg;}',
+    '.afa-beam.afa-beam-on{animation:afaBeamSpin var(--afa-beam-dur) linear infinite,afaBeamIn .6s ease forwards;}',
+    '.afa-beam.afa-beam-on::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:var(--afa-beam-w);background:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 54%,rgba(255,255,255,.1) 57%,rgba(255,255,255,.3) 60%,rgba(255,255,255,.6) 63%,rgba(255,255,255,.75) 66%,rgba(255,255,255,.6) 69%,rgba(255,255,255,.3) 72%,rgba(255,255,255,.1) 75%,transparent 78%),radial-gradient(ellipse 70px 40px at 33% -7%,#c0392b,transparent),radial-gradient(ellipse 60px 35px at 12% -5%,#d45a20,transparent),radial-gradient(ellipse 40px 70px at 2% 68%,#e8a838,transparent),radial-gradient(ellipse 180px 32px at 74% 100%,#a93226,transparent),radial-gradient(ellipse 85px 26px at 55% 100%,#d45a20,transparent),radial-gradient(ellipse 74px 32px at 94% 0%,#ff8c3c,transparent),radial-gradient(ellipse 52px 48px at 100% 27%,#e8a838,transparent);-webkit-mask:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 30%,rgba(255,255,255,.1) 36%,rgba(255,255,255,.35) 44%,#fff 52%,#fff 80%,rgba(255,255,255,.35) 86%,rgba(255,255,255,.1) 92%,transparent 95%),linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:source-in,xor;mask:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 30%,rgba(255,255,255,.1) 36%,rgba(255,255,255,.35) 44%,#fff 52%,#fff 80%,rgba(255,255,255,.35) 86%,rgba(255,255,255,.1) 92%,transparent 95%),linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:intersect,exclude;pointer-events:none;z-index:3;opacity:calc(var(--afa-beam-opacity) * .55 * var(--afa-beam-strength));animation:afaBeamHue 12s ease-in-out infinite;}',
+    '.afa-beam.afa-beam-on::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse 63px 36px at 33% -7%,rgba(192,57,43,.45),transparent),radial-gradient(ellipse 54px 32px at 12% -5%,rgba(212,90,32,.45),transparent),radial-gradient(ellipse 36px 63px at 2% 68%,rgba(232,168,56,.45),transparent),radial-gradient(ellipse 162px 29px at 74% 100%,rgba(169,50,38,.45),transparent),radial-gradient(ellipse 67px 29px at 94% 0%,rgba(255,140,60,.45),transparent),radial-gradient(ellipse 47px 43px at 100% 27%,rgba(232,168,56,.45),transparent);-webkit-mask-image:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 22%,rgba(255,255,255,.12) 28%,rgba(255,255,255,.4) 36%,#fff 46%,#fff 82%,rgba(255,255,255,.4) 88%,rgba(255,255,255,.12) 94%,transparent 97%);mask-image:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 22%,rgba(255,255,255,.12) 28%,rgba(255,255,255,.4) 36%,#fff 46%,#fff 82%,rgba(255,255,255,.4) 88%,rgba(255,255,255,.12) 94%,transparent 97%);pointer-events:none;z-index:2;opacity:calc(var(--afa-beam-opacity) * .4 * var(--afa-beam-strength));animation:afaBeamHue 12s ease-in-out infinite;}',
+    /* Targets. The composer wrapper takes over flex:1 from the input it wraps
+       (pseudo-elements do not render on <input>, hence the wrapper). */
+    '.afa-beam-input{position:relative;flex:1;min-width:0;border-radius:12px;}',
+    '.afa-beam-input .afa-input{width:100%;flex:none;}',
+    /* Panel target: ring only. The inner-glow blobs are sized in absolute px
+       for a card-height element, so on a 620px-tall panel they land mid-
+       transcript as a stray colour blotch instead of an edge glow. A clean
+       traveling rim is the right read at this size. */
+    '.afa-panel.afa-beam{--afa-beam-strength:1;}',
+    '.afa-panel.afa-beam.afa-beam-on::before{display:none;}',
+    /* Ember is thinking: spin faster and brighter, so the beam reads as a
+       live activity indicator rather than pure decoration. */
+    '.afa-beam.afa-beam-busy{--afa-beam-dur:1.05s;--afa-beam-strength:1.9;}',
+    '@keyframes afaBeamSpin{to{--afa-beam-angle:360deg;}}',
+    '@keyframes afaBeamIn{to{--afa-beam-opacity:1;}}',
+    '@keyframes afaBeamHue{0%,100%{filter:hue-rotate(calc(var(--afa-beam-hue) * -1)) brightness(1.3) saturate(1.2);}50%{filter:hue-rotate(var(--afa-beam-hue)) brightness(1.3) saturate(1.2);}}',
+    '@media (prefers-reduced-motion:reduce){',
+    '.afa-beam.afa-beam-on,.afa-beam.afa-beam-on::before,.afa-beam.afa-beam-on::after{animation:none !important;--afa-beam-opacity:1;}',
+    '}',
+
     '.afa-legal{text-align:center;font-size:10.5px;color:#6a6f7d;padding:0 12px 8px;}',
     '.afa-legal a{color:#8c91a0;}',
 
@@ -1052,6 +1096,20 @@
   ].join('\n');
 
   /* ── DOM construction ─────────────────────────────────────────────────── */
+  // The beam needs a registered @property (to animate an <angle>) and
+  // mask-composite. Where either is missing we skip it entirely rather than
+  // render a broken half-effect -- the widget is unaffected either way.
+  var beamEl = null;
+  function beamSupported() {
+    // NB: window.CSS, not CSS -- this file declares its own `var CSS` (the
+    // stylesheet string) above, which shadows the global CSS object.
+    var C = window.CSS;
+    if (!BEAM || !C || !C.supports) return false;
+    return typeof C.registerProperty === 'function' &&
+      (C.supports('mask-composite', 'exclude') ||
+       C.supports('-webkit-mask-composite', 'xor'));
+  }
+
   function el(tag, cls, html) {
     var e = document.createElement(tag);
     if (cls) e.className = cls;
@@ -1112,11 +1170,25 @@
     sendBtn = el('button', 'afa-send', SEND_SVG);
     sendBtn.setAttribute('aria-label', 'Send message');
     sendBtn.disabled = true;
-    row.appendChild(inputEl); row.appendChild(sendBtn);
+    // Pseudo-elements do not render on <input>, so the composer beam needs a
+    // wrapper element to hang its layers on.
+    if (BEAM === 'input' && beamSupported()) {
+      beamEl = el('div', 'afa-beam afa-beam-input afa-beam-on');
+      beamEl.appendChild(inputEl);
+      row.appendChild(beamEl);
+    } else {
+      row.appendChild(inputEl);
+    }
+    row.appendChild(sendBtn);
     var legal = el('div', 'afa-legal', 'AI assistant \u2014 answers can be imperfect. <a href="mailto:' + SUPPORT_EMAIL + '">Talk to a human</a> anytime.');
     foot.appendChild(row); foot.appendChild(legal);
 
     panel.appendChild(head); panel.appendChild(msgsEl); panel.appendChild(foot);
+    if (BEAM === 'panel' && beamSupported()) {
+      panel.classList.add('afa-beam', 'afa-beam-on');
+      beamEl = panel;
+    }
+
     root.appendChild(panel); root.appendChild(launcher);
     document.body.appendChild(root);
 
@@ -1321,7 +1393,11 @@
   }
 
   var typingRow = null;
+  function setBeamBusy(on) {
+    if (beamEl) beamEl.classList.toggle('afa-beam-busy', on);
+  }
   function showTyping() {
+    setBeamBusy(true);
     if (typingRow) return;
     typingRow = el('div', 'afa-row afa-bot');
     typingRow.appendChild(el('div', 'afa-mini-avatar', FLAME_SVG));
@@ -1330,7 +1406,10 @@
     msgsEl.appendChild(typingRow);
     scrollToEnd();
   }
-  function hideTyping() { if (typingRow) { typingRow.remove(); typingRow = null; } }
+  function hideTyping() {
+    setBeamBusy(false);
+    if (typingRow) { typingRow.remove(); typingRow = null; }
+  }
 
   /* ── Conversation flow ────────────────────────────────────────────────── */
   function submit() {
