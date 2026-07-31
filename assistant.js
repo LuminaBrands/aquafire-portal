@@ -64,7 +64,8 @@
   //            = false    off
   var BEAM = cfg.beam !== undefined ? cfg.beam : (dataAttr('beam') || 'input');
   if (BEAM === 'off' || BEAM === 'false') BEAM = false;
-  var BEAM_VARIANT = cfg.beamVariant || dataAttr('beam-variant') || 'ember';
+  //   cfg.beamVariant = 'colorful' full spectrum (default) | 'ember' fire palette
+  var BEAM_VARIANT = cfg.beamVariant || dataAttr('beam-variant') || 'colorful';
 
   var SUPPORT_EMAIL = 'support@aquafire.com';
   var SALES_EMAIL = 'sales@aquafire.com';
@@ -1061,10 +1062,28 @@
        never on .afa-beam itself -- .afa-panel must keep position:fixed. */
     '@property --afa-beam-angle{syntax:"<angle>";initial-value:0deg;inherits:true;}',
     '@property --afa-beam-opacity{syntax:"<number>";initial-value:0;inherits:true;}',
-    '.afa-beam{--afa-beam-w:1px;--afa-beam-dur:2.6s;--afa-beam-strength:1;--afa-beam-hue:8deg;}',
+    /* Colours live in custom properties so a variant only overrides nine
+       values instead of restating every gradient. Default is the full
+       spectrum; data-beam-variant="ember" narrows it to the fire palette. */
+    '.afa-beam{--afa-beam-w:1px;--afa-beam-dur:6s;--afa-beam-strength:1;--afa-beam-hue:30deg;' +
+      '--afa-b1:rgb(255,50,100);--afa-b2:rgb(40,140,255);--afa-b3:rgb(50,200,80);' +
+      '--afa-b4:rgb(30,185,170);--afa-b5:rgb(100,70,255);--afa-b6:rgb(40,140,255);' +
+      '--afa-b7:rgb(255,120,40);--afa-b8:rgb(240,50,180);--afa-b9:rgb(180,40,240);' +
+      '--afa-i1:rgba(255,50,100,.45);--afa-i2:rgba(40,140,255,.45);--afa-i3:rgba(50,200,80,.45);' +
+      '--afa-i4:rgba(30,185,170,.45);--afa-i5:rgba(100,70,255,.45);--afa-i6:rgba(40,140,255,.45);' +
+      '--afa-i7:rgba(255,120,40,.45);--afa-i8:rgba(240,50,180,.45);--afa-i9:rgba(180,40,240,.45);}',
+    /* Fire palette. Hue cycle tightened to 10deg -- at 30deg the reds swing
+       into magenta and the ambers into olive, which reads off-brand. */
+    '.afa-beam[data-beam-variant="ember"]{--afa-beam-hue:10deg;' +
+      '--afa-b1:rgb(192,57,43);--afa-b2:rgb(212,90,32);--afa-b3:rgb(232,168,56);' +
+      '--afa-b4:rgb(255,176,92);--afa-b5:rgb(169,50,38);--afa-b6:rgb(212,90,32);' +
+      '--afa-b7:rgb(255,140,60);--afa-b8:rgb(232,168,56);--afa-b9:rgb(199,136,32);' +
+      '--afa-i1:rgba(192,57,43,.45);--afa-i2:rgba(212,90,32,.45);--afa-i3:rgba(232,168,56,.45);' +
+      '--afa-i4:rgba(255,176,92,.45);--afa-i5:rgba(169,50,38,.45);--afa-i6:rgba(212,90,32,.45);' +
+      '--afa-i7:rgba(255,140,60,.45);--afa-i8:rgba(232,168,56,.45);--afa-i9:rgba(199,136,32,.45);}',
     '.afa-beam.afa-beam-on{animation:afaBeamSpin var(--afa-beam-dur) linear infinite,afaBeamIn .6s ease forwards;}',
-    '.afa-beam.afa-beam-on::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:var(--afa-beam-w);background:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 54%,rgba(255,255,255,.1) 57%,rgba(255,255,255,.3) 60%,rgba(255,255,255,.6) 63%,rgba(255,255,255,.75) 66%,rgba(255,255,255,.6) 69%,rgba(255,255,255,.3) 72%,rgba(255,255,255,.1) 75%,transparent 78%),radial-gradient(ellipse 70px 40px at 33% -7%,#c0392b,transparent),radial-gradient(ellipse 60px 35px at 12% -5%,#d45a20,transparent),radial-gradient(ellipse 40px 70px at 2% 68%,#e8a838,transparent),radial-gradient(ellipse 180px 32px at 74% 100%,#a93226,transparent),radial-gradient(ellipse 85px 26px at 55% 100%,#d45a20,transparent),radial-gradient(ellipse 74px 32px at 94% 0%,#ff8c3c,transparent),radial-gradient(ellipse 52px 48px at 100% 27%,#e8a838,transparent);-webkit-mask:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 30%,rgba(255,255,255,.1) 36%,rgba(255,255,255,.35) 44%,#fff 52%,#fff 80%,rgba(255,255,255,.35) 86%,rgba(255,255,255,.1) 92%,transparent 95%),linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:source-in,xor;mask:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 30%,rgba(255,255,255,.1) 36%,rgba(255,255,255,.35) 44%,#fff 52%,#fff 80%,rgba(255,255,255,.35) 86%,rgba(255,255,255,.1) 92%,transparent 95%),linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:intersect,exclude;pointer-events:none;z-index:3;opacity:calc(var(--afa-beam-opacity) * .55 * var(--afa-beam-strength));animation:afaBeamHue 12s ease-in-out infinite;}',
-    '.afa-beam.afa-beam-on::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse 63px 36px at 33% -7%,rgba(192,57,43,.45),transparent),radial-gradient(ellipse 54px 32px at 12% -5%,rgba(212,90,32,.45),transparent),radial-gradient(ellipse 36px 63px at 2% 68%,rgba(232,168,56,.45),transparent),radial-gradient(ellipse 162px 29px at 74% 100%,rgba(169,50,38,.45),transparent),radial-gradient(ellipse 67px 29px at 94% 0%,rgba(255,140,60,.45),transparent),radial-gradient(ellipse 47px 43px at 100% 27%,rgba(232,168,56,.45),transparent);-webkit-mask-image:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 22%,rgba(255,255,255,.12) 28%,rgba(255,255,255,.4) 36%,#fff 46%,#fff 82%,rgba(255,255,255,.4) 88%,rgba(255,255,255,.12) 94%,transparent 97%);mask-image:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 22%,rgba(255,255,255,.12) 28%,rgba(255,255,255,.4) 36%,#fff 46%,#fff 82%,rgba(255,255,255,.4) 88%,rgba(255,255,255,.12) 94%,transparent 97%);pointer-events:none;z-index:2;opacity:calc(var(--afa-beam-opacity) * .4 * var(--afa-beam-strength));animation:afaBeamHue 12s ease-in-out infinite;}',
+    '.afa-beam.afa-beam-on::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:var(--afa-beam-w);background:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 54%,rgba(255,255,255,.1) 57%,rgba(255,255,255,.3) 60%,rgba(255,255,255,.6) 63%,rgba(255,255,255,.75) 66%,rgba(255,255,255,.6) 69%,rgba(255,255,255,.3) 72%,rgba(255,255,255,.1) 75%,transparent 78%),radial-gradient(ellipse 70px 40px at 33% -7%,var(--afa-b1),transparent),radial-gradient(ellipse 60px 35px at 12% -5%,var(--afa-b2),transparent),radial-gradient(ellipse 40px 70px at 2% 68%,var(--afa-b3),transparent),radial-gradient(ellipse 180px 32px at 74% 100%,var(--afa-b5),transparent),radial-gradient(ellipse 85px 26px at 55% 100%,var(--afa-b6),transparent),radial-gradient(ellipse 74px 32px at 94% 0%,var(--afa-b7),transparent),radial-gradient(ellipse 52px 48px at 100% 27%,var(--afa-b9),transparent);-webkit-mask:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 30%,rgba(255,255,255,.1) 36%,rgba(255,255,255,.35) 44%,#fff 52%,#fff 80%,rgba(255,255,255,.35) 86%,rgba(255,255,255,.1) 92%,transparent 95%),linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:source-in,xor;mask:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 30%,rgba(255,255,255,.1) 36%,rgba(255,255,255,.35) 44%,#fff 52%,#fff 80%,rgba(255,255,255,.35) 86%,rgba(255,255,255,.1) 92%,transparent 95%),linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:intersect,exclude;pointer-events:none;z-index:3;opacity:calc(var(--afa-beam-opacity) * .55 * var(--afa-beam-strength));animation:afaBeamHue 12s ease-in-out infinite;}',
+    '.afa-beam.afa-beam-on::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse 63px 36px at 33% -7%,var(--afa-i1),transparent),radial-gradient(ellipse 54px 32px at 12% -5%,var(--afa-i2),transparent),radial-gradient(ellipse 36px 63px at 2% 68%,var(--afa-i3),transparent),radial-gradient(ellipse 162px 29px at 74% 100%,var(--afa-i5),transparent),radial-gradient(ellipse 67px 29px at 94% 0%,var(--afa-i7),transparent),radial-gradient(ellipse 47px 43px at 100% 27%,var(--afa-i9),transparent);-webkit-mask-image:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 22%,rgba(255,255,255,.12) 28%,rgba(255,255,255,.4) 36%,#fff 46%,#fff 82%,rgba(255,255,255,.4) 88%,rgba(255,255,255,.12) 94%,transparent 97%);mask-image:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 22%,rgba(255,255,255,.12) 28%,rgba(255,255,255,.4) 36%,#fff 46%,#fff 82%,rgba(255,255,255,.4) 88%,rgba(255,255,255,.12) 94%,transparent 97%);pointer-events:none;z-index:2;opacity:calc(var(--afa-beam-opacity) * .4 * var(--afa-beam-strength));animation:afaBeamHue 12s ease-in-out infinite;}',
     /* Targets. The composer wrapper takes over flex:1 from the input it wraps
        (pseudo-elements do not render on <input>, hence the wrapper). */
     '.afa-beam-input{position:relative;flex:1;min-width:0;border-radius:12px;}',
@@ -1077,7 +1096,7 @@
     '.afa-panel.afa-beam.afa-beam-on::before{display:none;}',
     /* Ember is thinking: spin faster and brighter, so the beam reads as a
        live activity indicator rather than pure decoration. */
-    '.afa-beam.afa-beam-busy{--afa-beam-dur:1.05s;--afa-beam-strength:1.9;}',
+    '.afa-beam.afa-beam-busy{--afa-beam-dur:2.8s;--afa-beam-strength:1.9;}',
     '@keyframes afaBeamSpin{to{--afa-beam-angle:360deg;}}',
     '@keyframes afaBeamIn{to{--afa-beam-opacity:1;}}',
     '@keyframes afaBeamHue{0%,100%{filter:hue-rotate(calc(var(--afa-beam-hue) * -1)) brightness(1.3) saturate(1.2);}50%{filter:hue-rotate(var(--afa-beam-hue)) brightness(1.3) saturate(1.2);}}',
@@ -1174,6 +1193,7 @@
     // wrapper element to hang its layers on.
     if (BEAM === 'input' && beamSupported()) {
       beamEl = el('div', 'afa-beam afa-beam-input afa-beam-on');
+      beamEl.setAttribute('data-beam-variant', BEAM_VARIANT);
       beamEl.appendChild(inputEl);
       row.appendChild(beamEl);
     } else {
@@ -1186,6 +1206,7 @@
     panel.appendChild(head); panel.appendChild(msgsEl); panel.appendChild(foot);
     if (BEAM === 'panel' && beamSupported()) {
       panel.classList.add('afa-beam', 'afa-beam-on');
+      panel.setAttribute('data-beam-variant', BEAM_VARIANT);
       beamEl = panel;
     }
 

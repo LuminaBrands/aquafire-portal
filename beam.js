@@ -150,7 +150,7 @@
     var variant = pick(
       opts.variant || el.getAttribute('data-beam-variant'),
       VARIANTS,
-      'ember'
+      'colorful'
     );
     var theme = resolveTheme(
       el,

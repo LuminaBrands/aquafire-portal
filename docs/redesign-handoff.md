@@ -41,6 +41,20 @@ studies → mix6 light graft → b1–b3 imagery integrations → home.
   gotchas). Suggested order: support/troubleshoot hub pages first (highest
   traffic per PRODUCT.md), then tools, then guides.
 
+## Border Beam on the hero composer (added 2026-07-31)
+
+`home/index.html` now loads `../beam.css` + `../beam.js` and wraps the hero
+composer in `.composer-beam.af-beam` (`data-beam-variant="colorful"`). The
+wrapper exists because `.composer` already spends both of its own
+pseudo-elements — `::before` on the liquid-glass rim, `::after` on the hover
+underline — so the beam has nowhere to hang its layers otherwise. The wrapper
+takes over the composer's `width`/`margin-top` so the hero layout is
+unchanged (verified: wrapper and composer both 620px).
+
+`data-beam-theme` is kept in sync with the page theme by the existing toggle
+script, since the beam ships separate dark/light sweeps. Beam radius is
+auto-detected from the composer's `999px` pill.
+
 ## Open items / decisions awaiting the user
 
 - **single-font hook finding**: Figtree-only is deliberate (now written

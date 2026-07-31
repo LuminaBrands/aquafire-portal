@@ -37,6 +37,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../beam.css">
   <style>
     /* Semantic tokens. Dark = mix4 "Edge-lit" smoke; light = mix6 "Edge-lit
        Showroom". Components below reference only tokens, never raw theme
@@ -259,6 +260,13 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       transition: background-color 0.25s, transform 0.3s var(--ease);
     }
     .composer:hover .send { background: var(--send-bg-hover); transform: translateX(2px); }
+
+    /* Border Beam wrapper (beam.css). The composer already spends both of its
+       own pseudo-elements on the liquid-glass rim and the hover underline, so
+       the beam hangs its layers on a wrapper instead. The wrapper takes over
+       the composer's width and top margin so the hero layout is unchanged. */
+    .composer-beam { width: min(620px, 100%); margin-top: 18px; border-radius: 999px; }
+    .composer-beam > .composer { width: 100%; margin-top: 0; }
     .murmur { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px; }
     .murmur .cap { padding: 8px 15px; font-size: 0.82rem; font-weight: 500; }
 
@@ -426,12 +434,14 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         <h1>Hi, I&rsquo;m Ember. What brings you by tonight?</h1>
         <p>I know the manuals, the specs, and every fix &mdash; ask me, or step into your color below.</p>
       </div>
-      <a class="composer" href="../support.html" title="Ember opens in the corner of every portal page">
-        <span class="ph">Message Ember&hellip;</span>
-        <span class="send">Ask
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </span>
-      </a>
+      <div class="composer-beam af-beam" data-beam-size="md" data-beam-variant="colorful">
+        <a class="composer" href="../support.html" title="Ember opens in the corner of every portal page">
+          <span class="ph">Message Ember&hellip;</span>
+          <span class="send">Ask
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </a>
+      </div>
       <div class="murmur" aria-label="Common questions">
         <a class="cap" href="../troubleshoot.html">&ldquo;It&rsquo;s beeping&rdquo;</a>
         <a class="cap" href="../maintenance.html">&ldquo;Cleaning the mist maker?&rdquo;</a>
@@ -587,13 +597,23 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         btn.setAttribute("aria-label",
           root.dataset.theme === "light" ? "Switch to dark theme" : "Switch to light theme");
       }
+      // The beam ships dark/light sweeps; keep it on the same theme as the
+      // page. beam.css defaults to dark, so only the light case needs setting.
+      function syncBeam() {
+        var beam = document.querySelector(".composer-beam");
+        if (beam) beam.setAttribute("data-beam-theme",
+          root.dataset.theme === "light" ? "light" : "dark");
+      }
       btn.addEventListener("click", function () {
         root.dataset.theme = root.dataset.theme === "light" ? "dark" : "light";
         try { localStorage.setItem("aquafire-theme", root.dataset.theme); } catch (e) {}
         label();
+        syncBeam();
       });
       label();
+      syncBeam();
     })();
   </script>
+  <script src="../beam.js" defer></script>
 </body>
 </html>

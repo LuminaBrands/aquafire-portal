@@ -85,18 +85,23 @@ on the tag itself:
 | `apiEndpoint` | — | `portalBase + 'api/chat'` | POST endpoint for Claude-powered replies (below). Set `null` to disable AI mode |
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
 | `beam` | `data-beam` | `'input'` | Border Beam target: `'input'` (composer field), `'panel'` (whole window), or `false` to disable |
+| `beamVariant` | `data-beam-variant` | `'colorful'` | Beam palette: `'colorful'` (full spectrum) or `'ember'` (Aquafire fire palette) |
 
 ### Border Beam
 
-The composer field carries an animated ember-coloured beam (a trimmed inline
+The composer field carries an animated full-spectrum beam (a trimmed inline
 port of `beam.css` — the widget ships as one script tag, so it can't link an
 external stylesheet). It brightens and spins faster while Ember is generating a
 reply, so it doubles as a live activity indicator alongside the typing dots.
 
 Set `beam: 'panel'` to rim the whole chat window instead, or `beam: false` to
-turn it off. The effect needs `@property` + `mask-composite`; where either is
-missing it is skipped entirely and the widget is unaffected.
-`prefers-reduced-motion` holds the beam lit but static.
+turn it off. `beamVariant: 'ember'` narrows the palette to the brand reds and
+ambers. The orbit runs at a deliberate 6s so it stays ambient rather than
+pulling the eye off the conversation.
+
+The effect needs `@property` + `mask-composite`; where either is missing it
+is skipped entirely and the widget is unaffected. `prefers-reduced-motion`
+holds the beam lit but static.
 
 ---
 
