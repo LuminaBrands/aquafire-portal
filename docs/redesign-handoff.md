@@ -55,6 +55,18 @@ unchanged (verified: wrapper and composer both 620px).
 script, since the beam ships separate dark/light sweeps. Beam radius is
 auto-detected from the composer's `999px` pill.
 
+The composer uses `data-beam-size="rim"`, which travels the outline by arc
+length via `offset-path`. The conic sweep `sm`/`md` use maps by angle, which
+on this ~10:1 pill lit the whole top edge at once and skipped the rounded
+ends.
+
+**Rollout note:** the page's head sets `AQUAFIRE_ASSISTANT_CONFIG.beam =
+false`. Every other customer page loads `assistant.js`, and when this one
+does, that flag is what stops the widget from beaming on top of the hero
+composer — two animated glows for the same action. Keep the script when
+adding the widget here; verified by injecting `assistant.js` at runtime
+(hero beams, widget renders with zero `.afa-beam` elements).
+
 ## Open items / decisions awaiting the user
 
 - **single-font hook finding**: Figtree-only is deliberate (now written

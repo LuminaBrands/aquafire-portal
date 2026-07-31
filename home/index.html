@@ -34,6 +34,16 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       } catch (e) {}
     })();
   </script>
+  <script>
+    // The hero composer already carries a Border Beam and is this page's
+    // primary action, so the Ember widget must NOT beam here as well -- two
+    // animated glows competing for the same action reads worse than either
+    // alone. This page does not load assistant.js yet; the config is set now
+    // so the widget is already correct on the day the rollout adds it.
+    // Merged, not assigned, so it cannot clobber other config set later.
+    window.AQUAFIRE_ASSISTANT_CONFIG = window.AQUAFIRE_ASSISTANT_CONFIG || {};
+    window.AQUAFIRE_ASSISTANT_CONFIG.beam = false;
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
