@@ -48,6 +48,19 @@ studies → mix6 light graft → b1–b3 imagery integrations → home.
   was never config-suppressed — the user hasn't explicitly confirmed
   suppression. Next session: ask once, then
   `/impeccable hooks ignore-rule single-font --shared` if confirmed.
+- **design-system-font/-color findings on the study folders**: once
+  DESIGN.md landed, the hook began flagging every exploration comp
+  (v1–v5, v4a–v4e, mix1–mix6, b1–b3, image-options.html — ~500 findings)
+  for using fonts/colors outside the committed system. That's
+  definitional: they are archived studies of *other* worlds, kept as
+  history. Classified as fixtures, not drift; nothing was changed or
+  suppressed. Next session: confirm with the user, then
+  `/impeccable hooks ignore-file` each study folder's index.html (or
+  exclude them in `.impeccable/config.json`) so audits only police
+  `home/` and rolled-out pages. The ~26 findings on `home/index.html`
+  itself are extractor literal-matching noise (glass rgba fills, scrims,
+  orb gradient stops live in DESIGN.md prose/sidecar, not frontmatter) —
+  also intentional.
 - **Imagery hosting**: the lobby photo is hot-linked from Higgsfield's CDN
   (`d8j0ntlcm91z4.cloudfront.net/user_32F7tD19jlevIep1EHCmpFuKJOX/hf_20260731_035654_66231451-0a23-45de-b19a-c56621d49d24.png`).
   That URL is outside our control — before production, upload it to the
