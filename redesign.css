@@ -351,3 +351,48 @@ a { color: inherit; }
   .nav-btn { display: none; }
   .phead { padding: 52px 0 10px; }
 }
+
+/* ── Legacy token bridge ──────────────────────────────────────────────────
+   troubleshoot.css, styles.css and water-care-styles.css predate this design
+   system and read ~270 `var(--old-name, fallback)` references. Binding those
+   names here makes the existing tool UIs adopt the new palette AND follow the
+   theme switch; without it they silently fall back to their hardcoded 2025
+   defaults inside a redesigned page.
+
+   --ember is deliberately absent: it already exists above, bound per theme,
+   and those stylesheets read the same name. Delete a line here once its
+   consumer has been restyled onto the new tokens directly. */
+:root {
+  --bg: #101216;
+  --surface: rgba(255,255,255,0.045);
+  --surface-alt: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.12);
+  --border-warm: rgba(255,138,74,0.26);
+  --text: #f3f4f6;
+  --text-muted: #8d939f;
+  --red: #ff8a4a;
+  --red-dark: #cf4e16;
+  --red-glow: rgba(255,138,74,0.15);
+  --amber: #e8a838;
+  --amber-dim: #c78820;
+  --blue: #6fc3ff;
+  --blue-dim: #2f8fd0;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+:root[data-theme="light"] {
+  --bg: #eef0f3;
+  --surface: rgba(255,255,255,0.72);
+  --surface-alt: rgba(255,255,255,0.9);
+  --border: #e2e4e9;
+  --border-warm: rgba(207,78,22,0.24);
+  --text: #171a1f;
+  --text-muted: #6a7280;
+  --red: #cf4e16;
+  --red-dark: #a83c0f;
+  --red-glow: rgba(207,78,22,0.12);
+  --amber: #b8801f;
+  --amber-dim: #8f6416;
+  --blue: #1c76c9;
+  --blue-dim: #135697;
+}
