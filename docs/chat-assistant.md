@@ -119,7 +119,7 @@ host's `--afa-*` tokens, so restyling it is a matter of rebinding those on the
 container. One exception: `.afa-head` has a hardcoded gradient rather than a
 token, so override it directly if the host's surface is not dark.
 
-`home/index.html` is the first consumer &mdash; its hero composer expands in
+`index.html` is the first consumer &mdash; its hero composer expands in
 place into this panel.
 
 ### Border Beam

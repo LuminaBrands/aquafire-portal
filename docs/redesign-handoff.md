@@ -5,9 +5,20 @@ State of the impeccable-driven redesign (PR #66, branch
 with zero re-discovery. Written at the end of the exploration phase, just
 after the visual world was committed.
 
+## Promoted to the root (2026-07-31)
+
+The committed direction now **is** `index.html`; the `home/` folder is gone and
+the old bento-grid homepage it replaced is in git history. Its rewards wiring
+was ported across in the same move -- the redesign had none, and promoting it
+as-is would have silently killed the points display and 12 earning hooks. The
+journey band is now the rewards progress display (`#rb-home-bar-fill`,
+`#rb-home-bar-label`), the nav points chip is `#rb-home-points`, and the 11
+earning links carry their `data-reward` hooks again. `contact-sales` has no
+equivalent link in the new design and is currently unearnable -- see below.
+
 ## Where things stand
 
-**Committed direction: `home/index.html`** — "Hero Bleed × Dual Theme"
+**Committed direction: `index.html`** — "Hero Bleed × Dual Theme"
 (compare id `home` / `home-light`). It is the token source of truth and
 the page every rollout decision copies from. `DESIGN.md` +
 `.impeccable/design.json` carbonize it. The user confirmed:
@@ -33,7 +44,7 @@ studies → mix6 light graft → b1–b3 imagery integrations → home.
 
 ## Immediately pending (user's explicit next asks)
 
-- **Copy pass on `home/`**: the user wants to change "specifics like
+- **Copy pass on `index.html`**: the user wants to change "specifics like
   phrasing and which prompt cards show" (murmur chips, row cards) before
   anything else. Do this first next session.
 - Then: `/impeccable` finish review of `home`, and roll the design across
@@ -43,7 +54,7 @@ studies → mix6 light graft → b1–b3 imagery integrations → home.
 
 ## Border Beam on the hero composer (added 2026-07-31)
 
-`home/index.html` now loads `../beam.css` + `../beam.js` and wraps the hero
+`index.html` now loads `../beam.css` + `../beam.js` and wraps the hero
 composer in `.composer-beam.af-beam` (`data-beam-variant="colorful"`). The
 wrapper exists because `.composer` already spends both of its own
 pseudo-elements — `::before` on the liquid-glass rim, `::after` on the hover
@@ -85,7 +96,7 @@ adding the widget here; verified by injecting `assistant.js` at runtime
   suppressed. Next session: confirm with the user, then
   `/impeccable hooks ignore-file` each study folder's index.html (or
   exclude them in `.impeccable/config.json`) so audits only police
-  `home/` and rolled-out pages. The ~26 findings on `home/index.html`
+  `index.html` and rolled-out pages. The ~26 findings on `index.html`
   itself are extractor literal-matching noise (glass rgba fills, scrims,
   orb gradient stops live in DESIGN.md prose/sidecar, not frontmatter) —
   also intentional.
@@ -93,9 +104,9 @@ adding the widget here; verified by injecting `assistant.js` at runtime
   (`d8j0ntlcm91z4.cloudfront.net/user_32F7tD19jlevIep1EHCmpFuKJOX/hf_20260731_035654_66231451-0a23-45de-b19a-c56621d49d24.png`).
   That URL is outside our control — before production, upload it to the
   Shopify CDN (the repo's convention for all imagery) and swap the URL in
-  `home/index.html` (3 places: preload, .scene img) and `image-options.html`.
+  `index.html` (3 places: preload, .scene img) and `image-options.html`.
   Shopify MCP needed approval in the original session.
-- **Old homepage**: `index.html` still is the live bento homepage; `home/`
+- **Old homepage**: `index.html` still is the live bento homepage; `index.html`
   replaces it only when the user says so.
 - Rewards/journey numbers on `home` (0/17 modules, +500, +300) mirror the
   real rewards system — keep in sync if rewards change.
@@ -114,7 +125,7 @@ adding the widget here; verified by injecting `assistant.js` at runtime
 - **Real-image renders**: the Higgsfield MCP `sandbox_exec` sandbox has
   unrestricted network + Playwright. Recipe: clone the public repo there
   (`git clone -b <branch> https://github.com/LuminaBrands/aquafire-portal`),
-  `npx playwright screenshot ... "file:///home/user/s/home/index.html?theme=light"`,
+  `npx playwright screenshot ... "file:///home/user/s/index.html?theme=light"`,
   then `media_upload` (presigned PUT from inside the sandbox) +
   `media_confirm` to deliver. Gotchas: the sandbox dies ~10s after each
   call (chain everything in one command); don't guard the static server

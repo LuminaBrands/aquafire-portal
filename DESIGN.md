@@ -106,7 +106,7 @@ The same room exists in two lightings, switched live by a theme button:
 and **light "showroom"** (daylight, `#e9ebef` ground, white glass with ink
 type). Every visual decision is a semantic token with a binding in each
 theme; nothing is styled for only one lighting. The reference
-implementation and token source of truth is `home/index.html`.
+implementation and token source of truth is `index.html`.
 
 The old portal look (flat dark cards, red-primary branding, Poppins/Inter)
 is the anti-reference: it read as a SaaS dashboard. This world is a
@@ -158,7 +158,7 @@ bar hues.
 
 **The Two Lightings Rule.** Never introduce a raw color into a component.
 Every color, fill, stroke, rim, and shadow references a token that defines
-both a dark and a light binding (see `home/index.html` `:root` and
+both a dark and a light binding (see `index.html` `:root` and
 `:root[data-theme="light"]`).
 
 ## Typography

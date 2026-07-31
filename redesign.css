@@ -1,6 +1,6 @@
 /* ── Aquafire portal — redesign design system ─────────────────────────────────
    The shared layer of the "Hero Bleed x Dual Theme" direction committed in
-   home/index.html (see DESIGN.md and docs/redesign-handoff.md). Extracted so
+   index.html (see DESIGN.md and docs/redesign-handoff.md). Extracted so
    the rollout does not paste the token system into every page -- the portal
    has no templating, and duplicated nav is already its worst maintenance
    problem (CLAUDE.md gotchas). One copy here; per-page CSS stays per page.
@@ -264,7 +264,7 @@ a { color: inherit; }
 }
 
 /* ── Inner-page chrome ────────────────────────────────────────────────────
-   home/ is a hero page; every other page needs a nav bar with a real link
+   The homepage is a hero page; every other page needs a nav bar with a real link
    list, a page header, a tile grid and a full footer. These live here so the
    rollout adds markup, not styles. */
 
