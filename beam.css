@@ -12,7 +12,7 @@
      --af-beam-angle    registered @property angle; animating it spins the sweep
 
    Markup:
-     <div class="af-beam" data-beam-size="md" data-beam-variant="ember">
+     <div class="af-beam" data-beam-size="md" data-beam-variant="colorful">
        <div class="card">…</div>
      </div>
 
@@ -54,9 +54,9 @@
 
   --af-beam-width: 1px;
   /* Slower than the original package's 1.96s. At speed the traveling beam
-     pulls the eye away from the content it is meant to frame; a ~6s orbit
-     reads as ambient rather than as something demanding attention. */
-  --af-beam-duration: 6s;
+     pulls the eye away from the content it is meant to frame; ~4s keeps it
+     ambient while still reading as movement. */
+  --af-beam-duration: 4s;
   --af-beam-strength: 1;
   --af-beam-brightness: 1.3;
   --af-beam-saturation: 1.2;
@@ -424,7 +424,7 @@
 /* ── Line: bottom-edge traveling beam ── */
 
 .af-beam[data-beam-size="line"] {
-  --af-beam-duration: 7s;
+  --af-beam-duration: 4.5s;
   --af-beam-stroke-opacity: 1.14;
   --af-beam-inner-opacity: 0.7;
   --af-beam-bloom-opacity: 0.8;

@@ -1065,7 +1065,7 @@
     /* Colours live in custom properties so a variant only overrides nine
        values instead of restating every gradient. Default is the full
        spectrum; data-beam-variant="ember" narrows it to the fire palette. */
-    '.afa-beam{--afa-beam-w:1px;--afa-beam-dur:6s;--afa-beam-strength:1;--afa-beam-hue:30deg;' +
+    '.afa-beam{--afa-beam-w:1px;--afa-beam-dur:4s;--afa-beam-strength:1;--afa-beam-hue:30deg;' +
       '--afa-b1:rgb(255,50,100);--afa-b2:rgb(40,140,255);--afa-b3:rgb(50,200,80);' +
       '--afa-b4:rgb(30,185,170);--afa-b5:rgb(100,70,255);--afa-b6:rgb(40,140,255);' +
       '--afa-b7:rgb(255,120,40);--afa-b8:rgb(240,50,180);--afa-b9:rgb(180,40,240);' +
@@ -1096,7 +1096,7 @@
     '.afa-panel.afa-beam.afa-beam-on::before{display:none;}',
     /* Ember is thinking: spin faster and brighter, so the beam reads as a
        live activity indicator rather than pure decoration. */
-    '.afa-beam.afa-beam-busy{--afa-beam-dur:2.8s;--afa-beam-strength:1.9;}',
+    '.afa-beam.afa-beam-busy{--afa-beam-dur:1.8s;--afa-beam-strength:1.9;}',
     '@keyframes afaBeamSpin{to{--afa-beam-angle:360deg;}}',
     '@keyframes afaBeamIn{to{--afa-beam-opacity:1;}}',
     '@keyframes afaBeamHue{0%,100%{filter:hue-rotate(calc(var(--afa-beam-hue) * -1)) brightness(1.3) saturate(1.2);}50%{filter:hue-rotate(var(--afa-beam-hue)) brightness(1.3) saturate(1.2);}}',

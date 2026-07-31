@@ -96,7 +96,7 @@ reply, so it doubles as a live activity indicator alongside the typing dots.
 
 Set `beam: 'panel'` to rim the whole chat window instead, or `beam: false` to
 turn it off. `beamVariant: 'ember'` narrows the palette to the brand reds and
-ambers. The orbit runs at a deliberate 6s so it stays ambient rather than
+ambers. The orbit runs at a deliberate 4s so it stays ambient rather than
 pulling the eye off the conversation.
 
 The effect needs `@property` + `mask-composite`; where either is missing it
