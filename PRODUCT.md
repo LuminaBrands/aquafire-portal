@@ -21,6 +21,8 @@ The Aquafire Interactive Owner's Guide — a self-serve documentation and tools 
 
 Success (user-confirmed): **fewer support tickets** (owners resolve issues themselves via the Troubleshooter, guides, and Ember instead of emailing support) and **dealer enablement** (trade partners rely on the portal as their working reference).
 
+The **rewards journey is a deliberate engagement mechanic** (user-confirmed 2026-07-31): gamification (17 guide modules, points, +500 setup / +300 warranty bonuses) should visibly encourage users deep into the guide journey, not sit as an afterthought.
+
 ## Positioning
 
 The only interactive, model-aware companion for Aquafire water-vapor fireplaces: guided decision-tree troubleshooting, an enclosure dimension calculator with cutout diagrams, and a ZIP-code water-hardness tool — all grounded in Aquafire's official documentation with a traceable source archive, and embeddable directly into aquafire.com.
@@ -45,6 +47,7 @@ The only interactive, model-aware companion for Aquafire water-vapor fireplaces:
 
 - **Binding (user-confirmed 2026-07-24):** the Aquafire name, logo, and official product imagery (Shopify CDN) only.
 - **Explicitly not binding:** the current dark theme, Aquafire red `#c0392b` palette, Poppins/Inter typography, and existing component language. The user opened the entire visual world for replacement in a redesign; the incumbent look is evidence, not authority.
+- **Vibrant color mixing is a differentiator (user-confirmed 2026-07-31):** Aquafire's dual LED light bars enable rich color mixing beyond standard RGB presets (front + back LED bars per the install specs). The redesign should carry subtle color elements drawn from a color-mixing palette — red/orange, frosty blue, greenish yellow, magenta — as brand expression.
 - Incumbent copy voice (plainspoken, owner-friendly, e.g. "Welcome to Your Aquafire Interactive Owner's Guide") is current practice, not a confirmed commitment.
 
 ## Evidence on Hand
