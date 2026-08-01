@@ -11,6 +11,7 @@ colors:
   chartreuse: "#c9e85c"
   magenta: "#ff5fa8"
   showroom: "#e9ebef"
+  showroom-deep: "#e2e5ea"
   ink: "#171a1f"
   ink-mid: "#4c525c"
   ink-dim: "#6a7280"
@@ -25,6 +26,8 @@ colors:
   orb-glow: "#ffd9ae"
   orb-body: "#e0641e"
   orb-shade: "#6e2a08"
+  photo-ink: "#f3f4f6"
+  photo-ink-dim: "#c9cdd5"
 typography:
   display:
     fontFamily: "Figtree, system-ui, sans-serif"
@@ -36,6 +39,12 @@ typography:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "1.05rem"
     fontWeight: 700
+  page-title:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "clamp(1.5rem, 5vw, 2rem)"
+    fontWeight: 700
+    lineHeight: 1.18
+    letterSpacing: "-0.025em"
   title:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "0.88rem"
@@ -147,6 +156,10 @@ palette and arrives mostly on interaction.
   end of the LED mix.
 - **Chartreuse** (#c9e85c dark / #aacc33 light): the Begin wing; growth and
   setup.
+- **Photo ink / photo ink dim** (#f3f4f6, #c9cdd5): the only text that does
+  not follow the theme. The hero greeting and its subtitle sit on the
+  photograph, which is the same photograph in both lightings, so they stay
+  light and lean on text-shadow for contrast instead of a token binding.
 - **Orb glow / body / shade** (#ffd9ae, #e0641e, #6e2a08): the three stops of
   Ember's radial-gradient orb, in that order from the 35%/30% highlight
   outward, over an inset `rgba(0,0,0,0.35)` shade. Not general-purpose fills --
@@ -197,6 +210,10 @@ second face without revisiting this file.
   greeting only; white in both themes with a soft shadow (it sits on the photo).
   Its fixed lower bound, 1.6rem, doubles as the stat size for the rewards
   band's standing total (tabular figures, magenta).
+- **Page title** (700, clamp(1.5rem, 5vw, 2rem)): the `.phead h1` on every
+  inner page. A step below Display on purpose — Display is Ember greeting
+  you from inside the photograph, and a section heading that shouts as loud
+  as the hero flattens the whole hierarchy.
 - **Headline** (700, 1.02–1.05rem): wing heads.
 - **Title** (600, 0.88rem): row-card titles, send button.
 - **Nav** (500, 0.83rem; 600 when current): links inside the nav capsule and

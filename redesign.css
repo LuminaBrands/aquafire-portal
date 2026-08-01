@@ -258,7 +258,9 @@ a { color: inherit; }
 }
 .row::after {
   content: ""; position: absolute; left: 13px; right: 13px; bottom: 0; height: 3px;
-  border-radius: 3px 3px 0 0; opacity: 0;
+  /* Pill: on a 3px-tall bar the radius clamps to half the height either
+     way, so this renders exactly as 3px did and stays on the scale. */
+  border-radius: 999px 999px 0 0; opacity: 0;
   transition: opacity 0.28s;
 }
 .row:hover::after, .row:focus-visible::after, .row:active::after { opacity: 1; }
@@ -311,7 +313,7 @@ a { color: inherit; }
 /* ── Close ───────────────────────────────────────── */
 .close { margin: 44px auto 0; max-width: 620px; text-align: center; }
 .close .stars { color: var(--ember-t); letter-spacing: 3px; font-size: 0.85rem; }
-.close blockquote { font-size: 1.1rem; font-weight: 500; margin-top: 10px; text-wrap: balance; }
+.close blockquote { font-size: 1.05rem; font-weight: 500; margin-top: 10px; text-wrap: balance; }
 .close figcaption { color: var(--text-dim); font-size: 0.82rem; margin-top: 10px; }
 .close figcaption a { color: var(--text-mid); text-decoration: none; }
 .close figcaption a:hover { color: var(--text-hi); text-decoration: underline; }
@@ -361,7 +363,7 @@ a { color: inherit; }
   display: flex; flex-direction: column; gap: 7px;
   padding: 20px 18px 22px; text-decoration: none;
   background: var(--row-bg); border: 1px solid var(--row-border);
-  border-radius: 18px; position: relative; overflow: hidden;
+  border-radius: 15px; position: relative; overflow: hidden;
   box-shadow: var(--row-shadow);
   transition: background-color 0.25s, border-color 0.25s,
               transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
@@ -376,7 +378,7 @@ a { color: inherit; }
 .tile p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
 .tile::after {
   content: ""; position: absolute; left: 18px; right: 18px; bottom: 0; height: 3px;
-  border-radius: 3px 3px 0 0; opacity: 0; transition: opacity 0.28s;
+  border-radius: 999px 999px 0 0; opacity: 0; transition: opacity 0.28s;
 }
 .tile:hover::after, .tile:focus-visible::after { opacity: 1; }
 .tiles .tile:nth-child(4n+1)::after { background: linear-gradient(90deg, transparent, var(--frost), transparent); }
