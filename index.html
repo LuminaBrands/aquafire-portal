@@ -162,22 +162,18 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     }
     .hero-chat-mount { height: clamp(360px, 56vh, 560px); }
 
-    /* Ember ships its own dark chrome; rebind its tokens so the panel wears
-       this page's glass and type instead of the corner-widget look. */
-    .hero-chat .afa-root {
+    /* Ember now carries the same tokens as this page, so the only thing left
+       to rebind is what the hero container itself provides: the surface and
+       the header tint, which would otherwise sit as a second panel on top of
+       the glass. Listed twice because the widget binds its light theme at
+       `:root[data-theme="light"] .afa-root`, which out-specifies a plain
+       `.hero-chat .afa-root` -- without the second selector the panel turns
+       opaque white the moment the page switches to light. */
+    .hero-chat .afa-root,
+    :root[data-theme="light"] .hero-chat .afa-root {
       --afa-bg: transparent;
-      --afa-surface: var(--cap-bg);
-      --afa-surface2: var(--cap-bg-hover);
-      --afa-border: var(--stroke);
-      --afa-text: var(--text-hi);
-      --afa-muted: var(--text-dim);
-      --afa-radius: 18px;
-      font-family: inherit;
+      --afa-head-bg: none;
     }
-    /* The header's gradient is hardcoded in assistant.js rather than
-       tokenised, so it has to be overridden here or it lands as a maroon
-       band across the glass. */
-    .hero-chat .afa-head { background: transparent; }
 
     @media (prefers-reduced-motion: reduce) {
       .greet .orb, .greet .greet-bubble, .greet .murmur,
