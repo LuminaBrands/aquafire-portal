@@ -268,6 +268,12 @@ off it. The recipe has four layers, applied together:
 3. **Directional conic rim**: a 1.2px border ring (padding-box mask trick) whose brightness varies around the perimeter — hot spot at ~315° (upper-left), faint counter-glint at ~135°; the light theme adds a dark refracted lower-right edge. Opacity 0.75–0.8 at rest, 1 on hover.
 4. **Whisper drop shadow**, slightly bottom-biased (e.g. `0 3px 9px -5px rgba(0,0,0,0.55)` dark / `0 2px 7px -4px rgba(23,26,31,0.16)` light); light-theme wings may carry the larger showroom shadow (`0 18px 40px -18px rgba(23,26,31,0.16), 0 3px 10px -4px rgba(23,26,31,0.07)`).
 
+**Type on the photograph** is the one exception to all of the above: it has
+no surface under it, so its contrast comes from a shadow rather than a
+ground. `--photo-shadow` (0 2px 20px) for the greeting, `--photo-shadow-sm`
+(a tight 4px pass plus a 14px halo) for the subtitle. Both are identical in
+the two themes -- the photo does not change with the lighting.
+
 ### Named Rules
 **The Debossed Glass Rule.** Surfaces look ever-so-slightly raised yet
 pressed in: flat face, inset top, rim carrying the glass. Never a glossy

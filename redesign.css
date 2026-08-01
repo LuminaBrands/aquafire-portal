@@ -64,6 +64,12 @@
     linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.028) 19%, rgba(255,255,255,0.028) 30%, transparent 31%),
     linear-gradient(180deg, #14171c 0%, #101216 55%, #0b0d10 100%);
   --puff-a-c: #262b34; --puff-b-c: #22262e; --puff-opacity: 0.5;
+  /* Type on the photograph earns its contrast from a shadow rather than a
+     ground, so unlike every other token these four are identical in both
+     themes -- the photo is the same photo in either lighting. */
+  --photo-ink: #f3f4f6; --photo-ink-dim: #c9cdd5;
+  --photo-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  --photo-shadow-sm: 0 1px 4px rgba(0,0,0,0.5), 0 1px 14px rgba(0,0,0,0.6);
   --logo-filter: none; --logo-foot-filter: none; --logo-foot-opacity: 0.65;
   --focus-ink: #f3f4f6;
   --ease: cubic-bezier(0.16,1,0.3,1);
@@ -113,6 +119,9 @@
     linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.5) 19%, rgba(255,255,255,0.5) 30%, transparent 31%),
     linear-gradient(107deg, transparent 52%, rgba(255,255,255,0.35) 53%, rgba(255,255,255,0.35) 66%, transparent 67%);
   --puff-a-c: #ffffff; --puff-b-c: #dde1e8; --puff-opacity: 0.55;
+  --photo-ink: #f3f4f6; --photo-ink-dim: #c9cdd5;
+  --photo-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  --photo-shadow-sm: 0 1px 4px rgba(0,0,0,0.5), 0 1px 14px rgba(0,0,0,0.6);
   --logo-filter: invert(1) brightness(0.25);
   --logo-foot-filter: invert(1) brightness(0.45); --logo-foot-opacity: 1;
   --focus-ink: #171a1f;

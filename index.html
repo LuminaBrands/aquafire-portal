@@ -68,8 +68,8 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     .greet > * { position: relative; }
     .greet .orb { width: 54px; height: 54px; }
     .greet-bubble { margin-top: 20px; max-width: 620px; position: relative; }
-    .greet-bubble h1 { color: #f3f4f6; font-size: clamp(1.6rem, 6vw, 2.25rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.18; text-wrap: balance; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
-    .greet-bubble p { color: #c9cdd5; font-size: 0.93rem; margin-top: 8px; text-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 1px 14px rgba(0,0,0,0.6); }
+    .greet-bubble h1 { color: var(--photo-ink); font-size: clamp(1.6rem, 6vw, 2.25rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.18; text-wrap: balance; text-shadow: var(--photo-shadow); }
+    .greet-bubble p { color: var(--photo-ink-dim); font-size: 0.93rem; margin-top: 8px; text-shadow: var(--photo-shadow-sm); }
     .composer {
       margin-top: 18px; width: min(620px, 100%);
       display: flex; align-items: center; gap: 10px;
