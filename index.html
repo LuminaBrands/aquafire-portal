@@ -227,7 +227,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     .j-sum b {
       font-size: 1.6rem; font-weight: 700; line-height: 1.15;
       letter-spacing: -0.025em; font-variant-numeric: tabular-nums;
-      color: var(--mag-t);
+      color: var(--ember-t);
     }
     .j-sum span { font-size: 0.76rem; color: var(--text-dim); }
     .j-cta {
@@ -245,19 +245,19 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     }
     .j-bar-fill {
       display: block; height: 100%; width: 0%; border-radius: 999px;
-      background: linear-gradient(90deg, var(--ember), var(--chart) 38%, var(--frost) 68%, var(--mag));
+      background: var(--ember);
       transition: width 0.6s var(--ease);
     }
     .j-meta { font-size: 0.76rem; color: var(--text-dim); }
     .j-meta strong { color: var(--text-hi); font-weight: 700; }
     .j-links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
-    /* Magenta is the rewards accent, but three magenta things in a row is
+    /* Ember is the rewards accent, but three orange things in a row is
        shouting -- the standing total keeps it, the primary link keeps it, the
        explainer steps back. */
     .j-links a { font-size: 0.76rem; font-weight: 600; color: var(--text-mid); text-decoration: none; }
-    .j-links a:first-child { color: var(--mag-t); }
+    .j-links a:first-child { color: var(--ember-t); }
     .j-links a:hover { text-decoration: underline; color: var(--text-hi); }
-    .j-links a:first-child:hover { color: var(--mag-t); }
+    .j-links a:first-child:hover { color: var(--ember-t); }
 
     /* ── Intent panes ────────────────────────────────── */
     .hall { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }

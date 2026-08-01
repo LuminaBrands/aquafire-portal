@@ -125,7 +125,7 @@ lifestyle brand's room.
 - Photography as atmosphere, never as a framed illustration
 - Monochrome glass at rest; LED spectrum color only on interaction edges
 - Conversation (composer + murmur chips) is the primary action everywhere
-- Rewards journey is always visible, magenta-flagged, never modal
+- Rewards are always visible, ember-flagged, never modal
 
 ## Colors
 
@@ -134,16 +134,20 @@ palette and arrives mostly on interaction.
 
 ### Primary
 - **Ember** (#ff8a4a dark / #ff6a3d light): the flame and the brand's warmth.
-  Ember's orb, the Resolve wing, halo glows, star ratings. The emotional
-  primary; still used sparingly.
+  Ember's orb, the Resolve wing, halo glows, star ratings, and every rewards
+  signal -- the band's standing total and progress fill, the nav points chip,
+  reward badges. The emotional primary; the widest-used accent, so reach for a
+  neutral first and let ember mean something.
 
 ### Secondary
 - **Frost** (#6fc3ff dark / #4aa8ef light): the Explore wing and the cool
   end of the LED mix.
 - **Chartreuse** (#c9e85c dark / #aacc33 light): the Begin wing; growth and
   setup.
-- **Magenta** (#ff5fa8 dark / #ff4d9e light): rewards and the journey band,
-  exclusively. If it's magenta, it earns points.
+- **Magenta** (#ff5fa8 dark / #ff4d9e light): the fourth LED hue. It closes
+  the spectrum bars and takes every fourth row/tile in the hover cycle. It
+  used to be the rewards flag; rewards are ember now, and magenta carries no
+  meaning of its own.
 
 ### Neutral
 - **Smoke** (#101216): dark-theme ground; glass fills are white at 3.5–12% alpha over it.
@@ -286,9 +290,11 @@ spring ease; LED bars slide in at the bottom edge.
   so the band shows the standing total, a pill progress bar and
   "N / 17 modules completed" -- not a sequence of steps. It replaced a 4-node
   track that implied one
-- **Magenta is the rewards accent** and stays scarce: the standing total and
-  the primary link take it, the secondary link steps back to mid-tone. The
-  band is the only rewards-colored surface
+- **Ember is the rewards accent** and stays scarce: the standing total, the
+  progress fill and the primary link take it, the secondary link steps back to
+  mid-tone. The fill is flat ember, not an LED spectrum -- a determinate bar
+  reads as one quantity, and a four-hue gradient implied segments it does not
+  have. Matches the amber score card on rewards.html
 
 ### Wings (intent panes)
 - **Shape:** 26px pane, blur 18px; contains head (bare tinted icon + headline), Ember tip bubble, rows, minis
