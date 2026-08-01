@@ -49,6 +49,7 @@
   --wing-shadow: 0 0 rgba(0,0,0,0);
   --tip-bg: rgba(16,18,22,0.4);
   --row-bg: rgba(13,15,19,0.4); --row-bg-hover: rgba(22,25,31,0.5);
+  --menu-bg: rgba(14,16,20,0.97);
   --row-border: rgba(255,255,255,0.07); --row-border-hover: rgba(255,255,255,0.13);
   --row-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.45), 0 2px 7px -4px rgba(0,0,0,0.5);
   --row-shadow-hover: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 6px 14px -7px rgba(0,0,0,0.6);
@@ -97,6 +98,7 @@
   --wing-shadow: 0 18px 40px -18px rgba(23,26,31,0.16), 0 3px 10px -4px rgba(23,26,31,0.07);
   --tip-bg: #f4f5f7;
   --row-bg: rgba(252,253,254,0.72); --row-bg-hover: #ffffff;
+  --menu-bg: rgba(255,255,255,0.97);
   --row-border: rgba(23,26,31,0.07); --row-border-hover: rgba(23,26,31,0.12);
   --row-shadow: inset 0 2px 4px -1px rgba(23,26,31,0.08), 0 2px 6px -4px rgba(23,26,31,0.14);
   --row-shadow-hover: inset 0 2px 4px -1px rgba(23,26,31,0.06), 0 5px 12px -6px rgba(23,26,31,0.2);
@@ -182,14 +184,56 @@ a { color: inherit; }
 .cap:hover::before, .composer:hover::before, .journey:hover::before, .row:hover::before { opacity: 1; }
 
 .page { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 18px; }
-.bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 0 0; }
-.bar .brand { padding: 10px 18px; }
-.bar .brand img { height: 16px; display: block; filter: var(--logo-filter); }
-.bar .links { display: none; gap: 8px; }
-.bar .links .cap { padding: 10px 18px; font-size: 0.88rem; font-weight: 600; }
-.bar-end { display: flex; align-items: center; gap: 8px; }
-.pts-chip { padding: 9px 16px; font-size: 0.84rem; font-weight: 600; color: var(--text-hi); }
-.pts-chip b { color: var(--mag-t); font-weight: 700; }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 20px 0 4px; }
+.bar .brand { padding: 11px 14px; }
+.bar .brand img { height: 17px; display: block; filter: var(--logo-filter); }
+
+/* One glass capsule holding the whole link set, each item a pill only on
+   hover or when current. Denser than a pill per link, which is what lets the
+   full menu fit rather than only the first few. */
+.bar .links {
+  display: none; gap: 2px;
+  background: var(--cap-bg); border: 1px solid var(--cap-border);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-radius: 999px; padding: 4px;
+  box-shadow: var(--cap-shadow);
+}
+.bar .links a {
+  display: block; padding: 8px 10px; border-radius: 999px; white-space: nowrap;
+  color: var(--text-mid); text-decoration: none;
+  font-size: 0.83rem; font-weight: 500;
+  transition: color 0.24s var(--ease), background-color 0.24s var(--ease);
+}
+.bar .links a:hover { color: var(--text-hi); background: var(--cap-bg-hover); }
+.bar .links a.is-here { color: var(--text-hi); background: var(--cap-bg-hover); font-weight: 600; }
+/* Overflow links that only belong in the mobile disclosure -- on desktop the
+   same destinations are the bar-end chips. */
+.bar .links a.in-menu { display: none; }
+.bar .links.open a.in-menu { display: block; }
+
+.bar-end { display: flex; align-items: center; gap: 7px; }
+.bar-end .cap { padding: 10px 14px; font-size: 0.83rem; font-weight: 600; }
+.pts-chip {
+  display: none; align-items: center; gap: 8px;
+  padding: 9px 15px; font-size: 0.83rem; font-weight: 600; color: var(--text-hi);
+}
+/* Reserved at the widest total the ledger can reach (4,100 pts) so the bar
+   is laid out for its worst case instead of growing into an overflow as
+   points are earned. */
+.pts-chip b {
+  color: var(--mag-t); font-weight: 700;
+  font-variant-numeric: tabular-nums; min-width: 5.4ch; text-align: right;
+}
+.pts-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex: none;
+  background: var(--ember); box-shadow: 0 0 8px 1px var(--ember);
+}
+.dealer-chip { display: none; }
+/* Dealer locator and rewards have no capsule link -- their chip carries the
+   current-page state instead. */
+.bar-end .cap.is-here, .bar-end .cap[aria-current="page"] {
+  color: var(--text-hi); background: var(--cap-bg-hover); border-color: var(--cap-border-hover);
+}
 .theme-btn { padding: 10px 12px; cursor: pointer; font: inherit; }
 .theme-btn svg { display: block; }
 .theme-btn .ico-moon { display: none; }
@@ -257,10 +301,23 @@ a { color: inherit; }
 .foot a { color: var(--text-dim); text-decoration: none; }
 .foot a:hover { color: var(--text-hi); }
 
-/* ── Desktop enhancement (shared) ── */
+/* ── Desktop enhancement (shared) ──
+   The bar sheds pieces as it narrows rather than wrapping or overflowing.
+   Measured in Chromium with Figtree loaded and the points chip at its maximum
+   (4,100 pts): capsule 653, brand ~110, end chips 332 with the dealer chip and
+   217 without. .page caps content at 1152 however wide the window gets, so the
+   full set only fits from a 1200 viewport; below that the dealer chip drops
+   first, then the capsule folds into the burger. Re-measure before adding a
+   link -- the widest state clears by ~28px. */
 @media (min-width: 920px) {
   .page { padding: 0 24px; }
+  .pts-chip { display: inline-flex; }
+}
+@media (min-width: 1080px) {
   .bar .links { display: flex; }
+}
+@media (min-width: 1200px) {
+  .dealer-chip { display: inline-flex; }
 }
 
 /* ── Inner-page chrome ────────────────────────────────────────────────────
@@ -327,12 +384,16 @@ a { color: inherit; }
 .nav-btn { display: inline-flex; padding: 10px 12px; cursor: pointer; font: inherit; }
 .nav-btn svg { display: block; }
 .bar .links.open {
-  display: flex; position: absolute; left: 18px; right: 18px; top: 74px;
-  flex-direction: column; gap: 6px; padding: 12px; z-index: 30;
-  background: var(--row-bg); border: 1px solid var(--row-border);
-  border-radius: 18px; backdrop-filter: blur(18px);
+  display: flex; position: absolute; left: 18px; right: 18px; top: 76px;
+  flex-direction: column; gap: 2px; padding: 8px; z-index: 30;
+  background: var(--menu-bg); border: 1px solid var(--row-border);
+  border-radius: 20px; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
   box-shadow: var(--row-shadow-hover);
 }
+.bar .links.open a { padding: 11px 14px; font-size: 0.92rem; border-radius: 13px; }
+/* The capsule's white-on-glass highlight vanishes against the near-opaque menu
+   in light theme, so the panel marks hover/current with the nub fill instead. */
+.bar .links.open a:hover, .bar .links.open a.is-here { background: var(--nub-bg); }
 .bar { position: relative; }
 
 /* Full footer for inner pages (home/ keeps its one-line .foot). */
@@ -348,8 +409,10 @@ a { color: inherit; }
 .pfoot-bottom { margin-top: 26px; color: var(--text-dim); font-size: 0.74rem; }
 
 @media (min-width: 920px) {
-  .nav-btn { display: none; }
   .phead { padding: 52px 0 10px; }
+}
+@media (min-width: 1080px) {
+  .nav-btn { display: none; }
 }
 
 /* ── Legacy token bridge ──────────────────────────────────────────────────

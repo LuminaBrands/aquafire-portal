@@ -42,15 +42,41 @@ the page every rollout decision copies from. `DESIGN.md` +
 `compare.html`): v1–v5 worlds → v4a–v4e Ember layouts → mix1–mix5 color
 studies → mix6 light graft → b1–b3 imagery integrations → home.
 
-## Immediately pending (user's explicit next asks)
+## Rollout status
 
-- **Copy pass on `index.html`**: the user wants to change "specifics like
-  phrasing and which prompt cards show" (murmur chips, row cards) before
-  anything else. Do this first next session.
-- Then: `/impeccable` finish review of `home`, and roll the design across
-  the portal's ~13 pages (nav is duplicated per page — see CLAUDE.md
-  gotchas). Suggested order: support/troubleshoot hub pages first (highest
-  traffic per PRODUCT.md), then tools, then guides.
+All 13 customer pages now carry the redesign chrome from `redesign.css`
+(`support.html` is the reference implementation). Still in draft on
+`claude/integrate-borderbeam-component-i6qga7` — nothing is live until the PR
+merges.
+
+## Nav bar (rebuilt 2026-08-01)
+
+Modelled on the v1 "Hearth Console" bar the user picked: one glass capsule
+holding **seven** links (Getting Started · Quick Start · Enclosure · Water
+Care · Maintenance · Troubleshoot · Support) with a pill only on hover or
+`is-here`, plus `Find a Dealer` and a `Rewards <points>` chip in `.bar-end`.
+The density is what makes seven items fit where six separate `.cap` pills did
+not.
+
+Widths are the binding constraint and were measured, not estimated —
+`.page` caps content at **1152px** no matter how wide the window is, and the
+full bar needs 1124 of it with the points chip at its ceiling (4,100 pts, the
+sum of every reward). That is ~28px of slack, so **re-measure before adding a
+link or lengthening a label**. Breakpoints, widest first: dealer chip at
+1200, capsule ↔ burger at 1080, points chip at 920.
+
+Two things that were not obvious:
+
+- The mobile disclosure panel needs its own near-opaque `--menu-bg`; the
+  translucent `--row-bg` let page text read straight through it, and
+  `backdrop-filter` alone did not save it.
+- `.pts-chip b` reserves its width with `tabular-nums` + `min-width` so the
+  bar is laid out for the maximum points total from the start instead of
+  growing into an overflow as the user earns points.
+
+`rewards.js`'s `updateHomeBanner()` used to bail early when
+`#rb-home-bar-fill` was absent, which would have left the points chip stuck
+at "0 pts" on all 12 non-home pages; each element is now guarded separately.
 
 ## Border Beam on the hero composer (added 2026-07-31)
 
@@ -106,8 +132,9 @@ adding the widget here; verified by injecting `assistant.js` at runtime
   Shopify CDN (the repo's convention for all imagery) and swap the URL in
   `index.html` (3 places: preload, .scene img) and `image-options.html`.
   Shopify MCP needed approval in the original session.
-- **Old homepage**: `index.html` still is the live bento homepage; `index.html`
-  replaces it only when the user says so.
+- **`contact-sales` reward is unearnable**: no link in the new design points
+  at the contact page, and `setupAutoTracking` only awards it on such a click.
+  Needs either a link somewhere or removal from `REWARDS`.
 - Rewards/journey numbers on `home` (0/17 modules, +500, +300) mirror the
   real rewards system — keep in sync if rewards change.
 

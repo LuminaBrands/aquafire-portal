@@ -440,13 +440,14 @@
     var barFill = document.getElementById('rb-home-bar-fill');
     var barLabel = document.getElementById('rb-home-bar-label');
     var ptsDisplay = document.getElementById('rb-home-points');
-    if (!barFill) return;
 
     var total = Object.keys(REWARDS).length;
     var done = Object.keys(completedRewards).length;
     var pct = total ? Math.round((done / total) * 100) : 0;
 
-    barFill.style.width = pct + '%';
+    // The journey bar is homepage-only; the points chip is in every page's nav,
+    // so each element is guarded separately rather than bailing on the first.
+    if (barFill) barFill.style.width = pct + '%';
     if (barLabel) barLabel.textContent = done + ' / ' + total + ' modules completed';
     if (ptsDisplay) ptsDisplay.textContent = userPoints.toLocaleString() + ' pts';
   }

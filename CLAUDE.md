@@ -111,13 +111,13 @@ Radius:         --radius: 14px | --radius-sm: 8px
 
 ## Navigation Structure
 
-All pages share the same nav bar (defined inline in each HTML file):
+All pages share the same nav bar (defined inline in each HTML file). Since the redesign it is one glass capsule of seven links plus two end chips, identical on all 13 pages:
 
 ```
-Home → Getting Started → Quick Start → Enclosure Guide → Water Care → Troubleshoot → Find a Dealer → Support
+[brand] │ Getting Started · Quick Start · Enclosure · Water Care · Maintenance · Troubleshoot · Support │ Find a Dealer · Rewards · ☰ · ☀
 ```
 
-(A few pages also slot **Maintenance** before Find a Dealer; `builder.html` adds **Build Yours**. The exact list varies slightly per page — match the page you're editing.)
+The page's own link carries `class="is-here" aria-current="page"` (guide pages point at Quick Start, `builder.html` at Enclosure; `rewards.html` / `dealer-locator.html` mark their end chip instead). `.in-menu` links (Find a Dealer, Rewards) are hidden on desktop — they only appear inside the burger panel, where the end chips aren't. Widths are tight: the full bar clears the 1152px content column by ~28px, so **re-measure before adding a link** (see the breakpoint comment in `redesign.css`). Breakpoints: capsule and burger swap at 1080px, the dealer chip appears at 1200px, the points chip at 920px.
 
 On the `aquafire-pro.html` / `aquafire-original.html` guide pages, the Troubleshoot nav link carries a `?model=pro` / `?model=original` param so the wizard pre-selects that model (same pattern as the Enclosure Guide link there).
 
