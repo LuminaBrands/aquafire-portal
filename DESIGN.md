@@ -146,7 +146,7 @@ palette and arrives mostly on interaction.
 
 ### Primary
 - **Ember** (#ff8a4a dark / #ff6a3d light): the flame and the brand's warmth.
-  Ember's orb, the Resolve wing, halo glows, star ratings, and every rewards
+  Ember's orb, the Fix wing, halo glows, star ratings, and every rewards
   signal -- the band's standing total and progress fill, the nav points chip,
   reward badges. The emotional primary; the widest-used accent, so reach for a
   neutral first and let ember mean something.
@@ -154,7 +154,7 @@ palette and arrives mostly on interaction.
 ### Secondary
 - **Frost** (#6fc3ff dark / #4aa8ef light): the Explore wing and the cool
   end of the LED mix.
-- **Chartreuse** (#c9e85c dark / #aacc33 light): the Begin wing; growth and
+- **Chartreuse** (#c9e85c dark / #aacc33 light): the Set up wing; growth and
   setup.
 - **Photo ink / photo ink dim** (#f3f4f6, #c9cdd5): the only text that does
   not follow the theme. The hero greeting and its subtitle sit on the
