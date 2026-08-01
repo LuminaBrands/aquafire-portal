@@ -4,36 +4,178 @@
   "title": "Design System: Aquafire Owner's Portal",
   "extensions": {
     "colorMeta": {
-      "ember": { "role": "primary", "displayName": "Ember", "canonical": "#ff8a4a", "tonalRamp": ["oklch(15% 0.05 45)", "oklch(27% 0.08 45)", "oklch(39% 0.11 45)", "oklch(51% 0.13 45)", "oklch(63% 0.15 45)", "oklch(75% 0.15 45)", "oklch(85% 0.10 45)", "oklch(95% 0.04 45)"] },
-      "frost": { "role": "secondary", "displayName": "Frost", "canonical": "#6fc3ff", "tonalRamp": ["oklch(15% 0.04 240)", "oklch(27% 0.06 240)", "oklch(39% 0.08 240)", "oklch(51% 0.10 240)", "oklch(64% 0.11 240)", "oklch(78% 0.11 240)", "oklch(87% 0.08 240)", "oklch(95% 0.03 240)"] },
-      "chartreuse": { "role": "secondary", "displayName": "Chartreuse", "canonical": "#c9e85c", "tonalRamp": ["oklch(15% 0.05 115)", "oklch(27% 0.08 115)", "oklch(40% 0.11 115)", "oklch(53% 0.13 115)", "oklch(67% 0.15 115)", "oklch(80% 0.16 115)", "oklch(88% 0.16 115)", "oklch(95% 0.08 115)"] },
-      "magenta": { "role": "secondary", "displayName": "Magenta (rewards only)", "canonical": "#ff5fa8", "tonalRamp": ["oklch(15% 0.06 355)", "oklch(26% 0.09 355)", "oklch(37% 0.12 355)", "oklch(48% 0.15 355)", "oklch(59% 0.17 355)", "oklch(70% 0.19 355)", "oklch(83% 0.12 355)", "oklch(95% 0.04 355)"] },
-      "smoke": { "role": "neutral", "displayName": "Smoke (dark ground)", "canonical": "#101216", "tonalRamp": ["oklch(17% 0.008 260)", "oklch(28% 0.008 260)", "oklch(39% 0.008 260)", "oklch(50% 0.008 260)", "oklch(61% 0.008 260)", "oklch(72% 0.008 260)", "oklch(84% 0.006 260)", "oklch(95% 0.004 260)"] },
-      "showroom": { "role": "neutral", "displayName": "Showroom (light ground)", "canonical": "#e9ebef", "tonalRamp": ["oklch(17% 0.008 260)", "oklch(28% 0.008 260)", "oklch(39% 0.008 260)", "oklch(50% 0.008 260)", "oklch(61% 0.008 260)", "oklch(72% 0.008 260)", "oklch(84% 0.006 260)", "oklch(94% 0.004 260)"] }
+      "ember": {
+        "role": "primary",
+        "displayName": "Ember",
+        "canonical": "#ff8a4a",
+        "tonalRamp": [
+          "oklch(15% 0.05 45)",
+          "oklch(27% 0.08 45)",
+          "oklch(39% 0.11 45)",
+          "oklch(51% 0.13 45)",
+          "oklch(63% 0.15 45)",
+          "oklch(75% 0.15 45)",
+          "oklch(85% 0.10 45)",
+          "oklch(95% 0.04 45)"
+        ]
+      },
+      "frost": {
+        "role": "secondary",
+        "displayName": "Frost",
+        "canonical": "#6fc3ff",
+        "tonalRamp": [
+          "oklch(15% 0.04 240)",
+          "oklch(27% 0.06 240)",
+          "oklch(39% 0.08 240)",
+          "oklch(51% 0.10 240)",
+          "oklch(64% 0.11 240)",
+          "oklch(78% 0.11 240)",
+          "oklch(87% 0.08 240)",
+          "oklch(95% 0.03 240)"
+        ]
+      },
+      "chartreuse": {
+        "role": "secondary",
+        "displayName": "Chartreuse",
+        "canonical": "#c9e85c",
+        "tonalRamp": [
+          "oklch(15% 0.05 115)",
+          "oklch(27% 0.08 115)",
+          "oklch(40% 0.11 115)",
+          "oklch(53% 0.13 115)",
+          "oklch(67% 0.15 115)",
+          "oklch(80% 0.16 115)",
+          "oklch(88% 0.16 115)",
+          "oklch(95% 0.08 115)"
+        ]
+      },
+      "magenta": {
+        "role": "secondary",
+        "displayName": "Magenta (rewards only)",
+        "canonical": "#ff5fa8",
+        "tonalRamp": [
+          "oklch(15% 0.06 355)",
+          "oklch(26% 0.09 355)",
+          "oklch(37% 0.12 355)",
+          "oklch(48% 0.15 355)",
+          "oklch(59% 0.17 355)",
+          "oklch(70% 0.19 355)",
+          "oklch(83% 0.12 355)",
+          "oklch(95% 0.04 355)"
+        ]
+      },
+      "smoke": {
+        "role": "neutral",
+        "displayName": "Smoke (dark ground)",
+        "canonical": "#101216",
+        "tonalRamp": [
+          "oklch(17% 0.008 260)",
+          "oklch(28% 0.008 260)",
+          "oklch(39% 0.008 260)",
+          "oklch(50% 0.008 260)",
+          "oklch(61% 0.008 260)",
+          "oklch(72% 0.008 260)",
+          "oklch(84% 0.006 260)",
+          "oklch(95% 0.004 260)"
+        ]
+      },
+      "showroom": {
+        "role": "neutral",
+        "displayName": "Showroom (light ground)",
+        "canonical": "#e9ebef",
+        "tonalRamp": [
+          "oklch(17% 0.008 260)",
+          "oklch(28% 0.008 260)",
+          "oklch(39% 0.008 260)",
+          "oklch(50% 0.008 260)",
+          "oklch(61% 0.008 260)",
+          "oklch(72% 0.008 260)",
+          "oklch(84% 0.006 260)",
+          "oklch(94% 0.004 260)"
+        ]
+      }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Ember's greeting only; white in both themes with a soft shadow (sits on the photograph)." },
-      "headline": { "displayName": "Headline", "purpose": "Wing heads and the journey band title." },
-      "title": { "displayName": "Title", "purpose": "Row-card titles, send button, nav caps." },
-      "body": { "displayName": "Body", "purpose": "Greeting subtitle, tip bubbles, descriptions." },
-      "label": { "displayName": "Label", "purpose": "Row subtitles, chips, minis, badges, journey captions." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "Ember's greeting only; white in both themes with a soft shadow (sits on the photograph)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Wing heads and the journey band title."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Row-card titles, send button, nav caps."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Greeting subtitle, tip bubbles, descriptions."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Row subtitles, chips, minis, badges, journey captions."
+      }
     },
     "shadows": [
-      { "name": "cap-rest-dark", "value": "inset 0 2px 5px -2px rgba(0,0,0,0.4), 0 3px 9px -5px rgba(0,0,0,0.55)", "purpose": "Debossed top + whisper drop for pills on smoke." },
-      { "name": "cap-hover-dark", "value": "inset 0 2px 5px -2px rgba(0,0,0,0.35), 0 6px 14px -7px rgba(0,0,0,0.6)", "purpose": "Hover: deboss eases, drop deepens as the pill lifts 2px." },
-      { "name": "row-rest-dark", "value": "inset 0 2px 6px -2px rgba(0,0,0,0.45), 0 2px 7px -4px rgba(0,0,0,0.5)", "purpose": "Row cards on smoke." },
-      { "name": "composer-dark", "value": "inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 8px 20px -12px rgba(0,0,0,0.6)", "purpose": "The composer floats slightly heavier than chips." },
-      { "name": "cap-rest-light", "value": "inset 0 2px 4px -1px rgba(23,26,31,0.09), 0 2px 7px -4px rgba(23,26,31,0.16)", "purpose": "Pills on showroom ground." },
-      { "name": "wing-light", "value": "0 18px 40px -18px rgba(23,26,31,0.16), 0 3px 10px -4px rgba(23,26,31,0.07)", "purpose": "Light-theme wings carry the larger showroom shadow." }
+      {
+        "name": "cap-rest-dark",
+        "value": "inset 0 2px 5px -2px rgba(0,0,0,0.4), 0 3px 9px -5px rgba(0,0,0,0.55)",
+        "purpose": "Debossed top + whisper drop for pills on smoke."
+      },
+      {
+        "name": "cap-hover-dark",
+        "value": "inset 0 2px 5px -2px rgba(0,0,0,0.35), 0 6px 14px -7px rgba(0,0,0,0.6)",
+        "purpose": "Hover: deboss eases, drop deepens as the pill lifts 2px."
+      },
+      {
+        "name": "row-rest-dark",
+        "value": "inset 0 2px 6px -2px rgba(0,0,0,0.45), 0 2px 7px -4px rgba(0,0,0,0.5)",
+        "purpose": "Row cards on smoke."
+      },
+      {
+        "name": "composer-dark",
+        "value": "inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 8px 20px -12px rgba(0,0,0,0.6)",
+        "purpose": "The composer floats slightly heavier than chips."
+      },
+      {
+        "name": "cap-rest-light",
+        "value": "inset 0 2px 4px -1px rgba(23,26,31,0.09), 0 2px 7px -4px rgba(23,26,31,0.16)",
+        "purpose": "Pills on showroom ground."
+      },
+      {
+        "name": "wing-light",
+        "value": "0 18px 40px -18px rgba(23,26,31,0.16), 0 3px 10px -4px rgba(23,26,31,0.07)",
+        "purpose": "Light-theme wings carry the larger showroom shadow."
+      }
     ],
     "motion": [
-      { "name": "ease-spring", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Default easing for transform lifts and rim opacity." },
-      { "name": "duration-color", "value": "0.25s-0.28s", "purpose": "Background, border, color, and edge-bar opacity transitions." },
-      { "name": "duration-lift", "value": "0.3s-0.32s", "purpose": "translateY(-2px) hover lifts and box-shadow changes." },
-      { "name": "duration-drift", "value": "46s / 58s", "purpose": "Ambient smoke-puff drift, alternating; disabled under prefers-reduced-motion." }
+      {
+        "name": "ease-spring",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Default easing for transform lifts and rim opacity."
+      },
+      {
+        "name": "duration-color",
+        "value": "0.25s-0.28s",
+        "purpose": "Background, border, color, and edge-bar opacity transitions."
+      },
+      {
+        "name": "duration-lift",
+        "value": "0.3s-0.32s",
+        "purpose": "translateY(-2px) hover lifts and box-shadow changes."
+      },
+      {
+        "name": "duration-drift",
+        "value": "46s / 58s",
+        "purpose": "Ambient smoke-puff drift, alternating; disabled under prefers-reduced-motion."
+      }
     ],
     "breakpoints": [
-      { "name": "desktop", "value": "920px" }
+      {
+        "name": "desktop",
+        "value": "920px"
+      }
     ]
   },
   "components": [
@@ -49,7 +191,7 @@
       "name": "Composer",
       "kind": "input",
       "refersTo": "composer",
-      "description": "Ask-Ember pill — the primary action; LED spectrum edge on hover.",
+      "description": "Ask-Ember pill \u2014 the primary action; LED spectrum edge on hover.",
       "html": "<a class=\"ds-composer\" href=\"#\"><span class=\"ds-composer-ph\">Message Ember&hellip;</span><span class=\"ds-send\">Ask <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></span></a>",
       "css": ".ds-composer { display: flex; align-items: center; gap: 10px; width: min(620px, 100%); position: relative; overflow: hidden; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(18px); border-radius: 999px; padding: 8px 8px 8px 20px; text-decoration: none; box-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 8px 20px -12px rgba(0,0,0,0.6); transition: border-color 0.28s, transform 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-composer::after { content: \"\"; position: absolute; left: 26px; right: 26px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; opacity: 0; background: linear-gradient(90deg, #ff8a4a, #c9e85c 38%, #6fc3ff 68%, #ff5fa8); transition: opacity 0.28s; } .ds-composer:hover { border-color: rgba(255,255,255,0.22); transform: translateY(-2px); } .ds-composer:hover::after { opacity: 1; } .ds-composer-ph { flex: 1; color: #8d939f; font: 400 0.95rem/1.6 Figtree, system-ui, sans-serif; text-align: left; } .ds-send { display: inline-flex; align-items: center; gap: 8px; flex: none; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.12); color: #f3f4f6; font: 600 0.9rem/1.6 Figtree, system-ui, sans-serif; padding: 10px 18px; border-radius: 999px; transition: background-color 0.25s, transform 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-composer:hover .ds-send { background: rgba(255,255,255,0.18); transform: translateX(2px); }"
     },
@@ -65,7 +207,7 @@
       "name": "Journey Band",
       "kind": "custom",
       "refersTo": "journey-band",
-      "description": "Rewards progress band — magenta-flagged, LED-hued nubs, the only rewards-colored surface.",
+      "description": "Rewards progress band \u2014 magenta-flagged, LED-hued nubs, the only rewards-colored surface.",
       "html": "<a class=\"ds-journey\" href=\"#\"><span class=\"ds-j-head\"><b>The Owner&rsquo;s Journey</b><span><strong>0 / 17</strong> modules &middot; earn points as you go</span></span><span class=\"ds-j-track\"><span class=\"ds-j-node ds-lit\"><span class=\"ds-nub\"></span><small><b>Start earning</b></small></span><span class=\"ds-j-node\"><span class=\"ds-nub\"></span><small>First guide</small></span><span class=\"ds-j-node\"><span class=\"ds-nub\"></span><small>Setup done <b>+500</b></small></span><span class=\"ds-j-node\"><span class=\"ds-nub\"></span><small>Warranty <b>+300</b></small></span></span><span class=\"ds-j-cta\">Sign in &rarr;</span></a>",
       "css": ".ds-journey { display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(18px); border-radius: 24px; padding: 18px 20px; text-decoration: none; color: #f3f4f6; font-family: Figtree, system-ui, sans-serif; box-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 4px 12px -8px rgba(0,0,0,0.55); transition: border-color 0.28s, transform 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-journey::after { content: \"\"; position: absolute; left: 22px; right: 22px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; opacity: 0; background: linear-gradient(90deg, #ff8a4a, #c9e85c 38%, #6fc3ff 68%, #ff5fa8); transition: opacity 0.28s; } .ds-journey:hover { border-color: rgba(255,255,255,0.22); transform: translateY(-2px); } .ds-journey:hover::after { opacity: 1; } .ds-j-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; } .ds-j-head b { font-size: 1.02rem; font-weight: 700; } .ds-j-head > span { font-size: 0.8rem; color: #8d939f; } .ds-j-head strong { color: #ff5fa8; font-weight: 700; } .ds-j-track { display: flex; align-items: center; gap: 6px; } .ds-j-node { flex: 1; display: flex; flex-direction: column; gap: 7px; min-width: 0; } .ds-nub { height: 5px; border-radius: 3px; background: rgba(255,255,255,0.08); } .ds-j-node.ds-lit .ds-nub { background: #ff8a4a; } .ds-j-node small { font-size: 0.7rem; color: #8d939f; line-height: 1.3; } .ds-j-node small b { color: #f3f4f6; font-weight: 600; } .ds-j-cta { font-size: 0.84rem; font-weight: 600; color: #ff5fa8; }"
     },
@@ -81,14 +223,22 @@
       "name": "Ember Orb",
       "kind": "custom",
       "refersTo": "cap-chip",
-      "description": "The assistant's avatar — warm radial orb with a detached hairline ring; never replaced by an icon.",
+      "description": "The assistant's avatar \u2014 warm radial orb with a detached hairline ring; never replaced by an icon.",
       "html": "<span class=\"ds-orb\" aria-hidden=\"true\"></span>",
       "css": ".ds-orb { display: inline-block; width: 54px; height: 54px; border-radius: 50%; position: relative; background: radial-gradient(circle at 35% 30%, #ffd9ae, #e0641e 62%, #6e2a08 100%); box-shadow: inset 0 -2px 6px rgba(0,0,0,0.35); } .ds-orb::after { content: \"\"; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); }"
+    },
+    {
+      "name": "Nav Capsule",
+      "kind": "nav",
+      "refersTo": "nav-capsule",
+      "description": "The primary nav: one glass pill container holding the whole link set, each link taking a pill only on hover or when current. Denser than a chip per link, which is what lets nine destinations fit the 1152px content column.",
+      "html": "<nav class=\"ds-navcap\"><a href=\"#\">Getting Started</a><a href=\"#\">Water Care</a><a class=\"is-here\" aria-current=\"page\" href=\"#\">Support</a></nav>",
+      "css": ".ds-navcap { display: inline-flex; gap: 2px; background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(18px); border-radius: 999px; padding: 4px; box-shadow: inset 0 2px 5px -2px rgba(0,0,0,0.4), 0 3px 9px -5px rgba(0,0,0,0.55); } .ds-navcap a { display: block; padding: 8px 10px; border-radius: 999px; white-space: nowrap; color: #b9bec8; text-decoration: none; font: 500 0.83rem/1.6 Figtree, system-ui, sans-serif; transition: color 0.24s cubic-bezier(0.16,1,0.3,1), background-color 0.24s cubic-bezier(0.16,1,0.3,1); } .ds-navcap a:hover { color: #f3f4f6; background: rgba(255,255,255,0.08); } .ds-navcap a.is-here { color: #f3f4f6; background: rgba(255,255,255,0.08); font-weight: 600; }"
     }
   ],
   "narrative": {
     "northStar": "The Glass Hearth",
-    "overview": "The portal is a room lit by the product it explains. A photographed hotel lobby — the fireplace glowing in marble — bleeds down from the top of the page and dissolves into the atmosphere; everything the visitor touches is liquid glass floating in front of that scene. Ember, the AI concierge (a warm orb), greets from inside the room, and the page is organized as a conversation first, three intent wings second. The product's one flamboyant trait — dual-LED color mixing — appears only as thin light bars along the edges of surfaces, the way the fireplace itself wears its color. The same room exists in two lightings, switched live by a theme button: dark smoke (default) and light showroom. Every visual decision is a semantic token with a binding in each theme; the reference implementation and token source of truth is index.html.",
+    "overview": "The portal is a room lit by the product it explains. A photographed hotel lobby \u2014 the fireplace glowing in marble \u2014 bleeds down from the top of the page and dissolves into the atmosphere; everything the visitor touches is liquid glass floating in front of that scene. Ember, the AI concierge (a warm orb), greets from inside the room, and the page is organized as a conversation first, three intent wings second. The product's one flamboyant trait \u2014 dual-LED color mixing \u2014 appears only as thin light bars along the edges of surfaces, the way the fireplace itself wears its color. The same room exists in two lightings, switched live by a theme button: dark smoke (default) and light showroom. Every visual decision is a semantic token with a binding in each theme; the reference implementation and token source of truth is index.html.",
     "keyCharacteristics": [
       "Mobile-first single column that fans out at one desktop breakpoint (920px)",
       "Photography as atmosphere, never as a framed illustration",
@@ -97,16 +247,44 @@
       "Rewards journey is always visible, magenta-flagged, never modal"
     ],
     "rules": [
-      { "name": "The Edge-on-Hover Rule", "body": "LED spectrum color (ember→chartreuse→frost→magenta gradient bars, 3px, along a surface's bottom edge) appears only on hover/focus/active. At rest the room is monochrome glass; interaction is what lights the LEDs.", "section": "colors" },
-      { "name": "The Deepened Ink Rule", "body": "On the light ground, colored text never uses the LED bar hues — it uses the deepened variants (ember-ink #cf4e16, frost-ink #1c76c9, chartreuse-ink #6f8f0a, magenta-ink #d9317f) for contrast. Bars and nubs keep full hue in both themes.", "section": "colors" },
-      { "name": "The Two Lightings Rule", "body": "Never introduce a raw color into a component. Every color, fill, stroke, rim, and shadow references a token that defines both a dark and a light binding.", "section": "colors" },
-      { "name": "The One Family Rule", "body": "Figtree only. If a surface feels flat, fix it with weight, size, or spacing — not a new font.", "section": "typography" },
-      { "name": "The Debossed Glass Rule", "body": "Surfaces look ever-so-slightly raised yet pressed in: flat face, inset top, rim carrying the glass. Never a glossy dome, never a heavy outer glow.", "section": "elevation" },
-      { "name": "The Directional Light Rule", "body": "All rims share one implied light source, upper-left. Do not rotate the conic hot spot per component.", "section": "elevation" },
-      { "name": "The White-on-Photo Rule", "body": "Type that sits on the photograph is white in both themes; the scrim, not the text color, adapts to the theme.", "section": "components" }
+      {
+        "name": "The Edge-on-Hover Rule",
+        "body": "LED spectrum color (ember\u2192chartreuse\u2192frost\u2192magenta gradient bars, 3px, along a surface's bottom edge) appears only on hover/focus/active. At rest the room is monochrome glass; interaction is what lights the LEDs.",
+        "section": "colors"
+      },
+      {
+        "name": "The Deepened Ink Rule",
+        "body": "On the light ground, colored text never uses the LED bar hues \u2014 it uses the deepened variants (ember-ink #cf4e16, frost-ink #1c76c9, chartreuse-ink #6f8f0a, magenta-ink #d9317f) for contrast. Bars and nubs keep full hue in both themes.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Lightings Rule",
+        "body": "Never introduce a raw color into a component. Every color, fill, stroke, rim, and shadow references a token that defines both a dark and a light binding.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Family Rule",
+        "body": "Figtree only. If a surface feels flat, fix it with weight, size, or spacing \u2014 not a new font.",
+        "section": "typography"
+      },
+      {
+        "name": "The Debossed Glass Rule",
+        "body": "Surfaces look ever-so-slightly raised yet pressed in: flat face, inset top, rim carrying the glass. Never a glossy dome, never a heavy outer glow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Directional Light Rule",
+        "body": "All rims share one implied light source, upper-left. Do not rotate the conic hot spot per component.",
+        "section": "elevation"
+      },
+      {
+        "name": "The White-on-Photo Rule",
+        "body": "Type that sits on the photograph is white in both themes; the scrim, not the text color, adapts to the theme.",
+        "section": "components"
+      }
     ],
     "dos": [
-      "Do reference tokens for every color, shadow, and rim — new surfaces get both theme bindings or they don't ship.",
+      "Do reference tokens for every color, shadow, and rim \u2014 new surfaces get both theme bindings or they don't ship.",
       "Do keep LED color on edges, nubs, badges, and icon tints; surfaces and text stay monochrome glass.",
       "Do keep pages mobile-first with the single 920px enhancement breakpoint.",
       "Do use the four-layer edged-glass recipe verbatim for any new surface (flat fill, debossed top, directional rim, whisper shadow).",
@@ -115,11 +293,11 @@
     ],
     "donts": [
       "Don't add gradient fills, glossy domes, or outer glows to glass surfaces.",
-      "Don't show LED edge bars at rest — hover/focus/active only.",
+      "Don't show LED edge bars at rest \u2014 hover/focus/active only.",
       "Don't put plates, chips, or cards behind icons or behind the hero title; they float bare.",
-      "Don't use full-hue LED colors for text on the light ground — use the deepened ink variants.",
+      "Don't use full-hue LED colors for text on the light ground \u2014 use the deepened ink variants.",
       "Don't introduce a second font family or revert to the old Poppins/Inter stack.",
-      "Don't frame the hero photograph in a card on the homepage hero — it bleeds and dissolves (the framed panorama band in b2/ is the sanctioned alternative for content pages, not the hero)."
+      "Don't frame the hero photograph in a card on the homepage hero \u2014 it bleeds and dissolves (the framed panorama band in b2/ is the sanctioned alternative for content pages, not the hero)."
     ]
   }
 }

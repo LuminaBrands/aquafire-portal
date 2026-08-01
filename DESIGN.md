@@ -37,6 +37,10 @@ typography:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "0.88rem"
     fontWeight: 600
+  nav:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "0.83rem"
+    fontWeight: 500
   body:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "0.93rem"
@@ -175,7 +179,13 @@ second face without revisiting this file.
 - **Display** (700, clamp(1.6rem, 6vw, 2.25rem), 1.18, -0.025em): Ember's
   greeting only; white in both themes with a soft shadow (it sits on the photo).
 - **Headline** (700, 1.02–1.05rem): wing heads, journey band title.
-- **Title** (600, 0.88rem): row-card titles, send button, nav caps.
+- **Title** (600, 0.88rem): row-card titles, send button.
+- **Nav** (500, 0.83rem; 600 when current): links inside the nav capsule and
+  the bar-end chips. A step below Title on purpose. The bar has to carry
+  seven destinations plus two chips inside a 1152px content column, and at
+  Title size that set measures ~65px too wide. Density is the point of the
+  capsule -- do not "fix" this back up to 0.88rem without re-measuring the
+  bar (see the breakpoint comment in redesign.css).
 - **Body** (400–500, 0.8–0.93rem, 1.6): greeting subtitle, tip bubbles, descriptions.
 - **Label** (500–700, 0.7–0.76rem): row subtitles, murmur chips, minis, badges, journey node captions.
 
@@ -231,6 +241,21 @@ spring ease; LED bars slide in at the bottom edge.
 - **Fill:** white 4.5% alpha dark / white 58% light; hover brightens fill and border, lifts 2px
 - **Text:** mid-tone gray/ink, brightening to high-emphasis on hover
 - **Rim:** directional conic (all glass surfaces carry it)
+
+### Nav capsule (primary navigation)
+- **Shape:** one full-pill glass container (999px, 4px padding, 1px border,
+  the shared cap fill/rim) holding the whole link set; each link is plain
+  text at the Nav step and only takes a pill (999px) on hover or when current
+- **Why a container, not a chip per link:** seven destinations plus two
+  bar-end chips have to fit a 1152px content column. Per-link chips fit six
+  at most; the capsule fits nine with ~28px to spare
+- **Degradation as the bar narrows:** the dealer chip drops below 1200, the
+  whole capsule folds into a burger disclosure below 1080, the points chip
+  hides below 920. Never wraps, never overflows
+- **Disclosure panel:** band radius (24px), near-opaque `--menu-bg` (a
+  translucent surface let page text read through it), rows at body size,
+  hover/current marked with the nub fill because the capsule's
+  white-on-glass highlight disappears against a white panel
 
 ### Composer (Ask Ember)
 - **Shape:** pill, padding 8px (20px text inset)
