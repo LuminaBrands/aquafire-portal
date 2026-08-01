@@ -953,11 +953,6 @@
   var SEND_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.4 20.4 21.8 12 3.4 3.6l2.5 7L14 12l-8.1 1.4-2.5 7z" fill="currentColor"/></svg>';
   var CLOSE_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-  // Absolute, because this CSS is injected into a merchant's document where a
-  // relative path would resolve against their host, not ours. PORTAL_BASE is
-  // the script's own directory unless configured otherwise.
-  var MARK_URL = pURL('ember-mark.webp');
-
   var CSS = [
     /* Tokens mirror redesign.css so the widget is the same material as the
        portal. Two bindings each: the dark set is the default (and what
@@ -967,8 +962,6 @@
        merchant's document and must not inherit their root font-size. That is
        why it cannot sit on DESIGN.md's rem type ramp. */
     '.afa-root{' +
-      '--afa-mark:url("' + MARK_URL + '") center / cover no-repeat;' +
-      '--afa-orb:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);' +
       '--afa-bg:#101216;--afa-head-bg:linear-gradient(135deg,rgba(255,138,74,.16) 0%,rgba(16,18,22,0) 62%);' +
       '--afa-surface:rgba(255,255,255,.045);--afa-surface2:rgba(255,255,255,.07);' +
       '--afa-border:rgba(255,255,255,.12);--afa-border-soft:rgba(255,255,255,.07);' +
@@ -1003,15 +996,11 @@
 
     /* Launcher. Ember's orb recipe from the design system, not a flat
        gradient chip -- it is the same character the portal greets you with. */
-    '.afa-root .afa-launcher{position:fixed;right:20px;bottom:20px;z-index:2147483000;width:60px;height:60px;border-radius:50%;background:var(--afa-mark),var(--afa-orb);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -2px 6px rgba(0,0,0,.35),0 8px 26px -8px rgba(224,100,30,.55),0 2px 8px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s cubic-bezier(.16,1,.3,1);}',
+    '.afa-root .afa-launcher{position:fixed;right:20px;bottom:20px;z-index:2147483000;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -2px 6px rgba(0,0,0,.35),0 8px 26px -8px rgba(224,100,30,.55),0 2px 8px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s cubic-bezier(.16,1,.3,1);}',
     '.afa-launcher svg{width:30px;height:30px;transition:transform .25s;}',
     '.afa-root .afa-launcher:hover{transform:translateY(-2px) scale(1.05);box-shadow:inset 0 -2px 6px rgba(0,0,0,.35),0 12px 32px -8px rgba(224,100,30,.7),0 3px 10px rgba(0,0,0,.35);}',
     '.afa-launcher .afa-ico-close{display:none;}',
     '.afa-launcher.afa-open .afa-ico-flame{display:none;}.afa-launcher.afa-open .afa-ico-close{display:block;}',
-    /* Open, the launcher is a close button rather than a brand mark, and the
-       chevron has to read against it -- laid over the artwork's own flame it
-       competes. Drops to the plain sphere for the duration. */
-    '.afa-root .afa-launcher.afa-open{background:var(--afa-orb);}',
     '.afa-badge{position:absolute;top:2px;right:2px;width:12px;height:12px;border-radius:50%;background:var(--afa-ember);border:2px solid var(--afa-bg);display:none;}',
     '.afa-launcher.afa-unread .afa-badge{display:block;}',
 
@@ -1027,8 +1016,8 @@
 
     /* Header */
     '.afa-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--afa-head-bg);border-bottom:1px solid var(--afa-border-soft);flex-shrink:0;}',
-    '.afa-avatar{position:relative;width:40px;height:40px;border-radius:50%;background:var(--afa-mark),var(--afa-orb);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 -2px 6px rgba(0,0,0,.35);}',
-    '.afa-avatar svg,.afa-mini-avatar svg,.afa-launcher .afa-ico-flame{display:none;}',
+    '.afa-avatar{position:relative;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;box-shadow:inset 0 -2px 6px rgba(0,0,0,.35);}',
+    '.afa-avatar svg{width:22px;height:22px;}',
     '.afa-dot{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;background:var(--afa-live);border:2px solid var(--afa-bg);}',
     '.afa-head-txt{flex:1;min-width:0;}',
     '.afa-head-txt h3{font-size:15px;font-weight:700;letter-spacing:-.01em;}',
@@ -1040,8 +1029,9 @@
     '.afa-msgs{flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--afa-border) transparent;}',
     '.afa-row{display:flex;gap:8px;max-width:100%;}',
     '.afa-row.afa-user{justify-content:flex-end;}',
-    '.afa-mini-avatar{width:26px;height:26px;border-radius:50%;background:var(--afa-mark),var(--afa-orb);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;box-shadow:inset 0 -2px 4px rgba(0,0,0,.35);}',
-        /* Bubble radius with the pinched corner on the speaker's side, per the
+    '.afa-mini-avatar{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;margin-top:2px;box-shadow:inset 0 -2px 4px rgba(0,0,0,.35);}',
+    '.afa-mini-avatar svg{width:15px;height:15px;}',
+    /* Bubble radius with the pinched corner on the speaker's side, per the
        design system's tip-bubble shape. */
     '.afa-bubble{max-width:82%;padding:10px 13px;border-radius:var(--afa-radius-bubble);font-size:13.8px;overflow-wrap:break-word;}',
     '.afa-row.afa-bot .afa-bubble{background:var(--afa-surface);border:1px solid var(--afa-border-soft);border-top-left-radius:4px;}',

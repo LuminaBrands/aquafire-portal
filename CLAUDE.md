@@ -165,4 +165,4 @@ This portal evolved through iterative Claude Code sessions:
 - **styles.css is enclosure-specific** despite the generic name. Shared styles are in `hub.css`.
 - **troubleshoot.css uses theme tokens with fallbacks** (e.g. `var(--blue, #4da6e8)`) — the per-page inline `:root` blocks only define a subset of the tokens listed in the Design System section, so the CSS can't rely on `--blue`/`--amber`/`--surface-alt` being present everywhere.
 - **No local dev server configured.** Open files directly or use any static server (`python -m http.server`, etc.).
-- **Images are on the Shopify CDN** with one exception: `ember-mark.webp`, Ember's brand mark, is committed to the repo root. It is referenced by `.orb` in `redesign.css` and by `--afa-mark` in `assistant.js` — the widget builds an absolute URL from `PORTAL_BASE`, because its CSS is injected into a merchant's document where a relative path would resolve against their host. 256px WebP (~12KB; the same PNG is 90KB), alpha already cut to a circle. A warm radial gradient sits underneath as the pre-decode fallback.
+- **Images are all on Shopify CDN** — no local image assets in the repo.

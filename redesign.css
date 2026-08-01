@@ -26,6 +26,7 @@
   --ground-fill: #101216;
   --text-hi: #f3f4f6; --text-mid: #b9bec8; --text-dim: #8d939f; --ico-ink: #b9bec8;
   --stroke: rgba(255,255,255,0.12); --stroke-hi: rgba(255,255,255,0.22);
+  --orb-ring: rgba(255,255,255,0.12);
   --orb-shadow: inset 0 -2px 6px rgba(0,0,0,0.35);
   --cap-bg: rgba(255,255,255,0.045); --cap-bg-hover: rgba(255,255,255,0.08);
   --cap-border: rgba(255,255,255,0.08); --cap-border-hover: rgba(255,255,255,0.15);
@@ -67,7 +68,6 @@
      ground, so unlike every other token these four are identical in both
      themes -- the photo is the same photo in either lighting. */
   --photo-ink: #f3f4f6; --photo-ink-dim: #c9cdd5;
-  --orb-glow: #ffd9ae; --orb-body: #e0641e; --orb-shade: #6e2a08;
   --photo-shadow: 0 2px 20px rgba(0,0,0,0.5);
   --photo-shadow-sm: 0 1px 4px rgba(0,0,0,0.5), 0 1px 14px rgba(0,0,0,0.6);
   --logo-filter: none; --logo-foot-filter: none; --logo-foot-opacity: 0.65;
@@ -81,6 +81,7 @@
   --ground-fill: linear-gradient(180deg, #f1f2f5 0%, #e9ebef 40%, #e2e5ea 100%);
   --text-hi: #171a1f; --text-mid: #4c525c; --text-dim: #6a7280; --ico-ink: #6a7280;
   --stroke: #e2e4e9; --stroke-hi: rgba(23,26,31,0.12);
+  --orb-ring: #cfd3da;
   --orb-shadow: inset 0 -2px 6px rgba(0,0,0,0.3), 0 8px 18px -8px rgba(224,100,30,0.5);
   --cap-bg: rgba(255,255,255,0.58); --cap-bg-hover: rgba(255,255,255,0.85);
   --cap-border: rgba(23,26,31,0.08); --cap-border-hover: rgba(23,26,31,0.13);
@@ -119,7 +120,6 @@
     linear-gradient(107deg, transparent 52%, rgba(255,255,255,0.35) 53%, rgba(255,255,255,0.35) 66%, transparent 67%);
   --puff-a-c: #ffffff; --puff-b-c: #dde1e8; --puff-opacity: 0.55;
   --photo-ink: #f3f4f6; --photo-ink-dim: #c9cdd5;
-  --orb-glow: #ffd9ae; --orb-body: #e0641e; --orb-shade: #6e2a08;
   --photo-shadow: 0 2px 20px rgba(0,0,0,0.5);
   --photo-shadow-sm: 0 1px 4px rgba(0,0,0,0.5), 0 1px 14px rgba(0,0,0,0.6);
   --logo-filter: invert(1) brightness(0.25);
@@ -170,19 +170,12 @@ a { color: inherit; }
   border-color: var(--cap-border-hover); color: var(--text-hi); transform: translateY(-2px);
   box-shadow: var(--cap-shadow-hover);
 }
-/* Ember's mark. A raster asset rather than the old CSS sphere, so the gradient
-   stops are gone -- the file carries its own neon rim and flame. Its alpha is
-   already cut to a circle; border-radius stays as belt-and-braces, and the
-   gradient underneath shows for the instant before it decodes. */
 .orb {
   border-radius: 50%; flex: none; position: relative;
-  background:
-    url("ember-mark.webp") center / cover no-repeat,
-    radial-gradient(circle at 35% 30%, var(--orb-glow), var(--orb-body) 62%, var(--orb-shade) 100%);
+  background: radial-gradient(circle at 35% 30%, #ffd9ae, #e0641e 62%, #6e2a08 100%);
   box-shadow: var(--orb-shadow);
 }
-/* No detached ring: the mark brings its own rim, and a second circle outside
-   it reads as a halo the artwork did not ask for. */
+.orb::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid var(--orb-ring); }
 
 /* Liquid-glass rim: bevel weight varies around the perimeter as if lit
    from the upper-left; each theme binds its own conic. */
