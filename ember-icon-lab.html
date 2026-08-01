@@ -31,7 +31,9 @@
   /* ── Option 0: the current orb, for comparison ───────────────────── */
   .m-orb {
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #ffd9ae, #e0641e 62%, #6e2a08 100%);
+    background:
+      url("ember-mark.webp") center / cover no-repeat,
+      radial-gradient(circle at 35% 30%, #ffd9ae, #e0641e 62%, #6e2a08 100%);
     box-shadow: var(--orb-shadow);
   }
 
@@ -181,9 +183,10 @@
 
   <!-- ══ current ══ -->
   <section class="opt">
-    <h2>Current <span>&mdash; Orb</span></h2>
-    <p>A static radial-gradient sphere. Reads as a bead or a planet more than fire, and holds
-    completely still next to a page that is otherwise alive.</p>
+    <h2>Current <span>&mdash; brand mark</span></h2>
+    <p>The supplied artwork (<code>ember-mark.webp</code>), now live across the portal. Static,
+    and a raster rather than vector, but unmistakably the brand. The three below remain here as
+    parked alternatives &mdash; they were explored before this mark existed.</p>
     <div class="sizes" id="row-orb"></div>
   </section>
 
