@@ -230,14 +230,19 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       color: var(--ember-t);
     }
     .j-sum span { font-size: 0.76rem; color: var(--text-dim); }
+    /* A text link, not a filled pill. As a bordered capsule on the dark panel
+       it read as another text input -- the same glass rounding and fill the
+       composer uses -- so it competed with the fields instead of the copy. */
     .j-cta {
-      display: inline-flex; align-items: center; gap: 8px; flex: none;
-      font: inherit; font-size: 0.83rem; font-weight: 600; cursor: pointer;
-      background: var(--send-bg); border: 1px solid var(--send-border);
-      color: var(--send-ink); padding: 10px 18px; border-radius: 999px;
-      transition: background-color 0.25s;
+      display: inline-flex; align-items: center; gap: 6px;
+      align-self: start; flex: none; padding: 0;
+      background: none; border: none; cursor: pointer;
+      font: inherit; font-size: 0.76rem; font-weight: 600;
+      color: var(--ember-t);
+      transition: color 0.22s;
     }
-    .j-cta:hover { background: var(--send-bg-hover); }
+    .j-cta:hover { text-decoration: underline; }
+    .j-cta svg { width: 13px; height: 13px; }
     .j-prog { display: flex; flex-direction: column; gap: 9px; }
     .j-bar {
       display: block; height: 6px; border-radius: 999px;
@@ -251,13 +256,10 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     .j-meta { font-size: 0.76rem; color: var(--text-dim); }
     .j-meta strong { color: var(--text-hi); font-weight: 700; }
     .j-links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
-    /* Ember is the rewards accent, but three orange things in a row is
-       shouting -- the standing total keeps it, the primary link keeps it, the
-       explainer steps back. */
+    /* Ember marks the standing total and the one action; these two are
+       navigation, so they stay quiet. Three orange things would be shouting. */
     .j-links a { font-size: 0.76rem; font-weight: 600; color: var(--text-mid); text-decoration: none; }
-    .j-links a:first-child { color: var(--ember-t); }
     .j-links a:hover { text-decoration: underline; color: var(--text-hi); }
-    .j-links a:first-child:hover { color: var(--ember-t); }
 
     /* ── Intent panes ────────────────────────────────── */
     .hall { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
@@ -300,7 +302,6 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       .journey { flex-direction: row; align-items: center; gap: 26px; margin-top: 38px; padding: 18px 26px; }
       .j-sum, .j-links, .j-cta { flex: none; }
       .j-prog { flex: 1; min-width: 190px; }
-      .j-cta { order: 4; }
       .j-head { flex-direction: column; align-items: flex-start; gap: 2px; flex: none; }
       .j-track { flex: 1; }
       .j-node small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

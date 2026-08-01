@@ -291,10 +291,13 @@ spring ease; LED bars slide in at the bottom edge.
   "N / 17 modules completed" -- not a sequence of steps. It replaced a 4-node
   track that implied one
 - **Ember is the rewards accent** and stays scarce: the standing total, the
-  progress fill and the primary link take it, the secondary link steps back to
-  mid-tone. The fill is flat ember, not an LED spectrum -- a determinate bar
-  reads as one quantity, and a four-hue gradient implied segments it does not
-  have. Matches the amber score card on rewards.html
+  progress fill and the one action (sign in / view profile) take it; the two
+  navigation links stay mid-tone. The fill is flat ember, not an LED spectrum
+  -- a determinate bar reads as one quantity, and a four-hue gradient implied
+  segments it does not have. Matches the amber score card on rewards.html
+- **The action is a text link, never a filled pill.** A bordered capsule here
+  reads as another text input -- same glass rounding and fill the composer
+  uses -- so it competes with the fields instead of the copy
 
 ### Wings (intent panes)
 - **Shape:** 26px pane, blur 18px; contains head (bare tinted icon + headline), Ember tip bubble, rows, minis
