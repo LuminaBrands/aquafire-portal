@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T05:00:00Z",
+  "generatedAt": "2026-08-01T00:00:00Z",
   "title": "Design System: Aquafire Owner's Portal",
   "extensions": {
     "colorMeta": {
@@ -93,6 +93,36 @@
           "oklch(84% 0.006 260)",
           "oklch(94% 0.004 260)"
         ]
+      },
+      "orb-glow": {
+        "role": "Ember's gradient highlight (35%/30%); same in both themes",
+        "displayName": "Orb glow",
+        "canonical": "#ffd9ae"
+      },
+      "orb-body": {
+        "role": "Ember's gradient body at 62%; same in both themes",
+        "displayName": "Orb body",
+        "canonical": "#e0641e"
+      },
+      "orb-shade": {
+        "role": "Ember's gradient edge at 100%; same in both themes",
+        "displayName": "Orb shade",
+        "canonical": "#6e2a08"
+      },
+      "photo-ink": {
+        "role": "Hero type on the photograph -- does not follow the theme",
+        "displayName": "Photo ink",
+        "canonical": "#f3f4f6"
+      },
+      "photo-ink-dim": {
+        "role": "Hero subtitle on the photograph -- does not follow the theme",
+        "displayName": "Photo ink dim",
+        "canonical": "#c9cdd5"
+      },
+      "showroom-deep": {
+        "role": "Bottom stop of the light ground gradient",
+        "displayName": "Showroom deep",
+        "canonical": "#e2e5ea"
       }
     },
     "typographyMeta": {
