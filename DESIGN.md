@@ -182,7 +182,9 @@ second face without revisiting this file.
 ### Hierarchy
 - **Display** (700, clamp(1.6rem, 6vw, 2.25rem), 1.18, -0.025em): Ember's
   greeting only; white in both themes with a soft shadow (it sits on the photo).
-- **Headline** (700, 1.02–1.05rem): wing heads, journey band title.
+  Its fixed lower bound, 1.6rem, doubles as the stat size for the rewards
+  band's standing total (tabular figures, magenta).
+- **Headline** (700, 1.02–1.05rem): wing heads.
 - **Title** (600, 0.88rem): row-card titles, send button.
 - **Nav** (500, 0.83rem; 600 when current): links inside the nav capsule and
   the bar-end chips. A step below Title on purpose. The bar has to carry
@@ -191,7 +193,8 @@ second face without revisiting this file.
   capsule -- do not "fix" this back up to 0.88rem without re-measuring the
   bar (see the breakpoint comment in redesign.css).
 - **Body** (400–500, 0.8–0.93rem, 1.6): greeting subtitle, tip bubbles, descriptions.
-- **Label** (500, 0.76rem): row subtitles, murmur chips, minis, journey node captions.
+- **Label** (500, 0.76rem): row subtitles, murmur chips, minis, the rewards
+  band's caption, progress meta and links.
 - **Label small** (700, 0.7rem): badges only -- the row's points chip and the
   reward badge. The floor of the ramp; nothing goes below it.
 
@@ -276,14 +279,22 @@ spring ease; LED bars slide in at the bottom edge.
 - **Hue cycling:** nth-child(4n+1..4) cycles frost → chartreuse → ember → magenta for the hover edge bar and icon tint (text-safe variants for icon color in light)
 - **Right edge:** arrow glyph; optional magenta points badge before it
 
-### Journey band (rewards)
-- **Shape:** 24px band; column on mobile, row on desktop
-- **Track:** 4 flex nodes with 5px nubs; unlit nubs are white 8% / #e5e8ec, lit nubs take the LED hue for their position
-- **All magenta text** (count, CTA) uses magenta / magenta-ink; the band is the only rewards-colored surface
+### Rewards band (homepage)
+- **Shape:** 24px band; column on mobile, row on desktop (total, progress,
+  links, then the CTA at the far end)
+- **Reports state, never a route.** The 17 modules are collected in any order,
+  so the band shows the standing total, a pill progress bar and
+  "N / 17 modules completed" -- not a sequence of steps. It replaced a 4-node
+  track that implied one
+- **Magenta is the rewards accent** and stays scarce: the standing total and
+  the primary link take it, the secondary link steps back to mid-tone. The
+  band is the only rewards-colored surface
 
 ### Wings (intent panes)
 - **Shape:** 26px pane, blur 18px; contains head (bare tinted icon + headline), Ember tip bubble, rows, minis
-- Explore = frost, Begin = chartreuse, Resolve = ember (head icon tint only — the pane itself stays neutral)
+- Head icons are neutral ink at 22px, matching the tile icons on every other
+  page; the wing's own hue (Explore = frost, Begin = chartreuse,
+  Resolve = ember) shows in its row hovers and underlines, not the head
 
 ### Theme toggle
 - A cap-styled icon button in the bar: sun icon in dark theme, moon in light.
