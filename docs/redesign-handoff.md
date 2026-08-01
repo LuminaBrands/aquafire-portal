@@ -132,6 +132,11 @@ adding the widget here; verified by injecting `assistant.js` at runtime
   Shopify CDN (the repo's convention for all imagery) and swap the URL in
   `index.html` (3 places: preload, .scene img) and `image-options.html`.
   Shopify MCP needed approval in the original session.
+- **`rewards.css` is still on the 2025 palette**: Inter, `#c0392b`, `#2c3038`
+  and friends -- the redesign never reached it, so the design hook reports it
+  as ~40 findings of whole-file drift. The badge styling the row/tile work
+  touched was restated in place rather than retoned, because retoning the file
+  is its own pass. Do that pass, or scope the rule to the file.
 - **`contact-sales` reward is unearnable**: no link in the new design points
   at the contact page, and `setupAutoTracking` only awards it on such a click.
   Needs either a link somewhere or removal from `REWARDS`.

@@ -50,6 +50,10 @@ typography:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "0.76rem"
     fontWeight: 500
+  labelSmall:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "0.7rem"
+    fontWeight: 700
 rounded:
   pill: "999px"
   pane: "26px"
@@ -187,7 +191,9 @@ second face without revisiting this file.
   capsule -- do not "fix" this back up to 0.88rem without re-measuring the
   bar (see the breakpoint comment in redesign.css).
 - **Body** (400–500, 0.8–0.93rem, 1.6): greeting subtitle, tip bubbles, descriptions.
-- **Label** (500–700, 0.7–0.76rem): row subtitles, murmur chips, minis, badges, journey node captions.
+- **Label** (500, 0.76rem): row subtitles, murmur chips, minis, journey node captions.
+- **Label small** (700, 0.7rem): badges only -- the row's points chip and the
+  reward badge. The floor of the ramp; nothing goes below it.
 
 ### Named Rules
 **The One Family Rule.** Figtree only. If a surface feels flat, fix it with
