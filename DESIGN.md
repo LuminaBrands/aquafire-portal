@@ -22,6 +22,9 @@ colors:
   frost-ink: "#1c76c9"
   chartreuse-ink: "#6f8f0a"
   magenta-ink: "#d9317f"
+  orb-glow: "#ffd9ae"
+  orb-body: "#e0641e"
+  orb-shade: "#6e2a08"
 typography:
   display:
     fontFamily: "Figtree, system-ui, sans-serif"
@@ -144,6 +147,12 @@ palette and arrives mostly on interaction.
   end of the LED mix.
 - **Chartreuse** (#c9e85c dark / #aacc33 light): the Begin wing; growth and
   setup.
+- **Orb glow / body / shade** (#ffd9ae, #e0641e, #6e2a08): the three stops of
+  Ember's radial-gradient orb, in that order from the 35%/30% highlight
+  outward, over an inset `rgba(0,0,0,0.35)` shade. Not general-purpose fills --
+  they exist to render Ember and appear only where Ember does (the hero orb,
+  the widget launcher, the chat avatars). Identical in both themes: Ember is
+  lit from within and does not change with the room.
 - **Magenta** (#ff5fa8 dark / #ff4d9e light): the fourth LED hue. It closes
   the spectrum bars and takes every fourth row/tile in the hover cycle. It
   used to be the rewards flag; rewards are ember now, and magenta carries no
