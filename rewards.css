@@ -352,11 +352,47 @@
 .af-rb-check { font-size: 0.8rem; line-height: 1; }
 .af-rb-pts { font-variant-numeric: tabular-nums; }
 
+/* Compact form for the redesign's dense components.
+   redesign.css's `.row span` out-specifies the plain `.af-reward-badge` rule
+   above, which silently stripped the badge's own size and color; and the badge
+   is injected as firstChild, so `.row`/`.minis` reorder it to the end. At full
+   size it took the row's leading column and wrapped the label onto three
+   lines. */
+.row .af-reward-badge,
+.minis a .af-reward-badge {
+  flex: none;
+  font-size: 0.66rem;
+  line-height: 1.6;
+  padding: 2px 7px;
+  gap: 3px;
+  color: #e8a838;
+}
+.row .af-reward-badge--done,
+.minis a .af-reward-badge--done { color: #2ecc71; }
+.row .af-reward-badge span,
+.minis a .af-reward-badge span {
+  display: inline;
+  font-size: inherit;
+  color: inherit;
+}
+/* "+500" instead of "+500 pts" here -- 22px of a phone row's ~150px label
+   column is not worth a unit the flame already implies. Cards keep it. */
+.row .af-reward-badge .af-rb-unit,
+.minis a .af-reward-badge .af-rb-unit { display: none; }
+
 /* Badge positioning on bento tiles */
 .bento-tile .af-reward-badge {
   position: absolute;
   top: 12px;
   right: 12px;
+}
+
+/* Redesign tiles are column flex, so an in-flow badge stretches the full card
+   width and reads as a banner. Corner chip, same as every other card type. */
+.tile .af-reward-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
 }
 
 /* Badge positioning on section cards */

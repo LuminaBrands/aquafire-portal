@@ -270,20 +270,38 @@ a { color: inherit; }
 .rows .row:nth-child(4n+2):hover .r-ico { color: var(--chart-t); }
 .rows .row:nth-child(4n+3):hover .r-ico { color: var(--ember-t); }
 .rows .row:nth-child(4n+4):hover .r-ico { color: var(--mag-t); }
-.row .r-ico { width: 24px; height: 24px; display: grid; place-items: center; color: var(--ico-ink); flex: none; }
-.row b { display: block; font-size: 0.88rem; font-weight: 600; }
+.row .r-ico { width: 26px; height: 26px; display: grid; place-items: center; color: var(--ico-ink); flex: none; }
+.row .r-ico svg { width: 18px; height: 18px; }
+/* The wrapper span holding <b> + subtitle also matches `.row span`, so the
+   title inherits the subtitle ink unless it is stated. Row titles are
+   headings -- white, like .tile b and .phead h1 everywhere else. */
+.row b { display: block; font-size: 0.88rem; font-weight: 600; color: var(--text-hi); }
 .row span { display: block; font-size: 0.74rem; color: var(--text-dim); }
 .row .thumb { width: 38px; height: 28px; display: grid; place-items: center; flex: none; }
 .row .thumb img { width: 34px; height: 24px; object-fit: contain; }
 .row .badge {
-  margin-left: auto; flex: none; font-size: 0.7rem; font-weight: 700;
+  flex: none; font-size: 0.7rem; font-weight: 700;
   border-radius: 999px; padding: 3px 9px;
 }
 .row .badge.pts { color: var(--mag-t); border: 1px solid var(--badge-border); background: var(--badge-bg); }
-.row svg.arr { margin-left: auto; color: var(--text-dim); flex: none; }
-.row .badge + svg.arr { margin-left: 8px; }
+.row svg.arr { color: var(--text-dim); flex: none; }
+/* rewards.js inserts its badge as the first child of any [data-reward].
+   Ordering the row explicitly keeps it at the end whatever the DOM says,
+   and letting the label column grow means neither the badge nor the arrow
+   needs an auto margin. */
+.row .r-ico, .row .thumb { order: 0; }
+.row > span:not(.r-ico):not(.thumb):not(.badge):not(.af-reward-badge) {
+  order: 1; flex: 1; min-width: 0;
+}
+.row .badge, .row .af-reward-badge { order: 2; }
+.row svg.arr { order: 3; }
+/* One trailing element per row: a reward badge closes the row just as the
+   chevron does, and keeping both leaves the label under 150px on a phone,
+   which wraps the title onto two lines. */
+.row:has(.af-reward-badge) svg.arr { display: none; }
 .minis { display: flex; flex-wrap: wrap; gap: 7px; }
 .minis a {
+  display: inline-flex; align-items: center; gap: 6px;
   font-size: 0.76rem; font-weight: 500; color: var(--text-mid); text-decoration: none;
   background: var(--mini-bg); border: 1px solid var(--stroke); border-radius: 999px; padding: 6px 12px;
   transition: color 0.22s, background-color 0.22s;
@@ -351,7 +369,8 @@ a { color: inherit; }
   background: var(--row-bg-hover); border-color: var(--row-border-hover);
   transform: translateY(-2px); box-shadow: var(--row-shadow-hover);
 }
-.tile .t-ico { width: 26px; height: 26px; display: grid; place-items: center; color: var(--ico-ink); }
+.tile .t-ico { width: 30px; height: 30px; display: grid; place-items: center; color: var(--ico-ink); }
+.tile .t-ico svg { width: 25px; height: 25px; }
 .tile b { font-size: 0.95rem; font-weight: 600; }
 .tile p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
 .tile::after {

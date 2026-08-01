@@ -429,7 +429,9 @@
         badge.innerHTML = '<span class="af-rb-check">&#x2713;</span><span class="af-rb-pts">+' + reward.points + '</span>';
       } else {
         badge.className = 'af-reward-badge';
-        badge.innerHTML = '<span class="af-rb-flame">&#x1f525;</span><span class="af-rb-pts">+' + reward.points + ' pts</span>';
+        // The unit is its own span so the dense row/mini badges can drop it
+        // (see rewards.css) while cards keep the full "+500 pts".
+        badge.innerHTML = '<span class="af-rb-flame">&#x1f525;</span><span class="af-rb-pts">+' + reward.points + '</span><span class="af-rb-unit">pts</span>';
       }
     });
     updateHomeBanner();

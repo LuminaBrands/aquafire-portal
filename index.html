@@ -263,11 +263,13 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       box-shadow: var(--wing-shadow);
     }
     .wing-head { display: flex; align-items: center; gap: 12px; }
-    .wing-head .w-ico { width: 30px; height: 30px; display: grid; place-items: center; flex: none; }
-    .wing.explore .w-ico { color: var(--frost-t); }
-    .wing.begin .w-ico { color: var(--chart-t); }
-    .wing.resolve .w-ico { color: var(--ember-t); }
-    .wing-head b { display: block; font-size: 1.05rem; font-weight: 700; }
+    .wing-head .w-ico { width: 30px; height: 30px; display: grid; place-items: center; flex: none; color: var(--ico-ink); }
+    /* Bare strokes with no plate behind them, so they carry at a larger size. */
+    .wing-head .w-ico svg { width: 22px; height: 22px; }
+    /* The wrapper span holding <b> + subtitle matches `.wing-head span`, so the
+       title inherits the subtitle's dim ink unless it is stated. Headings are
+       white here, same as .phead h1 and .tile b on every other page. */
+    .wing-head b { display: block; font-size: 1.05rem; font-weight: 700; color: var(--text-hi); }
     .wing-head span { display: block; font-size: 0.76rem; color: var(--text-dim); }
     .tip { display: flex; gap: 9px; }
     .tip .orb { width: 22px; height: 22px; margin-top: 3px; }
@@ -427,7 +429,6 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           <a class="row" data-reward="fireplace-setup" href="getting-started.html">
             <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></span>
             <span><b>Getting started</b><span>Unboxing to first flame</span></span>
-            <span class="badge pts">earns pts</span>
             <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
           <a class="row" data-reward="enclosure-builder" href="enclosure-guide.html">
@@ -443,7 +444,6 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           <a class="row" data-reward="register-warranty" href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">
             <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9.5 12 2 2 3.5-4"/></svg></span>
             <span><b>Register your warranty</b><span>Two minutes &middot; full coverage</span></span>
-            <span class="badge pts">+300</span>
             <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
         </div>
@@ -466,7 +466,6 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           <a class="row" data-reward="troubleshoot" href="troubleshoot.html">
             <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
             <span><b>Troubleshooter</b><span>Guided fixes &middot; 3&ndash;5 minutes</span></span>
-            <span class="badge pts">earns pts</span>
             <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
           <a class="row" data-reward="mist-maker" href="maintenance.html">
