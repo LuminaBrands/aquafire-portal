@@ -240,11 +240,11 @@
     "northStar": "The Glass Hearth",
     "overview": "The portal is a room lit by the product it explains. A photographed hotel lobby \u2014 the fireplace glowing in marble \u2014 bleeds down from the top of the page and dissolves into the atmosphere; everything the visitor touches is liquid glass floating in front of that scene. Ember, the AI concierge (a warm orb), greets from inside the room, and the page is organized as a conversation first, three intent wings second. The product's one flamboyant trait \u2014 dual-LED color mixing \u2014 appears only as thin light bars along the edges of surfaces, the way the fireplace itself wears its color. The same room exists in two lightings, switched live by a theme button: dark smoke (default) and light showroom. Every visual decision is a semantic token with a binding in each theme; the reference implementation and token source of truth is index.html.",
     "keyCharacteristics": [
-      "Mobile-first single column that fans out at one desktop breakpoint (920px)",
+      "Mobile-first single column that fans out at 920px; the nav capsule has its own wider steps (1080/1200) because the full link set does not fit sooner",
       "Photography as atmosphere, never as a framed illustration",
       "Monochrome glass at rest; LED spectrum color only on interaction edges",
       "Conversation (composer + murmur chips) is the primary action everywhere",
-      "Rewards journey is always visible, magenta-flagged, never modal"
+      "Rewards status is always visible, ember-flagged, never modal -- a standing total and module count, not a sequence"
     ],
     "rules": [
       {
@@ -281,15 +281,21 @@
         "name": "The White-on-Photo Rule",
         "body": "Type that sits on the photograph is white in both themes; the scrim, not the text color, adapts to the theme.",
         "section": "components"
+      },
+      {
+        "name": "The Peek Rule",
+        "body": "A horizontal rail has to show part of the next item past its right-edge fade, or nothing tells you it scrolls. Recipe: bleed to the viewport with negative margins, restore the content column with padding, match it with scroll-padding-left (or the rail loads scrolled and clips its first item), snap, hide the scrollbar, fade the right edge only -- a left fade eats the first item, which is where the rail rests. Card rails also equalise height and pin the last block with margin-top: auto.",
+        "section": "layout"
       }
     ],
     "dos": [
       "Do reference tokens for every color, shadow, and rim \u2014 new surfaces get both theme bindings or they don't ship.",
       "Do keep LED color on edges, nubs, badges, and icon tints; surfaces and text stay monochrome glass.",
-      "Do keep pages mobile-first with the single 920px enhancement breakpoint.",
+      "Do keep pages mobile-first, enhancing at 920px; measure before adding a nav link, since that bar is the one component with tighter steps of its own.",
       "Do use the four-layer edged-glass recipe verbatim for any new surface (flat fill, debossed top, directional rim, whisper shadow).",
       "Do keep Ember's composer the visually primary action on every page that has one.",
-      "Do label synthetic lifestyle imagery as illustrative (footer note) until brand photography replaces it."
+      "Do label synthetic lifestyle imagery as illustrative (footer note) until brand photography replaces it.",
+      "Do give a phone a swipe rail rather than a column of stacked peers, and size the items so the next one peeks -- the peek is the affordance, the dots only report position."
     ],
     "donts": [
       "Don't add gradient fills, glossy domes, or outer glows to glass surfaces.",
