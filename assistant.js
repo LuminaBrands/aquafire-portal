@@ -829,7 +829,10 @@
   function mainChips() {
     return { t: 'chips', items: [
       { label: '\ud83d\udd25 Compare models', send: 'Compare the models' },
-      { label: '\ud83d\udcb2 Pricing', send: 'How much do they cost?' },
+      // Money bag, not the heavy dollar sign: U+1F4B2 is a thin unfilled
+      // outline that all but disappears on the dark panel. Pick chip emoji with
+      // mass -- the panel is dark by default.
+      { label: '\ud83d\udcb0 Pricing', send: 'How much do they cost?' },
       { label: '\ud83d\udee0\ufe0f Fix an issue', send: 'Help me troubleshoot an issue' },
       { label: '\ud83d\udcd0 Plan an install', send: 'How is it installed?' },
       { label: '\ud83d\udee1\ufe0f Warranty', send: 'Tell me about the warranty' },
