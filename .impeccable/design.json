@@ -314,7 +314,7 @@
       },
       {
         "name": "The Peek Rule",
-        "body": "A horizontal rail has to show part of the next item past its right-edge fade, or nothing tells you it scrolls. Recipe: bleed to the viewport with negative margins, restore the content column with padding, match it with scroll-padding-left (or the rail loads scrolled and clips its first item), snap, hide the scrollbar, fade the right edge only -- a left fade eats the first item, which is where the rail rests. Card rails also equalise height and pin the last block with margin-top: auto. Dots go above the rail, not below -- they belong with the heading that introduces the set, and below the fold they can be missed entirely.",
+        "body": "A horizontal rail has to show part of the next item past its right-edge fade, or nothing tells you it scrolls. Recipe: bleed to the viewport with negative margins, restore the content column with padding, match it with scroll-padding-left (or the rail loads scrolled and clips its first item), snap, hide the scrollbar, fade the right edge only -- a left fade eats the first item, which is where the rail rests. Card rails also equalise height and pin the last block with margin-top: auto. The control goes above the rail, not below, and where the items are a small fixed set with names it is a segmented control rather than dots: three labelled segments say what the options are, three dots only say there are three.",
         "section": "layout"
       }
     ],
@@ -325,7 +325,7 @@
       "Do use the four-layer edged-glass recipe verbatim for any new surface (flat fill, debossed top, directional rim, whisper shadow).",
       "Do keep Ember's composer the visually primary action on every page that has one.",
       "Do label synthetic lifestyle imagery as illustrative (footer note) until brand photography replaces it.",
-      "Do give a phone a swipe rail rather than a column of stacked peers, and size the items so the next one peeks -- the peek is the affordance, the dots only report position."
+      "Do give a phone a swipe rail rather than a column of stacked peers, size the items so the next one peeks -- the peek is the affordance -- and label the control above it when the set is small and named."
     ],
     "donts": [
       "Don't add gradient fills, glossy domes, or outer glows to glass surfaces.",

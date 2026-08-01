@@ -288,14 +288,35 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
        for the same reason. */
     .hall > .wing .minis { margin-top: auto; }
 
-    /* Dots report position; the peeking card is what suggests the gesture. */
-    .hall-dots { display: flex; justify-content: center; gap: 8px; margin: 22px 0 11px; }
-    .hall-dots button {
-      width: 7px; height: 7px; padding: 0; border-radius: 999px;
-      border: none; background: var(--nub-bg); cursor: pointer;
-      transition: background-color 0.24s var(--ease), width 0.24s var(--ease);
+    /* A segmented control rather than dots: dots tell you there are three of
+       something, this tells you what the three are. Same glass capsule as the
+       nav bar -- one container, each segment a pill only when it is current. */
+    .hall-tabs {
+      position: relative; display: flex; margin: 22px 0 11px;
+      background: var(--cap-bg); border: 1px solid var(--cap-border);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-radius: 999px; padding: 4px;
+      box-shadow: var(--cap-shadow);
     }
-    .hall-dots button.is-on { width: 20px; background: var(--ember); }
+    /* The segments are equal thirds, so the thumb can be a third wide and
+       travel in whole multiples of itself -- no measuring, no resize handler. */
+    .tab-thumb {
+      position: absolute; top: 4px; bottom: 4px; left: 4px;
+      width: calc((100% - 8px) / 3);
+      border-radius: 999px; background: var(--cap-bg-hover);
+      transform: translateX(calc(var(--i, 0) * 100%));
+      transition: transform 0.34s var(--ease);
+    }
+    .hall-tabs button {
+      position: relative; z-index: 1; flex: 1;
+      font: inherit; font-size: 0.83rem; font-weight: 500; cursor: pointer;
+      padding: 9px 6px; border: none; background: none; border-radius: 999px;
+      color: var(--text-mid); white-space: nowrap;
+      transition: color 0.24s var(--ease);
+    }
+    .hall-tabs button:hover { color: var(--text-hi); }
+    .hall-tabs button.is-on { color: var(--text-hi); font-weight: 600; }
+    @media (prefers-reduced-motion: reduce) { .tab-thumb { transition: none; } }
 
     .wing {
       backdrop-filter: blur(18px); border-radius: 26px; padding: 20px 15px;
@@ -342,7 +363,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         -webkit-mask-image: none; mask-image: none;
       }
       .hall > .wing { flex: 1; }
-      .hall-dots { display: none; }
+      .hall-tabs { display: none; }
     }
   </style>
 </head>
@@ -433,12 +454,15 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       </div>
     </section>
 
-    <!-- Rendered up front so it is there without JS; the controller only
-         tracks position and handles clicks. -->
-    <div class="hall-dots" id="hallDots" role="group" aria-label="Choose a route">
-      <button type="button" class="is-on" aria-label="Show Explore"></button>
-      <button type="button" aria-label="Show Begin"></button>
-      <button type="button" aria-label="Show Resolve"></button>
+    <!-- Labelled up front so the three routes are readable without JS; the
+         controller only tracks position and handles clicks. Not a tablist:
+         all three panels stay in the DOM and remain reachable by swipe, which
+         is not what tab semantics promise. -->
+    <div class="hall-tabs" id="hallTabs" role="group" aria-label="Choose a route">
+      <span class="tab-thumb" aria-hidden="true"></span>
+      <button type="button" class="is-on" aria-current="true">Explore</button>
+      <button type="button">Begin</button>
+      <button type="button">Resolve</button>
     </div>
     <div class="hall" id="hall">
       <section class="wing explore" aria-label="Explore — still deciding">
@@ -597,14 +621,14 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     })();
   </script>
   <script>
-    // Wing carousel dots. The rail itself is pure CSS scroll-snap -- this only
-    // reports which card is in view and lets the dots scroll to one.
+    // Wing carousel segments. The rail itself is pure CSS scroll-snap -- this
+    // only reports which card is in view and lets a segment scroll to one.
     (function () {
       var hall = document.getElementById("hall");
-      var dots = document.getElementById("hallDots");
-      if (!hall || !dots) return;
+      var tabs = document.getElementById("hallTabs");
+      if (!hall || !tabs) return;
       var cards = [].slice.call(hall.querySelectorAll(".wing"));
-      var btns = [].slice.call(dots.querySelectorAll("button"));
+      var btns = [].slice.call(tabs.querySelectorAll("button"));
       if (cards.length !== btns.length) return;
 
       // Measured against the rail's own box rather than scrollLeft/width: the
@@ -622,9 +646,11 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
 
       function sync() {
         var i = nearest();
+        tabs.style.setProperty("--i", i);
         btns.forEach(function (b, j) {
           b.classList.toggle("is-on", j === i);
-          b.setAttribute("aria-current", j === i ? "true" : "false");
+          if (j === i) b.setAttribute("aria-current", "true");
+          else b.removeAttribute("aria-current");
         });
       }
 
