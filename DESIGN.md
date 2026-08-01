@@ -222,8 +222,9 @@ negative margins, restore the content column with padding, match it with
 `scroll-padding-left` (or the rail loads scrolled and clips its first item),
 snap, hide the scrollbar, and fade the right edge only — a left fade eats
 the first item, which is where the rail always rests. **The peek is the
-affordance**: size items so the next one shows past the fade. Dots report
-position; they do not teach the gesture. Card rails also equalise height and
+affordance**: size items so the next one shows past the fade. Dots sit **above** the rail --
+they belong with the heading that introduces the set, and below a tall card they can fall past the fold entirely. They report position; they do not
+teach the gesture. Card rails also equalise height and
 pin the last block with `margin-top: auto`, or short cards trail off in dead
 space. Vertical rhythm uses the spacing scale (8 /
 13 / 18 / 26 / 38px); sections breathe 30–44px apart. The lobby photograph

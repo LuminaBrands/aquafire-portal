@@ -284,7 +284,7 @@
       },
       {
         "name": "The Peek Rule",
-        "body": "A horizontal rail has to show part of the next item past its right-edge fade, or nothing tells you it scrolls. Recipe: bleed to the viewport with negative margins, restore the content column with padding, match it with scroll-padding-left (or the rail loads scrolled and clips its first item), snap, hide the scrollbar, fade the right edge only -- a left fade eats the first item, which is where the rail rests. Card rails also equalise height and pin the last block with margin-top: auto.",
+        "body": "A horizontal rail has to show part of the next item past its right-edge fade, or nothing tells you it scrolls. Recipe: bleed to the viewport with negative margins, restore the content column with padding, match it with scroll-padding-left (or the rail loads scrolled and clips its first item), snap, hide the scrollbar, fade the right edge only -- a left fade eats the first item, which is where the rail rests. Card rails also equalise height and pin the last block with margin-top: auto. Dots go above the rail, not below -- they belong with the heading that introduces the set, and below the fold they can be missed entirely.",
         "section": "layout"
       }
     ],

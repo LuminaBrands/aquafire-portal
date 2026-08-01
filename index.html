@@ -269,7 +269,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
        snap, right-edge fade -- plus the next card peeking, which is the part
        that reads as "there is more here" before any dot does. */
     .hall {
-      display: flex; gap: 12px; margin-top: 16px;
+      display: flex; gap: 12px; margin-top: 0;
       flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch; scrollbar-width: none;
       margin-left: -18px; margin-right: -18px;
@@ -293,7 +293,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     .hall > .wing .minis { margin-top: auto; }
 
     /* Dots report position; the peeking card is what suggests the gesture. */
-    .hall-dots { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+    .hall-dots { display: flex; justify-content: center; gap: 8px; margin: 22px 0 11px; }
     .hall-dots button {
       width: 7px; height: 7px; padding: 0; border-radius: 999px;
       border: none; background: var(--nub-bg); cursor: pointer;
@@ -437,6 +437,13 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       </div>
     </section>
 
+    <!-- Rendered up front so it is there without JS; the controller only
+         tracks position and handles clicks. -->
+    <div class="hall-dots" id="hallDots" role="group" aria-label="Choose a route">
+      <button type="button" class="is-on" aria-label="Show Explore"></button>
+      <button type="button" aria-label="Show Begin"></button>
+      <button type="button" aria-label="Show Resolve"></button>
+    </div>
     <div class="hall" id="hall">
       <section class="wing explore" aria-label="Explore — still deciding">
         <div class="wing-head">
@@ -542,13 +549,6 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           <a data-reward="support-hub" href="support.html">Support Hub</a>
         </div>
       </section>
-    </div>
-    <!-- Rendered up front so it is there without JS; the controller only
-         tracks position and handles clicks. -->
-    <div class="hall-dots" id="hallDots" role="group" aria-label="Choose a route">
-      <button type="button" class="is-on" aria-label="Show Explore"></button>
-      <button type="button" aria-label="Show Begin"></button>
-      <button type="button" aria-label="Show Resolve"></button>
     </div>
 
     <figure class="close">
