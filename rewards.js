@@ -180,6 +180,12 @@
 
   /* ── Nav UI ── */
   function updateNavUI() {
+    // The banner CTA is independent of the injected nav button and has to be
+    // wired even where that button does not exist -- injectNavButton() needs a
+    // `.nav-links` element, which no redesigned page has, so bailing first
+    // left the homepage's sign-in button inert.
+    updateBannerCTA();
+
     var btn = document.getElementById('af-rewards-btn');
     if (!btn) return;
 
@@ -199,8 +205,6 @@
         '<span class="af-nav-pts-icon">&#x1f525;</span>';
       btn.onclick = showModal;
     }
-
-    updateBannerCTA();
   }
 
   /* ── Banner CTA (Sign In / View Profile) ── */
@@ -452,6 +456,9 @@
     if (barFill) barFill.style.width = pct + '%';
     if (barLabel) barLabel.textContent = done + ' / ' + total + ' modules completed';
     if (ptsDisplay) ptsDisplay.textContent = userPoints.toLocaleString() + ' pts';
+    // The homepage band shows the bare figure; the nav chip carries the unit.
+    var ptsBig = document.getElementById('rb-home-points-big');
+    if (ptsBig) ptsBig.textContent = userPoints.toLocaleString();
   }
 
   /* ── Auto-detection of section completion ── */

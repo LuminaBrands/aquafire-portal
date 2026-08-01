@@ -209,17 +209,11 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     .murmur .cap { flex: none; scroll-snap-align: start; }
     .murmur .cap { padding: 8px 15px; font-size: 0.82rem; font-weight: 500; }
 
-    .j-bar {
-      display: block; height: 3px; border-radius: 3px; margin-top: 8px;
-      background: var(--stroke); overflow: hidden;
-    }
-    .j-bar-fill {
-      display: block; height: 100%; width: 0%; border-radius: 3px;
-      background: linear-gradient(90deg, var(--ember), var(--mag));
-      transition: width 0.6s var(--ease);
-    }
-
-    /* ── Journey band ────────────────────────────────── */
+    /* ── Rewards band ─────────────────────────────────
+       A status module, not a path: owners collect the 17 modules in whatever
+       order suits them, so this reports the standing total and how many are
+       done rather than implying a sequence. Mirrors the score card on
+       rewards.html. Not a link -- it holds three of its own. */
     .journey {
       margin-top: 30px;
       background: var(--journey-bg);
@@ -227,32 +221,43 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       position: relative; overflow: hidden;
       box-shadow: var(--journey-shadow);
       backdrop-filter: blur(18px); border-radius: 24px; padding: 18px 20px;
-      display: flex; flex-direction: column; gap: 14px;
-      text-decoration: none;
-      transition: border-color 0.28s, transform 0.3s var(--ease);
+      display: flex; flex-direction: column; gap: 15px;
     }
-    .journey:hover { border-color: var(--stroke-hi); transform: translateY(-2px); }
-    .journey::after {
-      content: ""; position: absolute; left: 22px; right: 22px; bottom: 0; height: 3px;
-      border-radius: 3px 3px 0 0;
+    .j-sum { display: flex; flex-direction: column; }
+    .j-sum b {
+      font-size: 1.6rem; font-weight: 700; line-height: 1.15;
+      letter-spacing: -0.025em; font-variant-numeric: tabular-nums;
+      color: var(--mag-t);
+    }
+    .j-sum span { font-size: 0.76rem; color: var(--text-dim); }
+    .j-cta {
+      display: inline-flex; align-items: center; gap: 8px; flex: none;
+      font: inherit; font-size: 0.83rem; font-weight: 600; cursor: pointer;
+      background: var(--send-bg); border: 1px solid var(--send-border);
+      color: var(--send-ink); padding: 10px 18px; border-radius: 999px;
+      transition: background-color 0.25s;
+    }
+    .j-cta:hover { background: var(--send-bg-hover); }
+    .j-prog { display: flex; flex-direction: column; gap: 9px; }
+    .j-bar {
+      display: block; height: 6px; border-radius: 999px;
+      background: var(--nub-bg); overflow: hidden;
+    }
+    .j-bar-fill {
+      display: block; height: 100%; width: 0%; border-radius: 999px;
       background: linear-gradient(90deg, var(--ember), var(--chart) 38%, var(--frost) 68%, var(--mag));
-      opacity: 0; transition: opacity 0.28s;
+      transition: width 0.6s var(--ease);
     }
-    .journey:hover::after, .journey:focus-visible::after { opacity: 1; }
-    .j-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-    .j-head b { font-size: 1.02rem; font-weight: 700; }
-    .j-head span { font-size: 0.8rem; color: var(--text-dim); }
-    .j-head span strong { color: var(--mag-t); font-weight: 700; }
-    .j-track { display: flex; align-items: center; gap: 6px; }
-    .j-node { flex: 1; display: flex; flex-direction: column; gap: 7px; min-width: 0; }
-    .j-node .nub { height: 5px; border-radius: 3px; background: var(--nub-bg); }
-    .j-node:nth-child(1).lit .nub { background: var(--ember); }
-    .j-node:nth-child(2).lit .nub { background: var(--chart); }
-    .j-node:nth-child(3).lit .nub { background: var(--frost); }
-    .j-node:nth-child(4).lit .nub { background: var(--mag); }
-    .j-node small { font-size: 0.7rem; color: var(--text-dim); line-height: 1.3; }
-    .j-node small b { color: var(--text-hi); font-weight: 600; }
-    .j-cta { font-size: 0.84rem; font-weight: 600; color: var(--mag-t); }
+    .j-meta { font-size: 0.76rem; color: var(--text-dim); }
+    .j-meta strong { color: var(--text-hi); font-weight: 700; }
+    .j-links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+    /* Magenta is the rewards accent, but three magenta things in a row is
+       shouting -- the standing total keeps it, the primary link keeps it, the
+       explainer steps back. */
+    .j-links a { font-size: 0.76rem; font-weight: 600; color: var(--text-mid); text-decoration: none; }
+    .j-links a:first-child { color: var(--mag-t); }
+    .j-links a:hover { text-decoration: underline; color: var(--text-hi); }
+    .j-links a:first-child:hover { color: var(--mag-t); }
 
     /* ── Intent panes ────────────────────────────────── */
     .hall { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
@@ -289,7 +294,13 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         -webkit-mask-image: none; mask-image: none;
       }
       .greet .orb { width: 60px; height: 60px; }
-      .journey { flex-direction: row; align-items: center; gap: 22px; margin-top: 38px; padding: 18px 26px; }
+      /* One line on desktop: total, progress, links, then the CTA at the far
+         end. The DOM keeps the CTA second so it stays under the total on a
+         phone, where it is the first thing to act on. */
+      .journey { flex-direction: row; align-items: center; gap: 26px; margin-top: 38px; padding: 18px 26px; }
+      .j-sum, .j-links, .j-cta { flex: none; }
+      .j-prog { flex: 1; min-width: 190px; }
+      .j-cta { order: 4; }
       .j-head { flex-direction: column; align-items: flex-start; gap: 2px; flex: none; }
       .j-track { flex: 1; }
       .j-node small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -367,20 +378,23 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       </div>
     </section>
 
-    <a class="journey" href="rewards.html" aria-label="Aquafire Rewards journey">
-      <span class="j-head">
-        <b>The Owner&rsquo;s Journey</b>
-        <span><strong id="rb-home-bar-label">0 / 17 modules completed</strong> &middot; earn points as you go</span>
+    <section class="journey" aria-labelledby="j-title">
+      <span class="j-sum">
+        <b id="rb-home-points-big">0</b>
+        <span id="j-title">Aquafire Reward Points</span>
+      </span>
+      <!-- rewards.js owns this button's label and action: "Sign In to Start
+           Earning" when signed out, "View Profile" once signed in. -->
+      <button class="j-cta" id="rb-signin-cta" type="button">Sign In to Start Earning</button>
+      <div class="j-prog">
         <span class="j-bar" aria-hidden="true"><span class="j-bar-fill" id="rb-home-bar-fill"></span></span>
-      </span>
-      <span class="j-track" aria-hidden="true">
-        <span class="j-node lit"><span class="nub"></span><small><b>Start earning</b></small></span>
-        <span class="j-node"><span class="nub"></span><small>First guide</small></span>
-        <span class="j-node"><span class="nub"></span><small>Setup done <b>+500</b></small></span>
-        <span class="j-node"><span class="nub"></span><small>Warranty <b>+300</b></small></span>
-      </span>
-      <span class="j-cta">Sign in &rarr;</span>
-    </a>
+        <span class="j-meta"><strong id="rb-home-bar-label">0 / 17 modules completed</strong> &middot; collect them in any order</span>
+      </div>
+      <div class="j-links">
+        <a href="rewards.html">View your rewards &rarr;</a>
+        <a href="rewards.html#how-it-works">How the program works</a>
+      </div>
+    </section>
 
     <div class="hall">
       <section class="wing explore" aria-label="Explore — still deciding">

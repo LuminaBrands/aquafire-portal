@@ -49,6 +49,25 @@ All 13 customer pages now carry the redesign chrome from `redesign.css`
 `claude/integrate-borderbeam-component-i6qga7` — nothing is live until the PR
 merges.
 
+## Rewards band on the homepage (rebuilt 2026-08-01)
+
+The band used to be a four-node track -- "Start earning -> First guide ->
+Setup done -> Warranty" -- which implied an order the program does not have.
+Owners collect the 17 modules however they like, so it now reports state the
+way rewards.html's score card does: standing points total, progress bar with
+"N / 17 modules completed", and links to the ledger and to the explainer
+(`rewards.html#how-it-works`, an anchor added for this).
+
+It is a `<section>` rather than an `<a>` now, because it holds three of its
+own controls. The sign-in button reuses `#rb-signin-cta`, the hook rewards.js
+already had -- which turned out to be dead on every redesigned page:
+`updateNavUI()` bailed before calling `updateBannerCTA()` whenever
+`#af-rewards-btn` was missing, and that button is injected by
+`injectNavButton()`, which looks for a `.nav-links` element no redesigned page
+has. The CTA call moved above the early return, so the button now opens the
+sign-in modal. (The modal itself is still on rewards.css's 2025 palette -- see
+the open item below.)
+
 ## Nav bar (rebuilt 2026-08-01)
 
 Modelled on the v1 "Hearth Console" bar the user picked: one glass capsule
