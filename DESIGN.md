@@ -209,11 +209,23 @@ weight, size, or spacing — not a new font.
 ## Layout
 
 Mobile-first, one column, max-width 1200px, side padding 18px (24px on
-desktop). A single enhancement breakpoint at **920px**: the nav links
-appear, the journey band turns horizontal (label left, track center, CTA
-right), and the three intent wings fan from stacked to a 3-across row with
-equal flex. The hero (orb → greeting → composer → murmur chips) is centered
-and never exceeds 620px wide. Vertical rhythm uses the spacing scale (8 /
+desktop). A single enhancement breakpoint at **920px**: the rewards band
+turns horizontal, and the three intent wings go from a swipe rail to a
+3-across row with equal flex. (The nav capsule has its own wider
+breakpoints — see the Nav Capsule component.) The hero (orb → greeting →
+composer → murmur chips) is centered and never exceeds 620px wide.
+
+**Swipe rails.** Where a phone would otherwise stack peers into a column you
+scroll past — the murmur chips, the three wings — they become a horizontal
+snap rail instead. The recipe is fixed: bleed to the viewport edges with
+negative margins, restore the content column with padding, match it with
+`scroll-padding-left` (or the rail loads scrolled and clips its first item),
+snap, hide the scrollbar, and fade the right edge only — a left fade eats
+the first item, which is where the rail always rests. **The peek is the
+affordance**: size items so the next one shows past the fade. Dots report
+position; they do not teach the gesture. Card rails also equalise height and
+pin the last block with `margin-top: auto`, or short cards trail off in dead
+space. Vertical rhythm uses the spacing scale (8 /
 13 / 18 / 26 / 38px); sections breathe 30–44px apart. The lobby photograph
 occupies the top 540px (620px desktop) behind the hero.
 

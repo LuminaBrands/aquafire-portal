@@ -313,7 +313,8 @@ a { color: inherit; }
 .close .stars { color: var(--ember-t); letter-spacing: 3px; font-size: 0.85rem; }
 .close blockquote { font-size: 1.1rem; font-weight: 500; margin-top: 10px; text-wrap: balance; }
 .close figcaption { color: var(--text-dim); font-size: 0.82rem; margin-top: 10px; }
-.close figcaption a { color: var(--text-mid); }
+.close figcaption a { color: var(--text-mid); text-decoration: none; }
+.close figcaption a:hover { color: var(--text-hi); text-decoration: underline; }
 .foot { margin: 36px 0 30px; display: flex; align-items: center; justify-content: center; gap: 14px; color: var(--text-dim); font-size: 0.76rem; flex-wrap: wrap; }
 .foot img { height: 13px; filter: var(--logo-foot-filter); opacity: var(--logo-foot-opacity); }
 .foot a { color: var(--text-dim); text-decoration: none; }

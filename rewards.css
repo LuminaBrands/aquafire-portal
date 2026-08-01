@@ -359,7 +359,9 @@
    size it took the row's leading column and wrapped the label onto three
    lines. */
 .row .af-reward-badge,
-.minis a .af-reward-badge {
+.minis a .af-reward-badge,
+.close figcaption a .af-reward-badge,
+.foot a .af-reward-badge {
   flex: none;
   font-size: 0.7rem;
   line-height: 1.6;
@@ -368,9 +370,13 @@
   color: #e8a838;
 }
 .row .af-reward-badge--done,
-.minis a .af-reward-badge--done { color: #2ecc71; }
+.minis a .af-reward-badge--done,
+.close figcaption a .af-reward-badge--done,
+.foot a .af-reward-badge--done { color: #2ecc71; }
 .row .af-reward-badge span,
-.minis a .af-reward-badge span {
+.minis a .af-reward-badge span,
+.close figcaption a .af-reward-badge span,
+.foot a .af-reward-badge span {
   display: inline;
   font-size: inherit;
   color: inherit;
@@ -378,7 +384,21 @@
 /* "+500" instead of "+500 pts" here -- 22px of a phone row's ~150px label
    column is not worth a unit the flame already implies. Cards keep it. */
 .row .af-reward-badge .af-rb-unit,
-.minis a .af-reward-badge .af-rb-unit { display: none; }
+.minis a .af-reward-badge .af-rb-unit,
+.close figcaption a .af-reward-badge .af-rb-unit,
+.foot a .af-reward-badge .af-rb-unit { display: none; }
+/* Injected as firstChild, so in a run of prose it landed mid-sentence and
+   pushed the link's own words onto the next line. Ordered after the label
+   instead. (These links carry no resting underline -- see redesign.css -- or
+   it would run under the badge; a descendant cannot cancel an ancestor's.) */
+.close figcaption a,
+.foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.close figcaption a .af-reward-badge,
+.foot a .af-reward-badge { order: 2; }
 
 /* Badge positioning on bento tiles */
 .bento-tile .af-reward-badge {

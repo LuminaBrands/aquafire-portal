@@ -262,9 +262,47 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     .j-links a:hover { text-decoration: underline; color: var(--text-hi); }
 
     /* ── Intent panes ────────────────────────────────── */
-    .hall { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+    /* Wings: a swipeable carousel on phones, three columns on desktop. Stacked
+       vertically they were three tall cards you had to scroll past to reach the
+       one that matched you; side by side, picking your route is a swipe.
+       Same rail mechanics as the chips above -- bleed to the viewport edges,
+       snap, right-edge fade -- plus the next card peeking, which is the part
+       that reads as "there is more here" before any dot does. */
+    .hall {
+      display: flex; gap: 12px; margin-top: 16px;
+      flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+      margin-left: -18px; margin-right: -18px;
+      padding: 2px 18px 6px;
+      /* Snapping has to respect the padding or the rail loads scrolled by 18px
+         and clips the first card. */
+      scroll-padding-left: 18px;
+      -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent 100%);
+      mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent 100%);
+    }
+    .hall::-webkit-scrollbar { display: none; }
+    /* 92% leaves ~34px of the next card showing past the fade -- enough to
+       read as a card edge, while giving the row labels back most of the
+       width the rail took. Below ~90% the titles start wrapping again. */
+    .hall > .wing { flex: 0 0 92%; scroll-snap-align: start; }
+    /* Cards are equal height (the rail would look ragged otherwise) but hold
+       different numbers of rows, so the shorter ones ended with a stretch of
+       empty card. Pinning the mini row to the bottom turns that slack into
+       deliberate spacing. Applies on desktop too -- the columns stretch there
+       for the same reason. */
+    .hall > .wing .minis { margin-top: auto; }
+
+    /* Dots report position; the peeking card is what suggests the gesture. */
+    .hall-dots { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+    .hall-dots button {
+      width: 7px; height: 7px; padding: 0; border-radius: 999px;
+      border: none; background: var(--nub-bg); cursor: pointer;
+      transition: background-color 0.24s var(--ease), width 0.24s var(--ease);
+    }
+    .hall-dots button.is-on { width: 20px; background: var(--ember); }
+
     .wing {
-      backdrop-filter: blur(18px); border-radius: 26px; padding: 20px 18px;
+      backdrop-filter: blur(18px); border-radius: 26px; padding: 20px 15px;
       display: flex; flex-direction: column; gap: 13px;
       background: var(--wing-bg); border: 1px solid var(--wing-border);
       box-shadow: var(--wing-shadow);
@@ -296,17 +334,19 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         -webkit-mask-image: none; mask-image: none;
       }
       .greet .orb { width: 60px; height: 60px; }
-      /* One line on desktop: total, progress, links, then the CTA at the far
-         end. The DOM keeps the CTA second so it stays under the total on a
-         phone, where it is the first thing to act on. */
+      /* One line on desktop: total, the sign-in link beside it, progress, then
+         the two navigation links. */
       .journey { flex-direction: row; align-items: center; gap: 26px; margin-top: 38px; padding: 18px 26px; }
       .j-sum, .j-links, .j-cta { flex: none; }
       .j-prog { flex: 1; min-width: 190px; }
-      .j-head { flex-direction: column; align-items: flex-start; gap: 2px; flex: none; }
-      .j-track { flex: 1; }
-      .j-node small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .hall { flex-direction: row; align-items: stretch; margin-top: 18px; }
-      .wing { flex: 1; }
+      .hall {
+        align-items: stretch; margin-top: 18px; gap: 16px;
+        overflow-x: visible; scroll-snap-type: none;
+        margin-left: 0; margin-right: 0; padding: 0;
+        -webkit-mask-image: none; mask-image: none;
+      }
+      .hall > .wing { flex: 1; }
+      .hall-dots { display: none; }
     }
   </style>
 </head>
@@ -397,7 +437,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       </div>
     </section>
 
-    <div class="hall">
+    <div class="hall" id="hall">
       <section class="wing explore" aria-label="Explore — still deciding">
         <div class="wing-head">
           <span class="w-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span>
@@ -458,7 +498,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           </a>
           <a class="row" data-reward="register-warranty" href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">
             <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9.5 12 2 2 3.5-4"/></svg></span>
-            <span><b>Register your warranty</b><span>Two minutes &middot; full coverage</span></span>
+            <span><b>Register warranty</b><span>Two minutes &middot; full coverage</span></span>
             <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
         </div>
@@ -502,6 +542,13 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           <a data-reward="support-hub" href="support.html">Support Hub</a>
         </div>
       </section>
+    </div>
+    <!-- Rendered up front so it is there without JS; the controller only
+         tracks position and handles clicks. -->
+    <div class="hall-dots" id="hallDots" role="group" aria-label="Choose a route">
+      <button type="button" class="is-on" aria-label="Show Explore"></button>
+      <button type="button" aria-label="Show Begin"></button>
+      <button type="button" aria-label="Show Resolve"></button>
     </div>
 
     <figure class="close">
@@ -551,6 +598,57 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         var open = links.classList.toggle("open");
         navBtn.setAttribute("aria-expanded", String(open));
       });
+    })();
+  </script>
+  <script>
+    // Wing carousel dots. The rail itself is pure CSS scroll-snap -- this only
+    // reports which card is in view and lets the dots scroll to one.
+    (function () {
+      var hall = document.getElementById("hall");
+      var dots = document.getElementById("hallDots");
+      if (!hall || !dots) return;
+      var cards = [].slice.call(hall.querySelectorAll(".wing"));
+      var btns = [].slice.call(dots.querySelectorAll("button"));
+      if (cards.length !== btns.length) return;
+
+      // Measured against the rail's own box rather than scrollLeft/width: the
+      // cards are a percentage wide and the gap is not part of that, so
+      // dividing would drift by a card near the end of the rail.
+      function nearest() {
+        var base = hall.getBoundingClientRect().left;
+        var best = 0, bestD = Infinity;
+        cards.forEach(function (c, i) {
+          var d = Math.abs(c.getBoundingClientRect().left - base);
+          if (d < bestD) { bestD = d; best = i; }
+        });
+        return best;
+      }
+
+      function sync() {
+        var i = nearest();
+        btns.forEach(function (b, j) {
+          b.classList.toggle("is-on", j === i);
+          b.setAttribute("aria-current", j === i ? "true" : "false");
+        });
+      }
+
+      var t;
+      hall.addEventListener("scroll", function () {
+        clearTimeout(t);
+        t = setTimeout(sync, 60);
+      }, { passive: true });
+
+      var still = window.matchMedia("(prefers-reduced-motion: reduce)");
+      btns.forEach(function (b, i) {
+        b.addEventListener("click", function () {
+          var left = hall.scrollLeft +
+            (cards[i].getBoundingClientRect().left - hall.getBoundingClientRect().left);
+          hall.scrollTo({ left: left, behavior: still.matches ? "auto" : "smooth" });
+        });
+      });
+
+      sync();
+      window.addEventListener("resize", sync);
     })();
   </script>
   <script src="rewards.js"></script>
