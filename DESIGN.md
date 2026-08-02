@@ -376,9 +376,20 @@ spring ease; LED bars slide in at the bottom edge.
   navigation links stay mid-tone. The fill is flat ember, not an LED spectrum
   -- a determinate bar reads as one quantity, and a four-hue gradient implied
   segments it does not have. Matches the amber score card on rewards.html
-- **The action is a text link, never a filled pill.** A bordered capsule here
-  reads as another text input -- same glass rounding and fill the composer
-  uses -- so it competes with the fields instead of the copy
+- **Two actions, and the rule is about glass, not weight.** The primary is a
+  solid ember pill: "Continue earning" once signed in, which scrolls to the
+  routes below where points are actually earned, or "Sign in to earn rewards"
+  when signed out, which opens the modal -- a button that says "sign in" and
+  scrolls instead is a lie. Ink on ember, not white: white on `#ff8a4a` is
+  2.2:1, ink is 7.5:1 dark and 6.1:1 light.
+  The earlier rule here read "never a filled pill", which was too broad. The
+  thing that failed was a *bordered glass capsule* -- it borrowed the
+  composer's rounding and translucent fill and so read as another text input.
+  An opaque fill has none of that problem; nothing else on the page is solid
+  ember. Glass is what this band's action must not be
+- **The secondary stays a text link, and steps aside when it would echo.** It
+  carries "View Profile" once signed in and hides while signed out, where it
+  would only repeat the primary
 - **Named, then counted.** The band opens with "Aquafire Rewards" in heading
   ink plus a "Learn to earn" badge (ember, Label small, the same chip shape
   the points badges use); the standing total sits below it. The bare number

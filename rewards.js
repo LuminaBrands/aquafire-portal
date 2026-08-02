@@ -214,7 +214,34 @@
   }
 
   /* ── Banner CTA (Sign In / View Profile) ── */
+  /* The homepage rewards band's primary action scrolls to the routes, which
+     are where points are actually earned. Only the homepage has them, so this
+     no-ops elsewhere. The tabs are the target on phones and are display:none
+     from 920 up, where the rail itself is the thing to land on. */
+  function scrollToEarn() {
+    var t = document.getElementById('hallTabs');
+    if (!t || getComputedStyle(t).display === 'none') t = document.getElementById('hall');
+    if (!t) return;
+    var reduce = window.matchMedia
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+
   function updateBannerCTA() {
+    // index.html rewards band: the primary action. Signed in it points at the
+    // routes below (where points are earned); signed out it opens the modal,
+    // because a button labelled "Sign in" that scrolls instead is a lie.
+    var journeyCta = document.getElementById('rb-journey-cta');
+    if (journeyCta) {
+      if (currentUser) {
+        journeyCta.innerHTML = 'Continue earning' + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>';
+        journeyCta.onclick = scrollToEarn;
+      } else {
+        journeyCta.innerHTML = 'Sign in to earn rewards' + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>';
+        journeyCta.onclick = function () { window.AquafireRewards && window.AquafireRewards.showLogin(); };
+      }
+    }
+
     // index.html banner button
     var homeCta = document.getElementById('rb-signin-cta');
     if (homeCta) {
@@ -229,6 +256,9 @@
           ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>';
         homeCta.onclick = function () { window.AquafireRewards && window.AquafireRewards.showLogin(); };
       }
+      // Signed out, the primary already says "Sign in to earn rewards";
+      // two sign-in actions side by side is just noise.
+      if (journeyCta) homeCta.style.display = currentUser ? '' : 'none';
     }
 
     // rewards.html banner button
