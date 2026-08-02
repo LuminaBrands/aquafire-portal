@@ -367,9 +367,9 @@ spring ease; LED bars slide in at the bottom edge.
 ### Rewards band (homepage)
 - **Shape:** 24px band; column on mobile, row on desktop (total, progress,
   links, then the CTA at the far end)
-- **Reports state, never a route.** The 17 modules are collected in any order,
+- **Reports state, never a route.** The 18 modules are collected in any order,
   so the band shows the standing total, a pill progress bar and
-  "N / 17 modules completed" -- not a sequence of steps. It replaced a 4-node
+  "N / 18 modules completed" -- not a sequence of steps. It replaced a 4-node
   track that implied one
 - **Ember is the rewards accent** and stays scarce: the standing total, the
   progress fill and the one action (sign in / view profile) take it; the
