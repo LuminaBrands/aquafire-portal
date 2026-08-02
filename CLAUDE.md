@@ -17,6 +17,7 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 | `enclosure-guide.html` | Interactive enclosure dimension calculator with 3D isometric diagram |
 | `water-care.html` | Water hardness lookup (ZIP code DB) and softener replacement calculator |
 | `quick-start.html` | Model selection page linking to individual guides — also the site's "getting started" entry point since the placeholder page was retired |
+| `share-install.html` | Photo submission — uploads one install shot to Firebase Storage (`installs/<uid>/`) and awards the 500-point `share-install` reward. Needs Storage enabled + the rules in `docs/storage-rules.md` |
 | `support.html` | Support hub — cards link to Troubleshooter + (stub) warranty/claims/FAQs |
 | `troubleshoot.html` | **Interactive Troubleshooter** — model-aware guided decision-tree wizard |
 | `chat-insights.html` | **Internal** chat-log dashboard for the Ember widget (Firebase-gated; not in nav) — transcripts, unanswered questions, 👍/👎 rates |
@@ -60,6 +61,7 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 |------|----------|
 | `docs/source-material/` | Plain-text extracts of the Aquafire help-center articles, install/spec guides, warranty, and manuals the Troubleshooter tree is built from (+ `README.md` index) |
 | `docs/chat-assistant.md` | Chat widget docs — Shopify install, config options, optional Claude-API proxy example, KB maintenance rules |
+| `docs/storage-rules.md` | **Source of truth for the Firebase Storage rules** — same hand-published arrangement as the Firestore ones; covers the `installs/` path, the size and content-type limits, and what must be switched on before `share-install.html` works |
 | `docs/firestore-rules.md` | **Source of truth for the Firestore security rules** (`users` / `chatEvents` / `chatKnowledge`) — they're published by hand in the Firebase console, so update this file in the same PR; also covers App Check and the rewards-points limitation |
 
 ## Architecture

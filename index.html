@@ -206,7 +206,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     .murmur .cap { padding: 8px 15px; font-size: 0.82rem; font-weight: 500; }
 
     /* ── Rewards band ─────────────────────────────────
-       A status module, not a path: owners collect the 17 modules in whatever
+       A status module, not a path: owners collect the 18 modules in whatever
        order suits them, so this reports the standing total and how many are
        done rather than implying a sequence. Mirrors the score card on
        rewards.html. Not a link -- it holds three of its own. */
@@ -540,7 +540,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       <button class="j-go" id="rb-journey-cta" type="button">Sign in to earn rewards</button>
       <div class="j-prog">
         <span class="j-bar" aria-hidden="true"><span class="j-bar-fill" id="rb-home-bar-fill"></span></span>
-        <span class="j-meta"><strong id="rb-home-bar-label">0 / 17 modules completed</strong> &middot; collect them in any order</span>
+        <span class="j-meta"><strong id="rb-home-bar-label">0 / 18 modules completed</strong> &middot; collect them in any order</span>
       </div>
       <!-- One footer row. "View your rewards" and "How the program works"
            pointed at the same page and were two blocks tall between them; the
@@ -628,7 +628,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         </div>
         <div class="minis">
           <a href="maintenance.html">Maintenance</a>
-          <a href="rewards.html">Complete setup &middot; +500 pts</a>
+          <a data-reward="share-install" href="share-install.html">Share your install</a>
         </div>
       </section>
 

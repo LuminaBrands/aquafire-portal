@@ -35,6 +35,7 @@
     'fireplace-setup':   { points: 500, label: 'Complete Fireplace Setup' },
     'register-warranty': { points: 300, label: 'Register Warranty' },
     'submit-review':     { points: 500, label: 'Submit a Review' },
+    'share-install':     { points: 500, label: 'Share Your Install' },
   };
 
   /* ── State ── */
