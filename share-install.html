@@ -135,6 +135,7 @@
         <!-- ── What makes a good one ──────────────────────────────── -->
         <section class="si-card si-aside" aria-labelledby="si-tips-t">
           <h2 id="si-tips-t" class="si-h">What makes a good one</h2>
+          <img class="si-example" src="install-example.jpg" alt="An Aquafire installed in a living room, flame lit, with a timber mantel above it" width="1448" height="1086" loading="lazy">
           <ul class="si-tips">
             <li><b>Flame on, lights down.</b> The vapour reads best when it is the brightest thing in the room.</li>
             <li><b>Show the surround.</b> The whole opening and the material around it, not just the flame.</li>
@@ -269,6 +270,11 @@
     .si-links a { font-size: 0.76rem; font-weight: 600; color: var(--text-mid); text-decoration: none; }
     .si-links a:hover { text-decoration: underline; color: var(--text-hi); }
 
+    /* An example of the thing we are asking for, above the advice about it. */
+    .si-example {
+      display: block; width: 100%; height: auto; margin-bottom: 16px;
+      border-radius: 15px; background: var(--tip-bg);
+    }
     .si-tips { display: flex; flex-direction: column; gap: 11px; margin-bottom: 14px; list-style: none; }
     .si-tips li { font-size: 0.8rem; line-height: 1.55; color: var(--text-mid); }
     .si-tips b { color: var(--text-hi); font-weight: 600; }
