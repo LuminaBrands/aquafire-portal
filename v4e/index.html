@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<!--
+DIRECTION CONTRACT — v4e "Welcome Hall" (Vapor Glass layout study 5 of 5)
+THESIS: A hotel lobby, not a funnel: Ember at the front desk, and three glass
+wings standing open at once — Explore, Begin, Resolve — so every audience sees
+its own hallway without clicking first. Refuses triage AND the undifferentiated
+grid: the audiences are architecture, visible simultaneously.
+OWN-WORLD: Inherited v4 Vapor Glass. New atoms: a reception band (orb + composer
++ murmured questions), three wing columns each opened by a small Ember tip
+bubble, link-rows as the wings' interior.
+STORY: A shopper walks the left wing, a new owner the middle, a seasoned owner
+the right — and Ember's desk is equidistant from all three.
+FIRST VIEWPORT: Reception band centered (orb, one-line welcome, composer,
+quick questions); the three wing headers and their Ember tips already visible
+below. Primary action = composer, then each wing's lead row.
+FORM: User-pinned world (v4) + pinned exploration. Structure 5: three-wing hall,
+no triage. No seed roll — pinned brief.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Owner's Guide — Welcome Hall</title>
+  <meta name="description" content="Ember, the Aquafire assistant — the welcome hall of the water vapor fireplace guide.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --smoke: #101216; --glass: rgba(255,255,255,0.055); --glass-hi: rgba(255,255,255,0.10);
+      --stroke: rgba(255,255,255,0.12); --stroke-hi: rgba(255,255,255,0.22);
+      --white: #f3f4f6; --gray: #b9bec8; --gray-2: #8d939f; --spark: #ff9d45;
+      --ease: cubic-bezier(0.16,1,0.3,1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--smoke); color: var(--white);
+      font-family: "Figtree", system-ui, sans-serif; line-height: 1.6;
+      -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--white); outline-offset: 3px; border-radius: 999px; }
+    .atmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .atmos::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.028) 19%, rgba(255,255,255,0.028) 30%, transparent 31%),
+        linear-gradient(107deg, transparent 36%, rgba(255,255,255,0.022) 37%, rgba(255,255,255,0.022) 48%, transparent 49%),
+        linear-gradient(107deg, transparent 58%, rgba(255,255,255,0.016) 59%, rgba(255,255,255,0.016) 72%, transparent 73%),
+        linear-gradient(180deg, #14171c 0%, var(--smoke) 55%, #0b0d10 100%);
+    }
+    .puff { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.5; will-change: transform; }
+    .puff-a { width: 560px; height: 420px; left: -8%; top: 8%; background: radial-gradient(closest-side, #262b34, transparent 72%); animation: drift-a 46s ease-in-out infinite alternate; }
+    .puff-b { width: 640px; height: 460px; right: -12%; top: 30%; background: radial-gradient(closest-side, #22262e, transparent 70%); animation: drift-b 58s ease-in-out infinite alternate; }
+    @keyframes drift-a { from { transform: translate(0,0) scale(1); } to { transform: translate(70px,-40px) scale(1.12); } }
+    @keyframes drift-b { from { transform: translate(0,0) scale(1.06); } to { transform: translate(-90px,50px) scale(0.96); } }
+    @media (prefers-reduced-motion: reduce) { .puff { animation: none; } }
+
+    .cap {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--glass); border: 1px solid var(--stroke);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-radius: 999px; color: var(--gray); text-decoration: none;
+      transition: background-color 0.28s, border-color 0.28s, color 0.28s, transform 0.32s var(--ease);
+    }
+    .cap:hover { background: var(--glass-hi); border-color: var(--stroke-hi); color: var(--white); transform: translateY(-2px); }
+    .orb {
+      border-radius: 50%; flex: none; position: relative;
+      background: radial-gradient(circle at 35% 30%, #ffd9ae, #e0641e 62%, #6e2a08 100%);
+      box-shadow: inset 0 -2px 6px rgba(0,0,0,0.35);
+    }
+    .orb::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid var(--stroke); }
+
+    .page { position: relative; z-index: 1; max-width: 1220px; margin: 0 auto; padding: 0 24px; }
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 24px 0 0; }
+    .bar .brand { padding: 11px 20px; }
+    .bar .brand img { height: 17px; display: block; }
+    .bar .links { display: flex; gap: 8px; }
+    .bar .links .cap { padding: 10px 18px; font-size: 0.88rem; font-weight: 600; }
+
+    /* ── Reception ───────────────────────────────────── */
+    .desk { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 46px 0 8px; }
+    .desk .orb { width: 58px; height: 58px; }
+    .desk h1 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -0.02em; margin-top: 18px; max-width: 24ch; text-wrap: balance; line-height: 1.2; }
+    .desk .sub { color: var(--gray-2); font-size: 0.95rem; margin-top: 8px; max-width: 52ch; }
+    .composer {
+      margin-top: 24px; width: min(620px, 100%);
+      display: flex; align-items: center; gap: 12px;
+      background: var(--glass); border: 1px solid var(--stroke); backdrop-filter: blur(18px);
+      border-radius: 999px; padding: 9px 9px 9px 24px;
+      box-shadow: 0 26px 54px -22px rgba(0,0,0,0.65);
+      text-decoration: none;
+      transition: border-color 0.28s, transform 0.3s var(--ease);
+    }
+    .composer:hover { border-color: var(--stroke-hi); transform: translateY(-2px); }
+    .composer .ph { flex: 1; color: var(--gray-2); font-size: 0.98rem; text-align: left; }
+    .composer .send {
+      display: inline-flex; align-items: center; gap: 8px; flex: none;
+      background: rgba(255,255,255,0.12); border: 1px solid var(--stroke);
+      color: var(--white); font-weight: 600; font-size: 0.9rem;
+      padding: 11px 20px; border-radius: 999px;
+    }
+    .composer:hover .send { background: rgba(255,255,255,0.18); }
+    .murmur { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; margin-top: 16px; }
+    .murmur .cap { padding: 8px 16px; font-size: 0.84rem; font-weight: 500; }
+
+    /* ── Wings ───────────────────────────────────────── */
+    .hall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; align-items: start; }
+    .wing {
+      background: var(--glass); border: 1px solid var(--stroke); backdrop-filter: blur(18px);
+      border-radius: 28px; padding: 22px 20px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .wing-head { display: flex; align-items: center; gap: 12px; padding: 0 4px; }
+    .wing-head .w-ico { width: 40px; height: 40px; border-radius: 13px; background: rgba(255,255,255,0.08); display: grid; place-items: center; color: var(--spark); flex: none; }
+    .wing-head b { display: block; font-size: 1.08rem; font-weight: 700; letter-spacing: -0.01em; }
+    .wing-head span { display: block; font-size: 0.78rem; color: var(--gray-2); }
+    .tip { display: flex; gap: 9px; }
+    .tip .orb { width: 24px; height: 24px; margin-top: 3px; }
+    .tip .bubble {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--stroke);
+      border-radius: 14px; border-top-left-radius: 4px; padding: 10px 13px;
+      font-size: 0.82rem; color: var(--gray);
+    }
+    .tip .bubble strong { color: var(--white); }
+    .rows { display: flex; flex-direction: column; gap: 8px; }
+    .row {
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+      background: rgba(255,255,255,0.045); border: 1px solid var(--stroke); border-radius: 16px;
+      padding: 12px 14px;
+      transition: background-color 0.25s, border-color 0.25s, transform 0.3s var(--ease);
+    }
+    .row:hover { background: rgba(255,255,255,0.09); border-color: var(--stroke-hi); transform: translateY(-2px); }
+    .row.lead { background: rgba(255,255,255,0.09); }
+    .row .r-ico { width: 32px; height: 32px; border-radius: 10px; background: rgba(255,255,255,0.07); display: grid; place-items: center; color: var(--gray); flex: none; }
+    .row:hover .r-ico { color: var(--spark); }
+    .row b { display: block; font-size: 0.9rem; font-weight: 600; }
+    .row span { display: block; font-size: 0.76rem; color: var(--gray-2); }
+    .row .thumb { width: 40px; height: 30px; border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.06); display: grid; place-items: center; flex: none; }
+    .row .thumb img { width: 36px; height: 26px; object-fit: contain; }
+    .row svg.arr { margin-left: auto; color: var(--gray-2); flex: none; }
+    .minis { display: flex; flex-wrap: wrap; gap: 7px; }
+    .minis a {
+      font-size: 0.78rem; font-weight: 500; color: var(--gray); text-decoration: none;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--stroke); border-radius: 999px; padding: 6px 12px;
+      transition: color 0.22s, background-color 0.22s;
+    }
+    .minis a:hover { color: var(--white); background: rgba(255,255,255,0.1); }
+
+    /* ── Close ───────────────────────────────────────── */
+    .close { margin: 60px auto 0; max-width: 640px; text-align: center; }
+    .close .stars { color: var(--spark); letter-spacing: 3px; font-size: 0.85rem; }
+    .close blockquote { font-size: 1.15rem; font-weight: 500; margin-top: 10px; text-wrap: balance; }
+    .close figcaption { color: var(--gray-2); font-size: 0.84rem; margin-top: 10px; }
+    .foot { margin: 44px 0 34px; display: flex; align-items: center; justify-content: center; gap: 18px; color: var(--gray-2); font-size: 0.78rem; flex-wrap: wrap; }
+    .foot img { height: 14px; opacity: 0.65; }
+    .foot a { color: var(--gray-2); text-decoration: none; }
+    .foot a:hover { color: var(--white); }
+
+    @media (max-width: 980px) {
+      .hall { grid-template-columns: 1fr; }
+      .bar .links { display: none; }
+      .desk { padding-top: 34px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="atmos" aria-hidden="true"><span class="puff puff-a"></span><span class="puff puff-b"></span></div>
+
+  <div class="page">
+    <header class="bar">
+      <a class="cap brand" href="../index.html" aria-label="Aquafire home">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <nav class="links">
+        <a class="cap" href="../quick-start.html">Guides</a>
+        <a class="cap" href="../dealer-locator.html">Find a Dealer</a>
+        <a class="cap" href="https://www.aquafire.com" target="_blank" rel="noopener">Shop</a>
+      </nav>
+    </header>
+
+    <section class="desk">
+      <span class="orb" aria-hidden="true"></span>
+      <h1>Welcome. I&rsquo;m Ember &mdash; this hall knows your Aquafire by heart.</h1>
+      <p class="sub">Ask me anything, or walk into the wing that sounds like you.</p>
+      <a class="composer" href="../support.html" title="Ember opens in the corner of every portal page">
+        <span class="ph">Ask Ember&hellip; &ldquo;can I put my hand in the flame?&rdquo;</span>
+        <span class="send">Ask
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </span>
+      </a>
+      <div class="murmur" aria-label="Common questions">
+        <a class="cap" href="../troubleshoot.html">&ldquo;It&rsquo;s beeping&rdquo;</a>
+        <a class="cap" href="../maintenance.html">&ldquo;Cleaning the mist maker?&rdquo;</a>
+        <a class="cap" href="../enclosure-guide.html">&ldquo;What cutout size?&rdquo;</a>
+        <a class="cap" href="../water-care.html">&ldquo;Is my water too hard?&rdquo;</a>
+      </div>
+    </section>
+
+    <div class="hall">
+      <section class="wing" aria-label="Explore — for prospective owners">
+        <div class="wing-head">
+          <span class="w-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span>
+          <span><b>Explore</b><span>Still deciding &middot; researching</span></span>
+        </div>
+        <div class="tip">
+          <span class="orb" aria-hidden="true"></span>
+          <p class="bubble">The flame is <strong>water mist, lit warm</strong> &mdash; cool to the touch, no venting, no gas. It plugs in.</p>
+        </div>
+        <div class="rows">
+          <a class="row lead" href="../quick-start.html">
+            <span class="r-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a1.5 1.5 0 0 1 1.5-1.5H19V21H5.5A1.5 1.5 0 0 1 4 19zM19 17H5.5A1.5 1.5 0 0 0 4 18.5"/></svg></span>
+            <span><b>Meet the models</b><span>Pro &middot; Original &middot; Lite &mdash; 20&Prime;/40&Prime;/60&Prime;</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../aquafire-pro.html">
+            <span class="thumb"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt=""></span>
+            <span><b>Aquafire Pro</b><span>Color LEDs &middot; app &middot; direct-plumb</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../aquafire-original.html">
+            <span class="thumb"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ORIGINAL.png?v=1768251742" alt=""></span>
+            <span><b>Aquafire Original</b><span>The classic amber flame</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../dealer-locator.html">
+            <span class="r-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+            <span><b>See one in person</b><span>Authorized dealers near you</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="minis">
+          <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener">Watch it move</a>
+          <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Custom quote</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop</a>
+        </div>
+      </section>
+
+      <section class="wing" aria-label="Begin — for new owners">
+        <div class="wing-head">
+          <span class="w-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a6 6 0 0 0 6-6c0-3-2-4.5-6-9-4 4.5-6 6-6 9a6 6 0 0 0 6 6z"/></svg></span>
+          <span><b>Begin</b><span>Just arrived &middot; setting up</span></span>
+        </div>
+        <div class="tip">
+          <span class="orb" aria-hidden="true"></span>
+          <p class="bubble">Day one order: <strong>place, water check, first fill</strong> &mdash; then register the warranty. I&rsquo;ll walk you.</p>
+        </div>
+        <div class="rows">
+          <a class="row lead" href="../getting-started.html">
+            <span class="r-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></span>
+            <span><b>Getting started</b><span>Unboxing to first flame</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../enclosure-guide.html">
+            <span class="r-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V4h8v3M9 12h6"/></svg></span>
+            <span><b>Enclosure Builder</b><span>Cutouts &amp; light trap, calculated</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../water-care.html">
+            <span class="r-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3.5 4-6 6.5-6 10a6 6 0 0 0 12 0c0-3.5-2.5-6-6-10z"/></svg></span>
+            <span><b>Check your water</b><span>Hardness by ZIP &middot; Vapor Pure</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">
+            <span class="r-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9.5 12 2 2 3.5-4"/></svg></span>
+            <span><b>Register your warranty</b><span>Two minutes &middot; full coverage</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="minis">
+          <a href="../quick-start.html">Quick start</a>
+          <a href="../rewards.html">Earn points as you go</a>
+        </div>
+      </section>
+
+      <section class="wing" aria-label="Resolve — for seasoned owners">
+        <div class="wing-head">
+          <span class="w-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+          <span><b>Resolve</b><span>Something&rsquo;s off &middot; fix it</span></span>
+        </div>
+        <div class="tip">
+          <span class="orb" aria-hidden="true"></span>
+          <p class="bubble">Beeps are messages, not moods. <strong>Name the symptom</strong> and I&rsquo;ll hand you the fix for your exact model.</p>
+        </div>
+        <div class="rows">
+          <a class="row lead" href="../troubleshoot.html">
+            <span class="r-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+            <span><b>Troubleshooter</b><span>Guided fixes &middot; 3&ndash;5 minutes</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../maintenance.html">
+            <span class="r-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.1-.6-.6-2.1z"/></svg></span>
+            <span><b>Maintenance rituals</b><span>Mist maker 3 mo &middot; flush 6 mo</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">
+            <span class="r-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M9 16h4M14 3H5a1.5 1.5 0 0 0-1.5 1.5v15A1.5 1.5 0 0 0 5 21h14a1.5 1.5 0 0 0 1.5-1.5V10z"/></svg></span>
+            <span><b>Request service</b><span>A human, scheduled</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../support.html">
+            <span class="r-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 21l1.5-4.6A8.5 8.5 0 1 1 21 12z"/></svg></span>
+            <span><b>Support Hub</b><span>Warranty, claims &amp; FAQs</span></span>
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="minis">
+          <a href="../troubleshoot.html">Beeping</a>
+          <a href="../troubleshoot.html">Low flame</a>
+          <a href="../troubleshoot.html">Foggy</a>
+          <a href="../troubleshoot.html?model=pro">App issues</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Parts</a>
+        </div>
+      </section>
+    </div>
+
+    <figure class="close">
+      <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+      <blockquote>&ldquo;We replaced our gas fireplace with the Aquafire 60&Prime; &mdash; no venting, no heat issues, and the ambiance is unreal.&rdquo;</blockquote>
+      <figcaption>Nicole &amp; David K. &middot; Renovation &middot; <a href="https://judge.me/product_reviews/9498b1ae-d6c2-4e5b-b06b-78b0906a168f/new?source=shareable-link" target="_blank" rel="noopener" style="color: var(--gray);">write a review</a></figcaption>
+    </figure>
+
+    <footer class="foot">
+      <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      <a href="../rewards.html">Rewards</a>
+      <a href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener">YouTube</a>
+      <span>&copy; 2026 Aquafire &middot; Vapor Glass layout study v4e &ldquo;Welcome Hall&rdquo;</span>
+    </footer>
+  </div>
+</body>
+</html>

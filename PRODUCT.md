@@ -21,6 +21,8 @@ The Aquafire Interactive Owner's Guide — a self-serve documentation and tools 
 
 Success (user-confirmed): **fewer support tickets** (owners resolve issues themselves via the Troubleshooter, guides, and Ember instead of emailing support) and **dealer enablement** (trade partners rely on the portal as their working reference).
 
+The **rewards journey is a deliberate engagement mechanic** (user-confirmed 2026-07-31): gamification (17 guide modules, points, +500 setup / +300 warranty bonuses) should visibly encourage users deep into the guide journey, not sit as an afterthought.
+
 ## Positioning
 
 The only interactive, model-aware companion for Aquafire water-vapor fireplaces: guided decision-tree troubleshooting, an enclosure dimension calculator with cutout diagrams, and a ZIP-code water-hardness tool — all grounded in Aquafire's official documentation with a traceable source archive, and embeddable directly into aquafire.com.
@@ -38,12 +40,14 @@ The only interactive, model-aware companion for Aquafire water-vapor fireplaces:
 - **Tools:** interactive Troubleshooter (model-aware decision tree, `?model=` / `?node=` deep links), enclosure calculator with SVG cutout/isometric diagrams, water hardness lookup (2,000+ ZIP prefixes) + softener replacement calculator, Build Yours configurator, dealer locator/admin, rewards program, Ember chat (local intent KB + Claude fallback).
 - **Tech constraints:** static vanilla HTML/CSS/JS, flat root, **no build step, no frameworks, no npm dependencies** — files deploy as-is. Nav and footer are duplicated per page (~13 files, no templating). `api/chat.js` must stay dependency-free. `assistant.js` string literals must stay pure-ASCII (Shopify charset safety).
 - **Content rule:** customer-facing facts must trace to `docs/source-material/`; when the underlying Aquafire docs change, both the tool and the extract get updated.
-- **Undecided / pending:** official how-to video URLs (the `VIDEOS` map in `troubleshoot.js` holds TODO placeholders; tools show "video coming soon" — do not fabricate links). `getting-started.html` and parts of `support.html` are stubs.
+- **Mobile-first (user-confirmed 2026-07-30):** the portal is designed phone-first — owners typically arrive on a phone standing next to the unit — and must scale up gracefully to desktop, where a denser dashboard-style layout is welcome. Composition decisions start at phone width; desktop is the enhancement, not the default.
+- **Undecided / pending:** official how-to video URLs (the `VIDEOS` map in `troubleshoot.js` holds TODO placeholders; tools show "video coming soon" — do not fabricate links). Parts of `support.html` are stubs. The `getting-started.html` placeholder was removed — Quick Start covers that ground.
 
 ## Brand Commitments
 
 - **Binding (user-confirmed 2026-07-24):** the Aquafire name, logo, and official product imagery (Shopify CDN) only.
 - **Explicitly not binding:** the current dark theme, Aquafire red `#c0392b` palette, Poppins/Inter typography, and existing component language. The user opened the entire visual world for replacement in a redesign; the incumbent look is evidence, not authority.
+- **Vibrant color mixing is a differentiator (user-confirmed 2026-07-31):** Aquafire's dual LED light bars enable rich color mixing beyond standard RGB presets (front + back LED bars per the install specs). The redesign should carry subtle color elements drawn from a color-mixing palette — red/orange, frosty blue, greenish yellow, magenta — as brand expression.
 - Incumbent copy voice (plainspoken, owner-friendly, e.g. "Welcome to Your Aquafire Interactive Owner's Guide") is current practice, not a confirmed commitment.
 
 ## Evidence on Hand

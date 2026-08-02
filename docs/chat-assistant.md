@@ -86,6 +86,59 @@ on the tag itself:
 | `orderEndpoint` | — | `portalBase + 'api/order-status'` | POST endpoint for order & tracking lookup (below). Set `null` to disable the lookup flow |
 | `notifyEndpoint` | — | `portalBase + 'api/notify-handoff'` | POST endpoint for team handoff notifications (below). Set `null` to disable |
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
+| `beam` | `data-beam` | `'input'` | Border Beam target: `'input'` (composer field), `'panel'` (whole window), or `false` to disable |
+| `beamVariant` | `data-beam-variant` | `'colorful'` | Beam palette: `'colorful'` (full spectrum) or `'ember'` (Aquafire fire palette) |
+| `mount` | `data-mount` | unset | CSS selector (or element) to render the panel into, instead of the corner launcher |
+
+### Inline mount
+
+Set `mount` to a selector and the widget renders its panel inside that
+container instead of floating in the corner. The launcher bubble, the nudge
+teaser and the mobile full-screen takeover all switch off; the host owns
+showing and sizing the container.
+
+```js
+window.AQUAFIRE_ASSISTANT_CONFIG = { mount: '#heroChatMount', beam: false };
+```
+
+Drive it through `window.AquafireAssistant`:
+
+| Call | Does |
+|---|---|
+| `.open()` | Open the panel (greets if the transcript is empty) |
+| `.ask(text)` | Open and send `text` as if the visitor typed it |
+| `.close()` | Close it |
+| `.reset()` | Clear the conversation |
+| `.isOpen()` / `.root()` | State, and the mounted element for styling/measuring |
+
+Calls made before the widget finishes loading are queued, so a host never has
+to wait for it. When the visitor closes the panel from its own header or with
+Escape, the widget fires a bubbling `aquafire:close` event so the host can
+collapse its container.
+
+The panel drops its own background and chrome when inline and inherits the
+host's `--afa-*` tokens, so restyling it is a matter of rebinding those on the
+container. One exception: `.afa-head` has a hardcoded gradient rather than a
+token, so override it directly if the host's surface is not dark.
+
+`index.html` is the first consumer &mdash; its hero composer expands in
+place into this panel.
+
+### Border Beam
+
+The composer field carries an animated full-spectrum beam (a trimmed inline
+port of `beam.css` — the widget ships as one script tag, so it can't link an
+external stylesheet). It brightens and spins faster while Ember is generating a
+reply, so it doubles as a live activity indicator alongside the typing dots.
+
+Set `beam: 'panel'` to rim the whole chat window instead, or `beam: false` to
+turn it off. `beamVariant: 'ember'` narrows the palette to the brand reds and
+ambers. The orbit runs at a deliberate 4s so it stays ambient rather than
+pulling the eye off the conversation.
+
+The effect needs `@property` + `mask-composite`; where either is missing it
+is skipped entirely and the widget is unaffected. `prefers-reduced-motion`
+holds the beam lit but static.
 
 ---
 

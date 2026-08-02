@@ -1,0 +1,16 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [
+      "compare.html"
+    ],
+    "ignoreValues": [
+      {
+        "rule": "design-system-color",
+        "value": "#000",
+        "createdAt": "2026-08-02T19:06:41.955Z",
+        "reason": "mask stencil alpha, not a palette color"
+      }
+    ]
+  }
+}

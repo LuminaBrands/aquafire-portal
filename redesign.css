@@ -1,0 +1,532 @@
+/* ── Aquafire portal — redesign design system ─────────────────────────────────
+   The shared layer of the "Hero Bleed x Dual Theme" direction committed in
+   index.html (see DESIGN.md and docs/redesign-handoff.md). Extracted so
+   the rollout does not paste the token system into every page -- the portal
+   has no templating, and duplicated nav is already its worst maintenance
+   problem (CLAUDE.md gotchas). One copy here; per-page CSS stays per page.
+
+   Contains: the dark/light token bindings, base reset, atmosphere and scene
+   layers, the glass primitives (.cap, .orb, the conic rim), page frame and
+   nav bar, the .row/.rows/.minis list components, and the closing/footer.
+
+   Page-specific composition (home's hero, journey band and intent wings; each
+   tool's own UI) stays inline in that page.
+
+   Themes are bound to :root[data-theme]; every page needs the tiny head script
+   that restores the saved theme before first paint, and the toggle button.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Semantic tokens. Dark = mix4 "Edge-lit" smoke; light = mix6 "Edge-lit
+   Showroom". Components below reference only tokens, never raw theme
+   colors, so the switcher swaps the whole surface at once. */
+:root {
+  color-scheme: dark;
+  --ember: #ff8a4a; --frost: #6fc3ff; --chart: #c9e85c; --mag: #ff5fa8;
+  --ember-t: #ff8a4a; --frost-t: #6fc3ff; --chart-t: #c9e85c; --mag-t: #ff5fa8;
+  --ground-fill: #101216;
+  --text-hi: #f3f4f6; --text-mid: #b9bec8; --text-dim: #8d939f; --ico-ink: #b9bec8;
+  --stroke: rgba(255,255,255,0.12); --stroke-hi: rgba(255,255,255,0.22);
+  --orb-ring: rgba(255,255,255,0.12);
+  --orb-shadow: inset 0 -2px 6px rgba(0,0,0,0.35);
+  --cap-bg: rgba(255,255,255,0.045); --cap-bg-hover: rgba(255,255,255,0.08);
+  --cap-border: rgba(255,255,255,0.08); --cap-border-hover: rgba(255,255,255,0.15);
+  --cap-shadow: inset 0 2px 5px -2px rgba(0,0,0,0.4), 0 3px 9px -5px rgba(0,0,0,0.55);
+  --cap-shadow-hover: inset 0 2px 5px -2px rgba(0,0,0,0.35), 0 6px 14px -7px rgba(0,0,0,0.6);
+  --rim-conic: conic-gradient(
+    rgba(255,255,255,0.20) 0deg, rgba(255,255,255,0.04) 70deg,
+    rgba(255,255,255,0.17) 135deg, rgba(255,255,255,0.03) 200deg,
+    rgba(255,255,255,0.08) 268deg, rgba(255,255,255,0.55) 315deg,
+    rgba(255,255,255,0.20) 360deg);
+  --rim-opacity: 0.75;
+  --composer-bg: rgba(255,255,255,0.05); --composer-border: rgba(255,255,255,0.12);
+  --composer-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 8px 20px -12px rgba(0,0,0,0.6);
+  --send-bg: rgba(255,255,255,0.12); --send-border: rgba(255,255,255,0.12);
+  --send-ink: #f3f4f6; --send-bg-hover: rgba(255,255,255,0.18);
+  --journey-bg: rgba(255,255,255,0.035); --journey-border: rgba(255,255,255,0.08);
+  --journey-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 4px 12px -8px rgba(0,0,0,0.55);
+  --nub-bg: rgba(255,255,255,0.08);
+  --wing-bg: rgba(255,255,255,0.055); --wing-border: rgba(255,255,255,0.12);
+  --wing-shadow: 0 0 rgba(0,0,0,0);
+  --tip-bg: rgba(16,18,22,0.4);
+  --row-bg: rgba(13,15,19,0.4); --row-bg-hover: rgba(22,25,31,0.5);
+  --menu-bg: rgba(14,16,20,0.97);
+  /* Overlay surfaces: the auth modal, the profile dropdown and the points
+     toast (rewards.css). They float above the page, so they take the same
+     near-opaque ground the burger panel does rather than the glass fills --
+     translucency there lets the page read straight through the dialog. The
+     scrim stays dark in both themes: it is a dimmer, not a surface. */
+  --scrim: rgba(0,0,0,0.6);
+  --modal-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  --dropdown-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  /* Form errors. Distinct from ember, which is the rewards accent -- an error
+     that reads as the brand colour is not an error. */
+  --danger: #ff6b5e;
+  --row-border: rgba(255,255,255,0.07); --row-border-hover: rgba(255,255,255,0.13);
+  --row-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.45), 0 2px 7px -4px rgba(0,0,0,0.5);
+  --row-shadow-hover: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 6px 14px -7px rgba(0,0,0,0.6);
+  --badge-border: rgba(255,138,74,0.4); --badge-bg: transparent;
+  --mini-bg: rgba(16,18,22,0.35); --mini-bg-hover: rgba(16,18,22,0.35);
+  --halo-grad: radial-gradient(closest-side, rgba(255,138,74,0.15), rgba(255,138,74,0.045) 45%, transparent 72%);
+  --scene-scrim:
+    radial-gradient(130% 100% at 50% 0%, transparent 42%, rgba(16,18,22,0.5) 100%),
+    linear-gradient(180deg, rgba(16,18,22,0.62) 0%, rgba(16,18,22,0.3) 26%, rgba(16,18,22,0.5) 58%, #101216 97%);
+  --atmos-grad:
+    linear-gradient(93deg, transparent 45%, rgba(255,255,255,0.05) 48%, rgba(255,255,255,0.015) 53%, transparent 57%),
+    linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.028) 19%, rgba(255,255,255,0.028) 30%, transparent 31%),
+    linear-gradient(180deg, #14171c 0%, #101216 55%, #0b0d10 100%);
+  --puff-a-c: #262b34; --puff-b-c: #22262e; --puff-opacity: 0.5;
+  /* Type on the photograph earns its contrast from a shadow rather than a
+     ground, so unlike every other token these four are identical in both
+     themes -- the photo is the same photo in either lighting. */
+  --photo-ink: #f3f4f6; --photo-ink-dim: #c9cdd5;
+  --photo-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  --photo-shadow-sm: 0 1px 4px rgba(0,0,0,0.5), 0 1px 14px rgba(0,0,0,0.6);
+  --logo-filter: none; --logo-foot-filter: none; --logo-foot-opacity: 0.65;
+  --focus-ink: #f3f4f6;
+  --ease: cubic-bezier(0.16,1,0.3,1);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ember: #ff6a3d; --frost: #4aa8ef; --chart: #aacc33; --mag: #ff4d9e;
+  --ember-t: #cf4e16; --frost-t: #1c76c9; --chart-t: #6f8f0a; --mag-t: #d9317f;
+  --ground-fill: linear-gradient(180deg, #f1f2f5 0%, #e9ebef 40%, #e2e5ea 100%);
+  --text-hi: #171a1f; --text-mid: #4c525c; --text-dim: #6a7280; --ico-ink: #6a7280;
+  --stroke: #e2e4e9; --stroke-hi: rgba(23,26,31,0.12);
+  --orb-ring: #cfd3da;
+  --orb-shadow: inset 0 -2px 6px rgba(0,0,0,0.3), 0 8px 18px -8px rgba(224,100,30,0.5);
+  --cap-bg: rgba(255,255,255,0.58); --cap-bg-hover: rgba(255,255,255,0.85);
+  --cap-border: rgba(23,26,31,0.08); --cap-border-hover: rgba(23,26,31,0.13);
+  --cap-shadow: inset 0 2px 4px -1px rgba(23,26,31,0.09), 0 2px 7px -4px rgba(23,26,31,0.16);
+  --cap-shadow-hover: inset 0 2px 4px -1px rgba(23,26,31,0.07), 0 5px 12px -6px rgba(23,26,31,0.22);
+  --rim-conic: conic-gradient(
+    rgba(255,255,255,0.9) 0deg, rgba(23,26,31,0.05) 80deg,
+    rgba(23,26,31,0.18) 135deg, rgba(23,26,31,0.04) 205deg,
+    rgba(255,255,255,0.55) 285deg, #ffffff 318deg,
+    rgba(255,255,255,0.9) 360deg);
+  --rim-opacity: 0.8;
+  --composer-bg: rgba(255,255,255,0.78); --composer-border: rgba(23,26,31,0.08);
+  --composer-shadow: inset 0 2px 5px -2px rgba(23,26,31,0.08), 0 6px 16px -10px rgba(23,26,31,0.18);
+  --send-bg: #171a1f; --send-border: #171a1f;
+  --send-ink: #ffffff; --send-bg-hover: #262b33;
+  --journey-bg: rgba(255,255,255,0.7); --journey-border: rgba(23,26,31,0.07);
+  --journey-shadow: inset 0 2px 5px -2px rgba(23,26,31,0.07), 0 3px 10px -7px rgba(23,26,31,0.16);
+  --nub-bg: #e5e8ec;
+  --wing-bg: rgba(255,255,255,0.74); --wing-border: #e2e4e9;
+  --wing-shadow: 0 18px 40px -18px rgba(23,26,31,0.16), 0 3px 10px -4px rgba(23,26,31,0.07);
+  --tip-bg: #f4f5f7;
+  --row-bg: rgba(252,253,254,0.72); --row-bg-hover: #ffffff;
+  --menu-bg: rgba(255,255,255,0.97);
+  --scrim: rgba(23,26,31,0.45);
+  --modal-shadow: 0 24px 70px rgba(23,26,31,0.22);
+  --dropdown-shadow: 0 16px 44px rgba(23,26,31,0.16);
+  --danger: #c0392b;
+  --row-border: rgba(23,26,31,0.07); --row-border-hover: rgba(23,26,31,0.12);
+  --row-shadow: inset 0 2px 4px -1px rgba(23,26,31,0.08), 0 2px 6px -4px rgba(23,26,31,0.14);
+  --row-shadow-hover: inset 0 2px 4px -1px rgba(23,26,31,0.06), 0 5px 12px -6px rgba(23,26,31,0.2);
+  --badge-border: rgba(207,78,22,0.35); --badge-bg: rgba(255,106,61,0.06);
+  --mini-bg: #fafbfc; --mini-bg-hover: #ffffff;
+  --halo-grad: radial-gradient(closest-side, rgba(255,255,255,0.5), rgba(255,106,61,0.06) 46%, transparent 70%);
+  --scene-scrim:
+    radial-gradient(130% 100% at 50% 0%, transparent 42%, rgba(233,235,239,0.45) 100%),
+    linear-gradient(180deg, rgba(16,18,22,0.62) 0%, rgba(16,18,22,0.46) 36%, rgba(196,201,210,0.3) 66%, #e9ebef 97%);
+  --atmos-grad:
+    linear-gradient(93deg, transparent 45%, rgba(255,255,255,0.9) 48%, rgba(255,255,255,0.25) 53%, transparent 57%),
+    linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.5) 19%, rgba(255,255,255,0.5) 30%, transparent 31%),
+    linear-gradient(107deg, transparent 52%, rgba(255,255,255,0.35) 53%, rgba(255,255,255,0.35) 66%, transparent 67%);
+  --puff-a-c: #ffffff; --puff-b-c: #dde1e8; --puff-opacity: 0.55;
+  --photo-ink: #f3f4f6; --photo-ink-dim: #c9cdd5;
+  --photo-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  --photo-shadow-sm: 0 1px 4px rgba(0,0,0,0.5), 0 1px 14px rgba(0,0,0,0.6);
+  --logo-filter: invert(1) brightness(0.25);
+  --logo-foot-filter: invert(1) brightness(0.45); --logo-foot-opacity: 1;
+  --focus-ink: #171a1f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ground-fill); color: var(--text-hi);
+  font-family: "Figtree", system-ui, sans-serif; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden; min-height: 100vh;
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--focus-ink); outline-offset: 3px; border-radius: 999px; }
+.atmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.atmos::before { content: ""; position: absolute; inset: 0; background: var(--atmos-grad); }
+.puff { position: absolute; border-radius: 50%; filter: blur(70px); opacity: var(--puff-opacity); }
+.puff-a { width: 480px; height: 380px; left: -14%; top: 6%; background: radial-gradient(closest-side, var(--puff-a-c), transparent 72%); animation: drift-a 46s ease-in-out infinite alternate; }
+.puff-b { width: 560px; height: 420px; right: -18%; top: 32%; background: radial-gradient(closest-side, var(--puff-b-c), transparent 70%); animation: drift-b 58s ease-in-out infinite alternate; }
+@keyframes drift-a { from { transform: translate(0,0); } to { transform: translate(60px,-36px) scale(1.1); } }
+@keyframes drift-b { from { transform: translate(0,0) scale(1.05); } to { transform: translate(-70px,44px) scale(0.96); } }
+@media (prefers-reduced-motion: reduce) { .puff { animation: none; } }
+
+/* Lobby photograph: full-bleed behind the hero, dissolving into whichever
+   ground the active theme uses. Hero type stays white in both themes
+   because it sits on the photograph, not the ground. */
+.scene { position: absolute; top: 0; left: 0; right: 0; height: 540px; z-index: 0; overflow: hidden; pointer-events: none; }
+.scene img {
+  /* The lobby photograph is 4:3 and its fireplace sits right of centre, so a
+     centred crop spent the left of a phone screen on the dark bar area and
+     clipped the flame's bright end. 62% keeps the flame running edge to edge.
+     Horizontal position only bites below 720px (above that the 4:3 source
+     already fills the width exactly) -- this is a phone-only correction.
+     Vertical 34% puts the flame just above the composer on phones and
+     directly behind it on desktop; both are deliberate. */
+  width: 100%; height: 100%; object-fit: cover; object-position: 62% 34%;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 44%, transparent 98%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 44%, transparent 98%);
+}
+.scene::after { content: ""; position: absolute; inset: 0; background: var(--scene-scrim); }
+@media (min-width: 920px) { .scene { height: 620px; } }
+
+.cap {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--cap-bg);
+  border: 1px solid var(--cap-border);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-radius: 999px; color: var(--text-mid); text-decoration: none;
+  box-shadow: var(--cap-shadow);
+  transition: background-color 0.28s, border-color 0.28s, color 0.28s, transform 0.32s var(--ease), box-shadow 0.32s var(--ease);
+}
+.cap:hover {
+  background: var(--cap-bg-hover);
+  border-color: var(--cap-border-hover); color: var(--text-hi); transform: translateY(-2px);
+  box-shadow: var(--cap-shadow-hover);
+}
+.orb {
+  border-radius: 50%; flex: none; position: relative;
+  background: radial-gradient(circle at 35% 30%, #ffd9ae, #e0641e 62%, #6e2a08 100%);
+  box-shadow: var(--orb-shadow);
+}
+.orb::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid var(--orb-ring); }
+
+/* Liquid-glass rim: bevel weight varies around the perimeter as if lit
+   from the upper-left; each theme binds its own conic. */
+.cap, .composer, .journey, .row { position: relative; }
+.cap::before, .composer::before, .journey::before, .row::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  padding: 1.2px; pointer-events: none;
+  background: var(--rim-conic);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: var(--rim-opacity); transition: opacity 0.3s var(--ease);
+}
+.cap:hover::before, .composer:hover::before, .journey:hover::before, .row:hover::before { opacity: 1; }
+
+.page { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 18px; }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 20px 0 4px; }
+.bar .brand { padding: 11px 14px; }
+.bar .brand img { height: 17px; display: block; filter: var(--logo-filter); }
+
+/* One glass capsule holding the whole link set, each item a pill only on
+   hover or when current. Denser than a pill per link, which is what lets the
+   full menu fit rather than only the first few. */
+.bar .links {
+  display: none; gap: 2px;
+  background: var(--cap-bg); border: 1px solid var(--cap-border);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-radius: 999px; padding: 4px;
+  box-shadow: var(--cap-shadow);
+}
+.bar .links a {
+  display: block; padding: 8px 10px; border-radius: 999px; white-space: nowrap;
+  color: var(--text-mid); text-decoration: none;
+  font-size: 0.83rem; font-weight: 500;
+  transition: color 0.24s var(--ease), background-color 0.24s var(--ease);
+}
+.bar .links a:hover { color: var(--text-hi); background: var(--cap-bg-hover); }
+.bar .links a.is-here { color: var(--text-hi); background: var(--cap-bg-hover); font-weight: 600; }
+/* Overflow links that only belong in the mobile disclosure -- on desktop the
+   same destinations are the bar-end chips. */
+.bar .links a.in-menu { display: none; }
+.bar .links.open a.in-menu { display: block; }
+
+.bar-end { display: flex; align-items: center; gap: 7px; }
+.bar-end .cap { padding: 10px 14px; font-size: 0.83rem; font-weight: 600; }
+.pts-chip {
+  display: none; align-items: center; gap: 8px;
+  padding: 9px 15px; font-size: 0.83rem; font-weight: 600; color: var(--text-hi);
+}
+/* Reserved at the widest total the ledger can reach (4,100 pts) so the bar
+   is laid out for its worst case instead of growing into an overflow as
+   points are earned. */
+.pts-chip b {
+  color: var(--ember-t); font-weight: 700;
+  font-variant-numeric: tabular-nums; min-width: 5.4ch; text-align: right;
+}
+.pts-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex: none;
+  background: var(--ember); box-shadow: 0 0 8px 1px var(--ember);
+}
+/* The storefront reaches the bar as a burger-panel link only (.in-menu), not
+   an end chip. Base made it a plain "Retail Site" item rather than a loud
+   "Shop Now" (#82/#91) -- selling is the quiet secondary -- and there is no
+   room for a fourth chip: the bar's content is capped at 1152px whatever the
+   viewport, and measured with the points chip at its 4,100 ceiling a fourth
+   chip wraps the whole bar-end onto two lines from 1320px up. Desktop reaches
+   the store from the footer. No "Get Started" CTA came across either: base
+   needed one because Quick Start sat inside a Guides dropdown; here it is the
+   first link in the bar, and a highlighted chip would be the same destination
+   twice. */
+.dealer-chip { display: none; }
+/* Dealer locator and rewards have no capsule link -- their chip carries the
+   current-page state instead. */
+.bar-end .cap.is-here, .bar-end .cap[aria-current="page"] {
+  color: var(--text-hi); background: var(--cap-bg-hover); border-color: var(--cap-border-hover);
+}
+.theme-btn { padding: 10px 12px; cursor: pointer; font: inherit; }
+.theme-btn svg { display: block; }
+.theme-btn .ico-moon { display: none; }
+:root[data-theme="light"] .theme-btn .ico-sun { display: none; }
+:root[data-theme="light"] .theme-btn .ico-moon { display: block; }
+
+/* ── Row lists, closing note, footer ── */
+.rows { display: flex; flex-direction: column; gap: 8px; }
+.row {
+  display: flex; align-items: center; gap: 11px; text-decoration: none;
+  background: var(--row-bg);
+  border: 1px solid var(--row-border); border-radius: 15px;
+  padding: 11px 13px 13px;
+  position: relative; overflow: hidden;
+  box-shadow: var(--row-shadow);
+  transition: background-color 0.25s, border-color 0.25s, transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.row:hover {
+  background: var(--row-bg-hover);
+  border-color: var(--row-border-hover); transform: translateY(-2px);
+  box-shadow: var(--row-shadow-hover);
+}
+.row::after {
+  content: ""; position: absolute; left: 13px; right: 13px; bottom: 0; height: 3px;
+  /* Pill: on a 3px-tall bar the radius clamps to half the height either
+     way, so this renders exactly as 3px did and stays on the scale. */
+  border-radius: 999px 999px 0 0; opacity: 0;
+  transition: opacity 0.28s;
+}
+.row:hover::after, .row:focus-visible::after, .row:active::after { opacity: 1; }
+.rows .row:nth-child(4n+1)::after { background: linear-gradient(90deg, transparent, var(--frost), transparent); }
+.rows .row:nth-child(4n+2)::after { background: linear-gradient(90deg, transparent, var(--chart), transparent); }
+.rows .row:nth-child(4n+3)::after { background: linear-gradient(90deg, transparent, var(--ember), transparent); }
+.rows .row:nth-child(4n+4)::after { background: linear-gradient(90deg, transparent, var(--mag), transparent); }
+.rows .row:nth-child(4n+1):hover .r-ico { color: var(--frost-t); }
+.rows .row:nth-child(4n+2):hover .r-ico { color: var(--chart-t); }
+.rows .row:nth-child(4n+3):hover .r-ico { color: var(--ember-t); }
+.rows .row:nth-child(4n+4):hover .r-ico { color: var(--mag-t); }
+.row .r-ico { width: 26px; height: 26px; display: grid; place-items: center; color: var(--ico-ink); flex: none; }
+.row .r-ico svg { width: 18px; height: 18px; }
+/* The wrapper span holding <b> + subtitle also matches `.row span`, so the
+   title inherits the subtitle ink unless it is stated. Row titles are
+   headings -- white, like .tile b and .phead h1 everywhere else. */
+.row b { display: block; font-size: 0.88rem; font-weight: 600; color: var(--text-hi); }
+.row span { display: block; font-size: 0.74rem; color: var(--text-dim); }
+.row .thumb { width: 38px; height: 28px; display: grid; place-items: center; flex: none; }
+.row .thumb img { width: 34px; height: 24px; object-fit: contain; }
+.row .badge {
+  flex: none; font-size: 0.7rem; font-weight: 700;
+  border-radius: 999px; padding: 3px 9px;
+}
+.row .badge.pts { color: var(--ember-t); border: 1px solid var(--badge-border); background: var(--badge-bg); }
+.row svg.arr { color: var(--text-dim); flex: none; }
+/* rewards.js inserts its badge as the first child of any [data-reward].
+   Ordering the row explicitly keeps it at the end whatever the DOM says,
+   and letting the label column grow means neither the badge nor the arrow
+   needs an auto margin. */
+.row .r-ico, .row .thumb { order: 0; }
+.row > span:not(.r-ico):not(.thumb):not(.badge):not(.af-reward-badge) {
+  order: 1; flex: 1; min-width: 0;
+}
+.row .badge, .row .af-reward-badge { order: 2; }
+.row svg.arr { order: 3; }
+/* One trailing element per row: a reward badge closes the row just as the
+   chevron does, and keeping both leaves the label under 150px on a phone,
+   which wraps the title onto two lines. */
+.row:has(.af-reward-badge) svg.arr { display: none; }
+.minis { display: flex; flex-wrap: wrap; gap: 7px; }
+.minis a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.76rem; font-weight: 500; color: var(--text-mid); text-decoration: none;
+  background: var(--mini-bg); border: 1px solid var(--stroke); border-radius: 999px; padding: 6px 12px;
+  transition: color 0.22s, background-color 0.22s;
+}
+.minis a:hover { color: var(--text-hi); background: var(--mini-bg-hover); }
+
+/* ── Close ───────────────────────────────────────── */
+.close { margin: 44px auto 0; max-width: 620px; text-align: center; }
+.close .stars { color: var(--ember-t); letter-spacing: 3px; font-size: 0.85rem; }
+.close blockquote { font-size: 1.05rem; font-weight: 500; margin-top: 10px; text-wrap: balance; }
+.close figcaption { color: var(--text-dim); font-size: 0.82rem; margin-top: 10px; }
+.close figcaption a { color: var(--text-mid); text-decoration: none; }
+.close figcaption a:hover { color: var(--text-hi); text-decoration: underline; }
+.foot { margin: 36px 0 30px; display: flex; align-items: center; justify-content: center; gap: 14px; color: var(--text-dim); font-size: 0.76rem; flex-wrap: wrap; }
+.foot img { height: 13px; filter: var(--logo-foot-filter); opacity: var(--logo-foot-opacity); }
+.foot a { color: var(--text-dim); text-decoration: none; }
+.foot a:hover { color: var(--text-hi); }
+
+/* ── Desktop enhancement (shared) ──
+   The bar sheds pieces as it narrows rather than wrapping or overflowing.
+   Measured in Chromium with Figtree loaded and the points chip at its maximum
+   (4,100 pts): capsule 653, brand ~110, end chips 332 with the dealer chip and
+   217 without. .page caps content at 1152 however wide the window gets, so the
+   full set only fits from a 1200 viewport; below that the dealer chip drops
+   first, then the capsule folds into the burger. Re-measure before adding a
+   link -- the widest state clears by ~28px. */
+@media (min-width: 920px) {
+  .page { padding: 0 24px; }
+  .pts-chip { display: inline-flex; }
+}
+@media (min-width: 1080px) {
+  .bar .links { display: flex; }
+}
+@media (min-width: 1200px) {
+  .dealer-chip { display: inline-flex; }
+}
+
+/* ── Inner-page chrome ────────────────────────────────────────────────────
+   The homepage is a hero page; every other page needs a nav bar with a real link
+   list, a page header, a tile grid and a full footer. These live here so the
+   rollout adds markup, not styles. */
+
+.phead { padding: 40px 0 8px; max-width: 760px; }
+.phead h1 {
+  font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700;
+  letter-spacing: -0.025em; line-height: 1.18; text-wrap: balance;
+}
+.phead p { color: var(--text-mid); font-size: 0.95rem; margin-top: 10px; }
+.pbody { padding: 22px 0 10px; }
+
+/* Card grid used by hub-style pages. */
+.tiles {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+.tile {
+  display: flex; flex-direction: column; gap: 7px;
+  padding: 20px 18px 22px; text-decoration: none;
+  background: var(--row-bg); border: 1px solid var(--row-border);
+  border-radius: 15px; position: relative; overflow: hidden;
+  box-shadow: var(--row-shadow);
+  transition: background-color 0.25s, border-color 0.25s,
+              transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.tile:hover {
+  background: var(--row-bg-hover); border-color: var(--row-border-hover);
+  transform: translateY(-2px); box-shadow: var(--row-shadow-hover);
+}
+.tile .t-ico { width: 30px; height: 30px; display: grid; place-items: center; color: var(--ico-ink); }
+.tile .t-ico svg { width: 25px; height: 25px; }
+.tile b { font-size: 0.95rem; font-weight: 600; }
+.tile p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
+.tile::after {
+  content: ""; position: absolute; left: 18px; right: 18px; bottom: 0; height: 3px;
+  border-radius: 999px 999px 0 0; opacity: 0; transition: opacity 0.28s;
+}
+.tile:hover::after, .tile:focus-visible::after { opacity: 1; }
+.tiles .tile:nth-child(4n+1)::after { background: linear-gradient(90deg, transparent, var(--frost), transparent); }
+.tiles .tile:nth-child(4n+2)::after { background: linear-gradient(90deg, transparent, var(--chart), transparent); }
+.tiles .tile:nth-child(4n+3)::after { background: linear-gradient(90deg, transparent, var(--ember), transparent); }
+.tiles .tile:nth-child(4n+4)::after { background: linear-gradient(90deg, transparent, var(--mag), transparent); }
+.tiles .tile:nth-child(4n+1):hover .t-ico { color: var(--frost-t); }
+.tiles .tile:nth-child(4n+2):hover .t-ico { color: var(--chart-t); }
+.tiles .tile:nth-child(4n+3):hover .t-ico { color: var(--ember-t); }
+.tiles .tile:nth-child(4n+4):hover .t-ico { color: var(--mag-t); }
+.tile, .phead { position: relative; }
+.tile::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  padding: 1.2px; pointer-events: none; background: var(--rim-conic);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: var(--rim-opacity); transition: opacity 0.3s var(--ease);
+}
+.tile:hover::before { opacity: 1; }
+
+/* Mobile nav. home/ hides its link list under 920px because the hero carries
+   the page; inner pages need the links reachable, so they get a disclosure. */
+.nav-btn { display: inline-flex; padding: 10px 12px; cursor: pointer; font: inherit; }
+.nav-btn svg { display: block; }
+.bar .links.open {
+  display: flex; position: absolute; left: 18px; right: 18px; top: 76px;
+  flex-direction: column; gap: 2px; padding: 8px; z-index: 30;
+  background: var(--menu-bg); border: 1px solid var(--row-border);
+  border-radius: 24px; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  box-shadow: var(--row-shadow-hover);
+}
+.bar .links.open a { padding: 11px 14px; font-size: 0.93rem; border-radius: 13px; }
+/* The capsule's white-on-glass highlight vanishes against the near-opaque menu
+   in light theme, so the panel marks hover/current with the nub fill instead. */
+.bar .links.open a:hover, .bar .links.open a.is-here { background: var(--nub-bg); }
+.bar { position: relative; }
+
+/* Full footer for inner pages (home/ keeps its one-line .foot). */
+.pfoot { margin: 54px 0 34px; padding-top: 26px; border-top: 1px solid var(--stroke); }
+.pfoot-in { display: flex; flex-wrap: wrap; gap: 30px 54px; }
+.pfoot-brand { flex: 1 1 240px; }
+.pfoot-brand img { height: 14px; filter: var(--logo-foot-filter); opacity: var(--logo-foot-opacity); }
+.pfoot-brand p { color: var(--text-dim); font-size: 0.8rem; margin-top: 10px; max-width: 34ch; }
+.pfoot-col { display: flex; flex-direction: column; gap: 7px; }
+.pfoot-col h4 { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-dim); }
+.pfoot-col a { color: var(--text-mid); text-decoration: none; font-size: 0.82rem; }
+.pfoot-col a:hover { color: var(--text-hi); }
+.pfoot-bottom { margin-top: 26px; color: var(--text-dim); font-size: 0.74rem; }
+
+@media (min-width: 920px) {
+  .phead { padding: 52px 0 10px; }
+}
+@media (min-width: 1080px) {
+  .nav-btn { display: none; }
+}
+
+/* ── Legacy token bridge ──────────────────────────────────────────────────
+   troubleshoot.css, styles.css and water-care-styles.css predate this design
+   system and read ~270 `var(--old-name, fallback)` references. Binding those
+   names here makes the existing tool UIs adopt the new palette AND follow the
+   theme switch; without it they silently fall back to their hardcoded 2025
+   defaults inside a redesigned page.
+
+   --ember is deliberately absent: it already exists above, bound per theme,
+   and those stylesheets read the same name. Delete a line here once its
+   consumer has been restyled onto the new tokens directly. */
+:root {
+  --bg: #101216;
+  --surface: rgba(255,255,255,0.045);
+  --surface-alt: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.12);
+  --border-warm: rgba(255,138,74,0.26);
+  --text: #f3f4f6;
+  --text-muted: #8d939f;
+  --red: #ff8a4a;
+  --red-dark: #cf4e16;
+  --red-glow: rgba(255,138,74,0.15);
+  --amber: #e8a838;
+  --amber-dim: #c78820;
+  --blue: #6fc3ff;
+  --blue-dim: #2f8fd0;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --amber-glow: rgba(232,168,56,0.10);
+  --blue-glow: rgba(111,195,255,0.10);
+  --ember-glow: rgba(255,138,74,0.10);
+  --shadow: 0 2px 24px rgba(0,0,0,0.35);
+}
+:root[data-theme="light"] {
+  --bg: #eef0f3;
+  --surface: rgba(255,255,255,0.72);
+  --surface-alt: rgba(255,255,255,0.9);
+  --border: #e2e4e9;
+  --border-warm: rgba(207,78,22,0.24);
+  --text: #171a1f;
+  --text-muted: #6a7280;
+  --red: #cf4e16;
+  --red-dark: #a83c0f;
+  --red-glow: rgba(207,78,22,0.12);
+  --amber: #b8801f;
+  --amber-dim: #8f6416;
+  --blue: #1c76c9;
+  --blue-dim: #135697;
+  --amber-glow: rgba(184,128,31,0.12);
+  --blue-glow: rgba(28,118,201,0.10);
+  --ember-glow: rgba(207,78,22,0.10);
+  --shadow: 0 2px 20px rgba(23,26,31,0.10);
+}

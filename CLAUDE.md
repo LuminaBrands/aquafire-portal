@@ -12,15 +12,15 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Landing hub — bento grid nav, model cards, section links |
+| `index.html` | Landing hub — hero photo + inline Ember chat, rewards status band, three swipeable intent routes (Explore / Set up / Fix), then an "explore by model" fleet row |
 | `aquafire-pro.html` | Comprehensive Pro model guide (specs, wiring, troubleshooting, video guide) — **largest page (~1,400 lines)** |
 | `enclosure-guide.html` | Interactive enclosure dimension calculator with 3D isometric diagram |
 | `water-care.html` | Water hardness lookup (ZIP code DB) and softener replacement calculator |
-| `quick-start.html` | Model selection page linking to individual guides |
-| `getting-started.html` | Placeholder — "coming soon" |
+| `quick-start.html` | Model selection page linking to individual guides — also the site's "getting started" entry point since the placeholder page was retired |
 | `support.html` | Support hub — cards link to Troubleshooter + (stub) warranty/claims/FAQs |
 | `troubleshoot.html` | **Interactive Troubleshooter** — model-aware guided decision-tree wizard |
 | `chat-insights.html` | **Internal** chat-log dashboard for the Ember widget (Firebase-gated; not in nav) — transcripts, unanswered questions, 👍/👎 rates |
+| `beam-demo.html` | **Internal** showcase for the Border Beam effect (`beam.css`/`beam.js`) — live playground, all sizes/variants, usage snippet (noindex; not in nav) |
 
 ### Stylesheets
 
@@ -30,6 +30,7 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 | `styles.css` | Enclosure guide — forms, SVG diagram, cards, step layout |
 | `water-care-styles.css` | Water care — hardness scale, map tiles, calculator UI |
 | `troubleshoot.css` | Troubleshooter — wizard cards, option buttons, breadcrumb, outcome/escalation styling |
+| `beam.css` | **Border Beam** — animated border-glow effect (`.af-beam`); opt-in, loaded by `index.html` + `beam-demo.html` |
 
 ### JavaScript
 
@@ -40,6 +41,7 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 | `troubleshoot.js` | Troubleshooter — `TREE` decision-tree data + wizard render/nav engine; `LINKS`/`VIDEOS` maps |
 | `embed.js` | Strips nav/footer when page loaded in iframe (`?embed` query param) |
 | `assistant.js` | **"Ember" AI chat widget** — self-contained (injects own CSS), embeddable on Shopify via one script tag; `INTENTS` knowledge base + Claude-API backend (`/api/chat` by default). See `docs/chat-assistant.md` |
+| `beam.js` | **Border Beam** controller — injects the bloom layer, auto-detects the wrapped child's radius, drives activate/deactivate; pairs with `beam.css` |
 | `api/chat.js` | **Vercel serverless function** for Ember's AI answers — Claude API (`claude-opus-4-8`), zero npm deps (raw fetch, keeps the repo build-free); grounded in `BASE_FACTS` + the `chatKnowledge` Firestore collection; needs `ANTHROPIC_API_KEY` env var in Vercel |
 | `api/notify-handoff.js` | **Vercel serverless function** — relays Ember human-handoff alerts to a chat webhook (Slack incoming-webhook `{text}` shape); once per conversation, emails masked; needs `HANDOFF_WEBHOOK_URL` env var, 503s gracefully until set |
 | `api/order-status.js` | **Vercel serverless function** for Ember's order & tracking lookup — Shopify Admin GraphQL proxy (`tryaquafire.myshopify.com`), zero npm deps; verifies order number + checkout email together, returns minimal safe fields; needs `SHOPIFY_CLIENT_ID` + `SHOPIFY_CLIENT_SECRET` env vars (Dev Dashboard app "Ember AI Chat", `read_orders` scope; tokens fetched via client-credentials grant and auto-renewed; legacy static `SHOPIFY_ORDERS_TOKEN` also accepted) — 503s gracefully until set (see `docs/chat-assistant.md`) |
@@ -72,7 +74,7 @@ Root (flat — no subdirectories)
 ├── Troubleshooter: troubleshoot.html + troubleshoot.css + troubleshoot.js
 ├── Chat widget: assistant.js (self-contained — CSS injected; on all customer pages + embeddable on Shopify)
 ├── Source docs: docs/source-material/ (help-article / manual extracts)
-└── Stubs: quick-start.html, getting-started.html, support.html
+└── Stubs: support.html (partial)
 ```
 
 No build process. No package.json. No bundler. Edit files directly and deploy.
@@ -119,15 +121,17 @@ Radius:         --radius: 14px | --radius-sm: 8px
 
 ## Navigation Structure
 
-All pages share the same nav bar (defined inline in each HTML file). Items are grouped into dropdowns (`.nav-drop` / `.nav-drop-btn` / `.nav-drop-menu`, styled in `hub.css` — CSS-only: hover/`:focus-within` on desktop, flattened into labeled groups in the mobile hamburger panel):
+All pages share the same nav bar (defined inline in each HTML file). Since the redesign it is one glass capsule of six links plus two end chips, identical on all 12 nav-bearing pages:
 
 ```
-Home → Guides ▾ (Quick Start, Build Yours, Enclosure Guide) → Care ▾ (Water Care, Maintenance, Troubleshoot) → Find a Dealer → Support → Retail Site → Get Started (CTA)
+[brand] │ Quick Start · Enclosure · Water Care · Maintenance · Troubleshoot · Support │ Find a Dealer · Rewards · ☰ · ☀
 ```
 
-The nav logo links to the portal homepage (`/`). **The prominent `.nav-cta` button is "Get Started" → `quick-start.html`** — the portal's job is to get customers reading, so the highlighted CTA points inward at the Quick Start guides, not at the store or the rewards programme (rewards is promoted by its homepage banner and the injected "Sign In" nav item instead). Selling is the secondary goal: the storefront (`https://www.aquafire.com`) is a plain nav item labelled **"Retail Site"**, sitting with the others just before the CTA. When a page inside a dropdown is active, its link gets `.active` and the parent `.nav-drop-btn` gets `.active` too.
+The page's own link carries `class="is-here" aria-current="page"` (guide pages point at Quick Start, `builder.html` at Enclosure; `rewards.html` / `dealer-locator.html` mark their end chip instead). `.in-menu` links (Find a Dealer, Rewards) are hidden on desktop — they only appear inside the burger panel, where the end chips aren't. Dropping the Getting Started link took the bar from ~28px of clearance over the 1152px content column to ~176px, so there is room for one more link now — but still **re-measure before adding one** (see the breakpoint comment in `redesign.css`), and measure with the points chip at its widest. Breakpoints are unchanged and now conservative: capsule and burger swap at 1080px, the dealer chip appears at 1200px, the points chip at 920px.
 
-`getting-started.html` is deliberately **not** in the nav — it's still a "coming soon" placeholder, and a "Getting Started" item next to the "Get Started" CTA reads as a duplicate. Don't re-add it until the page has real content.
+The storefront and the CTA keep the intent base set when it grouped the bar into dropdowns (#82, #91), carried onto the capsule: the highlighted end chip is **Get Started → `quick-start.html`**, because the portal's job is to get customers reading, and the store (`https://www.aquafire.com`) is a plain **"Retail Site"** link rather than the loud one. The dropdown grouping itself was dropped -- the capsule holds all six links flat.
+
+`getting-started.html` no longer exists. It was a permanent "coming soon" that dead-ended the setup route, and a "Getting Started" link beside a "Get Started" CTA read as a duplicate; Quick Start covers that ground.
 
 On the `aquafire-pro.html` / `aquafire-original.html` guide pages, the Troubleshoot nav link carries a `?model=pro` / `?model=original` param so the wizard pre-selects that model (same pattern as the Enclosure Guide link there).
 
@@ -150,7 +154,11 @@ Footer "Guides" columns (most pages) and the homepage bento grid also link to th
 - **Chat AI mode** — unmatched questions POST to `/api/chat` (`api/chat.js` — deployed by Vercel automatically, no package.json). Team-editable knowledge lives in the `chatKnowledge` Firestore collection, managed via the "Teach Ember" flow in `chat-insights.html`; the function caches it ~5 min. The widget falls back to the local `INTENTS` KB whenever the endpoint errors (`llmDown` per page load).
 - **Chat order lookup** — the `order_status` intent runs a guided flow (order # + checkout email → POST `/api/order-status` → status card with tracking links). Both values must match the order server-side; telemetry logs outcomes only and masks emails out of all logged text. Falls back to the account-page/orders@ answer when the endpoint 503s (`orderDown` per page load) or `orderEndpoint` is null.
 - **Troubleshooter decision tree lives in `troubleshoot.js`** as the `TREE` object — a map of `nodeId → node`. Nodes are either `question` (prompt + options/quickPicks) or `outcome` (steps, caution, video, article links, escalation). Model-specific copy uses functions that receive the model id (`'pro' | 'original' | 'lite' | 'unknown'`). `app_entry` is a `router` node that resolves Pro → `app_connect`, others → `app_not_pro`. URL params: `?model=pro|original|lite` pre-selects the model; `?node=<id>` deep-links a node (useful for support emails). Resource URLs are in the `LINKS` map; **how-to video URLs are TODO placeholders in the `VIDEOS` map** — until filled in, the tool shows a "video coming soon" chip. When the underlying help articles change, update the tree and the matching file in `docs/source-material/`.
+- **Ember can mount inline.** `AQUAFIRE_ASSISTANT_CONFIG.mount = '<selector>'` renders the panel into that container instead of the corner launcher (launcher, nudge and mobile takeover all switch off), and `window.AquafireAssistant` (`open` / `ask` / `close` / `reset` / `isOpen` / `root`) drives it; calls before load are queued. Closing from the panel's own header or Escape fires a bubbling `aquafire:close` so the host can collapse its container. `index.html` is the first consumer: its hero composer is a real `<form>` that expands in place into `#heroChatMount` (`.greet.is-chatting` folds the orb/greeting/chips away and grows `.hero-chat`), the murmur chips seed the conversation via `data-ask` instead of navigating, and without JS the form still submits to `support.html`. Ember owns the conversation; the page owns only the expand/collapse. `assistant.js` now runs on the same tokens as `redesign.css` (`--afa-*`, dark by default with a `:root[data-theme="light"] .afa-root` binding), so an inline host only has to rebind what its own container provides -- `--afa-bg` and `--afa-head-bg`. Note the light block out-specifies a plain `.host .afa-root` override, so a host must list a `:root[data-theme="light"]` selector too or the panel turns opaque when the page switches (see `index.html`).
+- **Border Beam lives in `beam.css` + `beam.js`** — a vanilla port of the `border-beam` npm package (MIT), rebuilt as plain CSS because the portal has no React/build step. Wrap anything in `<div class="af-beam" data-beam-size="md" data-beam-variant="colorful">`; children render untouched, so the effect is purely additive and degrades to a plain container without JS. Sizes `sm | md | line | pulse-inner | pulse-outside`, variants `ember | colorful | ocean | sunset | mono` (`colorful` is the default; `ember` is the on-brand fire palette and tightens the hue cycle to 10deg so reds don't drift magenta). **Beam colour priority (standing rule for any future palette work): red/orange dominant, then blue/magenta, then green.** It is enforced by weight, not by count — colours are assigned to blobs by area, so moving a colour to a different `--afb-*` index changes its weight; the split is documented in `beam.css` and currently splits 49/35/16 by blob area. Note `sm`/`md` sweep a conic gradient, which parameterises by angle rather than arc length, so on a very wide element the beam crawls the long edges and moves fast across the short ends. An `offset-path` `rim` size that travelled by arc length was tried and removed — the even travel was correct but the look wasn't what the effect is after; the diffuse conic glow is the wanted character. The orbit runs at a deliberate 4s — the package's stock 1.96s pulls the eye off the content the beam is meant to frame. Needs `@property` + `mask-composite`; `beam.js` feature-gates and no-ops on older browsers. Beams pause when scrolled offscreen, and `prefers-reduced-motion` freezes them lit rather than hiding them. **`beam.css`/`beam.js` are opt-in.** Loaded by `beam-demo.html` and by `index.html`, where the hero composer is wrapped in `.composer-beam.af-beam` at `size="md"` (the composer spends both its own pseudo-elements on the glass rim and hover underline, so the beam needs the wrapper) and `data-beam-theme` is synced to the page theme by the existing toggle script. The Ember chat widget is the one live consumer, but it does *not* use these files: `assistant.js` inlines its own trimmed copy under the `afa-` namespace (it ships as a single script tag on Shopify and can't link a stylesheet), applied to the composer field and brightened while Ember is generating. Toggle with `AQUAFIRE_ASSISTANT_CONFIG.beam` = `'input' | 'panel' | false` and `.beamVariant` = `'colorful' | 'ember'`. **`index.html` sets `beam = false`** in a head script: its hero composer already beams and is the page's primary action, so the widget must not beam there too. `index.html` now loads `assistant.js` and mounts Ember inline in the hero, so that head script is load-bearing — **don't drop it.** **Changing the beam look means editing both places.** Note `assistant.js` declares its own `var CSS` (the stylesheet string), which shadows the global `CSS` object — feature detection there must use `window.CSS`. The `#fff` literals in the CSS are mask stencils (alpha channels), not palette colors — impeccable's `design-system-color` rule flags them as false positives.
 - **Impeccable design skill** — `.claude/skills/impeccable/` (compiled bundle from [pbakaus/impeccable](https://github.com/pbakaus/impeccable)) gives Claude Code the `/impeccable` design commands (`craft`, `shape`, `audit`, `critique`, `polish`, `init`, …). `.claude/settings.json` wires its hook: deterministic design-quality checks after UI file edits + a deep pass on Stop. Run `/impeccable init` once before a big design pass so it generates project design context; update the skill with `npx impeccable update`. Personal overrides go in `.claude/settings.local.json` (gitignored).
+- **`rewards.css` runs on the redesign tokens.** The auth modal, profile dropdown, points toast and reward badges were hard-pinned to the 2025 palette (Poppins, `#1b1e24`, `#e8a838`, `#c0392b`) with no theme binding, so the sign-in dialog rendered dark over a light page. All of it is tokenised now. Three tokens were added to `redesign.css` for it: `--scrim` (the only token that stays dark in light theme -- it is a dimmer, not a surface), `--modal-shadow`/`--dropdown-shadow` (neutral elevation), and `--danger` (form errors, deliberately not ember). Overlay surfaces take the near-opaque `--menu-bg`, not a glass fill. Reward-badge ink is `--amber`, the one 2025 colour kept on purpose -- identical in dark, and it finally darkens in light.
+- **Portal redesign (in progress, PR #66)** — the committed direction is `index.html` ("Hero Bleed × Dual Theme": liquid glass over a lobby photograph, dark/light theme switcher). It is the token source of truth, locked into `DESIGN.md` + `.impeccable/design.json`. Exploration comps live in `v1/–v5/`, `v4a/–v4e/`, `mix1/–mix6/`, `b1/–b3/` with the `compare.html` gallery (internal, noindex); screenshot harness in `tools/shoot/`. **Status, pending work, and environment learnings: `docs/redesign-handoff.md`** — read it before resuming redesign work. `index.html` is still the live homepage; rollout to the other pages has not started.
 
 ## Development History
 
@@ -198,7 +206,7 @@ exports, dashboards, snapshots, or customer data.
   `fonts.googleapis.com`/`fonts.gstatic.com`, `cdn.shopify.com`, Carto/OSM tiles,
   `nominatim.openstreetmap.org`). Adding a CDN script, font, image host, or `fetch()`
   target means adding it there too, or it silently fails in production only.
-- **Nav duplication:** There's no shared template. Changing navigation means editing ~13 HTML files (and several have a footer "Guides" column too).
+- **Nav duplication:** There's no shared template. Changing navigation means editing ~12 HTML files (and several have a footer "Guides" column too).
 - **aquafire-pro.html is large** (~1,400 lines with inline CSS/JS). Read specific sections rather than the whole file. It still has its own in-page category-accordion troubleshooting section (`TS_DATA` / `ALERTS_DATA`) — that's separate from the standalone Troubleshooter; the new tool didn't replace it.
 - **styles.css is enclosure-specific** despite the generic name. Shared styles are in `hub.css`.
 - **troubleshoot.css uses theme tokens with fallbacks** (e.g. `var(--blue, #4da6e8)`) — the per-page inline `:root` blocks only define a subset of the tokens listed in the Design System section, so the CSS can't rely on `--blue`/`--amber`/`--surface-alt` being present everywhere.

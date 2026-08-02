@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<!--
+DIRECTION CONTRACT — v1 "Hearth Console"
+THESIS: The owner's manual as a warm-dark operations center lit by the fire itself.
+Refuses the docs-portal default: a cold grid of identical link cards under a text hero.
+OWN-WORLD: Layered warm browns (#140e09→#2c1d13), ember amber (#ff9d45/#e8862f),
+cream text; Gloock didone display over Hanken Grotesk; dark console cards with
+micro-visualizations; one live animated vapor-flame hearth band. Recognizable with
+all content removed: firelit umber console with a glowing trough.
+STORY: An owner at night sees their fireplace "running" on screen, understands this
+portal watches over care rituals (clean every 3 mo, flush every 6 mo), and steps
+into the right tool in one move.
+FIRST VIEWPORT: Console top bar; left column of three control cards (Maintenance
+ring, Water arc, Troubleshooter); right two-thirds is the hearth scene: serif
+greeting over a live flame trough with status chips. Primary action = Start
+Troubleshooting card + hearth chips.
+FORM: User-pinned direction (reference image 2, smart-home dashboard) — pinned
+brief beats the concept roll; no seed. Staging: control-room table + hearth band.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Owner's Guide — Hearth Console</title>
+  <meta name="description" content="The complete guide to your Aquafire water vapor fireplace.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #140e09;
+      --bg-deep: #0e0a06;
+      --panel: #1d140d;
+      --panel-2: #241811;
+      --panel-3: #2c1d13;
+      --line: #3a2a1c;
+      --line-soft: #2e2015;
+      --cream: #f4ebdf;
+      --cream-dim: #c9b6a2;
+      --cream-faint: #a58f7a;
+      --ember: #ff9d45;
+      --ember-deep: #e07b28;
+      --ember-core: #ffc98f;
+      --radius: 20px;
+      --radius-sm: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(1200px 500px at 72% 30%, rgba(224, 123, 40, 0.10), transparent 60%),
+        linear-gradient(180deg, #17100a 0%, var(--bg) 40%, var(--bg-deep) 100%);
+      color: var(--cream);
+      font-family: "Hanken Grotesk", system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    .shell { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+
+    /* ── Console top bar ─────────────────────────────── */
+    .bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; padding: 22px 0 18px;
+    }
+    .bar-logo img { height: 22px; display: block; }
+    .bar-nav {
+      display: flex; gap: 4px; list-style: none;
+      background: rgba(29, 20, 13, 0.75);
+      border: 1px solid var(--line-soft);
+      border-radius: 999px; padding: 5px;
+    }
+    .bar-nav a {
+      display: block; padding: 8px 16px; border-radius: 999px; white-space: nowrap;
+      color: var(--cream-dim); text-decoration: none; font-size: 0.92rem; font-weight: 500;
+      transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bar-nav a:hover { color: var(--cream); background: rgba(58, 42, 28, 0.55); }
+    .bar-nav a.is-here { color: #1c1209; background: var(--ember); font-weight: 600; }
+    .bar-side { display: flex; align-items: center; gap: 10px; }
+    .chip-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid var(--line); border-radius: 999px;
+      padding: 8px 16px; background: transparent;
+      color: var(--cream-dim); font: 500 0.88rem "Hanken Grotesk", sans-serif;
+      text-decoration: none; cursor: pointer;
+      transition: border-color 0.25s, color 0.25s;
+    }
+    .chip-btn:hover { border-color: var(--ember-deep); color: var(--cream); }
+    .chip-btn .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 8px 1px rgba(255, 157, 69, 0.7); }
+    .nav-burger { display: none; }
+
+    /* ── Console grid ────────────────────────────────── */
+    .console { display: grid; grid-template-columns: 340px 1fr; gap: 18px; margin-top: 14px; }
+    .stack { display: flex; flex-direction: column; gap: 18px; }
+
+    .card {
+      background: linear-gradient(160deg, var(--panel-2), var(--panel));
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius);
+      padding: 22px 22px 20px;
+      position: relative;
+      display: block; color: inherit; text-decoration: none;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
+    }
+    a.card:hover { transform: translateY(-3px); border-color: var(--line); }
+    a.card:focus-visible, a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--ember); outline-offset: 3px;
+    }
+    .card-kicker {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--cream-faint); margin-bottom: 4px;
+    }
+    .card h3 { font-size: 1.12rem; font-weight: 600; letter-spacing: -0.01em; }
+    .card .sub { color: var(--cream-dim); font-size: 0.9rem; margin-top: 2px; }
+    .card-go {
+      position: absolute; top: 20px; right: 20px;
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1px solid var(--line); display: grid; place-items: center;
+      color: var(--ember); transition: background-color 0.25s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    a.card:hover .card-go { background: var(--ember); color: #1c1209; transform: rotate(45deg); }
+
+    /* Maintenance ring */
+    .ring-row { display: flex; align-items: center; gap: 18px; margin-top: 16px; }
+    .ring { position: relative; width: 92px; height: 92px; flex: none; }
+    .ring svg { width: 92px; height: 92px; transform: rotate(-90deg); }
+    .ring .val {
+      position: absolute; inset: 0; display: grid; place-items: center;
+      font-weight: 700; font-size: 1.3rem; color: var(--ember-core); letter-spacing: -0.02em;
+    }
+    .ring .val small { display: block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; color: var(--cream-faint); text-transform: uppercase; text-align: center; }
+    .ring-legend { font-size: 0.88rem; color: var(--cream-dim); }
+    .ring-legend strong { color: var(--cream); font-weight: 600; }
+    .ring-legend em { font-style: normal; color: var(--ember); }
+
+    /* Water arc */
+    .arc-wrap { margin-top: 14px; }
+    .arc-scale { display: flex; justify-content: space-between; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cream-faint); margin-top: 8px; }
+    .arc-note { margin-top: 10px; font-size: 0.88rem; color: var(--cream-dim); }
+    .arc-note strong { color: var(--cream); }
+
+    /* Troubleshoot card */
+    .ts-card { background: linear-gradient(150deg, #33200f, #241505); border-color: #4a3018; }
+    .ts-symptoms { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .ts-symptoms span {
+      font-size: 0.8rem; color: var(--cream-dim);
+      border: 1px solid #4a3018; border-radius: 999px; padding: 5px 12px;
+    }
+    .ts-cta {
+      display: inline-flex; align-items: center; gap: 10px; margin-top: 18px;
+      background: var(--ember); color: #1c1209;
+      font-weight: 700; font-size: 0.95rem;
+      border-radius: 999px; padding: 12px 22px;
+      box-shadow: 0 8px 24px -6px rgba(224, 123, 40, 0.45);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
+    }
+    a.card.ts-card:hover .ts-cta { transform: translateX(3px); box-shadow: 0 10px 28px -6px rgba(224, 123, 40, 0.6); }
+
+    /* ── Hearth scene ────────────────────────────────── */
+    .hearth {
+      position: relative; overflow: hidden;
+      background:
+        radial-gradient(900px 420px at 50% 96%, rgba(224, 123, 40, 0.28), rgba(224, 123, 40, 0.05) 55%, transparent 75%),
+        linear-gradient(180deg, #1a110a 0%, #150d07 55%, #100a05 100%);
+      border: 1px solid var(--line-soft);
+      border-radius: 24px;
+      padding: 40px 44px 0;
+      display: flex; flex-direction: column;
+    }
+    .hearth-kicker {
+      font-size: 0.74rem; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--ember);
+    }
+    .hearth h1 {
+      font-family: "Gloock", serif; font-weight: 400;
+      font-size: clamp(2.3rem, 4.2vw, 3.4rem);
+      line-height: 1.08; letter-spacing: 0.005em;
+      margin-top: 10px; max-width: 15ch; text-wrap: balance;
+    }
+    .hearth-sub { color: var(--cream-dim); margin-top: 14px; max-width: 46ch; font-size: 1.02rem; }
+    .hearth-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .hearth-chips a {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid rgba(255, 157, 69, 0.35);
+      background: rgba(20, 12, 6, 0.55);
+      color: var(--cream); text-decoration: none;
+      font-size: 0.88rem; font-weight: 600;
+      border-radius: 999px; padding: 9px 16px;
+      backdrop-filter: blur(6px);
+      transition: background-color 0.25s, border-color 0.25s;
+    }
+    .hearth-chips a:hover { background: rgba(224, 123, 40, 0.2); border-color: var(--ember); }
+    .hearth-chips svg { color: var(--ember); }
+
+    /* The flame */
+    .flamebox { position: relative; height: 330px; margin-top: auto; }
+    .trough {
+      position: absolute; left: 8%; right: 8%; bottom: 34px; height: 10px;
+      background: linear-gradient(180deg, #3b271607, #241505);
+      border-radius: 6px 6px 2px 2px;
+      box-shadow: 0 14px 30px -6px rgba(0,0,0,0.75);
+    }
+    .trough::before {
+      content: ""; position: absolute; left: 2%; right: 2%; top: -3px; height: 5px;
+      background: linear-gradient(90deg, transparent, var(--ember-core) 18%, #fff3e0 50%, var(--ember-core) 82%, transparent);
+      border-radius: 4px; filter: blur(1.5px);
+    }
+    .plinth {
+      position: absolute; left: 4%; right: 4%; bottom: 0; height: 36px;
+      background: linear-gradient(180deg, #221610, #170f09);
+      border-radius: 4px 4px 14px 14px;
+    }
+    .plinth::after {
+      content: ""; position: absolute; inset: auto 10% 6px; height: 14px;
+      background: radial-gradient(50% 100% at 50% 0%, rgba(255, 157, 69, 0.35), transparent 75%);
+      filter: blur(6px);
+    }
+    .tongues { position: absolute; left: 8%; right: 8%; bottom: 40px; top: 0; overflow: hidden; }
+    .tongue {
+      position: absolute; bottom: -22px; width: 84px; height: 190px;
+      background: radial-gradient(46% 60% at 50% 78%, rgba(255, 201, 143, 0.85) 0%, rgba(255, 157, 69, 0.55) 34%, rgba(224, 100, 30, 0.22) 62%, transparent 82%);
+      border-radius: 50% 50% 42% 42%;
+      filter: blur(10px);
+      transform-origin: 50% 100%;
+      animation: rise 4.4s cubic-bezier(0.45, 0.05, 0.35, 1) infinite;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+    .tongue.tall { height: 260px; width: 100px; filter: blur(14px); }
+    .tongue.slim { height: 150px; width: 60px; filter: blur(8px); }
+    @keyframes rise {
+      0%   { transform: translateY(26px) scaleY(0.55) scaleX(1.06); opacity: 0; }
+      18%  { opacity: 0.95; }
+      55%  { transform: translateY(-34px) scaleY(1.08) scaleX(0.94) skewX(1.5deg); opacity: 0.6; }
+      100% { transform: translateY(-88px) scaleY(1.3) scaleX(0.72) skewX(-2deg); opacity: 0; }
+    }
+    .hearth-status {
+      position: absolute; right: 26px; bottom: 54px;
+      display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+    }
+    .hearth-status span {
+      font-size: 0.76rem; font-weight: 600; letter-spacing: 0.06em;
+      color: var(--cream-dim);
+      background: rgba(16, 10, 5, 0.72);
+      border: 1px solid var(--line-soft);
+      border-radius: 999px; padding: 6px 13px;
+      backdrop-filter: blur(6px);
+    }
+    .hearth-status b { color: var(--ember-core); font-weight: 700; }
+    @media (prefers-reduced-motion: reduce) {
+      .tongue { animation: none; opacity: 0.5; transform: translateY(-10px) scaleY(0.9); }
+    }
+
+    /* ── Models ──────────────────────────────────────── */
+    .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin: 64px 0 8px; }
+    .section-head h2 { font-family: "Gloock", serif; font-weight: 400; font-size: 1.9rem; letter-spacing: 0.005em; }
+    .section-head p { color: var(--cream-faint); font-size: 0.92rem; }
+    .models { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 18px; }
+    .model {
+      position: relative; overflow: hidden;
+      background: linear-gradient(165deg, var(--panel-3), var(--panel));
+      border: 1px solid var(--line-soft); border-radius: var(--radius);
+      padding: 24px; text-decoration: none; color: inherit; display: block;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
+    }
+    a.model:hover { transform: translateY(-4px); border-color: #4a3018; }
+    .model img {
+      width: 100%; height: 150px; object-fit: contain; display: block;
+      filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.55));
+    }
+    .model h3 { font-size: 1.15rem; font-weight: 600; margin-top: 16px; }
+    .model p { color: var(--cream-dim); font-size: 0.88rem; margin-top: 4px; min-height: 2.6em; }
+    .model-tag {
+      display: inline-flex; align-items: center; gap: 7px; margin-top: 14px;
+      color: var(--ember); font-weight: 600; font-size: 0.88rem;
+    }
+    .model-tag.soon { color: var(--cream-faint); }
+    .model .glowline {
+      position: absolute; left: 24px; right: 24px; bottom: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 157, 69, 0.55), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    a.model:hover .glowline { opacity: 1; }
+
+    /* ── Guide ledger (table) ────────────────────────── */
+    .ledger {
+      margin-top: 18px;
+      background: linear-gradient(180deg, var(--panel-2), var(--panel));
+      border: 1px solid var(--line-soft); border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .ledger-head, .ledger-row {
+      display: grid; grid-template-columns: 2fr 3fr 110px 58px;
+      gap: 16px; align-items: center; padding: 16px 24px;
+    }
+    .ledger-head {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--cream-faint); border-bottom: 1px solid var(--line-soft);
+      padding-top: 18px; padding-bottom: 12px;
+    }
+    .ledger-row { border-bottom: 1px solid var(--line-soft); text-decoration: none; color: inherit; transition: background-color 0.2s; }
+    .ledger-row:last-child { border-bottom: 0; }
+    .ledger-row:hover { background: rgba(58, 42, 28, 0.25); }
+    .ledger-row .g-name { display: flex; align-items: center; gap: 14px; font-weight: 600; font-size: 0.98rem; }
+    .g-ico {
+      width: 38px; height: 38px; flex: none; border-radius: 11px;
+      border: 1px solid var(--line); display: grid; place-items: center; color: var(--ember);
+      background: rgba(20, 12, 6, 0.5);
+    }
+    .ledger-row .g-desc { color: var(--cream-dim); font-size: 0.9rem; }
+    .ledger-row .g-time { color: var(--cream-faint); font-size: 0.85rem; font-weight: 500; }
+    .ledger-row .g-arrow { color: var(--ember); justify-self: end; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .ledger-row:hover .g-arrow { transform: translateX(4px); }
+
+    /* ── Quote + shelf ───────────────────────────────── */
+    .lower { display: grid; grid-template-columns: 1.2fr 1fr; gap: 18px; margin-top: 64px; }
+    .quote {
+      background:
+        radial-gradient(500px 260px at 15% 110%, rgba(224, 123, 40, 0.16), transparent 70%),
+        linear-gradient(165deg, var(--panel-2), var(--panel));
+      border: 1px solid var(--line-soft); border-radius: var(--radius);
+      padding: 38px 40px; display: flex; flex-direction: column;
+    }
+    .quote .stars { color: var(--ember); letter-spacing: 3px; font-size: 0.95rem; }
+    .quote blockquote {
+      font-family: "Gloock", serif; font-size: 1.55rem; line-height: 1.35;
+      margin-top: 16px; text-wrap: balance;
+    }
+    .quote figcaption { margin-top: 18px; color: var(--cream-faint); font-size: 0.9rem; }
+    .quote-links { margin-top: auto; padding-top: 22px; display: flex; gap: 18px; }
+    .quote-links a { color: var(--cream-dim); font-size: 0.88rem; font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: color 0.2s, border-color 0.2s; }
+    .quote-links a:hover { color: var(--ember); border-color: var(--ember-deep); }
+    .shelf { display: flex; flex-direction: column; gap: 18px; }
+    .shelf .card h3 { font-size: 1.05rem; }
+    .shelf-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+    .shelf-row + .shelf-row { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-soft); }
+    .shelf-row .lbl { font-weight: 600; font-size: 0.95rem; }
+    .shelf-row .lbl small { display: block; font-weight: 400; color: var(--cream-faint); font-size: 0.82rem; }
+    .shelf-row .go { color: var(--ember); flex: none; }
+
+    /* ── Footer ──────────────────────────────────────── */
+    footer { margin-top: 80px; border-top: 1px solid var(--line-soft); background: rgba(14, 10, 6, 0.6); }
+    .foot { display: flex; justify-content: space-between; gap: 40px; padding: 44px 0 30px; flex-wrap: wrap; }
+    .foot-brand img { height: 20px; }
+    .foot-brand p { color: var(--cream-faint); font-size: 0.88rem; margin-top: 12px; max-width: 30ch; }
+    .foot-cols { display: flex; gap: 64px; }
+    .foot-cols h4 { font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-faint); margin-bottom: 12px; }
+    .foot-cols a { display: block; color: var(--cream-dim); text-decoration: none; font-size: 0.9rem; padding: 4px 0; }
+    .foot-cols a:hover { color: var(--ember); }
+    .foot-base { display: flex; justify-content: space-between; padding: 0 0 26px; color: var(--cream-faint); font-size: 0.82rem; }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 1020px) {
+      .console { grid-template-columns: 1fr; }
+      .console .stack { order: 2; }
+      .hearth { order: 1; min-height: 480px; }
+      .lower { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 800px) {
+      .bar-nav { display: none; }
+      .bar-side .chip-btn:not(:first-child) { display: none; }
+      .section-head { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .nav-burger {
+        display: grid; place-items: center; width: 42px; height: 42px;
+        background: transparent; border: 1px solid var(--line); border-radius: 999px;
+        color: var(--cream); cursor: pointer;
+      }
+      .bar-nav.open {
+        display: flex; position: absolute; top: 74px; left: 28px; right: 28px; z-index: 30;
+        flex-direction: column; border-radius: 18px; padding: 10px;
+        background: #1d140dfa; box-shadow: 0 24px 50px -12px rgba(0,0,0,0.7);
+      }
+      .bar { position: relative; }
+      .models { grid-template-columns: 1fr; }
+      .ledger-head { display: none; }
+      .ledger-row { grid-template-columns: 1fr 44px; }
+      .ledger-row .g-desc, .ledger-row .g-time { display: none; }
+      .hearth { padding: 30px 26px 0; }
+      .hearth-status { position: static; margin-top: 20px; flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+      .flamebox { height: 190px; }
+      .foot { flex-direction: column; gap: 28px; }
+      .foot-cols { gap: 40px; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="bar">
+      <a class="bar-logo" href="../index.html" aria-label="Aquafire home">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <ul class="bar-nav" id="nav">
+        <li><a href="#" class="is-here">Console</a></li>
+        <li><a href="../getting-started.html">Getting Started</a></li>
+        <li><a href="../enclosure-guide.html">Enclosure</a></li>
+        <li><a href="../water-care.html">Water Care</a></li>
+        <li><a href="../maintenance.html">Maintenance</a></li>
+        <li><a href="../troubleshoot.html">Troubleshoot</a></li>
+        <li><a href="../support.html">Support</a></li>
+      </ul>
+      <div class="bar-side">
+        <a class="chip-btn" href="../rewards.html"><span class="dot"></span>Rewards</a>
+        <a class="chip-btn" href="../dealer-locator.html">Find a Dealer</a>
+        <button class="nav-burger" aria-label="Toggle menu" aria-expanded="false" onclick="document.getElementById('nav').classList.toggle('open'); this.setAttribute('aria-expanded', document.getElementById('nav').classList.contains('open'))">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <div class="console">
+        <div class="stack">
+          <a class="card" href="../maintenance.html">
+            <p class="card-kicker">Care Cycle</p>
+            <h3>Maintenance</h3>
+            <p class="sub">Preventative guide with checklists</p>
+            <span class="card-go" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+            <div class="ring-row">
+              <div class="ring">
+                <svg viewBox="0 0 92 92" aria-hidden="true">
+                  <circle cx="46" cy="46" r="40" fill="none" stroke="#3a2a1c" stroke-width="7"/>
+                  <circle cx="46" cy="46" r="40" fill="none" stroke="url(#emberGrad)" stroke-width="7" stroke-linecap="round" stroke-dasharray="188 251"/>
+                  <defs><linearGradient id="emberGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e07b28"/><stop offset="1" stop-color="#ffc98f"/></linearGradient></defs>
+                </svg>
+                <span class="val">3&thinsp;mo<small>cycle</small></span>
+              </div>
+              <p class="ring-legend"><strong>Mist maker:</strong> clean every <em>3 months</em>.<br><strong>Full flush:</strong> every <em>6 months</em>.</p>
+            </div>
+          </a>
+
+          <a class="card" href="../water-care.html">
+            <p class="card-kicker">Water Quality</p>
+            <h3>Water Care</h3>
+            <p class="sub">Hardness lookup &amp; Vapor Pure setup</p>
+            <span class="card-go" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+            <div class="arc-wrap">
+              <svg viewBox="0 0 260 64" width="100%" aria-hidden="true">
+                <path d="M10 54 A 122 122 0 0 1 250 54" fill="none" stroke="#3a2a1c" stroke-width="7" stroke-linecap="round"/>
+                <path d="M10 54 A 122 122 0 0 1 148 12" fill="none" stroke="url(#waterGrad)" stroke-width="7" stroke-linecap="round"/>
+                <circle cx="148" cy="12" r="6" fill="#ffc98f"/>
+                <defs><linearGradient id="waterGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e07b28"/><stop offset="1" stop-color="#ffc98f"/></linearGradient></defs>
+              </svg>
+              <div class="arc-scale"><span>Soft</span><span>Moderate</span><span>Hard</span></div>
+              <p class="arc-note">Check <strong>your ZIP code</strong> — hard water shortens mist-maker life.</p>
+            </div>
+          </a>
+
+          <a class="card ts-card" href="../troubleshoot.html">
+            <p class="card-kicker">Something Off?</p>
+            <h3>Troubleshooter</h3>
+            <p class="sub">Guided fixes, tailored to your model</p>
+            <div class="ts-symptoms" aria-hidden="true">
+              <span>Beeping</span><span>Low flame</span><span>Foggy mist</span><span>App won&rsquo;t connect</span>
+            </div>
+            <span class="ts-cta">Start Troubleshooting
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </span>
+          </a>
+        </div>
+
+        <section class="hearth" aria-label="Aquafire owner's guide">
+          <p class="hearth-kicker">Owner&rsquo;s Operations Center</p>
+          <h1>Good evening. Your fire is in good hands.</h1>
+          <p class="hearth-sub">Everything you need to plan, install, and maintain your Aquafire water vapor fireplace &mdash; in one warm, quiet place.</p>
+          <div class="hearth-chips">
+            <a href="#models"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19 7-7-7-7M5 12h14"/></svg>Choose your model</a>
+            <a href="../getting-started.html">First-time setup</a>
+            <a href="../enclosure-guide.html">Plan an enclosure</a>
+          </div>
+          <div class="flamebox" aria-hidden="true">
+            <div class="tongues">
+              <span class="tongue tall" style="left: 6%; animation-delay: 0s;"></span>
+              <span class="tongue slim" style="left: 15%; animation-delay: 1.3s;"></span>
+              <span class="tongue" style="left: 24%; animation-delay: 0.6s;"></span>
+              <span class="tongue tall" style="left: 34%; animation-delay: 2.1s;"></span>
+              <span class="tongue slim" style="left: 44%; animation-delay: 0.2s;"></span>
+              <span class="tongue" style="left: 52%; animation-delay: 1.7s;"></span>
+              <span class="tongue tall" style="left: 61%; animation-delay: 0.9s;"></span>
+              <span class="tongue" style="left: 71%; animation-delay: 2.6s;"></span>
+              <span class="tongue slim" style="left: 80%; animation-delay: 1.1s;"></span>
+              <span class="tongue tall" style="left: 87%; animation-delay: 0.4s;"></span>
+            </div>
+            <div class="trough"></div>
+            <div class="plinth"></div>
+            <div class="hearth-status">
+              <span>Flame from <b>water vapor</b> &mdash; cool to the touch</span>
+              <span>No venting &middot; No gas &middot; <b>Plug-in</b></span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="section-head" id="models">
+        <h2>Which Aquafire is yours?</h2>
+        <p>Each guide is tailored to its model.</p>
+      </div>
+      <div class="models">
+        <a class="model" href="../aquafire-pro.html">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt="Aquafire Pro">
+          <h3>Aquafire Pro</h3>
+          <p>Premium model with enhanced flame realism and wider light angles.</p>
+          <span class="model-tag">Open the Pro guide <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+          <span class="glowline"></span>
+        </a>
+        <a class="model" href="../aquafire-original.html">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ORIGINAL.png?v=1768251742" alt="Aquafire Original">
+          <h3>Aquafire Original</h3>
+          <p>The classic water vapor fireplace. Available in 20&Prime;, 40&Prime;, and 60&Prime;.</p>
+          <span class="model-tag">Open the Original guide <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+          <span class="glowline"></span>
+        </a>
+        <div class="model">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/LITE.png?v=1768251746" alt="Aquafire Lite">
+          <h3>Aquafire Lite</h3>
+          <p>Compact and easy to install &mdash; perfect for smaller spaces.</p>
+          <span class="model-tag soon">Guide coming soon</span>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <h2>The guide ledger</h2>
+        <p>Every manual, tool, and calculator.</p>
+      </div>
+      <div class="ledger">
+        <div class="ledger-head" aria-hidden="true">
+          <span>Guide</span><span>What it covers</span><span>Time</span><span></span>
+        </div>
+        <a class="ledger-row" href="../getting-started.html">
+          <span class="g-name"><span class="g-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3M12 21a6 6 0 0 0 6-6c0-3-2-4.5-6-9-4 4.5-6 6-6 9a6 6 0 0 0 6 6z"/></svg></span>Getting Started</span>
+          <span class="g-desc">Unboxing, first fill, and your first flame</span>
+          <span class="g-time">10 min</span>
+          <span class="g-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </a>
+        <a class="ledger-row" href="../quick-start.html">
+          <span class="g-name"><span class="g-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></span>Quick Start</span>
+          <span class="g-desc">Step-by-step install guides per model</span>
+          <span class="g-time">15 min</span>
+          <span class="g-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </a>
+        <a class="ledger-row" href="../enclosure-guide.html">
+          <span class="g-name"><span class="g-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="1.5"/><path d="M8 7V4h8v3M9 12h6"/></svg></span>Enclosure Builder</span>
+          <span class="g-desc">Dimensions, cutout sizes, light trap configuration</span>
+          <span class="g-time">Interactive</span>
+          <span class="g-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </a>
+        <a class="ledger-row" href="../water-care.html">
+          <span class="g-name"><span class="g-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3.5 4-6 6.5-6 10a6 6 0 0 0 12 0c0-3.5-2.5-6-6-10z"/></svg></span>Water Care</span>
+          <span class="g-desc">Hardness by ZIP, softener replacement timeline</span>
+          <span class="g-time">Interactive</span>
+          <span class="g-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </a>
+        <a class="ledger-row" href="../maintenance.html">
+          <span class="g-name"><span class="g-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.06-.4.1-.8.1-1.2z"/></svg></span>Maintenance</span>
+          <span class="g-desc">Mist maker cleaning &amp; system flush, with checklists</span>
+          <span class="g-time">Tracked</span>
+          <span class="g-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </a>
+        <a class="ledger-row" href="../troubleshoot.html">
+          <span class="g-name"><span class="g-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>Troubleshooter</span>
+          <span class="g-desc">Answer a few questions, get the fix or the right person</span>
+          <span class="g-time">3&ndash;5 min</span>
+          <span class="g-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </a>
+      </div>
+
+      <div class="lower">
+        <figure class="quote">
+          <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+          <blockquote>&ldquo;The maintenance guide on the portal saved me a service call. Mist maker cleaning was easy and took 10 minutes.&rdquo;</blockquote>
+          <figcaption>&mdash; Linda P., Aquafire 40 owner</figcaption>
+          <div class="quote-links">
+            <a href="https://judge.me/product_reviews/9498b1ae-d6c2-4e5b-b06b-78b0906a168f/new?source=shareable-link" target="_blank" rel="noopener">Write a review</a>
+            <a href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener">@aquafire on Instagram</a>
+            <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener">YouTube tutorials</a>
+          </div>
+        </figure>
+        <div class="shelf">
+          <div class="card">
+            <p class="card-kicker">Owner Services</p>
+            <div class="shelf-row">
+              <span class="lbl">Register your warranty<small>Coverage &amp; peace of mind</small></span>
+              <a class="go" href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener" aria-label="Register warranty"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+            <div class="shelf-row">
+              <span class="lbl">Submit a service request<small>Our team gets back to you</small></span>
+              <a class="go" href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener" aria-label="Submit service request"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+            <div class="shelf-row">
+              <span class="lbl">Shop accessories &amp; parts<small>Vapor Pure, inserts, replacements</small></span>
+              <a class="go" href="https://www.aquafire.com" target="_blank" rel="noopener" aria-label="Shop accessories"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+            <div class="shelf-row">
+              <span class="lbl">Need a custom quote?<small>Commercial &amp; custom enclosures</small></span>
+              <a class="go" href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener" aria-label="Contact sales"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            </div>
+          </div>
+          <a class="card" href="../rewards.html">
+            <p class="card-kicker">Aquafire Rewards</p>
+            <h3>Earn as you learn</h3>
+            <p class="sub">Collect points for completing guides, tools, and your fireplace setup.</p>
+            <span class="card-go" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <div class="shell">
+      <div class="foot">
+        <div class="foot-brand">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+          <p>The complete guide to your Aquafire water vapor fireplace.</p>
+        </div>
+        <div class="foot-cols">
+          <div>
+            <h4>Guides</h4>
+            <a href="../getting-started.html">Getting Started</a>
+            <a href="../quick-start.html">Quick Start</a>
+            <a href="../enclosure-guide.html">Enclosure Guide</a>
+            <a href="../water-care.html">Water Care</a>
+            <a href="../troubleshoot.html">Troubleshooter</a>
+            <a href="../maintenance.html">Maintenance</a>
+          </div>
+          <div>
+            <h4>Resources</h4>
+            <a href="../dealer-locator.html">Find a Dealer</a>
+            <a href="../support.html">Support Hub</a>
+            <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+            <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+      <div class="foot-base">
+        <p>&copy; 2026 Aquafire. All rights reserved.</p>
+        <p>Design direction v1 &mdash; &ldquo;Hearth Console&rdquo;</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

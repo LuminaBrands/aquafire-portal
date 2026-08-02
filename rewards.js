@@ -18,7 +18,7 @@
 
   /* ── Reward Definitions ── */
   const REWARDS = {
-    'setup-guide':       { points: 500, label: 'Complete Setup Guide' },
+    'setup-guide':       { points: 500, label: 'Read a Model Guide' },
     'enclosure-builder': { points: 200, label: 'Use Enclosure Builder' },
     'water-hardness':    { points: 250, label: 'Check Water Hardness' },
     'light-trap':        { points: 200, label: 'Configure Light Trap' },
@@ -186,6 +186,12 @@
 
   /* ── Nav UI ── */
   function updateNavUI() {
+    // The banner CTA is independent of the injected nav button and has to be
+    // wired even where that button does not exist -- injectNavButton() needs a
+    // `.nav-links` element, which no redesigned page has, so bailing first
+    // left the homepage's sign-in button inert.
+    updateBannerCTA();
+
     var btn = document.getElementById('af-rewards-btn');
     if (!btn) return;
 
@@ -205,8 +211,6 @@
         '<span class="af-nav-pts-icon">&#x1f525;</span>';
       btn.onclick = showModal;
     }
-
-    updateBannerCTA();
   }
 
   /* ── Banner CTA (Sign In / View Profile) ── */
@@ -435,7 +439,9 @@
         badge.innerHTML = '<span class="af-rb-check">&#x2713;</span><span class="af-rb-pts">+' + reward.points + '</span>';
       } else {
         badge.className = 'af-reward-badge';
-        badge.innerHTML = '<span class="af-rb-flame">&#x1f525;</span><span class="af-rb-pts">+' + reward.points + ' pts</span>';
+        // The unit is its own span so the dense row/mini badges can drop it
+        // (see rewards.css) while cards keep the full "+500 pts".
+        badge.innerHTML = '<span class="af-rb-flame">&#x1f525;</span><span class="af-rb-pts">+' + reward.points + '</span><span class="af-rb-unit">pts</span>';
       }
     });
     updateHomeBanner();
@@ -446,15 +452,19 @@
     var barFill = document.getElementById('rb-home-bar-fill');
     var barLabel = document.getElementById('rb-home-bar-label');
     var ptsDisplay = document.getElementById('rb-home-points');
-    if (!barFill) return;
 
     var total = Object.keys(REWARDS).length;
     var done = Object.keys(completedRewards).length;
     var pct = total ? Math.round((done / total) * 100) : 0;
 
-    barFill.style.width = pct + '%';
+    // The journey bar is homepage-only; the points chip is in every page's nav,
+    // so each element is guarded separately rather than bailing on the first.
+    if (barFill) barFill.style.width = pct + '%';
     if (barLabel) barLabel.textContent = done + ' / ' + total + ' modules completed';
     if (ptsDisplay) ptsDisplay.textContent = userPoints.toLocaleString() + ' pts';
+    // The homepage band shows the bare figure; the nav chip carries the unit.
+    var ptsBig = document.getElementById('rb-home-points-big');
+    if (ptsBig) ptsBig.textContent = userPoints.toLocaleString();
   }
 
   /* ── Auto-detection of section completion ── */
@@ -482,6 +492,12 @@
       setupQuickStartTracking();
     } else if (path.includes('support')) {
       setTimeout(function () { awardPoints('support-hub'); }, 3000);
+    } else if (path.includes('aquafire-pro') || path.includes('aquafire-original')) {
+      // Second path to the same reward. setupQuickStartTracking awards it on
+      // click-through from Quick Start, but the homepage fleet cards link
+      // straight here, so landing on a guide has to earn it too. awardPoints
+      // is idempotent, so arriving both ways still pays once.
+      setTimeout(function () { awardPoints('setup-guide'); }, 3000);
     }
   }
 
@@ -494,7 +510,9 @@
   function setupQuickStartTracking() {
     setTimeout(function () { awardPoints('quick-start'); }, 3000);
 
-    var grid = document.querySelector('.model-grid');
+    // `.tiles.models` is the redesigned grid; `.model-grid` is the pre-redesign
+    // markup. Match either so this keeps working through the rollout.
+    var grid = document.querySelector('.tiles.models, .model-grid');
     if (!grid) return;
 
     grid.addEventListener('click', function (e) {

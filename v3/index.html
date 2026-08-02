@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<!--
+DIRECTION CONTRACT — v3 "Nightfall"
+THESIS: The owner's manual as a night-flight companion app: you tell it where you
+need to go, it hands you the route. Refuses the docs-portal default of a static
+link directory — navigation is framed as a journey with routes and departures.
+OWN-WORLD: Deep indigo night (#10143a→#1c2364) with satin sheen streaks, 26px
+radii, image-led guide cards with bottom-anchored labels, ember (#ff9d45) action
+pills, Onest sans throughout, mobile bottom tab bar. Recognizable with content
+removed: satin indigo cards under streak light with one warm pill.
+STORY: An owner with a question types/taps it like a destination, sees the
+popular guides as places to go, and picks a support route labeled by how direct
+it is (self-serve = Direct, human help = 1 stop).
+FIRST VIEWPORT: Satin indigo hero: eyebrow, "Where do you need to go tonight?",
+search-styled prompt linking to the Troubleshooter, four symptom chips beneath,
+then the Popular Guides card row begins. Primary action = the search prompt.
+FORM: User-pinned direction (reference image 1, night-flight mobile app).
+Pinned brief beats the concept roll; no seed. Staging: search-led journey.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Owner's Guide — Nightfall</title>
+  <meta name="description" content="The complete guide to your Aquafire water vapor fireplace.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --night: #10143a;
+      --night-2: #151b4a;
+      --panel: #1b2158;
+      --panel-2: #222a6b;
+      --veil: rgba(255, 255, 255, 0.09);
+      --veil-2: rgba(255, 255, 255, 0.14);
+      --white: #f2f4ff;
+      --dim: #aab3e8;
+      --faint: #7d87c9;
+      --ember: #ff9d45;
+      --ember-deep: #e07b28;
+      --r: 26px;
+      --r-sm: 16px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: linear-gradient(180deg, #131845 0%, var(--night) 45%, #0b0e2c 100%);
+      color: var(--white);
+      font-family: "Onest", system-ui, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: 6px; }
+
+    /* satin sheen */
+    .sheen { position: relative; overflow: hidden; }
+    .sheen::before {
+      content: ""; position: absolute; inset: -40%;
+      background:
+        linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.05) 38%, transparent 46%),
+        linear-gradient(115deg, transparent 55%, rgba(255, 255, 255, 0.035) 66%, transparent 76%);
+      pointer-events: none;
+    }
+
+    /* ── Nav ─────────────────────────────────────────── */
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 0 8px; }
+    .nav img { height: 21px; display: block; }
+    .nav-links { display: flex; gap: 2px; list-style: none; }
+    .nav-links a {
+      display: block; padding: 9px 16px; border-radius: 999px; text-decoration: none;
+      font-size: 0.92rem; font-weight: 500; color: var(--dim);
+      transition: color 0.22s, background-color 0.22s;
+    }
+    .nav-links a:hover { color: var(--white); background: var(--veil); }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+      background: var(--veil); border: 1px solid var(--veil-2);
+      color: var(--white); font-weight: 600; font-size: 0.9rem;
+      padding: 9px 18px; border-radius: 999px;
+      transition: background-color 0.22s;
+    }
+    .nav-cta:hover { background: var(--veil-2); }
+
+    /* ── Hero ────────────────────────────────────────── */
+    .hero {
+      margin-top: 18px; border-radius: 32px;
+      background:
+        radial-gradient(700px 340px at 85% -10%, rgba(120, 140, 255, 0.22), transparent 60%),
+        radial-gradient(520px 300px at 8% 108%, rgba(255, 157, 69, 0.13), transparent 65%),
+        linear-gradient(160deg, #1d2467 0%, #171d52 55%, #12173f 100%);
+      padding: clamp(40px, 6vw, 72px) clamp(26px, 5vw, 64px) clamp(34px, 5vw, 56px);
+    }
+    .hero .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-size: 0.82rem; font-weight: 600; color: var(--dim);
+      background: rgba(16, 20, 58, 0.5); border: 1px solid var(--veil);
+      border-radius: 999px; padding: 7px 15px;
+    }
+    .hero .eyebrow .pip { width: 7px; height: 7px; border-radius: 50%; background: var(--ember); }
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.04;
+      margin-top: 22px; max-width: 14ch; text-wrap: balance;
+    }
+    .hero .sub { color: var(--dim); font-size: 1.05rem; margin-top: 16px; max-width: 46ch; }
+
+    .prompt {
+      display: flex; align-items: center; gap: 14px;
+      margin-top: 30px; max-width: 620px;
+      background: rgba(16, 20, 58, 0.65);
+      border: 1px solid var(--veil-2);
+      border-radius: 999px; padding: 8px 8px 8px 24px;
+      text-decoration: none;
+      box-shadow: 0 22px 44px -18px rgba(5, 8, 30, 0.8);
+      transition: border-color 0.25s, transform 0.3s var(--ease);
+    }
+    .prompt:hover { border-color: rgba(255, 157, 69, 0.5); transform: translateY(-2px); }
+    .prompt .q { color: var(--faint); font-size: 1rem; flex: 1; }
+    .prompt .go {
+      display: inline-flex; align-items: center; gap: 9px; flex: none;
+      background: var(--ember); color: #241203;
+      font-weight: 700; font-size: 0.94rem;
+      border-radius: 999px; padding: 12px 22px;
+      transition: transform 0.3s var(--ease);
+    }
+    .prompt:hover .go { transform: translateX(2px); }
+    .chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+    .chips a {
+      text-decoration: none; font-size: 0.88rem; font-weight: 500; color: var(--dim);
+      border: 1px solid var(--veil); border-radius: 999px; padding: 8px 16px;
+      transition: color 0.22s, border-color 0.22s, background-color 0.22s;
+    }
+    .chips a:hover { color: var(--white); border-color: var(--veil-2); background: var(--veil); }
+
+    /* ── Sections ────────────────────────────────────── */
+    .sect { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; margin: 58px 0 20px; }
+    .sect h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
+    .sect a { color: var(--dim); font-size: 0.9rem; font-weight: 600; text-decoration: none; }
+    .sect a:hover { color: var(--ember); }
+
+    /* Guide cards (destinations) */
+    .guides { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .gcard {
+      position: relative; overflow: hidden; border-radius: var(--r);
+      min-height: 300px; display: flex; flex-direction: column; justify-content: flex-end;
+      text-decoration: none; padding: 22px;
+      border: 1px solid var(--veil);
+      transition: transform 0.32s var(--ease), border-color 0.3s;
+    }
+    .gcard:hover { transform: translateY(-5px); border-color: var(--veil-2); }
+    .gcard .art { position: absolute; inset: 0; z-index: 0; }
+    .gcard .fade {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(180deg, rgba(16, 20, 58, 0) 30%, rgba(11, 14, 44, 0.88) 82%);
+    }
+    .gcard .txt { position: relative; z-index: 2; }
+    .gcard h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.015em; }
+    .gcard p { color: var(--dim); font-size: 0.88rem; margin-top: 3px; }
+    .gcard .meta {
+      position: absolute; top: 16px; right: 16px; z-index: 2;
+      font-size: 0.78rem; font-weight: 600; color: var(--white);
+      background: rgba(16, 20, 58, 0.6); border: 1px solid var(--veil);
+      backdrop-filter: blur(8px);
+      border-radius: 999px; padding: 6px 13px;
+    }
+    /* authored card scenes */
+    .art-enclosure {
+      background:
+        repeating-linear-gradient(0deg, rgba(150, 168, 255, 0.13) 0 1px, transparent 1px 34px),
+        repeating-linear-gradient(90deg, rgba(150, 168, 255, 0.13) 0 1px, transparent 1px 34px),
+        linear-gradient(150deg, #232b72, #171d52);
+    }
+    .art-enclosure::after {
+      content: ""; position: absolute; left: 18%; right: 18%; top: 26%; height: 34%;
+      border: 2px dashed rgba(255, 157, 69, 0.75); border-radius: 6px;
+      background: rgba(255, 157, 69, 0.08);
+    }
+    .art-water {
+      background:
+        radial-gradient(circle at 50% 38%, rgba(130, 200, 255, 0.28) 0 8%, transparent 9%),
+        radial-gradient(circle at 50% 38%, transparent 13%, rgba(130, 200, 255, 0.2) 14% 15%, transparent 16%),
+        radial-gradient(circle at 50% 38%, transparent 21%, rgba(130, 200, 255, 0.14) 22% 23%, transparent 24%),
+        radial-gradient(circle at 50% 38%, transparent 29%, rgba(130, 200, 255, 0.09) 30% 31%, transparent 32%),
+        linear-gradient(160deg, #1c2d6e, #141a4a);
+    }
+    .art-maint {
+      background:
+        conic-gradient(from 210deg at 62% 40%, rgba(255, 157, 69, 0.5) 0 52deg, rgba(255, 255, 255, 0.10) 52deg 360deg),
+        linear-gradient(150deg, #262e77, #161c50);
+      background-blend-mode: screen, normal;
+    }
+    .art-maint::after {
+      content: ""; position: absolute; left: 46%; top: 24%; width: 32%; aspect-ratio: 1;
+      border-radius: 50%; background: #1b2158;
+      box-shadow: 0 6px 24px -6px rgba(5, 8, 30, 0.7);
+    }
+
+    /* Model cards */
+    .models { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .mcard {
+      border-radius: var(--r); border: 1px solid var(--veil);
+      background: linear-gradient(165deg, var(--panel-2), var(--panel) 70%);
+      padding: 24px; text-decoration: none; position: relative; overflow: hidden;
+      transition: transform 0.32s var(--ease), border-color 0.3s;
+    }
+    .mcard:hover { transform: translateY(-5px); border-color: var(--veil-2); }
+    .mcard img { width: 100%; height: 140px; object-fit: contain; filter: drop-shadow(0 18px 20px rgba(5, 8, 30, 0.6)); }
+    .mcard h3 { font-size: 1.15rem; font-weight: 700; margin-top: 14px; }
+    .mcard p { color: var(--dim); font-size: 0.87rem; margin-top: 3px; min-height: 2.6em; }
+    .mcard .pill {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
+      background: var(--ember); color: #241203; font-weight: 700; font-size: 0.88rem;
+      border-radius: 999px; padding: 9px 18px;
+      transition: transform 0.3s var(--ease);
+    }
+    .mcard:hover .pill { transform: translateX(3px); }
+    .mcard .pill.ghost { background: var(--veil); color: var(--dim); }
+
+    /* ── Routes (flight results) ─────────────────────── */
+    .routes { display: flex; flex-direction: column; gap: 14px; max-width: 780px; }
+    .route {
+      display: grid; grid-template-columns: 52px 1fr auto; gap: 18px; align-items: center;
+      background: linear-gradient(160deg, var(--panel-2), var(--panel));
+      border: 1px solid var(--veil); border-radius: var(--r-sm);
+      padding: 18px 20px; text-decoration: none;
+      transition: transform 0.3s var(--ease), border-color 0.3s;
+    }
+    .route:hover { transform: translateY(-3px); border-color: var(--veil-2); }
+    .route .badge {
+      width: 52px; height: 52px; border-radius: 15px;
+      background: rgba(16, 20, 58, 0.55); border: 1px solid var(--veil);
+      display: grid; place-items: center; color: var(--ember);
+    }
+    .route h3 { font-size: 1.05rem; font-weight: 700; }
+    .route .path { color: var(--dim); font-size: 0.87rem; margin-top: 2px; }
+    .route .path b { color: var(--white); font-weight: 600; }
+    .route .stop {
+      display: inline-block; margin-top: 7px;
+      font-size: 0.76rem; font-weight: 700; letter-spacing: 0.04em;
+      color: #9fe8b9; background: rgba(70, 180, 120, 0.14);
+      border-radius: 999px; padding: 3px 11px;
+    }
+    .route .stop.human { color: #a9c4ff; background: rgba(110, 150, 255, 0.16); }
+    .route .open {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--veil); border: 1px solid var(--veil-2);
+      color: var(--white); font-weight: 700; font-size: 0.9rem;
+      border-radius: 999px; padding: 11px 22px;
+      transition: background-color 0.25s, color 0.25s;
+    }
+    .route:hover .open { background: var(--ember); border-color: var(--ember); color: #241203; }
+
+    /* Reviews rail */
+    .rail { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px; scroll-snap-type: x mandatory; }
+    .rail::-webkit-scrollbar { height: 8px; }
+    .rail::-webkit-scrollbar-thumb { background: var(--panel-2); border-radius: 4px; }
+    .rev {
+      flex: 0 0 320px; scroll-snap-align: start;
+      background: linear-gradient(160deg, var(--panel-2), var(--panel));
+      border: 1px solid var(--veil); border-radius: var(--r-sm);
+      padding: 22px;
+    }
+    .rev .stars { color: var(--ember); letter-spacing: 2px; font-size: 0.85rem; }
+    .rev p { font-size: 0.93rem; margin-top: 10px; line-height: 1.55; }
+    .rev footer { color: var(--faint); font-size: 0.82rem; margin-top: 12px; }
+
+    /* ── Footer ──────────────────────────────────────── */
+    .foot {
+      margin-top: 72px; border-top: 1px solid var(--veil);
+      padding: 40px 0 90px;
+      display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap;
+      color: var(--dim); font-size: 0.9rem;
+    }
+    .foot img { height: 18px; }
+    .foot .cols { display: flex; gap: 60px; }
+    .foot h4 { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); margin-bottom: 10px; }
+    .foot a { display: block; text-decoration: none; color: var(--dim); padding: 3px 0; }
+    .foot a:hover { color: var(--white); }
+    .foot .fine { flex-basis: 100%; color: var(--faint); font-size: 0.8rem; }
+
+    /* ── Mobile tab bar ──────────────────────────────── */
+    .tabbar { display: none; }
+    @media (max-width: 800px) {
+      .nav-links, .nav-cta { display: none; }
+      .guides, .models { grid-template-columns: 1fr; }
+      .gcard { min-height: 220px; }
+      .route { grid-template-columns: 44px 1fr; }
+      .route .open { display: none; }
+      .prompt { flex-direction: column; align-items: stretch; border-radius: 24px; padding: 16px; gap: 12px; }
+      .prompt .q { font-size: 0.92rem; }
+      .prompt .go { justify-content: center; }
+      .tabbar {
+        display: flex; position: fixed; left: 14px; right: 14px; bottom: 14px; z-index: 50;
+        background: rgba(16, 20, 58, 0.88); backdrop-filter: blur(14px);
+        border: 1px solid var(--veil-2); border-radius: 22px;
+        padding: 8px; justify-content: space-around;
+        box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.6);
+      }
+      .tabbar a {
+        display: flex; flex-direction: column; align-items: center; gap: 3px;
+        text-decoration: none; color: var(--dim); font-size: 0.68rem; font-weight: 600;
+        padding: 7px 14px; border-radius: 14px;
+      }
+      .tabbar a.on { color: var(--ember); background: rgba(255, 157, 69, 0.1); }
+    }
+    @media (max-width: 1020px) and (min-width: 801px) {
+      .guides, .models { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="../index.html" aria-label="Aquafire home">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <ul class="nav-links">
+        <li><a href="#guides">Guides</a></li>
+        <li><a href="#models">Models</a></li>
+        <li><a href="#support">Support</a></li>
+        <li><a href="../dealer-locator.html">Find a Dealer</a></li>
+        <li><a href="../rewards.html">Rewards</a></li>
+      </ul>
+      <a class="nav-cta" href="../troubleshoot.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        Troubleshoot
+      </a>
+    </nav>
+
+    <header class="hero sheen">
+      <span class="eyebrow"><span class="pip"></span>Aquafire Interactive Owner&rsquo;s Guide</span>
+      <h1>Where do you need to go tonight?</h1>
+      <p class="sub">Plan, install, and maintain your water vapor fireplace &mdash; guided routes for every question, from first fill to a foggy flame.</p>
+      <a class="prompt" href="../troubleshoot.html">
+        <span class="q">Describe what&rsquo;s happening&hellip; &ldquo;my Aquafire is beeping&rdquo;</span>
+        <span class="go">Find the fix
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </span>
+      </a>
+      <div class="chips">
+        <a href="../troubleshoot.html">Beeping sounds</a>
+        <a href="../troubleshoot.html">Flame low or uneven</a>
+        <a href="../troubleshoot.html">Smoky / foggy look</a>
+        <a href="../troubleshoot.html?model=pro">App won&rsquo;t connect</a>
+        <a href="../maintenance.html">Cleaning the mist maker</a>
+      </div>
+    </header>
+
+    <div class="sect" id="guides">
+      <h2>Popular guides</h2>
+      <a href="../quick-start.html">All guides &rarr;</a>
+    </div>
+    <div class="guides">
+      <a class="gcard sheen" href="../enclosure-guide.html">
+        <span class="art art-enclosure" aria-hidden="true"></span>
+        <span class="fade" aria-hidden="true"></span>
+        <span class="meta">Interactive</span>
+        <span class="txt">
+          <h3>Enclosure Builder</h3>
+          <p>Cutout sizes &amp; light trap, calculated for your model</p>
+        </span>
+      </a>
+      <a class="gcard sheen" href="../water-care.html">
+        <span class="art art-water" aria-hidden="true"></span>
+        <span class="fade" aria-hidden="true"></span>
+        <span class="meta">By ZIP code</span>
+        <span class="txt">
+          <h3>Water Care</h3>
+          <p>Hardness lookup &amp; Vapor Pure softener setup</p>
+        </span>
+      </a>
+      <a class="gcard sheen" href="../maintenance.html">
+        <span class="art art-maint" aria-hidden="true"></span>
+        <span class="fade" aria-hidden="true"></span>
+        <span class="meta">Every 3 months</span>
+        <span class="txt">
+          <h3>Maintenance</h3>
+          <p>Mist maker cleaning &amp; system flush, with checklists</p>
+        </span>
+      </a>
+    </div>
+
+    <div class="sect" id="models">
+      <h2>Your model&rsquo;s guide</h2>
+      <a href="../quick-start.html">Not sure which you have?</a>
+    </div>
+    <div class="models">
+      <a class="mcard sheen" href="../aquafire-pro.html">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt="Aquafire Pro">
+        <h3>Aquafire Pro</h3>
+        <p>Enhanced flame realism, color LEDs, app control, direct-plumb ready.</p>
+        <span class="pill">View guide
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </span>
+      </a>
+      <a class="mcard sheen" href="../aquafire-original.html">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ORIGINAL.png?v=1768251742" alt="Aquafire Original">
+        <h3>Aquafire Original</h3>
+        <p>The classic water vapor fireplace &mdash; 20&Prime;, 40&Prime;, and 60&Prime;.</p>
+        <span class="pill">View guide
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </span>
+      </a>
+      <div class="mcard sheen">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/LITE.png?v=1768251746" alt="Aquafire Lite">
+        <h3>Aquafire Lite</h3>
+        <p>Compact and easy to install &mdash; perfect for smaller spaces.</p>
+        <span class="pill ghost">Guide coming soon</span>
+      </div>
+    </div>
+
+    <div class="sect" id="support">
+      <h2>Support routes</h2>
+      <a href="../support.html">Support Hub &rarr;</a>
+    </div>
+    <div class="routes">
+      <a class="route" href="../troubleshoot.html">
+        <span class="badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+        <span>
+          <h3>Troubleshooter</h3>
+          <p class="path">Your symptom &rarr; <b>the fix</b> &middot; 3&ndash;5 min, tailored to your model</p>
+          <span class="stop">Direct &middot; self-serve</span>
+        </span>
+        <span class="open">Start</span>
+      </a>
+      <a class="route" href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">
+        <span class="badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H5a1.5 1.5 0 0 0-1.5 1.5v15A1.5 1.5 0 0 0 5 21h14a1.5 1.5 0 0 0 1.5-1.5V10"/><path d="M9 12h6M9 16h4M14 3l6.5 6.5M14 3v5.5a1 1 0 0 0 1 1H20"/></svg></span>
+        <span>
+          <h3>Service request</h3>
+          <p class="path">Your issue &rarr; <b>our team</b> &rarr; a scheduled fix</p>
+          <span class="stop human">1 stop &middot; human help</span>
+        </span>
+        <span class="open">Submit</span>
+      </a>
+      <a class="route" href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">
+        <span class="badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9.5 12 2 2 3.5-4"/></svg></span>
+        <span>
+          <h3>Warranty registration</h3>
+          <p class="path">Your serial number &rarr; <b>coverage active</b></p>
+          <span class="stop">Direct &middot; 2 min</span>
+        </span>
+        <span class="open">Register</span>
+      </a>
+      <a class="route" href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">
+        <span class="badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 21l1.5-4.6A8.5 8.5 0 1 1 21 12z"/></svg></span>
+        <span>
+          <h3>Custom quote</h3>
+          <p class="path">Your project &rarr; <b>sales team</b> &middot; commercial &amp; custom enclosures</p>
+          <span class="stop human">1 stop &middot; human help</span>
+        </span>
+        <span class="open">Contact</span>
+      </a>
+    </div>
+
+    <div class="sect">
+      <h2>Owners on the record</h2>
+      <a href="https://judge.me/product_reviews/9498b1ae-d6c2-4e5b-b06b-78b0906a168f/new?source=shareable-link" target="_blank" rel="noopener">Write a review &rarr;</a>
+    </div>
+    <div class="rail">
+      <article class="rev">
+        <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p>&ldquo;Absolutely stunning &mdash; guests always ask if it&rsquo;s real fire.&rdquo;</p>
+        <footer>Sarah M. &middot; Aquafire Pro owner</footer>
+      </article>
+      <article class="rev">
+        <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p>&ldquo;Installation was straightforward with the enclosure guide.&rdquo;</p>
+        <footer>James R. &middot; Custom build</footer>
+      </article>
+      <article class="rev">
+        <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p>&ldquo;No venting, no heat issues, and the ambiance is unreal.&rdquo;</p>
+        <footer>Nicole &amp; David K. &middot; Renovation</footer>
+      </article>
+      <article class="rev">
+        <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p>&ldquo;The maintenance guide saved me a service call &mdash; 10 minutes.&rdquo;</p>
+        <footer>Linda P. &middot; Aquafire 40 owner</footer>
+      </article>
+      <article class="rev">
+        <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p>&ldquo;Perfect for our restaurant lounge &mdash; safe around kids and pets.&rdquo;</p>
+        <footer>Marco T. &middot; Commercial install</footer>
+      </article>
+    </div>
+
+    <footer class="foot">
+      <div>
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+        <p style="margin-top: 12px; max-width: 30ch; color: var(--faint);">The complete guide to your Aquafire water vapor fireplace.</p>
+      </div>
+      <div class="cols">
+        <div>
+          <h4>Guides</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../quick-start.html">Quick Start</a>
+          <a href="../enclosure-guide.html">Enclosure Guide</a>
+          <a href="../water-care.html">Water Care</a>
+          <a href="../maintenance.html">Maintenance</a>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <a href="../troubleshoot.html">Troubleshooter</a>
+          <a href="../dealer-locator.html">Find a Dealer</a>
+          <a href="../support.html">Support Hub</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+        </div>
+        <div>
+          <h4>Community</h4>
+          <a href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener">YouTube</a>
+          <a href="../rewards.html">Aquafire Rewards</a>
+        </div>
+      </div>
+      <p class="fine">&copy; 2026 Aquafire. All rights reserved. &middot; Design direction v3 &ldquo;Nightfall&rdquo;</p>
+    </footer>
+  </div>
+
+  <nav class="tabbar" aria-label="Quick navigation">
+    <a href="#" class="on">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20z"/></svg>
+      Home
+    </a>
+    <a href="#guides">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a1.5 1.5 0 0 1 1.5-1.5H19V21H5.5A1.5 1.5 0 0 1 4 19zM19 17H5.5A1.5 1.5 0 0 0 4 18.5"/></svg>
+      Guides
+    </a>
+    <a href="../troubleshoot.html">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      Fix it
+    </a>
+    <a href="../support.html">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L4 21l1.5-4.6A8.5 8.5 0 1 1 21 12z"/></svg>
+      Support
+    </a>
+  </nav>
+</body>
+</html>

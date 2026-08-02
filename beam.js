@@ -1,0 +1,222 @@
+/* ── Border Beam controller ───────────────────────────────────────────────────
+   Companion to beam.css. Vanilla port of the `border-beam` React package's
+   runtime behaviour: injects the bloom layer, auto-detects the wrapped child's
+   border-radius, and drives activate/deactivate.
+
+   Usage — markup only, auto-initialised on DOMContentLoaded:
+
+     <link rel="stylesheet" href="beam.css">
+     <div class="af-beam" data-beam-size="md" data-beam-variant="colorful">
+       <div class="card">...</div>
+     </div>
+     <script src="beam.js" defer></script>
+
+   Options are data attributes on the wrapper (all optional):
+     data-beam-size       sm | md | line | pulse-inner | pulse-outside   (md)
+     data-beam-variant    colorful | ember | ocean | sunset | mono  (colorful)
+     data-beam-theme      dark | light | auto                            (dark)
+     data-beam-radius     px override; otherwise read from the first child
+     data-beam-duration   seconds (rotate/travel period)
+     data-beam-strength   0-1 overall effect opacity
+     data-beam-brightness / data-beam-saturation / data-beam-hue-range
+     data-beam-static     present = no hue cycling
+     data-beam-trigger    load | hover | visible                         (load)
+
+   Script API:
+     AquafireBeam.init(root)        scan + attach within root
+     AquafireBeam.attach(el, opts)  attach one element
+     AquafireBeam.activate(el)      turn the beam on
+     AquafireBeam.deactivate(el)    fade the beam out
+
+   Elements are only ever decorated - children render untouched if this script
+   never runs, so the effect degrades to a plain container.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+(function (global) {
+  'use strict';
+
+  var SIZES = ['sm', 'md', 'line', 'pulse-inner', 'pulse-outside'];
+  var VARIANTS = ['ember', 'colorful', 'ocean', 'sunset', 'mono'];
+  var DEFAULT_RADIUS = { sm: 32, md: 16, line: 16, 'pulse-inner': 16, 'pulse-outside': 16 };
+
+  var FADE_OUT_MS = 500;
+
+  /* Feature gate: the effect needs registered custom properties (to animate an
+     <angle>) and mask-composite. Without them the wrapper stays inert rather
+     than rendering a broken half-effect. */
+  var SUPPORTED = (function () {
+    if (typeof CSS === 'undefined' || !CSS.supports) return false;
+    var hasProperty = typeof CSS.registerProperty === 'function';
+    var hasMask =
+      CSS.supports('mask-composite', 'exclude') ||
+      CSS.supports('-webkit-mask-composite', 'xor');
+    return hasProperty && hasMask;
+  })();
+
+
+  function pick(value, allowed, fallback) {
+    return allowed.indexOf(value) === -1 ? fallback : value;
+  }
+
+  function resolveTheme(el, requested) {
+    if (requested !== 'auto') return requested;
+    var dark =
+      typeof global.matchMedia !== 'function' ||
+      !global.matchMedia('(prefers-color-scheme: light)').matches;
+    return dark ? 'dark' : 'light';
+  }
+
+  /* The beam ring must trace the wrapped card's own corner radius, otherwise
+     the stroke floats off the edge. Read it from the first element child and
+     fall back to the size preset. */
+  function detectRadius(el, size) {
+    var explicit = parseFloat(el.getAttribute('data-beam-radius'));
+    if (!isNaN(explicit)) return explicit;
+
+    var child = el.firstElementChild;
+    while (child && child.classList.contains('af-beam-bloom')) {
+      child = child.nextElementSibling;
+    }
+    if (child) {
+      var radius = parseFloat(global.getComputedStyle(child).borderTopLeftRadius);
+      if (!isNaN(radius) && radius > 0) return radius;
+    }
+    return DEFAULT_RADIUS[size] || 16;
+  }
+
+  function setVar(el, name, attr, suffix) {
+    var raw = el.getAttribute(attr);
+    if (raw === null || raw === '') return;
+    var value = parseFloat(raw);
+    if (isNaN(value)) return;
+    el.style.setProperty(name, value + (suffix || ''));
+  }
+
+  function ensureBloom(el) {
+    var existing = el.querySelector(':scope > .af-beam-bloom');
+    if (existing) return existing;
+    var bloom = document.createElement('span');
+    bloom.className = 'af-beam-bloom';
+    bloom.setAttribute('aria-hidden', 'true');
+    el.insertBefore(bloom, el.firstChild);
+    return bloom;
+  }
+
+
+  function activate(el) {
+    if (!el || el.getAttribute('data-beam-ready') !== 'true') return;
+    if (el._afBeamFadeTimer) {
+      clearTimeout(el._afBeamFadeTimer);
+      el._afBeamFadeTimer = null;
+    }
+    el.removeAttribute('data-beam-fading');
+    el.setAttribute('data-beam-active', '');
+  }
+
+  function deactivate(el) {
+    if (!el || !el.hasAttribute('data-beam-active')) return;
+    el.setAttribute('data-beam-fading', '');
+    el._afBeamFadeTimer = setTimeout(function () {
+      el.removeAttribute('data-beam-active');
+      el.removeAttribute('data-beam-fading');
+      el._afBeamFadeTimer = null;
+    }, FADE_OUT_MS);
+  }
+
+  /* Rotating conic gradients are not free; stop paying for beams that have
+     scrolled out of view. */
+  function observeVisibility(el, onEnter, onLeave) {
+    if (typeof IntersectionObserver !== 'function') {
+      onEnter();
+      return;
+    }
+    var observer = new IntersectionObserver(
+      function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          if (entries[i].isIntersecting) onEnter();
+          else onLeave();
+        }
+      },
+      { rootMargin: '64px' }
+    );
+    observer.observe(el);
+  }
+
+  function attach(el, options) {
+    if (!el || el.getAttribute('data-beam-ready') === 'true') return el;
+    if (!SUPPORTED) return el;
+
+    var opts = options || {};
+
+    var size = pick(opts.size || el.getAttribute('data-beam-size'), SIZES, 'md');
+    var variant = pick(
+      opts.variant || el.getAttribute('data-beam-variant'),
+      VARIANTS,
+      'colorful'
+    );
+    var theme = resolveTheme(
+      el,
+      pick(opts.theme || el.getAttribute('data-beam-theme'), ['dark', 'light', 'auto'], 'dark')
+    );
+
+    el.classList.add('af-beam');
+    el.setAttribute('data-beam-size', size);
+    el.setAttribute('data-beam-variant', variant);
+    el.setAttribute('data-beam-theme', theme);
+
+    el.style.setProperty('--af-beam-radius', detectRadius(el, size) + 'px');
+    setVar(el, '--af-beam-duration', 'data-beam-duration', 's');
+    setVar(el, '--af-beam-strength', 'data-beam-strength');
+    setVar(el, '--af-beam-brightness', 'data-beam-brightness');
+    setVar(el, '--af-beam-saturation', 'data-beam-saturation');
+    setVar(el, '--af-beam-hue-range', 'data-beam-hue-range', 'deg');
+
+    if (el.hasAttribute('data-beam-static')) el.setAttribute('data-beam-static', '');
+
+    ensureBloom(el);
+    el.setAttribute('data-beam-ready', 'true');
+
+    var trigger = el.getAttribute('data-beam-trigger') || opts.trigger || 'load';
+    if (trigger === 'hover') {
+      el.addEventListener('mouseenter', function () { activate(el); });
+      el.addEventListener('mouseleave', function () { deactivate(el); });
+      el.addEventListener('focusin', function () { activate(el); });
+      el.addEventListener('focusout', function () { deactivate(el); });
+    } else if (trigger === 'visible') {
+      observeVisibility(el, function () { activate(el); }, function () { deactivate(el); });
+    } else {
+      observeVisibility(
+        el,
+        function () { activate(el); },
+        function () { el.removeAttribute('data-beam-active'); }
+      );
+    }
+
+    return el;
+  }
+
+  function init(root) {
+    var scope = root || document;
+    var nodes = scope.querySelectorAll('.af-beam, [data-beam-size]');
+    for (var i = 0; i < nodes.length; i++) attach(nodes[i]);
+    return nodes.length;
+  }
+
+  var AquafireBeam = {
+    init: init,
+    attach: attach,
+    activate: activate,
+    deactivate: deactivate,
+    supported: SUPPORTED,
+    sizes: SIZES,
+    variants: VARIANTS
+  };
+
+  global.AquafireBeam = AquafireBeam;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { init(); });
+  } else {
+    init();
+  }
+})(window);

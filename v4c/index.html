@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<!--
+DIRECTION CONTRACT — v4c "Guided Tour" (Vapor Glass layout study 3 of 5)
+THESIS: Ember walks, you scroll. The page is a four-stop tour of living with an
+Aquafire — from "what is this flame" to "what's that beep" — with the chat
+composer docked like a tour guide who never leaves your side. Refuses both the
+link-grid portal AND the pure chat screen: the scroll itself is the guidance.
+OWN-WORLD: Inherited v4 Vapor Glass. New atoms: numbered glass stop-markers on a
+vertical rail, Ember narration bubbles beside content panels, a fixed bottom
+composer, audience tags on each stop.
+STORY: Prospective owners board at stop 1 (the flame), new owners at stop 2
+(day one), everyone shares stop 3 (care rituals), seasoned users jump to stop 4
+(when it beeps). The tour ends at a human door.
+FIRST VIEWPORT: Bar, Ember's "Let me show you around" invitation, and stop 1
+already beginning — the tour is visibly underway. Primary action = scroll (and
+the ever-present composer).
+FORM: User-pinned world (v4) + pinned exploration. Structure 3: scrollytelling
+tour with docked chat. No seed roll — pinned brief.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Owner's Guide — Guided Tour</title>
+  <meta name="description" content="Ember, the Aquafire assistant — a guided tour of your water vapor fireplace.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --smoke: #101216; --glass: rgba(255,255,255,0.055); --glass-hi: rgba(255,255,255,0.10);
+      --stroke: rgba(255,255,255,0.12); --stroke-hi: rgba(255,255,255,0.22);
+      --white: #f3f4f6; --gray: #b9bec8; --gray-2: #8d939f; --spark: #ff9d45;
+      --ease: cubic-bezier(0.16,1,0.3,1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--smoke); color: var(--white);
+      font-family: "Figtree", system-ui, sans-serif; line-height: 1.6;
+      -webkit-font-smoothing: antialiased; overflow-x: hidden;
+      padding-bottom: 120px; /* clears the docked composer */
+    }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--white); outline-offset: 3px; border-radius: 999px; }
+    .atmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .atmos::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.028) 19%, rgba(255,255,255,0.028) 30%, transparent 31%),
+        linear-gradient(107deg, transparent 52%, rgba(255,255,255,0.02) 53%, rgba(255,255,255,0.02) 66%, transparent 67%),
+        linear-gradient(180deg, #14171c 0%, var(--smoke) 55%, #0b0d10 100%);
+    }
+    .puff { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.5; will-change: transform; }
+    .puff-a { width: 560px; height: 420px; left: -8%; top: 8%; background: radial-gradient(closest-side, #262b34, transparent 72%); animation: drift-a 46s ease-in-out infinite alternate; }
+    .puff-b { width: 640px; height: 460px; right: -12%; top: 34%; background: radial-gradient(closest-side, #22262e, transparent 70%); animation: drift-b 58s ease-in-out infinite alternate; }
+    @keyframes drift-a { from { transform: translate(0,0) scale(1); } to { transform: translate(70px,-40px) scale(1.12); } }
+    @keyframes drift-b { from { transform: translate(0,0) scale(1.06); } to { transform: translate(-90px,50px) scale(0.96); } }
+    @media (prefers-reduced-motion: reduce) { .puff { animation: none; } }
+
+    .cap {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--glass); border: 1px solid var(--stroke);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-radius: 999px; color: var(--gray); text-decoration: none;
+      transition: background-color 0.28s, border-color 0.28s, color 0.28s, transform 0.32s var(--ease);
+    }
+    .cap:hover { background: var(--glass-hi); border-color: var(--stroke-hi); color: var(--white); transform: translateY(-2px); }
+    .orb {
+      border-radius: 50%; flex: none; position: relative;
+      background: radial-gradient(circle at 35% 30%, #ffd9ae, #e0641e 62%, #6e2a08 100%);
+      box-shadow: inset 0 -2px 6px rgba(0,0,0,0.35);
+    }
+    .orb::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid var(--stroke); }
+
+    .page { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 0 24px; }
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 24px 0 0; }
+    .bar .brand { padding: 11px 20px; }
+    .bar .brand img { height: 17px; display: block; }
+    .bar .links { display: flex; gap: 8px; }
+    .bar .links .cap { padding: 10px 18px; font-size: 0.88rem; font-weight: 600; }
+    .bar .links .cap.skip { color: var(--white); }
+
+    /* ── Invitation ──────────────────────────────────── */
+    .invite { display: flex; align-items: flex-start; gap: 16px; padding: 52px 0 10px; }
+    .invite .orb { width: 48px; height: 48px; margin-top: 6px; }
+    .invite .bubble {
+      background: var(--glass); border: 1px solid var(--stroke); backdrop-filter: blur(18px);
+      border-radius: 24px; border-top-left-radius: 6px; padding: 22px 28px; max-width: 640px;
+    }
+    .invite h1 { font-size: clamp(1.5rem, 2.8vw, 2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; }
+    .invite p { color: var(--gray); font-size: 0.95rem; margin-top: 8px; }
+    .invite .stops-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .invite .stops-nav a {
+      font-size: 0.82rem; font-weight: 600; color: var(--gray); text-decoration: none;
+      background: rgba(255,255,255,0.07); border: 1px solid var(--stroke); border-radius: 999px; padding: 7px 14px;
+      transition: color 0.22s, background-color 0.22s;
+    }
+    .invite .stops-nav a:hover { color: var(--white); background: rgba(255,255,255,0.12); }
+
+    /* ── Tour rail & stations ────────────────────────── */
+    .tour { position: relative; margin-top: 30px; padding-left: 64px; }
+    .tour::before {
+      content: ""; position: absolute; left: 21px; top: 10px; bottom: 10px; width: 1px;
+      background: linear-gradient(180deg, transparent, var(--stroke) 6%, var(--stroke) 94%, transparent);
+    }
+    .station { position: relative; padding: 8px 0 64px; }
+    .stopmark {
+      position: absolute; left: -64px; top: 6px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--glass); border: 1px solid var(--stroke); backdrop-filter: blur(18px);
+      display: grid; place-items: center;
+      font-size: 0.95rem; font-weight: 700; color: var(--spark);
+    }
+    .aud {
+      display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.09em;
+      text-transform: uppercase; color: var(--gray-2);
+      border: 1px solid var(--stroke); border-radius: 999px; padding: 4px 12px; margin-bottom: 12px;
+    }
+    .narrate { display: flex; gap: 12px; margin-bottom: 16px; }
+    .narrate .orb { width: 30px; height: 30px; margin-top: 3px; }
+    .narrate .bubble {
+      background: var(--glass); border: 1px solid var(--stroke); backdrop-filter: blur(18px);
+      border-radius: 18px; border-top-left-radius: 5px; padding: 13px 18px;
+      font-size: 0.94rem; color: var(--white); max-width: 560px;
+    }
+    .narrate .bubble em { color: var(--gray); font-style: normal; }
+    .panel {
+      background: var(--glass); border: 1px solid var(--stroke); backdrop-filter: blur(18px);
+      border-radius: 24px; padding: 24px 26px;
+    }
+    .panel h2 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.015em; }
+    .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+    .fact { background: rgba(255,255,255,0.05); border: 1px solid var(--stroke); border-radius: 16px; padding: 14px 16px; }
+    .fact b { display: block; font-size: 0.95rem; font-weight: 700; }
+    .fact span { font-size: 0.82rem; color: var(--gray-2); }
+    .panel .row { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+    .panel .row .cap { padding: 10px 18px; font-size: 0.88rem; font-weight: 600; color: var(--white); }
+    .panel .row .cap.prime { background: rgba(255,255,255,0.12); }
+    .panel ol { margin: 14px 0 0 20px; color: var(--gray); font-size: 0.92rem; }
+    .panel ol li { padding: 3px 0; }
+    .panel ol li strong { color: var(--white); }
+    .mrow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .mrow .cap { padding: 10px 18px 10px 11px; font-size: 0.87rem; font-weight: 600; color: var(--white); }
+    .mrow .thumb { width: 44px; height: 34px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,0.07); display: grid; place-items: center; }
+    .mrow .thumb img { width: 40px; height: 28px; object-fit: contain; }
+    .cyc { display: flex; gap: 14px; margin-top: 16px; }
+    .cyc .c {
+      flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--stroke);
+      border-radius: 16px; padding: 16px 18px;
+    }
+    .cyc .c b { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; }
+    .cyc .c b small { font-size: 0.85rem; color: var(--gray); font-weight: 500; }
+    .cyc .c span { display: block; font-size: 0.84rem; color: var(--gray-2); margin-top: 3px; }
+
+    /* Tour end */
+    .end { text-align: center; padding: 10px 0 30px; }
+    .end .quote blockquote { font-size: 1.15rem; font-weight: 500; max-width: 560px; margin: 12px auto 0; text-wrap: balance; }
+    .end .stars { color: var(--spark); letter-spacing: 3px; font-size: 0.85rem; }
+    .end figcaption { color: var(--gray-2); font-size: 0.84rem; margin-top: 10px; }
+    .end .caps { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 26px; }
+    .end .caps .cap { padding: 10px 18px; font-size: 0.85rem; font-weight: 500; }
+    .end .fine { color: var(--gray-2); font-size: 0.78rem; margin-top: 26px; }
+    .end img { height: 15px; opacity: 0.65; margin-top: 16px; }
+
+    /* ── Docked composer ─────────────────────────────── */
+    .dock {
+      position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+      width: min(680px, calc(100vw - 28px)); z-index: 50;
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(23, 26, 31, 0.72); border: 1px solid var(--stroke-hi);
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+      border-radius: 999px; padding: 8px 8px 8px 12px;
+      box-shadow: 0 26px 54px -18px rgba(0,0,0,0.75);
+      text-decoration: none;
+      transition: border-color 0.28s;
+    }
+    .dock:hover { border-color: rgba(255,255,255,0.32); }
+    .dock .orb { width: 34px; height: 34px; }
+    .dock .ph { flex: 1; color: var(--gray-2); font-size: 0.95rem; }
+    .dock .send {
+      display: inline-flex; align-items: center; gap: 8px; flex: none;
+      background: rgba(255,255,255,0.13); border: 1px solid var(--stroke);
+      color: var(--white); font-weight: 600; font-size: 0.9rem;
+      padding: 10px 19px; border-radius: 999px;
+    }
+    .dock:hover .send { background: rgba(255,255,255,0.2); }
+
+    @media (max-width: 760px) {
+      .bar .links .cap:not(.skip) { display: none; }
+      .tour { padding-left: 0; }
+      .tour::before { display: none; }
+      .stopmark { position: static; margin-bottom: 12px; }
+      .facts { grid-template-columns: 1fr; }
+      .cyc { flex-direction: column; }
+      .invite { padding-top: 36px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="atmos" aria-hidden="true"><span class="puff puff-a"></span><span class="puff puff-b"></span></div>
+
+  <div class="page">
+    <header class="bar">
+      <a class="cap brand" href="../index.html" aria-label="Aquafire home">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <nav class="links">
+        <a class="cap" href="../dealer-locator.html">Find a Dealer</a>
+        <a class="cap" href="../support.html">Support</a>
+        <a class="cap skip" href="../troubleshoot.html">Skip to a fix &rarr;</a>
+      </nav>
+    </header>
+
+    <section class="invite">
+      <span class="orb" aria-hidden="true"></span>
+      <div class="bubble">
+        <h1>I&rsquo;m Ember. Let me show you around your Aquafire.</h1>
+        <p>Four stops &mdash; what the flame actually is, your first day, the two care rituals, and what every beep means. Board wherever you like.</p>
+        <nav class="stops-nav" aria-label="Tour stops">
+          <a href="#stop1">1 &middot; The flame</a>
+          <a href="#stop2">2 &middot; Day one</a>
+          <a href="#stop3">3 &middot; Care rituals</a>
+          <a href="#stop4">4 &middot; When it beeps</a>
+        </nav>
+      </div>
+    </section>
+
+    <div class="tour">
+      <section class="station" id="stop1">
+        <span class="stopmark" aria-hidden="true">1</span>
+        <span class="aud">For the curious</span>
+        <div class="narrate">
+          <span class="orb" aria-hidden="true"></span>
+          <div class="bubble">This is the part guests never believe: <em>the flame is made of water.</em> Ultrasonic mist, lit warm from below. You can put your hand straight through it.</div>
+        </div>
+        <div class="panel">
+          <h2>A fire that&rsquo;s cool to the touch</h2>
+          <div class="facts">
+            <div class="fact"><b>Water vapor flame</b><span>Safe around kids &amp; pets</span></div>
+            <div class="fact"><b>No venting, no gas</b><span>It plugs into an outlet</span></div>
+            <div class="fact"><b>20&Prime; &middot; 40&Prime; &middot; 60&Prime;</b><span>Three models, three widths</span></div>
+          </div>
+          <div class="mrow">
+            <a class="cap" href="../aquafire-pro.html">
+              <span class="thumb"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt=""></span>
+              Aquafire Pro
+            </a>
+            <a class="cap" href="../aquafire-original.html">
+              <span class="thumb"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ORIGINAL.png?v=1768251742" alt=""></span>
+              Aquafire Original
+            </a>
+            <a class="cap" href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener">See it move on YouTube</a>
+            <a class="cap" href="../dealer-locator.html">See one in person</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="station" id="stop2">
+        <span class="stopmark" aria-hidden="true">2</span>
+        <span class="aud">For new owners</span>
+        <div class="narrate">
+          <span class="orb" aria-hidden="true"></span>
+          <div class="bubble">Day one is mostly water and patience. <em>Distilled or softened water, a first fill, and you&rsquo;re minutes from first flame.</em></div>
+        </div>
+        <div class="panel">
+          <h2>Your first day, in order</h2>
+          <ol>
+            <li><strong>Unbox and place</strong> &mdash; or plan the enclosure first if you&rsquo;re building one.</li>
+            <li><strong>Check your water</strong> &mdash; hard water shortens mist-maker life. Look yours up by ZIP.</li>
+            <li><strong>First fill &amp; first flame</strong> &mdash; the quick start walks each model through it.</li>
+            <li><strong>Register your warranty</strong> &mdash; two minutes, worth it.</li>
+          </ol>
+          <div class="row">
+            <a class="cap prime" href="../getting-started.html">Getting started</a>
+            <a class="cap" href="../enclosure-guide.html">Enclosure Builder</a>
+            <a class="cap" href="../water-care.html">Water check by ZIP</a>
+            <a class="cap" href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">Register warranty</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="station" id="stop3">
+        <span class="stopmark" aria-hidden="true">3</span>
+        <span class="aud">For every owner</span>
+        <div class="narrate">
+          <span class="orb" aria-hidden="true"></span>
+          <div class="bubble">Two rituals keep the flame beautiful for years. <em>Miss them, and the flame goes thin before it goes out.</em></div>
+        </div>
+        <div class="panel">
+          <h2>The care rituals</h2>
+          <div class="cyc">
+            <div class="c"><b>3 <small>months</small></b><span>Mist maker cleaning &mdash; a 10-minute descale</span></div>
+            <div class="c"><b>6 <small>months</small></b><span>Full system flush &mdash; tank, lines, and float sensor</span></div>
+          </div>
+          <div class="row">
+            <a class="cap prime" href="../maintenance.html">Open the maintenance guide</a>
+            <a class="cap" href="../rewards.html">Earn points as you go</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="station" id="stop4">
+        <span class="stopmark" aria-hidden="true">4</span>
+        <span class="aud">For the seasoned</span>
+        <div class="narrate">
+          <span class="orb" aria-hidden="true"></span>
+          <div class="bubble">Beeps aren&rsquo;t moods &mdash; they&rsquo;re messages. <em>Tell me the symptom and I&rsquo;ll hand you the exact fix for your model.</em></div>
+        </div>
+        <div class="panel">
+          <h2>When something&rsquo;s off</h2>
+          <div class="row" style="margin-top: 14px;">
+            <a class="cap" href="../troubleshoot.html">It&rsquo;s beeping</a>
+            <a class="cap" href="../troubleshoot.html">Flame is low or uneven</a>
+            <a class="cap" href="../troubleshoot.html">Looks smoky / foggy</a>
+            <a class="cap" href="../troubleshoot.html?model=pro">App won&rsquo;t connect</a>
+            <a class="cap" href="../troubleshoot.html">Lights are wrong</a>
+          </div>
+          <div class="row">
+            <a class="cap prime" href="../troubleshoot.html">Start the Troubleshooter</a>
+            <a class="cap" href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">Or request service from a human</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="end">
+      <figure class="quote">
+        <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <blockquote>&ldquo;The maintenance guide on the portal saved me a service call. Mist maker cleaning was easy and took 10 minutes.&rdquo;</blockquote>
+        <figcaption>Linda P. &middot; Aquafire 40 owner &mdash; end of the tour</figcaption>
+      </figure>
+      <div class="caps">
+        <a class="cap" href="../quick-start.html">All guides</a>
+        <a class="cap" href="../support.html">Support Hub</a>
+        <a class="cap" href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+        <a class="cap" href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener">Instagram</a>
+        <a class="cap" href="https://judge.me/product_reviews/9498b1ae-d6c2-4e5b-b06b-78b0906a168f/new?source=shareable-link" target="_blank" rel="noopener">Write a review</a>
+      </div>
+      <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      <p class="fine">&copy; 2026 Aquafire &middot; Vapor Glass layout study v4c &ldquo;Guided Tour&rdquo;</p>
+    </footer>
+  </div>
+
+  <a class="dock" href="../support.html" title="Ember opens in the corner of every portal page" aria-label="Message Ember">
+    <span class="orb" aria-hidden="true"></span>
+    <span class="ph">Ask Ember anything, any stop&hellip;</span>
+    <span class="send">Send
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </span>
+  </a>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<!--
+DIRECTION CONTRACT — v2 "Showroom"
+THESIS: The owner's manual as a daylight product showroom: one model on stage at a
+time, its guide and planning facts arranged around it like a spec placard.
+Refuses the docs-portal default: dark theme + a wall of link tiles.
+OWN-WORLD: Cool near-white ground (#e9ebef), floating pure-white panels with soft
+neutral offset shadows, 22px radii, ink #171a1f pill controls, Schibsted Grotesk
+only, one small ember dot as the single chromatic note. Recognizable with content
+removed: white cards floating over pale gray around a central stage.
+STORY: A visitor (owner or designer) picks their model on a segmented control,
+reads its real dimensions, and steps into the guide or a planning tool without
+leaving the stage.
+FIRST VIEWPORT: Stage card fills the viewport: logo + [Pro|Original|Lite] pills +
+links on top; left = model name, description, "Open the guide" CTA + tool rail;
+center = product image; right = floating "Plan your install" panel with real
+20/40/60 dimensions; bottom = three floating panels (Maintenance, Troubleshoot,
+Support). Primary action = Open the guide.
+FORM: User-pinned direction (reference image 5, light product-configurator).
+Pinned brief beats the concept roll; no seed. Staging: single-stage hero.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Owner's Guide — Showroom</title>
+  <meta name="description" content="The complete guide to your Aquafire water vapor fireplace.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ground: #e9ebef;
+      --panel: #ffffff;
+      --panel-soft: #f4f5f7;
+      --ink: #171a1f;
+      --ink-2: #4c525c;
+      --ink-3: #6a7280;
+      --hairline: #e2e4e9;
+      --ember: #e0641e;
+      --r: 22px;
+      --r-sm: 13px;
+      --shadow: 0 24px 48px -18px rgba(23, 26, 31, 0.20), 0 4px 12px -4px rgba(23, 26, 31, 0.08);
+      --shadow-lg: 0 40px 80px -28px rgba(23, 26, 31, 0.26), 0 8px 20px -8px rgba(23, 26, 31, 0.10);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--ground);
+      color: var(--ink);
+      font-family: "Schibsted Grotesk", system-ui, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 26px clamp(14px, 3vw, 40px) 40px;
+    }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+
+    /* ── Stage ───────────────────────────────────────── */
+    .stage {
+      position: relative;
+      max-width: 1320px; margin: 0 auto;
+      background: linear-gradient(175deg, #fdfdfe 0%, #f2f3f6 60%, #ecedf1 100%);
+      border-radius: 34px;
+      box-shadow: var(--shadow-lg);
+      padding: 30px clamp(22px, 4vw, 54px) clamp(22px, 3vw, 42px);
+      overflow: hidden;
+    }
+    .stage::before {
+      content: ""; position: absolute; left: 10%; right: 10%; top: 58%; height: 200px;
+      background: radial-gradient(60% 100% at 50% 50%, rgba(23, 26, 31, 0.05), transparent 70%);
+      pointer-events: none;
+    }
+
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand img { height: 20px; display: block; filter: invert(1) brightness(0.25); }
+    .switch {
+      display: flex; gap: 4px; background: #ffffffb8; border: 1px solid var(--hairline);
+      border-radius: 999px; padding: 4px;
+      box-shadow: 0 6px 16px -8px rgba(23, 26, 31, 0.14);
+    }
+    .switch button {
+      border: 0; background: transparent; cursor: pointer;
+      font: 600 0.92rem "Schibsted Grotesk", sans-serif; color: var(--ink-2);
+      padding: 9px 22px; border-radius: 999px;
+      transition: color 0.22s, background-color 0.22s;
+    }
+    .switch button:hover { color: var(--ink); }
+    .switch button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+    .top-links { display: flex; align-items: center; gap: 6px; }
+    .top-links a {
+      text-decoration: none; font-weight: 600; font-size: 0.9rem; color: var(--ink-2);
+      padding: 9px 14px; border-radius: 999px; transition: background-color 0.2s, color 0.2s;
+    }
+    .top-links a:hover { background: #fff; color: var(--ink); }
+    .menu-btn { display: none; }
+
+    /* ── Hero grid ───────────────────────────────────── */
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(300px, 1.05fr) minmax(320px, 1.5fr) minmax(280px, 0.95fr);
+      gap: 26px; align-items: start;
+      margin-top: clamp(24px, 4vh, 48px);
+    }
+    .intro { padding-top: 26px; }
+    .intro .eyebrow { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+    .intro h1 {
+      font-size: clamp(2.2rem, 3.6vw, 3.1rem); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.05; margin-top: 8px;
+    }
+    .intro .desc { color: var(--ink-2); margin-top: 14px; max-width: 34ch; font-size: 0.98rem; }
+    .intro .desc strong { color: var(--ink); font-weight: 600; }
+    .cta-row { display: flex; align-items: center; gap: 14px; margin-top: 24px; }
+    .btn-guide {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--ink); color: #fff; text-decoration: none;
+      font-weight: 700; font-size: 0.95rem;
+      padding: 13px 24px; border-radius: 999px;
+      box-shadow: 0 14px 28px -10px rgba(23, 26, 31, 0.45);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s;
+    }
+    .btn-guide:hover { transform: translateY(-2px); box-shadow: 0 18px 34px -10px rgba(23, 26, 31, 0.5); }
+    .btn-guide.disabled { background: #c7ccd4; box-shadow: none; pointer-events: none; }
+    .link-plain { font-weight: 600; font-size: 0.92rem; color: var(--ink-2); text-decoration: none; border-bottom: 1.5px solid var(--hairline); padding-bottom: 2px; }
+    .link-plain:hover { color: var(--ink); border-color: var(--ink); }
+
+    .rail { display: flex; flex-direction: column; gap: 10px; margin-top: 34px; }
+    .rail a {
+      width: 46px; height: 46px; border-radius: 14px;
+      background: #fff; border: 1px solid var(--hairline);
+      display: grid; place-items: center; color: var(--ink-2);
+      box-shadow: 0 8px 18px -10px rgba(23, 26, 31, 0.18);
+      transition: color 0.2s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rail a:hover { color: var(--ember); transform: translateY(-2px); }
+
+    /* Product */
+    .product { position: relative; text-align: center; align-self: center; }
+    .product img {
+      width: 100%; max-width: 560px; height: auto; display: block; margin: 0 auto;
+      filter: drop-shadow(0 34px 30px rgba(23, 26, 31, 0.22));
+      transition: opacity 0.3s ease;
+    }
+    .product .flame-note {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 18px; font-size: 0.85rem; font-weight: 600; color: var(--ink-2);
+      background: #ffffffd9; border: 1px solid var(--hairline); border-radius: 999px;
+      padding: 8px 16px; box-shadow: 0 8px 18px -10px rgba(23, 26, 31, 0.15);
+    }
+    .flame-note .spark { width: 8px; height: 8px; border-radius: 50%; background: var(--ember); }
+
+    /* Plan panel */
+    .plan {
+      background: var(--panel); border-radius: var(--r);
+      box-shadow: var(--shadow); padding: 22px;
+    }
+    .plan h2 { font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; }
+    .plan .plan-sub { font-size: 0.82rem; color: var(--ink-3); margin-top: 2px; }
+    .sizes { display: flex; gap: 8px; margin-top: 16px; }
+    .sizes button {
+      flex: 1; border: 1px solid var(--hairline); background: var(--panel-soft);
+      border-radius: var(--r-sm); padding: 10px 0 8px; cursor: pointer;
+      font: 700 1rem "Schibsted Grotesk", sans-serif; color: var(--ink-2);
+      transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+    }
+    .sizes button small { display: block; font-size: 0.68rem; font-weight: 600; color: var(--ink-3); letter-spacing: 0.05em; }
+    .sizes button[aria-pressed="true"] { background: #fff; border-color: var(--ink); color: var(--ink); }
+    .dims { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+    .dims div { background: var(--panel-soft); border-radius: var(--r-sm); padding: 10px 12px; }
+    .dims b { display: block; font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; }
+    .dims span { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3); }
+    .plan-rows { margin-top: 16px; border-top: 1px solid var(--hairline); }
+    .plan-rows a {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 13px 2px; text-decoration: none; border-bottom: 1px solid var(--hairline);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .plan-rows a:hover { transform: translateX(6px); }
+    .plan-rows .t { font-weight: 600; font-size: 0.92rem; }
+    .plan-rows .t small { display: block; font-weight: 500; font-size: 0.8rem; color: var(--ink-3); }
+    .plan-rows svg { color: var(--ink-3); flex: none; }
+    .plan-rows a:hover svg { color: var(--ember); }
+    .plan-note { font-size: 0.78rem; color: var(--ink-3); margin-top: 12px; }
+
+    /* Bottom floating panels */
+    .panels {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+      margin-top: clamp(26px, 4vh, 46px);
+    }
+    .panel {
+      background: var(--panel); border-radius: var(--r);
+      box-shadow: var(--shadow); padding: 20px 22px;
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      text-decoration: none;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .panel:hover { transform: translateY(-3px); }
+    .panel .p-txt b { display: block; font-size: 0.98rem; font-weight: 700; letter-spacing: -0.01em; }
+    .panel .p-txt span { font-size: 0.83rem; color: var(--ink-3); }
+    .panel .p-go {
+      width: 38px; height: 38px; flex: none; border-radius: 12px;
+      background: var(--panel-soft); display: grid; place-items: center; color: var(--ink-2);
+      transition: background-color 0.22s, color 0.22s;
+    }
+    .panel:hover .p-go { background: var(--ink); color: #fff; }
+
+    /* ── Below stage ─────────────────────────────────── */
+    .strip {
+      max-width: 1320px; margin: 44px auto 0;
+      display: grid; grid-template-columns: 300px 1fr; gap: 32px; align-items: start;
+    }
+    .strip-head h2 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; }
+    .strip-head p { color: var(--ink-2); font-size: 0.94rem; margin-top: 10px; max-width: 26ch; }
+    .strip-head a { display: inline-block; margin-top: 16px; font-weight: 600; font-size: 0.9rem; color: var(--ink); text-decoration: none; border-bottom: 1.5px solid var(--ink); padding-bottom: 2px; }
+    .reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .review {
+      background: var(--panel); border-radius: var(--r); box-shadow: var(--shadow);
+      padding: 24px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .review .stars { color: var(--ember); font-size: 0.85rem; letter-spacing: 2px; }
+    .review p { font-size: 0.94rem; color: var(--ink); line-height: 1.55; }
+    .review footer { font-size: 0.83rem; color: var(--ink-3); margin-top: auto; }
+
+    .explore {
+      max-width: 1320px; margin: 44px auto 0;
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .explore a {
+      text-decoration: none; font-weight: 600; font-size: 0.9rem; color: var(--ink-2);
+      background: #fff; border: 1px solid var(--hairline); border-radius: 999px;
+      padding: 10px 18px; box-shadow: 0 6px 14px -8px rgba(23, 26, 31, 0.12);
+      transition: color 0.2s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .explore a:hover { color: var(--ink); transform: translateY(-2px); }
+
+    .foot {
+      max-width: 1320px; margin: 52px auto 0;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      padding-top: 24px; border-top: 1px solid #d9dce2;
+      color: var(--ink-3); font-size: 0.85rem; flex-wrap: wrap;
+    }
+    .foot img { height: 16px; filter: invert(1) brightness(0.45); }
+    .foot nav { display: flex; gap: 20px; }
+    .foot nav a { text-decoration: none; color: var(--ink-3); font-weight: 500; }
+    .foot nav a:hover { color: var(--ink); }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 1080px) {
+      .hero { grid-template-columns: 1fr 1fr; }
+      .product { grid-column: 1 / -1; order: -1; }
+      .rail { flex-direction: row; margin-top: 24px; }
+      .panels { grid-template-columns: 1fr 1fr; }
+      .strip { grid-template-columns: 1fr; }
+      .reviews { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      body { padding: 12px 10px 28px; }
+      .stage { border-radius: 26px; }
+      .top { flex-wrap: wrap; }
+      .switch { order: 3; width: 100%; justify-content: stretch; }
+      .switch button { flex: 1; padding: 9px 0; }
+      .top-links { display: none; }
+      .menu-btn {
+        display: grid; place-items: center; width: 42px; height: 42px;
+        border: 1px solid var(--hairline); border-radius: 999px; background: #fff; cursor: pointer; color: var(--ink);
+      }
+      .top-links.open {
+        display: flex; flex-direction: column; align-items: stretch;
+        position: absolute; top: 78px; right: 22px; left: 22px; z-index: 40;
+        background: #fff; border-radius: 18px; box-shadow: var(--shadow-lg); padding: 10px;
+      }
+      .hero { grid-template-columns: 1fr; }
+      .intro { padding-top: 6px; }
+      .panels { grid-template-columns: 1fr; }
+      .reviews { grid-template-columns: 1fr; }
+      .foot { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <section class="stage">
+    <div class="top">
+      <a class="brand" href="../index.html" aria-label="Aquafire home">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <div class="switch" role="group" aria-label="Choose your model">
+        <button type="button" data-model="pro" aria-pressed="true">Pro</button>
+        <button type="button" data-model="original" aria-pressed="false">Original</button>
+        <button type="button" data-model="lite" aria-pressed="false">Lite</button>
+      </div>
+      <nav class="top-links" id="toplinks">
+        <a href="../getting-started.html">Getting started</a>
+        <a href="../dealer-locator.html">Find a dealer</a>
+        <a href="../support.html">Support</a>
+        <a href="../rewards.html">Rewards</a>
+      </nav>
+      <button class="menu-btn" aria-label="Toggle menu" aria-expanded="false" onclick="document.getElementById('toplinks').classList.toggle('open'); this.setAttribute('aria-expanded', document.getElementById('toplinks').classList.contains('open'))">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+
+    <div class="hero">
+      <div class="intro">
+        <p class="eyebrow">Interactive Owner&rsquo;s Guide</p>
+        <h1 id="m-name">Aquafire Pro</h1>
+        <p class="desc" id="m-desc">Premium model with <strong>enhanced flame realism</strong> and wider light angles. Amber + color LEDs, phone app control, direct-plumb ready.</p>
+        <div class="cta-row">
+          <a class="btn-guide" id="m-guide" href="../aquafire-pro.html">Open the guide
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="link-plain" href="../quick-start.html">Quick start</a>
+        </div>
+        <div class="rail">
+          <a href="../enclosure-guide.html" aria-label="Enclosure builder" title="Enclosure builder">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V4h8v3M9 12h6"/></svg>
+          </a>
+          <a href="../water-care.html" aria-label="Water care" title="Water care">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3.5 4-6 6.5-6 10a6 6 0 0 0 12 0c0-3.5-2.5-6-6-10z"/></svg>
+          </a>
+          <a href="../troubleshoot.html" aria-label="Troubleshooter" title="Troubleshooter">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          </a>
+          <a href="../maintenance.html" aria-label="Maintenance" title="Maintenance">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.1-.6-.6-2.1z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="product">
+        <img id="m-img" src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt="Aquafire Pro water vapor fireplace insert">
+        <span class="flame-note"><span class="spark"></span>Flame from water vapor &mdash; cool to the touch, no venting</span>
+      </div>
+
+      <aside class="plan" aria-label="Plan your install">
+        <h2>Plan your install</h2>
+        <p class="plan-sub">Real cutout math lives in the Enclosure Builder.</p>
+        <div class="sizes" role="group" aria-label="Insert width" id="m-sizes">
+          <button type="button" data-size="20" aria-pressed="false">20&Prime;<small>WIDE</small></button>
+          <button type="button" data-size="40" aria-pressed="true">40&Prime;<small>WIDE</small></button>
+          <button type="button" data-size="60" aria-pressed="false">60&Prime;<small>WIDE</small></button>
+        </div>
+        <div class="dims">
+          <div><b id="d-w">40.25&Prime;</b><span>Width</span></div>
+          <div><b id="d-d">12.25&Prime;</b><span>Depth</span></div>
+          <div><b id="d-h">14&Prime;</b><span>Height</span></div>
+        </div>
+        <div class="plan-rows">
+          <a href="../enclosure-guide.html">
+            <span class="t">Enclosure Builder<small>Cutout sizes &amp; light trap, calculated</small></span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="../water-care.html">
+            <span class="t">Check your water<small>Hardness by ZIP &middot; Vapor Pure setup</small></span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">
+            <span class="t">Register your warranty<small>Coverage &amp; peace of mind</small></span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+        <p class="plan-note" id="m-note">Insert dimensions for the Aquafire Pro. Enclosure cutouts differ &mdash; use the builder.</p>
+      </aside>
+    </div>
+
+    <div class="panels">
+      <a class="panel" href="../maintenance.html">
+        <span class="p-txt"><b>Maintenance Guide</b><span>Mist maker every 3 mo &middot; flush every 6 mo</span></span>
+        <span class="p-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="panel" href="../troubleshoot.html">
+        <span class="p-txt"><b>Troubleshooter</b><span>Guided fixes, tailored to your model</span></span>
+        <span class="p-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="panel" href="../support.html">
+        <span class="p-txt"><b>Support Hub</b><span>Warranty, claims, FAQs &amp; service requests</span></span>
+        <span class="p-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <section class="strip" aria-label="Owner reviews">
+    <div class="strip-head">
+      <h2>Owners, in their own words.</h2>
+      <p>Real reviews from Aquafire installs &mdash; homes, renovations, and commercial spaces.</p>
+      <a href="https://judge.me/product_reviews/9498b1ae-d6c2-4e5b-b06b-78b0906a168f/new?source=shareable-link" target="_blank" rel="noopener">Write a review</a>
+    </div>
+    <div class="reviews">
+      <article class="review">
+        <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p>&ldquo;Absolutely stunning &mdash; guests always ask if it&rsquo;s real fire. The water vapor effect is incredibly realistic.&rdquo;</p>
+        <footer>Sarah M. &middot; Aquafire Pro owner</footer>
+      </article>
+      <article class="review">
+        <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p>&ldquo;Installation was straightforward with the enclosure guide. The flames look even better in person.&rdquo;</p>
+        <footer>James R. &middot; Custom build</footer>
+      </article>
+      <article class="review">
+        <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+        <p>&ldquo;We replaced our gas fireplace with the Aquafire 60&Prime; &mdash; no venting, no heat issues, and the ambiance is unreal.&rdquo;</p>
+        <footer>Nicole &amp; David K. &middot; Renovation</footer>
+      </article>
+    </div>
+  </section>
+
+  <nav class="explore" aria-label="More from Aquafire">
+    <a href="../getting-started.html">Getting Started</a>
+    <a href="../quick-start.html">Quick Start</a>
+    <a href="../enclosure-guide.html">Enclosure Builder</a>
+    <a href="../water-care.html">Water Care</a>
+    <a href="../maintenance.html">Maintenance</a>
+    <a href="../troubleshoot.html">Troubleshooter</a>
+    <a href="../dealer-locator.html">Find a Dealer</a>
+    <a href="../rewards.html">Rewards</a>
+    <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
+    <a href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener">YouTube</a>
+  </nav>
+
+  <footer class="foot">
+    <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+    <nav>
+      <a href="../support.html">Support</a>
+      <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact sales</a>
+      <a href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">Service request</a>
+    </nav>
+    <p>&copy; 2026 Aquafire &middot; Design direction v2 &ldquo;Showroom&rdquo;</p>
+  </footer>
+
+  <script>
+    const MODELS = {
+      pro: {
+        name: "Aquafire Pro",
+        desc: 'Premium model with <strong>enhanced flame realism</strong> and wider light angles. Amber + color LEDs, phone app control, direct-plumb ready.',
+        img: "https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750",
+        alt: "Aquafire Pro water vapor fireplace insert",
+        guide: "../aquafire-pro.html",
+        note: "Insert dimensions for the Aquafire Pro. Enclosure cutouts differ — use the builder.",
+        sizes: { 20: ["20.25″", "12.25″", "14″"], 40: ["40.25″", "12.25″", "14″"], 60: ["60.25″", "12.25″", "14″"] }
+      },
+      original: {
+        name: "Aquafire Original",
+        desc: 'The <strong>classic water vapor fireplace</strong>. Amber LED flame, remote control, Direct Plumb Kit optional. Available in 20″, 40″, and 60″.',
+        img: "https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ORIGINAL.png?v=1768251742",
+        alt: "Aquafire Original water vapor fireplace insert",
+        guide: "../aquafire-original.html",
+        note: "Insert dimensions for the Aquafire Original. Enclosure cutouts differ — use the builder.",
+        sizes: { 20: ["20.25″", "12.25″", "12″"], 40: ["40.25″", "12.25″", "12″"], 60: ["60.25″", "12.25″", "12″"] }
+      },
+      lite: {
+        name: "Aquafire Lite",
+        desc: '<strong>Compact and easy to install</strong> — perfect for smaller spaces. Amber LED flame, manual fill, drains via a bottom plug.',
+        img: "https://cdn.shopify.com/s/files/1/0671/5562/4256/files/LITE.png?v=1768251746",
+        alt: "Aquafire Lite water vapor fireplace insert",
+        guide: null,
+        note: "Insert dimensions for the Aquafire Lite. Full guide coming soon.",
+        sizes: { 20: ["20.25″", "9.625″", "11″"], 40: ["40.25″", "9.625″", "11″"], 60: ["60.25″", "9.625″", "11″"] }
+      }
+    };
+    let current = "pro", size = "40";
+    const $ = id => document.getElementById(id);
+    function render() {
+      const m = MODELS[current];
+      $("m-name").textContent = m.name;
+      $("m-desc").innerHTML = m.desc;
+      $("m-img").src = m.img;
+      $("m-img").alt = m.alt;
+      $("m-note").textContent = m.note;
+      const g = $("m-guide");
+      if (m.guide) {
+        g.href = m.guide; g.classList.remove("disabled"); g.removeAttribute("aria-disabled");
+        g.firstChild.textContent = "Open the guide";
+      } else {
+        g.removeAttribute("href"); g.classList.add("disabled"); g.setAttribute("aria-disabled", "true");
+        g.firstChild.textContent = "Guide coming soon";
+      }
+      const [w, d, h] = m.sizes[size];
+      $("d-w").textContent = w; $("d-d").textContent = d; $("d-h").textContent = h;
+    }
+    document.querySelectorAll(".switch button").forEach(b => b.addEventListener("click", () => {
+      current = b.dataset.model;
+      document.querySelectorAll(".switch button").forEach(x => x.setAttribute("aria-pressed", x === b));
+      render();
+    }));
+    document.querySelectorAll("#m-sizes button").forEach(b => b.addEventListener("click", () => {
+      size = b.dataset.size;
+      document.querySelectorAll("#m-sizes button").forEach(x => x.setAttribute("aria-pressed", x === b));
+      render();
+    }));
+  </script>
+</body>
+</html>

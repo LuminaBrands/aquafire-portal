@@ -56,6 +56,22 @@
     : (PORTAL_BASE ? PORTAL_BASE + 'api/chat' : '');
   var llmDown = false;
 
+  // Border Beam (beam.css / beam.js) applied to the widget. Because this file
+  // ships as a single script tag on Shopify it cannot link beam.css, so a
+  // trimmed subset is inlined below under the afa- namespace.
+  //   cfg.beam = 'input'  beam the composer field (default)
+  //            = 'panel'  beam the whole chat window
+  //            = false    off
+  var BEAM = cfg.beam !== undefined ? cfg.beam : (dataAttr('beam') || 'input');
+  if (BEAM === 'off' || BEAM === 'false') BEAM = false;
+  //   cfg.beamVariant = 'colorful' full spectrum (default) | 'ember' fire palette
+  var BEAM_VARIANT = cfg.beamVariant || dataAttr('beam-variant') || 'colorful';
+
+  // Inline mount: render the panel inside a host container instead of the
+  // corner launcher. The host owns showing/hiding it and drives the widget
+  // through window.AquafireAssistant. Used by the redesign hero composer,
+  // which expands in place into this panel rather than opening a bubble.
+  var MOUNT = cfg.mount || dataAttr('mount') || null;
   // Order & tracking lookup: the order_status flow POSTs { order, email } to
   // the portal's /api/order-status function (a Shopify Admin API proxy —
   // api/order-status.js). Override with cfg.orderEndpoint, or set it to null
@@ -884,7 +900,10 @@
   function mainChips() {
     return { t: 'chips', items: [
       { label: '\ud83d\udd25 Compare models', send: 'Compare the models' },
-      { label: '\ud83d\udcb2 Pricing', send: 'How much do they cost?' },
+      // Money bag, not the heavy dollar sign: U+1F4B2 is a thin unfilled
+      // outline that all but disappears on the dark panel. Pick chip emoji
+      // with mass -- the panel is dark by default.
+      { label: '\ud83d\udcb0 Pricing', send: 'How much do they cost?' },
       { label: '\ud83d\udce6 Order status', send: 'Where is my order?' },
       { label: '\ud83d\udee0\ufe0f Fix an issue', send: 'Help me troubleshoot an issue' },
       { label: '\ud83d\udcd0 Plan an install', send: 'How is it installed?' },
@@ -1060,20 +1079,55 @@
   var CLOSE_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   var CSS = [
-    '.afa-root{--afa-bg:#15171c;--afa-surface:#1e2128;--afa-surface2:#262a33;--afa-border:#2f333d;--afa-text:#e6e7eb;--afa-muted:#8c91a0;--afa-red:#c0392b;--afa-red2:#d45a20;--afa-amber:#e8a838;--afa-radius:16px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}',
+    /* Tokens mirror redesign.css so the widget is the same material as the
+       portal. Two bindings each: the dark set is the default (and what
+       Shopify gets, since the storefront sets no data-theme), the light set
+       activates from the portal's theme switch.
+       Sizes stay in px, not rem, on purpose -- this panel renders inside a
+       merchant's document and must not inherit their root font-size. That is
+       why it cannot sit on DESIGN.md's rem type ramp. */
+    '.afa-root{' +
+      '--afa-bg:#101216;--afa-head-bg:linear-gradient(135deg,rgba(255,138,74,.16) 0%,rgba(16,18,22,0) 62%);' +
+      '--afa-surface:rgba(255,255,255,.045);--afa-surface2:rgba(255,255,255,.07);' +
+      '--afa-border:rgba(255,255,255,.12);--afa-border-soft:rgba(255,255,255,.07);' +
+      '--afa-text:#f3f4f6;--afa-mid:#b9bec8;--afa-muted:#8d939f;' +
+      '--afa-ember:#ff8a4a;--afa-ember-t:#ff8a4a;--afa-live:#c9e85c;' +
+      '--afa-send-bg:rgba(255,255,255,.12);--afa-send-ink:#f3f4f6;--afa-send-bg-hover:rgba(255,255,255,.18);' +
+      '--afa-hover:rgba(255,255,255,.08);' +
+      '--afa-shadow:0 24px 64px rgba(0,0,0,.55);--afa-shadow-sm:0 10px 32px rgba(0,0,0,.45);' +
+      /* The documented rounded scale: pane / card / bubble / pill. */
+      '--afa-radius:26px;--afa-radius-card:15px;--afa-radius-bubble:13px;' +
+      'font-family:Figtree,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;' +
+      'font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;}',
+    /* buildUI() pulls Figtree from Google Fonts where the host loads no font
+       of its own; the stack below is what renders until then, and on hosts we
+       defer to. */
+    ':root[data-theme="light"] .afa-root{' +
+      '--afa-bg:#ffffff;--afa-head-bg:linear-gradient(135deg,rgba(255,106,61,.14) 0%,rgba(255,255,255,0) 62%);' +
+      '--afa-surface:#f5f6f8;--afa-surface2:#eef0f4;' +
+      '--afa-border:rgba(23,26,31,.10);--afa-border-soft:rgba(23,26,31,.07);' +
+      '--afa-text:#171a1f;--afa-mid:#4c525c;--afa-muted:#6a7280;' +
+      '--afa-ember:#ff6a3d;--afa-ember-t:#cf4e16;--afa-live:#6f8f0a;' +
+      '--afa-send-bg:#171a1f;--afa-send-ink:#ffffff;--afa-send-bg-hover:#262b33;' +
+      '--afa-hover:rgba(23,26,31,.06);' +
+      '--afa-shadow:0 24px 64px rgba(23,26,31,.18);--afa-shadow-sm:0 10px 32px rgba(23,26,31,.14);}',
     '.afa-root,.afa-root *{box-sizing:border-box;margin:0;padding:0;}',
+    /* :where() holds these resets at zero specificity so component rules
+       always win, while the injected !important still shields against host
+       theme globals. Supersedes the .afa-root prefixing this branch used
+       for the same bug -- zero specificity is the better fix. */
     /* :where() keeps these resets at zero specificity so component rules always
        win, while the injected !important still shields against theme globals */
     ':where(.afa-root) button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;margin:0;padding:0;appearance:none;-webkit-appearance:none;text-transform:none;letter-spacing:normal;line-height:inherit;font-size:inherit;opacity:1;box-shadow:none;border-radius:0;}',
     ':where(.afa-root) input{margin:0;appearance:none;-webkit-appearance:none;box-shadow:none;text-transform:none;letter-spacing:normal;opacity:1;}',
-    ':where(.afa-root) a{color:#e8a838;text-decoration:none;}',
+    ':where(.afa-root) a{color:var(--afa-ember-t);text-decoration:none;}',
     ':where(.afa-root) a:hover{text-decoration:underline;}',
 
     /* Launcher */
     /* Liquid-glass launcher: translucent dark base + backdrop blur/saturation,
        specular top highlight, hairline light border. Browsers without
        backdrop-filter just get the translucent dark pill. */
-    '.afa-launcher{position:fixed;right:20px;bottom:20px;top:auto;left:auto;z-index:2147483000;height:56px;min-height:56px;width:auto;min-width:0;margin:0;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 22px 0 18px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 40%,rgba(255,255,255,0) 100%),rgba(21,24,30,.68);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);color:#fff;opacity:1;filter:none;font-family:Poppins,Inter,sans-serif;font-size:14px;font-weight:600;letter-spacing:.2px;line-height:1;text-transform:none;text-decoration:none;box-shadow:0 10px 32px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 1px rgba(255,255,255,.05);transition:transform .2s,box-shadow .2s,border-color .2s;}',
+    '.afa-launcher{position:fixed;right:20px;bottom:20px;top:auto;left:auto;z-index:2147483000;height:56px;min-height:56px;width:auto;min-width:0;margin:0;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 22px 0 18px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 40%,rgba(255,255,255,0) 100%),rgba(21,24,30,.68);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);color:#fff;opacity:1;filter:none;font-family:inherit;font-size:14px;font-weight:600;letter-spacing:.2px;line-height:1;text-transform:none;text-decoration:none;box-shadow:0 10px 32px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 1px rgba(255,255,255,.05);transition:transform .2s,box-shadow .2s,border-color .2s;}',
     '.afa-launcher svg{width:24px;height:24px;transition:transform .25s;}',
     '.afa-launcher .afa-ico-flame{color:#e8703a;}',
     '.afa-launcher:hover{transform:scale(1.04);border-color:rgba(255,255,255,.34);background:linear-gradient(180deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.06) 40%,rgba(255,255,255,0) 100%),rgba(26,29,36,.74);box-shadow:0 12px 38px rgba(0,0,0,.5),0 3px 10px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 1px rgba(255,255,255,.05);}',
@@ -1082,116 +1136,185 @@
     '.afa-launcher.afa-open{width:56px;padding:0;}',
     '.afa-launcher.afa-open .afa-ico-flame,.afa-launcher.afa-open .afa-launcher-label{display:none;}',
     '.afa-launcher.afa-open .afa-ico-close{display:block;}',
-    '.afa-badge{position:absolute;top:0;right:8px;width:12px;height:12px;border-radius:50%;background:#e8a838;border:2px solid #15171c;display:none;}',
+    '.afa-badge{position:absolute;top:0;right:8px;width:12px;height:12px;border-radius:50%;background:var(--afa-ember);border:2px solid var(--afa-bg);display:none;}',
     '.afa-launcher.afa-open .afa-badge{right:2px;}',
     '.afa-launcher.afa-unread .afa-badge{display:block;}',
 
     /* Proactive teaser (chat-style invitation card) */
-    '.afa-nudge{position:fixed;right:20px;bottom:92px;z-index:2147483000;width:300px;max-width:calc(100vw - 40px);background:#1e2128;color:#e6e7eb;border:1px solid #2f333d;border-radius:16px;padding:14px;box-shadow:0 14px 44px rgba(0,0,0,.5);font-size:13.5px;animation:afaPop .35s ease;cursor:pointer;}',
+    '.afa-nudge{position:fixed;right:20px;bottom:92px;z-index:2147483000;width:300px;max-width:calc(100vw - 40px);background:var(--afa-bg);color:var(--afa-text);border:1px solid var(--afa-border);border-radius:var(--afa-radius-card);padding:14px;box-shadow:0 14px 44px rgba(0,0,0,.5);font-size:13.5px;animation:afaPop .35s ease;cursor:pointer;}',
     '.afa-nudge-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}',
-    '.afa-nudge-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#c0392b,#d45a20);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}',
+    '.afa-nudge-avatar{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}',
     '.afa-nudge-avatar svg{width:15px;height:15px;}',
-    '.afa-nudge-name{font-weight:600;font-family:Poppins,Inter,sans-serif;font-size:13.5px;}',
-    '.afa-nudge-x{margin-left:auto;color:#8c91a0;font-size:14px;line-height:1;padding:4px 6px;border-radius:6px;}',
-    '.afa-nudge-x:hover{color:#e6e7eb;background:rgba(255,255,255,.06);}',
+    '.afa-nudge-name{font-weight:600;font-family:inherit;font-size:13.5px;}',
+    '.afa-nudge-x{margin-left:auto;color:var(--afa-muted);font-size:14px;line-height:1;padding:4px 6px;border-radius:6px;}',
+    '.afa-nudge-x:hover{color:var(--afa-text);background:rgba(255,255,255,.06);}',
     '.afa-nudge-msg{line-height:1.5;margin-bottom:10px;}',
-    '.afa-nudge-reply{background:#262a33;border:1px solid #2f333d;border-radius:10px;padding:9px 12px;color:#6a6f7d;font-size:12.8px;}',
+    '.afa-nudge-reply{background:var(--afa-surface2);border:1px solid var(--afa-border);border-radius:var(--afa-radius-bubble);padding:9px 12px;color:var(--afa-muted);font-size:12.8px;}',
     '@keyframes afaPop{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}',
 
-    /* Panel */
-    '.afa-panel{position:fixed;right:20px;bottom:92px;z-index:2147483001;width:382px;max-width:calc(100vw - 32px);height:min(620px,calc(100vh - 120px));display:none;flex-direction:column;background:var(--afa-bg);color:var(--afa-text);border:1px solid var(--afa-border);border-radius:var(--afa-radius);box-shadow:0 24px 64px rgba(0,0,0,.55);overflow:hidden;}',
-    '.afa-panel.afa-open{display:flex;animation:afaPop .28s ease;}',
+    /* Panel. Opaque ground rather than glass: this floats over a storefront we
+       do not control, and a translucent panel there is unreadable. */
+    '.afa-panel{position:fixed;right:20px;bottom:92px;z-index:2147483001;width:382px;max-width:calc(100vw - 32px);height:min(620px,calc(100vh - 120px));display:none;flex-direction:column;background:var(--afa-bg);color:var(--afa-text);border:1px solid var(--afa-border);border-radius:var(--afa-radius);box-shadow:var(--afa-shadow);overflow:hidden;}',
+    '.afa-panel.afa-open{display:flex;animation:afaPop .28s cubic-bezier(.16,1,.3,1);}',
 
     /* Header */
-    '.afa-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(135deg,#2a1a17 0%,#1a1c22 70%);border-bottom:1px solid var(--afa-border);flex-shrink:0;}',
-    '.afa-avatar{position:relative;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#c0392b,#d45a20);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}',
+    '.afa-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--afa-head-bg);border-bottom:1px solid var(--afa-border-soft);flex-shrink:0;}',
+    '.afa-avatar{position:relative;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;box-shadow:inset 0 -2px 6px rgba(0,0,0,.35);}',
     '.afa-avatar svg{width:22px;height:22px;}',
-    '.afa-dot{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;background:#3ecf6f;border:2px solid #1a1c22;}',
+    '.afa-dot{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;background:var(--afa-live);border:2px solid var(--afa-bg);}',
     '.afa-head-txt{flex:1;min-width:0;}',
-    '.afa-head-txt h3{font-size:15px;font-weight:700;font-family:Poppins,Inter,sans-serif;letter-spacing:.2px;}',
+    '.afa-head-txt h3{font-size:15px;font-weight:700;letter-spacing:-.01em;}',
     '.afa-head-txt p{font-size:11.5px;color:var(--afa-muted);}',
-    '.afa-head-btn{color:var(--afa-muted);padding:6px;border-radius:8px;font-size:16px;line-height:1;transition:color .15s,background .15s;}',
-    '.afa-head-btn:hover{color:var(--afa-text);background:rgba(255,255,255,.06);}',
+    '.afa-head-btn{color:var(--afa-muted);padding:6px;border-radius:999px;font-size:16px;line-height:1;transition:color .15s,background .15s;}',
+    '.afa-head-btn:hover{color:var(--afa-text);background:var(--afa-hover);}',
 
     /* Messages */
-    '.afa-msgs{flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:#2f333d transparent;}',
+    '.afa-msgs{flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--afa-border) transparent;}',
     '.afa-row{display:flex;gap:8px;max-width:100%;}',
     '.afa-row.afa-user{justify-content:flex-end;}',
-    '.afa-mini-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#c0392b,#d45a20);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;margin-top:2px;}',
+    '.afa-mini-avatar{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;margin-top:2px;box-shadow:inset 0 -2px 4px rgba(0,0,0,.35);}',
     '.afa-mini-avatar svg{width:15px;height:15px;}',
-    '.afa-bubble{max-width:82%;padding:10px 13px;border-radius:14px;font-size:13.8px;overflow-wrap:break-word;}',
-    '.afa-row.afa-bot .afa-bubble{background:var(--afa-surface);border:1px solid var(--afa-border);border-top-left-radius:4px;}',
-    '.afa-row.afa-user .afa-bubble{background:linear-gradient(135deg,#c0392b,#b13322);color:#fff;border-top-right-radius:4px;}',
+    /* Bubble radius with the pinched corner on the speaker's side, per the
+       design system's tip-bubble shape. */
+    '.afa-bubble{max-width:82%;padding:10px 13px;border-radius:var(--afa-radius-bubble);font-size:13.8px;overflow-wrap:break-word;}',
+    '.afa-row.afa-bot .afa-bubble{background:var(--afa-surface);border:1px solid var(--afa-border-soft);border-top-left-radius:4px;}',
+    /* The visitor speaks in the send colour -- the same high-contrast neutral
+       the portal uses for its primary action -- not in the accent. Ember owns
+       the accent; painting whole bubbles with it would drown the room. */
+    '.afa-row.afa-user .afa-bubble{background:var(--afa-send-bg);color:var(--afa-send-ink);border-top-right-radius:4px;}',
     '.afa-col{display:flex;flex-direction:column;gap:8px;min-width:0;max-width:calc(100% - 34px);}',
     '.afa-col .afa-bubble{max-width:100%;}',
 
     /* Steps */
     '.afa-steps{margin:2px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:13.4px;}',
 
-    /* Chips */
+    /* Chips: the portal's glass cap. */
     '.afa-chips{display:flex;flex-wrap:wrap;gap:6px;}',
-    '.afa-chip{padding:7px 12px;border:1px solid rgba(192,57,43,.55);border-radius:999px;color:#f0a08f;font-size:12.6px;font-weight:500;transition:background .15s,color .15s;text-decoration:none!important;display:inline-block;}',
-    '.afa-chip:hover{background:rgba(192,57,43,.18);color:#fff;}',
+    '.afa-root .afa-chip{padding:7px 12px;background:var(--afa-surface);border:1px solid var(--afa-border);border-radius:999px;color:var(--afa-mid);font-size:12.6px;font-weight:500;transition:background .22s,color .22s,border-color .22s;text-decoration:none!important;display:inline-block;}',
+    '.afa-root .afa-chip:hover{background:var(--afa-hover);border-color:var(--afa-border);color:var(--afa-text);}',
     '.afa-chips.afa-spent .afa-chip{opacity:.45;pointer-events:none;}',
 
     /* Cards */
-    '.afa-cards{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 6px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#2f333d transparent;}',
-    '.afa-card{scroll-snap-align:start;flex:0 0 172px;background:var(--afa-surface);border:1px solid var(--afa-border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;}',
-    '.afa-card img{width:100%;height:96px;object-fit:cover;background:#0e0f12;}',
+    '.afa-cards{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 6px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--afa-border) transparent;}',
+    '.afa-card{scroll-snap-align:start;flex:0 0 172px;background:var(--afa-surface);border:1px solid var(--afa-border-soft);border-radius:var(--afa-radius-card);overflow:hidden;display:flex;flex-direction:column;}',
+    '.afa-card img{width:100%;height:96px;object-fit:cover;background:var(--afa-surface2);}',
     '.afa-card-b{padding:9px 10px 10px;display:flex;flex-direction:column;gap:3px;flex:1;}',
     '.afa-card-b h4{font-size:13px;font-weight:600;}',
-    '.afa-card-b .afa-price{font-size:12.5px;color:var(--afa-amber);font-weight:600;}',
-    '.afa-card-b p{font-size:11.3px;color:var(--afa-muted);line-height:1.4;flex:1;}',
-    '.afa-card-b a{margin-top:6px;text-align:center;font-size:12px;font-weight:600;padding:6px 0;border-radius:8px;background:rgba(192,57,43,.16);color:#f0a08f;text-decoration:none!important;transition:background .15s,color .15s;}',
-    '.afa-card-b a:hover{background:var(--afa-red);color:#fff;}',
+    '.afa-card-b .afa-price{font-size:12.5px;color:var(--afa-ember-t);font-weight:600;}',
+    '.afa-card-b p{font-size:11.3px;color:var(--afa-muted);line-height:1.5;flex:1;}',
+    '.afa-card-b a{margin-top:6px;text-align:center;font-size:12px;font-weight:600;padding:7px 0;border-radius:999px;background:var(--afa-send-bg);color:var(--afa-send-ink)!important;text-decoration:none!important;transition:background .22s;}',
+    '.afa-card-b a:hover{background:var(--afa-send-bg-hover);}',
 
     /* Link & video lists */
     '.afa-links{display:flex;flex-direction:column;gap:6px;}',
-    '.afa-link{display:block;padding:9px 12px;background:var(--afa-surface2);border:1px solid var(--afa-border);border-radius:10px;font-size:12.8px;color:var(--afa-text)!important;text-decoration:none!important;transition:border-color .15s,background .15s;}',
-    '.afa-link:hover{border-color:rgba(192,57,43,.5);background:#2b2f3a;}',
+    '.afa-link{display:block;padding:10px 13px;background:var(--afa-surface);border:1px solid var(--afa-border-soft);border-radius:var(--afa-radius-card);font-size:12.8px;color:var(--afa-text)!important;text-decoration:none!important;transition:border-color .22s,background .22s;}',
+    '.afa-link:hover{border-color:var(--afa-border);background:var(--afa-hover);}',
     '.afa-videos{display:flex;flex-wrap:wrap;gap:6px;}',
-    '.afa-video{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;background:var(--afa-surface2);border:1px solid var(--afa-border);border-radius:999px;font-size:12.2px;color:var(--afa-text)!important;text-decoration:none!important;transition:border-color .15s;}',
-    '.afa-video:hover{border-color:var(--afa-amber);}',
-    '.afa-video::before{content:"\u25b6";color:var(--afa-red2);font-size:10px;}',
+    '.afa-video{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;background:var(--afa-surface);border:1px solid var(--afa-border-soft);border-radius:999px;font-size:12.2px;color:var(--afa-text)!important;text-decoration:none!important;transition:border-color .22s;}',
+    '.afa-video:hover{border-color:var(--afa-border);}',
+    '.afa-video::before{content:"\u25b6";color:var(--afa-ember-t);font-size:10px;}',
 
     /* Contact card */
-    '.afa-contact{display:flex;flex-direction:column;gap:6px;background:var(--afa-surface);border:1px solid rgba(232,168,56,.35);border-radius:12px;padding:12px;}',
-    '.afa-contact h5{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--afa-amber);font-family:Poppins,Inter,sans-serif;}',
-    '.afa-contact a{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--afa-surface2);border-radius:8px;font-size:13px;color:var(--afa-text)!important;text-decoration:none!important;transition:background .15s;}',
-    '.afa-contact a:hover{background:#2b2f3a;}',
+    '.afa-contact{display:flex;flex-direction:column;gap:6px;background:var(--afa-surface);border:1px solid var(--afa-border);border-radius:var(--afa-radius-card);padding:12px;}',
+    '.afa-contact h5{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--afa-ember-t);font-weight:700;}',
+    '.afa-contact a{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--afa-surface2);border-radius:var(--afa-radius-bubble);font-size:13px;color:var(--afa-text)!important;text-decoration:none!important;transition:background .22s;}',
+    '.afa-contact a:hover{background:var(--afa-hover);}',
 
     /* Feedback */
     '.afa-fb{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--afa-muted);}',
-    '.afa-fb button{font-size:13px;padding:3px 7px;border-radius:7px;border:1px solid var(--afa-border);transition:background .15s;}',
-    '.afa-fb button:hover{background:var(--afa-surface2);}',
+    '.afa-fb button{font-size:13px;padding:3px 7px;border-radius:999px;border:1px solid var(--afa-border-soft);transition:background .22s;}',
+    '.afa-fb button:hover{background:var(--afa-hover);}',
     '.afa-fb{flex-wrap:wrap;}',
     '.afa-fb-form{display:flex;gap:6px;flex:1;min-width:180px;}',
-    '.afa-fb-form input{flex:1;background:var(--afa-surface2);border:1px solid var(--afa-border);border-radius:8px;padding:6px 10px;color:var(--afa-text);font-size:12px;font-family:inherit;outline:none;}',
-    '.afa-fb-form input:focus{border-color:rgba(192,57,43,.6);}',
+    '.afa-fb-form input{flex:1;background:var(--afa-surface2);border:1px solid var(--afa-border-soft);border-radius:999px;padding:6px 12px;color:var(--afa-text);font-size:12px;font-family:inherit;outline:none;}',
+    '.afa-fb-form input:focus{border-color:var(--afa-ember);}',
     '.afa-fb-form button{flex-shrink:0;}',
 
     /* Typing */
     '.afa-typing{display:inline-flex;gap:4px;padding:12px 14px;}',
-    '.afa-typing span{width:7px;height:7px;border-radius:50%;background:#8c91a0;animation:afaBlink 1.2s infinite;}',
+    '.afa-typing span{width:7px;height:7px;border-radius:50%;background:var(--afa-muted);animation:afaBlink 1.2s infinite;}',
     '.afa-typing span:nth-child(2){animation-delay:.18s;}.afa-typing span:nth-child(3){animation-delay:.36s;}',
     '@keyframes afaBlink{0%,80%,100%{opacity:.25;transform:translateY(0);}40%{opacity:1;transform:translateY(-3px);}}',
 
-    /* Composer */
-    '.afa-foot{flex-shrink:0;border-top:1px solid var(--afa-border);background:var(--afa-bg);}',
+    /* Composer. Pill field + pill send, matching the portal's hero composer. */
+    '.afa-foot{flex-shrink:0;border-top:1px solid var(--afa-border-soft);background:var(--afa-bg);}',
     '.afa-inputrow{display:flex;align-items:center;gap:8px;padding:10px 12px 6px;}',
-    '.afa-input{flex:1;background:var(--afa-surface);border:1px solid var(--afa-border);border-radius:12px;padding:10px 14px;color:var(--afa-text);font-size:13.8px;font-family:inherit;outline:none;transition:border-color .15s;}',
-    '.afa-input:focus{border-color:rgba(192,57,43,.6);}',
-    '.afa-input::placeholder{color:#6a6f7d;}',
-    '.afa-send{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#c0392b,#d45a20);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .15s,transform .15s;}',
+    '.afa-input{flex:1;background:var(--afa-surface);border:1px solid var(--afa-border);border-radius:999px;padding:11px 16px;color:var(--afa-text);font-size:13.8px;font-family:inherit;outline:none;transition:border-color .22s;}',
+    '.afa-input:focus{border-color:var(--afa-ember);}',
+    '.afa-input::placeholder{color:var(--afa-muted);}',
+    '.afa-root .afa-send{width:40px;height:40px;border-radius:999px;background:var(--afa-send-bg);color:var(--afa-send-ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .22s,transform .3s cubic-bezier(.16,1,.3,1);}',
     '.afa-send svg{width:18px;height:18px;}',
     '.afa-send:disabled{opacity:.4;cursor:default;}',
-    '.afa-send:not(:disabled):hover{transform:scale(1.06);}',
-    '.afa-legal{text-align:center;font-size:10.5px;color:#6a6f7d;padding:0 12px 8px;}',
-    '.afa-legal a{color:#8c91a0;}',
+    '.afa-root .afa-send:not(:disabled):hover{background:var(--afa-send-bg-hover);transform:translateX(2px);}',
+
+    /* ── Border Beam ──
+       Trimmed port of beam.css (ring + inner glow; no bloom layer, which is
+       imperceptible at this size). Inlined rather than linked because this
+       widget ships as a single script tag on Shopify, where an external
+       stylesheet is not available. Namespaced afa- so it cannot collide with
+       beam.css when both load on a portal page. Position is set per target,
+       never on .afa-beam itself -- .afa-panel must keep position:fixed. */
+    '@property --afa-beam-angle{syntax:"<angle>";initial-value:0deg;inherits:true;}',
+    '@property --afa-beam-opacity{syntax:"<number>";initial-value:0;inherits:true;}',
+    /* Colours live in custom properties so a variant only overrides nine
+       values instead of restating every gradient. Default is the full
+       spectrum; data-beam-variant="ember" narrows it to the fire palette. */
+    '.afa-beam{--afa-beam-w:1px;--afa-beam-dur:4s;--afa-beam-strength:1;--afa-beam-hue:30deg;' +
+      /* Colour priority (mirrors beam.css): red/orange dominant, then
+         blue/magenta, then green. Weighted by blob area, not by count --
+         b5 is the largest blob, b4 the smallest. */
+      '--afa-b5:rgb(255,90,40);--afa-b1:rgb(255,60,60);--afa-b7:rgb(255,140,40);' +
+      '--afa-b9:rgb(150,60,240);--afa-b6:rgb(90,80,255);--afa-b2:rgb(40,140,255);' +
+      '--afa-b8:rgb(240,50,180);--afa-b3:rgb(50,200,80);--afa-b4:rgb(30,185,170);' +
+      '--afa-i5:rgba(255,90,40,.45);--afa-i1:rgba(255,60,60,.45);--afa-i7:rgba(255,140,40,.45);' +
+      '--afa-i9:rgba(150,60,240,.45);--afa-i6:rgba(90,80,255,.45);--afa-i2:rgba(40,140,255,.45);' +
+      '--afa-i8:rgba(240,50,180,.45);--afa-i3:rgba(50,200,80,.45);--afa-i4:rgba(30,185,170,.45);}',
+    /* Fire palette. Hue cycle tightened to 10deg -- at 30deg the reds swing
+       into magenta and the ambers into olive, which reads off-brand. */
+    '.afa-beam[data-beam-variant="ember"]{--afa-beam-hue:10deg;' +
+      '--afa-b1:rgb(192,57,43);--afa-b2:rgb(212,90,32);--afa-b3:rgb(232,168,56);' +
+      '--afa-b4:rgb(255,176,92);--afa-b5:rgb(169,50,38);--afa-b6:rgb(212,90,32);' +
+      '--afa-b7:rgb(255,140,60);--afa-b8:rgb(232,168,56);--afa-b9:rgb(199,136,32);' +
+      '--afa-i1:rgba(192,57,43,.45);--afa-i2:rgba(212,90,32,.45);--afa-i3:rgba(232,168,56,.45);' +
+      '--afa-i4:rgba(255,176,92,.45);--afa-i5:rgba(169,50,38,.45);--afa-i6:rgba(212,90,32,.45);' +
+      '--afa-i7:rgba(255,140,60,.45);--afa-i8:rgba(232,168,56,.45);--afa-i9:rgba(199,136,32,.45);}',
+    '.afa-beam.afa-beam-on{animation:afaBeamSpin var(--afa-beam-dur) linear infinite,afaBeamIn .6s ease forwards;}',
+    '.afa-beam.afa-beam-on::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:var(--afa-beam-w);background:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 54%,rgba(255,255,255,.1) 57%,rgba(255,255,255,.3) 60%,rgba(255,255,255,.6) 63%,rgba(255,255,255,.75) 66%,rgba(255,255,255,.6) 69%,rgba(255,255,255,.3) 72%,rgba(255,255,255,.1) 75%,transparent 78%),radial-gradient(ellipse 70px 40px at 33% -7%,var(--afa-b1),transparent),radial-gradient(ellipse 60px 35px at 12% -5%,var(--afa-b2),transparent),radial-gradient(ellipse 40px 70px at 2% 68%,var(--afa-b3),transparent),radial-gradient(ellipse 180px 32px at 74% 100%,var(--afa-b5),transparent),radial-gradient(ellipse 85px 26px at 55% 100%,var(--afa-b6),transparent),radial-gradient(ellipse 74px 32px at 94% 0%,var(--afa-b7),transparent),radial-gradient(ellipse 52px 48px at 100% 27%,var(--afa-b9),transparent);-webkit-mask:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 30%,rgba(255,255,255,.1) 36%,rgba(255,255,255,.35) 44%,#fff 52%,#fff 80%,rgba(255,255,255,.35) 86%,rgba(255,255,255,.1) 92%,transparent 95%),linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:source-in,xor;mask:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 30%,rgba(255,255,255,.1) 36%,rgba(255,255,255,.35) 44%,#fff 52%,#fff 80%,rgba(255,255,255,.35) 86%,rgba(255,255,255,.1) 92%,transparent 95%),linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:intersect,exclude;pointer-events:none;z-index:3;opacity:calc(var(--afa-beam-opacity) * .55 * var(--afa-beam-strength));animation:afaBeamHue 12s ease-in-out infinite;}',
+    '.afa-beam.afa-beam-on::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse 63px 36px at 33% -7%,var(--afa-i1),transparent),radial-gradient(ellipse 54px 32px at 12% -5%,var(--afa-i2),transparent),radial-gradient(ellipse 36px 63px at 2% 68%,var(--afa-i3),transparent),radial-gradient(ellipse 162px 29px at 74% 100%,var(--afa-i5),transparent),radial-gradient(ellipse 67px 29px at 94% 0%,var(--afa-i7),transparent),radial-gradient(ellipse 47px 43px at 100% 27%,var(--afa-i9),transparent);-webkit-mask-image:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 22%,rgba(255,255,255,.12) 28%,rgba(255,255,255,.4) 36%,#fff 46%,#fff 82%,rgba(255,255,255,.4) 88%,rgba(255,255,255,.12) 94%,transparent 97%);mask-image:conic-gradient(from var(--afa-beam-angle),transparent 0%,transparent 22%,rgba(255,255,255,.12) 28%,rgba(255,255,255,.4) 36%,#fff 46%,#fff 82%,rgba(255,255,255,.4) 88%,rgba(255,255,255,.12) 94%,transparent 97%);pointer-events:none;z-index:2;opacity:calc(var(--afa-beam-opacity) * .4 * var(--afa-beam-strength));animation:afaBeamHue 12s ease-in-out infinite;}',
+    /* Targets. The composer wrapper takes over flex:1 from the input it wraps
+       (pseudo-elements do not render on <input>, hence the wrapper). */
+    '.afa-beam-input{position:relative;flex:1;min-width:0;border-radius:999px;}',
+    '.afa-beam-input .afa-input{width:100%;flex:none;}',
+    /* Panel target: ring only. The inner-glow blobs are sized in absolute px
+       for a card-height element, so on a 620px-tall panel they land mid-
+       transcript as a stray colour blotch instead of an edge glow. A clean
+       traveling rim is the right read at this size. */
+    '.afa-panel.afa-beam{--afa-beam-strength:1;}',
+    '.afa-panel.afa-beam.afa-beam-on::before{display:none;}',
+    /* Ember is thinking: spin faster and brighter, so the beam reads as a
+       live activity indicator rather than pure decoration. */
+    '.afa-beam.afa-beam-busy{--afa-beam-dur:1.8s;--afa-beam-strength:1.9;}',
+    '@keyframes afaBeamSpin{to{--afa-beam-angle:360deg;}}',
+    '@keyframes afaBeamIn{to{--afa-beam-opacity:1;}}',
+    '@keyframes afaBeamHue{0%,100%{filter:hue-rotate(calc(var(--afa-beam-hue) * -1)) brightness(1.3) saturate(1.2);}50%{filter:hue-rotate(var(--afa-beam-hue)) brightness(1.3) saturate(1.2);}}',
+    '@media (prefers-reduced-motion:reduce){',
+    '.afa-beam.afa-beam-on,.afa-beam.afa-beam-on::before,.afa-beam.afa-beam-on::after{animation:none !important;--afa-beam-opacity:1;}',
+    '}',
+
+    /* Inline mount. The panel is normally position:fixed in the corner; here
+       it fills whatever box the host gives it and drops its own chrome so the
+       host's container provides the surface. */
+    '.afa-root.afa-inline{position:relative;display:block;width:100%;height:100%;}',
+    '.afa-inline .afa-panel{position:relative;right:auto;bottom:auto;z-index:auto;width:100%;max-width:none;height:100%;border:none;border-radius:0;box-shadow:none;background:transparent;}',
+    '.afa-inline .afa-panel.afa-open{animation:none;}',
+    '.afa-inline .afa-launcher,.afa-inline .afa-nudge{display:none!important;}',
+
+    '.afa-legal{text-align:center;font-size:10.5px;color:var(--afa-muted);padding:0 12px 8px;}',
+    '.afa-legal a{color:var(--afa-mid);}',
 
     /* Mobile */
     '@media (max-width:520px){',
-    '.afa-panel{right:0;bottom:0;width:100vw;max-width:100vw;height:100dvh;border-radius:0;border:none;}',
+    '.afa-root:not(.afa-inline) .afa-panel{right:0;bottom:0;width:100vw;max-width:100vw;height:100dvh;border-radius:0;border:none;}',
     '.afa-nudge{right:16px;bottom:88px;}',
     '}'
   ];
@@ -1210,6 +1333,20 @@
   }
 
   /* ── DOM construction ─────────────────────────────────────────────────── */
+  // The beam needs a registered @property (to animate an <angle>) and
+  // mask-composite. Where either is missing we skip it entirely rather than
+  // render a broken half-effect -- the widget is unaffected either way.
+  var beamEl = null;
+  function beamSupported() {
+    // NB: window.CSS, not CSS -- this file declares its own `var CSS` (the
+    // stylesheet string) above, which shadows the global CSS object.
+    var C = window.CSS;
+    if (!BEAM || !C || !C.supports) return false;
+    return typeof C.registerProperty === 'function' &&
+      (C.supports('mask-composite', 'exclude') ||
+       C.supports('-webkit-mask-composite', 'xor'));
+  }
+
   function el(tag, cls, html) {
     var e = document.createElement(tag);
     if (cls) e.className = cls;
@@ -1220,11 +1357,14 @@
   var root, panel, msgsEl, inputEl, sendBtn, launcher, nudge;
 
   function buildUI() {
-    // Fonts (skip if the page already loads Inter/Poppins)
+    // Figtree, the portal's one family. Skipped where the host already pulls
+    // from Google Fonts -- on the portal that is Figtree already, and on a
+    // storefront that loads its own we defer to the merchant rather than
+    // fetch a second family over theirs.
     if (!document.querySelector('link[href*="fonts.googleapis.com"]')) {
       var pre = el('link'); pre.rel = 'preconnect'; pre.href = 'https://fonts.gstatic.com'; pre.crossOrigin = '';
       var f = el('link'); f.rel = 'stylesheet';
-      f.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap';
+      f.href = 'https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap';
       document.head.appendChild(pre); document.head.appendChild(f);
     }
 
@@ -1270,13 +1410,41 @@
     sendBtn = el('button', 'afa-send', SEND_SVG);
     sendBtn.setAttribute('aria-label', 'Send message');
     sendBtn.disabled = true;
-    row.appendChild(inputEl); row.appendChild(sendBtn);
+    // Pseudo-elements do not render on <input>, so the composer beam needs a
+    // wrapper element to hang its layers on.
+    if (BEAM === 'input' && beamSupported()) {
+      beamEl = el('div', 'afa-beam afa-beam-input afa-beam-on');
+      beamEl.setAttribute('data-beam-variant', BEAM_VARIANT);
+      beamEl.appendChild(inputEl);
+      row.appendChild(beamEl);
+    } else {
+      row.appendChild(inputEl);
+    }
+    row.appendChild(sendBtn);
     var legal = el('div', 'afa-legal', 'AI assistant \u2014 answers can be imperfect. <a href="mailto:' + SUPPORT_EMAIL + '">Talk to a human</a> anytime.');
     foot.appendChild(row); foot.appendChild(legal);
 
     panel.appendChild(head); panel.appendChild(msgsEl); panel.appendChild(foot);
-    root.appendChild(panel); root.appendChild(launcher);
-    document.body.appendChild(root);
+    if (BEAM === 'panel' && beamSupported()) {
+      panel.classList.add('afa-beam', 'afa-beam-on');
+      panel.setAttribute('data-beam-variant', BEAM_VARIANT);
+      beamEl = panel;
+    }
+
+    root.appendChild(panel);
+    var host = MOUNT
+      ? (typeof MOUNT === 'string' ? document.querySelector(MOUNT) : MOUNT)
+      : null;
+    if (host) {
+      root.classList.add('afa-inline');
+      host.appendChild(root);
+      // The host decides when the chat is showing, so never restore an open
+      // panel or fire the corner nudge here.
+      state.open = false;
+    } else {
+      root.appendChild(launcher);
+      document.body.appendChild(root);
+    }
 
     inputEl.addEventListener('input', function () { sendBtn.disabled = !inputEl.value.trim(); });
     inputEl.addEventListener('keydown', function (e) { if (e.key === 'Enter' && inputEl.value.trim()) submit(); });
@@ -1293,7 +1461,7 @@
     // Proactive teaser \u2014 fires once the visitor shows engagement (scrolling
     // around or a few clicks), with a 30s dwell fallback. Once per session,
     // never over an open or previously-used chat.
-    if (!state.nudged && !state.open && !state.msgs.length) {
+    if (!host && !state.nudged && !state.open && !state.msgs.length) {
       var armedAt = Date.now(), scrolled = 0, lastY = window.pageYOffset || 0, clicks = 0, fallbackTimer;
       var onScroll = function () {
         var y = window.pageYOffset || 0;
@@ -1350,9 +1518,15 @@
   function killNudge() { if (nudge) { nudge.remove(); nudge = null; } }
 
   function toggle(force, silent) {
+    var was = state.open;
     state.open = force != null ? force : !state.open;
     panel.classList.toggle('afa-open', state.open);
     launcher.classList.toggle('afa-open', state.open);
+    // Inline hosts render their own container, so they need to know when the
+    // widget closed itself (header X, Escape) in order to collapse it.
+    if (MOUNT && was && !state.open && root) {
+      root.dispatchEvent(new CustomEvent('aquafire:close', { bubbles: true }));
+    }
     if (state.open) {
       launcher.classList.remove('afa-unread');
       killNudge();
@@ -1525,7 +1699,11 @@
   }
 
   var typingRow = null;
+  function setBeamBusy(on) {
+    if (beamEl) beamEl.classList.toggle('afa-beam-busy', on);
+  }
   function showTyping() {
+    setBeamBusy(true);
     if (typingRow) return;
     typingRow = el('div', 'afa-row afa-bot');
     typingRow.appendChild(el('div', 'afa-mini-avatar', FLAME_SVG));
@@ -1534,7 +1712,10 @@
     msgsEl.appendChild(typingRow);
     scrollToEnd();
   }
-  function hideTyping() { if (typingRow) { typingRow.remove(); typingRow = null; } }
+  function hideTyping() {
+    setBeamBusy(false);
+    if (typingRow) { typingRow.remove(); typingRow = null; }
+  }
 
   /* ── Conversation flow ────────────────────────────────────────────────── */
   function submit() {
@@ -1863,11 +2044,48 @@
       });
     });
   }
+  /* ── Public API ───────────────────────────────────────────────────────────
+     Mainly for inline hosts (see MOUNT): the host owns the container and the
+     show/hide animation, and drives the conversation through here. Safe to
+     call before the UI is built -- calls queue until it is. */
+  var pending = null;
+  var built = false;
 
-  /* \u2500\u2500 Boot \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', buildUI);
-  } else {
+  function api(fn) {
+    if (built) { fn(); return; }
+    pending = pending || [];
+    pending.push(fn);
+  }
+
+  window.AquafireAssistant = {
+    open: function () { api(function () { toggle(true); }); },
+    close: function () { api(function () { toggle(false); }); },
+    // Open and immediately send `text` as if the visitor had typed it.
+    ask: function (text) {
+      api(function () {
+        toggle(true);
+        if (text && String(text).trim()) handleUserText(String(text).trim());
+      });
+    },
+    reset: function () { api(function () { resetConversation(); }); },
+    isOpen: function () { return !!state.open; },
+    // The element the panel lives in, so a host can style or measure it.
+    root: function () { return root || null; }
+  };
+
+  /* ── Boot ─────────────────────────────────────────────────────────────── */
+  function boot() {
     buildUI();
+    built = true;
+    if (pending) {
+      for (var i = 0; i < pending.length; i++) pending[i]();
+      pending = null;
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 })();

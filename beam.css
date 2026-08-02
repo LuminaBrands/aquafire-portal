@@ -1,0 +1,693 @@
+/* ── Border Beam ──────────────────────────────────────────────────────────────
+   Animated border-beam / glow effect. Vanilla port of the `border-beam` npm
+   package (MIT, Jakub Antalik — https://beam.jakubantalik.com) rebuilt as plain
+   CSS so it works inside this build-free portal (no React, no npm, no bundler).
+
+   Technique (same as the original):
+     ::after            traveling stroke — a conic sweep + colored blobs, masked
+                        to a border-only ring via border-box XOR content-box
+     ::before           inner glow — the same blobs at lower alpha, masked by a
+                        wider conic sweep, plus an inset highlight
+     .af-beam-bloom     blurred outer bloom layer
+     --af-beam-angle    registered @property angle; animating it spins the sweep
+
+   Markup:
+     <div class="af-beam" data-beam-size="md" data-beam-variant="colorful">
+       <div class="card">…</div>
+     </div>
+
+   beam.js injects the bloom layer, auto-detects the child's border-radius and
+   flips [data-beam-active] on. Without JS the wrapper is inert and children
+   render untouched — the effect is purely additive.
+
+   Geometry is shared across variants; only the nine --afb-* colors change.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@property --af-beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: true;
+}
+@property --af-beam-opacity {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: true;
+}
+@property --af-beam-travel {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: true;
+}
+@property --af-beam-breathe {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: true;
+}
+
+/* ── Base ── */
+
+.af-beam {
+  position: relative;
+  border-radius: var(--af-beam-radius, 16px);
+  overflow: hidden;
+  isolation: isolate;
+
+  --af-beam-width: 1px;
+  /* Slower than the original package's 1.96s. At speed the traveling beam
+     pulls the eye away from the content it is meant to frame; ~4s keeps it
+     ambient while still reading as movement. */
+  --af-beam-duration: 4s;
+  --af-beam-strength: 1;
+  --af-beam-brightness: 1.3;
+  --af-beam-saturation: 1.2;
+  --af-beam-hue-range: 30deg;
+  --af-beam-hue-base: 0deg;
+
+  --af-beam-stroke-opacity: 0.26;
+  --af-beam-inner-opacity: 0.42;
+  --af-beam-bloom-opacity: 0.24;
+  --af-beam-inner-shadow: rgba(255, 255, 255, 0.27);
+}
+
+/* Children stay unpositioned on purpose. The stroke, inner glow and bloom are
+   positioned layers with z-index 1-3, so they paint OVER the wrapped element —
+   that is what lets the beam ride on top of an opaque card background. The
+   bloom is inserted as the first child, so where it uses z-index 0
+   (the pulse sizes) it still lands behind the content in DOM order. */
+
+/* ── Sweeps ── */
+
+.af-beam {
+  --af-sweep-stroke: conic-gradient(
+    from var(--af-beam-angle),
+    transparent 0%, transparent 54%,
+    rgba(255, 255, 255, 0.1) 57%,
+    rgba(255, 255, 255, 0.3) 60%,
+    rgba(255, 255, 255, 0.6) 63%,
+    rgba(255, 255, 255, 0.75) 66%,
+    rgba(255, 255, 255, 0.6) 69%,
+    rgba(255, 255, 255, 0.3) 72%,
+    rgba(255, 255, 255, 0.1) 75%,
+    transparent 78%, transparent 100%
+  );
+  --af-sweep-mask: conic-gradient(
+    from var(--af-beam-angle),
+    transparent 0%, transparent 30%,
+    rgba(255, 255, 255, 0.1) 36%,
+    rgba(255, 255, 255, 0.35) 44%,
+    white 52%, white 80%,
+    rgba(255, 255, 255, 0.35) 86%,
+    rgba(255, 255, 255, 0.1) 92%,
+    transparent 95%, transparent 100%
+  );
+  --af-sweep-inner: conic-gradient(
+    from var(--af-beam-angle),
+    transparent 0%, transparent 22%,
+    rgba(255, 255, 255, 0.12) 28%,
+    rgba(255, 255, 255, 0.4) 36%,
+    white 46%, white 82%,
+    rgba(255, 255, 255, 0.4) 88%,
+    rgba(255, 255, 255, 0.12) 94%,
+    transparent 97%, transparent 100%
+  );
+  --af-sweep-bloom: conic-gradient(
+    from var(--af-beam-angle),
+    transparent 0%, transparent 58%,
+    rgba(255, 255, 255, 0.03) 62%,
+    rgba(255, 255, 255, 0.08) 65%,
+    rgba(255, 255, 255, 0.2) 67%,
+    rgba(255, 255, 255, 0.45) 69%,
+    rgba(255, 255, 255, 0.85) 70%,
+    rgba(255, 255, 255, 0.85) 70.5%,
+    rgba(255, 255, 255, 0.45) 71.5%,
+    rgba(255, 255, 255, 0.2) 73%,
+    rgba(255, 255, 255, 0.08) 75%,
+    rgba(255, 255, 255, 0.03) 78%,
+    transparent 82%
+  );
+}
+
+/* Light theme inverts the sweep highlights to shadow. */
+.af-beam[data-beam-theme="light"] {
+  --af-sweep-stroke: conic-gradient(
+    from var(--af-beam-angle),
+    transparent 0%, transparent 54%,
+    rgba(0, 0, 0, 0.08) 57%,
+    rgba(0, 0, 0, 0.2) 60%,
+    rgba(0, 0, 0, 0.4) 63%,
+    rgba(0, 0, 0, 0.55) 66%,
+    rgba(0, 0, 0, 0.4) 69%,
+    rgba(0, 0, 0, 0.2) 72%,
+    rgba(0, 0, 0, 0.08) 75%,
+    transparent 78%, transparent 100%
+  );
+  --af-beam-inner-shadow: rgba(0, 0, 0, 0.14);
+  --af-beam-stroke-opacity: 0.12;
+  --af-beam-inner-opacity: 0.26;
+  --af-beam-bloom-opacity: 0.34;
+  --af-beam-saturation: 1.5;
+}
+
+/* ── Blob geometry (shared by every variant) ── */
+
+.af-beam {
+  --af-blobs-lg:
+    radial-gradient(ellipse 70px 40px at 33% -7.4%, var(--afb-1), transparent),
+    radial-gradient(ellipse 60px 35px at 12% -5%, var(--afb-2), transparent),
+    radial-gradient(ellipse 40px 70px at 2.1% 68.3%, var(--afb-3), transparent),
+    radial-gradient(ellipse 20px 35px at 2.1% 68.3%, var(--afb-4), transparent),
+    radial-gradient(ellipse 180px 32px at 74.4% 100%, var(--afb-5), transparent),
+    radial-gradient(ellipse 85px 26px at 55% 100%, var(--afb-6), transparent),
+    radial-gradient(ellipse 74px 32px at 93.9% 0%, var(--afb-7), transparent),
+    radial-gradient(ellipse 26px 42px at 100% 27.1%, var(--afb-8), transparent),
+    radial-gradient(ellipse 52px 48px at 100% 27.1%, var(--afb-9), transparent);
+
+  /* Inner layer: same positions, 0.9× size, reduced alpha. */
+  --af-blobs-lg-inner:
+    radial-gradient(ellipse 63px 36px at 33% -7.4%, var(--afi-1), transparent),
+    radial-gradient(ellipse 54px 32px at 12% -5%, var(--afi-2), transparent),
+    radial-gradient(ellipse 36px 63px at 2.1% 68.3%, var(--afi-3), transparent),
+    radial-gradient(ellipse 18px 32px at 2.1% 68.3%, var(--afi-4), transparent),
+    radial-gradient(ellipse 162px 29px at 74.4% 100%, var(--afi-5), transparent),
+    radial-gradient(ellipse 77px 23px at 55% 100%, var(--afi-6), transparent),
+    radial-gradient(ellipse 67px 29px at 93.9% 0%, var(--afi-7), transparent),
+    radial-gradient(ellipse 23px 38px at 100% 27.1%, var(--afi-8), transparent),
+    radial-gradient(ellipse 47px 43px at 100% 27.1%, var(--afi-9), transparent);
+
+  /* Compact set used by size="sm". */
+  --af-blobs-sm:
+    radial-gradient(ellipse 9px 18px at 2% 68%, var(--afb-3), transparent),
+    radial-gradient(ellipse 4px 8px at 2% 68%, var(--afb-4), transparent),
+    radial-gradient(ellipse 59px 9px at 72% -3%, var(--afb-7), transparent),
+    radial-gradient(ellipse 42px 7px at 74% 100%, var(--afb-5), transparent),
+    radial-gradient(ellipse 10px 17px at 100% 27%, var(--afb-8), transparent),
+    radial-gradient(ellipse 10px 18px at 100% 27%, var(--afb-9), transparent),
+    radial-gradient(ellipse 5px 10px at 100% 27%, var(--afb-2), transparent),
+    radial-gradient(ellipse 11px 12px at 100% 27%, var(--afb-1), transparent);
+
+  --af-blobs-sm-inner:
+    radial-gradient(ellipse 9px 18px at 2% 68%, var(--afi-3), transparent),
+    radial-gradient(ellipse 4px 8px at 2% 68%, var(--afi-4), transparent),
+    radial-gradient(ellipse 59px 9px at 72% -3%, var(--afi-7), transparent),
+    radial-gradient(ellipse 42px 7px at 74% 100%, var(--afi-5), transparent),
+    radial-gradient(ellipse 10px 17px at 100% 27%, var(--afi-8), transparent),
+    radial-gradient(ellipse 10px 18px at 100% 27%, var(--afi-9), transparent),
+    radial-gradient(ellipse 5px 10px at 100% 27%, var(--afi-2), transparent),
+    radial-gradient(ellipse 11px 12px at 100% 27%, var(--afi-1), transparent);
+
+  --af-blobs: var(--af-blobs-lg);
+  --af-blobs-inner: var(--af-blobs-lg-inner);
+}
+
+/* ── Color variants ── */
+
+/* Aquafire fire palette (red → ember → amber). Not the default — the portal
+   uses the full spectrum — but kept for surfaces that need to stay on-brand.
+   The hue cycle is tightened to 10deg here: at the stock 30deg the reds swing
+   into magenta and the ambers into olive, which reads off-brand. Fire stays
+   fire within a narrow band. */
+.af-beam[data-beam-variant="ember"] {
+  --af-beam-hue-range: 10deg;
+  --afb-1: rgb(192, 57, 43);
+  --afb-2: rgb(212, 90, 32);
+  --afb-3: rgb(232, 168, 56);
+  --afb-4: rgb(255, 176, 92);
+  --afb-5: rgb(169, 50, 38);
+  --afb-6: rgb(212, 90, 32);
+  --afb-7: rgb(255, 140, 60);
+  --afb-8: rgb(232, 168, 56);
+  --afb-9: rgb(199, 136, 32);
+
+  --afi-1: rgba(192, 57, 43, 0.45);
+  --afi-2: rgba(212, 90, 32, 0.45);
+  --afi-3: rgba(232, 168, 56, 0.45);
+  --afi-4: rgba(255, 176, 92, 0.45);
+  --afi-5: rgba(169, 50, 38, 0.45);
+  --afi-6: rgba(212, 90, 32, 0.45);
+  --afi-7: rgba(255, 140, 60, 0.45);
+  --afi-8: rgba(232, 168, 56, 0.45);
+  --afi-9: rgba(199, 136, 32, 0.45);
+}
+
+/* Full spectrum — the default.
+
+   COLOUR PRIORITY (standing rule for every Aquafire beam palette):
+     red/orange dominant, then blue/magenta, then green.
+
+   Enforced by weight, not by count. Each blob covers a different area, so the
+   colours are assigned to blobs by size. Area = w x h of the --af-blobs-lg
+   ellipses:
+     warm         b5 5760 + b1 2800 + b7 2368  = 10928  (49%)
+     blue/magenta b9 2496 + b6 2210 + b2 2100 + b8 1092 =  7898  (35%)
+     green        b3 2800 + b4  700            =  3500  (16%)
+   Recolour by swapping values here; if you move a colour to a different blob
+   index you change its weight, so re-check the split above. */
+.af-beam,
+.af-beam[data-beam-variant="colorful"] {
+  /* Warm — dominant. b5 is the single largest blob. */
+  --afb-5: rgb(255, 90, 40);
+  --afb-1: rgb(255, 60, 60);
+  --afb-7: rgb(255, 140, 40);
+  /* Blue / magenta — second. */
+  --afb-9: rgb(150, 60, 240);
+  --afb-6: rgb(90, 80, 255);
+  --afb-2: rgb(40, 140, 255);
+  --afb-8: rgb(240, 50, 180);
+  /* Green — least. */
+  --afb-3: rgb(50, 200, 80);
+  --afb-4: rgb(30, 185, 170);
+
+  --afi-5: rgba(255, 90, 40, 0.45);
+  --afi-1: rgba(255, 60, 60, 0.45);
+  --afi-7: rgba(255, 140, 40, 0.45);
+  --afi-9: rgba(150, 60, 240, 0.45);
+  --afi-6: rgba(90, 80, 255, 0.45);
+  --afi-2: rgba(40, 140, 255, 0.45);
+  --afi-8: rgba(240, 50, 180, 0.45);
+  --afi-3: rgba(50, 200, 80, 0.45);
+  --afi-4: rgba(30, 185, 170, 0.45);
+}
+
+.af-beam[data-beam-variant="ocean"] {
+  --afb-1: rgb(100, 80, 220);
+  --afb-2: rgb(60, 120, 255);
+  --afb-3: rgb(80, 100, 200);
+  --afb-4: rgb(50, 140, 220);
+  --afb-5: rgb(120, 80, 255);
+  --afb-6: rgb(70, 130, 255);
+  --afb-7: rgb(140, 100, 240);
+  --afb-8: rgb(90, 110, 230);
+  --afb-9: rgb(130, 70, 255);
+
+  --afi-1: rgba(100, 80, 220, 0.45);
+  --afi-2: rgba(60, 120, 255, 0.45);
+  --afi-3: rgba(80, 100, 200, 0.45);
+  --afi-4: rgba(50, 140, 220, 0.45);
+  --afi-5: rgba(120, 80, 255, 0.45);
+  --afi-6: rgba(70, 130, 255, 0.45);
+  --afi-7: rgba(140, 100, 240, 0.45);
+  --afi-8: rgba(90, 110, 230, 0.45);
+  --afi-9: rgba(130, 70, 255, 0.45);
+}
+
+.af-beam[data-beam-variant="sunset"] {
+  --afb-1: rgb(255, 80, 50);
+  --afb-2: rgb(255, 160, 40);
+  --afb-3: rgb(255, 120, 60);
+  --afb-4: rgb(255, 200, 50);
+  --afb-5: rgb(255, 100, 80);
+  --afb-6: rgb(255, 180, 60);
+  --afb-7: rgb(255, 60, 60);
+  --afb-8: rgb(255, 140, 50);
+  --afb-9: rgb(255, 90, 70);
+
+  --afi-1: rgba(255, 80, 50, 0.45);
+  --afi-2: rgba(255, 160, 40, 0.45);
+  --afi-3: rgba(255, 120, 60, 0.45);
+  --afi-4: rgba(255, 200, 50, 0.45);
+  --afi-5: rgba(255, 100, 80, 0.45);
+  --afi-6: rgba(255, 180, 60, 0.45);
+  --afi-7: rgba(255, 60, 60, 0.45);
+  --afi-8: rgba(255, 140, 50, 0.45);
+  --afi-9: rgba(255, 90, 70, 0.45);
+}
+
+/* Mono halves the stroke/inner/bloom opacities and the inner alpha. */
+.af-beam[data-beam-variant="mono"] {
+  --afb-1: rgb(180, 180, 180);
+  --afb-2: rgb(140, 140, 140);
+  --afb-3: rgb(160, 160, 160);
+  --afb-4: rgb(130, 130, 130);
+  --afb-5: rgb(170, 170, 170);
+  --afb-6: rgb(150, 150, 150);
+  --afb-7: rgb(190, 190, 190);
+  --afb-8: rgb(145, 145, 145);
+  --afb-9: rgb(165, 165, 165);
+
+  --afi-1: rgba(180, 180, 180, 0.225);
+  --afi-2: rgba(140, 140, 140, 0.225);
+  --afi-3: rgba(160, 160, 160, 0.225);
+  --afi-4: rgba(130, 130, 130, 0.225);
+  --afi-5: rgba(170, 170, 170, 0.225);
+  --afi-6: rgba(150, 150, 150, 0.225);
+  --afi-7: rgba(190, 190, 190, 0.225);
+  --afi-8: rgba(145, 145, 145, 0.225);
+  --afi-9: rgba(165, 165, 165, 0.225);
+
+  --af-beam-stroke-opacity: 0.13;
+  --af-beam-inner-opacity: 0.21;
+  --af-beam-bloom-opacity: 0.12;
+}
+
+/* ── Rotate family: sm / md ── */
+
+.af-beam[data-beam-size="sm"] {
+  --af-beam-radius: 32px;
+  --af-blobs: var(--af-blobs-sm);
+  --af-blobs-inner: var(--af-blobs-sm-inner);
+  --af-beam-stroke-opacity: 0.46;
+  --af-beam-inner-opacity: 0.24;
+  --af-beam-bloom-opacity: 0.38;
+  --af-beam-inner-shadow: rgba(255, 255, 255, 0.3);
+}
+
+.af-beam[data-beam-size="sm"][data-beam-theme="light"] {
+  --af-beam-stroke-opacity: 0.12;
+  --af-beam-inner-opacity: 0.3;
+  --af-beam-bloom-opacity: 0.16;
+  --af-beam-saturation: 1.8;
+}
+
+.af-beam[data-beam-active][data-beam-size="sm"],
+.af-beam[data-beam-active][data-beam-size="md"] {
+  animation:
+    af-beam-spin var(--af-beam-duration) linear infinite,
+    af-beam-fade-in 0.6s ease forwards;
+}
+
+/* Traveling stroke — border-only ring. */
+.af-beam[data-beam-active][data-beam-size="sm"]::after,
+.af-beam[data-beam-active][data-beam-size="md"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--af-beam-radius, 16px);
+  padding: var(--af-beam-width);
+  clip-path: inset(0 round var(--af-beam-radius, 16px));
+  background: var(--af-sweep-stroke), var(--af-blobs);
+  -webkit-mask:
+    var(--af-sweep-mask),
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: source-in, xor;
+  mask:
+    var(--af-sweep-mask),
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: intersect, exclude;
+  pointer-events: none;
+  z-index: 2;
+  opacity: calc(
+    var(--af-beam-opacity) * var(--af-beam-stroke-opacity) * var(--af-beam-strength)
+  );
+  animation: af-beam-hue-shift 12s ease-in-out infinite;
+}
+
+/* Inner glow. */
+.af-beam[data-beam-active][data-beam-size="sm"]::before,
+.af-beam[data-beam-active][data-beam-size="md"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--af-beam-radius, 16px);
+  clip-path: inset(0 round var(--af-beam-radius, 16px));
+  background: var(--af-blobs-inner);
+  box-shadow: inset 0 0 5px 1px var(--af-beam-inner-shadow);
+  -webkit-mask-image: var(--af-sweep-inner);
+  mask-image: var(--af-sweep-inner);
+  pointer-events: none;
+  z-index: 1;
+  opacity: calc(
+    var(--af-beam-opacity) * var(--af-beam-inner-opacity) * var(--af-beam-strength)
+  );
+  animation: af-beam-hue-shift 12s ease-in-out infinite;
+}
+
+/* Blurred bloom. */
+.af-beam[data-beam-active][data-beam-size="sm"] > .af-beam-bloom,
+.af-beam[data-beam-active][data-beam-size="md"] > .af-beam-bloom {
+  display: block;
+  position: absolute;
+  inset: 0;
+  border-radius: var(--af-beam-radius, 16px);
+  clip-path: inset(0 round var(--af-beam-radius, 16px));
+  padding: var(--af-beam-width);
+  background: var(--af-sweep-bloom);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  filter: blur(8px) brightness(var(--af-beam-brightness))
+    saturate(var(--af-beam-saturation));
+  pointer-events: none;
+  z-index: 3;
+  opacity: calc(
+    var(--af-beam-opacity) * var(--af-beam-bloom-opacity) * var(--af-beam-strength)
+  );
+}
+
+/* ── Line: bottom-edge traveling beam ── */
+
+.af-beam[data-beam-size="line"] {
+  --af-beam-duration: 4.5s;
+  --af-beam-stroke-opacity: 1.14;
+  --af-beam-inner-opacity: 0.7;
+  --af-beam-bloom-opacity: 0.8;
+  --af-beam-inner-shadow: rgba(255, 255, 255, 0.1);
+}
+
+.af-beam[data-beam-size="line"][data-beam-theme="light"] {
+  --af-beam-stroke-opacity: 0.16;
+  --af-beam-inner-opacity: 0.32;
+  --af-beam-bloom-opacity: 0.3;
+  --af-beam-saturation: 1.95;
+}
+
+.af-beam[data-beam-active][data-beam-size="line"] {
+  animation:
+    af-beam-travel var(--af-beam-duration) linear infinite,
+    af-beam-breathe 3.2s ease-in-out infinite,
+    af-beam-fade-in 0.6s ease forwards;
+}
+
+.af-beam[data-beam-active][data-beam-size="line"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--af-beam-radius, 16px);
+  pointer-events: none;
+  z-index: 2;
+  background:
+    radial-gradient(
+      ellipse calc(42px * (0.6 + var(--af-beam-breathe) * 0.6))
+        calc(18px * (0.6 + var(--af-beam-breathe) * 0.6))
+        at calc(var(--af-beam-travel) * 100%) 100%,
+      var(--afb-4), var(--afb-7) 35%, transparent 75%
+    ),
+    radial-gradient(
+      ellipse calc(120px * (0.6 + var(--af-beam-breathe) * 0.5)) 10px
+        at calc(var(--af-beam-travel) * 100%) 100%,
+      var(--afi-1), transparent 80%
+    );
+  -webkit-mask: linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0);
+  opacity: calc(
+    var(--af-beam-opacity) * var(--af-beam-stroke-opacity) * var(--af-beam-strength)
+  );
+  animation: af-beam-hue-shift 12s ease-in-out infinite;
+}
+
+/* Static hairline the traveling beam rides along. */
+.af-beam[data-beam-active][data-beam-size="line"]::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: var(--af-beam-width);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--afi-5) 25%,
+    var(--afi-7) 75%,
+    transparent
+  );
+  pointer-events: none;
+  z-index: 1;
+  opacity: calc(
+    var(--af-beam-opacity) * var(--af-beam-inner-opacity) * var(--af-beam-strength)
+  );
+}
+
+.af-beam[data-beam-active][data-beam-size="line"] > .af-beam-bloom {
+  display: block;
+  position: absolute;
+  inset: auto 0 -6px 0;
+  height: 22px;
+  background: radial-gradient(
+    ellipse calc(90px * (0.6 + var(--af-beam-breathe) * 0.6)) 14px
+      at calc(var(--af-beam-travel) * 100%) 100%,
+    var(--afb-2), transparent 70%
+  );
+  filter: blur(8px) brightness(var(--af-beam-brightness))
+    saturate(var(--af-beam-saturation));
+  pointer-events: none;
+  z-index: 3;
+  opacity: calc(
+    var(--af-beam-opacity) * var(--af-beam-bloom-opacity) * var(--af-beam-strength)
+  );
+}
+
+/* ── Pulse family: breathing glow, no rotation ── */
+
+.af-beam[data-beam-size="pulse-inner"] {
+  --af-beam-brightness: 0.75;
+  --af-beam-stroke-opacity: 1.54;
+  --af-beam-inner-opacity: 0.44;
+  --af-beam-bloom-opacity: 0.66;
+}
+
+.af-beam[data-beam-size="pulse-inner"][data-beam-theme="light"] {
+  --af-beam-brightness: 1.3;
+  --af-beam-stroke-opacity: 0.32;
+  --af-beam-inner-opacity: 0.4;
+  --af-beam-bloom-opacity: 0.8;
+  --af-beam-saturation: 0.75;
+}
+
+/* The outward bloom must escape the box, so this size opts out of clipping. */
+.af-beam[data-beam-size="pulse-outside"] {
+  overflow: visible;
+  --af-beam-brightness: 1.9;
+  --af-beam-stroke-opacity: 0.94;
+  --af-beam-inner-opacity: 0.34;
+  --af-beam-bloom-opacity: 0.3;
+}
+
+.af-beam[data-beam-size="pulse-outside"][data-beam-theme="light"] {
+  --af-beam-brightness: 1.7;
+  --af-beam-stroke-opacity: 1.96;
+  --af-beam-inner-opacity: 1.04;
+  --af-beam-bloom-opacity: 0.42;
+  --af-beam-saturation: 0.6;
+}
+
+.af-beam[data-beam-active][data-beam-size="pulse-inner"],
+.af-beam[data-beam-active][data-beam-size="pulse-outside"] {
+  animation:
+    af-beam-breathe 3.6s ease-in-out infinite,
+    af-beam-fade-in 0.6s ease forwards;
+}
+
+/* Colored stroke ring. */
+.af-beam[data-beam-active][data-beam-size="pulse-inner"]::after,
+.af-beam[data-beam-active][data-beam-size="pulse-outside"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--af-beam-radius, 16px);
+  padding: var(--af-beam-width);
+  background: var(--af-blobs);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+  opacity: calc(
+    var(--af-beam-opacity) * var(--af-beam-stroke-opacity) *
+    var(--af-beam-strength) * (0.45 + var(--af-beam-breathe) * 0.55)
+  );
+  animation: af-beam-hue-shift 12s ease-in-out infinite;
+}
+
+/* Contained inner breathe. */
+.af-beam[data-beam-active][data-beam-size="pulse-inner"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--af-beam-radius, 16px);
+  clip-path: inset(0 round var(--af-beam-radius, 16px));
+  background: var(--af-blobs-inner);
+  filter: blur(10px) brightness(var(--af-beam-brightness))
+    saturate(var(--af-beam-saturation));
+  pointer-events: none;
+  z-index: 1;
+  opacity: calc(
+    var(--af-beam-opacity) * var(--af-beam-inner-opacity) *
+    var(--af-beam-strength) * (0.4 + var(--af-beam-breathe) * 0.6)
+  );
+}
+
+/* Outward halo — sits behind the card, uncropped. */
+.af-beam[data-beam-active][data-beam-size="pulse-outside"] > .af-beam-bloom,
+.af-beam[data-beam-active][data-beam-size="pulse-inner"] > .af-beam-bloom {
+  display: block;
+  position: absolute;
+  inset: -14px;
+  border-radius: calc(var(--af-beam-radius, 16px) + 14px);
+  background: var(--af-blobs);
+  filter: blur(22px) brightness(var(--af-beam-brightness))
+    saturate(var(--af-beam-saturation));
+  pointer-events: none;
+  z-index: 0;
+  opacity: calc(
+    var(--af-beam-opacity) * var(--af-beam-bloom-opacity) *
+    var(--af-beam-strength) * (0.35 + var(--af-beam-breathe) * 0.65)
+  );
+}
+
+.af-beam[data-beam-active][data-beam-size="pulse-inner"] > .af-beam-bloom {
+  inset: 0;
+  border-radius: var(--af-beam-radius, 16px);
+  filter: blur(16px) brightness(var(--af-beam-brightness))
+    saturate(var(--af-beam-saturation));
+}
+
+/* ── Fade-out on deactivate ── */
+
+.af-beam[data-beam-fading] {
+  animation: af-beam-fade-out 0.5s ease forwards !important;
+}
+
+/* ── Keyframes ── */
+
+@keyframes af-beam-spin {
+  to { --af-beam-angle: 360deg; }
+}
+@keyframes af-beam-travel {
+  from { --af-beam-travel: 0; }
+  to { --af-beam-travel: 1; }
+}
+@keyframes af-beam-breathe {
+  0%, 100% { --af-beam-breathe: 0; }
+  50% { --af-beam-breathe: 1; }
+}
+@keyframes af-beam-fade-in {
+  to { --af-beam-opacity: 1; }
+}
+@keyframes af-beam-fade-out {
+  from { --af-beam-opacity: 1; }
+  to { --af-beam-opacity: 0; }
+}
+@keyframes af-beam-hue-shift {
+  0%, 100% {
+    filter: hue-rotate(calc(var(--af-beam-hue-base) - var(--af-beam-hue-range)))
+      brightness(var(--af-beam-brightness)) saturate(var(--af-beam-saturation));
+  }
+  50% {
+    filter: hue-rotate(calc(var(--af-beam-hue-base) + var(--af-beam-hue-range)))
+      brightness(var(--af-beam-brightness)) saturate(var(--af-beam-saturation));
+  }
+}
+
+/* Static colors — keeps the layers lit but drops the hue cycle. */
+.af-beam[data-beam-static]::after,
+.af-beam[data-beam-static]::before {
+  animation: none !important;
+  filter: brightness(var(--af-beam-brightness)) saturate(var(--af-beam-saturation));
+}
+
+/* ── Reduced motion ──
+   Holds the beam at a lit, unanimated state rather than hiding it, so the
+   affordance survives without movement. */
+@media (prefers-reduced-motion: reduce) {
+  .af-beam,
+  .af-beam[data-beam-active],
+  .af-beam[data-beam-active]::before,
+  .af-beam[data-beam-active]::after,
+  .af-beam[data-beam-active] > .af-beam-bloom {
+    animation: none !important;
+    --af-beam-opacity: 1;
+    --af-beam-breathe: 0.5;
+    --af-beam-travel: 0.5;
+  }
+}

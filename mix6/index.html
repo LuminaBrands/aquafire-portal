@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<!--
+DIRECTION CONTRACT — mix6 "Edge-lit Showroom" (graft: mix4 layout × v2 theme)
+THESIS: The Edge-lit system moved into daylight: v4b×v4e hybrid structure (chat
+front and center, intent-grouped wings, gamified journey band), v2 Showroom's
+near-white ground and floating white panes, and mix4's LED light-bar accents —
+every card carries a thin colored bar along its bottom edge, now glowing
+against white like a lit fixture in a bright showroom.
+OWN-WORLD: Light liquid glass — #e9ebef ground, translucent white panes with
+soft neutral offset shadows, ink type (Figtree), hairline strokes; the
+color-mixing palette lives only in the edge bars, badges, and journey nubs.
+Colored text uses deepened variants for contrast on white; bars keep full hue.
+STORY: Same as the mix family — Ember triages, wings group by intent, the
+journey band pulls forward with real +500/+300 bonuses — but in showroom light.
+FIRST VIEWPORT (phone): orb, white greeting bubble, composer with spectrum
+edge, murmur chips; the journey band peeks. Primary action = composer.
+FORM: User-pinned graft (mix4 layout + v2 theme colors + mix4 accents).
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aquafire Owner's Guide — Edge-lit Showroom</title>
+  <meta name="description" content="Ember, the Aquafire assistant — your guide to the water vapor fireplace.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ground: #e9ebef; --pane: rgba(255,255,255,0.74); --pane-solid: #ffffff;
+      --inner: #f4f5f7; --inner-2: #fafbfc;
+      --hairline: #e2e4e9; --hairline-2: #cfd3da;
+      --ink: #171a1f; --ink-2: #4c525c; --ink-3: #6a7280;
+      --ember: #ff6a3d; --frost: #4aa8ef; --chart: #aacc33; --mag: #ff4d9e;
+      --ember-t: #cf4e16; --frost-t: #1c76c9; --chart-t: #6f8f0a; --mag-t: #d9317f;
+      --shadow: 0 18px 40px -18px rgba(23,26,31,0.16), 0 3px 10px -4px rgba(23,26,31,0.07);
+      --ease: cubic-bezier(0.16,1,0.3,1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(180deg, #f1f2f5 0%, var(--ground) 40%, #e2e5ea 100%);
+      color: var(--ink);
+      font-family: "Figtree", system-ui, sans-serif; line-height: 1.6;
+      -webkit-font-smoothing: antialiased; overflow-x: hidden; min-height: 100vh;
+    }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 999px; }
+    .atmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .atmos::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        linear-gradient(93deg, transparent 45%, rgba(255,255,255,0.9) 48%, rgba(255,255,255,0.25) 53%, transparent 57%),
+        linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.5) 19%, rgba(255,255,255,0.5) 30%, transparent 31%),
+        linear-gradient(107deg, transparent 52%, rgba(255,255,255,0.35) 53%, rgba(255,255,255,0.35) 66%, transparent 67%);
+    }
+    .puff { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.55; }
+    .puff-a { width: 520px; height: 400px; left: -14%; top: 5%; background: radial-gradient(closest-side, #ffffff, transparent 72%); animation: drift-a 46s ease-in-out infinite alternate; }
+    .puff-b { width: 560px; height: 430px; right: -16%; top: 34%; background: radial-gradient(closest-side, #dde1e8, transparent 70%); animation: drift-b 58s ease-in-out infinite alternate; }
+    @keyframes drift-a { from { transform: translate(0,0); } to { transform: translate(60px,-36px) scale(1.1); } }
+    @keyframes drift-b { from { transform: translate(0,0) scale(1.05); } to { transform: translate(-70px,44px) scale(0.96); } }
+    @media (prefers-reduced-motion: reduce) { .puff { animation: none; } }
+
+    .cap {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.58);
+      border: 1px solid rgba(23,26,31,0.08);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-radius: 999px; color: var(--ink-2); text-decoration: none;
+      box-shadow:
+        inset 0 2px 4px -1px rgba(23,26,31,0.09),
+        0 2px 7px -4px rgba(23,26,31,0.16);
+      transition: background-color 0.28s, border-color 0.28s, color 0.28s, transform 0.32s var(--ease), box-shadow 0.32s var(--ease);
+    }
+    .cap:hover {
+      background: rgba(255,255,255,0.85);
+      border-color: rgba(23,26,31,0.13); color: var(--ink); transform: translateY(-2px);
+      box-shadow:
+        inset 0 2px 4px -1px rgba(23,26,31,0.07),
+        0 5px 12px -6px rgba(23,26,31,0.22);
+    }
+    .orb {
+      border-radius: 50%; flex: none; position: relative;
+      background: radial-gradient(circle at 35% 30%, #ffd9ae, #e0641e 62%, #6e2a08 100%);
+      box-shadow: inset 0 -2px 6px rgba(0,0,0,0.3), 0 8px 18px -8px rgba(224,100,30,0.5);
+    }
+    .orb::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid var(--hairline-2); }
+
+    /* Liquid-glass rim: bevel weight varies around the perimeter — white
+       hot spot upper-left, dark refracted edge lower-right. */
+    .cap, .composer, .journey, .row { position: relative; }
+    .cap::before, .composer::before, .journey::before, .row::before {
+      content: ""; position: absolute; inset: 0; border-radius: inherit;
+      padding: 1.2px; pointer-events: none;
+      background: conic-gradient(
+        rgba(255,255,255,0.9) 0deg,
+        rgba(23,26,31,0.05) 80deg,
+        rgba(23,26,31,0.18) 135deg,
+        rgba(23,26,31,0.04) 205deg,
+        rgba(255,255,255,0.55) 285deg,
+        #ffffff 318deg,
+        rgba(255,255,255,0.9) 360deg);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      opacity: 0.8; transition: opacity 0.3s var(--ease);
+    }
+    .cap:hover::before, .composer:hover::before, .journey:hover::before, .row:hover::before { opacity: 1; }
+
+    .page { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 18px; }
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 0 0; }
+    .bar .brand { padding: 10px 18px; }
+    .bar .brand img { height: 16px; display: block; filter: invert(1) brightness(0.25); }
+    .bar .links { display: none; gap: 8px; }
+    .bar .links .cap { padding: 10px 18px; font-size: 0.88rem; font-weight: 600; }
+    .pts-chip { padding: 9px 16px; font-size: 0.84rem; font-weight: 600; color: var(--ink); }
+    .pts-chip b { color: var(--mag-t); font-weight: 700; }
+
+    /* ── Greeting ────────────────────────────────────── */
+    .greet { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 34px 0 0; position: relative; }
+    .greet::before {
+      content: ""; position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
+      width: 480px; height: 400px; max-width: 92vw; pointer-events: none;
+      background: radial-gradient(closest-side, rgba(255,255,255,0.85), rgba(255,140,74,0.06) 46%, transparent 70%);
+      filter: blur(12px);
+    }
+    .greet > * { position: relative; }
+    .greet .orb { width: 54px; height: 54px; }
+    .greet-bubble { margin-top: 20px; max-width: 620px; position: relative; }
+    .greet-bubble h1 { font-size: clamp(1.6rem, 6vw, 2.25rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.18; text-wrap: balance; }
+    .greet-bubble p { color: var(--ink-2); font-size: 0.93rem; margin-top: 8px; }
+    .composer {
+      margin-top: 18px; width: min(620px, 100%);
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(23,26,31,0.08);
+      border-radius: 999px; padding: 8px 8px 8px 20px;
+      box-shadow:
+        inset 0 2px 5px -2px rgba(23,26,31,0.08),
+        0 6px 16px -10px rgba(23,26,31,0.18);
+      text-decoration: none;
+      position: relative; overflow: hidden;
+      transition: border-color 0.28s, transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .composer:hover { border-color: rgba(23,26,31,0.12); transform: translateY(-2px); }
+    .composer::after {
+      content: ""; position: absolute; left: 26px; right: 26px; bottom: 0; height: 3px;
+      border-radius: 3px 3px 0 0; opacity: 0;
+      background: linear-gradient(90deg, var(--ember), var(--chart) 38%, var(--frost) 68%, var(--mag));
+      transition: opacity 0.28s;
+    }
+    .composer:hover::after, .composer:focus-visible::after { opacity: 1; }
+    .composer .ph { flex: 1; color: var(--ink-3); font-size: 0.95rem; text-align: left; }
+    .composer .send {
+      display: inline-flex; align-items: center; gap: 8px; flex: none;
+      background: var(--ink); border: 1px solid var(--ink);
+      color: #fff; font-weight: 600; font-size: 0.9rem;
+      padding: 10px 18px; border-radius: 999px;
+      transition: transform 0.3s var(--ease);
+    }
+    .composer:hover .send { transform: translateX(2px); }
+    .murmur { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px; }
+    .murmur .cap { padding: 8px 15px; font-size: 0.82rem; font-weight: 500; }
+
+    /* ── Journey band ────────────────────────────────── */
+    .journey {
+      margin-top: 30px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(23,26,31,0.07);
+      border-radius: 24px; padding: 18px 20px;
+      display: flex; flex-direction: column; gap: 14px;
+      text-decoration: none;
+      box-shadow:
+        inset 0 2px 5px -2px rgba(23,26,31,0.07),
+        0 3px 10px -7px rgba(23,26,31,0.16);
+      position: relative; overflow: hidden;
+      transition: border-color 0.28s, transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .journey:hover { border-color: rgba(23,26,31,0.12); transform: translateY(-2px); }
+    .journey::after {
+      content: ""; position: absolute; left: 22px; right: 22px; bottom: 0; height: 3px;
+      border-radius: 3px 3px 0 0; opacity: 0;
+      background: linear-gradient(90deg, var(--ember), var(--chart) 38%, var(--frost) 68%, var(--mag));
+      transition: opacity 0.28s;
+    }
+    .journey:hover::after, .journey:focus-visible::after { opacity: 1; }
+    .j-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .j-head b { font-size: 1.02rem; font-weight: 700; }
+    .j-head span { font-size: 0.8rem; color: var(--ink-3); }
+    .j-head span strong { color: var(--mag-t); font-weight: 700; }
+    .j-track { display: flex; align-items: center; gap: 6px; }
+    .j-node { flex: 1; display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+    .j-node .nub { height: 5px; border-radius: 3px; background: #e5e8ec; }
+    .j-node:nth-child(1).lit .nub { background: var(--ember); }
+    .j-node:nth-child(2).lit .nub { background: var(--chart); }
+    .j-node:nth-child(3).lit .nub { background: var(--frost); }
+    .j-node:nth-child(4).lit .nub { background: var(--mag); }
+    .j-node small { font-size: 0.7rem; color: var(--ink-3); line-height: 1.3; }
+    .j-node small b { color: var(--ink); font-weight: 600; }
+    .j-cta { font-size: 0.84rem; font-weight: 600; color: var(--mag-t); }
+
+    /* ── Intent wings ────────────────────────────────── */
+    .hall { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+    .wing {
+      background: var(--pane); border: 1px solid var(--hairline);
+      backdrop-filter: blur(14px);
+      border-radius: 26px; padding: 20px 18px;
+      display: flex; flex-direction: column; gap: 13px;
+      box-shadow: var(--shadow);
+    }
+    .wing-head { display: flex; align-items: center; gap: 12px; }
+    .wing-head .w-ico { width: 30px; height: 30px; display: grid; place-items: center; flex: none; }
+    .wing.explore .w-ico { color: var(--frost-t); }
+    .wing.begin .w-ico { color: var(--chart-t); }
+    .wing.resolve .w-ico { color: var(--ember-t); }
+    .wing-head b { display: block; font-size: 1.05rem; font-weight: 700; }
+    .wing-head span { display: block; font-size: 0.76rem; color: var(--ink-3); }
+    .tip { display: flex; gap: 9px; }
+    .tip .orb { width: 22px; height: 22px; margin-top: 3px; }
+    .tip p {
+      background: var(--inner); border: 1px solid var(--hairline);
+      border-radius: 13px; border-top-left-radius: 4px; padding: 9px 12px;
+      font-size: 0.8rem; color: var(--ink-2);
+    }
+    .tip p strong { color: var(--ink); }
+    .rows { display: flex; flex-direction: column; gap: 8px; }
+    .row {
+      display: flex; align-items: center; gap: 11px; text-decoration: none;
+      background: rgba(252,253,254,0.72);
+      border: 1px solid rgba(23,26,31,0.07); border-radius: 15px;
+      padding: 11px 13px 13px;
+      position: relative; overflow: hidden;
+      box-shadow:
+        inset 0 2px 4px -1px rgba(23,26,31,0.08),
+        0 2px 6px -4px rgba(23,26,31,0.14);
+      transition: background-color 0.25s, border-color 0.25s, transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .row:hover {
+      background: #ffffff;
+      border-color: rgba(23,26,31,0.12); transform: translateY(-2px);
+      box-shadow:
+        inset 0 2px 4px -1px rgba(23,26,31,0.06),
+        0 5px 12px -6px rgba(23,26,31,0.2);
+    }
+    .row::after {
+      content: ""; position: absolute; left: 13px; right: 13px; bottom: 0; height: 3px;
+      border-radius: 3px 3px 0 0; opacity: 0;
+      transition: opacity 0.28s;
+    }
+    .row:hover::after, .row:focus-visible::after, .row:active::after { opacity: 1; }
+    .rows .row:nth-child(4n+1)::after { background: linear-gradient(90deg, transparent, var(--frost), transparent); }
+    .rows .row:nth-child(4n+2)::after { background: linear-gradient(90deg, transparent, var(--chart), transparent); }
+    .rows .row:nth-child(4n+3)::after { background: linear-gradient(90deg, transparent, var(--ember), transparent); }
+    .rows .row:nth-child(4n+4)::after { background: linear-gradient(90deg, transparent, var(--mag), transparent); }
+    .row .r-ico { width: 24px; height: 24px; display: grid; place-items: center; color: var(--ink-3); flex: none; }
+    .rows .row:nth-child(4n+1):hover .r-ico { color: var(--frost-t); }
+    .rows .row:nth-child(4n+2):hover .r-ico { color: var(--chart-t); }
+    .rows .row:nth-child(4n+3):hover .r-ico { color: var(--ember-t); }
+    .rows .row:nth-child(4n+4):hover .r-ico { color: var(--mag-t); }
+    .row b { display: block; font-size: 0.88rem; font-weight: 600; }
+    .row span { display: block; font-size: 0.74rem; color: var(--ink-3); }
+    .row .thumb { width: 38px; height: 28px; display: grid; place-items: center; flex: none; }
+    .row .thumb img { width: 34px; height: 24px; object-fit: contain; }
+    .row .badge {
+      margin-left: auto; flex: none; font-size: 0.7rem; font-weight: 700;
+      border-radius: 999px; padding: 3px 9px;
+    }
+    .row .badge.pts { color: var(--mag-t); border: 1px solid rgba(217,49,127,0.35); background: rgba(255,77,158,0.06); }
+    .row svg.arr { margin-left: auto; color: var(--ink-3); flex: none; }
+    .row .badge + svg.arr { margin-left: 8px; }
+    .minis { display: flex; flex-wrap: wrap; gap: 7px; }
+    .minis a {
+      font-size: 0.76rem; font-weight: 500; color: var(--ink-2); text-decoration: none;
+      background: var(--inner-2); border: 1px solid var(--hairline); border-radius: 999px; padding: 6px 12px;
+      transition: color 0.22s, background-color 0.22s;
+    }
+    .minis a:hover { color: var(--ink); background: var(--pane-solid); }
+
+    /* ── Close ───────────────────────────────────────── */
+    .close { margin: 44px auto 0; max-width: 620px; text-align: center; }
+    .close .stars { color: var(--ember-t); letter-spacing: 3px; font-size: 0.85rem; }
+    .close blockquote { font-size: 1.1rem; font-weight: 500; margin-top: 10px; text-wrap: balance; }
+    .close figcaption { color: var(--ink-3); font-size: 0.82rem; margin-top: 10px; }
+    .close figcaption a { color: var(--ink-2); }
+    .foot { margin: 36px 0 30px; display: flex; align-items: center; justify-content: center; gap: 14px; color: var(--ink-3); font-size: 0.76rem; flex-wrap: wrap; }
+    .foot img { height: 13px; filter: invert(1) brightness(0.45); }
+    .foot a { color: var(--ink-3); text-decoration: none; }
+    .foot a:hover { color: var(--ink); }
+
+    /* ── Desktop enhancement ─────────────────────────── */
+    @media (min-width: 920px) {
+      .page { padding: 0 24px; }
+      .bar .links { display: flex; }
+      .greet { padding-top: 46px; }
+      .greet .orb { width: 60px; height: 60px; }
+      .journey { flex-direction: row; align-items: center; gap: 22px; margin-top: 38px; padding: 18px 26px; }
+      .j-head { flex-direction: column; align-items: flex-start; gap: 2px; flex: none; }
+      .j-track { flex: 1; }
+      .j-node small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .hall { flex-direction: row; align-items: stretch; margin-top: 18px; }
+      .wing { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="atmos" aria-hidden="true"><span class="puff puff-a"></span><span class="puff puff-b"></span></div>
+
+  <div class="page">
+    <header class="bar">
+      <a class="cap brand" href="../index.html" aria-label="Aquafire home">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
+      <nav class="links">
+        <a class="cap" href="../quick-start.html">Guides</a>
+        <a class="cap" href="../dealer-locator.html">Find a Dealer</a>
+        <a class="cap" href="https://www.aquafire.com" target="_blank" rel="noopener">Shop</a>
+      </nav>
+      <a class="cap pts-chip" href="../rewards.html">Rewards <b>0 pts</b></a>
+    </header>
+
+    <section class="greet">
+      <span class="orb" aria-hidden="true"></span>
+      <div class="greet-bubble">
+        <h1>Hi, I&rsquo;m Ember. What brings you by tonight?</h1>
+        <p>I know the manuals, the specs, and every fix &mdash; ask me, or step into your wing below.</p>
+      </div>
+      <a class="composer" href="../support.html" title="Ember opens in the corner of every portal page">
+        <span class="ph">Message Ember&hellip;</span>
+        <span class="send">Ask
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </span>
+      </a>
+      <div class="murmur" aria-label="Common questions">
+        <a class="cap" href="../troubleshoot.html">&ldquo;It&rsquo;s beeping&rdquo;</a>
+        <a class="cap" href="../maintenance.html">&ldquo;Cleaning the mist maker?&rdquo;</a>
+        <a class="cap" href="../enclosure-guide.html">&ldquo;What cutout size?&rdquo;</a>
+        <a class="cap" href="../water-care.html">&ldquo;Is my water too hard?&rdquo;</a>
+      </div>
+    </section>
+
+    <a class="journey" href="../rewards.html" aria-label="Aquafire Rewards journey">
+      <span class="j-head">
+        <b>The Owner&rsquo;s Journey</b>
+        <span><strong>0 / 17</strong> modules &middot; earn points as you go</span>
+      </span>
+      <span class="j-track" aria-hidden="true">
+        <span class="j-node lit"><span class="nub"></span><small><b>Start earning</b></small></span>
+        <span class="j-node"><span class="nub"></span><small>First guide</small></span>
+        <span class="j-node"><span class="nub"></span><small>Setup done <b>+500</b></small></span>
+        <span class="j-node"><span class="nub"></span><small>Warranty <b>+300</b></small></span>
+      </span>
+      <span class="j-cta">Sign in &rarr;</span>
+    </a>
+
+    <div class="hall">
+      <section class="wing explore" aria-label="Explore — still deciding">
+        <div class="wing-head">
+          <span class="w-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span>
+          <span><b>Explore</b><span>Still deciding &middot; researching</span></span>
+        </div>
+        <div class="tip">
+          <span class="orb" aria-hidden="true"></span>
+          <p>The flame is <strong>water mist, lit warm</strong> &mdash; and the dual LED bars mix any color you can imagine.</p>
+        </div>
+        <div class="rows">
+          <a class="row" href="../quick-start.html">
+            <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a1.5 1.5 0 0 1 1.5-1.5H19V21H5.5A1.5 1.5 0 0 1 4 19zM19 17H5.5A1.5 1.5 0 0 0 4 18.5"/></svg></span>
+            <span><b>Meet the models</b><span>Pro &middot; Original &middot; Lite &mdash; 20&Prime;/40&Prime;/60&Prime;</span></span>
+            <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../aquafire-pro.html">
+            <span class="thumb"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt=""></span>
+            <span><b>Aquafire Pro</b><span>Full color mixing &middot; app &middot; direct-plumb</span></span>
+            <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../dealer-locator.html">
+            <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+            <span><b>See one in person</b><span>Authorized dealers near you</span></span>
+            <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="minis">
+          <a href="../aquafire-original.html">Original</a>
+          <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener">Watch it move</a>
+          <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop</a>
+        </div>
+      </section>
+
+      <section class="wing begin" aria-label="Begin — new owners">
+        <div class="wing-head">
+          <span class="w-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a6 6 0 0 0 6-6c0-3-2-4.5-6-9-4 4.5-6 6-6 9a6 6 0 0 0 6 6z"/></svg></span>
+          <span><b>Begin</b><span>Just arrived &middot; setting up</span></span>
+        </div>
+        <div class="tip">
+          <span class="orb" aria-hidden="true"></span>
+          <p>Day one order: <strong>place, water check, first fill</strong> &mdash; each step earns journey points.</p>
+        </div>
+        <div class="rows">
+          <a class="row" href="../getting-started.html">
+            <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></span>
+            <span><b>Getting started</b><span>Unboxing to first flame</span></span>
+            <span class="badge pts">earns pts</span>
+            <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../enclosure-guide.html">
+            <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V4h8v3M9 12h6"/></svg></span>
+            <span><b>Enclosure Builder</b><span>Cutouts &amp; light trap, calculated</span></span>
+            <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../water-care.html">
+            <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3.5 4-6 6.5-6 10a6 6 0 0 0 12 0c0-3.5-2.5-6-6-10z"/></svg></span>
+            <span><b>Check your water</b><span>Hardness by ZIP &middot; Vapor Pure</span></span>
+            <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">
+            <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9.5 12 2 2 3.5-4"/></svg></span>
+            <span><b>Register your warranty</b><span>Two minutes &middot; full coverage</span></span>
+            <span class="badge pts">+300</span>
+            <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="minis">
+          <a href="../quick-start.html">Quick start</a>
+          <a href="../rewards.html">Complete setup &middot; +500 pts</a>
+        </div>
+      </section>
+
+      <section class="wing resolve" aria-label="Resolve — fix something">
+        <div class="wing-head">
+          <span class="w-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+          <span><b>Resolve</b><span>Something&rsquo;s off &middot; fix it</span></span>
+        </div>
+        <div class="tip">
+          <span class="orb" aria-hidden="true"></span>
+          <p>Beeps are messages, not moods. <strong>Name the symptom</strong> &mdash; I&rsquo;ll hand you the fix for your model.</p>
+        </div>
+        <div class="rows">
+          <a class="row" href="../troubleshoot.html">
+            <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+            <span><b>Troubleshooter</b><span>Guided fixes &middot; 3&ndash;5 minutes</span></span>
+            <span class="badge pts">earns pts</span>
+            <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="../maintenance.html">
+            <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.1-.6-.6-2.1z"/></svg></span>
+            <span><b>Maintenance rituals</b><span>Mist maker 3 mo &middot; flush 6 mo</span></span>
+            <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="row" href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">
+            <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M9 16h4M14 3H5a1.5 1.5 0 0 0-1.5 1.5v15A1.5 1.5 0 0 0 5 21h14a1.5 1.5 0 0 0 1.5-1.5V10z"/></svg></span>
+            <span><b>Request service</b><span>A human, scheduled</span></span>
+            <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="minis">
+          <a href="../troubleshoot.html">Beeping</a>
+          <a href="../troubleshoot.html">Low flame</a>
+          <a href="../troubleshoot.html">Foggy</a>
+          <a href="../troubleshoot.html?model=pro">App issues</a>
+          <a href="../support.html">Support Hub</a>
+        </div>
+      </section>
+    </div>
+
+    <figure class="close">
+      <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+      <blockquote>&ldquo;Absolutely stunning &mdash; guests always ask if it&rsquo;s real fire.&rdquo;</blockquote>
+      <figcaption>Sarah M. &middot; Aquafire Pro owner &middot; <a href="https://judge.me/product_reviews/9498b1ae-d6c2-4e5b-b06b-78b0906a168f/new?source=shareable-link" target="_blank" rel="noopener">write a review</a></figcaption>
+    </figure>
+
+    <footer class="foot">
+      <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      <a href="../rewards.html">Rewards</a>
+      <a href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener">YouTube</a>
+      <span>&copy; 2026 Aquafire &middot; graft study mix6 &ldquo;Edge-lit Showroom&rdquo;</span>
+    </footer>
+  </div>
+</body>
+</html>
