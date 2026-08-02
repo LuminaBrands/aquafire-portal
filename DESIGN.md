@@ -372,8 +372,8 @@ spring ease; LED bars slide in at the bottom edge.
   "N / 17 modules completed" -- not a sequence of steps. It replaced a 4-node
   track that implied one
 - **Ember is the rewards accent** and stays scarce: the standing total, the
-  progress fill and the one action (sign in / view profile) take it; the two
-  navigation links stay mid-tone. The fill is flat ember, not an LED spectrum
+  progress fill and the one action (sign in / view profile) take it; the
+  footer row's navigation link stays mid-tone. The fill is flat ember, not an LED spectrum
   -- a determinate bar reads as one quantity, and a four-hue gradient implied
   segments it does not have. Matches the amber score card on rewards.html
 - **Two actions, and the rule is about glass, not weight.** The primary is a
@@ -390,6 +390,13 @@ spring ease; LED bars slide in at the bottom edge.
 - **The secondary stays a text link, and steps aside when it would echo.** It
   carries "View Profile" once signed in and hides while signed out, where it
   would only repeat the primary
+- **One footer row, one destination.** "View your rewards" and "How the
+  program works" both pointed at `rewards.html` and cost two stacked blocks
+  between them; they are one "How rewards work" link now, sharing a row with
+  the secondary. The standing total sits on a baseline with its unit rather
+  than above it. Together that took the band from 340px to 258px on a phone
+  and 118px to 99px on desktop -- a band that reports state should not be the
+  tallest thing above the fold
 - **Named, then counted.** The band opens with "Aquafire Rewards" in heading
   ink plus a "Learn to earn" badge (ember, Label small, the same chip shape
   the points badges use); the standing total sits below it. The bare number
