@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-02T02:00:00Z",
+  "generatedAt": "2026-08-02T21:00:00Z",
   "title": "Design System: Aquafire Owner's Portal",
   "extensions": {
     "colorMeta": {
@@ -280,6 +280,11 @@
       "description": "Rewards sign-in dialog (rewards.css), shown from any page. An overlay surface: near-opaque --menu-bg rather than a glass fill, since at 3.5-12% alpha the page reads straight through a dialog. Neutral elevation, no chromatic glow. The scrim is the one token that stays dark in the light theme -- it is a dimmer, not a surface. The submit button takes the send-button treatment; form errors take --danger, deliberately not ember.",
       "html": "<div class=\"ds-modal\"><button class=\"ds-modal-close\">&times;</button><div class=\"ds-modal-header\"><div class=\"ds-modal-flame\">&#x1f525;</div><h2 class=\"ds-modal-title\">Aquafire Rewards</h2><p class=\"ds-modal-sub\">Sign in to start earning points.</p></div><button class=\"ds-auth-google\">Continue with Google</button><label class=\"ds-form-label\">Email</label><input class=\"ds-form-input\" placeholder=\"you@example.com\"><div class=\"ds-auth-error\">Incorrect password.</div><button class=\"ds-auth-submit\">Sign In</button></div>",
       "css": ".ds-modal { position: relative; width: 400px; max-width: 100%; padding: 36px 32px 28px; background: rgba(14,16,20,0.97); border: 1px solid rgba(255,255,255,0.12); border-radius: 24px; box-shadow: 0 24px 80px rgba(0,0,0,0.5); color: #f3f4f6; font-family: Figtree, system-ui, sans-serif; } .ds-modal-close { position: absolute; top: 14px; right: 16px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.08); border-radius: 999px; color: #8d939f; font-size: 1.05rem; line-height: 1; cursor: pointer; } .ds-modal-header { text-align: center; margin-bottom: 28px; } .ds-modal-flame { font-size: 1.6rem; margin-bottom: 8px; } .ds-modal-title { font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700; letter-spacing: -0.025em; } .ds-modal-sub { margin-top: 6px; font-size: 0.88rem; color: #b9bec8; } .ds-auth-google { display: flex; align-items: center; justify-content: center; width: 100%; padding: 13px 20px; margin-bottom: 20px; border-radius: 13px; background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.12); color: #f3f4f6; font: inherit; font-size: 0.93rem; font-weight: 600; cursor: pointer; } .ds-form-label { display: block; margin-bottom: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #8d939f; } .ds-form-input { width: 100%; padding: 13px 16px; border-radius: 13px; background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.12); color: #f3f4f6; font: inherit; font-size: 0.93rem; outline: none; } .ds-auth-error { margin-top: 8px; min-height: 20px; font-size: 0.83rem; color: #ff6b5e; } .ds-auth-submit { width: 100%; padding: 14px 20px; margin-top: 12px; border-radius: 13px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.12); color: #f3f4f6; font: inherit; font-size: 0.93rem; font-weight: 600; cursor: pointer; }"
+    },
+    {
+      "name": "Journey CTA",
+      "css": ".j-go{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:999px;background:var(--ember);color:var(--on-ember);font-size:0.83rem;font-weight:600;border:none;cursor:pointer;}",
+      "html": "<button class=\"j-go\">Continue earning</button>"
     }
   ],
   "narrative": {

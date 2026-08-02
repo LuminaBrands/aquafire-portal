@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Static documentation and tools portal for **Aquafire** fireplace products (by Lumina Brands). Dark-themed, mobile-responsive site with interactive calculators — no frameworks, no build tools, no runtime dependencies.
+The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and tools portal for **Aquafire** fireplace products (by Lumina Brands). Dark-themed, mobile-responsive site with interactive calculators — no frameworks, no build tools, no runtime dependencies.
 
 **Stack:** Vanilla HTML5 + CSS3 + JavaScript. Static files served directly from root.
 
