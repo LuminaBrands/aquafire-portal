@@ -164,7 +164,14 @@ a { color: inherit; }
    because it sits on the photograph, not the ground. */
 .scene { position: absolute; top: 0; left: 0; right: 0; height: 540px; z-index: 0; overflow: hidden; pointer-events: none; }
 .scene img {
-  width: 100%; height: 100%; object-fit: cover; object-position: center 34%;
+  /* The lobby photograph is 4:3 and its fireplace sits right of centre, so a
+     centred crop spent the left of a phone screen on the dark bar area and
+     clipped the flame's bright end. 62% keeps the flame running edge to edge.
+     Horizontal position only bites below 720px (above that the 4:3 source
+     already fills the width exactly) -- this is a phone-only correction.
+     Vertical 34% puts the flame just above the composer on phones and
+     directly behind it on desktop; both are deliberate. */
+  width: 100%; height: 100%; object-fit: cover; object-position: 62% 34%;
   -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 44%, transparent 98%);
   mask-image: linear-gradient(180deg, #000 0%, #000 44%, transparent 98%);
 }

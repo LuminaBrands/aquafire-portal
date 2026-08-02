@@ -417,6 +417,15 @@ transparent 98%)`) and graded by a theme-bound scrim that dissolves it into
 the active ground — smoke or showroom. Hero display text and subtitle stay
 white with soft text shadows in both themes because they sit on the photo.
 
+The source is 4:3 and the crop is `object-position: 62% 34%`, which is not a
+default worth losing. The band is a fixed height (540px, 620px from 920up), so
+a 4:3 source crops horizontally below 720px and vertically above it -- the one
+value has to serve both. 62% is a phone correction: the fireplace sits right
+of centre, and a centred crop spent the left of the screen on the dark bar
+area while clipping the flame's bright end. 34% puts the flame just above the
+composer on phones and directly behind it on desktop. Re-derive both if the
+photograph is ever replaced; neither survives a change of subject placement.
+
 ### Named Rules
 **The White-on-Photo Rule.** Type that sits on the photograph is white in
 both themes; the scrim, not the text color, adapts to the theme.
