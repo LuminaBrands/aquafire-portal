@@ -762,6 +762,58 @@
       .chapter-nav-btn { font-size: 0.65rem; padding: 5px 10px; }
       .chapter-nav-label { display: none; }
     }
+
+    /* ── Mobile guide hero (2026-08) ─────────────────────────────────────
+       The CTA card was a fixed two-column row. At 390px the thumbnail took
+       110px of it and "Begin Setup Guide" broke across three lines with the
+       meta line under it doing the same -- the most important control on the
+       page read as the most broken. It stacks below 640px.
+       The entry point also needed to outrank "Jump to chapter", which was
+       0.75rem muted uppercase and was reading as the louder of the two. */
+    .hub-cta-go {
+      display: inline-flex; align-items: center; gap: 7px; margin-top: 12px;
+      padding: 9px 16px; border-radius: 999px;
+      background: var(--red); color: #fff;
+      font-size: 0.85rem; font-weight: 600; line-height: 1;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .hub-cta-card:hover .hub-cta-go { background: var(--red-dark); transform: translateX(2px); }
+    .hub-chapters-toggle { color: var(--text); font-size: 0.8rem; letter-spacing: 0.4px; }
+
+    @media (max-width: 640px) {
+      .hub-cta-card, .hub-cta-card--large {
+        flex-direction: column; align-items: stretch; gap: 14px; padding: 16px;
+      }
+      .hub-cta-thumb,
+      .hub-cta-card--large .hub-cta-thumb { width: 100%; height: 168px; }
+      .hub-cta-card--large .hub-cta-title { font-size: 1.2rem; }
+      .hub-cta-card--large .hub-cta-meta { font-size: 0.82rem; }
+      /* The chevron is redundant once the card carries a real button. */
+      .hub-cta-arrow { display: none; }
+      .hub-cta-go { width: 100%; justify-content: center; padding: 12px 16px; }
+    }
+
+    @media (max-width: 640px) {
+      /* The chapter grid was pinned to two columns. 1fr cannot shrink past a
+         card's min-content, so at 360px the tracks pushed ~25px of the page
+         off-screen. One column below 640, and cards that may actually shrink. */
+      .hub-grid { grid-template-columns: 1fr; }
+      .hub-card { min-width: 0; }
+    }
+
+    /* A grid track of `1fr` has min-width:auto, so it cannot shrink past its
+       content's min-content width -- the guide player was 343px wide inside a
+       276px column and pushed the page 25px off-screen at 360. minmax(0,1fr)
+       is the fix. The chapter descriptions were nowrap for the same reason. */
+    .guide-player { grid-template-columns: minmax(0, 1fr); }
+    @media (max-width: 640px) {
+      .hub-card-desc { white-space: normal; }
+    }
+
+    /* The hero's own title moved out (the page header states it), so the top
+       padding that used to sit above it is now just a hole. */
+    .hub-hero { padding-top: 0; }
+    .hub-hero .breadcrumb { margin-bottom: 14px; }
   </style>
   <link rel="stylesheet" href="redesign.css">
   <link rel="stylesheet" href="rewards.css">
@@ -827,12 +879,10 @@
     </div>
   </div>
 
-  <main class="container">
+  <div class="container">
     <!-- Hub Dashboard Hero -->
     <section class="hub-hero" id="hub-top">
       <p class="breadcrumb"><a href="quick-start.html">Quick Start</a> / Aquafire Pro</p>
-      <h1>Aquafire Pro</h1>
-      <p class="hub-tagline">Your interactive owner's guide</p>
 
       <!-- Primary CTA: Setup Guide -->
       <a href="#tour" class="hub-cta-card hub-cta-card--large">
@@ -849,13 +899,14 @@
             <div class="hub-cta-dot"></div><div class="hub-cta-dot"></div><div class="hub-cta-dot"></div>
             <div class="hub-cta-dot"></div>
           </div>
+          <span class="hub-cta-go">Start the guide<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </div>
         <svg class="hub-cta-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </a>
 
       <!-- Collapsible Chapter Navigation -->
       <button class="hub-chapters-toggle" id="chaptersToggle" aria-expanded="false">
-        <span>Jump to chapter</span>
+        <span>Browse all 7 chapters</span>
         <svg class="hub-chapters-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="hub-chapters-content" id="chaptersContent">
@@ -1376,7 +1427,7 @@
       </div>
     </section>
 
-  </main>
+  </div>
 
   <!-- Sticky Chapter Nav -->
   <div class="chapter-nav" id="chapterNav">
