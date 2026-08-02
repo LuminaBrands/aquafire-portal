@@ -17,7 +17,7 @@ Secondary, not a design priority: pre-purchase shoppers who reach the Build Your
 
 ## Product Purpose
 
-The Aquafire Interactive Owner's Guide — a self-serve documentation and tools portal for Aquafire fireplaces (by Lumina Brands). It turns the official help articles, spec guides, warranty, and manuals into interactive, model-aware tools.
+The Interactive Aquafire Guide — a self-serve documentation and tools portal for Aquafire fireplaces (by Lumina Brands). It turns the official help articles, spec guides, warranty, and manuals into interactive, model-aware tools.
 
 Success (user-confirmed): **fewer support tickets** (owners resolve issues themselves via the Troubleshooter, guides, and Ember instead of emailing support) and **dealer enablement** (trade partners rely on the portal as their working reference).
 
@@ -48,7 +48,7 @@ The only interactive, model-aware companion for Aquafire water-vapor fireplaces:
 - **Binding (user-confirmed 2026-07-24):** the Aquafire name, logo, and official product imagery (Shopify CDN) only.
 - **Explicitly not binding:** the current dark theme, Aquafire red `#c0392b` palette, Poppins/Inter typography, and existing component language. The user opened the entire visual world for replacement in a redesign; the incumbent look is evidence, not authority.
 - **Vibrant color mixing is a differentiator (user-confirmed 2026-07-31):** Aquafire's dual LED light bars enable rich color mixing beyond standard RGB presets (front + back LED bars per the install specs). The redesign should carry subtle color elements drawn from a color-mixing palette — red/orange, frosty blue, greenish yellow, magenta — as brand expression.
-- Incumbent copy voice (plainspoken, owner-friendly, e.g. "Welcome to Your Aquafire Interactive Owner's Guide") is current practice, not a confirmed commitment.
+- Incumbent copy voice (plainspoken, owner-friendly) is current practice, not a confirmed commitment. The portal is the **Interactive Aquafire Guide**; it dropped "Owner's" because roughly half of it -- the Explore route, the dealer locator, the model comparison -- serves people who have not bought one yet.
 
 ## Evidence on Hand
 

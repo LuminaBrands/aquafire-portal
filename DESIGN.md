@@ -1,6 +1,6 @@
 ---
-name: Aquafire Owner's Portal
-description: Liquid-glass owner's guide lit by the fireplace it explains — one room, two lightings
+name: Interactive Aquafire Guide
+description: Liquid-glass product guide lit by the fireplace it explains — one room, two lightings
 colors:
   smoke: "#101216"
   vapor-white: "#f3f4f6"
@@ -106,7 +106,7 @@ components:
     padding: "18px 20px"
 ---
 
-# Design System: Aquafire Owner's Portal
+# Design System: Interactive Aquafire Guide
 
 ## Overview
 
