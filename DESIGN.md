@@ -179,6 +179,24 @@ palette and arrives mostly on interaction.
   used to be the rewards flag; rewards are ember now, and magenta carries no
   meaning of its own.
 
+### Light (white as light, not as fill)
+Two tokens carry white at high alpha in the light theme, and neither is a
+surface colour -- both are light itself, so they are stated as literals rather
+than pulled from the neutral ramp:
+
+- `--halo-grad`, the bloom behind Ember's orb: white at **0.5** at the centre,
+  falling through ember at 0.06 to transparent. In the dark theme the same
+  token is ember at 0.15 -- a glow reads as the room's own light, and the
+  showroom's light is white where the smoke's is firelight.
+- `--atmos-grad`, the light shafts crossing the page: white at **0.9** for the
+  bright edge of the primary shaft, then **0.5** and **0.35** for the two
+  broader secondary ones. The 0.9 stop is a 3%-wide specular edge, not a
+  panel; widening it or dropping its alpha flattens the shaft into a stripe.
+
+They are deliberately outside the palette: a token that meant "white at 90%"
+in the fill ramp would invite its use as a surface, which is exactly what the
+glass fills at 3.5–12% exist to prevent.
+
 ### Overlay surfaces
 The auth modal, the profile dropdown and the points toast float above the
 page rather than sitting in it, so they take the near-opaque `--menu-bg` the
