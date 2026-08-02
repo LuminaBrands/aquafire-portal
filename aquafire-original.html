@@ -815,17 +815,30 @@
     .hub-hero { padding-top: 0; }
     .hub-hero .breadcrumb { margin-bottom: 14px; }
 
-    /* The chapter pager and the chat launcher both live at bottom:20px, the
-       pager centred and the launcher right-anchored, so they were free to
-       overlap -- and with two long chapter names ("1. Tour Your Aquafire")
-       the pager runs 363px at a 360px viewport and lands under the launcher.
-       Collapsing the launcher to its 56px disc buys most of the room back;
-       this bounds the pager so the two can never meet regardless of label
-       length. Long names ellipsize rather than push. */
+    /* The chapter pager and the chat launcher share the bottom-right corner,
+       so they are sized and placed as a pair.
+
+       Three things were wrong. The pager stretched the full band and held its
+       two buttons in the middle of it -- 264px of capsule around 128px of
+       content, which read as an empty bar with something floating in it. It
+       sat at bottom:12 (the 700px rule) against the launcher's bottom:20, so
+       the two never shared a line: 17px apart at the centre. And with two long
+       chapter names ("1. Tour Your Aquafire") it ran 363px at a 360px viewport
+       and slid under the launcher entirely.
+
+       Now it shrink-wraps and centres inside the band left of the launcher,
+       matches the launcher's 56px height and bottom so both pills sit on one
+       line, and ellipsizes long names instead of pushing. */
     @media (max-width: 640px) {
       .chapter-nav {
         left: 12px; right: 84px; transform: none;
-        justify-content: center; max-width: none;
+        /* fit-content shrink-wraps, but on a fixed element a percentage
+           max-width resolves against the viewport, not the left/right band --
+           so the cap is spelled out, or long names blow past the launcher. */
+        width: fit-content; max-width: calc(100vw - 96px); margin-inline: auto;
+        bottom: 20px; min-height: 56px;
+        align-items: center; justify-content: center;
+        padding: 0 10px;
       }
       .chapter-nav-btn { min-width: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; }
       .chapter-nav-label { flex: none; }
