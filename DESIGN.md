@@ -155,7 +155,15 @@ palette and arrives mostly on interaction.
 - **Frost** (#6fc3ff dark / #4aa8ef light): the Explore wing and the cool
   end of the LED mix.
 - **Chartreuse** (#c9e85c dark / #aacc33 light): the Set up wing; growth and
-  setup.
+  setup. Also the completed/earned signal -- a done reward badge and a
+  "Complete" status chip both take the text-safe `--chart-t`.
+- **Amber** (#e8a838 dark / #b8801f light): reward badge ink only. It is the
+  one survivor of the 2025 palette, kept because the badge's gold-on-ember
+  reading is the approved look; everywhere else the rewards accent is ember.
+  Do not reach for it for anything new.
+- **Danger** (#ff6b5e dark / #c0392b light): form errors, and nothing else.
+  Deliberately not ember -- an error that reads as the brand accent is not an
+  error.
 - **Photo ink / photo ink dim** (#f3f4f6, #c9cdd5): the only text that does
   not follow the theme. The hero greeting and its subtitle sit on the
   photograph, which is the same photograph in both lightings, so they stay
@@ -170,6 +178,14 @@ palette and arrives mostly on interaction.
   the spectrum bars and takes every fourth row/tile in the hover cycle. It
   used to be the rewards flag; rewards are ember now, and magenta carries no
   meaning of its own.
+
+### Overlay surfaces
+The auth modal, the profile dropdown and the points toast float above the
+page rather than sitting in it, so they take the near-opaque `--menu-bg` the
+burger panel uses (97% alpha) instead of the glass fills -- at 3.5–12% the
+page reads straight through a dialog. Their elevation is `--modal-shadow` /
+`--dropdown-shadow`, both neutral. `--scrim` is the only token that stays
+dark in the light theme: it is a dimmer, not a surface.
 
 ### Neutral
 - **Smoke** (#101216): dark-theme ground; glass fills are white at 3.5–12% alpha over it.
