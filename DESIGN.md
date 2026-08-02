@@ -356,7 +356,7 @@ spring ease; LED bars slide in at the bottom edge.
   interactive guides
 - **Flat, not another panel.** No glass pane around it, or it reads as a
   fourth route competing with the three
-- **Shape:** 18px cards on the row fill, product shot over name, description
+- **Shape:** card radius (15px) on the row fill, product shot over name, description
   and an outline CTA pill. The description grows so the CTA pins to the
   bottom edge of every card in the row
 - **Quieter than the routes.** The shot is short on phones (92px vs 140px
