@@ -2,6 +2,15 @@ Source PDF: 42724157-AquafireLiteAWLSpecsInstallGuide2026Compressed.pdf
 Extracted via pdftotext -layout for the Aquafire troubleshooter.
 ----------------------------------------------------------------------
 
+CORRECTION (Jul 2026, per Lumina Brands): the Hard Water Guidelines section
+originally read "3.5 to 8.5 Grains Per Gallon, Ideal is 7.0 (moderately hard)"
+and "Water that is too soft will have reduced flame effect." That guidance is
+superseded: the softer the water, the better — no minimum hardness. The
+affected lines below are amended and marked. The published PDFs and help-center
+articles still carry the old wording and need the same fix at the source. Note
+the "Reverse Osmosis is not recommended" line is likewise superseded (confirmed
+Jul 2026): reverse osmosis and whole-house softeners are ideal.
+
                                                                                                       REVISED: January 2026
 
 
@@ -685,14 +694,14 @@ Hard Water Guidelines
    For best results, descale your fireplace every three months
    or more frequently if you live in an area with hard water.
 
-   3.5 to 8.5 Grains Per Gallon, Ideal is 7.0 (moderately hard)
+   [Amended Jul 2026 — superseded: the softer the water, the better; no minimum hardness.]
 
    • Hard may produce scaling, shorten transducer life, and require more frequent cleaning.
    • If water hardness needs to be adjusted, consult local water conditioning professional.
-   • Water that is too soft will have reduced flame effect.
+   [Line removed Jul 2026 — superseded: soft water does not reduce the flame effect.]
 
-   Reverse Osmosis is not recommended, it removes all minerals
-   and vapor flame effect will be greatly diminished.
+   [Amended Jul 2026 — superseded: reverse osmosis and whole-house softeners are IDEAL.
+    A whole-house system used in place of Vapor Pure still needs written approval per the warranty.]
 
         For complete cleaning instruction visit www.aquafire.com/cleaning
 

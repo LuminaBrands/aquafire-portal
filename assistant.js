@@ -72,6 +72,48 @@
   // through window.AquafireAssistant. Used by the redesign hero composer,
   // which expands in place into this panel rather than opening a bubble.
   var MOUNT = cfg.mount || dataAttr('mount') || null;
+  // Order & tracking lookup: the order_status flow POSTs { order, email } to
+  // the portal's /api/order-status function (a Shopify Admin API proxy —
+  // api/order-status.js). Override with cfg.orderEndpoint, or set it to null
+  // to disable. Until that function has its Shopify token it 503s, and the
+  // flow falls back to the email-the-orders-team answer for this page load.
+  var ORDER_ENDPOINT = cfg.orderEndpoint !== undefined
+    ? cfg.orderEndpoint
+    : (PORTAL_BASE ? PORTAL_BASE + 'api/order-status' : '');
+  var orderDown = false;
+
+  // Team notification on human handoff: fire-and-forget POST to the portal's
+  // /api/notify-handoff function (Slack webhook relay). Sent at most once per
+  // conversation. Override with cfg.notifyEndpoint, or null to disable; a 503
+  // (webhook not configured yet) stops attempts for this page load.
+  var NOTIFY_ENDPOINT = cfg.notifyEndpoint !== undefined
+    ? cfg.notifyEndpoint
+    : (PORTAL_BASE ? PORTAL_BASE + 'api/notify-handoff' : '');
+  var notifyDown = false;
+
+  function notifyHandoff(mode) {
+    if (!NOTIFY_ENDPOINT || notifyDown || state.notified) return;
+    state.notified = true;
+    persist();
+    try {
+      var recent = state.msgs.filter(function (m) { return m.who === 'user'; })
+        .slice(-3).map(function (m) {
+          return String(m.text || '').replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, function (e) {
+            return /@(aquafire|luminabrands)\.com$/i.test(e) ? e : '[email]';
+          }).slice(0, 200);
+        });
+      fetch(NOTIFY_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+        body: JSON.stringify(Object.assign({
+          mode: mode, page: location.pathname, host: location.hostname,
+          model: state.ctx.model || '', recent: recent
+        }, visitorCtx()))
+      }).then(function (r) { if (r.status === 503) notifyDown = true; })
+        .catch(function () { /* never bother the customer over this */ });
+    } catch (e) { /* ignore */ }
+  }
 
   var SUPPORT_EMAIL = 'support@aquafire.com';
   var SALES_EMAIL = 'sales@aquafire.com';
@@ -239,8 +281,31 @@
           blocks: [
             { t: 'text', html: 'Here\u2019s the lineup at a glance:' },
             productCards(['pro', 'original', 'lite', 'gatsby']),
-            { t: 'text', html: '<strong>Pro (AWPR)</strong> is the flagship \u2014 30+ preset flame colors, AFIRE phone app, internal UV-C sanitizing, and it can be plumbed straight to a water line. <strong>Original (AWA)</strong> gives you the classic amber flame with a remote; a Direct Plumb Kit is optional. <strong>Lite (AWL)</strong> is the value pick \u2014 amber flame, manual fill, 8\u201310\u00a0hr per tank. <strong>Gatsby</strong> is freestanding, so there\u2019s no enclosure to build at all.' },
+            { t: 'text', html: '<strong>Pro (AWPR)</strong> is the flagship \u2014 30+ preset flame colors, AFIRE phone app, internal UV-C sanitizing, and it connects straight to a water line out of the box. <strong>Original (AWA)</strong> gives you the classic amber flame with a remote; the Direct Plumb Kit add-on (sold separately) enables a water-line connection. <strong>Lite (AWL)</strong> is the value pick \u2014 amber flame, manual fill, 8\u201310\u00a0hr per tank. <strong>Gatsby</strong> is freestanding, so there\u2019s no enclosure to build at all.' },
+            { t: 'links', items: [{ label: '\u2696\ufe0f Full spec table \u2014 Why Aquafire?', href: STORE + '/pages/compare-vs-aquafire' }] },
             { t: 'chips', items: [{ label: 'Sizes & dimensions', send: 'What sizes are available?' }, { label: 'Pricing', send: 'How much do they cost?' }, { label: 'Installation basics', send: 'How is it installed?' }] }
+          ]
+        };
+      }
+    },
+    {
+      id: 'competitors',
+      kw: [['dimplex', 9], ['opti-myst', 9], ['optimyst', 9], ['opti myst', 9], ['magikflame', 9], ['magik flame', 9], ['modern flames', 8], ['better than', 5], ['competitor', 7], ['competitors', 7], ['other brands', 7], ['alternatives', 5], ['why aquafire', 8], ['why choose', 5], ['best water vapor', 6], ['best electric fireplace', 6]],
+      answer: function () {
+        return {
+          feedback: true,
+          blocks: [
+            { t: 'text', html: 'Great question \u2014 there are some well-known names in flame effects, and we\u2019re glad you\u2019re comparing. Here\u2019s why we believe Aquafire is the one to beat:' },
+            { t: 'steps', items: [
+              '<strong>The most realistic flame, period</strong> \u2014 ultrasonic mist and LED light create a full 3-D flame made of real vapor. You can wave your hand through it.',
+              '<strong>Zero constraints</strong> \u2014 no heat, no venting, no gas. Build it into walls, cabinetry, bar tops, even a coffee table \u2014 or under a TV (just add a mantel shelf between).',
+              '<strong>Room to dream big</strong> \u2014 gang units into up to <strong>20 feet</strong> of continuous flame on one remote; the Pro adds 30+ colors, a phone app, out-of-the-box direct plumbing, and UV-C water sanitizing.',
+              '<strong>Proven where it counts</strong> \u2014 built by A-Fire Design, whose water-vapor technology runs in Hilton, Ritz-Carlton, Marriott, and Disney properties.',
+              '<strong>Backed properly</strong> \u2014 2-year residential warranty, US-based support, every part replaceable, and a free design review of your plans.'
+            ]},
+            { t: 'text', html: 'We\u2019d rather show you than tell you \u2014 see one running in person, or send your plans to <a href="mailto:' + SALES_EMAIL + '">' + SALES_EMAIL + '</a> for a free design review.' },
+            { t: 'links', items: [{ label: '\u2696\ufe0f Why Aquafire? Side-by-side comparisons', href: STORE + '/pages/compare-vs-aquafire' }, { label: '\ud83d\udcd6 The 2026 Water Vapor Fireplace Buying Guide', href: STORE + '/blogs/learn/the-complete-water-vapor-fireplace-buying-guide-for-2026' }, { label: '\ud83d\udccd See one at a dealer near you', href: pURL('dealer-locator.html') }, { label: '\ud83d\uded2 Explore the lineup', href: STORE }] },
+            { t: 'chips', items: [{ label: '\ud83d\udd25 Compare Aquafire models', send: 'Compare the models' }, { label: '\ud83d\udcb2 Pricing', send: 'How much do they cost?' }, { label: '\ud83c\udfa5 How it works', send: 'How does it work?' }] }
           ]
         };
       }
@@ -345,17 +410,19 @@
     },
     {
       id: 'plumbing',
-      kw: [['plumb', 6], ['plumbed', 6], ['plumbing', 6], ['water line', 7], ['waterline', 7], ['direct plumb', 8], ['hook up to water', 7], ['fill', 2], ['refill', 3], ['manual fill', 5], ['tap water', 4], ['distilled', 4]],
+      kw: [['plumb', 6], ['plumbed', 6], ['plumbing', 6], ['plumb kit', 9], ['water line', 7], ['waterline', 7], ['direct plumb', 8], ['hook up to water', 7], ['connect', 3], ['connected', 3], ['fill', 2], ['refill', 3], ['manual fill', 5], ['tap water', 4], ['distilled', 4]],
       answer: function () {
         return {
           feedback: true,
           blocks: [
-            { t: 'text', html: 'Two ways to keep the tank full:' },
+            { t: 'text', html: 'It depends on the model \u2014 here\u2019s the water-line rundown:' },
             { t: 'steps', items: [
-              '<strong>Direct plumb</strong> \u2014 connect a \u00bc\u2033 water line (like a fridge ice-maker) and the unit refills itself automatically. The Pro is direct-plumb ready; the Original uses an optional Direct Plumb Kit; the Lite 40\u2033/60\u2033 are manual-fill only.',
-              '<strong>Manual fill</strong> \u2014 every unit has an integrated pump: connect the fill tube, hold <strong>B1</strong> for 5 seconds, and it fills itself and stops automatically.'
+              '<strong>Pro</strong> \u2014 connects directly to a water line right out of the box (a \u00bc\u2033 line, like a fridge ice-maker, and it refills itself). It also includes a dispensing pump, so you can empty the unit at the press of a button.',
+              '<strong>Original</strong> \u2014 no water-line connection out of the box; the <strong>Direct Plumb Kit</strong> add-on enables one \u2014 an easy install, sold and shipped separately.',
+              '<strong>Lite &amp; Gatsby</strong> \u2014 manual fill only; there\u2019s currently no direct-plumb option or upgrade for these.'
             ]},
-            { t: 'text', html: 'Regular tap water is what you want \u2014 ideally moderately hard (around 7 grains/gallon). Avoid reverse-osmosis or distilled water: with no minerals, the flame effect is greatly diminished. The included Vapor Pure\u2122 softener handles hard-water areas.' },
+            { t: 'text', html: 'Every model can also be filled manually via the integrated water pump port on the top right corner of the burner: connect the fill tube, hold <strong>B1</strong> for 5 seconds, and it fills itself and stops automatically.' },
+            { t: 'text', html: 'Regular tap water works \u2014 and when it comes to water quality, <strong>the softer the better</strong>. Reverse-osmosis water or a whole-house softener is ideal; otherwise the included Vapor Pure\u2122 softener conditions your tap water automatically. (Using a whole-house system instead of Vapor Pure? Have it approved in writing to keep the warranty valid.)' },
             { t: 'links', items: [{ label: '\ud83d\udca7 Check your water hardness by ZIP', href: pURL('water-care.html') }] }
           ]
         };
@@ -405,17 +472,21 @@
     },
     {
       id: 'order_status',
-      kw: [['order status', 8], ['my order', 6], ['where is my order', 9], ['wheres my order', 9], ['order number', 5], ['track my', 6], ['hasn\u2019t arrived', 6], ['hasnt arrived', 6], ['not arrived', 5]],
+      kw: [['order status', 8], ['my order', 6], ['where is my order', 9], ['wheres my order', 9], ['order number', 5], ['track my', 6], ['tracking', 6], ['tracking number', 9], ['status of my order', 9], ['shipped yet', 7], ['hasn\u2019t arrived', 6], ['hasnt arrived', 6], ['not arrived', 5]],
       answer: function () {
+        if (!ORDER_ENDPOINT || orderDown) return orderFallback();
+        // fresh flow start \u2014 drop leftovers from an abandoned lookup, then
+        // keep whatever this message already contained
+        state.ctx.orderNum = lastSeenOrderNum || null;
+        state.ctx.orderEmail = lastSeenEmail || null;
+        state.ctx.awaiting = 'order_lookup';
+        persist();
+        var need = [];
+        if (!state.ctx.orderNum) need.push('your <strong>order number</strong> (e.g. #1234, from your confirmation email)');
+        if (!state.ctx.orderEmail) need.push('the <strong>email address</strong> you used at checkout');
         return {
-          feedback: true,
           blocks: [
-            { t: 'text', html: 'I can\u2019t look up individual orders from here yet, but two quick options:' },
-            { t: 'steps', items: [
-              'Log in to <a href="' + STORE + '/account" target="_blank" rel="noopener">your aquafire.com account</a> \u2014 every order shows live status and tracking.',
-              'Or email <a href="mailto:' + ORDERS_EMAIL + '">' + ORDERS_EMAIL + '</a> with your order number and the team will check right away.'
-            ]},
-            contactBlock('orders')
+            { t: 'text', html: 'I can check on that right here \u2014 just send me ' + need.join(' and ') + '.' }
           ]
         };
       }
@@ -453,7 +524,7 @@
         return {
           feedback: true,
           blocks: [
-            { t: 'text', html: 'Yes \u2014 since Aquafire produces <strong>no heat</strong>, mounting a TV or artwork directly above it is completely fine. One design tip: add a recessed <strong>light trap</strong> above the flame so LED light doesn\u2019t wash onto the screen or ceiling. The Enclosure Guide shows exactly how.' },
+            { t: 'text', html: 'Yes \u2014 Aquafire produces <strong>no heat</strong>, so artwork above is completely fine, and a TV works great too: just put a <strong>mantel shelf</strong> between the flame and the screen so the light mist has room to dissipate. Design tip: add a recessed <strong>light trap</strong> above the flame so LED light doesn\u2019t wash onto the screen or ceiling. The Enclosure Guide shows exactly how.' },
             { t: 'links', items: [{ label: '\ud83d\udcd0 Light trap design in the Enclosure Guide', href: pURL('enclosure-guide.html') }] }
           ]
         };
@@ -513,7 +584,7 @@
         return {
           feedback: true,
           blocks: [
-            { t: 'text', html: 'Water quality is the #1 factor in Aquafire longevity. The sweet spot is <strong>3.5\u20138.5 grains per gallon (ideal \u22487)</strong> \u2014 too hard causes scaling and shortens mist-maker life; too soft (or RO/distilled water) weakens the flame. The included <strong>Vapor Pure\u2122 softener</strong> conditions your water automatically, and keeping it installed is required for warranty coverage.' },
+            { t: 'text', html: 'Water quality is the #1 factor in Aquafire longevity, and the rule is simple: <strong>the softer the water, the better</strong>. Reverse-osmosis water or a whole-house softener is ideal. Otherwise, the included <strong>Vapor Pure\u2122 softener</strong> conditions your tap water automatically \u2014 keep it installed for warranty coverage (a whole-house system used in its place needs written approval from Aquafire).' },
             { t: 'links', items: [
               { label: '\ud83d\udca7 Water Care tool \u2014 hardness by ZIP + cartridge timeline', href: pURL('water-care.html') },
               { label: '\ud83d\udcc4 Vapor Pure installation guide', href: STORE + '/vaporpure' }
@@ -830,9 +901,10 @@
     return { t: 'chips', items: [
       { label: '\ud83d\udd25 Compare models', send: 'Compare the models' },
       // Money bag, not the heavy dollar sign: U+1F4B2 is a thin unfilled
-      // outline that all but disappears on the dark panel. Pick chip emoji with
-      // mass -- the panel is dark by default.
+      // outline that all but disappears on the dark panel. Pick chip emoji
+      // with mass -- the panel is dark by default.
       { label: '\ud83d\udcb0 Pricing', send: 'How much do they cost?' },
+      { label: '\ud83d\udce6 Order status', send: 'Where is my order?' },
       { label: '\ud83d\udee0\ufe0f Fix an issue', send: 'Help me troubleshoot an issue' },
       { label: '\ud83d\udcd0 Plan an install', send: 'How is it installed?' },
       { label: '\ud83d\udee1\ufe0f Warranty', send: 'Tell me about the warranty' },
@@ -885,13 +957,56 @@
   var state = { open: false, nudged: false, msgs: [], ctx: { model: null, awaiting: null } };
   try {
     var saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; }
+    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; state.started = !!p.started; state.notified = !!p.notified; state.journey = p.journey || []; }
   } catch (e) { /* private mode etc. */ }
+
+  /* ── Visitor context — anonymous browsing signals (no PII) ─────────────
+     Journey (pages this session), device class, current product page, and
+     on the Shopify storefront the cart contents. Fed to the AI so answers
+     fit what the customer is looking at, logged with convo_start for the
+     insights dashboard, and attached to handoff notifications. */
+  state.journey = state.journey || [];
+  if (state.journey[state.journey.length - 1] !== location.pathname) {
+    state.journey.push(location.pathname);
+    if (state.journey.length > 10) state.journey = state.journey.slice(-10);
+    persist(); // journey accrues while browsing, before any chat interaction
+  }
+
+  var cartCache = '';
+  function loadCart() {
+    // /cart.js exists only on the Shopify storefront — skip on the portal
+    try {
+      if (!PORTAL_BASE || location.origin === new URL(PORTAL_BASE).origin) return;
+    } catch (e) { return; }
+    fetch('/cart.js', { credentials: 'same-origin' }).then(function (r) {
+      if (!r.ok) throw new Error('no cart');
+      return r.json();
+    }).then(function (c) {
+      if (!c || !c.items || !c.items.length) return;
+      cartCache = c.items.slice(0, 5).map(function (i) {
+        return i.quantity + 'x ' + String(i.product_title || i.title || '').slice(0, 60);
+      }).join(', ');
+      if (typeof c.total_price === 'number') {
+        cartCache += ' ($' + Math.round(c.total_price / 100) + ')';
+      }
+    }).catch(function () { /* empty cart or non-Shopify host */ });
+  }
+  loadCart();
+
+  function visitorCtx() {
+    var m = location.pathname.match(/\/products\/([^\/?#]+)/);
+    return {
+      device: Math.min(window.innerWidth, window.innerHeight) < 700 ? 'mobile' : 'desktop',
+      journey: state.journey.join(' > ').slice(0, 300),
+      product: m ? m[1] : '',
+      cart: cartCache
+    };
+  }
 
   function persist() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid
+        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid, started: state.started, notified: state.notified, journey: state.journey
       }));
     } catch (e) { /* ignore */ }
   }
@@ -930,6 +1045,16 @@
         model: state.ctx.model || ''
       };
       Object.keys(data || {}).forEach(function (k) { ev[k] = data[k]; });
+      // Privacy: never let customer email addresses reach the telemetry
+      // store (they type theirs during the order-lookup flow). Aquafire's
+      // own contact addresses pass through so transcripts stay readable.
+      ['text', 'comment'].forEach(function (k) {
+        if (typeof ev[k] === 'string') {
+          ev[k] = ev[k].replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, function (m) {
+            return /@(aquafire|luminabrands)\.com$/i.test(m) ? m : '[email]';
+          });
+        }
+      });
       if (cfg.logEndpoint) {
         fetch(cfg.logEndpoint, {
           method: 'POST', keepalive: true,
@@ -987,26 +1112,44 @@
       '--afa-hover:rgba(23,26,31,.06);' +
       '--afa-shadow:0 24px 64px rgba(23,26,31,.18);--afa-shadow-sm:0 10px 32px rgba(23,26,31,.14);}',
     '.afa-root,.afa-root *{box-sizing:border-box;margin:0;padding:0;}',
-    /* This reset out-specifies a bare `.afa-thing` rule, so any button that
-       needs a background has to be selected as `.afa-root .afa-thing`.
-       The launcher and send button were silently transparent for want of
-       that prefix. */
-    '.afa-root button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}',
-    '.afa-root a{color:var(--afa-ember-t);text-decoration:none;}.afa-root a:hover{text-decoration:underline;}',
+    /* :where() holds these resets at zero specificity so component rules
+       always win, while the injected !important still shields against host
+       theme globals. Supersedes the .afa-root prefixing this branch used
+       for the same bug -- zero specificity is the better fix. */
+    /* :where() keeps these resets at zero specificity so component rules always
+       win, while the injected !important still shields against theme globals */
+    ':where(.afa-root) button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;margin:0;padding:0;appearance:none;-webkit-appearance:none;text-transform:none;letter-spacing:normal;line-height:inherit;font-size:inherit;opacity:1;box-shadow:none;border-radius:0;}',
+    ':where(.afa-root) input{margin:0;appearance:none;-webkit-appearance:none;box-shadow:none;text-transform:none;letter-spacing:normal;opacity:1;}',
+    ':where(.afa-root) a{color:var(--afa-ember-t);text-decoration:none;}',
+    ':where(.afa-root) a:hover{text-decoration:underline;}',
 
-    /* Launcher. Ember's orb recipe from the design system, not a flat
-       gradient chip -- it is the same character the portal greets you with. */
-    '.afa-root .afa-launcher{position:fixed;right:20px;bottom:20px;z-index:2147483000;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -2px 6px rgba(0,0,0,.35),0 8px 26px -8px rgba(224,100,30,.55),0 2px 8px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s cubic-bezier(.16,1,.3,1);}',
-    '.afa-launcher svg{width:30px;height:30px;transition:transform .25s;}',
-    '.afa-root .afa-launcher:hover{transform:translateY(-2px) scale(1.05);box-shadow:inset 0 -2px 6px rgba(0,0,0,.35),0 12px 32px -8px rgba(224,100,30,.7),0 3px 10px rgba(0,0,0,.35);}',
+    /* Launcher */
+    /* Liquid-glass launcher: translucent dark base + backdrop blur/saturation,
+       specular top highlight, hairline light border. Browsers without
+       backdrop-filter just get the translucent dark pill. */
+    '.afa-launcher{position:fixed;right:20px;bottom:20px;top:auto;left:auto;z-index:2147483000;height:56px;min-height:56px;width:auto;min-width:0;margin:0;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 22px 0 18px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 40%,rgba(255,255,255,0) 100%),rgba(21,24,30,.68);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);color:#fff;opacity:1;filter:none;font-family:inherit;font-size:14px;font-weight:600;letter-spacing:.2px;line-height:1;text-transform:none;text-decoration:none;box-shadow:0 10px 32px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 1px rgba(255,255,255,.05);transition:transform .2s,box-shadow .2s,border-color .2s;}',
+    '.afa-launcher svg{width:24px;height:24px;transition:transform .25s;}',
+    '.afa-launcher .afa-ico-flame{color:#e8703a;}',
+    '.afa-launcher:hover{transform:scale(1.04);border-color:rgba(255,255,255,.34);background:linear-gradient(180deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.06) 40%,rgba(255,255,255,0) 100%),rgba(26,29,36,.74);box-shadow:0 12px 38px rgba(0,0,0,.5),0 3px 10px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 1px rgba(255,255,255,.05);}',
+    '.afa-launcher-label{white-space:nowrap;}',
     '.afa-launcher .afa-ico-close{display:none;}',
-    '.afa-launcher.afa-open .afa-ico-flame{display:none;}.afa-launcher.afa-open .afa-ico-close{display:block;}',
-    '.afa-badge{position:absolute;top:2px;right:2px;width:12px;height:12px;border-radius:50%;background:var(--afa-ember);border:2px solid var(--afa-bg);display:none;}',
+    '.afa-launcher.afa-open{width:56px;padding:0;}',
+    '.afa-launcher.afa-open .afa-ico-flame,.afa-launcher.afa-open .afa-launcher-label{display:none;}',
+    '.afa-launcher.afa-open .afa-ico-close{display:block;}',
+    '.afa-badge{position:absolute;top:0;right:8px;width:12px;height:12px;border-radius:50%;background:var(--afa-ember);border:2px solid var(--afa-bg);display:none;}',
+    '.afa-launcher.afa-open .afa-badge{right:2px;}',
     '.afa-launcher.afa-unread .afa-badge{display:block;}',
 
-    /* Nudge teaser */
-    '.afa-nudge{position:fixed;right:20px;bottom:92px;z-index:2147483000;max-width:270px;background:var(--afa-bg);color:var(--afa-text);border:1px solid var(--afa-border);border-radius:var(--afa-radius-card);padding:12px 34px 12px 14px;box-shadow:var(--afa-shadow-sm);font-size:13.5px;animation:afaPop .35s cubic-bezier(.16,1,.3,1);cursor:pointer;}',
-    '.afa-nudge-x{position:absolute;top:6px;right:8px;color:var(--afa-muted);font-size:15px;line-height:1;padding:4px;}',
+    /* Proactive teaser (chat-style invitation card) */
+    '.afa-nudge{position:fixed;right:20px;bottom:92px;z-index:2147483000;width:300px;max-width:calc(100vw - 40px);background:var(--afa-bg);color:var(--afa-text);border:1px solid var(--afa-border);border-radius:var(--afa-radius-card);padding:14px;box-shadow:0 14px 44px rgba(0,0,0,.5);font-size:13.5px;animation:afaPop .35s ease;cursor:pointer;}',
+    '.afa-nudge-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}',
+    '.afa-nudge-avatar{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}',
+    '.afa-nudge-avatar svg{width:15px;height:15px;}',
+    '.afa-nudge-name{font-weight:600;font-family:inherit;font-size:13.5px;}',
+    '.afa-nudge-x{margin-left:auto;color:var(--afa-muted);font-size:14px;line-height:1;padding:4px 6px;border-radius:6px;}',
+    '.afa-nudge-x:hover{color:var(--afa-text);background:rgba(255,255,255,.06);}',
+    '.afa-nudge-msg{line-height:1.5;margin-bottom:10px;}',
+    '.afa-nudge-reply{background:var(--afa-surface2);border:1px solid var(--afa-border);border-radius:var(--afa-radius-bubble);padding:9px 12px;color:var(--afa-muted);font-size:12.8px;}',
     '@keyframes afaPop{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}',
 
     /* Panel. Opaque ground rather than glass: this floats over a storefront we
@@ -1174,7 +1317,20 @@
     '.afa-root:not(.afa-inline) .afa-panel{right:0;bottom:0;width:100vw;max-width:100vw;height:100dvh;border-radius:0;border:none;}',
     '.afa-nudge{right:16px;bottom:88px;}',
     '}'
-  ].join('\n');
+  ];
+
+  // Host pages (Shopify themes especially) style <button>/<input>/<a> globally,
+  // often with !important — which washes out the launcher and inputs. Every
+  // declaration gets !important; with our class specificity that wins against
+  // any theme rule. Keyframe bodies are skipped (!important is invalid there).
+  function hardenedCSS() {
+    return CSS.map(function (rule) {
+      if (rule.indexOf('@keyframes') === 0) return rule;
+      return rule
+        .replace(/\s*!important/g, '')
+        .replace(/([a-zA-Z-]+):([^;{}]+);/g, '$1:$2 !important;');
+    }).join('\n');
+  }
 
   /* ── DOM construction ─────────────────────────────────────────────────── */
   // The beam needs a registered @property (to animate an <angle>) and
@@ -1212,7 +1368,7 @@
       document.head.appendChild(pre); document.head.appendChild(f);
     }
 
-    var style = el('style'); style.textContent = CSS;
+    var style = el('style'); style.textContent = hardenedCSS();
     document.head.appendChild(style);
 
     root = el('div', 'afa-root');
@@ -1220,7 +1376,7 @@
 
     launcher = el('button', 'afa-launcher');
     launcher.setAttribute('aria-label', 'Chat with Aquafire assistant');
-    launcher.innerHTML = '<span class="afa-ico-flame">' + FLAME_SVG + '</span><span class="afa-ico-close">' + CLOSE_SVG + '</span><span class="afa-badge"></span>';
+    launcher.innerHTML = '<span class="afa-ico-flame">' + FLAME_SVG + '</span><span class="afa-launcher-label">Chat with us</span><span class="afa-ico-close">' + CLOSE_SVG + '</span><span class="afa-badge"></span>';
     launcher.classList.add('afa-unread');
     launcher.addEventListener('click', function () { toggle(); });
 
@@ -1302,19 +1458,61 @@
     }
     if (state.open) toggle(true, true);
 
-    // Nudge teaser (corner mode only -- inline has no launcher to point at)
-    if (!host && !state.nudged && !state.open) {
-      setTimeout(function () {
-        if (state.open || state.nudged) return;
-        nudge = el('div', 'afa-nudge', '\ud83d\udc4b Questions about Aquafire? I\u2019m here to help.<button class="afa-nudge-x" aria-label="Dismiss">\u2715</button>');
-        nudge.addEventListener('click', function (e) {
-          if (e.target.classList.contains('afa-nudge-x')) { killNudge(); return; }
-          toggle(true);
-        });
-        root.appendChild(nudge);
-        state.nudged = true; persist();
-      }, 4000);
+    // Proactive teaser \u2014 fires once the visitor shows engagement (scrolling
+    // around or a few clicks), with a 30s dwell fallback. Once per session,
+    // never over an open or previously-used chat.
+    if (!host && !state.nudged && !state.open && !state.msgs.length) {
+      var armedAt = Date.now(), scrolled = 0, lastY = window.pageYOffset || 0, clicks = 0, fallbackTimer;
+      var onScroll = function () {
+        var y = window.pageYOffset || 0;
+        scrolled += Math.abs(y - lastY);
+        lastY = y;
+        maybeTease();
+      };
+      var onClick = function (e) {
+        if (root.contains(e.target)) return; // interacting with the widget itself
+        clicks++;
+        maybeTease();
+      };
+      var stopWatching = function () {
+        window.removeEventListener('scroll', onScroll);
+        document.removeEventListener('click', onClick, true);
+        clearTimeout(fallbackTimer);
+      };
+      var fireTease = function () {
+        stopWatching();
+        if (!state.open && !state.nudged) showTeaser();
+      };
+      var maybeTease = function () {
+        if (state.open || state.nudged) { stopWatching(); return; }
+        if (Date.now() - armedAt < 5000) return; // let them land first
+        if (scrolled > 700 || clicks >= 3) fireTease();
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      document.addEventListener('click', onClick, true);
+      fallbackTimer = setTimeout(fireTease, 30000);
     }
+  }
+
+  function showTeaser() {
+    state.nudged = true; persist();
+    logEvent('teaser_shown', {});
+    nudge = el('div', 'afa-nudge');
+    nudge.setAttribute('role', 'complementary');
+    nudge.setAttribute('aria-label', 'Chat invitation');
+    nudge.innerHTML =
+      '<div class="afa-nudge-head">' +
+        '<span class="afa-nudge-avatar">' + FLAME_SVG + '</span>' +
+        '<span class="afa-nudge-name">Ember</span>' +
+        '<button class="afa-nudge-x" aria-label="Dismiss">\u2715</button>' +
+      '</div>' +
+      '<div class="afa-nudge-msg">Hi! \ud83d\udc4b Looking at Aquafire? I can help you compare models, plan your install, or fix an issue \u2014 just ask.</div>' +
+      '<div class="afa-nudge-reply">Click to reply\u2026</div>';
+    nudge.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('.afa-nudge-x')) { killNudge(); return; }
+      toggle(true);
+    });
+    root.appendChild(nudge);
   }
 
   function killNudge() { if (nudge) { nudge.remove(); nudge = null; } }
@@ -1347,11 +1545,12 @@
     greet();
   }
 
+  // convo_start is logged lazily on the first user message (not on panel
+  // open) so browsing visitors don't create empty conversations in insights
   function greet() {
-    logEvent('convo_start', {});
     pushBot({
       blocks: [
-        { t: 'text', html: 'Hi, I\u2019m <strong>Ember</strong> \ud83d\udd25 \u2014 the Aquafire assistant. I can compare models, plan your install, check water care, or walk you through a fix. How can I help?' },
+        { t: 'text', html: 'Hi, I\u2019m <strong>Ember</strong> \ud83d\udd25 \u2014 the Aquafire assistant. I can compare models, plan your install, check water care, track your order, or walk you through a fix. How can I help?' },
         mainChips()
       ]
     });
@@ -1417,7 +1616,10 @@
         });
         if (vids.children.length) container.appendChild(vids);
       } else if (b.t === 'contact') {
-        if (!spent) logEvent('handoff', { mode: b.mode || 'support' });
+        if (!spent) {
+          logEvent('handoff', { mode: b.mode || 'support' });
+          notifyHandoff(b.mode || 'support');
+        }
         var email = b.mode === 'sales' ? SALES_EMAIL : b.mode === 'orders' ? ORDERS_EMAIL : SUPPORT_EMAIL;
         var c = el('div', 'afa-contact');
         c.innerHTML = '<h5>' + (b.mode === 'sales' ? 'Sales & design' : b.mode === 'orders' ? 'Orders' : 'Aquafire support') + '</h5>' +
@@ -1526,6 +1728,11 @@
 
   function handleUserText(text) {
     pushUser(text);
+    if (!state.started) {
+      state.started = true;
+      persist();
+      logEvent('convo_start', visitorCtx());
+    }
     var norm = normalize(text);
 
     // model mentions update context anywhere in the conversation
@@ -1543,6 +1750,48 @@
       return;
     }
 
+    // Order lookup: parse from the RAW text (normalize strips @ and #)
+    lastSeenEmail = (text.match(EMAIL_RE) || [])[0] || null;
+    lastSeenOrderNum = extractOrderNum(text, state.ctx.awaiting === 'order_lookup');
+
+    if (ORDER_ENDPOINT && !orderDown) {
+      if (state.ctx.awaiting === 'order_lookup') {
+        if (/\b(cancel|nevermind|never mind|stop|forget it)\b/i.test(text)) {
+          state.ctx.awaiting = null; state.ctx.orderNum = null; state.ctx.orderEmail = null; persist();
+          lastIntentId = 'order_lookup';
+          logEvent('user_message', { text: text.slice(0, 300), intent: 'order_lookup_cancel' });
+          reply(function () { return { blocks: [{ t: 'text', html: 'No problem \u2014 what else can I help with?' }] }; });
+          return;
+        }
+        if (lastSeenEmail || lastSeenOrderNum) {
+          if (lastSeenEmail) state.ctx.orderEmail = lastSeenEmail;
+          if (lastSeenOrderNum) state.ctx.orderNum = lastSeenOrderNum;
+          persist();
+          lastIntentId = 'order_lookup';
+          logEvent('user_message', { text: text.slice(0, 300), intent: 'order_lookup' });
+          if (state.ctx.orderNum && state.ctx.orderEmail) {
+            orderLookup();
+          } else {
+            reply(function () {
+              return { blocks: [{ t: 'text', html: state.ctx.orderNum
+                ? 'Got it \u2014 and the <strong>email address</strong> you used at checkout?'
+                : 'Thanks \u2014 and your <strong>order number</strong>? It\u2019s in your confirmation email (e.g. #1234).' }] };
+            });
+          }
+          return;
+        }
+        // no order info in this message — treat it as a normal question instead
+        state.ctx.awaiting = null; state.ctx.orderNum = null; state.ctx.orderEmail = null; persist();
+      } else if (lastSeenEmail && lastSeenOrderNum) {
+        // both volunteered in one message (e.g. after an AI answer suggested it)
+        state.ctx.orderEmail = lastSeenEmail; state.ctx.orderNum = lastSeenOrderNum; persist();
+        lastIntentId = 'order_lookup';
+        logEvent('user_message', { text: text.slice(0, 300), intent: 'order_lookup' });
+        orderLookup();
+        return;
+      }
+    }
+
     var intent = matchIntent(text);
     var llmAvailable = API_ENDPOINT && !llmDown;
     lastIntentId = intent ? intent.id : (llmAvailable ? 'llm' : 'fallback');
@@ -1557,12 +1806,28 @@
     }
   }
 
+  // Plain-text extract of an answer's text/steps blocks (for transcripts)
+  function blocksText(blocks) {
+    var out = [];
+    (blocks || []).forEach(function (b) {
+      if (b.t === 'text') out.push(b.html.replace(/<[^>]+>/g, ''));
+      else if (b.t === 'steps') out.push(b.items.map(function (s) { return s.replace(/<[^>]+>/g, ''); }).join(' | '));
+    });
+    return out.join('\n');
+  }
+
+  // "Thinking" pause before answers land (~2s) — instant replies read as canned
+  var THINK_MS = 1900;
+  function thinkDelay() { return THINK_MS + Math.random() * 600; }
+
   function reply(produce) {
     showTyping();
     setTimeout(function () {
       hideTyping();
-      pushBot(produce());
-    }, 450 + Math.random() * 400);
+      var res = produce();
+      pushBot(res);
+      logEvent('bot_reply', { intent: lastIntentId, text: blocksText(res.blocks).slice(0, 600) });
+    }, thinkDelay());
   }
 
   /* ── Optional LLM backend ─────────────────────────────────────────────── */
@@ -1578,6 +1843,11 @@
 
   function remoteReply(text) {
     showTyping();
+    var startedAt = Date.now();
+    // hold the typing dots for at least the think time, even on a fast API
+    function afterThink(fn) {
+      setTimeout(fn, Math.max(0, THINK_MS - (Date.now() - startedAt)));
+    }
     var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
 
@@ -1588,26 +1858,30 @@
       body: JSON.stringify({
         message: text,
         history: historyForApi().slice(0, -1),
-        context: { model: state.ctx.model, page: location.href }
+        context: Object.assign({ model: state.ctx.model, page: location.href }, visitorCtx())
       })
     }).then(function (r) {
       if (!r.ok) throw new Error('bad status');
       return r.json();
     }).then(function (d) {
       clearTimeout(timer);
-      hideTyping();
       if (!d || !d.reply) throw new Error('empty');
-      logEvent('llm_reply', { text: String(d.reply).slice(0, 500) });
-      pushBot({
-        feedback: true,
-        blocks: [{ t: 'text', html: mdLite(d.reply) }, { t: 'chips', items: [CHIP_HUMAN] }]
+      afterThink(function () {
+        hideTyping();
+        logEvent('llm_reply', { text: String(d.reply).slice(0, 500) });
+        pushBot({
+          feedback: true,
+          blocks: [{ t: 'text', html: mdLite(d.reply) }, { t: 'chips', items: [CHIP_HUMAN] }]
+        });
       });
     }).catch(function () {
       clearTimeout(timer);
-      hideTyping();
       llmDown = true; // don't retry this page load — go straight to local KB
-      logEvent('llm_error', {});
-      pushBot(FALLBACK());
+      afterThink(function () {
+        hideTyping();
+        logEvent('llm_error', {});
+        pushBot(FALLBACK());
+      });
     });
   }
 
@@ -1620,6 +1894,156 @@
       .replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
   }
 
+  /* ── Order & tracking lookup (api/order-status.js) ────────────────────────
+     Guided collect of order number + checkout email, verified server-side.
+     Telemetry logs outcomes only — never the number or the email. */
+  var EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/;
+  var lastSeenEmail = null, lastSeenOrderNum = null;
+
+  function extractOrderNum(text, loose) {
+    var m = text.match(/#\s*([A-Za-z]{0,6}-?\d{1,10})\b/);
+    if (m) return m[1];
+    m = text.match(/\border(?:\s+number|\s+no\.?|\s*#)?\s*[:\-]?\s*([A-Za-z]{0,6}-?\d{1,10})\b/i);
+    if (m) return m[1];
+    if (loose) {
+      // mid-collect a bare number counts (but never digits inside the email)
+      m = text.replace(EMAIL_RE, ' ').match(/\b([A-Za-z]{0,6}-?\d{3,10})\b/);
+      if (m) return m[1];
+    }
+    return null;
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function fmtDate(iso) {
+    try {
+      return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    } catch (e) { return ''; }
+  }
+
+  function orderFallback() {
+    return {
+      feedback: true,
+      blocks: [
+        { t: 'text', html: 'I can\u2019t look up individual orders right now, but two quick options:' },
+        { t: 'steps', items: [
+          'Log in to <a href="' + STORE + '/account" target="_blank" rel="noopener">your aquafire.com account</a> \u2014 every order shows live status and tracking.',
+          'Or email <a href="mailto:' + ORDERS_EMAIL + '">' + ORDERS_EMAIL + '</a> with your order number and the team will check right away.'
+        ]},
+        contactBlock('orders')
+      ]
+    };
+  }
+
+  function orderCard(o) {
+    var statusMap = {
+      FULFILLED: 'Shipped', UNFULFILLED: 'Being prepared', IN_PROGRESS: 'Being prepared',
+      PARTIALLY_FULFILLED: 'Partially shipped', SCHEDULED: 'Scheduled', ON_HOLD: 'On hold',
+      PENDING_FULFILLMENT: 'Being prepared', OPEN: 'Being prepared'
+    };
+    var status = o.cancelled ? 'Cancelled' : (statusMap[o.status] || 'In progress');
+    var head = '<strong>Order ' + escHtml(o.name) + '</strong> \u00b7 placed ' + fmtDate(o.placedAt) +
+      '<br>Status: <strong>' + status + '</strong>';
+    if (o.shipTo) head += ' \u00b7 shipping to ' + escHtml(o.shipTo);
+    var blocks = [{ t: 'text', html: head }];
+    if (o.items && o.items.length) {
+      blocks.push({ t: 'steps', items: o.items.slice(0, 6).map(function (i) {
+        return escHtml(i.title) + (i.qty > 1 ? ' \u00d7 ' + i.qty : '');
+      }) });
+    }
+    var links = [], delivered = null, eta = null;
+    (o.shipments || []).forEach(function (s) {
+      if (s.deliveredAt) delivered = s.deliveredAt;
+      if (s.eta) eta = s.eta;
+      (s.tracking || []).forEach(function (t) {
+        if (t.url) {
+          links.push({
+            label: '\ud83d\udce6 Track ' + (t.company ? escHtml(t.company) + ' ' : '') + 'shipment' +
+              (t.number ? ' (' + escHtml(t.number) + ')' : ''),
+            href: t.url
+          });
+        }
+      });
+    });
+    if (delivered) blocks.push({ t: 'text', html: '\u2705 Delivered ' + fmtDate(delivered) + '.' });
+    else if (eta) blocks.push({ t: 'text', html: 'Estimated delivery: <strong>' + fmtDate(eta) + '</strong>.' });
+    if (links.length) blocks.push({ t: 'links', items: links });
+    else if (!o.cancelled && status !== 'Shipped') {
+      blocks.push({ t: 'text', html: 'Tracking will appear here as soon as it ships \u2014 you\u2019ll also get it by email.' });
+    }
+    if (o.cancelled) blocks.push(contactBlock('orders'));
+    blocks.push({ t: 'chips', items: [{ label: '\ud83d\udd0d Check another order', send: 'Where is my order?' }, CHIP_HUMAN] });
+    return { feedback: true, blocks: blocks };
+  }
+
+  function orderLookup() {
+    var num = state.ctx.orderNum, email = state.ctx.orderEmail;
+    state.ctx.awaiting = null;
+    persist();
+    showTyping();
+    var startedAt = Date.now();
+    function afterThink(fn) { setTimeout(fn, Math.max(0, THINK_MS - (Date.now() - startedAt))); }
+    function done() { state.ctx.orderNum = null; state.ctx.orderEmail = null; persist(); }
+    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
+
+    fetch(ORDER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: ctrl ? ctrl.signal : undefined,
+      body: JSON.stringify({ order: num, email: email })
+    }).then(function (r) {
+      clearTimeout(timer);
+      if (r.status === 404) return { notFound: true };
+      if (r.status === 503) { orderDown = true; return { down: true }; }
+      if (!r.ok) throw new Error('bad status');
+      return r.json().then(function (d) {
+        if (!d || !d.order) throw new Error('empty');
+        return d;
+      });
+    }).then(function (d) {
+      afterThink(function () {
+        hideTyping();
+        if (d.down) {
+          logEvent('order_lookup', { outcome: 'unconfigured' });
+          done();
+          pushBot(orderFallback());
+        } else if (d.notFound) {
+          logEvent('order_lookup', { outcome: 'not_found' });
+          // let them retry with corrected details
+          state.ctx.orderNum = null; state.ctx.orderEmail = null;
+          state.ctx.awaiting = 'order_lookup';
+          persist();
+          pushBot({
+            feedback: true,
+            blocks: [
+              { t: 'text', html: 'Hmm \u2014 I couldn\u2019t find an order matching that number and email. Double-check both against your confirmation email and send them again (or type <strong>cancel</strong>), and I\u2019ll take another look.' },
+              contactBlock('orders')
+            ]
+          });
+        } else {
+          logEvent('order_lookup', { outcome: 'found' });
+          done();
+          pushBot(orderCard(d.order));
+        }
+      });
+    }).catch(function () {
+      clearTimeout(timer);
+      afterThink(function () {
+        hideTyping();
+        logEvent('order_lookup', { outcome: 'error' });
+        done();
+        pushBot({
+          feedback: true,
+          blocks: [
+            { t: 'text', html: 'I hit a snag reaching the order system just now \u2014 sorry about that. The orders team can check right away:' },
+            contactBlock('orders')
+          ]
+        });
+      });
+    });
+  }
   /* ── Public API ───────────────────────────────────────────────────────────
      Mainly for inline hosts (see MOUNT): the host owns the container and the
      show/hide animation, and drives the conversation through here. Safe to

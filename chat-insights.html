@@ -138,6 +138,9 @@
       font-size: 0.78rem; }
     .ev .intent { font-size: 0.68rem; color: var(--blue); }
     .ev .intent.fallback { color: var(--amber); }
+    .linkbtn { background: none; border: none; color: var(--amber); cursor: pointer;
+      font-size: 0.7rem; padding: 0; font-family: inherit; }
+    .linkbtn:hover { text-decoration: underline; }
 
     .setup-hint { border-color: rgba(232,168,56,0.5); }
     .setup-hint code, .setup-hint pre { background: var(--bg); border-radius: 6px; font-size: 0.78rem; }
@@ -170,6 +173,7 @@
       <input type="password" id="password" placeholder="Password" autocomplete="current-password">
       <button class="btn btn-secondary" id="emailBtn">Sign in with email</button>
       <div class="auth-err" id="authErr"></div>
+      <button class="btn btn-secondary" id="switchBtn" style="display:none;margin-top:10px;">Sign out &amp; use a team account</button>
     </div>
 
     <!-- Dashboard -->
@@ -212,12 +216,15 @@
   <!-- Teach Ember modal -->
   <div class="modal-wrap" id="kbModal" style="display:none;">
     <div class="modal">
-      <h3>&#x1f525; Teach Ember</h3>
-      <p>Saved knowledge is used by AI answers right away (within ~5 min). Write the answer
-        the way you'd want a customer to read it &mdash; you can include links.</p>
+      <h3 id="kbTitle">&#x1f525; Teach Ember</h3>
+      <p id="kbHint">Saved knowledge is used by AI answers right away (within ~5 min).</p>
       <label for="kbQ">Customer question (or topic)</label>
       <input id="kbQ" maxlength="300" placeholder="e.g. Do you ship to Canada?">
-      <label for="kbA">The correct answer</label>
+      <div id="kbWrongWrap" style="display:none;">
+        <label>What Ember said (won&rsquo;t be repeated)</label>
+        <div id="kbWrong" style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 13px;font-size:0.82rem;color:var(--text-muted);max-height:120px;overflow-y:auto;"></div>
+      </div>
+      <label for="kbA" id="kbALabel">The correct answer</label>
       <textarea id="kbA" rows="5" maxlength="1500" placeholder="e.g. Yes — we ship to Canada via&hellip;"></textarea>
       <div class="auth-err" id="kbErr"></div>
       <div class="row">
@@ -260,7 +267,11 @@
 
       /* ── Auth ── */
       $('googleBtn').onclick = function () {
-        auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+        var provider = new firebase.auth.GoogleAuthProvider();
+        // Always offer the account chooser, so someone already signed in with a
+        // personal account can pick their team address without signing out.
+        provider.setCustomParameters({ prompt: 'select_account' });
+        auth.signInWithPopup(provider)
           .catch(function (e) { $('authErr').textContent = e.message; });
       };
       $('emailBtn').onclick = function () {
@@ -269,15 +280,41 @@
       };
       $('signOutBtn').onclick = function () { auth.signOut(); };
 
+      /* Team-only: the Firestore rules are the real gate (verified
+         @luminabrands.com emails only), but rewards customers hold accounts in
+         this same Firebase project — so being signed in is not enough to see
+         the dashboard chrome. Mirror the rule here.
+
+         A signed-in non-team account gets the sign-in gate, never the
+         dashboard — but we deliberately do NOT sign them out. Rewards runs on
+         the same Firebase project and origin, so an automatic signOut() here
+         would drop a customer's rewards session just because they opened this
+         URL. They're offered the switch instead. */
+      var TEAM_EMAIL = /@luminabrands\.com$/i;
+      function isTeam(user) {
+        return !!user && !!user.email && user.emailVerified && TEAM_EMAIL.test(user.email);
+      }
+
+      $('switchBtn').onclick = function () {
+        $('authErr').textContent = '';
+        auth.signOut();
+      };
+
       auth.onAuthStateChanged(function (user) {
-        var authed = !!user;
+        var authed = isTeam(user);
+        if (user && !authed) {
+          $('authErr').textContent = user.emailVerified
+            ? 'Signed in as ' + user.email + ' — not a Lumina Brands team account.'
+            : 'Verify ' + (user.email || 'your email address') + ' first, then sign in again.';
+        }
+        $('switchBtn').style.display = (user && !authed) ? '' : 'none';
         $('authCard').style.display = authed ? 'none' : '';
         $('dash').style.display = authed ? '' : 'none';
         $('signOutBtn').style.display = authed ? '' : 'none';
         $('refreshBtn').style.display = authed ? '' : 'none';
         $('exportBtn').style.display = authed ? '' : 'none';
         $('who').textContent = authed ? (user.email || user.displayName || '') : '';
-        if (authed) { load(); loadKb(); }
+        if (authed) { $('authErr').textContent = ''; load(); loadKb(); }
       });
 
       /* ── Team knowledge ("Teach Ember") ── */
@@ -290,14 +327,17 @@
           if (!items.length) {
             el.innerHTML = '<span style="color:var(--text-muted);font-size:0.85rem;">Nothing yet &mdash; ' +
               'click <strong>Answer</strong> on an unanswered question, or <strong>+ Add knowledge</strong>. ' +
-              '(If saving fails with permission-denied, publish the <code>chatKnowledge</code> rule from docs/chat-assistant.md.)</span>';
+              '(If saving fails with permission-denied, publish the <code>chatKnowledge</code> rule from docs/firestore-rules.md.)</span>';
             return;
           }
           el.innerHTML = '';
           items.forEach(function (it) {
             var row = document.createElement('div');
             row.className = 'kb-item';
-            row.innerHTML = '<div><div class="kb-q">' + esc(it.d.q || '(general)') + '</div>' +
+            var tag = it.d.kind === 'correction'
+              ? '<span class="tag warn" style="margin-right:6px;">correction</span>'
+              : '<span class="tag info" style="margin-right:6px;">fact</span>';
+            row.innerHTML = '<div><div class="kb-q">' + tag + esc(it.d.q || '(general)') + '</div>' +
               '<div class="kb-a">' + esc(it.d.a || '') + '</div></div>' +
               '<button class="kb-x">Remove</button>';
             row.querySelector('.kb-x').onclick = function () {
@@ -309,30 +349,47 @@
           });
         }).catch(function (e) {
           $('kbList').innerHTML = '<span style="color:var(--text-muted);font-size:0.85rem;">Couldn’t load knowledge (' +
-            esc(e.code || 'error') + ') &mdash; publish the <code>chatKnowledge</code> rule from docs/chat-assistant.md.</span>';
+            esc(e.code || 'error') + ') &mdash; publish the <code>chatKnowledge</code> rule from docs/firestore-rules.md.</span>';
         });
       }
 
-      function openTeach(question) {
+      var teachMode = 'fact', teachWrong = '';
+      function openTeach(question, mode, wrong) {
+        teachMode = mode === 'correction' ? 'correction' : 'fact';
+        teachWrong = (wrong || '').slice(0, 600);
         $('kbQ').value = question || '';
         $('kbA').value = '';
         $('kbErr').textContent = '';
+        if (teachMode === 'correction') {
+          $('kbTitle').innerHTML = '&#x1f527; Correct this answer';
+          $('kbHint').textContent = 'Plain notes are fine — tell Ember what’s actually correct and it will phrase it naturally, in its own voice, for each conversation. Corrections override everything else it knows. Live within ~5 min.';
+          $('kbALabel').textContent = 'What’s actually correct?';
+          $('kbWrong').textContent = teachWrong;
+          $('kbWrongWrap').style.display = '';
+        } else {
+          $('kbTitle').innerHTML = '&#x1f525; Teach Ember';
+          $('kbHint').textContent = 'Saved knowledge is used by AI answers right away (within ~5 min). Plain notes are fine — Ember phrases things in its own voice.';
+          $('kbALabel').textContent = 'The correct answer';
+          $('kbWrongWrap').style.display = 'none';
+        }
         $('kbModal').style.display = '';
         (question ? $('kbA') : $('kbQ')).focus();
       }
-      $('kbAddBtn').onclick = function () { openTeach(''); };
+      $('kbAddBtn').onclick = function () { openTeach('', 'fact'); };
       $('kbCancel').onclick = function () { $('kbModal').style.display = 'none'; };
       $('kbModal').addEventListener('click', function (e) {
         if (e.target === $('kbModal')) $('kbModal').style.display = 'none';
       });
       $('kbSave').onclick = function () {
         var q = $('kbQ').value.trim(), a = $('kbA').value.trim();
-        if (!a) { $('kbErr').textContent = 'Write the answer first.'; return; }
-        db.collection('chatKnowledge').add({
-          q: q, a: a,
+        if (!a) { $('kbErr').textContent = 'Write the correct information first.'; return; }
+        var doc = {
+          kind: teachMode, q: q, a: a,
           by: (auth.currentUser && auth.currentUser.email) || '',
           ts: new Date().toISOString()
-        }).then(function () {
+        };
+        if (teachMode === 'correction' && teachWrong) doc.wrong = teachWrong;
+        db.collection('chatKnowledge').add(doc).then(function () {
           $('kbModal').style.display = 'none';
           loadKb();
         }).catch(function (e) { $('kbErr').textContent = 'Save failed: ' + e.message; });
@@ -386,7 +443,7 @@
           '    &amp;&amp; request.auth.token.email.matches(\'.*@luminabrands[.]com\');\n' +
           '  allow update, delete: if false;\n' +
           '}</pre>' +
-          '<p style="font-size:0.85rem;color:var(--text-muted);margin-top:8px;">Full setup: <code>docs/chat-assistant.md</code></p>';
+          '<p style="font-size:0.85rem;color:var(--text-muted);margin-top:8px;">Full ruleset: <code>docs/firestore-rules.md</code></p>';
         $('detail').innerHTML = '';
         $('detail').appendChild(hint);
       }
@@ -417,7 +474,13 @@
       /* ── Render ── */
       function render() {
         var q = ($('search').value || '').toLowerCase();
-        var list = Object.keys(convos).map(function (k) { return convos[k]; });
+        // Only conversations where the customer actually asked something —
+        // panel-opens and teaser impressions (incl. historical events from
+        // before the widget logged lazily) would otherwise swamp the list.
+        var list = Object.keys(convos).map(function (k) { return convos[k]; })
+          .filter(function (c) {
+            return c.events.some(function (e) { return e.type === 'user_message'; });
+          });
         list.sort(function (a, b) { return (a.last.ts || '') < (b.last.ts || '') ? 1 : -1; });
 
         // stats (unfiltered)
@@ -495,18 +558,25 @@
       function showConvo(c) {
         var d = $('detail');
         d.innerHTML = '';
+        var lastUser = '';
         c.events.forEach(function (e) {
           var div = document.createElement('div');
           if (e.type === 'user_message') {
+            lastUser = e.text || '';
             div.className = 'ev user';
             div.innerHTML = '<div class="meta">' + fmtTs(e.ts) + ' &middot; customer &middot; ' +
               '<span class="intent' + (e.intent === 'fallback' ? ' fallback' : '') + '">' +
               (e.intent === 'fallback' ? '&#x26a0;&#xfe0f; unanswered' : 'answered by: ' + esc(e.intent || '')) + '</span></div>' +
               '<div class="body">' + esc(e.text || '') + '</div>';
-          } else if (e.type === 'llm_reply') {
+          } else if (e.type === 'bot_reply' || e.type === 'llm_reply') {
             div.className = 'ev bot';
-            div.innerHTML = '<div class="meta">' + fmtTs(e.ts) + ' &middot; Ember (AI)</div>' +
+            var who = e.type === 'llm_reply' ? 'Ember (AI)' : 'Ember (KB &middot; ' + esc(e.intent || '?') + ')';
+            div.innerHTML = '<div class="meta">' + fmtTs(e.ts) + ' &middot; ' + who +
+              ' &middot; <button class="linkbtn">&#x1f527; Correct this</button></div>' +
               '<div class="body">' + esc(e.text || '') + '</div>';
+            (function (q, wrong) {
+              div.querySelector('.linkbtn').onclick = function () { openTeach(q, 'correction', wrong); };
+            })(lastUser, e.text || '');
           } else if (e.type === 'feedback') {
             div.className = 'ev sys';
             div.innerHTML = '<div class="body">' + (e.vote === 'up' ? '&#x1f44d;' : '&#x1f44e;') +
@@ -519,7 +589,13 @@
             div.innerHTML = '<div class="body">&#x1f91d; handoff shown (' + esc(e.mode || 'support') + ')</div>';
           } else if (e.type === 'convo_start') {
             div.className = 'ev sys';
-            div.innerHTML = '<div class="body">conversation started &middot; ' + esc(e.page || '') + ' @ ' + esc(e.host || '') + '</div>';
+            var cb = [];
+            if (e.device) cb.push(esc(e.device));
+            if (e.product) cb.push('viewing: ' + esc(e.product));
+            if (e.cart) cb.push('&#x1f6d2; ' + esc(e.cart));
+            if (e.journey) cb.push('journey: ' + esc(e.journey));
+            div.innerHTML = '<div class="body">conversation started &middot; ' + esc(e.page || '') + ' @ ' + esc(e.host || '') +
+              (cb.length ? '<br>' + cb.join(' &middot; ') : '') + '</div>';
           } else if (e.type === 'llm_error') {
             div.className = 'ev sys';
             div.innerHTML = '<div class="body">&#x26a0;&#xfe0f; AI endpoint failed &rarr; local fallback used</div>';
@@ -532,6 +608,7 @@
       $('exportBtn').onclick = function () {
         var rows = [['convo', 'ts', 'type', 'intent', 'text', 'vote', 'comment', 'mode', 'model', 'page', 'host']];
         Object.keys(convos).forEach(function (k) {
+          if (!convos[k].events.some(function (e) { return e.type === 'user_message'; })) return;
           convos[k].events.forEach(function (e) {
             rows.push([e.convo, e.ts, e.type, e.intent, e.text, e.vote, e.comment, e.mode, e.model, e.page, e.host]
               .map(function (v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }));

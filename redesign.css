@@ -259,6 +259,16 @@ a { color: inherit; }
   width: 6px; height: 6px; border-radius: 50%; flex: none;
   background: var(--ember); box-shadow: 0 0 8px 1px var(--ember);
 }
+/* The storefront reaches the bar as a burger-panel link only (.in-menu), not
+   an end chip. Base made it a plain "Retail Site" item rather than a loud
+   "Shop Now" (#82/#91) -- selling is the quiet secondary -- and there is no
+   room for a fourth chip: the bar's content is capped at 1152px whatever the
+   viewport, and measured with the points chip at its 4,100 ceiling a fourth
+   chip wraps the whole bar-end onto two lines from 1320px up. Desktop reaches
+   the store from the footer. No "Get Started" CTA came across either: base
+   needed one because Quick Start sat inside a Guides dropdown; here it is the
+   first link in the bar, and a highlighted chip would be the same destination
+   twice. */
 .dealer-chip { display: none; }
 /* Dealer locator and rewards have no capsule link -- their chip carries the
    current-page state instead. */

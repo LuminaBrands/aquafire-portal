@@ -98,9 +98,15 @@
     });
   }
 
+  // Resolves when the most recent save has been accepted by Firestore (or
+  // immediately when there's nothing to wait for). Used before navigating away
+  // so a click-triggered award isn't lost mid-flight.
+  var lastSave = Promise.resolve();
+  function whenSaved() { return lastSave; }
+
   function saveUserData() {
     if (db && currentUser) {
-      db.collection('users').doc(currentUser.uid).set({
+      lastSave = db.collection('users').doc(currentUser.uid).set({
         points: userPoints,
         completed: completedRewards,
         email: currentUser.email || '',
@@ -483,16 +489,53 @@
     } else if (path.includes('water-care')) {
       setupWaterCareTracking();
     } else if (path.includes('quick-start')) {
-      // Award points when visiting the quick start page
-      setTimeout(function () { awardPoints('quick-start'); }, 3000);
+      setupQuickStartTracking();
     } else if (path.includes('support')) {
       setTimeout(function () { awardPoints('support-hub'); }, 3000);
     } else if (path.includes('aquafire-pro') || path.includes('aquafire-original')) {
-      // 'setup-guide' used to live on getting-started.html, which was a
-      // placeholder and never awarded anything. It now belongs to the model
-      // guides -- reading either one earns it.
+      // Second path to the same reward. setupQuickStartTracking awards it on
+      // click-through from Quick Start, but the homepage fleet cards link
+      // straight here, so landing on a guide has to earn it too. awardPoints
+      // is idempotent, so arriving both ways still pays once.
       setTimeout(function () { awardPoints('setup-guide'); }, 3000);
     }
+  }
+
+  /* ── Quick Start page ──────────────────────────────────────────────────
+     Two rewards, deliberately at different depths:
+       'quick-start' (150) — for landing on the page.
+       'setup-guide' (500) — for actually opening a model's setup guide from
+         here. It used to sit on getting-started.html, which is a "coming soon"
+         placeholder that never awarded anything, so the badge was unearnable. */
+  function setupQuickStartTracking() {
+    setTimeout(function () { awardPoints('quick-start'); }, 3000);
+
+    // `.tiles.models` is the redesigned grid; `.model-grid` is the pre-redesign
+    // markup. Match either so this keeps working through the rollout.
+    var grid = document.querySelector('.tiles.models, .model-grid');
+    if (!grid) return;
+
+    grid.addEventListener('click', function (e) {
+      var link = e.target.closest('a[href]');
+      if (!link || !grid.contains(link)) return;
+      // Model guides only — not the "Coming Soon" Lite card, which isn't a link.
+      if (!/^aquafire-[a-z-]+\.html/.test(link.getAttribute('href') || '')) return;
+      if (!awardPoints('setup-guide')) return;   // already earned — let the click through
+
+      // Opening in a new tab/window leaves this page alive, so the save
+      // finishes on its own and we must not hijack the click.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+
+      // Same-tab navigation can cut off the Firestore write mid-flight, and the
+      // next page load reads Firestore back over local state — so the 500
+      // points would vanish. Hold navigation until the save lands, capped so a
+      // slow network never traps the customer on the page.
+      e.preventDefault();
+      var href = link.href, went = false;
+      var go = function () { if (!went) { went = true; window.location.href = href; } };
+      whenSaved().then(go, go);
+      setTimeout(go, 700);
+    });
   }
 
   function setupEnclosureTracking() {

@@ -1,0 +1,125 @@
+"Why Aquafire?" — Comparison page
+=================================
+
+Source: https://www.aquafire.com/pages/compare-vs-aquafire
+Fetched: Jul 24, 2026 via the Shopify Admin API. The Shopify page body is
+empty — all content lives in the theme (template templates/page.compare.json
++ section sections/af-vs-traditional.liquid on the live theme), so this
+extract is assembled from both. Videos and images omitted.
+
+----------------------------------------------------------------------
+
+WHY AQUAFIRE? (hero, over demo video)
+-------------------------------------
+
+We pioneered advanced water vapor fireplaces because you deserve to relax
+without the worries. You shouldn't have to worry about the dangers of an
+open flame. Gone are the days of foul-smelling gas fumes. At Aquafire, we
+think it's time you get to enjoy the ambiance and safety of real, water
+vapor flames unhindered by excess heat, smell, and other inconveniences.
+
+SIDE-BY-SIDE COMPARISONS — "It's Aquafire versus everybody."
+------------------------------------------------------------
+
+Three tabs: 1) Traditional fireplaces, 2) Other water vapor, 3) Aquafire
+models.
+
+TAB 1 — AQUAFIRE vs. TRADITIONAL FIREPLACES
+
+  Attribute  | Aquafire Fireplaces          | Traditional Fireplaces
+  -----------|------------------------------|------------------------
+  Flame      | Realistic 3D water vapor  ✓  | Open, burning flame  ✗
+  Safety     | 100% cool-to-touch        ✓  | Hot surfaces, burn risk  ✗
+  Install    | Plug & play setup         ✓  | Gas lines & venting  ✗
+  Fuel       | Just tap water            ✓  | Gas, wood, or ethanol  ✗
+  Emissions  | Zero smoke & fumes        ✓  | Smoke, CO2, soot  ✗
+  Design     | Sleek & modular           ✓  | Bulky, fixed  ✗
+  Care       | Simple water refill       ✓  | Chimney sweeps  ✗
+
+  Verdict: "All the ambiance of real fire — none of the smoke, heat, or
+  risk."
+
+TAB 2 — AQUAFIRE vs. OTHER WATER VAPOR (three side-by-side demo videos;
+competitors shown generically, not named)
+
+  "Alternative Brand Competitor" (left column):
+    - Flat flames lack depth and realism
+    - Stringy, finger-like mist plumes
+    - Limited to 6 set colors
+    - No water softener — mineral buildup over time
+    - Foot-mounted: harder install, never sits flush
+
+  Aquafire (center, hero):
+    - Dual Flame Spectrum(TM): volumetric, full-depth flames with vibrant
+      color mixing
+    - Dual Air Vapor Flow System(TM): moves like real wood fire — natural,
+      irregular flame motion
+    - Modular Ambiance: gang multiple burners for one seamless,
+      edge-to-edge flame
+    - UVC Disinfection and Vapor Pure(TM): softened, UVC-sanitized water —
+      no buildup, no upkeep surprises
+    - Side-Mount Design: flush, recessed finish with an easier install
+
+  "Generic Budget Unit" (right column):
+    - Looks like smoke, not fire
+    - Can't be ganged — visible gaps between units
+    - Dense mist causes moisture and corrosion
+    - Cheap internals mean frequent maintenance
+    - Lacks North American-based product support
+
+  Verdict: "Only one water vapor fireplace technology looks like real
+  fire — and it's the only one built to last."
+
+TAB 3 — AQUAFIRE MODELS (spec comparison)
+
+  Attribute          | Pro                        | Original                  | Lite
+  -------------------|----------------------------|---------------------------|---------------------------
+  Color              | 30+ LED colors             | Natural flame             | Natural flame
+  Sizes              | 20"/40"/60"L x 12.9"W      | 20"/40"/60"L x 12.9"W     | 16"/20"/40"/60"L x 10.5"W
+                     |   x 11.3"H                 |   x 8.7"H                 |   x 9.3"H
+  Burn time          | Up to 20 hours             | Up to 20 hours            | Up to 10 hours
+  Light bar          | Dual LED light bars        | Single LED light bar      | Single LED light bar
+  Brightness         | 37 LEDs per 20 in.         | 19 LEDs per 20 in.        | 12 LEDs per 20 in.
+  Flame settings     | Density, speed, color,     | Density, speed,           | Density, speed,
+                     |   brightness, fade         |   brightness              |   brightness
+  Automatic fill     | Yes ✓                      | Yes ✓                     | Yes ✓
+  Gangable           | Yes ✓                      | Yes ✓                     | No ✗
+  UV-C disinfection  | Yes ✓                      | Yes ✓                     | No ✗
+  Direct plumb       | Yes ✓                      | Plumb kit sold            | No ✗
+                     |                            |   separately (!)          |
+  Water softener     | Yes ✓                      | Included with plumb       | Sold separately ✗
+                     |                            |   kit (!)                 |
+  Automatic drain    | Yes ✓                      | No ✗                      | No ✗
+
+  Verdict: "Every Aquafire makes real-looking fire — Pro adds color,
+  brightness, and plumbing freedom."
+
+  All three tabs CTA: "Explore Water Vapor Fireplaces" →
+  https://www.aquafire.com/collections/water-vapor-fireplaces
+
+UV-C — THE POWER OF UV DISINFECTION
+-----------------------------------
+
+Our mission is to provide you with an experience that is both safe and
+environmentally sustainable, while ensuring that cleanliness and hygiene
+remain a top priority. That's why every Aquafire is equipped with
+state-of-the-art germicidal UV-C lamps which disinfect the vapor as it
+flows out of the unit and into the air. This powerful technology
+eliminates up to 99.9% of viruses, bacteria, spores, microorganisms, and
+airborne pathogens, keeping your environment clean and healthy.
+
+[Note: the impact-text blanket claim "every Aquafire" sits above the model
+table on the same page, which marks UV-C "No" for the Lite — when
+answering customers, attribute UV-C to the Pro and Original only.]
+
+CTA: "Learn How We Keep You Safe" →
+https://aquafire.gorgias.help/en-US/why-we-utilize-uv-c-technology-232559
+
+CONTACT — "Need a hand getting started?"
+----------------------------------------
+
+Got questions about Aquafire or need help placing an order? Reach out and
+one of our Customer Experience team members would love to assist you!
+
+Our customer support is available Monday to Friday: 9am-4:30pm EST.
+Average answer time: 24h.
