@@ -107,9 +107,9 @@
               <input class="si-file" id="siFile" type="file" accept="image/*">
             </label>
 
-            <!-- The <img> is built in JS when a file is picked rather than
-                 shipped empty: a src-less tag is a broken-image box the moment
-                 anything unhides it. -->
+            <!-- The preview image element is created in JS when a file is
+                 picked, rather than shipped here with no src -- an empty one is
+                 a broken-image box the moment anything unhides it. -->
             <figure class="si-preview" id="siPreview" hidden>
               <figcaption>
                 <span id="siFileName"></span>
@@ -229,8 +229,12 @@
       background: var(--nub-bg); border-radius: 999px;
     }
     .si-bar-fill {
-      display: block; height: 100%; width: 0%; border-radius: 999px;
-      background: var(--ember); transition: width 0.25s linear;
+      display: block; height: 100%; width: 100%; border-radius: 999px;
+      background: var(--ember);
+      /* scaleX, not width: upload progress fires on every chunk, and a
+         transform is composited where a width change relayouts each time. */
+      transform: scaleX(0); transform-origin: left center;
+      transition: transform 0.25s linear;
     }
 
     /* Same treatment as the homepage rewards band's primary: solid ember with
@@ -429,12 +433,12 @@
 
         task.on('state_changed', function (snap) {
           var pct = snap.totalBytes ? Math.round((snap.bytesTransferred / snap.totalBytes) * 100) : 0;
-          barFill.style.width = pct + '%';
+          barFill.style.transform = 'scaleX(' + (pct / 100) + ')';
         }, function (e) {
           busy = false;
           submit.disabled = false;
           bar.hidden = true;
-          barFill.style.width = '0%';
+          barFill.style.transform = 'scaleX(0)';
           fail(e && e.code === 'storage/unauthorized'
             ? 'We could not accept that upload. If this keeps happening, email support and we will sort it out.'
             : 'The upload did not finish. Check your connection and try again.');
