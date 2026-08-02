@@ -410,10 +410,11 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
        three full-height route cards -- a tall stack here doubles the scroll
        for something that should read quieter than the routes. */
     .mcard .mshot { display: block; height: 92px; margin-bottom: 4px; }
-    .mcard .mshot img {
-      width: 100%; height: 100%; object-fit: contain;
-      filter: drop-shadow(0 10px 22px rgba(0,0,0,0.4));
-    }
+    /* Room photographs now, not transparent cutouts: they fill the frame and
+       take a radius, where `contain` plus a drop-shadow would letterbox them
+       and cast a shadow off a rectangle. */
+    .mcard .mshot { border-radius: 13px; overflow: hidden; }
+    .mcard .mshot img { width: 100%; height: 100%; object-fit: cover; }
     .mcard b { font-size: 0.88rem; font-weight: 600; color: var(--text-hi); }
     /* Grows so the CTA pins to the bottom of every card -- the descriptions
        are different lengths and the grid stretches them to equal height. */
@@ -429,7 +430,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     a.mcard:hover .mcta { color: var(--text-hi); border-color: var(--stroke-hi); }
     /* Lite has no guide yet, so its card is a div, not a link. */
     .mcard.is-soon { opacity: 0.72; }
-    .mcard.is-soon .mshot img { filter: grayscale(0.35) drop-shadow(0 10px 22px rgba(0,0,0,0.35)); }
+    .mcard.is-soon .mshot img { filter: grayscale(0.35); }
 
 
     /* ── Share your install ──────────────────────────────
@@ -729,7 +730,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       </div>
       <div class="fleet-cards">
         <a class="mcard" href="aquafire-original.html">
-          <span class="mshot"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ORIGINAL.png?v=1768251742" alt="" loading="lazy"></span>
+          <span class="mshot"><img src="model-original.jpg" alt="" loading="lazy" width="1264" height="842"></span>
           <b>Aquafire Original</b>
           <span class="mdesc">The classic water vapor fireplace. 20&Prime;, 40&Prime; and 60&Prime;.</span>
           <span class="mcta">Open the guide
@@ -737,7 +738,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           </span>
         </a>
         <a class="mcard" href="aquafire-pro.html">
-          <span class="mshot"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt="" loading="lazy"></span>
+          <span class="mshot"><img src="model-pro.jpg" alt="" loading="lazy" width="1400" height="1400"></span>
           <b>Aquafire Pro</b>
           <span class="mdesc">Full color mixing, app control and direct-plumb.</span>
           <span class="mcta">Open the guide
@@ -745,7 +746,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           </span>
         </a>
         <div class="mcard is-soon">
-          <span class="mshot"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/LITE.png?v=1768251746" alt="" loading="lazy"></span>
+          <span class="mshot"><img src="model-lite.jpg" alt="" loading="lazy" width="1400" height="933"></span>
           <b>Aquafire Lite</b>
           <span class="mdesc">Compact and easy to install &mdash; for smaller spaces.</span>
           <span class="mcta">Guide coming soon</span>
