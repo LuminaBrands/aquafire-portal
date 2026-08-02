@@ -647,6 +647,82 @@
       }
     },
 
+    /* -- The portal itself: rewards + the tools ----------------------------
+       Ember lives on the same site as these tools, and used to fall back on
+       anything about them. The programme facts here must track rewards.js
+       REWARDS (18 modules, 4,600 points) and the tiers on rewards.html. */
+    {
+      id: 'rewards',
+      kw: [['rewards program', 10], ['reward program', 10], ['rewards programme', 10],
+           ['reward points', 9], ['aquafire rewards', 9], ['earn points', 8],
+           ['loyalty', 8], ['redeem', 7], ['rewards', 6], ['my points', 7],
+           ['how do points work', 8], ['point tiers', 7], ['tier', 4]],
+      answer: function () {
+        return {
+          feedback: true,
+          blocks: [
+            { t: 'text', html: '<strong>Aquafire Rewards</strong> is free \u2014 sign in with Google or an email address and your points follow you across devices. You earn them for using the guide: there are <strong>18 modules worth 4,600 points</strong> in total, collected in any order.' },
+            { t: 'steps', items: [
+              'Biggest earners: share a photo of your install (+500), complete your setup (+500), read a model guide (+500), write a review (+500).',
+              'Tools pay too: check your water hardness (+250), use the enclosure builder (+200), clean the mist maker (+250), register your warranty (+300).',
+              'Redemption starts at 600 points and runs through six tiers, the top one at 2,800+.'
+            ]},
+            { t: 'links', items: [
+              { label: '\ud83c\udfc6 Rewards \u2014 your points, the full list and the tiers', href: pURL('rewards.html') },
+              { label: '\ud83d\udcf7 Share your install for +500', href: pURL('share-install.html') }
+            ]},
+            { t: 'chips', items: [
+              { label: 'How do I earn the most?', send: 'Which rewards are worth the most points?' },
+              { label: 'Share my install', send: 'How do I submit a photo of my install?' }
+            ]}
+          ]
+        };
+      }
+    },
+    {
+      id: 'share_install',
+      kw: [['submit a photo', 9], ['submit photo', 9], ['share my install', 10],
+           ['share install', 9], ['send you a picture', 8], ['upload a photo', 9],
+           ['upload picture', 8], ['photo of my install', 10], ['install photo', 9]],
+      answer: function () {
+        return {
+          feedback: true,
+          blocks: [
+            { t: 'text', html: 'Send us one photo of your finished Aquafire and it is worth <strong>500 points</strong> \u2014 the largest single reward we have. Any model, any phone camera; flame on with the lights down reads best, and it helps to get the whole surround in frame.' },
+            { t: 'links', items: [
+              { label: '\ud83d\udcf7 Share your install (+500 points)', href: pURL('share-install.html') }
+            ]},
+            { t: 'chips', items: [{ label: 'About the rewards', send: 'Tell me about the rewards program' }]}
+          ]
+        };
+      }
+    },
+    {
+      id: 'portal_tools',
+      kw: [['what tools', 9], ['what can you help', 6], ['what is on the site', 8],
+           ['what guides', 7], ['calculators', 8], ['interactive guide', 8],
+           ['owners guide', 7], ['resources', 5], ['help center', 6], ['portal', 6]],
+      answer: function () {
+        return {
+          feedback: true,
+          blocks: [
+            { t: 'text', html: 'The <strong>Interactive Aquafire Guide</strong> has a tool for most things \u2014 here is the whole set:' },
+            { t: 'links', items: [
+              { label: '\ud83d\ude80 Quick Start \u2014 pick your model, then its full guide', href: pURL('quick-start.html') },
+              { label: '\ud83d\udcd0 Enclosure Guide \u2014 cutout dimensions and light trap', href: pURL('enclosure-guide.html') },
+              { label: '\ud83e\uddf1 Build Yours \u2014 plan a surround from scratch', href: pURL('builder.html') },
+              { label: '\ud83d\udca7 Water Care \u2014 hardness by ZIP and cartridge timing', href: pURL('water-care.html') },
+              { label: '\ud83e\uddf9 Maintenance \u2014 the cleaning and flush schedule', href: pURL('maintenance.html') },
+              { label: '\ud83e\udded Troubleshooter \u2014 guided fixes for your model', href: pURL('troubleshoot.html') },
+              { label: '\ud83d\udccd Find a Dealer \u2014 see one in person', href: pURL('dealer-locator.html') },
+              { label: '\ud83c\udfc6 Rewards \u2014 earn points as you go', href: pURL('rewards.html') },
+              { label: '\ud83d\udee1\ufe0f Support \u2014 warranty, claims and contact', href: pURL('support.html') }
+            ]}
+          ]
+        };
+      }
+    },
+
     /* ── Troubleshooting ─────────────────────────────────────────────── */
     {
       id: 'ts_start',
@@ -692,7 +768,7 @@
     },
     {
       id: 'flame_low',
-      kw: [['flame low', 8], ['low flame', 8], ['weak flame', 8], ['flame short', 7], ['no flame', 8], ['flame uneven', 8], ['uneven', 5], ['flame height', 7], ['barely visible', 6], ['flame is small', 7], ['one section', 5]],
+      kw: [['flame low', 8], ['low flame', 8], ['flame is low', 8], ['weak flame', 8], ['flame short', 7], ['no flame', 8], ['flame uneven', 8], ['uneven', 5], ['flame height', 7], ['barely visible', 6], ['flame is small', 7], ['one section', 5]],
       answer: function () {
         return {
           feedback: true,
@@ -853,7 +929,7 @@
     /* ── Escalation ─────────────────────────────────────────────────── */
     {
       id: 'human',
-      kw: [['human', 8], ['agent', 6], ['real person', 9], ['speak to someone', 9], ['talk to someone', 9], ['customer service', 7], ['support team', 7], ['contact', 5], ['call', 4], ['email', 4], ['phone number', 7], ['representative', 7]],
+      kw: [['human', 8], ['agent', 6], ['real person', 9], ['speak to someone', 9], ['talk to someone', 9], ['talk to a person', 9], ['speak to a person', 9], ['talk to a human', 9], ['customer service', 7], ['support team', 7], ['contact', 5], ['call', 4], ['email', 4], ['phone number', 7], ['representative', 7]],
       answer: function () {
         return {
           blocks: [
@@ -908,6 +984,7 @@
       { label: '\ud83d\udee0\ufe0f Fix an issue', send: 'Help me troubleshoot an issue' },
       { label: '\ud83d\udcd0 Plan an install', send: 'How is it installed?' },
       { label: '\ud83d\udee1\ufe0f Warranty', send: 'Tell me about the warranty' },
+      { label: '\ud83c\udfc6 Rewards', send: 'Tell me about the rewards program' },
       CHIP_HUMAN
     ]};
   }
