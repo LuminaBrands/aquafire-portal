@@ -1561,6 +1561,20 @@
     msgsEl.scrollTo({ top: msgsEl.scrollHeight, behavior: instant ? 'auto' : 'smooth' });
   }
 
+  // Scroll a newly added message into view. Scrolling to the bottom is right
+  // for anything that fits, but a step-by-step answer is taller than the pane
+  // on a phone -- the hero panel gives the message list about 300px -- and
+  // jumping to its end lands the reader past the instructions they asked for.
+  // Taller-than-the-pane messages align their top instead, so the answer reads
+  // from its first line.
+  function scrollToMsg(row, instant) {
+    if (!row || !msgsEl) return;
+    if (row.offsetHeight <= msgsEl.clientHeight) { scrollToEnd(instant); return; }
+    var top = msgsEl.scrollTop
+      + (row.getBoundingClientRect().top - msgsEl.getBoundingClientRect().top);
+    msgsEl.scrollTo({ top: Math.max(0, top - 8), behavior: instant ? 'auto' : 'smooth' });
+  }
+
   function renderBlocks(container, blocks, spent) {
     blocks.forEach(function (b) {
       if (b.t === 'text') {
@@ -1645,7 +1659,7 @@
       row.appendChild(col);
     }
     msgsEl.appendChild(row);
-    if (!restoring) scrollToEnd();
+    if (!restoring) scrollToMsg(row);
     return row;
   }
 
