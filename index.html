@@ -241,6 +241,10 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       color: var(--ember-t);
     }
     .j-sum span { font-size: 0.76rem; color: var(--text-dim); }
+    /* Total and its unit share a baseline instead of stacking -- three lines of
+       summary made the band taller than anything in it justified. Stated at
+       (0,2,0) to beat `.j-sum span` above, which would otherwise shrink it. */
+    .j-sum .j-total { display: flex; align-items: baseline; gap: 7px; }
     /* A text link, not a filled pill. As a bordered capsule on the dark panel
        it read as another text input -- the same glass rounding and fill the
        composer uses -- so it competed with the fields instead of the copy. */
@@ -527,24 +531,23 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     <section class="journey" aria-labelledby="j-title">
       <span class="j-sum">
         <span class="j-name" id="j-title">Aquafire Rewards<em class="j-tag">Learn to earn</em></span>
-        <b id="rb-home-points-big">0</b>
-        <span>Reward points</span>
+        <span class="j-total"><b id="rb-home-points-big">0</b><span>Reward points</span></span>
       </span>
-      <!-- rewards.js owns this button's label and action: "Sign In to Start
-           Earning" when signed out, "View Profile" once signed in. -->
       <!-- rewards.js owns both. Primary: "Continue earning" (signed in, scrolls
            to the routes) / "Sign in to earn rewards" (signed out, opens the
            modal). The secondary text link carries "View Profile" once signed
            in, and hides while signed out where it would repeat the primary. -->
       <button class="j-go" id="rb-journey-cta" type="button">Sign in to earn rewards</button>
-      <button class="j-cta" id="rb-signin-cta" type="button">Sign In to Start Earning</button>
       <div class="j-prog">
         <span class="j-bar" aria-hidden="true"><span class="j-bar-fill" id="rb-home-bar-fill"></span></span>
         <span class="j-meta"><strong id="rb-home-bar-label">0 / 17 modules completed</strong> &middot; collect them in any order</span>
       </div>
+      <!-- One footer row. "View your rewards" and "How the program works"
+           pointed at the same page and were two blocks tall between them; the
+           secondary profile link now shares this row instead of owning one. -->
       <div class="j-links">
-        <a href="rewards.html">View your rewards &rarr;</a>
-        <a href="rewards.html#how-it-works">How the program works</a>
+        <button class="j-cta" id="rb-signin-cta" type="button">Sign In to Start Earning</button>
+        <a href="rewards.html">How rewards work &rarr;</a>
       </div>
     </section>
 
@@ -710,7 +713,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop</a>
       <a data-reward="follow-instagram" href="https://www.instagram.com/aquafirefireplace/" target="_blank" rel="noopener">Instagram</a>
       <a href="https://www.youtube.com/@AquafireFireplace" target="_blank" rel="noopener">YouTube</a>
-      <span>&copy; 2026 Aquafire &middot; committed direction &ldquo;Hero Bleed&rdquo; &middot; dual theme &middot; lobby scene illustrative</span>
+      <span>&copy; 2026 Aquafire &middot; Interactive Aquafire Guide</span>
     </footer>
   </div>
 
