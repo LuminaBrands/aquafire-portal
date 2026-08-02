@@ -214,4 +214,4 @@ exports, dashboards, snapshots, or customer data.
 - **styles.css is enclosure-specific** despite the generic name. Shared styles are in `hub.css`.
 - **troubleshoot.css uses theme tokens with fallbacks** (e.g. `var(--blue, #4da6e8)`) — the per-page inline `:root` blocks only define a subset of the tokens listed in the Design System section, so the CSS can't rely on `--blue`/`--amber`/`--surface-alt` being present everywhere.
 - **No local dev server configured.** Open files directly or use any static server (`python -m http.server`, etc.).
-- **Images are all on Shopify CDN** — no local image assets in the repo.
+- **Images are on the Shopify CDN, with one exception.** `install-example.jpg` (the install photo on the homepage's share module and on `share-install.html`) is committed here, because it was supplied directly rather than uploaded to the store. Re-encoded from a 2.4 MB PNG to a 257 KB JPEG on the way in. Anything new still belongs on the CDN — `img-src` allows `'self'`, so a local file works, but the repo is not an asset pipeline.
