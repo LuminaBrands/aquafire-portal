@@ -12,12 +12,11 @@ Static documentation and tools portal for **Aquafire** fireplace products (by Lu
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Landing hub — bento grid nav, model cards, section links |
+| `index.html` | Landing hub — hero photo + inline Ember chat, rewards status band, three swipeable intent routes (Explore / Set up / Fix), then an "explore by model" fleet row |
 | `aquafire-pro.html` | Comprehensive Pro model guide (specs, wiring, troubleshooting, video guide) — **largest page (~1,400 lines)** |
 | `enclosure-guide.html` | Interactive enclosure dimension calculator with 3D isometric diagram |
 | `water-care.html` | Water hardness lookup (ZIP code DB) and softener replacement calculator |
-| `quick-start.html` | Model selection page linking to individual guides |
-| `getting-started.html` | Placeholder — "coming soon" |
+| `quick-start.html` | Model selection page linking to individual guides — also the site's "getting started" entry point since the placeholder page was retired |
 | `support.html` | Support hub — cards link to Troubleshooter + (stub) warranty/claims/FAQs |
 | `troubleshoot.html` | **Interactive Troubleshooter** — model-aware guided decision-tree wizard |
 | `chat-insights.html` | **Internal** chat-log dashboard for the Ember widget (Firebase-gated; not in nav) — transcripts, unanswered questions, 👍/👎 rates |
@@ -64,7 +63,7 @@ Root (flat — no subdirectories)
 ├── Troubleshooter: troubleshoot.html + troubleshoot.css + troubleshoot.js
 ├── Chat widget: assistant.js (self-contained — CSS injected; on all customer pages + embeddable on Shopify)
 ├── Source docs: docs/source-material/ (help-article / manual extracts)
-└── Stubs: quick-start.html, getting-started.html, support.html
+└── Stubs: support.html (partial)
 ```
 
 No build process. No package.json. No bundler. Edit files directly and deploy.
@@ -111,13 +110,13 @@ Radius:         --radius: 14px | --radius-sm: 8px
 
 ## Navigation Structure
 
-All pages share the same nav bar (defined inline in each HTML file). Since the redesign it is one glass capsule of seven links plus two end chips, identical on all 13 pages:
+All pages share the same nav bar (defined inline in each HTML file). Since the redesign it is one glass capsule of six links plus two end chips, identical on all 12 nav-bearing pages:
 
 ```
-[brand] │ Getting Started · Quick Start · Enclosure · Water Care · Maintenance · Troubleshoot · Support │ Find a Dealer · Rewards · ☰ · ☀
+[brand] │ Quick Start · Enclosure · Water Care · Maintenance · Troubleshoot · Support │ Find a Dealer · Rewards · ☰ · ☀
 ```
 
-The page's own link carries `class="is-here" aria-current="page"` (guide pages point at Quick Start, `builder.html` at Enclosure; `rewards.html` / `dealer-locator.html` mark their end chip instead). `.in-menu` links (Find a Dealer, Rewards) are hidden on desktop — they only appear inside the burger panel, where the end chips aren't. Widths are tight: the full bar clears the 1152px content column by ~28px, so **re-measure before adding a link** (see the breakpoint comment in `redesign.css`). Breakpoints: capsule and burger swap at 1080px, the dealer chip appears at 1200px, the points chip at 920px.
+The page's own link carries `class="is-here" aria-current="page"` (guide pages point at Quick Start, `builder.html` at Enclosure; `rewards.html` / `dealer-locator.html` mark their end chip instead). `.in-menu` links (Find a Dealer, Rewards) are hidden on desktop — they only appear inside the burger panel, where the end chips aren't. Dropping the Getting Started link took the bar from ~28px of clearance over the 1152px content column to ~176px, so there is room for one more link now — but still **re-measure before adding one** (see the breakpoint comment in `redesign.css`), and measure with the points chip at its widest. Breakpoints are unchanged and now conservative: capsule and burger swap at 1080px, the dealer chip appears at 1200px, the points chip at 920px.
 
 On the `aquafire-pro.html` / `aquafire-original.html` guide pages, the Troubleshoot nav link carries a `?model=pro` / `?model=original` param so the wizard pre-selects that model (same pattern as the Enclosure Guide link there).
 
@@ -160,7 +159,7 @@ This portal evolved through iterative Claude Code sessions:
 
 ## Gotchas
 
-- **Nav duplication:** There's no shared template. Changing navigation means editing ~13 HTML files (and several have a footer "Guides" column too).
+- **Nav duplication:** There's no shared template. Changing navigation means editing ~12 HTML files (and several have a footer "Guides" column too).
 - **aquafire-pro.html is large** (~1,400 lines with inline CSS/JS). Read specific sections rather than the whole file. It still has its own in-page category-accordion troubleshooting section (`TS_DATA` / `ALERTS_DATA`) — that's separate from the standalone Troubleshooter; the new tool didn't replace it.
 - **styles.css is enclosure-specific** despite the generic name. Shared styles are in `hub.css`.
 - **troubleshoot.css uses theme tokens with fallbacks** (e.g. `var(--blue, #4da6e8)`) — the per-page inline `:root` blocks only define a subset of the tokens listed in the Design System section, so the CSS can't rely on `--blue`/`--amber`/`--surface-alt` being present everywhere.

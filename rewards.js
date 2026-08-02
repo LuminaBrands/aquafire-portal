@@ -18,7 +18,7 @@
 
   /* ── Reward Definitions ── */
   const REWARDS = {
-    'setup-guide':       { points: 500, label: 'Complete Setup Guide' },
+    'setup-guide':       { points: 500, label: 'Read a Model Guide' },
     'enclosure-builder': { points: 200, label: 'Use Enclosure Builder' },
     'water-hardness':    { points: 250, label: 'Check Water Hardness' },
     'light-trap':        { points: 200, label: 'Configure Light Trap' },
@@ -487,6 +487,11 @@
       setTimeout(function () { awardPoints('quick-start'); }, 3000);
     } else if (path.includes('support')) {
       setTimeout(function () { awardPoints('support-hub'); }, 3000);
+    } else if (path.includes('aquafire-pro') || path.includes('aquafire-original')) {
+      // 'setup-guide' used to live on getting-started.html, which was a
+      // placeholder and never awarded anything. It now belongs to the model
+      // guides -- reading either one earns it.
+      setTimeout(function () { awardPoints('setup-guide'); }, 3000);
     }
   }
 

@@ -345,6 +345,25 @@ spring ease; LED bars slide in at the bottom edge.
 - **The action is a text link, never a filled pill.** A bordered capsule here
   reads as another text input -- same glass rounding and fill the composer
   uses -- so it competes with the fields instead of the copy
+- **Named, then counted.** The band opens with "Aquafire Rewards" in heading
+  ink plus a "Learn to earn" badge (ember, Label small, the same chip shape
+  the points badges use); the standing total sits below it. The bare number
+  alone never said whose programme it was
+
+### Fleet (explore by model, homepage)
+- Sits under the wings as the second door: the wings ask "what are you trying
+  to do", the fleet asks "which one do you own" -- both land in the same
+  interactive guides
+- **Flat, not another panel.** No glass pane around it, or it reads as a
+  fourth route competing with the three
+- **Shape:** 18px cards on the row fill, product shot over name, description
+  and an outline CTA pill. The description grows so the CTA pins to the
+  bottom edge of every card in the row
+- **Quieter than the routes.** The shot is short on phones (92px vs 140px
+  desktop) -- the section follows three full-height route cards, and a tall
+  stack here doubles the scroll for the secondary entry point
+- A model with no guide yet is a `div`, not an `a`: dimmed, shot desaturated,
+  CTA reading "coming soon"
 
 ### Wings (intent panes)
 - **Shape:** 26px pane, blur 18px; contains head (bare tinted icon + headline), Ember tip bubble, rows, minis

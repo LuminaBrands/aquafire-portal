@@ -71,16 +71,18 @@ the open item below.)
 ## Nav bar (rebuilt 2026-08-01)
 
 Modelled on the v1 "Hearth Console" bar the user picked: one glass capsule
-holding **seven** links (Getting Started · Quick Start · Enclosure · Water
+holding **six** links (Quick Start · Enclosure · Water
 Care · Maintenance · Troubleshoot · Support) with a pill only on hover or
 `is-here`, plus `Find a Dealer` and a `Rewards <points>` chip in `.bar-end`.
-The density is what makes seven items fit where six separate `.cap` pills did
-not.
+The density is what makes six items plus two end chips fit where six separate
+`.cap` pills did not. (It held seven until `getting-started.html` was retired;
+the bar now clears the 1152px column by ~176px instead of ~28px.)
 
 Widths are the binding constraint and were measured, not estimated —
 `.page` caps content at **1152px** no matter how wide the window is, and the
-full bar needs 1124 of it with the points chip at its ceiling (4,100 pts, the
-sum of every reward). That is ~28px of slack, so **re-measure before adding a
+full bar needed 1124 of it with the points chip at its ceiling (4,100 pts, the
+sum of every reward) back when it held seven links; with six it needs ~976.
+That was ~28px of slack and is now ~176px, so **re-measure before adding a
 link or lengthening a label**. Breakpoints, widest first: dealer chip at
 1200, capsule ↔ burger at 1080, points chip at 920.
 

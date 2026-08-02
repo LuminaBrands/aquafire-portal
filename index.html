@@ -220,6 +220,21 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       display: flex; flex-direction: column; gap: 15px;
     }
     .j-sum { display: flex; flex-direction: column; }
+    /* Named, because the standing total on its own didn't say whose programme
+       this is. `.j-sum span` is (0,2,0), so the name has to be stated at the
+       same weight or it inherits the dim caption styling below it. */
+    .j-sum .j-name {
+      display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+      margin-bottom: 7px;
+      font-size: 0.95rem; font-weight: 600; color: var(--text-hi);
+    }
+    .j-sum .j-tag {
+      font-style: normal; font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--ember-t);
+      background: var(--badge-bg); border: 1px solid var(--badge-border);
+      border-radius: 999px; padding: 2px 8px;
+    }
     .j-sum b {
       font-size: 1.6rem; font-weight: 700; line-height: 1.15;
       letter-spacing: -0.025em; font-variant-numeric: tabular-nums;
@@ -342,6 +357,59 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     }
     .tip p strong { color: var(--text-hi); }
 
+    /* ── Fleet: entry by model ────────────────────────
+       Sits under the three routes as the product-shaped door into the same
+       guides. Kept flat -- no glass panel around it -- so it reads as a
+       continuation of the wings rather than a fourth competing card. */
+    .fleet { margin-top: 26px; }
+    /* The reward badge is injected as firstChild, so the title is ordered
+       after it and the badge pushed to the end (same trick as `.row`). */
+    .fleet-head {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 13px;
+    }
+    .fleet-head > span:not(.af-reward-badge) { order: 1; flex: 1; min-width: 0; }
+    .fleet-head .af-reward-badge { order: 2; flex: none; }
+    .fleet-head b { display: block; font-size: 1.05rem; font-weight: 700; color: var(--text-hi); }
+    .fleet-head span span { display: block; font-size: 0.76rem; color: var(--text-dim); }
+    .fleet-cards { display: grid; gap: 12px; }
+    .mcard {
+      display: flex; flex-direction: column; gap: 5px;
+      padding: 16px 16px 15px; border-radius: 18px;
+      background: var(--row-bg); border: 1px solid var(--row-border);
+      box-shadow: var(--row-shadow); backdrop-filter: blur(18px);
+      text-decoration: none; color: inherit;
+      transition: transform 0.3s var(--ease), border-color 0.24s, box-shadow 0.3s var(--ease);
+    }
+    a.mcard:hover {
+      transform: translateY(-2px);
+      border-color: var(--row-border-hover); box-shadow: var(--row-shadow-hover);
+    }
+    /* Short on phones: this is the secondary door, and it sits directly under
+       three full-height route cards -- a tall stack here doubles the scroll
+       for something that should read quieter than the routes. */
+    .mcard .mshot { display: block; height: 92px; margin-bottom: 4px; }
+    .mcard .mshot img {
+      width: 100%; height: 100%; object-fit: contain;
+      filter: drop-shadow(0 10px 22px rgba(0,0,0,0.4));
+    }
+    .mcard b { font-size: 0.88rem; font-weight: 600; color: var(--text-hi); }
+    /* Grows so the CTA pins to the bottom of every card -- the descriptions
+       are different lengths and the grid stretches them to equal height. */
+    .mcard .mdesc { flex: 1 1 auto; font-size: 0.8rem; color: var(--text-mid); }
+    .mcard .mcta {
+      align-self: flex-start; margin-top: 7px;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.76rem; font-weight: 600; color: var(--text-mid);
+      background: var(--mini-bg); border: 1px solid var(--stroke);
+      border-radius: 999px; padding: 5px 12px;
+      transition: color 0.24s, border-color 0.24s;
+    }
+    a.mcard:hover .mcta { color: var(--text-hi); border-color: var(--stroke-hi); }
+    /* Lite has no guide yet, so its card is a div, not a link. */
+    .mcard.is-soon { opacity: 0.72; }
+    .mcard.is-soon .mshot img { filter: grayscale(0.35) drop-shadow(0 10px 22px rgba(0,0,0,0.35)); }
+
     /* ── Desktop enhancement ─────────────────────────── */
     @media (min-width: 920px) {
       .greet { padding-top: 46px; }
@@ -364,6 +432,9 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       }
       .hall > .wing { flex: 1; }
       .hall-tabs { display: none; }
+      .fleet { margin-top: 34px; }
+      .fleet-cards { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .mcard .mshot { height: 140px; }
     }
   </style>
 </head>
@@ -379,7 +450,6 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
       </a>
       <nav class="links" id="navLinks" aria-label="Primary">
-        <a href="getting-started.html">Getting Started</a>
         <a href="quick-start.html">Quick Start</a>
         <a href="enclosure-guide.html">Enclosure</a>
         <a href="water-care.html">Water Care</a>
@@ -438,8 +508,9 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
 
     <section class="journey" aria-labelledby="j-title">
       <span class="j-sum">
+        <span class="j-name" id="j-title">Aquafire Rewards<em class="j-tag">Learn to earn</em></span>
         <b id="rb-home-points-big">0</b>
-        <span id="j-title">Aquafire Reward Points</span>
+        <span>Reward points</span>
       </span>
       <!-- rewards.js owns this button's label and action: "Sign In to Start
            Earning" when signed out, "View Profile" once signed in. -->
@@ -480,9 +551,9 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
             <span><b>Meet the models</b><span>Pro &middot; Original &middot; Lite &mdash; 20&Prime;/40&Prime;/60&Prime;</span></span>
             <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
-          <a class="row" href="aquafire-pro.html">
-            <span class="thumb"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt=""></span>
-            <span><b>Aquafire Pro</b><span>Full color mixing &middot; app &middot; direct-plumb</span></span>
+          <a class="row" href="enclosure-guide.html">
+            <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V4h8v3M9 12h6"/></svg></span>
+            <span><b>Enclosure guide</b><span>Will it fit? Cutouts by model &amp; size</span></span>
             <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
           <a class="row" href="dealer-locator.html">
@@ -508,9 +579,9 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           <p>Day one order: <strong>place, water check, first fill</strong> &mdash; each step earns journey points.</p>
         </div>
         <div class="rows">
-          <a class="row" data-reward="fireplace-setup" href="getting-started.html">
+          <a class="row" data-reward="fireplace-setup" href="quick-start.html">
             <span class="r-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></span>
-            <span><b>Getting started</b><span>Unboxing to first flame</span></span>
+            <span><b>Quick start</b><span>Unboxing to first flame</span></span>
             <svg class="arr" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
           <a class="row" data-reward="enclosure-builder" href="enclosure-guide.html">
@@ -530,7 +601,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           </a>
         </div>
         <div class="minis">
-          <a href="quick-start.html">Quick start</a>
+          <a href="maintenance.html">Maintenance</a>
           <a href="rewards.html">Complete setup &middot; +500 pts</a>
         </div>
       </section>
@@ -570,6 +641,39 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         </div>
       </section>
     </div>
+
+    <!-- A second way in, by product rather than by intent. The three routes
+         above ask "what are you trying to do"; this asks "which one do you
+         own" -- and lands in the same interactive guides. -->
+    <section class="fleet" aria-labelledby="fleet-t">
+      <div class="fleet-head" data-reward="setup-guide">
+        <span id="fleet-t"><b>Explore by model</b><span>Specs, install, water care and fixes &mdash; per model</span></span>
+      </div>
+      <div class="fleet-cards">
+        <a class="mcard" href="aquafire-original.html">
+          <span class="mshot"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/ORIGINAL.png?v=1768251742" alt="" loading="lazy"></span>
+          <b>Aquafire Original</b>
+          <span class="mdesc">The classic water vapor fireplace. 20&Prime;, 40&Prime; and 60&Prime;.</span>
+          <span class="mcta">Open the guide
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </a>
+        <a class="mcard" href="aquafire-pro.html">
+          <span class="mshot"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png?v=1768251750" alt="" loading="lazy"></span>
+          <b>Aquafire Pro</b>
+          <span class="mdesc">Full color mixing, app control and direct-plumb.</span>
+          <span class="mcta">Open the guide
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </a>
+        <div class="mcard is-soon">
+          <span class="mshot"><img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/LITE.png?v=1768251746" alt="" loading="lazy"></span>
+          <b>Aquafire Lite</b>
+          <span class="mdesc">Compact and easy to install &mdash; for smaller spaces.</span>
+          <span class="mcta">Guide coming soon</span>
+        </div>
+      </div>
+    </section>
 
     <figure class="close">
       <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>

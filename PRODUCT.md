@@ -41,7 +41,7 @@ The only interactive, model-aware companion for Aquafire water-vapor fireplaces:
 - **Tech constraints:** static vanilla HTML/CSS/JS, flat root, **no build step, no frameworks, no npm dependencies** — files deploy as-is. Nav and footer are duplicated per page (~13 files, no templating). `api/chat.js` must stay dependency-free. `assistant.js` string literals must stay pure-ASCII (Shopify charset safety).
 - **Content rule:** customer-facing facts must trace to `docs/source-material/`; when the underlying Aquafire docs change, both the tool and the extract get updated.
 - **Mobile-first (user-confirmed 2026-07-30):** the portal is designed phone-first — owners typically arrive on a phone standing next to the unit — and must scale up gracefully to desktop, where a denser dashboard-style layout is welcome. Composition decisions start at phone width; desktop is the enhancement, not the default.
-- **Undecided / pending:** official how-to video URLs (the `VIDEOS` map in `troubleshoot.js` holds TODO placeholders; tools show "video coming soon" — do not fabricate links). `getting-started.html` and parts of `support.html` are stubs.
+- **Undecided / pending:** official how-to video URLs (the `VIDEOS` map in `troubleshoot.js` holds TODO placeholders; tools show "video coming soon" — do not fabricate links). Parts of `support.html` are stubs. The `getting-started.html` placeholder was removed — Quick Start covers that ground.
 
 ## Brand Commitments
 
