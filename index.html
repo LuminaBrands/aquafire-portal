@@ -431,6 +431,40 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     .mcard.is-soon { opacity: 0.72; }
     .mcard.is-soon .mshot img { filter: grayscale(0.35) drop-shadow(0 10px 22px rgba(0,0,0,0.35)); }
 
+
+    /* ── Share your install ──────────────────────────────
+       Same trick as the hero scene: the photograph is masked into the ground
+       instead of being boxed, so there is no visible edge between it and the
+       page. On desktop the fade runs rightward into the copy; stacked, it runs
+       down into the text below. */
+    .share { margin-top: 30px; display: grid; gap: 0; }
+    .share-shot { position: relative; height: 210px; margin: 0 -18px; }
+    .share-shot img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center 45%;
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 13%, #000 46%, transparent 97%);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 13%, #000 46%, transparent 97%);
+    }
+    .share-copy { margin-top: -34px; position: relative; }
+    .share-badge {
+      display: inline-flex; align-items: center; gap: 6px; margin-bottom: 10px;
+      padding: 3px 10px; border-radius: 999px;
+      background: var(--badge-bg); border: 1px solid var(--badge-border);
+      color: var(--ember-t); font-size: 0.7rem; font-weight: 700;
+    }
+    .share-copy h2 {
+      font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700;
+      line-height: 1.18; letter-spacing: -0.025em; color: var(--text-hi);
+    }
+    .share-copy p { margin-top: 9px; max-width: 46ch; font-size: 0.93rem; color: var(--text-mid); }
+    .share-go {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 18px;
+      padding: 11px 20px; border-radius: 999px;
+      background: var(--ember); color: var(--on-ember); text-decoration: none;
+      font-size: 0.88rem; font-weight: 600;
+      transition: transform 0.3s var(--ease), filter 0.24s;
+    }
+    .share-go:hover { transform: translateY(-1px); filter: brightness(1.06); }
+
     /* ── Desktop enhancement ─────────────────────────── */
     @media (min-width: 920px) {
       .greet { padding-top: 46px; }
@@ -453,6 +487,24 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       }
       .hall > .wing { flex: 1; }
       .hall-tabs { display: none; }
+      .share {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center; gap: 10px; margin-top: 44px;
+      }
+      .share-shot { height: 320px; margin: 0 0 0 -24px; }
+      .share-shot img {
+        object-position: center 50%;
+        /* Two masks intersected: one fades rightward into the copy, the other
+           softens top and bottom into the ground. One axis alone leaves the
+           other two edges hard, which is the opposite of blending in. */
+        -webkit-mask-image: linear-gradient(90deg, #000 0% 52%, transparent 98%),
+                            linear-gradient(180deg, transparent 0%, #000 15%, #000 80%, transparent 100%);
+        mask-image: linear-gradient(90deg, #000 0% 52%, transparent 98%),
+                    linear-gradient(180deg, transparent 0%, #000 15%, #000 80%, transparent 100%);
+        -webkit-mask-composite: source-in;
+        mask-composite: intersect;
+      }
+      .share-copy { margin-top: 0; margin-left: -40px; }
       .fleet { margin-top: 34px; }
       .fleet-cards { grid-template-columns: repeat(3, 1fr); gap: 16px; }
       .mcard .mshot { height: 140px; }
@@ -698,6 +750,26 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           <span class="mdesc">Compact and easy to install &mdash; for smaller spaces.</span>
           <span class="mcta">Guide coming soon</span>
         </div>
+      </div>
+    </section>
+
+    <!-- Share your install. The photograph is masked into the ground the same
+         way the hero is, so it reads as part of the page rather than a framed
+         picture sitting on it -- the fade runs toward the copy on desktop and
+         downward once the two stack. -->
+    <section class="share" aria-labelledby="share-t">
+      <div class="share-shot" aria-hidden="true">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/IMG_1292.jpg" alt="" loading="lazy">
+      </div>
+      <div class="share-copy">
+        <span class="share-badge">&#x1f525; +500 points</span>
+        <h2 id="share-t">Share your install</h2>
+        <p>Send us one photo of your finished Aquafire &mdash; any model, a phone
+          camera is fine. It is the largest single reward in the programme, and
+          it helps the next person picture theirs.</p>
+        <a class="share-go" href="share-install.html">Submit a photo
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
       </div>
     </section>
 
