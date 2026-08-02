@@ -1314,7 +1314,7 @@
 
     /* Mobile */
     '@media (max-width:520px){',
-    '.afa-root:not(.afa-inline) .afa-panel{right:0;bottom:0;width:100vw;max-width:100vw;height:100dvh;border-radius:0;border:none;}',
+    '.afa-root:not(.afa-inline) .afa-panel{right:0;left:0;top:0;bottom:auto;width:100vw;max-width:100vw;height:var(--afa-vvh,100dvh);transform:translateY(var(--afa-vvt,0px));border-radius:0;border:none;}',
     '.afa-nudge{right:16px;bottom:88px;}',
     '}'
   ];
@@ -1517,6 +1517,34 @@
 
   function killNudge() { if (nudge) { nudge.remove(); nudge = null; } }
 
+  /* ── Keyboard fit (iOS) ────────────────────────────────────────────────
+     On the phone takeover the panel filled 100dvh. dvh follows the URL bar but
+     NOT the software keyboard, so opening the keyboard left the panel its full
+     height with the bottom half underneath it -- Safari then scrolled the
+     focused input into view, carrying the header and the whole message list
+     off the top of the screen. Only visualViewport reports the keyboard, so
+     the takeover is sized and offset from it. Desktop, the inline hero mount
+     and browsers without the API keep the CSS default. */
+  var vvBound = false;
+  function fitViewport() {
+    if (!root || !window.visualViewport) return;
+    var takeover = !MOUNT && window.matchMedia('(max-width:520px)').matches;
+    if (!takeover || !state.open) {
+      root.style.removeProperty('--afa-vvh');
+      root.style.removeProperty('--afa-vvt');
+      return;
+    }
+    var vv = window.visualViewport;
+    root.style.setProperty('--afa-vvh', Math.round(vv.height) + 'px');
+    root.style.setProperty('--afa-vvt', Math.round(vv.offsetTop) + 'px');
+  }
+  function bindViewport() {
+    if (vvBound || !window.visualViewport) return;
+    vvBound = true;
+    window.visualViewport.addEventListener('resize', fitViewport);
+    window.visualViewport.addEventListener('scroll', fitViewport);
+  }
+
   function toggle(force, silent) {
     var was = state.open;
     state.open = force != null ? force : !state.open;
@@ -1531,8 +1559,16 @@
       launcher.classList.remove('afa-unread');
       killNudge();
       if (!state.msgs.length) greet();
+      bindViewport();
+      fitViewport();
       if (!silent) inputEl.focus();
+      // The keyboard animates in after focus, so the first resize event can
+      // land a frame or two later; re-fit rather than trusting the first read.
+      setTimeout(fitViewport, 250);
+      setTimeout(fitViewport, 600);
       scrollToEnd(true);
+    } else {
+      fitViewport();
     }
     persist();
   }
@@ -1559,6 +1595,20 @@
   /* ── Rendering ────────────────────────────────────────────────────────── */
   function scrollToEnd(instant) {
     msgsEl.scrollTo({ top: msgsEl.scrollHeight, behavior: instant ? 'auto' : 'smooth' });
+  }
+
+  // Scroll a newly added message into view. Scrolling to the bottom is right
+  // for anything that fits, but a step-by-step answer is taller than the pane
+  // on a phone -- the hero panel gives the message list about 300px -- and
+  // jumping to its end lands the reader past the instructions they asked for.
+  // Taller-than-the-pane messages align their top instead, so the answer reads
+  // from its first line.
+  function scrollToMsg(row, instant) {
+    if (!row || !msgsEl) return;
+    if (row.offsetHeight <= msgsEl.clientHeight) { scrollToEnd(instant); return; }
+    var top = msgsEl.scrollTop
+      + (row.getBoundingClientRect().top - msgsEl.getBoundingClientRect().top);
+    msgsEl.scrollTo({ top: Math.max(0, top - 8), behavior: instant ? 'auto' : 'smooth' });
   }
 
   function renderBlocks(container, blocks, spent) {
@@ -1645,7 +1695,7 @@
       row.appendChild(col);
     }
     msgsEl.appendChild(row);
-    if (!restoring) scrollToEnd();
+    if (!restoring) scrollToMsg(row);
     return row;
   }
 
