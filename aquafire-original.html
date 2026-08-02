@@ -814,6 +814,22 @@
        padding that used to sit above it is now just a hole. */
     .hub-hero { padding-top: 0; }
     .hub-hero .breadcrumb { margin-bottom: 14px; }
+
+    /* The chapter pager and the chat launcher both live at bottom:20px, the
+       pager centred and the launcher right-anchored, so they were free to
+       overlap -- and with two long chapter names ("1. Tour Your Aquafire")
+       the pager runs 363px at a 360px viewport and lands under the launcher.
+       Collapsing the launcher to its 56px disc buys most of the room back;
+       this bounds the pager so the two can never meet regardless of label
+       length. Long names ellipsize rather than push. */
+    @media (max-width: 640px) {
+      .chapter-nav {
+        left: 12px; right: 84px; transform: none;
+        justify-content: center; max-width: none;
+      }
+      .chapter-nav-btn { min-width: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; }
+      .chapter-nav-label { flex: none; }
+    }
   </style>
   <link rel="stylesheet" href="redesign.css">
   <link rel="stylesheet" href="rewards.css">
