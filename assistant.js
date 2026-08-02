@@ -1127,11 +1127,17 @@
     /* Liquid-glass launcher: translucent dark base + backdrop blur/saturation,
        specular top highlight, hairline light border. Browsers without
        backdrop-filter just get the translucent dark pill. */
-    '.afa-launcher{position:fixed;right:20px;bottom:20px;top:auto;left:auto;z-index:2147483000;height:56px;min-height:56px;width:auto;min-width:0;margin:0;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 22px 0 18px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 40%,rgba(255,255,255,0) 100%),rgba(21,24,30,.68);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);color:#fff;opacity:1;filter:none;font-family:inherit;font-size:14px;font-weight:600;letter-spacing:.2px;line-height:1;text-transform:none;text-decoration:none;box-shadow:0 10px 32px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 1px rgba(255,255,255,.05);transition:transform .2s,box-shadow .2s,border-color .2s;}',
+    '.afa-launcher{position:fixed;right:20px;bottom:20px;top:auto;left:auto;z-index:2147483000;height:56px;min-height:56px;width:auto;min-width:0;margin:0;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 22px 0 18px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 40%,rgba(255,255,255,0) 100%),rgba(21,24,30,.68);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);color:#fff;opacity:1;filter:none;font-family:inherit;font-size:14px;font-weight:600;letter-spacing:.2px;line-height:1;text-transform:none;text-decoration:none;box-shadow:0 10px 32px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 1px rgba(255,255,255,.05);transition:transform .2s,box-shadow .2s,border-color .2s,width .3s cubic-bezier(.16,1,.3,1),padding .3s cubic-bezier(.16,1,.3,1);}',
     '.afa-launcher svg{width:24px;height:24px;transition:transform .25s;}',
     '.afa-launcher .afa-ico-flame{color:#e8703a;}',
     '.afa-launcher:hover{transform:scale(1.04);border-color:rgba(255,255,255,.34);background:linear-gradient(180deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.06) 40%,rgba(255,255,255,0) 100%),rgba(26,29,36,.74);box-shadow:0 12px 38px rgba(0,0,0,.5),0 3px 10px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 1px rgba(255,255,255,.05);}',
-    '.afa-launcher-label{white-space:nowrap;}',
+    '.afa-launcher-label{white-space:nowrap;max-width:170px;opacity:1;overflow:hidden;transition:max-width .3s cubic-bezier(.16,1,.3,1),opacity .18s;}',
+    /* Collapsed: the label folds away and the pill becomes the flame disc.
+       The wordmark earns its width on arrival, not for the whole visit --
+       parked over a page it covers whatever sits bottom-right, which on
+       the guides is the chapter pager. */
+    '.afa-launcher.afa-mini{width:56px;padding:0;gap:0;}',
+    '.afa-launcher.afa-mini .afa-launcher-label{max-width:0;opacity:0;}',
     '.afa-launcher .afa-ico-close{display:none;}',
     '.afa-launcher.afa-open{width:56px;padding:0;}',
     '.afa-launcher.afa-open .afa-ico-flame,.afa-launcher.afa-open .afa-launcher-label{display:none;}',
@@ -1538,6 +1544,28 @@
     root.style.setProperty('--afa-vvh', Math.round(vv.height) + 'px');
     root.style.setProperty('--afa-vvt', Math.round(vv.offsetTop) + 'px');
   }
+  /* The launcher introduces itself as "Chat with us", then gets out of the way:
+     it folds to the flame disc on the first real scroll, or after a short dwell
+     if the visitor never scrolls. Once collapsed it stays collapsed -- a pill
+     that reappears would be the same obstruction twice. Inline hosts have no
+     launcher, and an open panel already renders the compact close state. */
+  function armLauncherCollapse() {
+    if (MOUNT || !launcher) return;
+    var done = false;
+    function collapse() {
+      if (done) return;
+      done = true;
+      launcher.classList.add('afa-mini');
+      window.removeEventListener('scroll', onScroll);
+      clearTimeout(timer);
+    }
+    function onScroll() { if ((window.pageYOffset || 0) > 60) collapse(); }
+    var timer = setTimeout(collapse, 6000);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // Deep links and restored positions can start the page mid-scroll.
+    onScroll();
+  }
+
   function bindViewport() {
     if (vvBound || !window.visualViewport) return;
     vvBound = true;
@@ -2127,6 +2155,7 @@
   function boot() {
     buildUI();
     built = true;
+    armLauncherCollapse();
     if (pending) {
       for (var i = 0; i < pending.length; i++) pending[i]();
       pending = null;
