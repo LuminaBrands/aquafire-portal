@@ -383,13 +383,57 @@ button, input, select, textarea { font-family: inherit; }
 }
 .minis a:hover { color: var(--text-hi); background: var(--mini-bg-hover); }
 
-/* ── Close ───────────────────────────────────────── */
-.close { margin: 44px auto 0; max-width: 620px; text-align: center; }
+/* ── Close (reviews) ─────────────────────────────── */
+.close { margin: 56px auto 0; max-width: 620px; text-align: center; }
+.close-h { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
 .close .stars { color: var(--ember-t); letter-spacing: 3px; font-size: 0.83rem; }
 .close blockquote { font-size: 1.05rem; font-weight: 500; margin-top: 10px; text-wrap: balance; }
 .close figcaption { color: var(--text-dim); font-size: 0.83rem; margin-top: 10px; }
-.close figcaption a { color: var(--text-mid); text-decoration: none; }
-.close figcaption a:hover { color: var(--text-hi); text-decoration: underline; }
+
+/* Every slide occupies the same grid cell, so the rail measures as tall as its
+   longest quote and the footer never shifts as they cycle. Inactive slides keep
+   their box (that is the point) but are pulled out of the a11y tree. */
+.rv { margin-top: 22px; }
+.rv-track { display: grid; }
+.rv-slide {
+  grid-area: 1 / 1;
+  opacity: 0; visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease), visibility 0.45s;
+}
+.rv-slide.is-on { opacity: 1; visibility: visible; transform: none; }
+
+.rv-dots { display: flex; justify-content: center; gap: 8px; margin-top: 18px; }
+.rv-dots button {
+  width: 7px; height: 7px; padding: 0; border-radius: 999px;
+  border: none; background: var(--nub-bg); cursor: pointer;
+  transition: background-color 0.3s, width 0.3s var(--ease);
+}
+.rv-dots button[aria-selected="true"] { width: 20px; background: var(--ember); }
+
+/* The ask, not a footnote. It used to be a text link inside the attribution
+   line, which put the one thing this section wants you to do below the quote
+   and at label size. */
+.rv-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 24px; padding: 13px 26px;
+  border-radius: 999px; text-decoration: none;
+  background: var(--ember); color: var(--on-ember);
+  font-size: 0.93rem; font-weight: 600;
+  transition: transform 0.3s var(--ease), filter 0.24s;
+}
+.rv-cta:hover { transform: translateY(-2px); filter: brightness(1.07); }
+.rv-cta svg { transition: transform 0.3s var(--ease); }
+.rv-cta:hover svg { transform: translateX(3px); }
+/* rewards.js injects its points badge as the first child of anything carrying
+   data-reward, and its resting look is amber on glass. Dropped onto an
+   accent-filled pill that becomes amber on red: two warm colours arguing, at
+   about 2:1. On this fill it borrows the button's own ink instead. */
+.rv-cta .af-reward-badge {
+  background: rgba(255,255,255,0.16);
+  border-color: transparent;
+  color: var(--on-ember);
+}
 .foot { margin: 36px 0 30px; display: flex; align-items: center; justify-content: center; gap: 14px; color: var(--text-dim); font-size: 0.76rem; flex-wrap: wrap; }
 .foot img { height: 13px; filter: var(--logo-foot-filter); opacity: var(--logo-foot-opacity); }
 .foot a { color: var(--text-dim); text-decoration: none; }
