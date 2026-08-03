@@ -404,12 +404,23 @@ button, input, select, textarea { font-family: inherit; }
 .rv-slide.is-on { opacity: 1; visibility: visible; transform: none; }
 
 .rv-dots { display: flex; justify-content: center; gap: 8px; margin-top: 18px; }
+/* The button is a fixed 20px slot and the visible pill lives in ::before, so
+   the active dot can widen without shoving the four beside it along -- the
+   growth reflows inside its own box and the row's layout never changes. A
+   7px tap target would also be too small on a phone; the slot is the hit
+   area, the pill is only what you see. */
 .rv-dots button {
-  width: 7px; height: 7px; padding: 0; border-radius: 999px;
-  border: none; background: var(--nub-bg); cursor: pointer;
+  width: 20px; height: 20px; padding: 0; border: none;
+  background: none; cursor: pointer;
+  display: grid; place-items: center;
+}
+.rv-dots button::before {
+  content: ""; display: block;
+  width: 7px; height: 7px; border-radius: 999px;
+  background: var(--nub-bg);
   transition: background-color 0.3s, width 0.3s var(--ease);
 }
-.rv-dots button[aria-selected="true"] { width: 20px; background: var(--ember); }
+.rv-dots button[aria-selected="true"]::before { width: 20px; background: var(--ember); }
 
 /* The ask, not a footnote. It used to be a text link inside the attribution
    line, which put the one thing this section wants you to do below the quote
