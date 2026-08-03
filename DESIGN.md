@@ -189,14 +189,19 @@ palette and arrives mostly on interaction.
   reading is the approved look; everywhere else the rewards accent is ember.
   Do not reach for it for anything new.
 - **Danger** (#ff6b5e dark / #c0392b light): form errors, and nothing else.
-  **This token's separation from the accent no longer holds.** It was picked to
-  be visibly not-ember back when ember was orange; now that the accent is
-  #d33337 the two are within a few degrees of hue, and a field error reads as
-  brand colour. Nothing is broken -- red is still the conventional error signal,
-  and errors carry their own copy and placement -- but the stated rationale is
-  now false, and the honest options are to move danger somewhere clearly
-  distinct or to accept that errors and the accent share a hue. Open decision;
-  do not treat the current value as considered.
+  It **shares a hue with the accent**, and that is accepted rather than
+  overlooked. The token was originally picked to be visibly not-ember, back when
+  ember was orange; the red accent put them 6.4 degrees apart in dark and 7.1 in
+  light, which no one can perceive. Reviewed against the real case -- the
+  sign-in modal showing an error while the copy above it advertises a points
+  total in the accent -- and confirmed: red is still the conventional error
+  signal, and an error earns its meaning from its copy, its placement under the
+  field, and the `role="alert"`, not from being a different red.
+
+  So do not "fix" this by nudging the hue. A few degrees buys nothing. If errors
+  ever need to be unmistakable at a glance, the move is a different *treatment*
+  -- an icon and a tinted strip, with the accent staying bare text -- not a
+  different colour.
 - **Photo ink / photo ink dim** (#f3f4f6, #c9cdd5): the only text that does
   not follow the theme. The hero greeting and its subtitle sit on the
   photograph, which is the same photograph in both lightings, so they stay
