@@ -48,17 +48,17 @@ service cloud.firestore {
              ['points', 'completed', 'email', 'displayName', 'updatedAt'])
         && request.resource.data.points is number
         && request.resource.data.points >= 0
-        // 4,100 = the sum of every reward in the REWARDS map in rewards.js.
+        // 4,600 = the sum of every reward in the REWARDS map in rewards.js.
         // Bump this when rewards are added, or the save silently fails and the
         // widget falls back to localStorage.
-        && request.resource.data.points <= 4100
+        && request.resource.data.points <= 4600
         && request.resource.data.completed is map
         && request.resource.data.completed.keys().hasOnly([
              'setup-guide', 'enclosure-builder', 'water-hardness', 'light-trap',
              'fireplace-tour', 'mist-maker', 'system-cleaning', 'follow-instagram',
              'watch-youtube', 'ar-cutout', 'quick-start', 'support-hub',
              'contact-sales', 'shop-accessories', 'fireplace-setup', 'register-warranty',
-             'submit-review'])
+             'submit-review', 'share-install'])
         // Identity fields must match the token — no impersonating another
         // customer's address in the document body.
         && request.resource.data.email in [request.auth.token.email, '']
@@ -110,6 +110,24 @@ service cloud.firestore {
 Adjust the domain pattern if the team signs in with something else (e.g.
 `'.*@(luminabrands|aquafire)[.]com'`), or swap `isTeam()` for an explicit UID
 allowlist.
+
+## Adding a reward — three places, or it silently fails
+
+The `users` rule pins both an allowlist of reward ids and a points ceiling, so a
+reward added to `rewards.js` alone is a reward that cannot be saved. Every new
+one needs:
+
+1. `REWARDS` in `rewards.js`.
+2. The `completed.keys().hasOnly([...])` allowlist above, **and** the
+   `points <= N` cap raised to the new total.
+3. **Publish the rules in the console.** They do not deploy from this repo.
+
+Miss step 2 or 3 and the failure is quiet and confusing rather than loud: the
+write is rejected, the in-session total still goes up, and the next page load
+shows the server's lower figure. That is what happened when `share-install`
+(500 points, taking the total from 4,100 to 4,600) shipped ahead of the rules.
+`saveUserData()` no longer mirrors a rejected write to localStorage, so the two
+stores can't drift apart, and it logs a message naming this exact cause.
 
 ## Authorized domains (Auth) — required for sign-in to work at all
 
