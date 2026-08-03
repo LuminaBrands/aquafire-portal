@@ -51,16 +51,22 @@ service firebase.storage {
   the console, and the page tells the customer we will ask before using theirs
   anywhere public.
 
-## Before this page goes live
+## Status
 
-1. **Enable Storage** in the Firebase console for the `aquafire-portal`
-   project. The bucket (`aquafire-portal.firebasestorage.app`) is already in
-   the client config, but Storage itself has never been switched on — until it
-   is, uploads fail and the page shows its "upload did not finish" error.
-2. **Publish the rules above.** The default template allows any signed-in user
-   to read and write the whole bucket, which is not what we want.
-3. Uploads count against the free tier's 5 GB / 1 GB-per-day download. At a few
-   MB per submission that is a long way off, but it is not free forever.
+Storage is **enabled** and the rules above are **published** (2026-08-03),
+verified three ways: the bucket answers `403` to an unauthenticated list (it
+exists and is not world-readable), `aquafire-portal.appspot.com` `404`s so the
+name in `rewards.js` is the current one, and the console's Rules Playground
+allows `installs/abc123/photo.jpg` for uid `abc123` on the `allow read` line
+while denying the same path for any other uid.
+
+If you re-run the Playground: the Location box takes the **path only**
+(`installs/abc123/photo.jpg`). Pasting the full `/b/<bucket>/o/...` prefix in
+there doubles it, the path stops matching `/installs/{uid}/{file}`, and you get
+a deny from the catch-all instead of the answer you were testing for.
+
+Uploads count against the free tier's 5 GB stored / 1 GB-per-day download. At a
+few MB per submission that is a long way off, but it is not free forever.
 
 ## Known gap
 
