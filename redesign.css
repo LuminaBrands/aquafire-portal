@@ -153,6 +153,12 @@ body {
   -webkit-font-smoothing: antialiased; overflow-x: hidden; min-height: 100vh;
 }
 a { color: inherit; }
+/* Form controls do not inherit font-family from the page -- they fall back to
+   the UA default, which is Arial. Every control therefore had to name the face
+   itself, and any that forgot silently rendered in Arial. One rule here instead
+   of a declaration per button. Family only, not the `font` shorthand: that
+   would also reset size and weight, which controls do set for themselves. */
+button, input, select, textarea { font-family: inherit; }
 :focus-visible { outline: 2px solid var(--focus-ink); outline-offset: 3px; border-radius: 999px; }
 .atmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 .atmos::before { content: ""; position: absolute; inset: 0; background: var(--atmos-grad); }
