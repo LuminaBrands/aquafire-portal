@@ -9,7 +9,7 @@
 /* ── Breadcrumb of answers ──────────────────────────────────────────────── */
 .ts-crumbs {
   display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
-  margin-bottom: 16px; font-size: 0.8rem;
+  margin-bottom: 16px; font-size: 0.83rem;
 }
 .ts-crumb {
   background: var(--surface-alt, #22262e); border: 1px solid var(--border);
@@ -29,11 +29,11 @@
 
 /* ── Question ───────────────────────────────────────────────────────────── */
 .ts-q-prompt {
-  font-size: 1.5rem; line-height: 1.3;
+  font-size: 1.6rem; line-height: 1.3;
   letter-spacing: -0.4px; margin: 0 0 8px;
 }
-@media (max-width: 600px) { .ts-q-prompt { font-size: 1.25rem; } }
-.ts-q-help { color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0 0 20px; }
+@media (max-width: 600px) { .ts-q-prompt { font-size: 1.35rem; } }
+.ts-q-help { color: var(--text-muted); font-size: 0.93rem; line-height: 1.6; margin: 0 0 20px; }
 .ts-q-help a { color: var(--blue, #4da6e8); }
 
 .ts-options { display: flex; flex-direction: column; gap: 10px; }
@@ -45,9 +45,9 @@
 }
 .ts-option:hover { border-color: var(--red, #c0392b); background: #262a32; }
 .ts-option:active { transform: translateY(1px); }
-.ts-option-icon { font-size: 1.3rem; line-height: 1; flex: none; width: 26px; text-align: center; }
+.ts-option-icon { font-size: 1.35rem; line-height: 1; flex: none; width: 26px; text-align: center; }
 .ts-option-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-.ts-option-label { font-weight: 600; font-size: 0.98rem; line-height: 1.35; }
+.ts-option-label { font-weight: 600; font-size: 0.93rem; line-height: 1.35; }
 .ts-option-desc { color: var(--text-muted); font-size: 0.83rem; line-height: 1.4; }
 .ts-option-arrow { color: var(--text-muted); flex: none; transition: transform .15s, color .15s; }
 .ts-option:hover .ts-option-arrow { color: var(--red, #c0392b); transform: translateX(2px); }
@@ -55,14 +55,14 @@
 /* ── Quick-pick chips (common issues) ───────────────────────────────────── */
 .ts-quick { margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
 .ts-quick-label, .ts-related-label {
-  display: block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+  display: block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
   letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 8px;
 }
 .ts-quick-chips, .ts-related { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .ts-chip {
   background: rgba(192,57,43,0.10); border: 1px solid rgba(192,57,43,0.35);
   color: var(--text); padding: 7px 12px; border-radius: 999px; font: inherit;
-  font-size: 0.84rem; cursor: pointer; transition: background .15s, border-color .15s;
+  font-size: 0.83rem; cursor: pointer; transition: background .15s, border-color .15s;
 }
 .ts-chip:hover { background: rgba(192,57,43,0.2); border-color: var(--red, #c0392b); }
 .ts-chip-related {
@@ -97,7 +97,7 @@
 
 .ts-outcome-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
 .ts-sev-badge {
-  display: inline-block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+  display: inline-block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: 0.9px; padding: 4px 10px; border-radius: 999px;
   background: rgba(255,255,255,0.06); color: var(--text-muted);
 }
@@ -105,20 +105,20 @@
 .ts-sev-maintenance .ts-sev-badge { background: rgba(232,168,56,0.15); color: var(--amber, #e8a838); }
 .ts-sev-support .ts-sev-badge { background: rgba(192,57,43,0.18); color: #e8857a; }
 .ts-model-tag {
-  font-size: 0.74rem; color: var(--text-muted); border: 1px solid var(--border);
+  font-size: 0.76rem; color: var(--text-muted); border: 1px solid var(--border);
   padding: 3px 9px; border-radius: 999px;
 }
 .ts-outcome-title {
-  font-size: 1.4rem; line-height: 1.3;
+  font-size: 1.35rem; line-height: 1.3;
   letter-spacing: -0.3px; margin: 0 0 8px;
 }
-@media (max-width: 600px) { .ts-outcome-title { font-size: 1.2rem; } }
-.ts-outcome-lead { color: var(--text); font-size: 0.96rem; line-height: 1.6; margin: 0 0 18px; }
+@media (max-width: 600px) { .ts-outcome-title { font-size: 1.15rem; } }
+.ts-outcome-lead { color: var(--text); font-size: 0.93rem; line-height: 1.6; margin: 0 0 18px; }
 
 /* ── Steps ──────────────────────────────────────────────────────────────── */
 .ts-steps { list-style: none; counter-reset: ts; margin: 0 0 4px; padding: 0; }
 .ts-steps li {
-  position: relative; padding: 12px 0 12px 40px; line-height: 1.6; font-size: 0.95rem;
+  position: relative; padding: 12px 0 12px 40px; line-height: 1.6; font-size: 0.93rem;
   border-bottom: 1px solid var(--border);
 }
 .ts-steps li:last-child { border-bottom: none; }
@@ -127,7 +127,7 @@
   position: absolute; left: 0; top: 11px;
   width: 26px; height: 26px; border-radius: 50%;
   background: rgba(77,166,232,0.15); color: var(--blue, #4da6e8);
-  font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  font-size: 0.83rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
 }
 .ts-sev-maintenance .ts-steps li::before { background: rgba(232,168,56,0.15); color: var(--amber, #e8a838); }
 .ts-sev-support .ts-steps li::before { background: rgba(192,57,43,0.16); color: #e8857a; }
@@ -139,12 +139,12 @@
 .ts-caution, .ts-note {
   display: flex; gap: 12px; align-items: flex-start;
   margin: 18px 0 0; padding: 14px 16px; border-radius: var(--radius-sm, 8px);
-  font-size: 0.9rem; line-height: 1.6;
+  font-size: 0.88rem; line-height: 1.6;
 }
 .ts-caution { background: rgba(192,57,43,0.10); border: 1px solid rgba(192,57,43,0.3); }
-.ts-caution-ic { color: var(--red, #c0392b); font-size: 1.1rem; line-height: 1.5; flex: none; }
+.ts-caution-ic { color: var(--red, #c0392b); font-size: 1.15rem; line-height: 1.5; flex: none; }
 .ts-note { background: rgba(77,166,232,0.08); border: 1px solid rgba(77,166,232,0.25); }
-.ts-note-ic { color: var(--blue, #4da6e8); font-size: 1rem; line-height: 1.6; flex: none; }
+.ts-note-ic { color: var(--blue, #4da6e8); font-size: 1.05rem; line-height: 1.6; flex: none; }
 .ts-caution p, .ts-note p { margin: 0; }
 .ts-caution strong, .ts-note strong { color: var(--text); }
 
@@ -152,7 +152,7 @@
 .ts-resources { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .ts-resource {
   display: inline-flex; align-items: center; gap: 8px; max-width: 100%;
-  padding: 8px 12px; border-radius: var(--radius-sm, 8px); font-size: 0.84rem;
+  padding: 8px 12px; border-radius: var(--radius-sm, 8px); font-size: 0.83rem;
   text-decoration: none; color: var(--text); border: 1px solid var(--border);
   background: var(--surface-alt, #22262e); transition: border-color .15s, background .15s;
 }
@@ -177,10 +177,10 @@
   background: rgba(255,255,255,0.03); border: 1px solid var(--border);
 }
 .ts-escalate-firm { background: rgba(192,57,43,0.08); border-color: rgba(192,57,43,0.3); }
-.ts-escalate-h { font-size: 1rem; margin: 0 0 6px; }
+.ts-escalate-h { font-size: 1.05rem; margin: 0 0 6px; }
 .ts-escalate-p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin: 0 0 14px; }
 .ts-escalate-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-.ts-escalate-note { color: var(--text-muted); font-size: 0.78rem; line-height: 1.6; margin: 14px 0 0; }
+.ts-escalate-note { color: var(--text-muted); font-size: 0.76rem; line-height: 1.6; margin: 14px 0 0; }
 .ts-escalate-note a { color: var(--blue, #4da6e8); }
 
 /* ── Embed mode tweaks ──────────────────────────────────────────────────── */
