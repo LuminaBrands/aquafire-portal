@@ -384,7 +384,12 @@ button, input, select, textarea { font-family: inherit; }
 .minis a:hover { color: var(--text-hi); background: var(--mini-bg-hover); }
 
 /* ── Close (reviews) ─────────────────────────────── */
-.close { margin: 56px auto 0; max-width: 620px; text-align: center; }
+/* padding rather than margin-bottom: the footer carries its own 36px top
+   margin, and adjacent margins collapse to the larger of the two rather than
+   adding -- so a margin here would have bought nothing. The gap belongs to
+   this section anyway, since it is what stops the footer links reading as one
+   more row of the review module. */
+.close { margin: 56px auto 0; padding-bottom: 38px; max-width: 620px; text-align: center; }
 .close-h { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
 .close .stars { color: var(--ember-t); letter-spacing: 3px; font-size: 0.83rem; }
 .close blockquote { font-size: 1.05rem; font-weight: 500; margin-top: 10px; text-wrap: balance; }
