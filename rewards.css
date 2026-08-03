@@ -589,3 +589,37 @@
 @media (max-width: 560px) {
   .af-modal { border-radius: 15px; }
 }
+
+/* ── Sign Out in the mobile disclosure panel ──────────────────────────
+   The nav's points chip hides below 920px and the capsule collapses to the
+   burger at 1080, so the profile dropdown that normally holds Sign Out has
+   nothing to anchor to on a phone. rewards.js appends this button to the same
+   `.links` container the panel is built from; it mirrors `.bar .links a` in
+   redesign.css rather than reusing it, because a button is not a link and the
+   nav's own rules are scoped to `a`. */
+#af-menu-signout {
+  display: none;
+  width: 100%;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  color: var(--text-mid);
+  transition: color 0.24s var(--ease), background-color 0.24s var(--ease);
+}
+.bar .links.open #af-menu-signout {
+  display: block;
+  /* Ruled off from the links above it: everything else in the panel goes
+     somewhere, this one acts on the account. */
+  margin-top: 8px;
+  padding: 14px 14px 11px;
+  border-top: 1px solid var(--row-border);
+  border-radius: 0 0 13px 13px;
+  font-size: 0.93rem;
+  font-weight: 500;
+}
+.bar .links.open #af-menu-signout:hover {
+  color: var(--text-hi);
+  background: var(--nub-bg);
+}
