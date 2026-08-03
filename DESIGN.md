@@ -45,6 +45,18 @@ typography:
     fontWeight: 700
     lineHeight: 1.18
     letterSpacing: "-0.025em"
+  section:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "1.6rem"
+    fontWeight: 700
+  subsection:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "1.35rem"
+    fontWeight: 700
+  minor:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "1.15rem"
+    fontWeight: 700
   title:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "0.88rem"
@@ -248,7 +260,13 @@ second face without revisiting this file.
   inner page. A step below Display on purpose — Display is Ember greeting
   you from inside the photograph, and a section heading that shouts as loud
   as the hero flattens the whole hierarchy.
-- **Headline** (700, 1.02–1.05rem): wing heads.
+- **Section** (700, 1.6rem): the top heading inside an inner page's body —
+  Troubleshooter question prompts, guide section titles, calculator results.
+- **Subsection** (700, 1.35rem): a level under Section — guide step titles,
+  outcome titles.
+- **Minor** (700, 1.15rem): the smallest true heading — card headings inside
+  a subsection.
+- **Headline** (700, 1.05rem): wing heads.
 - **Title** (600, 0.88rem): row-card titles, send button.
 - **Nav** (500, 0.83rem; 600 when current): links inside the nav capsule and
   the bar-end chips. A step below Title on purpose. The bar has to carry
@@ -256,7 +274,9 @@ second face without revisiting this file.
   Title size that set measures ~65px too wide. Density is the point of the
   capsule -- do not "fix" this back up to 0.88rem without re-measuring the
   bar (see the breakpoint comment in redesign.css).
-- **Body** (400–500, 0.8–0.93rem, 1.6): greeting subtitle, tip bubbles, descriptions.
+- **Body** (400–500, 0.93rem, 1.6): greeting subtitle, tip bubbles,
+  descriptions, and anything with no explicit size — `body` carries this step
+  so unstyled copy lands on the ramp instead of the browser's 16px.
 - **Label** (500, 0.76rem): row subtitles, murmur chips, minis, the rewards
   band's caption, progress meta and links.
 - **Label small** (700, 0.7rem): badges only -- the row's points chip and the
@@ -265,6 +285,21 @@ second face without revisiting this file.
 ### Named Rules
 **The One Family Rule.** Figtree only. If a surface feels flat, fix it with
 weight, size, or spacing — not a new font.
+
+**The Ten Steps Rule.** The eleven sizes above (2.25 / 1.6 / 1.35 / 1.15 /
+1.05 / 0.93 / 0.88 / 0.83 / 0.76 / 0.7rem, plus the two clamps) are the whole
+ramp. Do not introduce a size between them. The portal reached 37 distinct
+rendered sizes by adding "just a little smaller" one declaration at a time —
+0.82 beside 0.83, 14.4px beside 14.08px, two link styles 0.16px apart. None of
+that read as hierarchy; it read as noise, and it is invisible in review because
+a 0.4px difference is invisible. Sizes below 0.7rem are diagram and map
+furniture, not type.
+
+A note on the ratios: the four supporting steps (0.93 → 0.7) sit 1.05–1.09
+apart, well under the 1.25 a typographic scale would want. That is deliberate
+and it is what a dense UI needs — the contrast between a row title and its
+subtitle comes from weight and ink, not size. The strong ratios live where the
+eye actually needs them: 2.25 → 1.6 is 1.41, 1.6 → 1.35 is 1.19.
 
 ## Layout
 

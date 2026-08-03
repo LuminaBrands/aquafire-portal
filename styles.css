@@ -43,7 +43,7 @@ body {
 .site-nav .nav-links a {
   display: block;
   padding: 6px 14px;
-  font-size: 0.82rem;
+  font-size: 0.83rem;
   font-weight: 500;
   color: var(--text-muted);
   text-decoration: none;
@@ -84,7 +84,7 @@ body {
     gap: 2px;
   }
   .site-nav .nav-links.open { display: flex; }
-  .site-nav .nav-links a { padding: 10px 14px; font-size: 0.9rem; }
+  .site-nav .nav-links a { padding: 10px 14px; font-size: 0.88rem; }
 }
 
 /* ── Header ── */
@@ -96,7 +96,7 @@ body {
   object-fit: contain;
 }
 header h1 {
-  font-size: 2.4rem;
+  font-size: 2.25rem;
   font-weight: 700;
   letter-spacing: -0.5px;
   color: var(--text);
@@ -105,7 +105,7 @@ header h1 {
 .subtitle {
   color: var(--text-muted);
   margin-top: 10px;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 400;
 }
 
@@ -129,7 +129,7 @@ header h1 {
 }
 .header-notice p {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   line-height: 1.6;
   margin: 0;
 }
@@ -152,7 +152,7 @@ header h1 {
 .card-desc {
   color: var(--text-muted);
   margin-top: 4px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   line-height: 1.5;
 }
 .step-row {
@@ -169,7 +169,7 @@ header h1 {
   display: grid;
   place-items: center;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.93rem;
   color: #fff;
   background: #c0392b;
   box-shadow: 0 0 18px rgba(192,57,43,0.15), 0 0 0 4px rgba(192,57,43,0.08);
@@ -182,7 +182,7 @@ header h1 {
 .controls-panel > .form-group { margin-bottom: 20px; }
 .form-group label {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
   color: var(--text-muted);
   margin-bottom: 6px;
@@ -197,7 +197,7 @@ select, input[type="number"] {
   background: var(--bg);
   color: var(--text);
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 0.93rem;
   appearance: none;
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -247,7 +247,7 @@ select {
 }
 .dim-value {
   display: block;
-  font-size: 1.65rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--amber);
   font-variant-numeric: tabular-nums;
@@ -294,12 +294,12 @@ input[type="range"]::-moz-range-thumb {
   min-width: 64px;
   text-align: right;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--amber);
   font-variant-numeric: tabular-nums;
 }
 .hint {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   margin-top: 6px;
   line-height: 1.45;
@@ -319,7 +319,7 @@ input[type="range"]::-moz-range-thumb {
   background: var(--card-bg);
   color: var(--text-muted);
   border: none;
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
@@ -363,7 +363,7 @@ input[type="range"]::-moz-range-thumb {
 }
 .result-label {
   display: block;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -371,14 +371,14 @@ input[type="range"]::-moz-range-thumb {
 }
 .result-value {
   display: block;
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 700;
   color: var(--amber);
   margin: 6px 0 2px;
   line-height: 1.1;
 }
 .result-sub {
-  font-size: 0.75rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
 }
 
@@ -395,7 +395,7 @@ input[type="range"]::-moz-range-thumb {
 .formula-note {
   margin-top: 20px;
   padding: 0;
-  font-size: 0.8rem;
+  font-size: 0.83rem;
   color: var(--text-muted);
   line-height: 1.5;
   font-style: italic;
@@ -413,7 +413,7 @@ th, td {
 th {
   color: var(--text-muted);
   font-weight: 600;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.6px;
 }
@@ -436,7 +436,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   padding: 14px 40px;
   background: #c0392b;
   color: #fff;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   border-radius: var(--radius-sm);
   text-decoration: none;
@@ -468,12 +468,12 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   .dimensions-display { flex-direction: row; flex-wrap: wrap; gap: 10px; }
   .dim-box { flex: 1; min-width: 100px; }
   header { padding: 36px 0 32px; }
-  header h1 { font-size: 1.7rem; }
+  header h1 { font-size: 1.6rem; }
   .card { padding: 24px 20px; margin: 20px 0; }
   .step-row { gap: 14px; }
-  .step-num { width: 32px; height: 32px; font-size: 0.85rem; }
-  .dim-value { font-size: 1.3rem; }
-  .result-value { font-size: 1.7rem; }
+  .step-num { width: 32px; height: 32px; font-size: 0.83rem; }
+  .dim-value { font-size: 1.35rem; }
+  .result-value { font-size: 1.6rem; }
 }
 
 @media (max-width: 480px) {

@@ -130,21 +130,45 @@
         "displayName": "Display",
         "purpose": "Ember's greeting only; white in both themes with a soft shadow (sits on the photograph)."
       },
+      "page-title": {
+        "displayName": "Page title",
+        "purpose": "The .phead h1 on every inner page. A step below Display on purpose."
+      },
+      "section": {
+        "displayName": "Section",
+        "purpose": "Top heading inside an inner page body: Troubleshooter prompts, guide section titles, calculator results."
+      },
+      "subsection": {
+        "displayName": "Subsection",
+        "purpose": "A level under Section: guide step titles, outcome titles."
+      },
+      "minor": {
+        "displayName": "Minor",
+        "purpose": "The smallest true heading: card headings inside a subsection."
+      },
       "headline": {
         "displayName": "Headline",
         "purpose": "Wing heads."
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Row-card titles, send button, nav caps."
+        "purpose": "Row-card titles, send button."
+      },
+      "nav": {
+        "displayName": "Nav",
+        "purpose": "Links inside the nav capsule and the bar-end chips. Sized to fit seven destinations plus two chips in a 1152px column."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Greeting subtitle, tip bubbles, descriptions."
+        "purpose": "Greeting subtitle, tip bubbles, descriptions, and anything with no explicit size (carried on body)."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Row subtitles, chips, minis, badges, journey captions."
+        "purpose": "Row subtitles, chips, minis, journey captions."
+      },
+      "labelSmall": {
+        "displayName": "Label small",
+        "purpose": "Badges only. The floor of the ramp; below it is diagram and map furniture, not type."
       }
     },
     "shadows": [
