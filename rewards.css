@@ -41,7 +41,9 @@
   height: 24px;
   border-radius: 999px;
   background: var(--ember);
-  color: var(--ground-fill);
+  /* Ink on the accent, not the page ground: --ground-fill is a gradient in
+     light theme and was never a text colour. */
+  color: var(--on-ember);
   font-size: 0.7rem;
   font-weight: 700;
 }

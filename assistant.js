@@ -1164,11 +1164,11 @@
        merchant's document and must not inherit their root font-size. That is
        why it cannot sit on DESIGN.md's rem type ramp. */
     '.afa-root{' +
-      '--afa-bg:#101216;--afa-head-bg:linear-gradient(135deg,rgba(255,138,74,.16) 0%,rgba(16,18,22,0) 62%);' +
+      '--afa-bg:#101216;--afa-head-bg:linear-gradient(135deg,rgba(211,51,55,.16) 0%,rgba(16,18,22,0) 62%);' +
       '--afa-surface:rgba(255,255,255,.045);--afa-surface2:rgba(255,255,255,.07);' +
       '--afa-border:rgba(255,255,255,.12);--afa-border-soft:rgba(255,255,255,.07);' +
       '--afa-text:#f3f4f6;--afa-mid:#b9bec8;--afa-muted:#8d939f;' +
-      '--afa-ember:#ff8a4a;--afa-ember-t:#ff8a4a;--afa-live:#c9e85c;' +
+      '--afa-ember:#d33337;--afa-ember-t:#f05a5e;--afa-live:#c9e85c;' +
       '--afa-send-bg:rgba(255,255,255,.12);--afa-send-ink:#f3f4f6;--afa-send-bg-hover:rgba(255,255,255,.18);' +
       '--afa-hover:rgba(255,255,255,.08);' +
       '--afa-shadow:0 24px 64px rgba(0,0,0,.55);--afa-shadow-sm:0 10px 32px rgba(0,0,0,.45);' +
@@ -1184,7 +1184,7 @@
       '--afa-surface:#f5f6f8;--afa-surface2:#eef0f4;' +
       '--afa-border:rgba(23,26,31,.10);--afa-border-soft:rgba(23,26,31,.07);' +
       '--afa-text:#171a1f;--afa-mid:#4c525c;--afa-muted:#6a7280;' +
-      '--afa-ember:#ff6a3d;--afa-ember-t:#cf4e16;--afa-live:#6f8f0a;' +
+      '--afa-ember:#d33337;--afa-ember-t:#b02427;--afa-live:#6f8f0a;' +
       '--afa-send-bg:#171a1f;--afa-send-ink:#ffffff;--afa-send-bg-hover:#262b33;' +
       '--afa-hover:rgba(23,26,31,.06);' +
       '--afa-shadow:0 24px 64px rgba(23,26,31,.18);--afa-shadow-sm:0 10px 32px rgba(23,26,31,.14);}',
