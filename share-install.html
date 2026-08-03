@@ -466,7 +466,20 @@
         show(done['share-install'] ? 'done' : 'form');
       }
 
-      if (typeof firebase !== 'undefined' && firebase.auth) {
+      /* Wait for DOM ready before touching firebase.auth(). rewards.js owns the
+         config and defers initializeApp() to its own DOMContentLoaded handler,
+         but this script runs during parsing -- so calling auth() here directly
+         threw "No Firebase App '[DEFAULT]' has been created", the catch below
+         swallowed it into the signed-out state, and the subscription was never
+         registered. Signing in then could not move the page off "Sign in to
+         submit". rewards.js is loaded above this block, so its handler is
+         registered first and has already run by the time ours fires. */
+      function wireAuth() {
+        if (typeof firebase === 'undefined' || !firebase.auth ||
+            !firebase.apps || !firebase.apps.length) {
+          show('out');
+          return;
+        }
         try {
           firebase.auth().onAuthStateChanged(function (u) {
             user = u;
@@ -475,10 +488,14 @@
             setTimeout(route, 400);
           });
         } catch (e) { show('out'); }
-      } else {
-        show('out');
       }
+
       show('out');
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireAuth);
+      } else {
+        wireAuth();
+      }
     })();
   </script>
   <script src="assistant.js" defer></script>

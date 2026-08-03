@@ -105,7 +105,6 @@ body {
   position: relative;
 }
 .card h2 {
-  font-family: 'Poppins', sans-serif;
   font-size: 1.35rem;
   font-weight: 600;
   line-height: 1.3;
@@ -574,7 +573,6 @@ input[type="range"]::-moz-range-thumb {
 }
 .result-value {
   display: block;
-  font-family: 'Poppins', sans-serif;
   font-size: 2.2rem;
   font-weight: 700;
   color: var(--blue);
@@ -715,7 +713,6 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   padding: 14px 40px;
   background: #2980b9;
   color: #fff;
-  font-family: 'Poppins', sans-serif;
   font-size: 1rem;
   font-weight: 600;
   border-radius: var(--radius-sm);

@@ -215,19 +215,19 @@ function drawCutoutDiagram(dims) {
 
     const mx = (x1+x2)/2, my = (y1+y2)/2;
     if (side === 'below') {
-      s += `<text x="${mx}" y="${my+22+off}" fill="${col}" font-family="Inter,sans-serif" font-size="16" text-anchor="middle" font-weight="700">${label}</text>`;
-      if (sublabel) s += `<text x="${mx}" y="${my+38+off}" fill="${mutedCol}" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" letter-spacing="2">${sublabel}</text>`;
+      s += `<text x="${mx}" y="${my+22+off}" fill="${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="middle" font-weight="700">${label}</text>`;
+      if (sublabel) s += `<text x="${mx}" y="${my+38+off}" fill="${mutedCol}" font-family="Figtree,sans-serif" font-size="11" text-anchor="middle" letter-spacing="2">${sublabel}</text>`;
     } else if (side === 'right') {
-      s += `<text x="${mx+16+off}" y="${my-4}" fill="${col}" font-family="Inter,sans-serif" font-size="16" text-anchor="start" font-weight="700">${label}</text>`;
-      if (sublabel) s += `<text x="${mx+16+off}" y="${my+12}" fill="${mutedCol}" font-family="Inter,sans-serif" font-size="11" text-anchor="start" letter-spacing="2">${sublabel}</text>`;
+      s += `<text x="${mx+16+off}" y="${my-4}" fill="${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="start" font-weight="700">${label}</text>`;
+      if (sublabel) s += `<text x="${mx+16+off}" y="${my+12}" fill="${mutedCol}" font-family="Figtree,sans-serif" font-size="11" text-anchor="start" letter-spacing="2">${sublabel}</text>`;
     } else if (side === 'left') {
-      s += `<text x="${mx-16-off}" y="${my-4}" fill="${col}" font-family="Inter,sans-serif" font-size="16" text-anchor="end" font-weight="700">${label}</text>`;
-      if (sublabel) s += `<text x="${mx-16-off}" y="${my+12}" fill="${mutedCol}" font-family="Inter,sans-serif" font-size="11" text-anchor="end" letter-spacing="2">${sublabel}</text>`;
+      s += `<text x="${mx-16-off}" y="${my-4}" fill="${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="end" font-weight="700">${label}</text>`;
+      if (sublabel) s += `<text x="${mx-16-off}" y="${my+12}" fill="${mutedCol}" font-family="Figtree,sans-serif" font-size="11" text-anchor="end" letter-spacing="2">${sublabel}</text>`;
     } else if (side === 'along') {
       const angle = Math.atan2(dy,dx) * 180 / Math.PI;
       const tOff = 7; // perpendicular offset multiplier to clear the line
-      s += `<text x="${mx+nx*tOff}" y="${my+ny*tOff-6}" fill="${col}" font-family="Inter,sans-serif" font-size="16" text-anchor="middle" font-weight="700" transform="rotate(${angle},${mx+nx*tOff},${my+ny*tOff-6})">${label}</text>`;
-      if (sublabel) s += `<text x="${mx+nx*tOff}" y="${my+ny*tOff+10}" fill="${mutedCol}" font-family="Inter,sans-serif" font-size="11" text-anchor="middle" letter-spacing="2" transform="rotate(${angle},${mx+nx*tOff},${my+ny*tOff+10})">${sublabel}</text>`;
+      s += `<text x="${mx+nx*tOff}" y="${my+ny*tOff-6}" fill="${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="middle" font-weight="700" transform="rotate(${angle},${mx+nx*tOff},${my+ny*tOff-6})">${label}</text>`;
+      if (sublabel) s += `<text x="${mx+nx*tOff}" y="${my+ny*tOff+10}" fill="${mutedCol}" font-family="Figtree,sans-serif" font-size="11" text-anchor="middle" letter-spacing="2" transform="rotate(${angle},${mx+nx*tOff},${my+ny*tOff+10})">${sublabel}</text>`;
     }
     return s;
   }
@@ -295,13 +295,13 @@ function drawCutoutDiagram(dims) {
   // ── "ENCLOSURE" label ──
   const encLabelX = (eFL.x + eFR.x) / 2;
   const encLabelY = (eFL.y + eFTL.y) / 2 + 6;
-  out += `<text x="${encLabelX}" y="${encLabelY}" fill="#878c99" font-family="Inter,sans-serif"
+  out += `<text x="${encLabelX}" y="${encLabelY}" fill="#878c99" font-family="Figtree,sans-serif"
     font-size="14" text-anchor="middle" font-weight="600" letter-spacing="4" opacity="0.6">ENCLOSURE</text>`;
 
   // ── "CUTOUT" label — below the cutout front edge, between cutout and enclosure front ──
   const cutLabelX = (cFL.x + cFR.x) / 2;
   const cutLabelY = cFL.y + (eFTL.y - cFL.y) / 2 + cutPadD * isoY / 2;
-  out += `<text x="${cutLabelX}" y="${cutLabelY + 2}" fill="#e8a838" font-family="Inter,sans-serif"
+  out += `<text x="${cutLabelX}" y="${cutLabelY + 2}" fill="#e8a838" font-family="Figtree,sans-serif"
     font-size="11" text-anchor="middle" font-weight="700" letter-spacing="3">CUTOUT</text>`;
 
 
@@ -380,7 +380,7 @@ function drawCutoutDiagram(dims) {
   // ── Model name on insert front face ──
   const insLabelX = (iFL.x + iFR.x) / 2;
   const insLabelY = (iFL.y + iFTL.y) / 2 + 4;
-  out += `<text x="${insLabelX}" y="${insLabelY}" fill="#b0b4be" font-family="Inter,sans-serif"
+  out += `<text x="${insLabelX}" y="${insLabelY}" fill="#b0b4be" font-family="Figtree,sans-serif"
     font-size="12" text-anchor="middle" font-weight="600" letter-spacing="2">${modelName.toUpperCase()}</text>`;
 
   // ════════════════════════════════════════════════
@@ -716,7 +716,7 @@ function drawLightDiagram() {
 
   // ── "Room" label(s) ──
   ctx.fillStyle = '#4a4f5c';
-  ctx.font = '13px sans-serif';
+  ctx.font = '13px Figtree, sans-serif';
   ctx.textAlign = 'center';
   ctx.save();
   ctx.translate(marginL - 60, py(encHeight / 2));
@@ -725,7 +725,7 @@ function drawLightDiagram() {
   ctx.restore();
   if (isDouble) {
     ctx.fillStyle = '#4a4f5c';
-    ctx.font = '13px sans-serif';
+    ctx.font = '13px Figtree, sans-serif';
     ctx.textAlign = 'center';
     ctx.save();
     ctx.translate(px(encDepth) + wallThick + 50, py(encHeight / 2));
@@ -751,7 +751,7 @@ function drawLightDiagram() {
 
   // Insert label
   ctx.fillStyle = '#878c99';
-  ctx.font = 'bold 11px sans-serif';
+  ctx.font = 'bold 11px Figtree, sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText(model.name, ixPx + iwPx / 2, py(cordSpace + insertH / 2) + 5);
 
@@ -766,7 +766,7 @@ function drawLightDiagram() {
 
   // Installation surface label — two lines to fit on mobile
   ctx.fillStyle = '#878c99';
-  ctx.font = '10px sans-serif';
+  ctx.font = '10px Figtree, sans-serif';
   ctx.textAlign = 'left';
   ctx.fillText('Installation', px(encDepth) + wallThick + 4, py(insertTopY) - 2);
   ctx.fillText('Surface', px(encDepth) + wallThick + 4, py(insertTopY) + 10);
@@ -774,7 +774,7 @@ function drawLightDiagram() {
   // ── Cord space label ──
   if (cordSpace > 0) {
     ctx.fillStyle = '#4a4f5c';
-    ctx.font = '9px sans-serif';
+    ctx.font = '9px Figtree, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('Cord / wiring space', ixPx + iwPx / 2, py(cordSpace / 2) + 3);
   }
@@ -788,7 +788,7 @@ function drawLightDiagram() {
 
   // Light path label (above LED strip, raised to avoid angle arc overlap)
   ctx.fillStyle = '#e8a838';
-  ctx.font = 'bold 10px sans-serif';
+  ctx.font = 'bold 10px Figtree, sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('LIGHT PATH', px((ledFrontX + ledBackX) / 2), py(ledY) - 28);
 
@@ -905,7 +905,7 @@ function drawLightDiagram() {
     ctx.fillRect(px(0), py(lightTrapBotY) - soffitH / 2, Math.min(setback, setback + 0.3) * pxPerInch, soffitH);
 
     ctx.fillStyle = '#78b8f0';
-    ctx.font = 'bold 9px sans-serif';
+    ctx.font = 'bold 9px Figtree, sans-serif';
     ctx.textAlign = 'center';
     if (setback > 0.8) {
       ctx.fillText('LIGHT TRAP', px(setback / 2), py(lightTrapBotY) - soffitH / 2 - 6);
@@ -919,7 +919,7 @@ function drawLightDiagram() {
     ctx.fillRect(px(encDepth - backSetback), py(lightTrapBotY) - soffitH / 2, backSetback * pxPerInch, soffitH);
 
     ctx.fillStyle = '#5bc0de';
-    ctx.font = 'bold 9px sans-serif';
+    ctx.font = 'bold 9px Figtree, sans-serif';
     ctx.textAlign = 'center';
     if (backSetback > 0.8) {
       ctx.fillText('LIGHT TRAP', px(encDepth - backSetback / 2), py(lightTrapBotY) - soffitH / 2 - 6);
@@ -940,7 +940,7 @@ function drawLightDiagram() {
     ctx.stroke();
 
     ctx.fillStyle = '#e8a838';
-    ctx.font = '10px sans-serif';
+    ctx.font = '10px Figtree, sans-serif';
     ctx.textAlign = 'right';
     const labelAngle = frontAngleRad / 2 - Math.PI;
     ctx.fillText(
@@ -960,7 +960,7 @@ function drawLightDiagram() {
     ctx.stroke();
 
     ctx.fillStyle = '#d45a20';
-    ctx.font = '10px sans-serif';
+    ctx.font = '10px Figtree, sans-serif';
     ctx.textAlign = 'left';
     const bLabelAngle = -backAngleRad / 2;
     ctx.fillText(
@@ -1017,7 +1017,7 @@ function drawLightDiagram() {
       : recMaxDefaultPy;
 
     ctx.fillStyle = '#4ade80';
-    ctx.font = '9px sans-serif';
+    ctx.font = '9px Figtree, sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText((isDouble ? 'Front Max: ' : 'Rec. Max: ') + maxOpening + '"', px(0) + 4, recMaxLabelPy);
   }
@@ -1036,7 +1036,7 @@ function drawLightDiagram() {
       ctx.setLineDash([]);
 
       ctx.fillStyle = '#4ade80';
-      ctx.font = '9px sans-serif';
+      ctx.font = '9px Figtree, sans-serif';
       ctx.textAlign = 'right';
       ctx.fillText('Back Max: ' + backMaxOpening + '"', px(encDepth) - 4, py(backRecY) - 5);
     }
@@ -1068,7 +1068,7 @@ function drawLightDiagram() {
 
     // Warning label (outside the enclosure, next to escape ray)
     ctx.fillStyle = '#ff5555';
-    ctx.font = 'bold 9px sans-serif';
+    ctx.font = 'bold 9px Figtree, sans-serif';
     ctx.textAlign = 'right';
     const escLabelX = px(0) - wallThick - 50;
     const escLabelY = (gapTopPy + gapBotPy) / 2 - 50;
@@ -1102,7 +1102,7 @@ function drawLightDiagram() {
 
     // Warning label (outside the enclosure, next to escape ray)
     ctx.fillStyle = '#ff5555';
-    ctx.font = 'bold 9px sans-serif';
+    ctx.font = 'bold 9px Figtree, sans-serif';
     ctx.textAlign = 'left';
     const escLabelX = px(encDepth) + wallThick + 50;
     const escLabelY = (gapTopPy + gapBotPy) / 2 - 50;
@@ -1153,7 +1153,7 @@ function drawLightDiagram() {
   // Opening label (rotated)
   ctx.save();
   ctx.fillStyle = arrowColor;
-  ctx.font = 'bold 11px sans-serif';
+  ctx.font = 'bold 11px Figtree, sans-serif';
   ctx.textAlign = 'center';
   ctx.translate(arrowX - 14, (moArrowBotPy + moArrowTopPy) / 2);
   ctx.rotate(-Math.PI / 2);
@@ -1183,7 +1183,7 @@ function drawLightDiagram() {
     ctx.stroke();
 
     ctx.fillStyle = '#78b8f0';
-    ctx.font = '10px sans-serif';
+    ctx.font = '10px Figtree, sans-serif';
     ctx.textAlign = 'center';
     if (setback > 0.5) {
       ctx.fillText('Front SB: ' + setback.toFixed(1) + '"', px(setback / 2), sbDimPy + 13);
@@ -1209,7 +1209,7 @@ function drawLightDiagram() {
     ctx.stroke();
 
     ctx.fillStyle = '#5bc0de';
-    ctx.font = '10px sans-serif';
+    ctx.font = '10px Figtree, sans-serif';
     ctx.textAlign = 'center';
     if (backSetback > 0.5) {
       ctx.fillText('Back SB: ' + backSetback.toFixed(1) + '"', px((insertBackX + encDepth) / 2), sbDimPy + 13);
@@ -1219,7 +1219,7 @@ function drawLightDiagram() {
   // ── FRONT / BACK labels (below floor) ──
   const frontBackPy = py(0) + wallThick + 22;
   ctx.fillStyle = '#878c99';
-  ctx.font = '12px sans-serif';
+  ctx.font = '12px Figtree, sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('FRONT', px(0), frontBackPy);
   ctx.fillText('BACK', px(encDepth), frontBackPy);
@@ -1280,17 +1280,17 @@ function drawLightDiagram() {
 
   // Total depth label
   ctx.fillStyle = '#e8a838';
-  ctx.font = 'bold 14px sans-serif';
+  ctx.font = 'bold 14px Figtree, sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText(frac(totalDepth), (px(0) + px(encDepth)) / 2, tdY - 8);
-  ctx.font = '9px sans-serif';
+  ctx.font = '9px Figtree, sans-serif';
   ctx.fillStyle = '#878c99';
   ctx.fillText('TOTAL DEPTH', (px(0) + px(encDepth)) / 2, tdY - 24);
 
   // ── Legend ──
   const legendX = px(encDepth) + wallThick + 116;
   const legendY = 16;
-  ctx.font = '10px sans-serif';
+  ctx.font = '10px Figtree, sans-serif';
   ctx.textAlign = 'left';
 
   ctx.fillStyle = '#e8a838';
@@ -1315,7 +1315,7 @@ function drawLightDiagram() {
 
   // Cross-section label
   ctx.fillStyle = '#4a4f5c';
-  ctx.font = '10px sans-serif';
+  ctx.font = '10px Figtree, sans-serif';
   ctx.textAlign = 'left';
   ctx.fillText(isDouble ? '3D cutaway / double side' : '3D cutaway / side view', 14, 16);
 }
