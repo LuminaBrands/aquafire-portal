@@ -258,16 +258,21 @@ button, input, select, textarea { font-family: inherit; }
   display: none; align-items: center; gap: 8px;
   padding: 9px 15px; font-size: 0.83rem; font-weight: 600; color: var(--text-hi);
 }
-/* Reserved at the widest total the ledger can reach (4,100 pts) so the bar
+/* Reserved at the widest total the ledger can reach (4,600 pts) so the bar
    is laid out for its worst case instead of growing into an overflow as
    points are earned. */
 .pts-chip b {
   color: var(--ember-t); font-weight: 700;
   font-variant-numeric: tabular-nums; min-width: 5.4ch; text-align: right;
 }
-.pts-dot {
-  width: 6px; height: 6px; border-radius: 50%; flex: none;
-  background: var(--ember); box-shadow: 0 0 8px 1px var(--ember);
+/* An account mark, not a status light. Signed in, this chip opens the profile
+   dropdown (rewards.js), so it has to read as "you" rather than as a live
+   indicator -- a glowing dot here said "something happened", which is not what
+   it means. Quiet on purpose: the points figure beside it is already ember, and
+   two orange things in one chip fight each other. */
+.pts-ico {
+  width: 15px; height: 15px; flex: none;
+  color: var(--text-mid);
 }
 /* The storefront reaches the bar as a burger-panel link only (.in-menu), not
    an end chip. Base made it a plain "Retail Site" item rather than a loud
