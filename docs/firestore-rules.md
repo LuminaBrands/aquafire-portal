@@ -111,6 +111,28 @@ Adjust the domain pattern if the team signs in with something else (e.g.
 `'.*@(luminabrands|aquafire)[.]com'`), or swap `isTeam()` for an explicit UID
 allowlist.
 
+## Authorized domains (Auth) — required for sign-in to work at all
+
+Firebase Auth refuses to complete a sign-in unless the *serving* origin is on
+its authorized list, and the defaults only cover `localhost`,
+`aquafire-portal.firebaseapp.com` and `aquafire-portal.web.app`. We serve from
+a custom Vercel domain, so `aquafire.app` has to be added by hand:
+
+> Firebase console → **Authentication → Settings → Authorized domains → Add
+> domain** → `aquafire.app` (and `www.aquafire.app` if it resolves).
+
+Symptom when it is missing: the Google popup opens and closes within a second
+and `rewards.js` surfaces `auth/unauthorized-domain`. It is easy to misread as
+a popup-blocker or a COOP problem — it is neither. `vercel.json` already sets
+`Cross-Origin-Opener-Policy: same-origin-allow-popups`, which is what
+`signInWithPopup` needs; don't "fix" that header chasing this bug.
+
+This gates **every** sign-in path, not just Google — email/password on
+`rewards.html`, `share-install.html`, and the `@luminabrands.com` gate on the
+two internal pages all fail the same way. Vercel preview URLs
+(`*.vercel.app`) are each a distinct origin and cannot be wildcarded, so
+sign-in will not work on a preview deploy unless that exact host is added.
+
 ## App Check (closes anonymous `chatEvents` writes)
 
 The rules above bound *what* an anonymous caller can write, not *who* can
