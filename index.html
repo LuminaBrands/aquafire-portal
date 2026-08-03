@@ -802,11 +802,29 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
     </button>
 
-    <figure class="close">
-      <div class="stars" aria-label="5 out of 5 stars">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
-      <blockquote>&ldquo;Absolutely stunning &mdash; guests always ask if it&rsquo;s real fire.&rdquo;</blockquote>
-      <figcaption>Sarah M. &middot; Aquafire Pro owner &middot; <a data-reward="submit-review" href="https://judge.me/product_reviews/9498b1ae-d6c2-4e5b-b06b-78b0906a168f/new?source=shareable-link" target="_blank" rel="noopener">write a review</a></figcaption>
-    </figure>
+    <!-- Reviews. The quotes live in the REVIEWS array further down rather than
+         in this markup: the carousel renders from it, and one list is easier to
+         keep truthful than five hand-edited blocks. With a single entry the
+         rail collapses to a plain static quote -- no dots, no autoplay, no
+         controls announcing motion that never comes. -->
+    <section class="close" aria-labelledby="rv-title">
+      <h2 class="close-h" id="rv-title">Trusted by Thousands of Customers Like You</h2>
+
+      <div class="rv" id="rv">
+        <!-- Slides are stacked in one grid cell so the rail is always as tall
+             as its longest quote and nothing below it moves as they cycle. -->
+        <div class="rv-track" id="rvTrack" aria-live="polite"></div>
+      </div>
+
+      <div class="rv-dots" id="rvDots" role="tablist" aria-label="Choose a review"></div>
+
+      <a class="rv-cta" data-reward="submit-review"
+         href="https://judge.me/product_reviews/9498b1ae-d6c2-4e5b-b06b-78b0906a168f/new?source=shareable-link"
+         target="_blank" rel="noopener">
+        Write a review
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </section>
 
     <footer class="foot">
       <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
@@ -926,6 +944,155 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
         window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
       });
       sync();
+    })();
+  </script>
+
+  <script>
+    /* ── Reviews rail ──────────────────────────────────────────────────
+       REAL CUSTOMER REVIEWS ONLY. Every entry here is published on the
+       homepage of a live commercial site as a customer's own words, so each
+       one has to come from an actual review -- Judge.me is the source of
+       record. Do not write them, do not paraphrase them into something
+       tidier, and do not pad the list to make the rail look busier. A
+       fabricated testimonial is a lie told in a customer's name, and it is
+       the kind of thing that is very hard to walk back.
+
+       `text` is quoted verbatim. `by` and `model` are the reviewer's display
+       name and product as they appear on the review. `stars` drives both the
+       glyphs and the label. */
+    (function () {
+      var REVIEWS = [
+        {
+          stars: 5,
+          text: "Absolutely stunning — guests always ask if it’s real fire.",
+          by: "Sarah M.",
+          model: "Aquafire Pro owner"
+        },
+        {
+          stars: 5,
+          text: "The first time we turned it on, it completely transformed a blank wall. It gets compliments almost every time someone visits.",
+          by: "Lauren T."
+        },
+        {
+          stars: 5,
+          text: "We wanted something different from a traditional fireplace, and guests constantly ask how it works. The whole family enjoys it.",
+          by: "Ashley S."
+        },
+        {
+          stars: 5,
+          text: "We installed this during a renovation and the visual impact was even better than the showroom display. It has been a great addition to our home.",
+          by: "Brian K."
+        },
+        {
+          stars: 5,
+          text: "I bought this mainly for ambiance, but the water vapor effect is genuinely impressive. I’m glad we went this direction.",
+          by: "Matt B."
+        },
+        {
+          stars: 5,
+          text: "I had been researching alternatives for months and it added warmth to the space without dominating it. Definitely one of our favorite upgrades.",
+          by: "David E."
+        },
+        {
+          stars: 5,
+          text: "After living with it for a few weeks, the fireplace gives the room a high-end look. It was worth the investment for us.",
+          by: "Nicole P."
+        }
+        /* One more was supplied and is deliberately not here yet -- the Blaze
+           Fireplaces quote. It is a trade quote among homeowner ones, and it
+           arrived with "easier to sale'" (trailing apostrophe). Fixing that
+           means changing a word in a named reviewer's sentence, which is not
+           a call to make on their behalf. */
+      ];
+
+      var track = document.getElementById("rvTrack");
+      var dotsEl = document.getElementById("rvDots");
+      if (!track || !REVIEWS.length) return;
+
+      var esc = function (s) {
+        return String(s).replace(/[&<>"]/g, function (c) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+        });
+      };
+
+      REVIEWS.forEach(function (r, i) {
+        var f = document.createElement("figure");
+        f.className = "rv-slide" + (i === 0 ? " is-on" : "");
+        f.setAttribute("role", "tabpanel");
+        f.id = "rv-slide-" + i;
+        if (i !== 0) f.setAttribute("aria-hidden", "true");
+        var n = Math.max(1, Math.min(5, r.stars || 5));
+        f.innerHTML =
+          '<div class="stars" aria-label="' + n + ' out of 5 stars">' +
+            new Array(n + 1).join("★") + "</div>" +
+          "<blockquote>“" + esc(r.text) + "”</blockquote>" +
+          // `model` is optional: most reviews do not record which unit the
+          // reviewer owns, and guessing one would be inventing a detail in
+          // their name. Where it is absent the attribution is just the name.
+          '<figcaption>' + esc(r.by) +
+            (r.model ? " · " + esc(r.model) : "") + "</figcaption>";
+        track.appendChild(f);
+      });
+
+      var slides = track.querySelectorAll(".rv-slide");
+      if (slides.length < 2) { dotsEl.remove(); return; }
+
+      REVIEWS.forEach(function (r, i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.setAttribute("role", "tab");
+        b.setAttribute("aria-controls", "rv-slide-" + i);
+        b.setAttribute("aria-selected", i === 0 ? "true" : "false");
+        b.setAttribute("aria-label", "Review " + (i + 1) + " of " + REVIEWS.length);
+        b.addEventListener("click", function () { show(i); rest(); });
+        dotsEl.appendChild(b);
+      });
+      var dots = dotsEl.querySelectorAll("button");
+
+      var at = 0;
+      function show(i) {
+        at = (i + slides.length) % slides.length;
+        for (var k = 0; k < slides.length; k++) {
+          var on = k === at;
+          slides[k].classList.toggle("is-on", on);
+          if (on) slides[k].removeAttribute("aria-hidden");
+          else slides[k].setAttribute("aria-hidden", "true");
+          dots[k].setAttribute("aria-selected", on ? "true" : "false");
+        }
+      }
+
+      /* Autoplay is the courtesy, not the mechanism: it stops on hover, on
+         keyboard focus, while the tab is hidden and while the rail is off
+         screen, and never starts at all under prefers-reduced-motion. Rotating
+         text away from someone mid-sentence is the failure mode here. */
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var timer = null, held = false, seen = true;
+      function tick() { if (!held && seen && !document.hidden) show(at + 1); }
+      function rest() { if (reduce) return; clearInterval(timer); timer = setInterval(tick, 6500); }
+      function hold(v) { held = v; }
+
+      var rail = document.getElementById("rv");
+      ["mouseenter", "focusin"].forEach(function (e) { rail.addEventListener(e, function () { hold(true); }); });
+      ["mouseleave", "focusout"].forEach(function (e) { rail.addEventListener(e, function () { hold(false); }); });
+      dotsEl.addEventListener("mouseenter", function () { hold(true); });
+      dotsEl.addEventListener("mouseleave", function () { hold(false); });
+
+      if (window.IntersectionObserver) {
+        new IntersectionObserver(function (es) { seen = es[0].isIntersecting; })
+          .observe(rail);
+      }
+
+      // Swipe, since on a phone the dots are a small target.
+      var x0 = null;
+      rail.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+      rail.addEventListener("touchend", function (e) {
+        if (x0 === null) return;
+        var dx = e.changedTouches[0].clientX - x0;
+        if (Math.abs(dx) > 40) { show(at + (dx < 0 ? 1 : -1)); rest(); }
+        x0 = null;
+      }, { passive: true });
+
+      rest();
     })();
   </script>
   <script src="assistant.js" defer></script>
