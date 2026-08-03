@@ -390,17 +390,20 @@ spring ease; LED bars slide in at the bottom edge.
 - **The secondary stays a text link, and steps aside when it would echo.** It
   carries "View Profile" once signed in and hides while signed out, where it
   would only repeat the primary
-- **One footer row, one destination.** "View your rewards" and "How the
-  program works" both pointed at `rewards.html` and cost two stacked blocks
-  between them; they are one "How rewards work" link now, sharing a row with
-  the secondary. The standing total sits on a baseline with its unit rather
-  than above it. Together that took the band from 340px to 258px on a phone
-  and 118px to 99px on desktop -- a band that reports state should not be the
-  tallest thing above the fold
+- **It ends on its action.** Name and total, then progress, then the primary
+  pill with the two quiet links directly beneath it -- read the state, then
+  act. The links used to sit in a row of their own above the button, which put
+  navigation between the reader and the thing to do.
+  "View your rewards" and "How the program works" both pointed at
+  `rewards.html` and cost two stacked blocks between them; they are one "How
+  rewards work" link now. With the total on a baseline with its unit, that
+  took the band from 340px to 253px on a phone -- a band that reports state
+  should not be the tallest thing above the fold
 - **Named, then counted.** The band opens with "Aquafire Rewards" in heading
-  ink plus a "Learn to earn" badge (ember, Label small, the same chip shape
-  the points badges use); the standing total sits below it. The bare number
-  alone never said whose programme it was
+  ink; the standing total sits below it on a baseline with its unit. The bare
+  number alone never said whose programme it was. A "Learn to earn" badge sat
+  beside the name for a while and was removed -- the band is already titled,
+  already ember, and already ends on an action that says the same thing
 
 ### Fleet (explore by model, homepage)
 - Sits under the wings as the second door: the wings ask "what are you trying

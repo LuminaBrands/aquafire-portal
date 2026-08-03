@@ -224,16 +224,8 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
        this is. `.j-sum span` is (0,2,0), so the name has to be stated at the
        same weight or it inherits the dim caption styling below it. */
     .j-sum .j-name {
-      display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
-      margin-bottom: 7px;
+      display: block; margin-bottom: 7px;
       font-size: 0.95rem; font-weight: 600; color: var(--text-hi);
-    }
-    .j-sum .j-tag {
-      font-style: normal; font-size: 0.7rem; font-weight: 700;
-      letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--ember-t);
-      background: var(--badge-bg); border: 1px solid var(--badge-border);
-      border-radius: 999px; padding: 2px 8px;
     }
     .j-sum b {
       font-size: 1.6rem; font-weight: 700; line-height: 1.15;
@@ -287,11 +279,15 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     }
     .j-meta { font-size: 0.76rem; color: var(--text-dim); }
     .j-meta strong { color: var(--text-hi); font-weight: 700; }
+    /* The band ends on its action: primary pill, then the two quiet links
+       directly beneath it rather than in a row of their own. */
+    .j-end { display: flex; flex-direction: column; align-items: start; gap: 10px; }
+    .j-under { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
     .j-links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
     /* Ember marks the standing total and the one action; these two are
        navigation, so they stay quiet. Three orange things would be shouting. */
-    .j-links a { font-size: 0.76rem; font-weight: 600; color: var(--text-mid); text-decoration: none; }
-    .j-links a:hover { text-decoration: underline; color: var(--text-hi); }
+    .j-links a, .j-under a { font-size: 0.76rem; font-weight: 600; color: var(--text-mid); text-decoration: none; }
+    .j-links a:hover, .j-under a:hover { text-decoration: underline; color: var(--text-hi); }
 
     /* ── Intent panes ────────────────────────────────── */
     /* Wings: a swipeable carousel on phones, three columns on desktop. Stacked
@@ -497,7 +493,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       /* One line on desktop: total, the sign-in link beside it, progress, then
          the two navigation links. */
       .journey { flex-direction: row; align-items: center; gap: 26px; margin-top: 38px; padding: 18px 26px; }
-      .j-sum, .j-links, .j-cta, .j-go { flex: none; }
+      .j-sum, .j-end { flex: none; }
       .j-prog { flex: 1; min-width: 190px; }
       .hall {
         align-items: stretch; margin-top: 18px; gap: 16px;
@@ -603,24 +599,24 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
 
     <section class="journey" aria-labelledby="j-title">
       <span class="j-sum">
-        <span class="j-name" id="j-title">Aquafire Rewards<em class="j-tag">Learn to earn</em></span>
+        <span class="j-name" id="j-title">Aquafire Rewards</span>
         <span class="j-total"><b id="rb-home-points-big">0</b><span>Reward points</span></span>
       </span>
-      <!-- rewards.js owns both. Primary: "Continue earning" (signed in, scrolls
-           to the routes) / "Sign in to earn rewards" (signed out, opens the
-           modal). The secondary text link carries "View Profile" once signed
-           in, and hides while signed out where it would repeat the primary. -->
-      <button class="j-go" id="rb-journey-cta" type="button">Sign in to earn rewards</button>
       <div class="j-prog">
         <span class="j-bar" aria-hidden="true"><span class="j-bar-fill" id="rb-home-bar-fill"></span></span>
         <span class="j-meta"><strong id="rb-home-bar-label">0 / 18 modules completed</strong> &middot; collect them in any order</span>
       </div>
-      <!-- One footer row. "View your rewards" and "How the program works"
-           pointed at the same page and were two blocks tall between them; the
-           secondary profile link now shares this row instead of owning one. -->
-      <div class="j-links">
-        <button class="j-cta" id="rb-signin-cta" type="button">Sign In to Start Earning</button>
-        <a href="rewards.html">How rewards work &rarr;</a>
+      <!-- The band ends on its action. rewards.js owns both: the primary is
+           "Continue earning" (signed in, scrolls to the routes) or "Sign in to
+           earn rewards" (signed out, opens the modal); the secondary text link
+           carries "View Profile" once signed in and hides while signed out,
+           where it would only repeat the primary. -->
+      <div class="j-end">
+        <button class="j-go" id="rb-journey-cta" type="button">Sign in to earn rewards</button>
+        <div class="j-under">
+          <button class="j-cta" id="rb-signin-cta" type="button">Sign In to Start Earning</button>
+          <a href="rewards.html">How rewards work &rarr;</a>
+        </div>
       </div>
     </section>
 
