@@ -967,8 +967,47 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           text: "Absolutely stunning — guests always ask if it’s real fire.",
           by: "Sarah M.",
           model: "Aquafire Pro owner"
+        },
+        {
+          stars: 5,
+          text: "The first time we turned it on, it completely transformed a blank wall. It gets compliments almost every time someone visits.",
+          by: "Lauren T."
+        },
+        {
+          stars: 5,
+          text: "We wanted something different from a traditional fireplace, and guests constantly ask how it works. The whole family enjoys it.",
+          by: "Ashley S."
+        },
+        {
+          stars: 5,
+          text: "We installed this during a renovation and the visual impact was even better than the showroom display. It has been a great addition to our home.",
+          by: "Brian K."
+        },
+        {
+          stars: 5,
+          text: "I bought this mainly for ambiance, but the water vapor effect is genuinely impressive. I’m glad we went this direction.",
+          by: "Matt B."
+        },
+        {
+          stars: 5,
+          text: "I wasn’t sure what to expect at first, but the flame effect feels much more natural than I expected. Very happy with the purchase.",
+          by: "Lauren T."
+        },
+        {
+          stars: 5,
+          text: "I had been researching alternatives for months and it added warmth to the space without dominating it. Definitely one of our favorite upgrades.",
+          by: "David E."
+        },
+        {
+          stars: 5,
+          text: "After living with it for a few weeks, the fireplace gives the room a high-end look. It was worth the investment for us.",
+          by: "Nicole P."
         }
-        /* More real reviews go here -- see the note above. */
+        /* One more was supplied and is deliberately not here yet -- the Blaze
+           Fireplaces quote. It is a trade quote among homeowner ones, and it
+           arrived with "easier to sale'" (trailing apostrophe). Fixing that
+           means changing a word in a named reviewer's sentence, which is not
+           a call to make on their behalf. */
       ];
 
       var track = document.getElementById("rvTrack");
@@ -992,7 +1031,11 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
           '<div class="stars" aria-label="' + n + ' out of 5 stars">' +
             new Array(n + 1).join("★") + "</div>" +
           "<blockquote>“" + esc(r.text) + "”</blockquote>" +
-          '<figcaption>' + esc(r.by) + " · " + esc(r.model) + "</figcaption>";
+          // `model` is optional: most reviews do not record which unit the
+          // reviewer owns, and guessing one would be inventing a detail in
+          // their name. Where it is absent the attribution is just the name.
+          '<figcaption>' + esc(r.by) +
+            (r.model ? " · " + esc(r.model) : "") + "</figcaption>";
         track.appendChild(f);
       });
 

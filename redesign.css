@@ -397,6 +397,9 @@ button, input, select, textarea { font-family: inherit; }
 .rv-track { display: grid; }
 .rv-slide {
   grid-area: 1 / 1;
+  /* The cell is as tall as the longest quote, so a short one would otherwise
+     sit at the top with all the slack below it. Centred, the slack splits. */
+  align-self: center;
   opacity: 0; visibility: hidden;
   transform: translateY(6px);
   transition: opacity 0.45s var(--ease), transform 0.45s var(--ease), visibility 0.45s;
