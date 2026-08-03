@@ -6,7 +6,7 @@ colors:
   vapor-white: "#f3f4f6"
   mist-gray: "#b9bec8"
   faded-gray: "#8d939f"
-  ember: "#ff8a4a"
+  ember: "#d33337"
   frost: "#6fc3ff"
   chartreuse: "#c9e85c"
   magenta: "#ff5fa8"
@@ -15,17 +15,19 @@ colors:
   ink: "#171a1f"
   ink-mid: "#4c525c"
   ink-dim: "#6a7280"
-  ember-day: "#ff6a3d"
+  ember-day: "#d33337"
   frost-day: "#4aa8ef"
   chartreuse-day: "#aacc33"
   magenta-day: "#ff4d9e"
-  ember-ink: "#cf4e16"
+  ember-ink: "#b02427"
   frost-ink: "#1c76c9"
   chartreuse-ink: "#6f8f0a"
   magenta-ink: "#d9317f"
   orb-glow: "#ffd9ae"
   orb-body: "#e0641e"
   orb-shade: "#6e2a08"
+  ember-text: "#f05a5e"
+  on-accent: "#ffffff"
   photo-ink: "#f3f4f6"
   photo-ink-dim: "#c9cdd5"
 typography:
@@ -157,11 +159,24 @@ A monochrome glass world where color is reserved for the product's LED
 palette and arrives mostly on interaction.
 
 ### Primary
-- **Ember** (#ff8a4a dark / #ff6a3d light): the flame and the brand's warmth.
-  Ember's orb, the Fix wing, halo glows, star ratings, and every rewards
-  signal -- the band's standing total and progress fill, the nav points chip,
-  reward badges. The emotional primary; the widest-used accent, so reach for a
-  neutral first and let ember mean something.
+- **Ember** (#d33337, both themes): the brand's accent. The Fix wing, halo
+  glows, star ratings, and every rewards signal -- the band's standing total and
+  progress fill, the nav points chip, reward badges. The emotional primary; the
+  widest-used accent, so reach for a neutral first and let it mean something.
+
+  It is a deep red, and that has two consequences the old orange did not have.
+  **Ink on it is white** (`--on-ember`, 4.9:1 -- the old dark ink would be
+  3.6:1). And **it cannot be used as text**: #d33337 on the dark ground is
+  3.9:1, under AA. Text takes `--ember-t` instead -- #f05a5e on dark (5.7:1),
+  #b02427 on light. `color: var(--ember)` / `var(--red)` is always a mistake;
+  fills and strokes take the accent, type takes the text variant.
+
+  Note `--on-amber` is a separate token and does not follow the accent. Amber
+  survives as the reward-badge colour and is a *light* fill, where white would
+  be 2.0:1 -- anything drawn on amber takes the dark ink.
+
+  Ember's orb keeps its warm firelight gradient. It is a depicted glowing coal,
+  not an accent surface, and a red sphere reads as a dot rather than an ember.
 
 ### Secondary
 - **Frost** (#6fc3ff dark / #4aa8ef light): the Explore wing and the cool
@@ -174,8 +189,14 @@ palette and arrives mostly on interaction.
   reading is the approved look; everywhere else the rewards accent is ember.
   Do not reach for it for anything new.
 - **Danger** (#ff6b5e dark / #c0392b light): form errors, and nothing else.
-  Deliberately not ember -- an error that reads as the brand accent is not an
-  error.
+  **This token's separation from the accent no longer holds.** It was picked to
+  be visibly not-ember back when ember was orange; now that the accent is
+  #d33337 the two are within a few degrees of hue, and a field error reads as
+  brand colour. Nothing is broken -- red is still the conventional error signal,
+  and errors carry their own copy and placement -- but the stated rationale is
+  now false, and the honest options are to move danger somewhere clearly
+  distinct or to accept that errors and the accent share a hue. Open decision;
+  do not treat the current value as considered.
 - **Photo ink / photo ink dim** (#f3f4f6, #c9cdd5): the only text that does
   not follow the theme. The hero greeting and its subtitle sit on the
   photograph, which is the same photograph in both lightings, so they stay

@@ -227,7 +227,9 @@ select {
 }
 .autocomplete-item:hover .ppm-badge,
 .autocomplete-item.highlighted .ppm-badge {
-  background: #2980b9;
+  /* Same darkening as .cta-button, for the same reason: white on #2980b9 is
+     4.3:1, under AA. */
+  background: #2471a3;
   color: #fff;
 }
 
@@ -711,7 +713,10 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 .cta-button {
   display: inline-block;
   padding: 14px 40px;
-  background: #2980b9;
+  /* Was #2980b9, which is 4.3:1 against white -- just under AA on a primary
+     CTA. This is the old hover shade promoted to the resting state (5.3:1),
+     with the hover darkened to keep the darkens-on-hover relationship. */
+  background: #2471a3;
   color: #fff;
   font-size: 1.05rem;
   font-weight: 600;
@@ -721,7 +726,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   box-shadow: 0 2px 12px rgba(41,128,185,0.25);
 }
 .cta-button:hover {
-  background: #2471a3;
+  background: #1f6391;
   box-shadow: 0 4px 20px rgba(41,128,185,0.35);
 }
 .cta-link {

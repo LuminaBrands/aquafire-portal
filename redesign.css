@@ -21,8 +21,8 @@
    colors, so the switcher swaps the whole surface at once. */
 :root {
   color-scheme: dark;
-  --ember: #ff8a4a; --frost: #6fc3ff; --chart: #c9e85c; --mag: #ff5fa8;
-  --ember-t: #ff8a4a; --frost-t: #6fc3ff; --chart-t: #c9e85c; --mag-t: #ff5fa8;
+  --ember: #d33337; --frost: #6fc3ff; --chart: #c9e85c; --mag: #ff5fa8;
+  --ember-t: #f05a5e; --frost-t: #6fc3ff; --chart-t: #c9e85c; --mag-t: #ff5fa8;
   --ground-fill: #101216;
   --text-hi: #f3f4f6; --text-mid: #b9bec8; --text-dim: #8d939f; --ico-ink: #b9bec8;
   --stroke: rgba(255,255,255,0.12); --stroke-hi: rgba(255,255,255,0.22);
@@ -45,10 +45,15 @@
   --journey-bg: rgba(255,255,255,0.035); --journey-border: rgba(255,255,255,0.08);
   --journey-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 4px 12px -8px rgba(0,0,0,0.55);
   --nub-bg: rgba(255,255,255,0.08);
-  /* Type sitting ON ember. Ember is a light fill in both themes, so this stays
-     dark in both -- like --scrim it is not a surface colour and does not flip.
-     White on #ff8a4a is 2.2:1. */
-  --on-ember: #171a1f;
+  /* Type sitting ON the accent fill. The accent is a deep red now, not a light
+     orange, so this is white in both themes: white on #d33337 is 4.9:1 where
+     the old dark ink would be 3.6:1. Like --scrim it is not a surface colour
+     and does not flip with the theme.
+     --on-amber is the other half of the pair and does not follow the accent:
+     amber (#e8a838) survives as the reward-badge colour and is a *light* fill,
+     where white would be 2.0:1. Anything drawn on amber takes this instead. */
+  --on-ember: #ffffff;
+  --on-amber: #171a1f;
   --wing-bg: rgba(255,255,255,0.055); --wing-border: rgba(255,255,255,0.12);
   --wing-shadow: 0 0 rgba(0,0,0,0);
   --tip-bg: rgba(16,18,22,0.4);
@@ -68,9 +73,9 @@
   --row-border: rgba(255,255,255,0.07); --row-border-hover: rgba(255,255,255,0.13);
   --row-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.45), 0 2px 7px -4px rgba(0,0,0,0.5);
   --row-shadow-hover: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 6px 14px -7px rgba(0,0,0,0.6);
-  --badge-border: rgba(255,138,74,0.4); --badge-bg: transparent;
+  --badge-border: rgba(240,90,94,0.4); --badge-bg: transparent;
   --mini-bg: rgba(16,18,22,0.35); --mini-bg-hover: rgba(16,18,22,0.35);
-  --halo-grad: radial-gradient(closest-side, rgba(255,138,74,0.15), rgba(255,138,74,0.045) 45%, transparent 72%);
+  --halo-grad: radial-gradient(closest-side, rgba(211,51,55,0.16), rgba(211,51,55,0.05) 45%, transparent 72%);
   --scene-scrim:
     radial-gradient(130% 100% at 50% 0%, transparent 42%, rgba(16,18,22,0.5) 100%),
     linear-gradient(180deg, rgba(16,18,22,0.62) 0%, rgba(16,18,22,0.3) 26%, rgba(16,18,22,0.5) 58%, #101216 97%);
@@ -91,8 +96,8 @@
 }
 :root[data-theme="light"] {
   color-scheme: light;
-  --ember: #ff6a3d; --frost: #4aa8ef; --chart: #aacc33; --mag: #ff4d9e;
-  --ember-t: #cf4e16; --frost-t: #1c76c9; --chart-t: #6f8f0a; --mag-t: #d9317f;
+  --ember: #d33337; --frost: #4aa8ef; --chart: #aacc33; --mag: #ff4d9e;
+  --ember-t: #b02427; --frost-t: #1c76c9; --chart-t: #6f8f0a; --mag-t: #d9317f;
   --ground-fill: linear-gradient(180deg, #f1f2f5 0%, #e9ebef 40%, #e2e5ea 100%);
   --text-hi: #171a1f; --text-mid: #4c525c; --text-dim: #6a7280; --ico-ink: #6a7280;
   --stroke: #e2e4e9; --stroke-hi: rgba(23,26,31,0.12);
@@ -127,7 +132,7 @@
   --row-border: rgba(23,26,31,0.07); --row-border-hover: rgba(23,26,31,0.12);
   --row-shadow: inset 0 2px 4px -1px rgba(23,26,31,0.08), 0 2px 6px -4px rgba(23,26,31,0.14);
   --row-shadow-hover: inset 0 2px 4px -1px rgba(23,26,31,0.06), 0 5px 12px -6px rgba(23,26,31,0.2);
-  --badge-border: rgba(207,78,22,0.35); --badge-bg: rgba(255,106,61,0.06);
+  --badge-border: rgba(176,36,39,0.35); --badge-bg: rgba(211,51,55,0.06);
   --mini-bg: #fafbfc; --mini-bg-hover: #ffffff;
   --halo-grad: radial-gradient(closest-side, rgba(255,255,255,0.5), rgba(255,106,61,0.06) 46%, transparent 70%);
   --scene-scrim:
@@ -520,12 +525,12 @@ button, input, select, textarea { font-family: inherit; }
   --surface: rgba(255,255,255,0.045);
   --surface-alt: rgba(255,255,255,0.08);
   --border: rgba(255,255,255,0.12);
-  --border-warm: rgba(255,138,74,0.26);
+  --border-warm: rgba(240,90,94,0.26);
   --text: #f3f4f6;
   --text-muted: #8d939f;
-  --red: #ff8a4a;
-  --red-dark: #cf4e16;
-  --red-glow: rgba(255,138,74,0.15);
+  --red: #d33337;
+  --red-dark: #b02427;
+  --red-glow: rgba(211,51,55,0.16);
   --amber: #e8a838;
   --amber-dim: #c78820;
   --blue: #6fc3ff;
@@ -534,7 +539,7 @@ button, input, select, textarea { font-family: inherit; }
   --radius-sm: 10px;
   --amber-glow: rgba(232,168,56,0.10);
   --blue-glow: rgba(111,195,255,0.10);
-  --ember-glow: rgba(255,138,74,0.10);
+  --ember-glow: rgba(211,51,55,0.10);
   --shadow: 0 2px 24px rgba(0,0,0,0.35);
 }
 :root[data-theme="light"] {
@@ -542,18 +547,18 @@ button, input, select, textarea { font-family: inherit; }
   --surface: rgba(255,255,255,0.72);
   --surface-alt: rgba(255,255,255,0.9);
   --border: #e2e4e9;
-  --border-warm: rgba(207,78,22,0.24);
+  --border-warm: rgba(176,36,39,0.24);
   --text: #171a1f;
   --text-muted: #6a7280;
-  --red: #cf4e16;
-  --red-dark: #a83c0f;
-  --red-glow: rgba(207,78,22,0.12);
+  --red: #c02b2e;
+  --red-dark: #8d1d20;
+  --red-glow: rgba(176,36,39,0.12);
   --amber: #b8801f;
   --amber-dim: #8f6416;
   --blue: #1c76c9;
   --blue-dim: #135697;
   --amber-glow: rgba(184,128,31,0.12);
   --blue-glow: rgba(28,118,201,0.10);
-  --ember-glow: rgba(207,78,22,0.10);
+  --ember-glow: rgba(176,36,39,0.10);
   --shadow: 0 2px 20px rgba(23,26,31,0.10);
 }
