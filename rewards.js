@@ -113,12 +113,23 @@
         email: currentUser.email || '',
         displayName: currentUser.displayName || '',
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }, { merge: true }).catch(function (e) {
-        console.warn('Save error:', e);
+      }, { merge: true }).then(saveLocal).catch(function (e) {
+        /* The local mirror is deliberately NOT written when the server write
+           fails. Mirroring unconditionally let the two stores drift: a reward
+           the rules rejected still landed in localStorage, boot() read that
+           before auth resolved, and the total appeared at the higher figure
+           and then dropped to the server's when loadUserData answered. Points
+           that did not persist should not be shown as if they had. */
+        console.warn(
+          'Rewards save rejected by Firestore, not mirrored locally. The usual ' +
+          'cause is docs/firestore-rules.md drifting behind the REWARDS map in ' +
+          'rewards.js -- a new reward id missing from the completed allowlist, ' +
+          'or a points total above the cap. Error:', e);
       });
+    } else {
+      // Signed out, localStorage is the only store.
+      saveLocal();
     }
-    // Always mirror to localStorage as backup
-    saveLocal();
   }
 
   /* ── localStorage fallback ── */
@@ -149,6 +160,10 @@
     userPoints += reward.points;
     saveUserData();
     updateNavUI();
+    // The nav points chip and the homepage band both live in updateHomeBanner,
+    // which this was not calling -- so an award updated the account button but
+    // left the visible points total stale until the next page load.
+    updateHomeBanner();
     updateAllBadges();
     showPointsToast(reward.points, reward.label);
     return true;
