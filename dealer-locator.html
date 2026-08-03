@@ -21,13 +21,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
   <link rel="stylesheet" href="redesign.css">
+  <link rel="stylesheet" href="rewards.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     /* Palette removed: redesign.css owns these token names now, per theme.
        A :root here re-pinned the old dark values and beat the bridge. */
     html { scroll-behavior: smooth; scroll-padding-top: 72px; }
     body { min-height: 100vh; }
-    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    /* Headings inherit Figtree from redesign.css. A 'Poppins' override lived
+       here from the 2025 stack, but only Figtree is linked above -- so it was
+       not setting headings in Poppins, it was dropping them to plain
+       sans-serif while the body stayed Figtree. */
     a { color: inherit; }
     .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
@@ -35,13 +39,12 @@
     .search-row { display: flex; gap: 10px; width: 100%; align-items: stretch; }
     .search-row input {
       width: 100%; padding: 14px 20px; background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 1rem; outline: none;
+      border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 0.93rem; outline: none;
     }
     .search-row input::placeholder { color: var(--text-muted); }
     .search-row input:focus { border-color: var(--red); }
     .search-row #go {
-      padding: 14px 28px; background: var(--red); color: #fff; font-family: 'Poppins', sans-serif;
-      font-size: 0.9rem; font-weight: 600; border: none; border-radius: var(--radius-sm); cursor: pointer;
+      padding: 14px 28px; background: var(--red); color: var(--on-ember); font-size: 0.88rem; font-weight: 600; border: none; border-radius: var(--radius-sm); cursor: pointer;
       white-space: nowrap;
     }
     .search-row #go:hover { background: var(--red-dark); }
@@ -55,7 +58,7 @@
     .geo-icon-btn:disabled { opacity: 0.5; cursor: default; }
     .distance-select {
       padding: 0 14px; background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 0.9rem;
+      border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 0.88rem;
       outline: none; cursor: pointer; flex-shrink: 0;
     }
     .distance-select:focus { border-color: var(--red); }
@@ -71,12 +74,12 @@
     }
     .ac-list.open { display: block; }
     .ac-item {
-      padding: 10px 16px; cursor: pointer; font-size: 0.9rem; color: var(--text-muted);
+      padding: 10px 16px; cursor: pointer; font-size: 0.88rem; color: var(--text-muted);
       border-bottom: 1px solid var(--border); transition: background 0.15s;
     }
     .ac-item:last-child { border-bottom: none; }
     .ac-item:hover, .ac-item.active { background: var(--surface-alt); color: var(--text); }
-    .ac-item small { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+    .ac-item small { display: block; font-size: 0.76rem; color: var(--text-muted); margin-top: 2px; }
 
     /* Layout */
     .locator-grid { display: grid; grid-template-columns: 380px 1fr; gap: 24px; margin-top: 24px; }
@@ -85,8 +88,8 @@
       max-height: 600px; overflow-y: auto; padding-right: 8px;
     }
     .card-list::-webkit-scrollbar { width: 6px; }
-    .card-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    .card-count { font-size: 0.85rem; color: var(--text-muted); padding-bottom: 8px; border-bottom: 1px solid var(--border); line-height: 1.5; }
+    .card-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+    .card-count { font-size: 0.83rem; color: var(--text-muted); padding-bottom: 8px; border-bottom: 1px solid var(--border); line-height: 1.5; }
     .card-count a { color: var(--blue); text-decoration: none; }
     .card-count a:hover { color: var(--text); }
 
@@ -95,22 +98,22 @@
       padding: 16px 20px; background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); cursor: pointer; transition: border-color 0.2s, transform 0.15s;
     }
-    .d-card:hover { transform: translateY(-1px); border-color: rgba(192,57,43,0.3); }
+    .d-card:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--red) 30%, transparent); }
     .d-card.active { border-color: var(--red); box-shadow: 0 0 0 1px var(--red), 0 4px 16px var(--red-glow); }
-    .d-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
+    .d-card h3 { font-size: 0.88rem; font-weight: 600; margin-bottom: 2px; }
     .d-badge {
-      display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.5px; padding: 2px 7px; border-radius: 4px; margin-bottom: 6px;
+      display: inline-block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; padding: 2px 7px; border-radius: 999px; margin-bottom: 6px;
     }
-    .d-badge.dealer { background: rgba(192,57,43,0.15); color: var(--red); }
-    .d-badge.regional-dealer { background: rgba(232,168,56,0.15); color: var(--amber); }
-    .d-badge.sales-rep { background: rgba(77,166,232,0.15); color: var(--blue); }
-    .d-badge.online-dealer { background: rgba(39,174,96,0.15); color: #27ae60; }
-    .d-badge.temporary-dealer { background: rgba(135,140,153,0.15); color: var(--text-muted); }
-    .d-badge.appt { background: rgba(135,140,153,0.1); color: var(--text-muted); font-size: 0.6rem; }
-    .d-badge.country { background: rgba(135,140,153,0.1); color: var(--text-muted); font-size: 0.6rem; }
+    .d-badge.dealer { background: color-mix(in srgb, var(--red) 15%, transparent); color: var(--red); }
+    .d-badge.regional-dealer { background: color-mix(in srgb, var(--amber) 15%, transparent); color: var(--amber); }
+    .d-badge.sales-rep { background: color-mix(in srgb, var(--blue) 15%, transparent); color: var(--blue); }
+    .d-badge.online-dealer { background: color-mix(in srgb, var(--chart) 15%, transparent); color: var(--chart-t); }
+    .d-badge.temporary-dealer { background: color-mix(in srgb, var(--text-muted) 15%, transparent); color: var(--text-muted); }
+    .d-badge.appt { background: color-mix(in srgb, var(--text-muted) 10%, transparent); color: var(--text-muted); font-size: 0.7rem; }
+    .d-badge.country { background: color-mix(in srgb, var(--text-muted) 10%, transparent); color: var(--text-muted); font-size: 0.7rem; }
     .d-addr { font-size: 0.83rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 6px; }
-    .d-meta { display: flex; align-items: center; gap: 14px; font-size: 0.78rem; color: var(--text-muted); flex-wrap: wrap; }
+    .d-meta { display: flex; align-items: center; gap: 14px; font-size: 0.76rem; color: var(--text-muted); flex-wrap: wrap; }
     .d-dist { color: var(--amber); font-weight: 600; }
     .d-meta a { color: var(--blue); text-decoration: none; }
     .d-meta a:hover { color: var(--text); }
@@ -124,16 +127,20 @@
     }
     #map { width: 100%; height: 100%; }
 
-    /* Leaflet overrides for dark theme */
-    .leaflet-popup-content-wrapper { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; }
-    .leaflet-popup-tip { background: var(--surface); }
-    .leaflet-popup-content { font-family: 'Inter', sans-serif; font-size: 0.83rem; line-height: 1.5; margin: 10px 14px; }
-    .leaflet-popup-content b { font-family: 'Poppins', sans-serif; font-size: 0.9rem; }
+    /* Leaflet chrome, themed. The popup is an overlay sitting on map tiles, so
+       it takes the near-opaque --menu-bg rather than the glass --surface fill --
+       translucency over tiles reads as muddy, not layered. */
+    .leaflet-popup-content-wrapper { background: var(--menu-bg); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+    .leaflet-popup-tip { background: var(--menu-bg); }
+    .leaflet-popup-content { font-size: 0.83rem; line-height: 1.5; margin: 10px 14px; }
+    .leaflet-popup-content b { font-size: 0.88rem; }
     .leaflet-popup-content a { color: var(--blue); }
     .leaflet-popup-close-button { color: var(--text-muted) !important; }
-    .leaflet-control-attribution { font-size: 10px; }
+    .leaflet-control-attribution { font-size: 0.7rem; }
     .leaflet-control-attribution a { color: var(--text-muted); }
-    .leaflet-tile-pane { filter: brightness(1.6) contrast(1.1) saturate(0.9); }
+    /* Lifts Carto's dark basemap toward the page's own darkness. The light
+       basemap needs none of it, so it is scoped rather than global. */
+    :root[data-theme="dark"] .leaflet-tile-pane { filter: brightness(1.6) contrast(1.1) saturate(0.9); }
 
     /* Responsive */
     @media (max-width: 800px) {
@@ -278,15 +285,38 @@
   var currentDealers = [];
   var lastCoords = null;
 
+  /* COLORS in dealers.js is the retired 2025 palette. The category badges on
+     the cards now come from theme tokens, so the pins that mean the same five
+     things have to as well -- otherwise the legend on the left disagrees with
+     the map on the right, and neither follows the theme. dealers.js is data;
+     the mapping from category to token belongs here, and COLORS stays as the
+     fallback for a category this map has not been taught. */
+  var TYPE_TOKEN = {
+    'Dealer': '--red',
+    'Regional Dealer': '--amber',
+    'Sales Rep': '--blue',
+    'Online Dealer': '--chart-t',
+    'Temporary Dealer': '--text-muted'
+  };
+  /* A highlight that has to stay light on a saturated fill in both themes --
+     the mirror of --on-ember, which stays dark for the same reason. */
+  var ON_COLOR = '#fff';
+
+  function typeColor(type) {
+    var tok = TYPE_TOKEN[type] || '--text-muted';
+    var v = getComputedStyle(document.documentElement).getPropertyValue(tok).trim();
+    return v || COLORS[type];
+  }
+
   function pinSVG(color) {
     return '<svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg">' +
-      '<path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0z" fill="' + color + '" stroke="#111" stroke-width="1"/>' +
-      '<circle cx="12" cy="12" r="4.5" fill="#fff" opacity="0.85"/></svg>';
+      '<path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0z" fill="' + color + '" stroke="' + ON_COLOR + '" stroke-width="1" stroke-opacity="0.5"/>' +
+      '<circle cx="12" cy="12" r="4.5" fill="' + ON_COLOR + '" opacity="0.85"/></svg>';
   }
 
   function makeIcon(type) {
     return L.divIcon({
-      html: pinSVG(COLORS[type] || '#c0392b'),
+      html: pinSVG(typeColor(type)),
       className: '',
       iconSize: [24, 36],
       iconAnchor: [12, 36],
@@ -296,7 +326,7 @@
 
   function popupHTML(d) {
     var h = '<b>' + d.name + '</b><br>' +
-      '<span style="color:' + (COLORS[d.type]||'#999') + ';font-size:11px;text-transform:uppercase">' + d.type + '</span><br>';
+      '<span style="color:' + typeColor(d.type) + ';font-size:0.7rem;text-transform:uppercase">' + d.type + '</span><br>';
     if (d.address) h += d.address + '<br>';
     h += '<a href="tel:' + d.phone.replace(/\D/g, '') + '">' + d.phone + '</a>';
     if (d.website) h += ' · <a href="' + d.website + '" target="_blank">Website</a>';
@@ -405,7 +435,7 @@
     var nearby = nearestDealers(coords);
 
     if (userDot) map.removeLayer(userDot);
-    userDot = L.circleMarker(coords, { radius: 7, fillColor: '#c0392b', fillOpacity: 1, color: '#fff', weight: 2 })
+    userDot = L.circleMarker(coords, { radius: 7, fillColor: typeColor('Dealer'), fillOpacity: 1, color: ON_COLOR, weight: 2 })
       .addTo(map).bindPopup('Your location');
 
     buildCards(nearby, true);
@@ -564,12 +594,37 @@
   // ─── Init ───
   var HQ = [35.5951, -82.5515]; // Aquafire HQ, Asheville NC
 
+  /* Carto ships a dark and a light basemap and the page has both themes, so
+     the tiles follow it -- a brightened dark basemap under a light page was
+     the one part of this screen that never switched. Watched with an observer
+     rather than wired into the theme toggle: that toggle block is duplicated
+     verbatim across every redesigned page, and this is the only one with a
+     map, so hooking it here would make this copy diverge from the other 12. */
+  var tileLayer = null;
+  function syncTiles() {
+    if (!map) return;
+    var light = document.documentElement.dataset.theme === 'light';
+    if (typeof MAPPABLE !== 'undefined') {
+      MAPPABLE.forEach(function (d) { if (d._marker) d._marker.setIcon(makeIcon(d.type)); });
+    }
+    if (tileLayer) map.removeLayer(tileLayer);
+    tileLayer = L.tileLayer(
+      'https://{s}.basemaps.cartocdn.com/' + (light ? 'light_all' : 'dark_all') + '/{z}/{x}/{y}{r}.png',
+      {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd', maxZoom: 19
+      }
+    ).addTo(map);
+  }
+  if (window.MutationObserver) {
+    new MutationObserver(syncTiles).observe(document.documentElement, {
+      attributes: true, attributeFilter: ['data-theme']
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     map = L.map('map', { scrollWheelZoom: true }).setView(HQ, 10);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '\u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a> \u00a9 <a href="https://carto.com/">CARTO</a>',
-      subdomains: 'abcd', maxZoom: 19
-    }).addTo(map);
+    syncTiles();
     layerGroup = L.layerGroup().addTo(map);
     setTimeout(function() { map.invalidateSize(); }, 0);
 
@@ -647,6 +702,7 @@
       });
     })();
   </script>
+  <script src="rewards.js"></script>
   <script src="assistant.js" defer></script>
 </body>
 </html>
