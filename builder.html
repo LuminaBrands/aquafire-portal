@@ -26,7 +26,10 @@
        A :root here re-pinned the old dark values and beat the bridge. */
     html { scroll-behavior: smooth; scroll-padding-top: 72px; }
     body { min-height: 100vh; }
-    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    /* Headings inherit Figtree from redesign.css. A 'Poppins' override lived
+       here from the 2025 stack, but only Figtree is linked above -- so it was
+       not setting headings in Poppins, it was dropping them to plain
+       sans-serif while the body stayed Figtree. */
     a { color: inherit; }
     .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
   </style>
