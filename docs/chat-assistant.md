@@ -86,6 +86,7 @@ on the tag itself:
 | `orderEndpoint` | — | `portalBase + 'api/order-status'` | POST endpoint for order & tracking lookup (below). Set `null` to disable the lookup flow |
 | `notifyEndpoint` | — | `portalBase + 'api/notify-handoff'` | POST endpoint for team handoff notifications (below). Set `null` to disable |
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
+| `markUrl` | `data-mark-url` | `portalBase + 'ember-mark.png'` | Ember's avatar artwork, used by the launcher, the panel header, the nudge and every bot message row |
 | `beam` | `data-beam` | `'input'` | Border Beam target: `'input'` (composer field), `'panel'` (whole window), or `false` to disable |
 | `beamVariant` | `data-beam-variant` | `'colorful'` | Beam palette: `'colorful'` (full spectrum) or `'ember'` (Aquafire fire palette) |
 | `mount` | `data-mount` | unset | CSS selector (or element) to render the panel into, instead of the corner launcher |

@@ -23,9 +23,7 @@ colors:
   frost-ink: "#1c76c9"
   chartreuse-ink: "#6f8f0a"
   magenta-ink: "#d9317f"
-  orb-glow: "#ffd9ae"
-  orb-body: "#e0641e"
-  orb-shade: "#6e2a08"
+  orb-lift: "rgba(224,100,30,0.45)"
   ember-text: "#f05a5e"
   on-accent: "#ffffff"
   photo-ink: "#f3f4f6"
@@ -175,8 +173,8 @@ palette and arrives mostly on interaction.
   survives as the reward-badge colour and is a *light* fill, where white would
   be 2.0:1 -- anything drawn on amber takes the dark ink.
 
-  Ember's orb keeps its warm firelight gradient. It is a depicted glowing coal,
-  not an accent surface, and a red sphere reads as a dot rather than an ember.
+  Ember's orb keeps its warm firelight. It is a depicted flame, not an accent
+  surface, and a red sphere reads as a dot rather than an ember.
 
 ### Secondary
 - **Frost** (#6fc3ff dark / #4aa8ef light): the Explore wing and the cool
@@ -206,12 +204,13 @@ palette and arrives mostly on interaction.
   not follow the theme. The hero greeting and its subtitle sit on the
   photograph, which is the same photograph in both lightings, so they stay
   light and lean on text-shadow for contrast instead of a token binding.
-- **Orb glow / body / shade** (#ffd9ae, #e0641e, #6e2a08): the three stops of
-  Ember's radial-gradient orb, in that order from the 35%/30% highlight
-  outward, over an inset `rgba(0,0,0,0.35)` shade. Not general-purpose fills --
-  they exist to render Ember and appear only where Ember does (the hero orb,
-  the widget launcher, the chat avatars). Identical in both themes: Ember is
-  lit from within and does not change with the room.
+- **Orb lift** (rgba(224,100,30,0.45)): the warm cast under Ember's mark. Ember
+  is no longer drawn in CSS -- the mark is artwork (`ember-mark.png`, a white
+  twin-flame glyph on an orange-to-red disc) and carries its own modelling, so
+  the only colour the system still states for Ember is the glow the disc throws
+  onto whatever it sits on. Not a general-purpose fill -- it appears only where
+  Ember does (the hero orb, the widget launcher, the chat avatars). Identical
+  in both themes: Ember is lit from within and does not change with the room.
 - **Magenta** (#ff5fa8 dark / #ff4d9e light): the fourth LED hue. It closes
   the spectrum bars and takes every fourth row/tile in the hover cycle. It
   used to be the rewards flag; rewards are ember now, and magenta carries no
@@ -385,8 +384,8 @@ Capsule language. Interactive chips, buttons, and the composer are full
 pills (999px); containers step down through pane 26px → band 24px → card
 15px → tip bubble 13px (with a 4px pinched corner on the speaker's side).
 Icons are bare strokes (no plates or chips behind them), 14–30px,
-stroke-width 1.8–2.2. Ember is always a radial-gradient orb with a 1px
-detached ring at -5px. Hover states translate surfaces up 2px with the
+stroke-width 1.8–2.2. Ember is always the `ember-mark.png` disc with a 1px
+detached ring at -5px, never redrawn as an icon or a gradient. Hover states translate surfaces up 2px with the
 spring ease; LED bars slide in at the bottom edge.
 
 ## Components

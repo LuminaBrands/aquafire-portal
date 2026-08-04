@@ -18,6 +18,7 @@
 
    Config (window.AQUAFIRE_ASSISTANT_CONFIG or data-* on the script tag):
      portalBase   — absolute base URL of the portal (default: script's own dir)
+     markUrl      — Ember's avatar artwork (default: portalBase + ember-mark.png)
      apiEndpoint  — POST endpoint for LLM replies (optional)
      showInEmbed  — set true to show inside ?embed iframes (default hidden, so
                     a Shopify page embedding a portal tool doesn't get 2 widgets)
@@ -1151,7 +1152,12 @@
   }
 
   /* ── Styles ───────────────────────────────────────────────────────────── */
-  var FLAME_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c.5 3.5-1.5 5-3 7-1.6 2.1-2.5 4-2.5 6A7.5 7.5 0 0 0 14 22.4 7.5 7.5 0 0 0 17.5 15c0-1.8-.7-3.4-1.6-4.8C14.6 8.2 13 6.5 12 2z" fill="currentColor"/><path d="M12.2 22.5c-2 0-3.7-1.6-3.7-3.7 0-1.5.8-2.6 1.7-3.7.7-.8 1.4-1.7 1.7-2.9.9 1.4 2 2.6 2.6 3.7.5.9.9 1.8.9 2.9 0 2.1-1.7 3.7-3.2 3.7z" fill="#ffd9a0"/></svg>';
+  /* Ember's mark. Resolved against PORTAL_BASE (the script's own directory)
+     rather than written relative, because this file is served to the Shopify
+     storefront -- a bare "ember-mark.png" there would resolve against the
+     store's origin and 404. Override with cfg.markUrl / data-mark-url. */
+  var MARK_URL = cfg.markUrl || dataAttr('mark-url') || pURL('ember-mark.png');
+  var MARK_BG = 'background:url("' + MARK_URL + '") center/100% 100% no-repeat;';
   var SEND_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.4 20.4 21.8 12 3.4 3.6l2.5 7L14 12l-8.1 1.4-2.5 7z" fill="currentColor"/></svg>';
   var CLOSE_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
@@ -1206,7 +1212,7 @@
        backdrop-filter just get the translucent dark pill. */
     '.afa-launcher{position:fixed;right:20px;bottom:20px;top:auto;left:auto;z-index:2147483000;height:56px;min-height:56px;width:auto;min-width:0;margin:0;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 22px 0 18px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(180deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 40%,rgba(255,255,255,0) 100%),rgba(21,24,30,.68);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);color:#fff;opacity:1;filter:none;font-family:inherit;font-size:14px;font-weight:600;letter-spacing:.2px;line-height:1;text-transform:none;text-decoration:none;box-shadow:0 10px 32px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 1px rgba(255,255,255,.05);transition:transform .2s,box-shadow .2s,border-color .2s,width .3s cubic-bezier(.16,1,.3,1),padding .3s cubic-bezier(.16,1,.3,1);}',
     '.afa-launcher svg{width:24px;height:24px;transition:transform .25s;}',
-    '.afa-launcher .afa-ico-flame{color:#e8703a;}',
+    '.afa-launcher .afa-ico-flame{width:26px;height:26px;flex:none;border-radius:50%;' + MARK_BG + '}',
     '.afa-launcher:hover{transform:scale(1.04);border-color:rgba(255,255,255,.34);background:linear-gradient(180deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.06) 40%,rgba(255,255,255,0) 100%),rgba(26,29,36,.74);box-shadow:0 12px 38px rgba(0,0,0,.5),0 3px 10px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 1px rgba(255,255,255,.05);}',
     '.afa-launcher-label{white-space:nowrap;max-width:170px;opacity:1;overflow:hidden;transition:max-width .3s cubic-bezier(.16,1,.3,1),opacity .18s;}',
     /* Collapsed: the label folds away and the pill becomes the flame disc.
@@ -1226,8 +1232,7 @@
     /* Proactive teaser (chat-style invitation card) */
     '.afa-nudge{position:fixed;right:20px;bottom:92px;z-index:2147483000;width:300px;max-width:calc(100vw - 40px);background:var(--afa-bg);color:var(--afa-text);border:1px solid var(--afa-border);border-radius:var(--afa-radius-card);padding:14px;box-shadow:0 14px 44px rgba(0,0,0,.5);font-size:13.5px;animation:afaPop .35s ease;cursor:pointer;}',
     '.afa-nudge-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}',
-    '.afa-nudge-avatar{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}',
-    '.afa-nudge-avatar svg{width:15px;height:15px;}',
+    '.afa-nudge-avatar{width:26px;height:26px;border-radius:50%;' + MARK_BG + 'flex-shrink:0;}',
     '.afa-nudge-name{font-weight:600;font-family:inherit;font-size:13.5px;}',
     '.afa-nudge-x{margin-left:auto;color:var(--afa-muted);font-size:14px;line-height:1;padding:4px 6px;border-radius:6px;}',
     '.afa-nudge-x:hover{color:var(--afa-text);background:rgba(255,255,255,.06);}',
@@ -1242,8 +1247,7 @@
 
     /* Header */
     '.afa-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--afa-head-bg);border-bottom:1px solid var(--afa-border-soft);flex-shrink:0;}',
-    '.afa-avatar{position:relative;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;box-shadow:inset 0 -2px 6px rgba(0,0,0,.35);}',
-    '.afa-avatar svg{width:22px;height:22px;}',
+    '.afa-avatar{position:relative;width:40px;height:40px;border-radius:50%;' + MARK_BG + 'flex-shrink:0;}',
     '.afa-dot{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;background:var(--afa-live);border:2px solid var(--afa-bg);}',
     '.afa-head-txt{flex:1;min-width:0;}',
     '.afa-head-txt h3{font-size:15px;font-weight:700;letter-spacing:-.01em;}',
@@ -1255,8 +1259,7 @@
     '.afa-msgs{flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--afa-border) transparent;}',
     '.afa-row{display:flex;gap:8px;max-width:100%;}',
     '.afa-row.afa-user{justify-content:flex-end;}',
-    '.afa-mini-avatar{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd9ae,#e0641e 62%,#6e2a08 100%);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;margin-top:2px;box-shadow:inset 0 -2px 4px rgba(0,0,0,.35);}',
-    '.afa-mini-avatar svg{width:15px;height:15px;}',
+    '.afa-mini-avatar{width:26px;height:26px;border-radius:50%;' + MARK_BG + 'flex-shrink:0;margin-top:2px;}',
     /* Bubble radius with the pinched corner on the speaker's side, per the
        design system's tip-bubble shape. */
     '.afa-bubble{max-width:82%;padding:10px 13px;border-radius:var(--afa-radius-bubble);font-size:13.8px;overflow-wrap:break-word;}',
@@ -1459,7 +1462,7 @@
 
     launcher = el('button', 'afa-launcher');
     launcher.setAttribute('aria-label', 'Chat with Aquafire assistant');
-    launcher.innerHTML = '<span class="afa-ico-flame">' + FLAME_SVG + '</span><span class="afa-launcher-label">Chat with us</span><span class="afa-ico-close">' + CLOSE_SVG + '</span><span class="afa-badge"></span>';
+    launcher.innerHTML = '<span class="afa-ico-flame"></span><span class="afa-launcher-label">Chat with us</span><span class="afa-ico-close">' + CLOSE_SVG + '</span><span class="afa-badge"></span>';
     launcher.classList.add('afa-unread');
     launcher.addEventListener('click', function () { toggle(); });
 
@@ -1468,7 +1471,7 @@
     panel.setAttribute('aria-label', 'Aquafire assistant chat');
 
     var head = el('div', 'afa-head');
-    var av = el('div', 'afa-avatar', FLAME_SVG + '<span class="afa-dot"></span>');
+    var av = el('div', 'afa-avatar', '<span class="afa-dot"></span>');
     var ht = el('div', 'afa-head-txt', '<h3>Ember</h3><p>Aquafire AI assistant \u00b7 online</p>');
     var restart = el('button', 'afa-head-btn', '&#x21bb;');
     restart.title = 'Restart conversation';
@@ -1585,7 +1588,7 @@
     nudge.setAttribute('aria-label', 'Chat invitation');
     nudge.innerHTML =
       '<div class="afa-nudge-head">' +
-        '<span class="afa-nudge-avatar">' + FLAME_SVG + '</span>' +
+        '<span class="afa-nudge-avatar"></span>' +
         '<span class="afa-nudge-name">Ember</span>' +
         '<button class="afa-nudge-x" aria-label="Dismiss">\u2715</button>' +
       '</div>' +
@@ -1793,7 +1796,7 @@
       bub.textContent = m.text;
       row.appendChild(bub);
     } else {
-      row.appendChild(el('div', 'afa-mini-avatar', FLAME_SVG));
+      row.appendChild(el('div', 'afa-mini-avatar'));
       var col = el('div', 'afa-col');
       renderBlocks(col, m.blocks, restoring);
       if (m.feedback && !restoring) col.appendChild(feedbackEl());
@@ -1861,7 +1864,7 @@
     setBeamBusy(true);
     if (typingRow) return;
     typingRow = el('div', 'afa-row afa-bot');
-    typingRow.appendChild(el('div', 'afa-mini-avatar', FLAME_SVG));
+    typingRow.appendChild(el('div', 'afa-mini-avatar'));
     var bub = el('div', 'afa-bubble afa-typing', '<span></span><span></span><span></span>');
     typingRow.appendChild(bub);
     msgsEl.appendChild(typingRow);
