@@ -94,20 +94,10 @@
           "oklch(94% 0.004 260)"
         ]
       },
-      "orb-glow": {
-        "role": "Ember's gradient highlight (35%/30%); same in both themes",
-        "displayName": "Orb glow",
-        "canonical": "#ffd9ae"
-      },
-      "orb-body": {
-        "role": "Ember's gradient body at 62%; same in both themes",
-        "displayName": "Orb body",
-        "canonical": "#e0641e"
-      },
-      "orb-shade": {
-        "role": "Ember's gradient edge at 100%; same in both themes",
-        "displayName": "Orb shade",
-        "canonical": "#6e2a08"
+      "orb-lift": {
+        "role": "Warm cast under Ember's mark; same in both themes. Ember itself is artwork (ember-mark.png), not a CSS gradient",
+        "displayName": "Orb lift",
+        "canonical": "rgba(224,100,30,0.45)"
       },
       "photo-ink": {
         "role": "Hero type on the photograph -- does not follow the theme",
@@ -285,9 +275,9 @@
       "name": "Ember Orb",
       "kind": "custom",
       "refersTo": "cap-chip",
-      "description": "The assistant's avatar — warm radial orb with a detached hairline ring; never replaced by an icon.",
+      "description": "The assistant's avatar — the ember-mark.png disc with a detached hairline ring; never redrawn as an icon or a gradient.",
       "html": "<span class=\"ds-orb\" aria-hidden=\"true\"></span>",
-      "css": ".ds-orb { display: inline-block; width: 54px; height: 54px; border-radius: 50%; position: relative; background: radial-gradient(circle at 35% 30%, #ffd9ae, #e0641e 62%, #6e2a08 100%); box-shadow: inset 0 -2px 6px rgba(0,0,0,0.35); } .ds-orb::after { content: \"\"; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); }"
+      "css": ".ds-orb { display: inline-block; width: 54px; height: 54px; border-radius: 50%; position: relative; background: url(\"ember-mark.png\") center / 100% 100% no-repeat; box-shadow: 0 4px 14px -4px rgba(224,100,30,0.45); } .ds-orb::after { content: \"\"; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); }"
     },
     {
       "name": "Nav Capsule",
