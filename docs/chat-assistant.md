@@ -83,6 +83,7 @@ on the tag itself:
 |---|---|---|---|
 | `portalBase` | `data-portal-base` | script's own directory | Absolute base URL used for portal deep links |
 | `apiEndpoint` | — | `portalBase + 'api/chat'` | POST endpoint for Claude-powered replies (below). Set `null` to disable AI mode |
+| `notifyEndpoint` | — | `portalBase + 'api/notify-slack'` | POST endpoint that Slack-alerts dead ends (below). Set `null` to disable alerts |
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
 
 ---
@@ -128,7 +129,12 @@ contract — the original Cloudflare Worker example below still works.
 }
 ```
 
-**Expected response:** `{ "reply": "…markdown-lite text…" }`
+**Expected response:** `{ "reply": "…markdown-lite text…", "unresolved": false }`
+
+`unresolved` is optional — set it `true` when the model couldn't actually answer, and
+the widget raises a Slack alert (see "Slack alerts" below). `api/chat.js` gets this by
+asking the model to end such replies with an `[[UNRESOLVED]]` marker, which the
+function strips before the text reaches the customer.
 
 ### Example: Cloudflare Worker
 
@@ -247,7 +253,8 @@ cents. Add rate limiting (e.g. Cloudflare's built-in) before going live.
 The widget logs anonymous conversation events so the team can see what customers ask,
 what Ember couldn't answer, and how answers were rated — and feed that back into the
 knowledge base. Review everything at **`chat-insights.html`** (internal, sign-in
-gated — same Firebase accounts as the Rewards system).
+gated — same Firebase accounts as the Rewards system). Anything Ember *couldn't*
+handle also pings Slack in real time — see "Slack alerts for dead ends" below.
 
 ### What gets logged
 
@@ -309,6 +316,41 @@ customer-typed details — treat logs as customer data and set a retention polic
 | `telemetry: false` | on | Kill switch — nothing is logged |
 | `firestore: {projectId, apiKey}` | portal's project | Log to a different Firebase project (`firestore: null` disables Firestore logging) |
 | `logEndpoint: 'https://…'` | unset | Also POST each event (JSON) to any webhook — Zapier, a Worker, Gorgias, your warehouse |
+
+### Slack alerts for dead ends (`api/notify-slack.js`)
+
+The dashboard is a pull medium — someone has to remember to look. So the widget also
+**pushes an alert to Slack (`#chat-insights-feeback`) the moment Ember hits a dead
+end**, which is exactly when a human can still save the conversation:
+
+| Alert | Fired when |
+|---|---|
+| :grey_question: **Ember had no answer** | No knowledge-base match *and* AI mode unavailable — the customer got the generic "try one of these" reply |
+| :grey_question: **Ember didn't know the answer** | The AI replied but flagged itself `unresolved` — it told the customer it couldn't help |
+| :warning: **Ember's AI backend failed** | `/api/chat` errored or timed out; the customer got the local fallback |
+| :raising_hand: **Handoff to a human** | A contact card was shown (support / sales / orders) — including after a 👎 |
+
+Each message carries the customer's question, the model they're on, the page they were
+reading, Ember's reply (for the `unresolved` case), the conversation id, and a link to
+Chat Insights — enough to decide whether to follow up without opening anything.
+
+**To activate alerts (one-time):**
+
+1. In Slack, create an **incoming webhook** for `#chat-insights-feeback`
+   (api.slack.com/apps → your app → *Incoming Webhooks* → *Add New Webhook to
+   Workspace* → pick the channel). Copy the `https://hooks.slack.com/services/…` URL.
+2. Vercel → `luminabrands-projects/aquafire-portal` → **Settings → Environment
+   Variables** → add `SLACK_WEBHOOK_URL` (Production), then **Redeploy**.
+
+Until it's set, `/api/notify-slack` returns 503 and the widget quietly stops trying for
+that page load — nothing about the chat changes. To move channels, just point the
+webhook somewhere else; the channel lives in the webhook, not in the code.
+
+Function behavior: same CORS allowlist as `/api/chat`, 10 alerts/min/IP, and a 10-minute
+dedupe on (kind + conversation + question) so a re-render or a repeated question doesn't
+double-post. All customer text is Slack-escaped, so a pasted `<!channel>` can't ping the
+workspace. To silence alerts from the client instead, set
+`AQUAFIRE_ASSISTANT_CONFIG.notifyEndpoint = null`.
 
 ### The improvement loop
 

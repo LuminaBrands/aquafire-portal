@@ -19,6 +19,7 @@
    Config (window.AQUAFIRE_ASSISTANT_CONFIG or data-* on the script tag):
      portalBase   — absolute base URL of the portal (default: script's own dir)
      apiEndpoint  — POST endpoint for LLM replies (optional)
+     notifyEndpoint — POST endpoint that Slack-alerts dead ends (optional)
      showInEmbed  — set true to show inside ?embed iframes (default hidden, so
                     a Shopify page embedding a portal tool doesn't get 2 widgets)
 
@@ -55,6 +56,17 @@
     ? cfg.apiEndpoint
     : (PORTAL_BASE ? PORTAL_BASE + 'api/chat' : '');
   var llmDown = false;
+
+  // Slack alerts: when Ember can't answer or hands off to a human we ping the
+  // team via the portal's /api/notify-slack function (api/notify-slack.js →
+  // #chat-insights-feeback). Override with cfg.notifyEndpoint, or set it to
+  // null to disable. Fire-and-forget; one failure (e.g. no webhook configured
+  // yet) stops further attempts for this page load.
+  var NOTIFY_ENDPOINT = cfg.notifyEndpoint !== undefined
+    ? cfg.notifyEndpoint
+    : (PORTAL_BASE ? PORTAL_BASE + 'api/notify-slack' : '');
+  var notifyDown = false;
+  var lastUserText = '';
 
   var SUPPORT_EMAIL = 'support@aquafire.com';
   var SALES_EMAIL = 'sales@aquafire.com';
@@ -928,6 +940,40 @@
     } catch (e) { /* never break the chat */ }
   }
 
+  /* ── Slack alerts (dead ends) ─────────────────────────────────────────
+     Pings the team in Slack the moment Ember can't answer a question or has
+     to hand the customer to a human, so nobody has to watch the dashboard.
+     Kinds: 'unanswered' (no KB match, AI unavailable), 'unresolved' (the AI
+     said it didn't know), 'llm_error' (endpoint failed), 'handoff' (a contact
+     card was shown). Independent of telemetry — disable with notifyEndpoint:null. */
+  function lastUserMessage() {
+    for (var i = state.msgs.length - 1; i >= 0; i--) {
+      if (state.msgs[i].who === 'user') return state.msgs[i].text || '';
+    }
+    return '';
+  }
+
+  function notify(kind, data) {
+    if (!NOTIFY_ENDPOINT || notifyDown) return;
+    try {
+      var payload = {
+        kind: kind, convo: state.cid, page: location.href,
+        model: state.ctx.model || '',
+        question: (data && data.question) || lastUserText || lastUserMessage(),
+        mode: (data && data.mode) || '',
+        reply: (data && data.reply) || ''
+      };
+      fetch(NOTIFY_ENDPOINT, {
+        method: 'POST', keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (r) {
+        // Not configured / refused — stop trying for this page load.
+        if (!r.ok && r.status !== 429) notifyDown = true;
+      }).catch(function () { notifyDown = true; });
+    } catch (e) { /* never break the chat */ }
+  }
+
   /* ── Styles ───────────────────────────────────────────────────────────── */
   var FLAME_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c.5 3.5-1.5 5-3 7-1.6 2.1-2.5 4-2.5 6A7.5 7.5 0 0 0 14 22.4 7.5 7.5 0 0 0 17.5 15c0-1.8-.7-3.4-1.6-4.8C14.6 8.2 13 6.5 12 2z" fill="currentColor"/><path d="M12.2 22.5c-2 0-3.7-1.6-3.7-3.7 0-1.5.8-2.6 1.7-3.7.7-.8 1.4-1.7 1.7-2.9.9 1.4 2 2.6 2.6 3.7.5.9.9 1.8.9 2.9 0 2.1-1.7 3.7-3.2 3.7z" fill="#ffd9a0"/></svg>';
   var SEND_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.4 20.4 21.8 12 3.4 3.6l2.5 7L14 12l-8.1 1.4-2.5 7z" fill="currentColor"/></svg>';
@@ -1207,7 +1253,7 @@
             var btn = el('button', 'afa-chip', c.label);
             btn.addEventListener('click', function () {
               chips.classList.add('afa-spent');
-              handleUserText(c.send);
+              handleUserText(c.send, true);
             });
             chips.appendChild(btn);
           }
@@ -1241,7 +1287,10 @@
         });
         if (vids.children.length) container.appendChild(vids);
       } else if (b.t === 'contact') {
-        if (!spent) logEvent('handoff', { mode: b.mode || 'support' });
+        if (!spent) {
+          logEvent('handoff', { mode: b.mode || 'support' });
+          notify('handoff', { mode: b.mode || 'support' });
+        }
         var email = b.mode === 'sales' ? SALES_EMAIL : b.mode === 'orders' ? ORDERS_EMAIL : SUPPORT_EMAIL;
         var c = el('div', 'afa-contact');
         c.innerHTML = '<h5>' + (b.mode === 'sales' ? 'Sales & design' : b.mode === 'orders' ? 'Orders' : 'Aquafire support') + '</h5>' +
@@ -1341,8 +1390,11 @@
     handleUserText(text);
   }
 
-  function handleUserText(text) {
+  function handleUserText(text, viaChip) {
     pushUser(text);
+    // Handoff alerts quote the last question the customer actually typed —
+    // "Talk to a human" tells the team nothing about what they were stuck on.
+    if (!viaChip) lastUserText = text;
     var norm = normalize(text);
 
     // model mentions update context anywhere in the conversation
@@ -1370,6 +1422,7 @@
     } else if (llmAvailable) {
       remoteReply(text);
     } else {
+      notify('unanswered', { question: text });
       reply(FALLBACK);
     }
   }
@@ -1415,6 +1468,8 @@
       hideTyping();
       if (!d || !d.reply) throw new Error('empty');
       logEvent('llm_reply', { text: String(d.reply).slice(0, 500) });
+      // The function flags replies where the AI told the customer it couldn't help.
+      if (d.unresolved) notify('unresolved', { question: text, reply: String(d.reply).slice(0, 700) });
       pushBot({
         feedback: true,
         blocks: [{ t: 'text', html: mdLite(d.reply) }, { t: 'chips', items: [CHIP_HUMAN] }]
@@ -1424,6 +1479,7 @@
       hideTyping();
       llmDown = true; // don't retry this page load — go straight to local KB
       logEvent('llm_error', {});
+      notify('llm_error', { question: text });
       pushBot(FALLBACK());
     });
   }
