@@ -271,10 +271,62 @@ button, input, select, textarea { font-family: inherit; }
 }
 .bar .links a:hover { color: var(--text-hi); background: var(--cap-bg-hover); }
 .bar .links a.is-here { color: var(--text-hi); background: var(--cap-bg-hover); font-weight: 600; }
-/* Overflow links that only belong in the mobile disclosure -- on desktop the
-   same destinations are the bar-end chips. */
-.bar .links a.in-menu { display: none; }
-.bar .links.open a.in-menu { display: block; }
+/* ── Nav groups (Guides / Support) ──
+   The capsule carries three items: one link and two disclosures. Grouping was
+   tried and dropped once (#82/#91) when the bar held its destinations flat and
+   the dropdowns only added a click; it earns its place now that Support alone
+   holds six, four of them off-site. */
+.navgroup { position: relative; display: block; }
+.navgroup-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 8px 10px; border: 0; border-radius: 999px;
+  background: none; cursor: pointer; white-space: nowrap;
+  color: var(--text-mid); font: inherit;
+  font-size: 0.83rem; font-weight: 500;
+  transition: color 0.24s var(--ease), background-color 0.24s var(--ease);
+}
+.navgroup-btn:hover,
+.navgroup-btn[aria-expanded="true"] { color: var(--text-hi); background: var(--cap-bg-hover); }
+/* The group carries the current-page mark when the page lives inside it, so
+   the collapsed bar still says where you are. */
+.navgroup-btn.is-here { color: var(--text-hi); background: var(--cap-bg-hover); font-weight: 600; }
+.navgroup-caret { flex: none; transition: transform 0.24s var(--ease); }
+.navgroup-btn[aria-expanded="true"] .navgroup-caret { transform: rotate(180deg); }
+
+.navgroup-menu {
+  display: none; position: absolute; top: calc(100% + 9px); left: 0;
+  min-width: 218px; z-index: 40; padding: 7px;
+  flex-direction: column; gap: 2px;
+  background: var(--menu-bg); border: 1px solid var(--row-border);
+  border-radius: 15px; box-shadow: var(--row-shadow-hover);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+}
+.navgroup.is-open .navgroup-menu { display: flex; }
+.bar .links .navgroup-menu a {
+  padding: 9px 12px; border-radius: 13px; font-size: 0.83rem;
+}
+/* Same reason the burger panel marks itself with the nub fill: the capsule's
+   white-on-glass highlight disappears against a near-opaque panel in light. */
+.bar .links .navgroup-menu a:hover,
+.bar .links .navgroup-menu a.is-here { background: var(--nub-bg); color: var(--text-hi); }
+
+/* Inside the burger panel the groups are not popovers -- they are labelled
+   sections, open and stacked. A disclosure nested in a disclosure is two taps
+   to reach a link that has room to simply be there. */
+.bar .links.open .navgroup { display: block; margin-top: 6px; }
+.bar .links.open .navgroup-btn {
+  width: 100%; pointer-events: none;
+  padding: 10px 14px 4px;
+  font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--text-dim); background: none;
+}
+.bar .links.open .navgroup-btn.is-here { color: var(--text-dim); background: none; }
+.bar .links.open .navgroup-caret { display: none; }
+.bar .links.open .navgroup-menu {
+  display: flex; position: static; min-width: 0; padding: 0;
+  background: none; border: 0; box-shadow: none; backdrop-filter: none;
+}
 
 .bar-end { display: flex; align-items: center; gap: 7px; }
 .bar-end .cap { padding: 10px 14px; font-size: 0.83rem; font-weight: 600; }
@@ -298,19 +350,11 @@ button, input, select, textarea { font-family: inherit; }
   width: 15px; height: 15px; flex: none;
   color: var(--text-mid);
 }
-/* The storefront reaches the bar as a burger-panel link only (.in-menu), not
-   an end chip. Base made it a plain "Retail Site" item rather than a loud
-   "Shop Now" (#82/#91) -- selling is the quiet secondary -- and there is no
-   room for a fourth chip: the bar's content is capped at 1152px whatever the
-   viewport, and measured with the points chip at its 4,100 ceiling a fourth
-   chip wraps the whole bar-end onto two lines from 1320px up. Desktop reaches
-   the store from the footer. No "Get Started" CTA came across either: base
-   needed one because Quick Start sat inside a Guides dropdown; here it is the
-   first link in the bar, and a highlighted chip would be the same destination
-   twice. */
-.dealer-chip { display: none; }
-/* Dealer locator and rewards have no capsule link -- their chip carries the
-   current-page state instead. */
+/* One end chip. Find a Dealer is a Support menu item now, and the storefront is
+   reached through the Warranty / Service Request / Contact Us items and the
+   footer. The rewards chip stays because it is not really navigation -- it
+   reports a live points total, and rewards are always visible (DESIGN.md). */
+/* Kept for the chip's own current-page state. */
 .bar-end .cap.is-here, .bar-end .cap[aria-current="page"] {
   color: var(--text-hi); background: var(--cap-bg-hover); border-color: var(--cap-border-hover);
 }
@@ -467,21 +511,23 @@ button, input, select, textarea { font-family: inherit; }
 
 /* ── Desktop enhancement (shared) ──
    The bar sheds pieces as it narrows rather than wrapping or overflowing.
-   Measured in Chromium with Figtree loaded and the points chip at its maximum
-   (4,100 pts): capsule 653, brand ~110, end chips 332 with the dealer chip and
-   217 without. .page caps content at 1152 however wide the window gets, so the
-   full set only fits from a 1200 viewport; below that the dealer chip drops
-   first, then the capsule folds into the burger. Re-measure before adding a
-   link -- the widest state clears by ~28px. */
+   Re-measured in Chromium with Figtree loaded and the points chip at its
+   maximum (4,600 pts) after the bar became Set Up + two group disclosures:
+   capsule 256 (was 653 with six flat links), brand ~110, end chip 177.
+   The whole bar needs ~450px without the points chip and ~630px with it, so
+   the capsule now unfolds at 760 rather than 1080 -- that reaches iPad
+   portrait (768) with ~300px to spare instead of handing it a burger.
+
+   Adding a *group* costs ~85px of capsule, which the bar can absorb several
+   times over; adding an *item inside* a group costs nothing, because the menu
+   is a popover. That is the point of the grouping, and it is why the earlier
+   flat capsule had to be measured before every new link. */
 @media (min-width: 920px) {
   .page { padding: 0 24px; }
   .pts-chip { display: inline-flex; }
 }
-@media (min-width: 1080px) {
+@media (min-width: 760px) {
   .bar .links { display: flex; }
-}
-@media (min-width: 1200px) {
-  .dealer-chip { display: inline-flex; }
 }
 
 /* ── Inner-page chrome ────────────────────────────────────────────────────
@@ -555,11 +601,20 @@ button, input, select, textarea { font-family: inherit; }
   border-radius: 24px; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
   box-shadow: var(--row-shadow-hover);
 }
+/* Eleven rows is taller than a phone once both groups are laid out flat, and
+   the panel is absolutely positioned, so on a short page the last items would
+   sit below anything scrollable. */
+.bar .links.open { max-height: calc(100vh - 96px); overflow-y: auto; }
 .bar .links.open a { padding: 11px 14px; font-size: 0.93rem; border-radius: 13px; }
 /* The capsule's white-on-glass highlight vanishes against the near-opaque menu
    in light theme, so the panel marks hover/current with the nub fill instead. */
 .bar .links.open a:hover, .bar .links.open a.is-here { background: var(--nub-bg); }
-.bar { position: relative; }
+/* The z-index belongs here, not on the menus. `.links` carries backdrop-filter,
+   which makes it a stacking context, so a z-index on a menu inside it is scoped
+   to the capsule and loses to any later page content -- the group dropdowns
+   rendered *under* the page heading, which read straight through them. Lifting
+   the whole bar puts both the dropdowns and the burger panel above the page. */
+.bar { position: relative; z-index: 50; }
 
 /* Full footer for inner pages (home/ keeps its one-line .foot). */
 .pfoot { margin: 54px 0 34px; padding-top: 26px; border-top: 1px solid var(--stroke); }
@@ -576,7 +631,9 @@ button, input, select, textarea { font-family: inherit; }
 @media (min-width: 920px) {
   .phead { padding: 52px 0 10px; }
 }
-@media (min-width: 1080px) {
+/* Paired with the capsule breakpoint above: the moment the real nav is on
+   screen the burger is redundant. */
+@media (min-width: 760px) {
   .nav-btn { display: none; }
 }
 

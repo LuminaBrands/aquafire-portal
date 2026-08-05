@@ -398,18 +398,34 @@ spring ease; LED bars slide in at the bottom edge.
 
 ### Nav capsule (primary navigation)
 - **Shape:** one full-pill glass container (999px, 4px padding, 1px border,
-  the shared cap fill/rim) holding the whole link set; each link is plain
-  text at the Nav step and only takes a pill (999px) on hover or when current
-- **Why a container, not a chip per link:** seven destinations plus two
-  bar-end chips have to fit a 1152px content column. Per-link chips fit six
-  at most; the capsule fits nine with ~28px to spare
-- **Degradation as the bar narrows:** the dealer chip drops below 1200, the
-  whole capsule folds into a burger disclosure below 1080, the points chip
-  hides below 920. Never wraps, never overflows
+  the shared cap fill/rim) holding one link and two group disclosures; each
+  item is plain text at the Nav step and only takes a pill (999px) on hover,
+  when open, or when it holds the current page
+- **Set Up · Guides ▾ · Support ▾.** Eleven destinations do not fit a flat bar
+  -- Support alone holds six, four of them off-site. Grouping was tried and
+  dropped once (#82/#91) when the bar was flat and dropdowns only added a
+  click; it earns its place at this count
+- **Group menus:** card radius (15px), near-opaque `--menu-bg`, items at the
+  Nav step with bubble-radius (13px) rows. Open on **click, not hover** --
+  hover menus are unreachable on touch, and it is the same markup on both.
+  One open at a time; Escape closes and returns focus to the button
+- **The z-index lives on `.bar`, not on the menus.** `.links` carries
+  `backdrop-filter`, which makes it a stacking context, so a z-index inside it
+  is scoped to the capsule and loses to later page content -- the menus
+  rendered *under* the page heading
+- **Cost of growth:** an item inside a group is free (the menu is a popover);
+  a new group costs ~85px of capsule. That is the point of the grouping, and
+  why the flat capsule had to be re-measured before every new link
+- **Degradation as the bar narrows:** the capsule folds into a burger
+  disclosure below 760 (the capsule is 256px wide, so iPad portrait keeps the
+  real nav), the points chip hides below 920. Never wraps, never overflows
 - **Disclosure panel:** band radius (24px), near-opaque `--menu-bg` (a
   translucent surface let page text read through it), rows at body size,
   hover/current marked with the nub fill because the capsule's
-  white-on-glass highlight disappears against a white panel
+  white-on-glass highlight disappears against a white panel. **Groups are
+  flattened here into labelled, always-open sections** -- a disclosure nested
+  in a disclosure is two taps to reach a link that has room to simply be
+  there. Scrolls internally past `100vh - 96px`
 
 ### Composer (Ask Ember)
 - **Shape:** pill, padding 8px (20px text inset)

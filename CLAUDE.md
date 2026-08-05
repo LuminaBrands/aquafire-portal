@@ -19,7 +19,7 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 | `maintenance.html` | Preventative maintenance — the quarterly mist-maker clean and the six-month full system flush, each a persisted step checklist that stamps a completion date, derives the next due date from it, and awards the `mist-maker` / `system-cleaning` rewards |
 | `quick-start.html` | Model selection page linking to individual guides — also the site's "getting started" entry point since the placeholder page was retired |
 | `share-install.html` | Photo submission — uploads one install shot to Firebase Storage (`installs/<uid>/`) and awards the 500-point `share-install` reward. Needs Storage enabled + the rules in `docs/storage-rules.md` |
-| `support.html` | Support hub — cards link to Troubleshooter + (stub) warranty/claims/FAQs |
+| `support.html` | Support hub — cards link to the Troubleshooter and the storefront warranty page (which awards the 300-point `register-warranty` reward on click-through); the claims and FAQs cards are still `#` stubs |
 | `troubleshoot.html` | **Interactive Troubleshooter** — model-aware guided decision-tree wizard |
 | `chat-insights.html` | **Internal** chat-log dashboard for the Ember widget (Firebase-gated; not in nav) — transcripts, unanswered questions, 👍/👎 rates |
 | `beam-demo.html` | **Internal** showcase for the Border Beam effect (`beam.css`/`beam.js`) — live playground, all sizes/variants, usage snippet (noindex; not in nav) |
@@ -124,21 +124,63 @@ Radius:         --radius: 14px | --radius-sm: 8px
 
 ## Navigation Structure
 
-All pages share the same nav bar (defined inline in each HTML file). Since the redesign it is one glass capsule of six links plus two end chips, identical on all 12 nav-bearing pages:
+All pages share the same nav bar (defined inline in each HTML file). It is one
+glass capsule holding a link and two group disclosures, plus a single end chip,
+identical on all 13 nav-bearing pages:
 
 ```
-[brand] │ Quick Start · Enclosure · Water Care · Maintenance · Troubleshoot · Support │ Find a Dealer · Rewards · ☰ · ☀
+[brand] │ Set Up · Guides ▾ · Support ▾ │ Rewards <pts> · ☰ · ☀
 ```
 
-The page's own link carries `class="is-here" aria-current="page"` (guide pages point at Quick Start, `builder.html` at Enclosure; `rewards.html` / `dealer-locator.html` mark their end chip instead). `.in-menu` links (Find a Dealer, Rewards) are hidden on desktop — they only appear inside the burger panel, where the end chips aren't. Dropping the Getting Started link took the bar from ~28px of clearance over the 1152px content column to ~176px, so there is room for one more link now — but still **re-measure before adding one** (see the breakpoint comment in `redesign.css`), and measure with the points chip at its widest. Breakpoints are unchanged and now conservative: capsule and burger swap at 1080px, the dealer chip appears at 1200px, the points chip at 920px.
+```
+Guides                        Support
+  Product Guide                 Troubleshoot
+  Enclosure Surround            Find a Dealer
+  Water Care                    Warranty / Register  (storefront)
+  Preventative Maintenance      Rewards
+                                Service Request      (storefront)
+                                Contact Us           (storefront)
+```
 
-The storefront and the CTA keep the intent base set when it grouped the bar into dropdowns (#82, #91), carried onto the capsule: the highlighted end chip is **Get Started → `quick-start.html`**, because the portal's job is to get customers reading, and the store (`https://www.aquafire.com`) is a plain **"Retail Site"** link rather than the loud one. The dropdown grouping itself was dropped -- the capsule holds all six links flat.
+Grouping was tried and dropped once (#82, #91) when the bar held its
+destinations flat and dropdowns only added a click. It earns its place now that
+Support alone holds six items, four of them off-site — a flat bar cannot carry
+eleven destinations.
 
-`getting-started.html` no longer exists. It was a permanent "coming soon" that dead-ended the setup route, and a "Getting Started" link beside a "Get Started" CTA read as a duplicate; Quick Start covers that ground.
+`nav.js` owns the group disclosures and is **shared, not inlined**: the nav
+markup is already duplicated across 13 files with no template, and 13 copies of
+the same behaviour is how copies drift. Each page's own inline script still owns
+the theme toggle and the burger. Groups open on click, not hover — hover menus
+are unreachable on touch and the capsule is the same markup on both.
 
-On the `aquafire-pro.html` / `aquafire-original.html` guide pages, the Troubleshoot nav link carries a `?model=pro` / `?model=original` param so the wizard pre-selects that model (same pattern as the Enclosure Guide link there).
+The current page carries `class="is-here" aria-current="page"`, and its group
+button takes `is-here` too so the collapsed bar still says where you are.
+`support.html` and `share-install.html` have no nav entry of their own and mark
+nothing.
 
-Footer "Guides" columns (most pages) and the homepage bento grid also link to the Troubleshooter.
+**Inside the burger panel the groups are not popovers** — they are labelled,
+always-open sections (`.links.open .navgroup-btn` becomes a section heading and
+loses pointer events). A disclosure nested in a disclosure is two taps to reach
+a link that has room to simply be there.
+
+Breakpoints: the capsule and burger swap at **760px** (down from 1080 — the
+capsule is 256px wide now against 653 for the old six flat links, so iPad
+portrait gets the real nav), and the points chip appears at 920px. The dealer
+chip is gone; Find a Dealer is a Support item. **Adding an item inside a group
+costs no bar width** — that is the point of grouping. Adding a *group* costs
+~85px; re-measure then (see the breakpoint comment in `redesign.css`).
+
+`getting-started.html` no longer exists. It was a permanent "coming soon" that
+dead-ended the setup route; Quick Start covers that ground, and "Set Up" now
+points there.
+
+On the `aquafire-pro.html` / `aquafire-original.html` guide pages, the in-page
+Enclosure Guide link carries a `?model=pro` / `?model=original` param so the
+tool pre-selects that model. (This has never applied to the nav, despite an
+earlier note here claiming the Troubleshoot nav link carried it too.)
+
+Footer "Guides" columns (most pages) and the homepage bento grid also link to
+the Troubleshooter.
 
 ## Key Conventions
 
@@ -213,6 +255,7 @@ exports, dashboards, snapshots, or customer data.
   `nominatim.openstreetmap.org`). Adding a CDN script, font, image host, or `fetch()`
   target means adding it there too, or it silently fails in production only.
 - **Nav duplication:** There's no shared template. Changing navigation means editing ~12 HTML files (and several have a footer "Guides" column too).
+- **`embed.js` names the chrome by class, so renaming chrome breaks it silently.** It removes `.bar` / `.phead` / `.pfoot` (plus the pre-redesign `.site-nav` / `.page-header` / `.site-footer` that `dealer-admin.html` still uses). The redesign renamed all three and left this file on the old names, so `?embed` matched nothing and stripped nothing on every customer page from the rollout until 2026-08-05 — invisible unless you actually load `?embed`, which is why it survived a full rollout. Rename a chrome element, rename it here. Embeds take the light theme with `?embed&theme=light`.
 - **aquafire-pro.html is large** (~1,400 lines with inline CSS/JS). Read specific sections rather than the whole file. It still has its own in-page category-accordion troubleshooting section (`TS_DATA` / `ALERTS_DATA`) — that's separate from the standalone Troubleshooter; the new tool didn't replace it.
 - **styles.css is enclosure-specific** despite the generic name. Shared styles are in `hub.css`.
 - **troubleshoot.css uses theme tokens with fallbacks** (e.g. `var(--blue, #4da6e8)`) — the per-page inline `:root` blocks only define a subset of the tokens listed in the Design System section, so the CSS can't rely on `--blue`/`--amber`/`--surface-alt` being present everywhere.

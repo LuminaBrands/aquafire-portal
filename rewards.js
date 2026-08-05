@@ -597,6 +597,10 @@
       if (href.includes('youtube.com') && href.includes('Aquafire')) awardPoints('watch-youtube');
       if (href === 'https://www.aquafire.com' && !href.includes('contact') && !href.includes('products')) awardPoints('shop-accessories');
       if (href.includes('contact')) awardPoints('contact-sales');
+      // Awarded on click-through, the same standard as the links above -- we
+      // can't see the registration itself. Dead until support.html's warranty
+      // tile stopped pointing at '#'.
+      if (href.includes('/pages/warranty')) awardPoints('register-warranty');
     });
 
     // Page-specific tracking
