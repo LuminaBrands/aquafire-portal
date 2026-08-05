@@ -62,6 +62,7 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 |------|----------|
 | `docs/source-material/` | Plain-text extracts of the Aquafire help-center articles, install/spec guides, warranty, and manuals the Troubleshooter tree is built from (+ `README.md` index) |
 | `docs/chat-assistant.md` | Chat widget docs — Shopify install, config options, optional Claude-API proxy example, KB maintenance rules |
+| `docs/embedding.md` | Putting a portal page in an iframe on the store — the `?embed` / `?theme=` params, measured page heights, the allowed `frame-ancestors` origins, and why third-party storage means the theme must be passed explicitly (and why rewards pages should not be embedded) |
 | `docs/storage-rules.md` | **Source of truth for the Firebase Storage rules** — same hand-published arrangement as the Firestore ones; covers the `installs/` path, the size and content-type limits, and what must be switched on before `share-install.html` works |
 | `docs/firestore-rules.md` | **Source of truth for the Firestore security rules** (`users` / `chatEvents` / `chatKnowledge`) — they're published by hand in the Firebase console, so update this file in the same PR; also covers App Check and the rewards-points limitation |
 
