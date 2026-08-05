@@ -316,9 +316,12 @@ button, input, select, textarea { font-family: inherit; }
 .bar .links.open .navgroup { display: block; margin-top: 6px; }
 .bar .links.open .navgroup-btn {
   width: 100%; pointer-events: none;
-  padding: 10px 14px 4px;
-  font-size: 0.7rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.07em;
+  padding: 14px 14px 6px;
+  /* Same family and size as "Set Up" and the rows beneath, so the three
+     top-level entries read as the peers they are. The label-vs-link difference
+     is carried by ink and weight rather than by a size step and small caps --
+     which had "Set Up" at body size sitting between two 0.7rem headings. */
+  font-size: 0.93rem; font-weight: 600;
   color: var(--text-dim); background: none;
 }
 .bar .links.open .navgroup-btn.is-here { color: var(--text-dim); background: none; }
