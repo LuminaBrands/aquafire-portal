@@ -1461,18 +1461,18 @@
     root.setAttribute('data-aquafire-assistant', '');
 
     launcher = el('button', 'afa-launcher');
-    launcher.setAttribute('aria-label', 'Chat with Aquafire assistant');
+    launcher.setAttribute('aria-label', 'Chat with Aquafire');
     launcher.innerHTML = '<span class="afa-ico-flame"></span><span class="afa-launcher-label">Chat with us</span><span class="afa-ico-close">' + CLOSE_SVG + '</span><span class="afa-badge"></span>';
     launcher.classList.add('afa-unread');
     launcher.addEventListener('click', function () { toggle(); });
 
     panel = el('div', 'afa-panel');
     panel.setAttribute('role', 'dialog');
-    panel.setAttribute('aria-label', 'Aquafire assistant chat');
+    panel.setAttribute('aria-label', 'Aquafire chat');
 
     var head = el('div', 'afa-head');
     var av = el('div', 'afa-avatar', '<span class="afa-dot"></span>');
-    var ht = el('div', 'afa-head-txt', '<h3>Ember</h3><p>Aquafire AI assistant \u00b7 online</p>');
+    var ht = el('div', 'afa-head-txt', '<h3>Chat</h3><p>Aquafire support \u00b7 online</p>');
     var restart = el('button', 'afa-head-btn', '&#x21bb;');
     restart.title = 'Restart conversation';
     restart.setAttribute('aria-label', 'Restart conversation');
@@ -1589,7 +1589,7 @@
     nudge.innerHTML =
       '<div class="afa-nudge-head">' +
         '<span class="afa-nudge-avatar"></span>' +
-        '<span class="afa-nudge-name">Ember</span>' +
+        '<span class="afa-nudge-name">Chat</span>' +
         '<button class="afa-nudge-x" aria-label="Dismiss">\u2715</button>' +
       '</div>' +
       '<div class="afa-nudge-msg">Hi! \ud83d\udc4b Looking at Aquafire? I can help you compare models, plan your install, or fix an issue \u2014 just ask.</div>' +
@@ -1691,10 +1691,22 @@
 
   // convo_start is logged lazily on the first user message (not on panel
   // open) so browsing visitors don't create empty conversations in insights
+  /* "this morning" / "this afternoon" / "this evening" / "tonight".
+     index.html carries its own copy for the hero greeting: this file ships to
+     third-party pages as one script tag and cannot share a helper with them. */
+  function dayPart() {
+    var h = new Date().getHours();
+    if (h < 5) return 'tonight';
+    if (h < 12) return 'this morning';
+    if (h < 17) return 'this afternoon';
+    if (h < 21) return 'this evening';
+    return 'tonight';
+  }
+
   function greet() {
     pushBot({
       blocks: [
-        { t: 'text', html: 'Hi, I\u2019m <strong>Ember</strong> \ud83d\udd25 \u2014 the Aquafire assistant. I can compare models, plan your install, check water care, track your order, or walk you through a fix. How can I help?' },
+        { t: 'text', html: 'How can I help you ' + dayPart() + '? I can compare models, plan your install, check water care, track your order, or walk you through a fix.' },
         mainChips()
       ]
     });
@@ -1829,7 +1841,7 @@
       function submitComment() {
         var val = inp.value.trim();
         if (val) logEvent('feedback_comment', { intent: srcIntent, comment: val.slice(0, 300) });
-        fb.innerHTML = '<span>Thanks \u2014 this helps us improve Ember.</span>';
+        fb.innerHTML = '<span>Thanks \u2014 this helps us improve these answers.</span>';
       }
       send.addEventListener('click', submitComment);
       inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitComment(); });
