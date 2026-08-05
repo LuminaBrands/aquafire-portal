@@ -208,7 +208,8 @@
     // left the homepage's sign-in button inert.
     updateBannerCTA();
     wireChip();
-    wireMenuSignOut();
+    wireMenuAccount();
+    wireMenuPoints();
 
     var btn = document.getElementById('af-rewards-btn');
     if (!btn) return;
@@ -257,26 +258,46 @@
   }
 
   /* The chip is display:none below 920px and the whole capsule collapses to the
-     burger at 1080, so on a phone the dropdown above -- and with it the only
-     Sign Out -- has nothing to hang off. The disclosure panel carries its own
-     item there. A button, not a link: it performs an action rather than going
-     somewhere, so it does not inherit `.bar .links a` and brings its own style
-     from rewards.css. */
-  function wireMenuSignOut() {
+     burger at 760, so on a phone the dropdown above -- and with it Sign Out --
+     has nothing to hang off. The disclosure panel carries its own account item.
+
+     It is present in **both** states: Sign Out signed in, Sign In signed out.
+     It used to be removed entirely when signed out, which meant a phone had
+     nowhere to sign in from at all -- the chip that opens the modal is hidden at
+     that width. A button, not a link: it acts rather than navigating, so it does
+     not inherit `.bar .links a` and brings its own style from rewards.css. */
+  function wireMenuAccount() {
     var nav = document.getElementById('navLinks') || document.querySelector('.bar .links');
     if (!nav) return;
-    var existing = document.getElementById('af-menu-signout');
-    if (!currentUser) {
-      if (existing) existing.remove();
-      return;
+    var b = document.getElementById('af-menu-account');
+    if (!b) {
+      b = document.createElement('button');
+      b.type = 'button';
+      b.id = 'af-menu-account';
+      nav.appendChild(b);
     }
-    if (existing) return;
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.id = 'af-menu-signout';
-    b.textContent = 'Sign Out';
-    b.onclick = function () { auth.signOut(); };
-    nav.appendChild(b);
+    if (currentUser) {
+      b.textContent = 'Sign Out';
+      b.onclick = function () { auth.signOut(); };
+    } else {
+      b.textContent = 'Sign In';
+      b.onclick = showModal;
+    }
+  }
+
+  /* The points total on a phone. The chip carrying it is hidden below 920, and
+     the panel's Support > Rewards row is the place a visitor already looks for
+     it, so the figure rides on that row rather than arriving as a twelfth item
+     repeating a label that is already there. Panel-only (rewards.css), since
+     above the burger breakpoint the chip is doing this job. */
+  function wireMenuPoints() {
+    var row = document.querySelector('.bar .links .navgroup-menu a[href="rewards.html"]');
+    if (!row || row.querySelector('[data-rb-points]')) return;
+    var b = document.createElement('b');
+    b.className = 'af-menu-pts';
+    b.setAttribute('data-rb-points', '');
+    b.textContent = userPoints.toLocaleString() + ' pts';
+    row.appendChild(b);
   }
 
   /* ── Banner CTA (Sign In / View Profile) ── */
@@ -580,6 +601,11 @@
     if (barFill) barFill.style.width = pct + '%';
     if (barLabel) barLabel.textContent = done + ' / ' + total + ' modules completed';
     if (ptsDisplay) ptsDisplay.textContent = userPoints.toLocaleString() + ' pts';
+    // The nav chip carries an id; the panel's copy is injected, so it is marked
+    // by attribute instead -- two elements cannot share one id.
+    var pts = userPoints.toLocaleString() + ' pts';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-rb-points]'),
+      function (el) { el.textContent = pts; });
     // The homepage band shows the bare figure; the nav chip carries the unit.
     var ptsBig = document.getElementById('rb-home-points-big');
     if (ptsBig) ptsBig.textContent = userPoints.toLocaleString();

@@ -599,7 +599,7 @@
    `.links` container the panel is built from; it mirrors `.bar .links a` in
    redesign.css rather than reusing it, because a button is not a link and the
    nav's own rules are scoped to `a`. */
-#af-menu-signout {
+#af-menu-account {
   display: none;
   width: 100%;
   border: 0;
@@ -610,7 +610,7 @@
   color: var(--text-mid);
   transition: color 0.24s var(--ease), background-color 0.24s var(--ease);
 }
-.bar .links.open #af-menu-signout {
+.bar .links.open #af-menu-account {
   display: block;
   /* Ruled off from the links above it: everything else in the panel goes
      somewhere, this one acts on the account. */
@@ -621,7 +621,23 @@
   font-size: 0.93rem;
   font-weight: 500;
 }
-.bar .links.open #af-menu-signout:hover {
+.bar .links.open #af-menu-account:hover {
   color: var(--text-hi);
   background: var(--nub-bg);
 }
+
+/* The points total on the panel's Rewards row. Panel-only: above the burger
+   breakpoint the bar-end chip carries the figure, and showing it in both places
+   would state the same number twice in one bar. */
+.af-menu-pts { display: none; }
+.bar .links.open .navgroup-menu a .af-menu-pts {
+  display: inline;
+  margin-left: auto;
+  padding-left: 12px;
+  color: var(--ember-t);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+/* Every panel row is a flex line rather than selecting the one that has a
+   badge -- uniform, and no :has() dependency for a single right-aligned span. */
+.bar .links.open .navgroup-menu a { display: flex; align-items: center; }
