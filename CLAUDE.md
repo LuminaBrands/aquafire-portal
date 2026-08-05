@@ -124,21 +124,63 @@ Radius:         --radius: 14px | --radius-sm: 8px
 
 ## Navigation Structure
 
-All pages share the same nav bar (defined inline in each HTML file). Since the redesign it is one glass capsule of six links plus two end chips, identical on all 12 nav-bearing pages:
+All pages share the same nav bar (defined inline in each HTML file). It is one
+glass capsule holding a link and two group disclosures, plus a single end chip,
+identical on all 13 nav-bearing pages:
 
 ```
-[brand] │ Quick Start · Enclosure · Water Care · Maintenance · Troubleshoot · Support │ Find a Dealer · Rewards · ☰ · ☀
+[brand] │ Set Up · Guides ▾ · Support ▾ │ Rewards <pts> · ☰ · ☀
 ```
 
-The page's own link carries `class="is-here" aria-current="page"` (guide pages point at Quick Start, `builder.html` at Enclosure; `rewards.html` / `dealer-locator.html` mark their end chip instead). `.in-menu` links (Find a Dealer, Rewards) are hidden on desktop — they only appear inside the burger panel, where the end chips aren't. Dropping the Getting Started link took the bar from ~28px of clearance over the 1152px content column to ~176px, so there is room for one more link now — but still **re-measure before adding one** (see the breakpoint comment in `redesign.css`), and measure with the points chip at its widest. Breakpoints are unchanged and now conservative: capsule and burger swap at 1080px, the dealer chip appears at 1200px, the points chip at 920px.
+```
+Guides                        Support
+  Product Guide                 Troubleshoot
+  Enclosure Surround            Find a Dealer
+  Water Care                    Warranty / Register  (storefront)
+  Preventative Maintenance      Rewards
+                                Service Request      (storefront)
+                                Contact Us           (storefront)
+```
 
-The storefront and the CTA keep the intent base set when it grouped the bar into dropdowns (#82, #91), carried onto the capsule: the highlighted end chip is **Get Started → `quick-start.html`**, because the portal's job is to get customers reading, and the store (`https://www.aquafire.com`) is a plain **"Retail Site"** link rather than the loud one. The dropdown grouping itself was dropped -- the capsule holds all six links flat.
+Grouping was tried and dropped once (#82, #91) when the bar held its
+destinations flat and dropdowns only added a click. It earns its place now that
+Support alone holds six items, four of them off-site — a flat bar cannot carry
+eleven destinations.
 
-`getting-started.html` no longer exists. It was a permanent "coming soon" that dead-ended the setup route, and a "Getting Started" link beside a "Get Started" CTA read as a duplicate; Quick Start covers that ground.
+`nav.js` owns the group disclosures and is **shared, not inlined**: the nav
+markup is already duplicated across 13 files with no template, and 13 copies of
+the same behaviour is how copies drift. Each page's own inline script still owns
+the theme toggle and the burger. Groups open on click, not hover — hover menus
+are unreachable on touch and the capsule is the same markup on both.
 
-On the `aquafire-pro.html` / `aquafire-original.html` guide pages, the Troubleshoot nav link carries a `?model=pro` / `?model=original` param so the wizard pre-selects that model (same pattern as the Enclosure Guide link there).
+The current page carries `class="is-here" aria-current="page"`, and its group
+button takes `is-here` too so the collapsed bar still says where you are.
+`support.html` and `share-install.html` have no nav entry of their own and mark
+nothing.
 
-Footer "Guides" columns (most pages) and the homepage bento grid also link to the Troubleshooter.
+**Inside the burger panel the groups are not popovers** — they are labelled,
+always-open sections (`.links.open .navgroup-btn` becomes a section heading and
+loses pointer events). A disclosure nested in a disclosure is two taps to reach
+a link that has room to simply be there.
+
+Breakpoints: the capsule and burger swap at **760px** (down from 1080 — the
+capsule is 256px wide now against 653 for the old six flat links, so iPad
+portrait gets the real nav), and the points chip appears at 920px. The dealer
+chip is gone; Find a Dealer is a Support item. **Adding an item inside a group
+costs no bar width** — that is the point of grouping. Adding a *group* costs
+~85px; re-measure then (see the breakpoint comment in `redesign.css`).
+
+`getting-started.html` no longer exists. It was a permanent "coming soon" that
+dead-ended the setup route; Quick Start covers that ground, and "Set Up" now
+points there.
+
+On the `aquafire-pro.html` / `aquafire-original.html` guide pages, the in-page
+Enclosure Guide link carries a `?model=pro` / `?model=original` param so the
+tool pre-selects that model. (This has never applied to the nav, despite an
+earlier note here claiming the Troubleshoot nav link carried it too.)
+
+Footer "Guides" columns (most pages) and the homepage bento grid also link to
+the Troubleshooter.
 
 ## Key Conventions
 
