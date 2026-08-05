@@ -19,7 +19,7 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 | `maintenance.html` | Preventative maintenance — the quarterly mist-maker clean and the six-month full system flush, each a persisted step checklist that stamps a completion date, derives the next due date from it, and awards the `mist-maker` / `system-cleaning` rewards |
 | `quick-start.html` | Model selection page linking to individual guides — also the site's "getting started" entry point since the placeholder page was retired |
 | `share-install.html` | Photo submission — uploads one install shot to Firebase Storage (`installs/<uid>/`) and awards the 500-point `share-install` reward. Needs Storage enabled + the rules in `docs/storage-rules.md` |
-| `support.html` | Support hub — cards link to Troubleshooter + (stub) warranty/claims/FAQs |
+| `support.html` | Support hub — cards link to the Troubleshooter and the storefront warranty page (which awards the 300-point `register-warranty` reward on click-through); the claims and FAQs cards are still `#` stubs |
 | `troubleshoot.html` | **Interactive Troubleshooter** — model-aware guided decision-tree wizard |
 | `chat-insights.html` | **Internal** chat-log dashboard for the Ember widget (Firebase-gated; not in nav) — transcripts, unanswered questions, 👍/👎 rates |
 | `beam-demo.html` | **Internal** showcase for the Border Beam effect (`beam.css`/`beam.js`) — live playground, all sizes/variants, usage snippet (noindex; not in nav) |
