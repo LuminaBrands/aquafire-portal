@@ -121,6 +121,7 @@
         </button>
       </h2>
       <div class="procedure-body" id="body-quarterly">
+        <div class="procedure-clip">
         <div class="procedure-inner">
 
           <p class="tools-h">You'll need</p>
@@ -215,6 +216,7 @@
           </p>
 
         </div>
+        </div>
       </div>
     </section>
 
@@ -231,6 +233,7 @@
         </button>
       </h2>
       <div class="procedure-body" id="body-biannual">
+        <div class="procedure-clip">
         <div class="procedure-inner">
 
           <p class="tools-h">You'll need</p>
@@ -365,6 +368,7 @@
             <span id="done-biannual-text"></span>
           </p>
 
+        </div>
         </div>
       </div>
     </section>
@@ -562,19 +566,17 @@
        the same speed as short ones -- the old max-height guess ran the easing
        against a number the content never reached. */
     .procedure-body { display: grid; grid-template-rows: 1fr; }
-    .procedure-body > * { min-height: 0; overflow: hidden; }
+    /* The clip exists so nothing with padding is ever the grid item. A 0fr
+       track collapses the row but not the item's own padding -- a border box
+       cannot be shorter than its padding -- so padding out here left the closed
+       panel with a 28px sliver of the tools list showing through it. Held one
+       level in, the padding is content the clip hides, and the row height is
+       the only thing that animates. */
+    .procedure-clip { min-height: 0; overflow: hidden; }
+    .procedure-inner { padding: 2px 18px 22px; }
     .has-js .procedure-body { transition: grid-template-rows 0.42s var(--ease); }
     .has-js .procedure:not(.procedure--open) .procedure-body { grid-template-rows: 0fr; }
-    .procedure-inner { padding: 2px 18px 22px; }
-    /* A 0fr track collapses the row but not the item's own padding -- a border
-       box cannot be shorter than its padding, so the closed panel kept a 28px
-       sliver with the top of the tools list showing through it. The padding
-       rides the same curve as the row instead. */
-    .has-js .procedure-inner { transition: padding 0.42s var(--ease); }
-    .has-js .procedure:not(.procedure--open) .procedure-inner { padding-top: 0; padding-bottom: 0; }
-    @media (prefers-reduced-motion: reduce) {
-      .procedure-body, .procedure-inner { transition: none; }
-    }
+    @media (prefers-reduced-motion: reduce) { .procedure-body { transition: none; } }
 
     /* ── Tools ── */
     .tools-h {
@@ -724,7 +726,6 @@
       .procedure-meta { flex: 1 1 175px; }
       .procedure-name { font-size: 1.05rem; }
       .procedure-inner { padding: 2px 15px 20px; }
-      .has-js .procedure:not(.procedure--open) .procedure-inner { padding-top: 0; padding-bottom: 0; }
       /* Ordered past the chevron so it is the item that wraps; the indent is
          the cadence badge (38px) plus the row gap. */
       .procedure-header .af-reward-badge { order: 4; margin-left: 50px; }
@@ -734,7 +735,6 @@
     @media (min-width: 920px) {
       .procedure-header { padding: 20px 24px; }
       .procedure-inner { padding: 2px 24px 26px; }
-      .has-js .procedure:not(.procedure--open) .procedure-inner { padding-top: 0; padding-bottom: 0; }
       .panel { padding: 28px 26px; }
     }
   </style>
