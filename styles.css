@@ -174,6 +174,21 @@ select {
 .cutout-diagram-wrapper { text-align: center; }
 #cutout-diagram { width: 100%; max-height: 380px; }
 
+/* ── Ganged-run note (shown only when a combined size is selected) ── */
+.gang-note {
+  margin-top: 22px;
+  padding: 14px 18px;
+  border: 1px solid var(--amber-dim);
+  border-left: 3px solid var(--amber);
+  border-radius: var(--radius-sm);
+  background: var(--amber-glow);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+.gang-note strong { color: var(--text); font-weight: 600; }
+.gang-note[hidden] { display: none; }
+
 /* ── Field-practice note under the cutout numbers ── */
 .cutout-field-note {
   margin-top: 22px;
@@ -216,7 +231,7 @@ select {
 .tip:hover { border-color: var(--border-warm); }
 .tip-tag {
   display: inline-block;
-  font-size: 0.66rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.9px;
@@ -224,7 +239,7 @@ select {
   margin-bottom: 8px;
 }
 .tip h3 {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   line-height: 1.35;
   color: var(--text);
@@ -399,6 +414,8 @@ input[type="range"]::-moz-range-thumb {
 
 /* ── Table ── */
 .table-wrapper { overflow-x: auto; margin-top: 4px; }
+/* The make-up of a ganged run, alongside its total length */
+.ref-gang { color: var(--text-muted); font-size: 0.76rem; }
 table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
 th, td {
   padding: 11px 16px;

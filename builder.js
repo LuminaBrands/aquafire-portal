@@ -17,6 +17,9 @@ const MODELS = {
       20: { w: 20.375, d: 12.25, h: 12 },
       40: { w: 40.375, d: 12.25, h: 12 },
       60: { w: 60.375, d: 12.25, h: 12 },
+      80:  { w: 80.375,  d: 12.25, h: 12, units: [40, 40] },
+      100: { w: 100.375, d: 12.25, h: 12, units: [60, 40] },
+      120: { w: 120.375, d: 12.25, h: 12, units: [60, 60] },
     },
   },
   pro: {
@@ -29,6 +32,9 @@ const MODELS = {
       20: { w: 20.375, d: 12.25, h: 14 },
       40: { w: 40.375, d: 12.25, h: 14 },
       60: { w: 60.375, d: 12.25, h: 14 },
+      80:  { w: 80.375,  d: 12.25, h: 14, units: [40, 40] },
+      100: { w: 100.375, d: 12.25, h: 14, units: [60, 40] },
+      120: { w: 120.375, d: 12.25, h: 14, units: [60, 60] },
     },
   },
   lite: {
@@ -175,6 +181,9 @@ function renderStep2() {
   if (!container || !state.model) return;
   const model = MODELS[state.model];
   let html = '';
+  // Singles only — the ganged sizes in MODELS are carried here to keep the two
+  // tables identical, but the builder's surround plan, pricing and materials
+  // are single-insert. The Enclosure Guide is where a ganged run gets sized.
   for (const size of [20, 40, 60]) {
     const dims = model.sizes[size];
     const barWidth = Math.round((size / 60) * 100);

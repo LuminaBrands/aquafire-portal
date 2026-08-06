@@ -335,7 +335,7 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'Inserts come in <strong>20\u2033, 40\u2033 and 60\u2033</strong> widths (the Lite adds a 16\u2033 Mini). All are about 12\u2033 deep and 11\u215c\u2033 tall, designed for a flush, drop-in install.' },
-            { t: 'text', html: 'Cutout dimensions are critical \u2014 the insert hangs from its flanges, so the opening has to be right (e.g. a 40\u2033 unit needs a 40\u215c\u2033 \u00d7 12\u00bc\u2033 opening with 12\u201314\u2033 of depth below, depending on model). That width is nominal + \u215c\u2033 \u2014 \u215b\u2033 over the spec-sheet minimum, which our install crews recommend so the insert seats without being forced. Our Enclosure Guide calculates it for your exact model and size:' },
+            { t: 'text', html: 'Cutout dimensions are critical \u2014 the insert hangs from its flanges, so the opening has to be right (e.g. a 40\u2033 unit needs a 40\u215c\u2033 \u00d7 12\u00bc\u2033 opening with 12\u201314\u2033 of depth below, depending on model). That width is nominal + \u215c\u2033 \u2014 \u215b\u2033 over the spec-sheet minimum, which our install crews recommend so the insert seats without being forced. Two inserts can also be ganged into an 80\u2033, 100\u2033 or 120\u2033 run sharing one opening. Our Enclosure Guide calculates it for your exact model and size:' },
             { t: 'links', items: [{ label: '\ud83d\udcd0 Enclosure dimension calculator', href: pURL('enclosure-guide.html') }] },
             { t: 'chips', items: [{ label: 'Can I make a longer flame?', send: 'Can I combine multiple units?' }, { label: 'Installation basics', send: 'How is it installed?' }] }
           ]
@@ -344,13 +344,14 @@
     },
     {
       id: 'ganging',
-      kw: [['gang', 5], ['combine', 4], ['multiple units', 6], ['longer', 3], ['ribbon', 5], ['continuous', 4], ['side by side', 5], ['80', 2], ['100 inch', 4], ['120', 2]],
+      kw: [['gang', 5], ['ganged', 6], ['ganging', 6], ['combine', 4], ['multiple units', 6], ['longer', 3], ['ribbon', 5], ['continuous', 4], ['side by side', 5], ['80', 2], ['100 inch', 6], ['120', 2], ['two fireplaces', 8], ['two units', 8], ['two inserts', 8], ['2 units', 6], ['second unit', 6], ['connect two', 7], ['80 inch', 6], ['120 inch', 6], ['80"', 5], ['100"', 5], ['120"', 5], ['run', 2]],
       answer: function () {
         return {
           feedback: true,
           blocks: [
-            { t: 'text', html: 'Yes! Inserts gang together seamlessly to create up to <strong>20 feet (240\u2033) of continuous flame</strong>, all controlled from a single remote. Common combos: two 40\u2033 units for 80\u2033, a 40\u2033 + 60\u2033 for 100\u2033, or two 60\u2033 units for 120\u2033.' },
-            { t: 'links', items: [{ label: '\ud83d\udcd0 Plan the enclosure for ganged units', href: pURL('enclosure-guide.html') }] }
+            { t: 'text', html: 'Yes! Pro and Original inserts gang together seamlessly to create up to <strong>20 feet (240\u2033) of continuous flame</strong>, all controlled from a single remote. Common combos: two 40\u2033 units for 80\u2033, a 60\u2033 + 40\u2033 for 100\u2033, or two 60\u2033 units for 120\u2033. (The Lite is the one model that can\u2019t be ganged.)' },
+            { t: 'text', html: 'A ganged run drops into <strong>one continuous cutout</strong>, not two: 80\u215c\u2033, 100\u215c\u2033 or 120\u215c\u2033 wide, with depth and height the same as a single insert. The \u215c\u2033 allowance is for the whole opening, not per insert.' },
+            { t: 'links', items: [{ label: '\ud83d\udcd0 Size a ganged cutout in the Enclosure Guide', href: pURL('enclosure-guide.html') }] }
           ]
         };
       }

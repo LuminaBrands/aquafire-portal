@@ -21,6 +21,9 @@ const MODELS = {
       20: { w: 20.375, d: 12.25, h: 12 },
       40: { w: 40.375, d: 12.25, h: 12 },
       60: { w: 60.375, d: 12.25, h: 12 },
+      80:  { w: 80.375,  d: 12.25, h: 12, units: [40, 40] },
+      100: { w: 100.375, d: 12.25, h: 12, units: [60, 40] },
+      120: { w: 120.375, d: 12.25, h: 12, units: [60, 60] },
     },
   },
   pro: {
@@ -34,8 +37,14 @@ const MODELS = {
       20: { w: 20.375, d: 12.25, h: 14 },
       40: { w: 40.375, d: 12.25, h: 14 },
       60: { w: 60.375, d: 12.25, h: 14 },
+      80:  { w: 80.375,  d: 12.25, h: 14, units: [40, 40] },
+      100: { w: 100.375, d: 12.25, h: 14, units: [60, 40] },
+      120: { w: 120.375, d: 12.25, h: 14, units: [60, 60] },
     },
   },
+  // The Lite carries no ganged sizes on purpose — it is the one model that
+  // can't be ganged (docs/source-material/page-compare-vs-aquafire.txt), so
+  // the size list is built from this table rather than hard-coded.
   lite: {
     name: 'Aquafire Lite',
     frontAngle: 58,
@@ -62,6 +71,7 @@ const openingSlider     = document.getElementById('opening-slider');
 const openingDisp       = document.getElementById('opening-display');
 const cutoutW           = document.getElementById('cutout-w');
 const publishedW        = document.getElementById('published-w');
+const gangNote          = document.getElementById('gang-note');
 const cutoutD           = document.getElementById('cutout-d');
 const cutoutH           = document.getElementById('cutout-h');
 const maxOpeningEl      = document.getElementById('max-opening');
@@ -92,6 +102,44 @@ function frac(n) {
   return n.toFixed(3) + '"';
 }
 
+// ── Size options (model-aware) ──
+// Ganged runs are two inserts butted together in one continuous opening, so
+// they are sizes like any other — but only the Pro and Original can gang, and
+// the list has to follow the model.
+function comboLabel(units) {
+  return units[0] === units[1]
+    ? `two ${units[0]}" units`
+    : `${units[0]}" + ${units[1]}"`;
+}
+
+function renderSizeOptions() {
+  const model = MODELS[modelSelect.value];
+  const prev = sizeSelect.value;
+  const singles = [];
+  const ganged = [];
+
+  for (const [key, dims] of Object.entries(model.sizes)) {
+    (dims.units ? ganged : singles).push([key, dims]);
+  }
+
+  sizeSelect.innerHTML = '';
+  for (const [key] of singles) {
+    sizeSelect.appendChild(new Option(`${key}"`, key));
+  }
+  if (ganged.length) {
+    const group = document.createElement('optgroup');
+    group.label = 'Ganged — two inserts, one opening';
+    for (const [key, dims] of ganged) {
+      group.appendChild(new Option(`${key}" (${comboLabel(dims.units)})`, key));
+    }
+    sizeSelect.appendChild(group);
+  }
+
+  // Keep the chosen size across a model change where it still exists —
+  // switching to the Lite from a ganged run has to fall back to a single.
+  sizeSelect.value = model.sizes[prev] ? prev : '60';
+}
+
 function getState() {
   const modelKey      = modelSelect.value;
   const sizeKey       = sizeSelect.value;
@@ -115,6 +163,19 @@ function update() {
   // published + 1/4" minimum it sits above, so anyone checking the number
   // against a spec sheet can see why the two differ.
   if (publishedW) publishedW.textContent = frac(dims.w - 0.125);
+
+  if (gangNote) {
+    if (dims.units) {
+      const sizeKey = sizeSelect.value;
+      gangNote.innerHTML = `<strong>${sizeKey}" run — ${dims.units.length} inserts, one opening.</strong> `
+        + `Order ${comboLabel(dims.units).replace('units', 'inserts')} of the ${model.name}. `
+        + `They butt together into a continuous ribbon of flame on a single remote, so the cutout is one `
+        + `${frac(dims.w)} opening, not two — and the ⅜" allowance is for the opening overall, not per insert.`;
+      gangNote.hidden = false;
+    } else {
+      gangNote.hidden = true;
+    }
+  }
 
   setbackDisp.textContent     = setback.toFixed(1) + '"';
   backSetbackDisp.textContent = backSetback.toFixed(1) + '"';
@@ -153,8 +214,10 @@ function drawCutoutDiagram(dims) {
   const minEncHInches = 14;
   const encHInches = Math.max(minEncHInches, dims.h + clearance);
 
-  // Scale: map inches → SVG px, fit widest model (60.25"+8") into ~420px
-  const scale = 420 / (60.375 + clearance * 2);
+  // Scale: map inches → SVG px, fitting a 60" cutout (+8" clearance) into
+  // ~420px. Smaller sizes stay proportionally smaller, as they should; a
+  // ganged run is wider than that reference, so it scales down to fit.
+  const scale = 420 / (Math.max(dims.w, 60.375) + clearance * 2);
   const w = dims.w * scale;
   const d = dims.d * scale;
   const h = dims.h * scale;
@@ -179,19 +242,43 @@ function drawCutoutDiagram(dims) {
   const eBTL = { x: eBL.x, y: eBL.y - encH };
   const eBTR = { x: eBR.x, y: eBR.y - encH };
 
-  // ── Insert (floating above enclosure) ──
+  // ── Inserts (floating above enclosure) ──
+  // A ganged run is two inserts butted together into one continuous ribbon, so
+  // the row is drawn unit by unit. A single size is a run of one. These are the
+  // inserts' nominal widths, not the cutout's — the 3/8" allowance is the room
+  // they drop into, a hairline at this scale.
+  const unitSizes = dims.units || [Math.round(dims.w)];
   const gap = 70;
   const insCx = encCx;
   const insBot = eFTL.y - gap;
+  const insW = unitSizes.reduce((sum, s) => sum + s, 0) * scale;
 
-  const iFL = { x: insCx - w/2, y: insBot };
-  const iFR = { x: insCx + w/2, y: insBot };
+  const iFL = { x: insCx - insW/2, y: insBot };
+  const iFR = { x: insCx + insW/2, y: insBot };
   const iBL = { x: iFL.x + d*isoX, y: iFL.y - d*isoY };
   const iBR = { x: iFR.x + d*isoX, y: iFR.y - d*isoY };
   const iFTL = { x: iFL.x, y: iFL.y - h };
   const iFTR = { x: iFR.x, y: iFR.y - h };
   const iBTL = { x: iBL.x, y: iBL.y - h };
   const iBTR = { x: iBR.x, y: iBR.y - h };
+
+  // Per-unit boxes, left to right across that row.
+  const units = [];
+  let unitX = iFL.x;
+  for (const size of unitSizes) {
+    const uw = size * scale;
+    const fl = { x: unitX,      y: insBot };
+    const fr = { x: unitX + uw, y: insBot };
+    units.push({
+      size,
+      fl, fr,
+      ftl: { x: fl.x, y: fl.y - h },
+      ftr: { x: fr.x, y: fr.y - h },
+      btl: { x: fl.x + d*isoX, y: fl.y - d*isoY - h },
+      btr: { x: fr.x + d*isoX, y: fr.y - d*isoY - h },
+    });
+    unitX += uw;
+  }
 
   // ── Cutout on enclosure top ──
   // Centered in the top face with equal clearance on all sides
@@ -318,7 +405,7 @@ function drawCutoutDiagram(dims) {
 
 
   // ── Drop-in arrows (purely vertical, manual arrowheads) ──
-  const arrowCount = 3;
+  const arrowCount = 3 * unitSizes.length;
   for (let i = 0; i < arrowCount; i++) {
     const t = (i + 1) / (arrowCount + 1);
     const ax = cFL.x + t * (cFR.x - cFL.x);
@@ -332,68 +419,93 @@ function drawCutoutDiagram(dims) {
       fill="#e8a838" opacity="0.7"/>`;
   }
 
-  // ── Insert box ──
-  // Hidden faces (dashed)
+  // ── Insert boxes ──
+  // Hidden faces (dashed) — the row's far left and back, not each unit's:
+  // butted inserts have no side faces between them.
   out += `<polygon points="${iFL.x},${iFL.y} ${iBL.x},${iBL.y} ${iBTL.x},${iBTL.y} ${iFTL.x},${iFTL.y}"
     fill="none" stroke="#4a4f5c" stroke-width="1" stroke-dasharray="5,4" opacity="0.3"/>`;
   out += `<polygon points="${iBL.x},${iBL.y} ${iBR.x},${iBR.y} ${iBTR.x},${iBTR.y} ${iBTL.x},${iBTL.y}"
     fill="none" stroke="#4a4f5c" stroke-width="1" stroke-dasharray="5,4" opacity="0.3"/>`;
-  // Visible faces
-  out += `<polygon points="${iFL.x},${iFL.y} ${iFR.x},${iFR.y} ${iFTR.x},${iFTR.y} ${iFTL.x},${iFTL.y}"
-    fill="url(#ins-front)" stroke="#5a5e68" stroke-width="1.5"/>`;
+
+  // Visible faces, one unit at a time so the seam between ganged inserts reads
+  // as an edge rather than disappearing into one long box.
+  for (const u of units) {
+    out += `<polygon points="${u.fl.x},${u.fl.y} ${u.fr.x},${u.fr.y} ${u.ftr.x},${u.ftr.y} ${u.ftl.x},${u.ftl.y}"
+      fill="url(#ins-front)" stroke="#5a5e68" stroke-width="1.5"/>`;
+    out += `<polygon points="${u.ftl.x},${u.ftl.y} ${u.ftr.x},${u.ftr.y} ${u.btr.x},${u.btr.y} ${u.btl.x},${u.btl.y}"
+      fill="url(#ins-top)" stroke="#5a5e68" stroke-width="1.5"/>`;
+  }
+  // Right side face belongs to the row, not to a unit.
   out += `<polygon points="${iFR.x},${iFR.y} ${iBR.x},${iBR.y} ${iBTR.x},${iBTR.y} ${iFTR.x},${iFTR.y}"
     fill="url(#ins-side)" stroke="#5a5e68" stroke-width="1.5"/>`;
-  out += `<polygon points="${iFTL.x},${iFTL.y} ${iFTR.x},${iFTR.y} ${iBTR.x},${iBTR.y} ${iBTL.x},${iBTL.y}"
-    fill="url(#ins-top)" stroke="#5a5e68" stroke-width="1.5"/>`;
 
-  // ── Flame / light source on top of insert ──
-  // LED strip centered on the top face (runs front-to-back in the middle)
+  // ── Flame / light source on top of each insert ──
   const ledInsetSide = 12;
   // Center strip: 30% of depth, centered at 50% depth
   const ledDepthFrac = 0.30;
   const ledStartFrac = 0.5 - ledDepthFrac / 2;  // 0.35
   const ledEndFrac = 0.5 + ledDepthFrac / 2;     // 0.65
-  const ledFL = {
-    x: iFTL.x + ledInsetSide + d * isoX * ledStartFrac,
-    y: iFTL.y - d * isoY * ledStartFrac
-  };
-  const ledFR = {
-    x: iFTR.x - ledInsetSide + d * isoX * ledStartFrac,
-    y: iFTR.y - d * isoY * ledStartFrac
-  };
-  const ledBL = {
-    x: iFTL.x + ledInsetSide + d * isoX * ledEndFrac,
-    y: iFTL.y - d * isoY * ledEndFrac
-  };
-  const ledBR = {
-    x: iFTR.x - ledInsetSide + d * isoX * ledEndFrac,
-    y: iFTR.y - d * isoY * ledEndFrac
-  };
-  // LED strip
-  out += `<polygon points="${ledFL.x},${ledFL.y} ${ledFR.x},${ledFR.y} ${ledBR.x},${ledBR.y} ${ledBL.x},${ledBL.y}"
-    fill="#e8a838" opacity="0.25" filter="url(#glow)"/>`;
-  out += `<polygon points="${ledFL.x},${ledFL.y} ${ledFR.x},${ledFR.y} ${ledBR.x},${ledBR.y} ${ledBL.x},${ledBL.y}"
-    fill="none" stroke="#e8a838" stroke-width="1" opacity="0.5"/>`;
-  // Flame wisps rising from top
-  const flameCx = (iFTL.x + iBTR.x) / 2;
-  const flameCy = (iFTL.y + iBTR.y) / 2;
-  const flameW = (ledFR.x - ledFL.x) * 0.4;
-  out += `<ellipse cx="${flameCx}" cy="${flameCy - 8}"
-    rx="${flameW / 2}" ry="14"
-    fill="url(#flame-grad)" filter="url(#glow)" opacity="0.5"/>`;
-  // Smaller secondary wisps
-  out += `<ellipse cx="${flameCx - flameW * 0.4}" cy="${flameCy - 5}"
-    rx="${flameW / 4}" ry="10"
-    fill="url(#flame-grad)" filter="url(#glow)" opacity="0.3"/>`;
-  out += `<ellipse cx="${flameCx + flameW * 0.4}" cy="${flameCy - 5}"
-    rx="${flameW / 4}" ry="10"
-    fill="url(#flame-grad)" filter="url(#glow)" opacity="0.3"/>`;
+  for (const u of units) {
+    const ledFL = {
+      x: u.ftl.x + ledInsetSide + d * isoX * ledStartFrac,
+      y: u.ftl.y - d * isoY * ledStartFrac
+    };
+    const ledFR = {
+      x: u.ftr.x - ledInsetSide + d * isoX * ledStartFrac,
+      y: u.ftr.y - d * isoY * ledStartFrac
+    };
+    const ledBL = {
+      x: u.ftl.x + ledInsetSide + d * isoX * ledEndFrac,
+      y: u.ftl.y - d * isoY * ledEndFrac
+    };
+    const ledBR = {
+      x: u.ftr.x - ledInsetSide + d * isoX * ledEndFrac,
+      y: u.ftr.y - d * isoY * ledEndFrac
+    };
+    // LED strip
+    out += `<polygon points="${ledFL.x},${ledFL.y} ${ledFR.x},${ledFR.y} ${ledBR.x},${ledBR.y} ${ledBL.x},${ledBL.y}"
+      fill="#e8a838" opacity="0.25" filter="url(#glow)"/>`;
+    out += `<polygon points="${ledFL.x},${ledFL.y} ${ledFR.x},${ledFR.y} ${ledBR.x},${ledBR.y} ${ledBL.x},${ledBL.y}"
+      fill="none" stroke="#e8a838" stroke-width="1" opacity="0.5"/>`;
+    // Flame wisps rising from top
+    const flameCx = (u.ftl.x + u.btr.x) / 2;
+    const flameCy = (u.ftl.y + u.btr.y) / 2;
+    const flameW = (ledFR.x - ledFL.x) * 0.4;
+    out += `<ellipse cx="${flameCx}" cy="${flameCy - 8}"
+      rx="${flameW / 2}" ry="14"
+      fill="url(#flame-grad)" filter="url(#glow)" opacity="0.5"/>`;
+    // Smaller secondary wisps
+    out += `<ellipse cx="${flameCx - flameW * 0.4}" cy="${flameCy - 5}"
+      rx="${flameW / 4}" ry="10"
+      fill="url(#flame-grad)" filter="url(#glow)" opacity="0.3"/>`;
+    out += `<ellipse cx="${flameCx + flameW * 0.4}" cy="${flameCy - 5}"
+      rx="${flameW / 4}" ry="10"
+      fill="url(#flame-grad)" filter="url(#glow)" opacity="0.3"/>`;
+  }
 
-  // ── Model name on insert front face ──
-  const insLabelX = (iFL.x + iFR.x) / 2;
+  // ── Labels on the insert front faces ──
+  // One insert carries the model name; a ganged run labels each unit with its
+  // own size and puts the model name above the row, where it has the width.
   const insLabelY = (iFL.y + iFTL.y) / 2 + 4;
-  out += `<text x="${insLabelX}" y="${insLabelY}" fill="#b0b4be" font-family="Figtree,sans-serif"
-    font-size="12" text-anchor="middle" font-weight="600" letter-spacing="2">${modelName.toUpperCase()}</text>`;
+  if (units.length === 1) {
+    out += `<text x="${(iFL.x + iFR.x) / 2}" y="${insLabelY}" fill="#b0b4be" font-family="Figtree,sans-serif"
+      font-size="12" text-anchor="middle" font-weight="600" letter-spacing="2">${modelName.toUpperCase()}</text>`;
+  } else {
+    for (const u of units) {
+      out += `<text x="${(u.fl.x + u.fr.x) / 2}" y="${insLabelY}" fill="#b0b4be" font-family="Figtree,sans-serif"
+        font-size="12" text-anchor="middle" font-weight="600" letter-spacing="2">${u.size}"</text>`;
+    }
+    const runLabel = `${modelName.toUpperCase()} · ${units.map(u => u.size + '"').join(' + ')} GANGED`;
+    out += `<text x="${insCx + d * isoX / 2}" y="${iBTL.y - 14}" fill="#878c99" font-family="Figtree,sans-serif"
+      font-size="11" text-anchor="middle" font-weight="600" letter-spacing="3">${runLabel}</text>`;
+    // Seam where the units butt. Drawn across the top face only — it needs to
+    // read as a joint, and the caption above already names the run.
+    for (let i = 1; i < units.length; i++) {
+      const sTop = units[i].ftl, sBack = units[i].btl;
+      out += `<line x1="${sTop.x}" y1="${sTop.y}" x2="${sBack.x}" y2="${sBack.y}"
+        stroke="#6f7480" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.8"/>`;
+    }
+  }
 
   // ════════════════════════════════════════════════
   // ── CUTOUT DIMENSIONS (primary focus) ──
@@ -425,8 +537,13 @@ function drawCutoutDiagram(dims) {
     eFL, eFR, eBL, eBR, eFTL, eFTR, eBTL, eBTR,
     iFL, iFR, iBL, iBR, iFTL, iFTR, iBTL, iBTR,
     cFL, cFR, cBL, cBR,
-    // dimension endpoints
-    { x: hDimX - 40, y: eFL.y }, { x: hDimX - 40, y: eFTL.y },
+    // the ganged-run caption sits above the back-top edge
+    { x: insCx, y: iBTL.y - 30 },
+    // Dimension endpoints. The left reserve carries "Min. HEIGHT", which is
+    // the longest label in the drawing — 40 units cut it off on narrow
+    // screens, where the browser floors SVG text at its minimum font size and
+    // the glyphs stop scaling down with the viewBox.
+    { x: hDimX - 96, y: eFL.y }, { x: hDimX - 96, y: eFTL.y },
     { x: dS.x + 40, y: dS.y }, { x: dE.x + 40, y: dE.y },
     { x: cFL.x, y: wDimY + 50 },
   ];
@@ -1337,11 +1454,10 @@ function buildTable() {
   const tbody = document.getElementById('ref-table-body');
   let html = '';
   for (const [key, m] of Object.entries(MODELS)) {
-    for (const size of [20, 40, 60]) {
-      const d = m.sizes[size];
+    for (const [size, d] of Object.entries(m.sizes)) {
       html += `<tr>
         <td>${m.name}</td>
-        <td>${size}"</td>
+        <td>${size}"${d.units ? ` <span class="ref-gang">${comboLabel(d.units)}</span>` : ''}</td>
         <td>${frac(d.w)}</td>
         <td>${frac(d.d)}</td>
         <td>${frac(d.h)}</td>
@@ -1363,7 +1479,10 @@ function resetOpeningToMax() {
 }
 
 // ── Event listeners ──
-modelSelect.addEventListener('change', resetOpeningToMax);
+modelSelect.addEventListener('change', () => {
+  renderSizeOptions();   // the ganged sizes belong to the Pro and Original only
+  resetOpeningToMax();
+});
 sizeSelect.addEventListener('change', resetOpeningToMax);
 setbackSlider.addEventListener('input', update);
 backSetbackSlider.addEventListener('input', update);
@@ -1382,12 +1501,18 @@ hearthBtns.forEach(btn => {
   });
 });
 
-// ── Pre-select model from URL query param (?model=pro) ──
+// ── Pre-select model and size from URL query params (?model=pro&size=100) ──
+// The size options depend on the model, so this runs before they're built.
 (function() {
   var params = new URLSearchParams(window.location.search);
   var m = params.get('model');
   if (m && modelSelect.querySelector('option[value="' + m + '"]')) {
     modelSelect.value = m;
+  }
+  renderSizeOptions();
+  var s = params.get('size');
+  if (s && MODELS[modelSelect.value].sizes[s]) {
+    sizeSelect.value = s;
   }
 })();
 

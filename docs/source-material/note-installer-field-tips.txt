@@ -44,6 +44,16 @@ FRAMING THE CUTOUT
     or 3/8" per side. Confirm which convention a drawing uses before
     cutting. The portal states the recommendation as +3/8" OVERALL width
     and flags the per-side question.
+  - Ganged runs (Stefan, Aug 2026): customers commonly buy two inserts —
+    80" as two 40s, 100" as a 60 + 40, 120" as two 60s (the Pro and
+    Original only; page-compare-vs-aquafire.txt records the Lite as not
+    gangable). The units butt together into one continuous ribbon, so the
+    portal treats a run as a single opening and applies the same + 3/8"
+    once, to the total: 80 3/8", 100 3/8", 120 3/8". Depth and height are
+    the single-insert figures. The published guides list the ganged sizes
+    under "Other Common Dimensions" as unit dimensions only (80" x 12" x
+    8 3/4" etc.) and give no ganged cutout row, so the cutout figure is
+    the portal's, derived the same way as the singles.
   - Not to be over-applied: the insert is suspended in the opening from
     its 1/2"-thick flanges (published guides: "Cutout dimensions are
     critical!"), so the generous figure is a small, deliberate margin,

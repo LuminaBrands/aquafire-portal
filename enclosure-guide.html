@@ -89,7 +89,7 @@
         <div class="step-num">1</div>
         <div>
           <h2>Choose Your Model</h2>
-          <p class="card-desc">Select the Aquafire insert and size for your project.</p>
+          <p class="card-desc">Select the Aquafire insert and size for your project. Running two inserts? The Pro and Original gang into 80&quot;, 100&quot; and 120&quot; ribbons &mdash; pick the total length and the guide sizes the single opening they share.</p>
         </div>
       </div>
 
@@ -104,6 +104,8 @@
         </div>
         <div class="form-group">
           <label for="size">Size</label>
+          <!-- Options are rebuilt per model in app.js: the ganged runs exist on
+               the Pro and Original only. These three are the no-JS fallback. -->
           <select id="size">
             <option value="20">20"</option>
             <option value="40">40"</option>
@@ -143,6 +145,8 @@
           <svg id="cutout-diagram" xmlns="http://www.w3.org/2000/svg"></svg>
         </div>
       </div>
+
+      <p class="gang-note" id="gang-note" hidden></p>
 
       <p class="cutout-field-note">
         <strong>The width includes a &frac18;&quot; install allowance.</strong> Our senior install crews
@@ -258,6 +262,13 @@
           <p>The widths on this page are <strong>nominal + &frac38;&quot;</strong> &mdash; &frac18;&quot; over the + &frac14;&quot; minimum printed in the spec sheets. That extra room lets the unit seat without being forced, keeps air moving around the internals, and gives light strips, fans and sensors a buffer so nothing gets compressed while the insert is worked into place.</p>
           <p>Depth and height are unchanged, and the margin stops here. The insert hangs from &frac12;&quot; flanges, so cutting wider than this starts eating into what the unit rests on.</p>
           <p class="tip-flag">Working to someone else's drawing? Check whether its clearance is called out overall or per side before you cut &mdash; both conventions turn up on shop drawings.</p>
+        </article>
+
+        <article class="tip">
+          <span class="tip-tag">Ganging</span>
+          <h3>A ganged run is one opening</h3>
+          <p>Two inserts butted together share a single continuous cutout &mdash; 80&quot;, 100&quot; or 120&quot; of opening, not two openings with framing between them. The &frac38;&quot; allowance is for that whole opening; don't add it per insert or the run ends up loose.</p>
+          <p>Depth and height don't change with the run length, and the pair works from one remote. The Lite is the one model that can't be ganged.</p>
         </article>
 
         <article class="tip">

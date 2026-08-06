@@ -70,6 +70,12 @@ FACTS:
 - Sizes 20"/40"/60" (Lite adds 16"); ~12" deep; gang units for up to 20 ft of
   flame on one remote. Power: 60/120/180 W standard outlet (under 2 cents/hr).
   Optional 1/4" water line like a fridge ice maker.
+- Ganged runs: the Pro and Original gang seamlessly, the Lite cannot. The
+  common runs are 80" (two 40"), 100" (60" + 40") and 120" (two 60"). A ganged
+  run drops into ONE continuous cutout, not two: 80 3/8", 100 3/8" or 120 3/8"
+  wide, with the same depth and height as a single insert of that model. The
+  3/8" allowance is for the whole opening, not per insert. The Enclosure Guide
+  offers these as sizes and draws both inserts in the opening.
 - Cutout dimensions are critical (insert hangs from flanges); the portal's
   Enclosure Guide gives the exact opening per model and size. Enclosures need a
   matte-black light trap, 50 sq in air intake per 20" of insert, sealed wall
