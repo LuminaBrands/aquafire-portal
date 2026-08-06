@@ -867,10 +867,14 @@ function drawLightDiagram() {
     if (yIn <= surf + 0.5 || yIn >= trapTop - 0.3) return '';
     const dir = anchorStart ? 1 : -1;
     const xEnd = r(px(atPlane) + dir * 3.6 * ppi);
+    // A max marker well above the built opening sits in the trap-band zone;
+    // its label drops below the line there so it can't strike through the
+    // RECESSED LIGHT TRAP label under the ceiling.
+    const labelY = yIn > openTop + 1.5 ? py(yIn) + 12 : py(yIn) - 5;
     let s = `<line class="ld-amber-line" stroke-width="1.3" stroke-dasharray="5,3"
       x1="${px(atPlane)}" y1="${py(yIn)}" x2="${xEnd}" y2="${py(yIn)}"/>`;
     s += `<text class="ld-amber-ink" font-size="9" font-weight="700" letter-spacing="0.5" text-anchor="${anchorStart ? 'start' : 'end'}"
-      x="${r(px(atPlane) + dir * 5)}" y="${py(yIn) - 5}">${label}</text>`;
+      x="${r(px(atPlane) + dir * 5)}" y="${labelY}">${label}</text>`;
     return s;
   }
   function escapeLabel(atPlane, hitIn, maxIn, mirror) {
@@ -1010,6 +1014,59 @@ hearthBtns.forEach(btn => {
     update();
   });
 });
+
+// ── Reset — back to the defaults the page loads with ──
+document.getElementById('calc-reset').addEventListener('click', () => {
+  setbackSlider.value = 6;
+  backSetbackSlider.value = 2;
+  hearthType = 'single';
+  hearthBtns.forEach(b => b.classList.toggle('active', b.dataset.hearth === 'single'));
+  hearthHint.textContent = 'Standard hearth with a single front viewing opening.';
+  resetOpeningToMax();   // matches the load behaviour: opening snaps to the recommended max
+});
+
+// ── Print — a spec sheet an installer can hand to the framer ──
+// The print stylesheet strips the page down to the two diagrams plus the
+// summary below; printing runs in the light theme so the sheet is ink on
+// white (the diagrams follow automatically — every colour is a token).
+// Browsers' "Save as PDF" is the PDF path; no dependency needed.
+function fillPrintSummary() {
+  const { modelKey, model, dims, setback, backSetback, openingHeight, hearthType } = getState();
+  const fMax = Math.round((setback + model.lightOffset) * Math.tan(model.frontAngle * Math.PI / 180) - 1);
+  const bMax = Math.round((backSetback + model.lightOffsetBack) * Math.tan(model.backAngle * Math.PI / 180) - 1);
+  const isDouble = hearthType === 'double';
+  const rows = [
+    ['Model', `${model.name} — ${sizeSelect.value}"`],
+    ['Cutout (W × D × H)', `${frac(dims.w)} × ${frac(dims.d)} × ${frac(dims.h)}`],
+    ['Hearth type', isDouble ? 'Double-sided' : 'Single opening'],
+    ['Front setback', frac(setback)],
+    ['Back setback', frac(backSetback)],
+    ['Viewing opening', frac(openingHeight)],
+    [isDouble ? 'Front max opening' : 'Recommended max opening', fMax + '"'],
+  ];
+  if (isDouble) rows.push(['Back max opening', bMax + '"']);
+  rows.push(['Printed', new Date().toLocaleDateString()]);
+  document.getElementById('print-summary').innerHTML =
+    `<h2>Aquafire enclosure spec</h2><dl>` +
+    rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('') +
+    `</dl><p>Cutout width includes &frac38;" of clearance per side (&frac34;" over nominal). ` +
+    `Opening heights are measured from the installation surface. aquafire.app/enclosure-guide</p>`;
+}
+let themeBeforePrint = null;
+window.addEventListener('beforeprint', () => {
+  fillPrintSummary();
+  // Guarded so a doubled beforeprint (some engines fire it again around
+  // the print snapshot) can't capture the already-swapped theme.
+  if (themeBeforePrint === null) {
+    themeBeforePrint = document.documentElement.dataset.theme || 'dark';
+    document.documentElement.dataset.theme = 'light';
+  }
+});
+window.addEventListener('afterprint', () => {
+  if (themeBeforePrint) document.documentElement.dataset.theme = themeBeforePrint;
+  themeBeforePrint = null;
+});
+document.getElementById('calc-print').addEventListener('click', () => window.print());
 
 // ── Pre-select model and size from URL query params (?model=pro&size=100) ──
 // The size options depend on the model, so this runs before they're built.

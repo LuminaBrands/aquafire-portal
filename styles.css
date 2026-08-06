@@ -474,6 +474,30 @@ input[type="range"]::-moz-range-thumb {
   font-style: italic;
 }
 
+/* ── Calculator actions (reset / print) ── */
+.calc-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+.calc-btn {
+  padding: 9px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.calc-btn:hover { color: var(--text); border-color: var(--border-warm); }
+.calc-btn:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+/* ── Print-only spec summary (see the @media print block below) ── */
+.print-only { display: none; }
+
 /* ── Table ── */
 .table-wrapper { overflow-x: auto; margin-top: 4px; }
 /* The make-up of a ganged run, alongside its total length */
@@ -535,8 +559,9 @@ tr:hover td { background: var(--surface); }
   text-decoration: underline;
 }
 
-/* ── Responsive ── */
-@media (max-width: 800px) {
+/* ── Responsive (screen only — print media widths must not trigger the
+      phone layout; paper gets its own block below) ── */
+@media screen and (max-width: 800px) {
   /* Light-trap calculator, phone order: hearth toggle and sliders first,
      then the diagram directly under your thumb, then the result cards.
      The two wrappers give up their boxes (display: contents) so their
@@ -572,11 +597,62 @@ tr:hover td { background: var(--surface); }
   .result-value { font-size: 1.6rem; }
 }
 
-@media (max-width: 480px) {
+@media screen and (max-width: 480px) {
   .container { padding: 0 16px; }
   .card { padding: 20px 16px; }
   .form-row { flex-direction: column; gap: 12px; }
   .dimensions-display { gap: 8px; }
   .dim-box { min-width: 80px; padding: 14px 8px; }
   .dim-value { font-size: 1.15rem; }
+}
+
+/* ── Print — the installer spec sheet ─────────────────────────────────
+   Triggered by the "Print spec sheet" button (or Ctrl+P). app.js swaps
+   the page to the light theme before printing, so everything below
+   renders ink-on-white; it fills #print-summary with the chosen
+   configuration at the same moment. The sheet keeps the summary, the
+   cutout card and the light-trap diagram; everything interactive or
+   navigational goes. */
+@media print {
+  .bar, .pfoot, .atmos, .header-notice,
+  #model-selection, #field-notes, #reference-section, .cta-section,
+  .controls-panel, .calc-actions, .gang-note,
+  .afa-root, .afa-launcher, .af-toast, .af-reward-badge { display: none !important; }
+
+  .phead { padding: 0 0 6px; }
+  .phead p { display: none; }
+
+  .print-only { display: block; }
+  .print-summary h2 { font-size: 1.15rem; margin-bottom: 10px; }
+  .print-summary dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px 18px;
+  }
+  .print-summary dt {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-muted);
+  }
+  .print-summary dd { font-size: 0.98rem; font-weight: 700; margin: 2px 0 0; }
+  .print-summary p { margin-top: 12px; font-size: 0.76rem; color: var(--text-muted); }
+
+  .card {
+    background: none;
+    box-shadow: none;
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    margin: 12px 0;
+    break-inside: avoid;
+  }
+  .calculator-layout { display: block; }
+  .diagram-panel {
+    background: none;
+    border: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  #cutout-diagram { max-height: 330px; }
+  #light-diagram { max-height: 540px; }
 }
