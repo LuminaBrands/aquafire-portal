@@ -16,76 +16,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+/* The pre-redesign chrome that used to live here — `.container`, `.site-nav`
+   and its burger — is gone. This file is loaded by water-care.html alone, and
+   that page has run on the redesign's `.page` / `.bar` / `.phead` since the
+   rollout, so none of those selectors matched anything.
 
-/* ── Site Nav ── */
-.site-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(18, 20, 23, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-}
-.site-nav .nav-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
-}
-.site-nav .nav-logo img { height: 22px; display: block; }
-.site-nav .nav-links {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  list-style: none;
-}
-.site-nav .nav-links a {
-  display: block;
-  padding: 6px 14px;
-  font-size: 0.83rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-decoration: none;
-  border-radius: 6px;
-  transition: color 0.15s, background 0.15s;
-}
-.site-nav .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.04); }
-.site-nav .nav-links a.active { color: var(--text); background: rgba(255,255,255,0.06); }
-
-.nav-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-}
-.nav-toggle span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--text-muted);
-  border-radius: 2px;
-}
-
-@media (max-width: 700px) {
-  .nav-toggle { display: flex; }
-  .site-nav .nav-links {
-    display: none;
-    position: absolute;
-    top: 56px;
-    left: 0; right: 0;
-    flex-direction: column;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    gap: 2px;
-  }
-  .site-nav .nav-links.open { display: flex; }
-  .site-nav .nav-links a { padding: 10px 14px; font-size: 0.88rem; }
-}
+   Everything below is on the redesign tokens (redesign.css). No literal
+   colors — a page that can switch lighting can't carry hard-pinned ones. */
 
 /* ── Header ── */
 .wc-sub {
@@ -130,9 +67,9 @@ body {
   place-items: center;
   font-weight: 700;
   font-size: 0.93rem;
-  color: #fff;
-  background: #2980b9;
-  box-shadow: 0 0 18px rgba(41,128,185,0.15), 0 0 0 4px rgba(41,128,185,0.08);
+  color: var(--on-accent);
+  background: var(--blue-solid);
+  box-shadow: 0 0 18px var(--blue-glow), 0 0 0 4px var(--blue-glow);
   line-height: 1;
 }
 
@@ -161,7 +98,7 @@ select, input[type="number"], input[type="text"] {
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-select:hover, input[type="number"]:hover, input[type="text"]:hover { border-color: #3e4452; }
+select:hover, input[type="number"]:hover, input[type="text"]:hover { border-color: var(--blue-dim); }
 select:focus, input[type="number"]:focus, input[type="text"]:focus {
   outline: none;
   border-color: var(--blue);
@@ -199,7 +136,7 @@ select {
   overflow-y: auto;
   z-index: 100;
   display: none;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  box-shadow: var(--shadow);
 }
 .autocomplete-list.active { display: block; }
 .autocomplete-item {
@@ -215,9 +152,9 @@ select {
 }
 .autocomplete-item:last-child { border-bottom: none; }
 .autocomplete-item:hover,
-.autocomplete-item.highlighted { background: rgba(77,166,232,0.08); }
+.autocomplete-item.highlighted { background: var(--blue-glow); }
 .ppm-badge {
-  background: rgba(77,166,232,0.12);
+  background: var(--blue-glow);
   color: var(--blue);
   padding: 2px 8px;
   border-radius: 4px;
@@ -227,10 +164,10 @@ select {
 }
 .autocomplete-item:hover .ppm-badge,
 .autocomplete-item.highlighted .ppm-badge {
-  /* Same darkening as .cta-button, for the same reason: white on #2980b9 is
-     4.3:1, under AA. */
-  background: #2471a3;
-  color: #fff;
+  /* The solid blue, for the same reason as .cta-button: --blue itself is
+     tuned to read as colour on the page, not to carry white text. */
+  background: var(--blue-solid);
+  color: var(--on-accent);
 }
 
 /* City name display */
@@ -239,8 +176,8 @@ select {
   margin-top: 10px;
   padding: 8px 14px;
   border-radius: var(--radius-sm);
-  background: rgba(77,166,232,0.06);
-  border: 1px solid rgba(77,166,232,0.15);
+  background: var(--blue-glow);
+  border: 1px solid var(--blue-dim);
   color: var(--blue);
   font-size: 0.83rem;
   font-weight: 500;
@@ -280,10 +217,20 @@ select {
   gap: 8px;
 }
 .water-hardness-display.active { display: flex; }
-.water-hardness-display.soft { background: rgba(46,204,113,0.1); color: #2ecc71; border: 1px solid rgba(46,204,113,0.2); }
-.water-hardness-display.moderate { background: rgba(241,196,15,0.1); color: #f1c40f; border: 1px solid rgba(241,196,15,0.2); }
-.water-hardness-display.hard { background: rgba(230,126,34,0.1); color: #e67e22; border: 1px solid rgba(230,126,34,0.2); }
-.water-hardness-display.very-hard { background: rgba(231,76,60,0.1); color: #e74c3c; border: 1px solid rgba(231,76,60,0.2); }
+/* Each level is one token; the fill and border are mixed from it, so a
+   theme only rebinds the four colors. */
+.water-hardness-display.soft      { --lvl: var(--hard-soft); }
+.water-hardness-display.moderate  { --lvl: var(--hard-moderate); }
+.water-hardness-display.hard      { --lvl: var(--hard-hard); }
+.water-hardness-display.very-hard { --lvl: var(--hard-vhard); }
+.water-hardness-display.soft,
+.water-hardness-display.moderate,
+.water-hardness-display.hard,
+.water-hardness-display.very-hard {
+  color: var(--lvl);
+  background: color-mix(in srgb, var(--lvl) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lvl) 30%, transparent);
+}
 
 /* Hardness scale bar */
 .hardness-scale { margin-top: 16px; }
@@ -312,10 +259,14 @@ select {
   line-height: 1;
   flex: 1;
 }
-.seg-soft { background: rgba(46,204,113,0.25); color: #2ecc71; }
-.seg-moderate { background: rgba(241,196,15,0.25); color: #f1c40f; }
-.seg-hard { background: rgba(230,126,34,0.25); color: #e67e22; }
-.seg-vhard { background: rgba(231,76,60,0.25); color: #e74c3c; }
+.seg-soft     { --lvl: var(--hard-soft); }
+.seg-moderate { --lvl: var(--hard-moderate); }
+.seg-hard     { --lvl: var(--hard-hard); }
+.seg-vhard    { --lvl: var(--hard-vhard); }
+.hardness-bar-segment {
+  color: var(--lvl);
+  background: color-mix(in srgb, var(--lvl) 28%, transparent);
+}
 .hardness-bar-labels {
   display: flex;
   margin-top: 4px;
@@ -331,7 +282,7 @@ select {
   background: var(--text);
   border-radius: 2px;
   transform: translateX(-50%);
-  box-shadow: 0 0 0 2px var(--surface), 0 0 6px rgba(0,0,0,0.4);
+  box-shadow: 0 0 0 2px var(--surface), var(--shadow-sm);
   transition: left 0.4s ease;
   display: none;
   z-index: 2;
@@ -368,9 +319,9 @@ select {
 }
 .silhouette-tile {
   aspect-ratio: 1;
-  background: rgba(77,166,232,0.04);
+  background: var(--blue-glow);
   border-radius: 2px;
-  border: 1px solid rgba(77,166,232,0.06);
+  border: 1px solid var(--border);
 }
 .state-tile {
   aspect-ratio: 1;
@@ -389,7 +340,7 @@ select {
 .state-tile:hover {
   transform: scale(1.15);
   z-index: 2;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  box-shadow: var(--shadow-sm);
 }
 .state-tile.active {
   box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 2.5px var(--blue);
@@ -399,7 +350,7 @@ select {
 }
 @keyframes tilePulse {
   0%, 100% { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 2.5px var(--blue); }
-  50% { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 2.5px var(--blue), 0 0 8px rgba(77,166,232,0.4); }
+  50% { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 2.5px var(--blue), 0 0 8px var(--blue); }
 }
 .map-legend {
   display: flex;
@@ -445,24 +396,24 @@ input[type="range"] {
   flex: 1;
   -webkit-appearance: none;
   height: 5px;
-  border-radius: 3px;
+  border-radius: 999px;
   background: var(--border);
   outline: none;
   transition: background 0.15s;
 }
-input[type="range"]:hover { background: #3a3e48; }
+input[type="range"]:hover { background: var(--surface-alt); }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px; height: 20px;
   border-radius: 50%;
   background: var(--blue);
   cursor: grab;
-  box-shadow: 0 1px 6px rgba(0,0,0,.4), 0 0 12px rgba(77,166,232,0.15);
+  box-shadow: var(--shadow-sm), 0 0 12px var(--blue-glow);
   transition: transform 0.12s, box-shadow 0.12s;
-  border: 2px solid rgba(255,255,255,0.12);
+  border: 2px solid var(--border);
 }
 input[type="range"]::-webkit-slider-thumb:hover {
-  box-shadow: 0 1px 6px rgba(0,0,0,.4), 0 0 20px rgba(77,166,232,0.25);
+  box-shadow: var(--shadow-sm), 0 0 20px var(--blue-glow);
 }
 input[type="range"]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.12); }
 input[type="range"]::-moz-range-thumb {
@@ -470,7 +421,7 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 50%;
   background: var(--blue);
   cursor: grab;
-  border: 2px solid rgba(255,255,255,0.12);
+  border: 2px solid var(--border);
 }
 .slider-value {
   min-width: 64px;
@@ -512,8 +463,8 @@ input[type="range"]::-moz-range-thumb {
 }
 .fireplace-row .remove-btn {
   padding: 10px 12px;
-  background: rgba(231,76,60,0.08);
-  color: #e74c3c;
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: var(--danger);
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -522,7 +473,7 @@ input[type="range"]::-moz-range-thumb {
   transition: background 0.2s;
   flex-shrink: 0;
 }
-.fireplace-row .remove-btn:hover { background: rgba(231,76,60,0.18); }
+.fireplace-row .remove-btn:hover { background: color-mix(in srgb, var(--danger) 24%, transparent); }
 .add-fireplace-btn {
   background: none;
   border: 1.5px dashed var(--border);
@@ -538,7 +489,7 @@ input[type="range"]::-moz-range-thumb {
 }
 .add-fireplace-btn:hover {
   border-color: var(--blue);
-  background: rgba(77,166,232,0.04);
+  background: var(--blue-glow);
 }
 .total-segments {
   margin-top: 8px;
@@ -553,7 +504,7 @@ input[type="range"]::-moz-range-thumb {
   padding: 22px 24px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--blue);
-  background: linear-gradient(135deg, rgba(77,166,232,0.06) 0%, rgba(41,128,185,0.04) 100%);
+  background: linear-gradient(135deg, var(--blue-glow) 0%, transparent 100%);
   position: relative;
   overflow: hidden;
   text-align: center;
@@ -563,7 +514,7 @@ input[type="range"]::-moz-range-thumb {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--blue), #2980b9);
+  background: linear-gradient(90deg, var(--blue), var(--blue-solid));
 }
 .result-label {
   display: block;
@@ -622,7 +573,7 @@ input[type="range"]::-moz-range-thumb {
 .results-grid .result-card { margin-top: 0; }
 .result-config-label {
   display: inline-block;
-  background: rgba(77,166,232,0.12);
+  background: var(--blue-glow);
   color: var(--blue);
   padding: 3px 12px;
   border-radius: 6px;
@@ -646,10 +597,10 @@ input[type="range"]::-moz-range-thumb {
 .replace-warning {
   margin-top: 16px;
   padding: 12px 16px;
-  background: rgba(241,196,15,0.06);
-  border: 1px solid rgba(241,196,15,0.25);
+  background: var(--amber-glow);
+  border: 1px solid var(--amber-dim);
   border-radius: var(--radius-sm);
-  color: #f1c40f;
+  color: var(--amber);
   font-size: 0.83rem;
   font-weight: 500;
   line-height: 1.5;
@@ -697,7 +648,7 @@ th {
   letter-spacing: 0.6px;
 }
 td { color: var(--text); }
-tr:hover td { background: rgba(255,255,255,0.02); }
+tr:hover td { background: var(--surface); }
 
 /* Footer */
 
@@ -713,21 +664,20 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 .cta-button {
   display: inline-block;
   padding: 14px 40px;
-  /* Was #2980b9, which is 4.3:1 against white -- just under AA on a primary
-     CTA. This is the old hover shade promoted to the resting state (5.3:1),
-     with the hover darkened to keep the darkens-on-hover relationship. */
-  background: #2471a3;
-  color: #fff;
+  /* --blue-solid, not --blue: the resting shade clears AA under white and
+     the hover shade keeps the darkens-on-hover relationship. */
+  background: var(--blue-solid);
+  color: var(--on-accent);
   font-size: 1.05rem;
   font-weight: 600;
   border-radius: var(--radius-sm);
   text-decoration: none;
   transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 12px rgba(41,128,185,0.25);
+  box-shadow: 0 2px 12px var(--blue-glow);
 }
 .cta-button:hover {
-  background: #1f6391;
-  box-shadow: 0 4px 20px rgba(41,128,185,0.35);
+  background: var(--blue-solid-hover);
+  box-shadow: 0 4px 20px var(--blue-glow);
 }
 .cta-link {
   display: block;
@@ -773,7 +723,6 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 }
 
 @media (max-width: 480px) {
-  .container { padding: 0 16px; }
   .card { padding: 20px 16px; }
   .form-row { flex-direction: column; gap: 12px; }
   .fireplace-row { grid-template-columns: 1fr; }

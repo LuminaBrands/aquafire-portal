@@ -137,7 +137,7 @@ identical on all 13 nav-bearing pages:
 ```
 Guides                        Support
   Product Guide                 Troubleshoot
-  Enclosure Surround            Find a Dealer
+  Enclosure Guide               Find a Dealer
   Water Care                    Warranty / Register  (storefront)
   Preventative Maintenance      Rewards
                                 Service Request      (storefront)

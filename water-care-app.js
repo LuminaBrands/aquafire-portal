@@ -226,21 +226,25 @@ const hardnessMarker = document.getElementById('hardnessMarker');
 let selectedPPM = null;
 let highlightedIndex = -1;
 
-// ── Dark theme hardness colors ──
+// ── Hardness scale colors ──
+// Token references, not literals: these go into inline styles on the map
+// tiles, and the four levels are rebound per theme in redesign.css (the dark
+// theme's greens and yellows are unreadable on a light card).
+function hardnessToken(ppm) {
+  if (ppm === null || ppm === undefined) return null;
+  if (ppm <= 60) return 'var(--hard-soft)';
+  if (ppm <= 120) return 'var(--hard-moderate)';
+  if (ppm <= 180) return 'var(--hard-hard)';
+  return 'var(--hard-vhard)';
+}
+
 function getHardnessColor(ppm) {
-  if (ppm === null || ppm === undefined) return 'rgba(255,255,255,0.04)';
-  if (ppm <= 60) return 'rgba(46,204,113,0.35)';
-  if (ppm <= 120) return 'rgba(241,196,15,0.35)';
-  if (ppm <= 180) return 'rgba(230,126,34,0.35)';
-  return 'rgba(231,76,60,0.35)';
+  var c = hardnessToken(ppm);
+  return c ? 'color-mix(in srgb, ' + c + ' 38%, transparent)' : 'var(--surface)';
 }
 
 function getHardnessTextColor(ppm) {
-  if (ppm === null || ppm === undefined) return '#555';
-  if (ppm <= 60) return '#2ecc71';
-  if (ppm <= 120) return '#f1c40f';
-  if (ppm <= 180) return '#e67e22';
-  return '#e74c3c';
+  return hardnessToken(ppm) || 'var(--text-dim)';
 }
 
 // Continental US silhouette
