@@ -893,17 +893,18 @@ function drawLightDiagram() {
     S.push(`<text class="ld-muted-ink" font-size="8.5" letter-spacing="1.5" text-anchor="middle" x="${px(plane / 2)}" y="${y - 20}">TOTAL DEPTH</text>`);
     S.push(`<text class="ld-ink" font-size="11.5" font-weight="700" text-anchor="middle" x="${px(plane / 2)}" y="${y - 7}">${frac(setback + nominalD + backSetback)} + material</text>`);
   }
-  // Setbacks, at the installation surface.
-  function sbDim(x1In, x2In, value, tag) {
+  // Setbacks, at the installation surface — tag spelled out on two lines.
+  function sbDim(x1In, x2In, value, tagTop) {
     if (x2In - x1In < 0.45) return '';
     const y = py(surf + 1), mx = px((x1In + x2In) / 2);
     let s = hticks(px(x1In), px(x2In), y, 'ld-amber');
     s += `<text class="ld-amber-ink" font-size="10.5" font-weight="700" text-anchor="middle" x="${mx}" y="${y - 6}">${value}</text>`;
-    s += `<text class="ld-muted-ink" font-size="8" letter-spacing="1" text-anchor="middle" x="${mx}" y="${y - 17}">${tag}</text>`;
+    s += `<text class="ld-muted-ink" font-size="8" letter-spacing="1" text-anchor="middle" x="${mx}" y="${y - 27}">${tagTop}</text>`;
+    s += `<text class="ld-muted-ink" font-size="8" letter-spacing="1" text-anchor="middle" x="${mx}" y="${y - 18}">SETBACK</text>`;
     return s;
   }
-  S.push(sbDim(0, insBack, frac(backSetback), 'BACK SB'));
-  S.push(sbDim(insFront, plane, frac(setback), 'FRONT SB'));
+  S.push(sbDim(0, insBack, frac(backSetback), 'BACK'));
+  S.push(sbDim(insFront, plane, frac(setback), 'FRONT'));
 
   // Vertical stack outside the front wall: opening (slider), trap band, base height.
   // The whole stack sits outside the base's front face so nothing reads as

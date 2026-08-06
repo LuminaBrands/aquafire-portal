@@ -547,7 +547,9 @@ tr:hover td { background: var(--surface); }
   .controls-panel, .diagram-panel { display: contents; }
   #light-diagram {
     order: 1;
-    margin-top: 4px;
+    /* Bleed a little past the card padding so the drawing runs larger. */
+    margin: 2px -14px 0;
+    width: calc(100% + 28px);
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
@@ -556,7 +558,8 @@ tr:hover td { background: var(--surface); }
   .formula-note { order: 3; margin-top: 12px; }
   /* Tighter control stack: the explainer lines go, the labels carry it. */
   .controls-panel .hint { display: none; }
-  .controls-panel > .form-group { margin-bottom: 12px; }
+  .controls-panel > .form-group { margin-bottom: 6px; }
+  .controls-panel .form-group label { margin-bottom: 4px; }
   .cutout-layout { grid-template-columns: 1fr; }
   .dimensions-display { flex-direction: row; flex-wrap: wrap; gap: 10px; }
   .dim-box { flex: 1; min-width: 100px; }
