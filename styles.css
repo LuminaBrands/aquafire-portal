@@ -16,98 +16,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+/* The pre-redesign chrome that used to live here — `.container`, `.site-nav`
+   and its burger, `.brand-logo`, a bare `header h1`, `.subtitle` — is gone.
+   This file is loaded by enclosure-guide.html alone, and that page has run on
+   the redesign's `.page` / `.bar` / `.phead` since the rollout; none of those
+   selectors matched anything. The bare `header h1` was the live one: it lost
+   to `.phead h1` on specificity, so it changed nothing and looked like it did.
 
-/* ── Site Nav ── */
-.site-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(18, 20, 23, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-}
-.site-nav .nav-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
-}
-.site-nav .nav-logo img { height: 22px; display: block; }
-.site-nav .nav-links {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  list-style: none;
-}
-.site-nav .nav-links a {
-  display: block;
-  padding: 6px 14px;
-  font-size: 0.83rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-decoration: none;
-  border-radius: 6px;
-  transition: color 0.15s, background 0.15s;
-}
-.site-nav .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.04); }
-.site-nav .nav-links a.active { color: var(--text); background: rgba(255,255,255,0.06); }
-
-.nav-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-}
-.nav-toggle span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--text-muted);
-  border-radius: 2px;
-}
-
-@media (max-width: 700px) {
-  .nav-toggle { display: flex; }
-  .site-nav .nav-links {
-    display: none;
-    position: absolute;
-    top: 56px;
-    left: 0; right: 0;
-    flex-direction: column;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    gap: 2px;
-  }
-  .site-nav .nav-links.open { display: flex; }
-  .site-nav .nav-links a { padding: 10px 14px; font-size: 0.88rem; }
-}
-
-/* ── Header ── */
-.brand-logo {
-  display: block;
-  margin: 0 auto 16px;
-  height: 32px;
-  width: auto;
-  object-fit: contain;
-}
-header h1 {
-  font-size: 2.25rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  color: var(--text);
-  line-height: 1.2;
-}
-.subtitle {
-  color: var(--text-muted);
-  margin-top: 10px;
-  font-size: 1.05rem;
-  font-weight: 400;
-}
+   Everything below is on the redesign tokens (redesign.css). No literal colors
+   — a page that can switch lighting can't carry hard-pinned ones. */
 
 /* ── Header Notice ── */
 .header-notice {
@@ -116,9 +33,10 @@ header h1 {
   gap: 12px;
   margin-top: 16px;
   padding: 14px 18px;
-  background: rgba(232, 168, 56, 0.08);
-  border: 1px solid var(--border-warm);
-  border-left: 3px solid var(--amber);
+  background: var(--amber-glow);
+  /* Same notice treatment as .gang-note below: amber border and tint all
+     round, no accent bar. The amber icon carries the warning. */
+  border: 1px solid var(--amber-dim);
   border-radius: var(--radius-sm);
   margin: 28px 0;
 }
@@ -170,9 +88,9 @@ header h1 {
   place-items: center;
   font-weight: 700;
   font-size: 0.93rem;
-  color: #fff;
-  background: #c0392b;
-  box-shadow: 0 0 18px rgba(192,57,43,0.15), 0 0 0 4px rgba(192,57,43,0.08);
+  color: var(--on-accent);
+  background: var(--red);
+  box-shadow: 0 0 18px var(--red-glow), 0 0 0 4px var(--red-glow);
   line-height: 1;
 }
 
@@ -202,7 +120,7 @@ select, input[type="number"] {
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-select:hover, input[type="number"]:hover { border-color: #3e4452; }
+select:hover, input[type="number"]:hover { border-color: var(--border-warm); }
 select:focus, input[type="number"]:focus {
   outline: none;
   border-color: var(--amber-dim);
@@ -257,30 +175,126 @@ select {
 .cutout-diagram-wrapper { text-align: center; }
 #cutout-diagram { width: 100%; max-height: 380px; }
 
+/* ── Ganged-run note (shown only when a combined size is selected) ── */
+.gang-note {
+  margin-top: 22px;
+  padding: 14px 18px;
+  /* Amber border and tint all round, no accent bar down one side: the tint
+     already marks it, and the caution card in the field notes below is on the
+     same treatment. */
+  border: 1px solid var(--amber-dim);
+  border-radius: var(--radius-sm);
+  background: var(--amber-glow);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+.gang-note strong { color: var(--text); font-weight: 600; }
+.gang-note[hidden] { display: none; }
+
+/* ── Field-practice note under the cutout numbers ── */
+.cutout-field-note {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+.cutout-field-note strong { color: var(--text); font-weight: 600; }
+.cutout-field-note b,
+.cutout-field-note #published-w {
+  color: var(--amber);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.cutout-field-note #published-w { font-weight: 600; }
+.cutout-field-note a {
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-warm);
+  white-space: nowrap;
+}
+.cutout-field-note a:hover { color: var(--amber); border-bottom-color: currentColor; }
+
+/* ── Installer field notes ── */
+.tips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 26px;
+}
+.tip {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px 22px;
+  transition: border-color 0.2s;
+}
+.tip:hover { border-color: var(--border-warm); }
+.tip-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  color: var(--amber);
+  margin-bottom: 8px;
+}
+.tip h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.tip p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+.tip p + p { margin-top: 10px; }
+.tip strong { color: var(--text); font-weight: 600; }
+.tip-flag {
+  margin-top: 12px;
+  padding-left: 12px;
+  border-left: 2px solid var(--border-warm);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+/* The handoff note closes the set — spanning the row keeps the grid from
+   ending on a lone orphan card at any column count. */
+.tip--closing { grid-column: 1 / -1; }
+.tip--caution {
+  border-color: var(--amber-dim);
+  background: linear-gradient(135deg, var(--amber-glow) 0%, transparent 70%), var(--bg);
+}
+.tip--caution:hover { border-color: var(--amber); }
+
 /* ── Sliders ── */
 .slider-row { display: flex; align-items: center; gap: 14px; }
 input[type="range"] {
   flex: 1;
   -webkit-appearance: none;
   height: 5px;
-  border-radius: 3px;
+  border-radius: 999px;
   background: var(--border);
   outline: none;
   transition: background 0.15s;
 }
-input[type="range"]:hover { background: #3a3e48; }
+input[type="range"]:hover { background: var(--surface-alt); }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px; height: 20px;
   border-radius: 50%;
   background: var(--amber);
   cursor: grab;
-  box-shadow: 0 1px 6px rgba(0,0,0,.4), 0 0 12px var(--amber-glow);
+  box-shadow: var(--shadow-sm), 0 0 12px var(--amber-glow);
   transition: transform 0.12s, box-shadow 0.12s;
-  border: 2px solid rgba(255,255,255,0.12);
+  border: 2px solid var(--border);
 }
 input[type="range"]::-webkit-slider-thumb:hover {
-  box-shadow: 0 1px 6px rgba(0,0,0,.4), 0 0 20px rgba(232,168,56,0.25);
+  box-shadow: var(--shadow-sm), 0 0 20px var(--amber-glow);
 }
 input[type="range"]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.12); }
 input[type="range"]::-moz-range-thumb {
@@ -288,7 +302,7 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 50%;
   background: var(--amber);
   cursor: grab;
-  border: 2px solid rgba(255,255,255,0.12);
+  border: 2px solid var(--border);
 }
 .slider-value {
   min-width: 64px;
@@ -327,13 +341,13 @@ input[type="range"]::-moz-range-thumb {
 .hearth-btn + .hearth-btn { border-left: 1px solid var(--border); }
 .hearth-btn.active {
   background: var(--amber);
-  color: #121417;
+  color: var(--bg);
 }
 
 .result-card--back {
-  border-color: #d45a20;
+  border-color: var(--ember);
 }
-.result-card--back .result-value { color: #d45a20; }
+.result-card--back .result-value { color: var(--ember); }
 
 /* ── Calculator layout ── */
 .calculator-layout {
@@ -350,7 +364,7 @@ input[type="range"]::-moz-range-thumb {
   padding: 22px 24px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--amber-dim);
-  background: linear-gradient(135deg, rgba(232,168,56,0.06) 0%, rgba(212,90,32,0.04) 100%);
+  background: linear-gradient(135deg, var(--amber-glow) 0%, var(--ember-glow) 100%);
   position: relative;
   overflow: hidden;
 }
@@ -403,6 +417,8 @@ input[type="range"]::-moz-range-thumb {
 
 /* ── Table ── */
 .table-wrapper { overflow-x: auto; margin-top: 4px; }
+/* The make-up of a ganged run, alongside its total length */
+.ref-gang { color: var(--text-muted); font-size: 0.76rem; }
 table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
 th, td {
   padding: 11px 16px;
@@ -418,7 +434,7 @@ th {
   letter-spacing: 0.6px;
 }
 td { color: var(--text); }
-tr:hover td { background: rgba(255,255,255,0.02); }
+tr:hover td { background: var(--surface); }
 
 /* ── Footer ── */
 
@@ -434,18 +450,18 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 .cta-button {
   display: inline-block;
   padding: 14px 40px;
-  background: #c0392b;
-  color: #fff;
+  background: var(--red);
+  color: var(--on-accent);
   font-size: 1.05rem;
   font-weight: 600;
   border-radius: var(--radius-sm);
   text-decoration: none;
   transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 12px rgba(192,57,43,0.25);
+  box-shadow: 0 2px 12px var(--red-glow);
 }
 .cta-button:hover {
-  background: #a93226;
-  box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+  background: var(--red-dark);
+  box-shadow: 0 4px 20px var(--red-glow);
 }
 .cta-link {
   display: block;

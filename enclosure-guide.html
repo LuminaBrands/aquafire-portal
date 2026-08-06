@@ -89,7 +89,7 @@
         <div class="step-num">1</div>
         <div>
           <h2>Choose Your Model</h2>
-          <p class="card-desc">Select the Aquafire insert and size for your project.</p>
+          <p class="card-desc">Select the Aquafire insert and size for your project. Running two inserts? The Pro and Original gang into 80&quot;, 100&quot; and 120&quot; ribbons &mdash; pick the total length and the guide sizes the single opening they share.</p>
         </div>
       </div>
 
@@ -104,6 +104,8 @@
         </div>
         <div class="form-group">
           <label for="size">Size</label>
+          <!-- Options are rebuilt per model in app.js: the ganged runs exist on
+               the Pro and Original only. These three are the no-JS fallback. -->
           <select id="size">
             <option value="20">20"</option>
             <option value="40">40"</option>
@@ -143,6 +145,16 @@
           <svg id="cutout-diagram" xmlns="http://www.w3.org/2000/svg"></svg>
         </div>
       </div>
+
+      <p class="gang-note" id="gang-note" hidden></p>
+
+      <p class="cutout-field-note">
+        <strong>The width includes a &frac18;&quot; install allowance.</strong> Our senior install crews
+        cut it at nominal + &frac38;&quot; so the insert seats without being forced, and these are the
+        figures the guide now uses. Working from a spec sheet? Its published minimum is
+        <span id="published-w">&mdash;</span>. Depth and height are unchanged.
+        <a href="#field-notes">Why &rarr;</a>
+      </p>
     </section>
 
     <!-- Step 3: Light Trap Calculator -->
@@ -238,6 +250,67 @@
       </div>
     </section>
 
+    <!-- Installer Field Notes -->
+    <section class="card" id="field-notes">
+      <h2>Installer Field Notes</h2>
+      <p class="card-desc">What our senior install crews do on site, past the published dimensions. Almost all of it is about controlling air &mdash; around the enclosure, and through the unit.</p>
+
+      <div class="tips">
+        <article class="tip">
+          <span class="tip-tag">Framing</span>
+          <h3>Be slightly generous on width</h3>
+          <p>The widths on this page are <strong>nominal + &frac38;&quot;</strong> &mdash; &frac18;&quot; over the + &frac14;&quot; minimum printed in the spec sheets. That extra room lets the unit seat without being forced, keeps air moving around the internals, and gives light strips, fans and sensors a buffer so nothing gets compressed while the insert is worked into place.</p>
+          <p>Depth and height are unchanged, and the margin stops here. The insert hangs from &frac12;&quot; flanges, so cutting wider than this starts eating into what the unit rests on.</p>
+          <p class="tip-flag">Working to someone else's drawing? Check whether its clearance is called out overall or per side before you cut &mdash; both conventions turn up on shop drawings.</p>
+        </article>
+
+        <article class="tip">
+          <span class="tip-tag">Ganging</span>
+          <h3>A ganged run is one opening</h3>
+          <p>Two inserts butted together share a single continuous cutout &mdash; 80&quot;, 100&quot; or 120&quot; of opening, not two openings with framing between them. The &frac38;&quot; allowance is for that whole opening; don't add it per insert or the run ends up loose.</p>
+          <p>Depth and height don't change with the run length, and the pair works from one remote. The Lite is the one model that can't be ganged.</p>
+        </article>
+
+        <article class="tip">
+          <span class="tip-tag">Sealing</span>
+          <h3>The ideal: frame it, drywall it, seal it</h3>
+          <p>The best outcome is agreed with the builder before anything is cut: the opening framed to spec, and the entire bottom enclosure drywalled and sealed. Open wall cavities behind or beneath the fireplace let air move through the enclosure, and that air pulls the flame down and drives vapor onto components.</p>
+        </article>
+
+        <article class="tip">
+          <span class="tip-tag">Sealing</span>
+          <h3>Tape is the fallback &mdash; and it goes on now</h3>
+          <p>If you arrive to open framing, or you can feel air moving around the enclosure, seal the unit that day. Flip it to expose the underside and wrap the front and back edges with <strong>3&quot;-wide black high-quality tape</strong> (Gorilla tape or equivalent) &mdash; the width matters, it has to cover the edge properly.</p>
+          <p>Do it while the enclosure is open. Sealing after symptoms appear means pulling an installed unit back out.</p>
+        </article>
+
+        <article class="tip">
+          <span class="tip-tag">Sealing</span>
+          <h3>Seal the DP kit to the structure</h3>
+          <p>Where a unit calls for a downdraft prevention kit, the kit only works if it is sealed against the surrounding structure. In high-rise condos, where the wall assemblies breathe, an unsealed DP kit has been the cause of major installation failures.</p>
+        </article>
+
+        <article class="tip tip--caution">
+          <span class="tip-tag">Airflow</span>
+          <h3>Seal the cavity, not the vents</h3>
+          <p>Sealing is about the wall cavity &mdash; the unit still has to breathe. Aquafire inserts need at least <strong>50 square inches of air intake per 20&quot; of unit length</strong>, through the top lid or, if the lid is covered by a decorative top or media, through a toe kick beneath the enclosure.</p>
+          <p>Before you leave, check nothing heavy is sitting on top of the unit and walk the customer through keeping it clear. This matters more, not less, once the enclosure is fully sealed.</p>
+        </article>
+
+        <article class="tip">
+          <span class="tip-tag">HVAC</span>
+          <h3>Why this keeps coming up</h3>
+          <p>A lot of current construction runs &ldquo;open plenum&rdquo; positive-pressure HVAC. That trend routinely puts air pressure into fireplace enclosures, which is why sealing is now a default step on new builds rather than a fix for a problem house. Keep supply vents from blowing directly at the insert wherever the layout allows.</p>
+        </article>
+
+        <article class="tip tip--closing">
+          <span class="tip-tag">Handoff</span>
+          <h3>Say it before you build it</h3>
+          <p>Frame sealing to the builder and the customer as proactive best practice, not a repair. It heads off the service calls that cost everyone time later &mdash; replacing light strips and fans on a unit that has to come back out of a finished wall &mdash; and it keeps the fireplace looking right for the life of the install.</p>
+        </article>
+      </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="card cta-section">
       <h2>Ready to Get Started?</h2>
@@ -275,14 +348,6 @@
   <script src="nav.js" defer></script>
   <script src="app.js"></script>
   <script src="rewards.js"></script>
-  <script>
-    const toggle = document.querySelector('.nav-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    toggle?.addEventListener('click', () => {
-      const open = navLinks?.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(open));
-    });
-  </script>
   <script>
     // Theme toggle + mobile nav. Shared across every redesigned page.
     (function () {

@@ -671,6 +671,11 @@ button, input, select, textarea { font-family: inherit; }
   --blue-glow: rgba(111,195,255,0.10);
   --ember-glow: rgba(211,51,55,0.10);
   --shadow: 0 2px 24px rgba(0,0,0,0.35);
+  /* Ink that sits on a saturated accent fill (DESIGN.md `on-accent`), and the
+     tight elevation a control-sized element wants — --shadow is tuned for
+     cards and goes to mush under a 20px slider thumb. */
+  --on-accent: #fff;
+  --shadow-sm: 0 1px 6px rgba(0,0,0,0.4);
 }
 :root[data-theme="light"] {
   --bg: #eef0f3;
@@ -691,4 +696,6 @@ button, input, select, textarea { font-family: inherit; }
   --blue-glow: rgba(28,118,201,0.10);
   --ember-glow: rgba(176,36,39,0.10);
   --shadow: 0 2px 20px rgba(23,26,31,0.10);
+  --on-accent: #fff;
+  --shadow-sm: 0 1px 5px rgba(23,26,31,0.22);
 }

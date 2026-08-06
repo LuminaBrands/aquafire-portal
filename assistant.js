@@ -335,7 +335,7 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'Inserts come in <strong>20\u2033, 40\u2033 and 60\u2033</strong> widths (the Lite adds a 16\u2033 Mini). All are about 12\u2033 deep and 11\u215c\u2033 tall, designed for a flush, drop-in install.' },
-            { t: 'text', html: 'Cutout dimensions are critical \u2014 the insert hangs from its flanges, so the opening must be exact (e.g. a 40\u2033 unit needs a 40\u00bc\u2033 \u00d7 12\u00bc\u2033 opening with 12\u201314\u2033 of depth below, depending on model). Our Enclosure Guide calculates the exact cutout for your model and size:' },
+            { t: 'text', html: 'Cutout dimensions are critical \u2014 the insert hangs from its flanges, so the opening has to be right (e.g. a 40\u2033 unit needs a 40\u215c\u2033 \u00d7 12\u00bc\u2033 opening with 12\u201314\u2033 of depth below, depending on model). That width is nominal + \u215c\u2033 \u2014 \u215b\u2033 over the spec-sheet minimum, which our install crews recommend so the insert seats without being forced. Two inserts can also be ganged into an 80\u2033, 100\u2033 or 120\u2033 run sharing one opening. Our Enclosure Guide calculates it for your exact model and size:' },
             { t: 'links', items: [{ label: '\ud83d\udcd0 Enclosure dimension calculator', href: pURL('enclosure-guide.html') }] },
             { t: 'chips', items: [{ label: 'Can I make a longer flame?', send: 'Can I combine multiple units?' }, { label: 'Installation basics', send: 'How is it installed?' }] }
           ]
@@ -344,13 +344,14 @@
     },
     {
       id: 'ganging',
-      kw: [['gang', 5], ['combine', 4], ['multiple units', 6], ['longer', 3], ['ribbon', 5], ['continuous', 4], ['side by side', 5], ['80', 2], ['100 inch', 4], ['120', 2]],
+      kw: [['gang', 5], ['ganged', 6], ['ganging', 6], ['combine', 4], ['multiple units', 6], ['longer', 3], ['ribbon', 5], ['continuous', 4], ['side by side', 5], ['80', 2], ['100 inch', 6], ['120', 2], ['two fireplaces', 8], ['two units', 8], ['two inserts', 8], ['2 units', 6], ['second unit', 6], ['connect two', 7], ['80 inch', 6], ['120 inch', 6], ['80"', 5], ['100"', 5], ['120"', 5], ['run', 2]],
       answer: function () {
         return {
           feedback: true,
           blocks: [
-            { t: 'text', html: 'Yes! Inserts gang together seamlessly to create up to <strong>20 feet (240\u2033) of continuous flame</strong>, all controlled from a single remote. Common combos: two 40\u2033 units for 80\u2033, a 40\u2033 + 60\u2033 for 100\u2033, or two 60\u2033 units for 120\u2033.' },
-            { t: 'links', items: [{ label: '\ud83d\udcd0 Plan the enclosure for ganged units', href: pURL('enclosure-guide.html') }] }
+            { t: 'text', html: 'Yes! Pro and Original inserts gang together seamlessly to create up to <strong>20 feet (240\u2033) of continuous flame</strong>, all controlled from a single remote. Common combos: two 40\u2033 units for 80\u2033, a 60\u2033 + 40\u2033 for 100\u2033, or two 60\u2033 units for 120\u2033. (The Lite is the one model that can\u2019t be ganged.)' },
+            { t: 'text', html: 'A ganged run drops into <strong>one continuous cutout</strong>, not two: 80\u215c\u2033, 100\u215c\u2033 or 120\u215c\u2033 wide, with depth and height the same as a single insert. The \u215c\u2033 allowance is for the whole opening, not per insert.' },
+            { t: 'links', items: [{ label: '\ud83d\udcd0 Size a ganged cutout in the Enclosure Guide', href: pURL('enclosure-guide.html') }] }
           ]
         };
       }
@@ -390,7 +391,7 @@
     },
     {
       id: 'enclosure',
-      kw: [['enclosure', 6], ['light trap', 7], ['ceiling', 4], ['light bleed', 6], ['hearth', 4], ['surround', 4], ['cabinet', 3], ['design tips', 5], ['viewing height', 6], ['airflow', 4], ['air flow', 4], ['vent', 3], ['toe kick', 6]],
+      kw: [['enclosure', 6], ['light trap', 7], ['ceiling', 4], ['light bleed', 6], ['hearth', 4], ['surround', 4], ['cabinet', 3], ['design tips', 5], ['viewing height', 6], ['airflow', 4], ['air flow', 4], ['vent', 3], ['toe kick', 6], ['cutout', 5], ['cut out', 4], ['rough opening', 6], ['framing', 5], ['frame the opening', 7]],
       answer: function () {
         return {
           feedback: true,
@@ -403,8 +404,34 @@
               '<strong>Seal wall cavities</strong> \u2014 open cavities cause downdrafts that flatten the flame.',
               '<strong>Side clearance</strong> \u2014 keep 6\u2033 from side walls to avoid light reflecting on them.'
             ]},
+            { t: 'text', html: 'On the <strong>width</strong>: cut the opening at nominal + \u215c\u2033 \u2014 \u215b\u2033 over the + \u00bc\u2033 minimum in the spec sheets. Our senior install crews recommend it so the insert seats without being forced and air keeps moving around the internals, and it\u2019s what the Enclosure Guide now calculates. Depth and height are unchanged, and the margin stops there \u2014 the insert hangs from \u00bd\u2033 flanges, so cutting wider eats into what it rests on.' },
             { t: 'text', html: 'The Enclosure Guide calculates all of this for your exact model and size \u2014 and you can email drawings to <a href="mailto:' + SALES_EMAIL + '">' + SALES_EMAIL + '</a> for a free design review.' },
-            { t: 'links', items: [{ label: '\ud83d\udcd0 Open the Enclosure Guide', href: pURL('enclosure-guide.html') }] }
+            { t: 'links', items: [{ label: '\ud83d\udcd0 Open the Enclosure Guide', href: pURL('enclosure-guide.html') }, { label: '\ud83d\udd28 Installer field notes (framing & sealing)', href: pURL('enclosure-guide.html#field-notes') }] },
+            { t: 'chips', items: [{ label: 'Downdrafts & sealing', send: 'How do I stop downdrafts in the enclosure?' }] }
+          ]
+        };
+      }
+    },
+    {
+      /* Field practice from the install crews \u2014 sealing the enclosure against
+         downdrafts. Mirrored in api/chat.js BASE_FACTS; both move together.
+         Source: docs/source-material/note-installer-field-tips.txt */
+      id: 'downdraft',
+      kw: [['downdraft', 9], ['downdrafts', 9], ['down draft', 9], ['dp kit', 9], ['seal the enclosure', 8], ['sealing the enclosure', 8], ['seal the unit', 7], ['open plenum', 8], ['plenum', 6], ['wall cavity', 7], ['wall cavities', 7], ['open framing', 7], ['gorilla tape', 8], ['tape the unit', 8], ['high rise', 5], ['high-rise', 5], ['condo', 4], ['positive pressure', 7], ['air moving', 5], ['drafty', 6]],
+      answer: function () {
+        return {
+          feedback: true,
+          blocks: [
+            { t: 'text', html: 'Downdrafts are the most common cause of installation trouble \u2014 air moving through an open enclosure pulls the flame down and drives vapor onto the components, which shortens the life of light strips, fans and sensors. A lot of current construction runs \u201copen plenum\u201d positive-pressure HVAC, so this is worth handling up front on any new build.' },
+            { t: 'steps', items: [
+              '<strong>Best case</strong> \u2014 have the builder frame the opening to spec and drywall and seal the entire bottom enclosure. No open cavities behind or beneath the fireplace.',
+              '<strong>Fallback</strong> \u2014 if you find open framing, or can feel air moving around the enclosure, seal the unit that day: flip it to expose the underside and wrap the front and back edges with 3\u2033-wide black high-quality tape (Gorilla tape or equivalent). The width matters \u2014 it has to cover the edge properly.',
+              '<strong>DP kit</strong> \u2014 where a downdraft prevention kit is used, it only works if it\u2019s sealed against the surrounding structure. In high-rise condos, where the wall assemblies breathe, an unsealed DP kit has caused major installation failures.',
+              '<strong>Don\u2019t seal the vents</strong> \u2014 the unit still needs 50\u00a0sq\u00a0in of air intake per 20\u2033 of length, through the top lid or a toe kick if the lid is covered. Keep heavy items off the top.'
+            ]},
+            { t: 'text', html: 'Do it during the initial install while the enclosure is still open \u2014 sealing after symptoms appear means pulling an installed unit back out of a finished wall.' },
+            { t: 'links', items: [{ label: '\ud83d\udd28 Installer field notes (framing & sealing)', href: pURL('enclosure-guide.html#field-notes') }] },
+            { t: 'chips', items: [CHIP_HUMAN] }
           ]
         };
       }
