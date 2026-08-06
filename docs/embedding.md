@@ -71,7 +71,7 @@ Measured content heights with `?embed` (Chromium, Figtree loaded):
 | `water-care.html` | 2191 | 2993 |
 | `maintenance.html` | 2318 | 4051 |
 | `rewards.html` | 2487 | 3083 |
-| `enclosure-guide.html` | 2783 | 3173 |
+| `enclosure-guide.html` | 3759 | 4213 |
 | `aquafire-pro.html` | 7034 | 12027 |
 
 Phone heights are roughly 1.3–1.7× the desktop ones, so a single fixed height
