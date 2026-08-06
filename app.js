@@ -916,9 +916,11 @@ function drawLightDiagram() {
   // ── Right-rail callouts with leader lines ──
   const railX = Math.max(W - marginR + 18, vdimX + 30);
   const callouts = [
-    // Matte finish points at the recess ceiling; the light trap at the
-    // band's inner bottom corner, where the max line lands.
-    { lines: ['NON-REFLECTIVE,', 'MATTE FINISH'], tx: px(plane * 0.68), ty: py(trapTop) },
+    // Matte finish points at the recess ceiling; its label rides well above
+    // the target so the leader drops in at a steep, legible angle. The
+    // light trap points at the band's inner bottom corner, where the max
+    // line lands.
+    { lines: ['NON-REFLECTIVE,', 'MATTE FINISH'], tx: px(plane * 0.68), ty: py(trapTop), ly0: Math.max(py(trapTop) - 46, 58) },
     { lines: ['LIGHT TRAP'],                      tx: px(plane),        ty: py(openTop), ly0: py(openTop) + 3 },
     { lines: ['INSTALLATION SURFACE'],            tx: px(baseR) - 6,    ty: py(surf) },
     { lines: ['TOE KICK AIR FLOW', 'IF TOP VENTS COVERED'], tx: px(baseR) - 10, ty: py(0) + 4 },
