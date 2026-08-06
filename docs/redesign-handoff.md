@@ -129,11 +129,11 @@ adding the widget here; verified by injecting `assistant.js` at runtime
 
 ## Open items / decisions awaiting the user
 
-- **single-font hook finding**: Figtree-only is deliberate (now written
-  into DESIGN.md as The One Family Rule) but the recurring hook finding
-  was never config-suppressed — the user hasn't explicitly confirmed
-  suppression. Next session: ask once, then
-  `/impeccable hooks ignore-rule single-font --shared` if confirmed.
+- ~~single-font hook finding~~ **Resolved 2026-08-06**: the user confirmed
+  Figtree-only is intentional (The One Family Rule) and asked for the
+  suppression, so `single-font` now sits in `detector.ignoreRules` in
+  `.impeccable/config.json` (shared). The hook no longer flags it anywhere
+  in the project.
 - **design-system-font/-color findings on the study folders**: once
   DESIGN.md landed, the hook began flagging every exploration comp
   (v1–v5, v4a–v4e, mix1–mix6, b1–b3, image-options.html — ~500 findings)
