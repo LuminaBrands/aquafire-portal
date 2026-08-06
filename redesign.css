@@ -676,6 +676,18 @@ button, input, select, textarea { font-family: inherit; }
      cards and goes to mush under a 20px slider thumb. */
   --on-accent: #fff;
   --shadow-sm: 0 1px 6px rgba(0,0,0,0.4);
+  /* A blue solid enough to carry white text: --blue and --blue-dim are tuned
+     to be read AS colour on the page ground, and neither clears AA under
+     white. Water Care's CTA and badges use these. */
+  --blue-solid: #2471a3;
+  --blue-solid-hover: #1f6391;
+  /* Water-hardness scale (soft → very hard). A sequential data ramp, not
+     brand colour — it has to stay legible as text, so the light theme uses
+     darker steps rather than the same hues. */
+  --hard-soft: #2ecc71;
+  --hard-moderate: #f1c40f;
+  --hard-hard: #e67e22;
+  --hard-vhard: #e74c3c;
 }
 :root[data-theme="light"] {
   --bg: #eef0f3;
@@ -698,4 +710,12 @@ button, input, select, textarea { font-family: inherit; }
   --shadow: 0 2px 20px rgba(23,26,31,0.10);
   --on-accent: #fff;
   --shadow-sm: 0 1px 5px rgba(23,26,31,0.22);
+  --blue-solid: #1c76c9;
+  --blue-solid-hover: #135697;
+  /* Darkened so the scale still reads as text on a light card; the dark
+     theme's #2ecc71 lands at 2.2:1 there. */
+  --hard-soft: #1d8348;
+  --hard-moderate: #8a6d0b;
+  --hard-hard: #a8500c;
+  --hard-vhard: #c0392b;
 }
