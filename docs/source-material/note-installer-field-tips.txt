@@ -10,6 +10,14 @@ the difference is called out below.
 Published in the portal as the "Installer Field Notes" section of
 enclosure-guide.html.
 
+DECISION (Stefan, Aug 2026): the cutout recommendation below was adopted as
+the portal's own figure, not just as a tip. MODELS in app.js and builder.js
+now carry nominal + 3/8" widths, so the Enclosure Guide, its Quick Reference
+table and the Fireplace Builder all report 1/8" wider than the 2026 spec
+guides in this folder. That divergence from the published + 1/4" is
+intentional; the guide shows the published minimum alongside its own number
+so a spec-sheet reader can see why the two differ.
+
 
 FRAMING THE CUTOUT
 

@@ -335,7 +335,7 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'Inserts come in <strong>20\u2033, 40\u2033 and 60\u2033</strong> widths (the Lite adds a 16\u2033 Mini). All are about 12\u2033 deep and 11\u215c\u2033 tall, designed for a flush, drop-in install.' },
-            { t: 'text', html: 'Cutout dimensions are critical \u2014 the insert hangs from its flanges, so the opening must be exact (e.g. a 40\u2033 unit needs a 40\u00bc\u2033 \u00d7 12\u00bc\u2033 opening with 12\u201314\u2033 of depth below, depending on model). Our Enclosure Guide calculates the exact cutout for your model and size:' },
+            { t: 'text', html: 'Cutout dimensions are critical \u2014 the insert hangs from its flanges, so the opening has to be right (e.g. a 40\u2033 unit needs a 40\u215c\u2033 \u00d7 12\u00bc\u2033 opening with 12\u201314\u2033 of depth below, depending on model). That width is nominal + \u215c\u2033 \u2014 \u215b\u2033 over the spec-sheet minimum, which our install crews recommend so the insert seats without being forced. Our Enclosure Guide calculates it for your exact model and size:' },
             { t: 'links', items: [{ label: '\ud83d\udcd0 Enclosure dimension calculator', href: pURL('enclosure-guide.html') }] },
             { t: 'chips', items: [{ label: 'Can I make a longer flame?', send: 'Can I combine multiple units?' }, { label: 'Installation basics', send: 'How is it installed?' }] }
           ]
@@ -403,7 +403,7 @@
               '<strong>Seal wall cavities</strong> \u2014 open cavities cause downdrafts that flatten the flame.',
               '<strong>Side clearance</strong> \u2014 keep 6\u2033 from side walls to avoid light reflecting on them.'
             ]},
-            { t: 'text', html: 'One tip from our senior install crews: cut the <strong>width</strong> at nominal + \u215c\u2033 rather than the published + \u00bc\u2033 \u2014 the extra \u215b\u2033 lets the insert seat without being forced and keeps air moving around the internals. Depth and height stay exactly as published; the insert hangs from \u00bd\u2033 flanges, so this is a small deliberate margin, not room to open the cutout up further.' },
+            { t: 'text', html: 'On the <strong>width</strong>: cut the opening at nominal + \u215c\u2033 \u2014 \u215b\u2033 over the + \u00bc\u2033 minimum in the spec sheets. Our senior install crews recommend it so the insert seats without being forced and air keeps moving around the internals, and it\u2019s what the Enclosure Guide now calculates. Depth and height are unchanged, and the margin stops there \u2014 the insert hangs from \u00bd\u2033 flanges, so cutting wider eats into what it rests on.' },
             { t: 'text', html: 'The Enclosure Guide calculates all of this for your exact model and size \u2014 and you can email drawings to <a href="mailto:' + SALES_EMAIL + '">' + SALES_EMAIL + '</a> for a free design review.' },
             { t: 'links', items: [{ label: '\ud83d\udcd0 Open the Enclosure Guide', href: pURL('enclosure-guide.html') }, { label: '\ud83d\udd28 Installer field notes (framing & sealing)', href: pURL('enclosure-guide.html#field-notes') }] },
             { t: 'chips', items: [{ label: 'Downdrafts & sealing', send: 'How do I stop downdrafts in the enclosure?' }] }

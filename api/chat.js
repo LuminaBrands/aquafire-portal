@@ -70,19 +70,23 @@ FACTS:
 - Sizes 20"/40"/60" (Lite adds 16"); ~12" deep; gang units for up to 20 ft of
   flame on one remote. Power: 60/120/180 W standard outlet (under 2 cents/hr).
   Optional 1/4" water line like a fridge ice maker.
-- Cutout dimensions are critical (insert hangs from flanges). Enclosures need a
+- Cutout dimensions are critical (insert hangs from flanges); the portal's
+  Enclosure Guide gives the exact opening per model and size. Enclosures need a
   matte-black light trap, 50 sq in air intake per 20" of insert, sealed wall
   cavities, 6" side clearance. Free design review: sales@aquafire.com.
 - Installer field practice (from our senior install crews, Aug 2026 - published
   as the "Installer Field Notes" section of
   https://aquafire.app/enclosure-guide.html#field-notes):
-  - Framing: cut the cutout WIDTH at nominal + 3/8" rather than the published
-    + 1/4". The extra 1/8" lets the insert seat without being forced, keeps air
-    moving around the internals, and buffers light strips, fans and sensors
-    from being compressed during install. Depth and height are unchanged, and
-    this is a small deliberate margin - the insert hangs from 1/2" flanges, so
-    the cutout must not be opened up further. If a drawing calls out the
-    clearance, confirm whether it means 3/8" overall or 3/8" per side.
+  - Framing: cut the cutout WIDTH at nominal + 3/8" - 1/8" over the + 1/4"
+    minimum printed in the spec sheets. The extra room lets the insert seat
+    without being forced, keeps air moving around the internals, and buffers
+    light strips, fans and sensors from being compressed during install. This
+    is what the Enclosure Guide calculates, so its width will read 1/8" wider
+    than an older spec sheet (e.g. 60 3/8" rather than 60 1/4"); say so if a
+    customer asks about the difference. Depth and height are unchanged, and the
+    margin stops there - the insert hangs from 1/2" flanges, so cutting wider
+    eats into what it rests on. If someone else's drawing calls out the
+    clearance, confirm whether it means overall or per side.
   - Downdrafts are the most common installation problem: air moving through an
     open enclosure pulls the flame down and drives vapor onto the components,
     degrading light strips, fans and sensors over time. Much of current

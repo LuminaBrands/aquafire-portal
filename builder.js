@@ -4,6 +4,8 @@
    ────────────────────────────────────────────────────────── */
 
 // ── Model Data (mirrors app.js MODELS) ──
+// Cutout widths are nominal + 3/8", the install-crew recommendation — see the
+// note above MODELS in app.js. Keep the two tables in step.
 const MODELS = {
   original: {
     name: 'Aquafire Original',
@@ -12,9 +14,9 @@ const MODELS = {
     frontAngle: 58, backAngle: 68,
     lightOffset: 5.3, lightOffsetBack: 4.6, lightWidth: 3,
     sizes: {
-      20: { w: 20.25, d: 12.25, h: 12 },
-      40: { w: 40.25, d: 12.25, h: 12 },
-      60: { w: 60.25, d: 12.25, h: 12 },
+      20: { w: 20.375, d: 12.25, h: 12 },
+      40: { w: 40.375, d: 12.25, h: 12 },
+      60: { w: 60.375, d: 12.25, h: 12 },
     },
   },
   pro: {
@@ -24,9 +26,9 @@ const MODELS = {
     frontAngle: 53, backAngle: 68,
     lightOffset: 5.3, lightOffsetBack: 4.6, lightWidth: 3,
     sizes: {
-      20: { w: 20.25, d: 12.25, h: 14 },
-      40: { w: 40.25, d: 12.25, h: 14 },
-      60: { w: 60.25, d: 12.25, h: 14 },
+      20: { w: 20.375, d: 12.25, h: 14 },
+      40: { w: 40.375, d: 12.25, h: 14 },
+      60: { w: 60.375, d: 12.25, h: 14 },
     },
   },
   lite: {
@@ -36,9 +38,9 @@ const MODELS = {
     frontAngle: 58, backAngle: 68,
     lightOffset: 4.0, lightOffsetBack: 3.75, lightWidth: 3,
     sizes: {
-      20: { w: 20.25, d: 9.625, h: 11 },
-      40: { w: 40.25, d: 9.625, h: 11 },
-      60: { w: 60.25, d: 9.625, h: 11 },
+      20: { w: 20.375, d: 9.625, h: 11 },
+      40: { w: 40.375, d: 9.625, h: 11 },
+      60: { w: 60.375, d: 9.625, h: 11 },
     },
   },
 };
@@ -571,7 +573,7 @@ function drawPreviewDiagram() {
   const minEncHInches = 14;
   const encHInches = Math.max(minEncHInches, dims.h + clearance);
 
-  const scale = 320 / (60.25 + clearance * 2);
+  const scale = 320 / (60.375 + clearance * 2);
   const w = dims.w * scale;
   const d = dims.d * scale;
   const h = dims.h * scale;

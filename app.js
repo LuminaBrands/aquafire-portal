@@ -3,6 +3,12 @@
    ────────────────────────────────────────────────────────── */
 
 // ── Model Data ──
+// Cutout widths are nominal + 3/8" — 1/8" over the published + 1/4" minimum,
+// on the recommendation of our senior install crews (Aug 2026). The extra
+// clearance lets the insert seat without being forced, keeps air moving around
+// the internals, and buffers light strips and fans during install. Depth and
+// height are the published figures. Both this and builder.js carry the same
+// table; move them together. See docs/source-material/note-installer-field-tips.txt
 const MODELS = {
   original: {
     name: 'Aquafire Original',
@@ -12,9 +18,9 @@ const MODELS = {
     lightOffsetBack: 4.6,   // back of insert → back edge of LED opening
     lightWidth: 3,          // depth of LED opening (front-to-back)
     sizes: {
-      20: { w: 20.25, d: 12.25, h: 12 },
-      40: { w: 40.25, d: 12.25, h: 12 },
-      60: { w: 60.25, d: 12.25, h: 12 },
+      20: { w: 20.375, d: 12.25, h: 12 },
+      40: { w: 40.375, d: 12.25, h: 12 },
+      60: { w: 60.375, d: 12.25, h: 12 },
     },
   },
   pro: {
@@ -25,9 +31,9 @@ const MODELS = {
     lightOffsetBack: 4.6,
     lightWidth: 3,
     sizes: {
-      20: { w: 20.25, d: 12.25, h: 14 },
-      40: { w: 40.25, d: 12.25, h: 14 },
-      60: { w: 60.25, d: 12.25, h: 14 },
+      20: { w: 20.375, d: 12.25, h: 14 },
+      40: { w: 40.375, d: 12.25, h: 14 },
+      60: { w: 60.375, d: 12.25, h: 14 },
     },
   },
   lite: {
@@ -38,9 +44,9 @@ const MODELS = {
     lightOffsetBack: 3.75,
     lightWidth: 3,
     sizes: {
-      20: { w: 20.25, d: 9.625, h: 11 },
-      40: { w: 40.25, d: 9.625, h: 11 },
-      60: { w: 60.25, d: 9.625, h: 11 },
+      20: { w: 20.375, d: 9.625, h: 11 },
+      40: { w: 40.375, d: 9.625, h: 11 },
+      60: { w: 60.375, d: 9.625, h: 11 },
     },
   },
 };
@@ -55,7 +61,6 @@ const backSetbackDisp   = document.getElementById('back-setback-display');
 const openingSlider     = document.getElementById('opening-slider');
 const openingDisp       = document.getElementById('opening-display');
 const cutoutW           = document.getElementById('cutout-w');
-const framingW          = document.getElementById('framing-w');
 const publishedW        = document.getElementById('published-w');
 const cutoutD           = document.getElementById('cutout-d');
 const cutoutH           = document.getElementById('cutout-h');
@@ -106,11 +111,10 @@ function update() {
   cutoutD.textContent = frac(dims.d);
   cutoutH.textContent = frac(dims.h);
 
-  // Field practice: crews frame the width at nominal + 3/8" rather than the
-  // published + 1/4" — see the Installer Field Notes section. The published
-  // number stays the headline; this is the extra 1/8" alongside it.
-  if (framingW)   framingW.textContent   = frac(dims.w + 0.125);
-  if (publishedW) publishedW.textContent = frac(dims.w);
+  // The width above already carries the 3/8" install allowance. This is the
+  // published + 1/4" minimum it sits above, so anyone checking the number
+  // against a spec sheet can see why the two differ.
+  if (publishedW) publishedW.textContent = frac(dims.w - 0.125);
 
   setbackDisp.textContent     = setback.toFixed(1) + '"';
   backSetbackDisp.textContent = backSetback.toFixed(1) + '"';
@@ -150,7 +154,7 @@ function drawCutoutDiagram(dims) {
   const encHInches = Math.max(minEncHInches, dims.h + clearance);
 
   // Scale: map inches → SVG px, fit widest model (60.25"+8") into ~420px
-  const scale = 420 / (60.25 + clearance * 2);
+  const scale = 420 / (60.375 + clearance * 2);
   const w = dims.w * scale;
   const d = dims.d * scale;
   const h = dims.h * scale;
