@@ -338,14 +338,6 @@
   <script src="app.js"></script>
   <script src="rewards.js"></script>
   <script>
-    const toggle = document.querySelector('.nav-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    toggle?.addEventListener('click', () => {
-      const open = navLinks?.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(open));
-    });
-  </script>
-  <script>
     // Theme toggle + mobile nav. Shared across every redesigned page.
     (function () {
       var root = document.documentElement;

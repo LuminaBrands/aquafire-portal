@@ -16,98 +16,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+/* The pre-redesign chrome that used to live here — `.container`, `.site-nav`
+   and its burger, `.brand-logo`, a bare `header h1`, `.subtitle` — is gone.
+   This file is loaded by enclosure-guide.html alone, and that page has run on
+   the redesign's `.page` / `.bar` / `.phead` since the rollout; none of those
+   selectors matched anything. The bare `header h1` was the live one: it lost
+   to `.phead h1` on specificity, so it changed nothing and looked like it did.
 
-/* ── Site Nav ── */
-.site-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(18, 20, 23, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-}
-.site-nav .nav-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
-}
-.site-nav .nav-logo img { height: 22px; display: block; }
-.site-nav .nav-links {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  list-style: none;
-}
-.site-nav .nav-links a {
-  display: block;
-  padding: 6px 14px;
-  font-size: 0.83rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-decoration: none;
-  border-radius: 6px;
-  transition: color 0.15s, background 0.15s;
-}
-.site-nav .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.04); }
-.site-nav .nav-links a.active { color: var(--text); background: rgba(255,255,255,0.06); }
-
-.nav-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-}
-.nav-toggle span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--text-muted);
-  border-radius: 2px;
-}
-
-@media (max-width: 700px) {
-  .nav-toggle { display: flex; }
-  .site-nav .nav-links {
-    display: none;
-    position: absolute;
-    top: 56px;
-    left: 0; right: 0;
-    flex-direction: column;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    gap: 2px;
-  }
-  .site-nav .nav-links.open { display: flex; }
-  .site-nav .nav-links a { padding: 10px 14px; font-size: 0.88rem; }
-}
-
-/* ── Header ── */
-.brand-logo {
-  display: block;
-  margin: 0 auto 16px;
-  height: 32px;
-  width: auto;
-  object-fit: contain;
-}
-header h1 {
-  font-size: 2.25rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  color: var(--text);
-  line-height: 1.2;
-}
-.subtitle {
-  color: var(--text-muted);
-  margin-top: 10px;
-  font-size: 1.05rem;
-  font-weight: 400;
-}
+   Everything below is on the redesign tokens (redesign.css). No literal colors
+   — a page that can switch lighting can't carry hard-pinned ones. */
 
 /* ── Header Notice ── */
 .header-notice {
@@ -116,7 +33,7 @@ header h1 {
   gap: 12px;
   margin-top: 16px;
   padding: 14px 18px;
-  background: rgba(232, 168, 56, 0.08);
+  background: var(--amber-glow);
   border: 1px solid var(--border-warm);
   border-left: 3px solid var(--amber);
   border-radius: var(--radius-sm);
@@ -170,9 +87,9 @@ header h1 {
   place-items: center;
   font-weight: 700;
   font-size: 0.93rem;
-  color: #fff;
-  background: #c0392b;
-  box-shadow: 0 0 18px rgba(192,57,43,0.15), 0 0 0 4px rgba(192,57,43,0.08);
+  color: var(--on-accent);
+  background: var(--red);
+  box-shadow: 0 0 18px var(--red-glow), 0 0 0 4px var(--red-glow);
   line-height: 1;
 }
 
@@ -202,7 +119,7 @@ select, input[type="number"] {
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-select:hover, input[type="number"]:hover { border-color: #3e4452; }
+select:hover, input[type="number"]:hover { border-color: var(--border-warm); }
 select:focus, input[type="number"]:focus {
   outline: none;
   border-color: var(--amber-dim);
@@ -342,24 +259,24 @@ input[type="range"] {
   flex: 1;
   -webkit-appearance: none;
   height: 5px;
-  border-radius: 3px;
+  border-radius: 999px;
   background: var(--border);
   outline: none;
   transition: background 0.15s;
 }
-input[type="range"]:hover { background: #3a3e48; }
+input[type="range"]:hover { background: var(--surface-alt); }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px; height: 20px;
   border-radius: 50%;
   background: var(--amber);
   cursor: grab;
-  box-shadow: 0 1px 6px rgba(0,0,0,.4), 0 0 12px var(--amber-glow);
+  box-shadow: var(--shadow-sm), 0 0 12px var(--amber-glow);
   transition: transform 0.12s, box-shadow 0.12s;
-  border: 2px solid rgba(255,255,255,0.12);
+  border: 2px solid var(--border);
 }
 input[type="range"]::-webkit-slider-thumb:hover {
-  box-shadow: 0 1px 6px rgba(0,0,0,.4), 0 0 20px rgba(232,168,56,0.25);
+  box-shadow: var(--shadow-sm), 0 0 20px var(--amber-glow);
 }
 input[type="range"]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.12); }
 input[type="range"]::-moz-range-thumb {
@@ -367,7 +284,7 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 50%;
   background: var(--amber);
   cursor: grab;
-  border: 2px solid rgba(255,255,255,0.12);
+  border: 2px solid var(--border);
 }
 .slider-value {
   min-width: 64px;
@@ -406,13 +323,13 @@ input[type="range"]::-moz-range-thumb {
 .hearth-btn + .hearth-btn { border-left: 1px solid var(--border); }
 .hearth-btn.active {
   background: var(--amber);
-  color: #121417;
+  color: var(--bg);
 }
 
 .result-card--back {
-  border-color: #d45a20;
+  border-color: var(--ember);
 }
-.result-card--back .result-value { color: #d45a20; }
+.result-card--back .result-value { color: var(--ember); }
 
 /* ── Calculator layout ── */
 .calculator-layout {
@@ -429,7 +346,7 @@ input[type="range"]::-moz-range-thumb {
   padding: 22px 24px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--amber-dim);
-  background: linear-gradient(135deg, rgba(232,168,56,0.06) 0%, rgba(212,90,32,0.04) 100%);
+  background: linear-gradient(135deg, var(--amber-glow) 0%, var(--ember-glow) 100%);
   position: relative;
   overflow: hidden;
 }
@@ -497,7 +414,7 @@ th {
   letter-spacing: 0.6px;
 }
 td { color: var(--text); }
-tr:hover td { background: rgba(255,255,255,0.02); }
+tr:hover td { background: var(--surface); }
 
 /* ── Footer ── */
 
@@ -513,18 +430,18 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 .cta-button {
   display: inline-block;
   padding: 14px 40px;
-  background: #c0392b;
-  color: #fff;
+  background: var(--red);
+  color: var(--on-accent);
   font-size: 1.05rem;
   font-weight: 600;
   border-radius: var(--radius-sm);
   text-decoration: none;
   transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 12px rgba(192,57,43,0.25);
+  box-shadow: 0 2px 12px var(--red-glow);
 }
 .cta-button:hover {
-  background: #a93226;
-  box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+  background: var(--red-dark);
+  box-shadow: 0 4px 20px var(--red-glow);
 }
 .cta-link {
   display: block;
