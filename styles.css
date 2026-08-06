@@ -537,8 +537,26 @@ tr:hover td { background: var(--surface); }
 
 /* ── Responsive ── */
 @media (max-width: 800px) {
-  .calculator-layout { grid-template-columns: 1fr; }
-  .controls-panel { position: static; }
+  /* Light-trap calculator, phone order: hearth toggle and sliders first,
+     then the diagram directly under your thumb, then the result cards.
+     The two wrappers give up their boxes (display: contents) so their
+     children can interleave in one column; the svg carries the panel
+     chrome itself. The --ld-* tokens still inherit — display: contents
+     removes the box, not the element. */
+  .calculator-layout { display: flex; flex-direction: column; }
+  .controls-panel, .diagram-panel { display: contents; }
+  #light-diagram {
+    order: 1;
+    margin-top: 4px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .result-card { order: 2; margin-top: 12px; padding: 14px 18px; }
+  .formula-note { order: 3; margin-top: 12px; }
+  /* Tighter control stack: the explainer lines go, the labels carry it. */
+  .controls-panel .hint { display: none; }
+  .controls-panel > .form-group { margin-bottom: 12px; }
   .cutout-layout { grid-template-columns: 1fr; }
   .dimensions-display { flex-direction: row; flex-wrap: wrap; gap: 10px; }
   .dim-box { flex: 1; min-width: 100px; }
