@@ -678,8 +678,9 @@ function drawLightDiagram() {
       s += `<line class="ld-leader" stroke-dasharray="3,3" x1="${extFromX}" y1="${yB}" x2="${x + 5}" y2="${yB}"/>`;
     }
     const my = r((yT + yB) / 2);
+    const lx = r(x + size + 5);  // label rides the outside of the line
     s += `<text class="${cls}-ink" font-size="${size}" font-weight="700" letter-spacing="0.5" text-anchor="middle"
-      x="${x - 6}" y="${my}" transform="rotate(-90 ${x - 6} ${my})">${label}</text>`;
+      x="${lx}" y="${my}" transform="rotate(-90 ${lx} ${my})">${label}</text>`;
     return s;
   }
 
@@ -729,9 +730,8 @@ function drawLightDiagram() {
   S.push(`<path class="ld-edge" d="M ${px(baseL)} ${py(surf)} V ${py(0)} H ${px(baseR)} V ${py(surf)}"/>`);
   // Installation surface — the emphasized top edge the insert hangs from.
   S.push(`<line class="ld-surface" stroke-width="1.6" x1="${px(baseL)}" y1="${py(surf)}" x2="${px(baseR)}" y2="${py(surf)}"/>`);
-  // Toe-kick airflow.
-  S.push(`<line class="ld-air" stroke-width="3" stroke-linecap="round" opacity="0.9"
-    x1="${px(baseL) + 3}" y1="${py(0) + 4}" x2="${px(baseR) - 3}" y2="${py(0) + 4}"/>`);
+  // (The toe-kick airflow callout names the base's bottom edge directly —
+  // an accent line under it was tried and cut in design review.)
 
   // ── Insert (hangs from the installation surface; cord space below) ──
   const iX = px(insBack), iW = r(dims.d * ppi), iY = py(surf), iH = r(dims.h * ppi);
@@ -834,6 +834,13 @@ function drawLightDiagram() {
   S.push(`<path class="ld-edge" d="M ${px(slabR)} ${py(breakY)} V ${py(openTop)}${isDouble ? ` M ${px(slabL)} ${py(breakY)} V ${py(openTop)}` : ''}"/>`);
   S.push(zigzag(px(isDouble ? slabL : -partT), px(slabR), py(breakY)));
 
+  // The opening plane — a faint dotted line from the trap's inner corner
+  // down to the installation surface (both faces in double mode).
+  const openPlane = xIn => `<line class="ld-muted-line" stroke-width="1" stroke-dasharray="2,4" opacity="0.65"
+    x1="${px(xIn)}" y1="${py(openTop)}" x2="${px(xIn)}" y2="${py(surf)}"/>`;
+  S.push(openPlane(plane));
+  if (isDouble) S.push(openPlane(0));
+
   // ── Labels inside the recess ──
   S.push(`<text class="ld-ink" font-size="10" font-weight="700" letter-spacing="1.5" text-anchor="middle"
     x="${px(plane / 2)}" y="${py(trapTop) + 14}">RECESSED LIGHT TRAP</text>`);
@@ -912,7 +919,7 @@ function drawLightDiagram() {
     // Matte finish points at the recess ceiling; the light trap at the
     // band's inner bottom corner, where the max line lands.
     { lines: ['NON-REFLECTIVE,', 'MATTE FINISH'], tx: px(plane * 0.68), ty: py(trapTop) },
-    { lines: ['LIGHT TRAP'],                      tx: px(plane),        ty: py(openTop), ly0: py(openTop) + 8 },
+    { lines: ['LIGHT TRAP'],                      tx: px(plane),        ty: py(openTop), ly0: py(openTop) + 3 },
     { lines: ['INSTALLATION SURFACE'],            tx: px(baseR) - 6,    ty: py(surf) },
     { lines: ['TOE KICK AIR FLOW', 'IF TOP VENTS COVERED'], tx: px(baseR) - 10, ty: py(0) + 4 },
   ];

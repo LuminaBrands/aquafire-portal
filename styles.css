@@ -466,7 +466,6 @@ input[type="range"]::-moz-range-thumb {
 .ld-frost-line { stroke: var(--frost); }
 .ld-frost-ink { fill: var(--frost-t); }
 .ld-frost-fill { fill: var(--frost); }
-.ld-air { stroke: var(--chart); }
 
 /* ── Formula note ── */
 .formula-note {
