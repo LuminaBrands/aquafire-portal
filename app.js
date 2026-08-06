@@ -722,16 +722,19 @@ function drawLightDiagram() {
       x="${wx}" y="${dly}" transform="rotate(-90 ${wx} ${dly})">POTENTIAL DOWNDRAFTS</text>`);
   }
 
-  // ── Hearth base — with a toe-kick cutout at each open face, the airflow
-  // path in when the top vents are covered ──
-  const nD = 1.6, nH = 2;  // toe-kick notch depth and height
-  let baseD = `M ${px(baseL)} ${py(surf)}`;
-  baseD += isDouble
-    ? ` L ${px(baseL)} ${py(nH)} L ${px(baseL + nD)} ${py(nH)} L ${px(baseL + nD)} ${py(0)}`
-    : ` L ${px(baseL)} ${py(0)}`;
-  baseD += ` L ${px(baseR - nD)} ${py(0)} L ${px(baseR - nD)} ${py(nH)} L ${px(baseR)} ${py(nH)} L ${px(baseR)} ${py(surf)}`;
-  S.push(`<path class="ld-wall" d="${baseD} Z"/>`);
-  S.push(`<path class="ld-edge" d="${baseD}"/>`);
+  // ── Hearth base ──
+  S.push(`<rect class="ld-wall" x="${px(baseL)}" y="${py(surf)}" width="${r((baseR - baseL) * ppi)}" height="${r(surf * ppi)}"/>`);
+  S.push(`<path class="ld-edge" d="M ${px(baseL)} ${py(surf)} V ${py(0)} H ${px(baseR)} V ${py(surf)}"/>`);
+  // Toe-kick vent — a hole through the face at the floor, drawn as a
+  // hidden-line dashed cutout (each open face; both in double mode).
+  const nD = 1.6, nH = 2;  // toe-kick hole depth and height
+  const kick = (faceIn, dir) =>
+    `<path class="ld-edge" stroke-dasharray="3,3" d="M ${px(faceIn)} ${py(nH)} H ${px(faceIn - dir * nD)} V ${py(0)}"/>`;
+  S.push(kick(baseR, 1));
+  if (isDouble) S.push(kick(baseL, -1));
+  // Room floor, running on forward past the enclosure.
+  const floorExt = 5.5;
+  S.push(`<line class="ld-edge" stroke-width="1.3" x1="${px(isDouble ? baseL - floorExt : -partT)}" y1="${py(0)}" x2="${px(baseR + floorExt)}" y2="${py(0)}"/>`);
   // Installation surface — the emphasized top edge the insert hangs from.
   S.push(`<line class="ld-surface" stroke-width="1.6" x1="${px(baseL)}" y1="${py(surf)}" x2="${px(baseR)}" y2="${py(surf)}"/>`);
   // (The toe-kick airflow callout names the base's bottom edge directly —
@@ -837,6 +840,12 @@ function drawLightDiagram() {
     x1="${px(xIn)}" y1="${py(openTop)}" x2="${px(xIn)}" y2="${py(surf)}"/>`;
   S.push(openPlane(plane));
   if (isDouble) S.push(openPlane(0));
+  // …and the wall's hidden inner face carrying on up through the solid
+  // chase, hidden-line dashed.
+  const hiddenFace = xIn => `<line class="ld-edge" stroke-dasharray="3,3"
+    x1="${px(xIn)}" y1="${py(breakY)}" x2="${px(xIn)}" y2="${py(trapTop)}"/>`;
+  S.push(hiddenFace(plane));
+  if (isDouble) S.push(hiddenFace(0));
 
   // ── Labels inside the recess ──
   S.push(`<text class="ld-ink" font-size="10" font-weight="700" letter-spacing="1.5" text-anchor="middle"
