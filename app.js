@@ -658,9 +658,11 @@ function drawLightDiagram() {
 
   // ── Helpers ──
   function zigzag(xa, xb, y) {
-    // Architectural break symbol capping a wall that continues upward.
-    const w = xb - xa, m = (xa + xb) / 2;
-    return `<path class="ld-edge" stroke-width="1.1" d="M ${r(xa - 2)} ${y} L ${r(m - w * 0.18)} ${r(y - 4)} L ${r(m + w * 0.18)} ${r(y + 4)} L ${r(xb + 2)} ${y}"/>`;
+    // Architectural break symbol capping a wall that continues upward — a
+    // compact jog at the centre, so it reads the same on a narrow partition
+    // and across the full chase.
+    const m = (xa + xb) / 2, j = Math.min(12, (xb - xa) * 0.25);
+    return `<path class="ld-edge" stroke-width="1.1" d="M ${r(xa - 2)} ${y} L ${r(m - j)} ${y} L ${r(m - j / 2)} ${r(y - 5)} L ${r(m + j / 2)} ${r(y + 5)} L ${r(m + j)} ${y} L ${r(xb + 2)} ${y}"/>`;
   }
 
   function vdim(x, yTopIn, yBotIn, label, cls, size, extFromX) {
@@ -702,23 +704,24 @@ function drawLightDiagram() {
     S.push(`<rect class="ld-wall" x="${pxa}" y="${py(breakY)}" width="${r(partT * ppi)}" height="${r(breakY * ppi)}"/>`);
     S.push(`<rect fill="url(#ld-hatch-wall)" x="${pxa}" y="${py(breakY)}" width="${r(partT * ppi)}" height="${r(breakY * ppi)}"/>`);
     S.push(`<path class="ld-edge" d="M ${pxa} ${py(breakY)} V ${py(0)} M ${pxb} ${py(breakY)} V ${py(0)}"/>`);
-    S.push(zigzag(pxa, pxb, py(breakY)));
     const wy = r((py(surf) + py(breakY)) / 2);
     S.push(`<text class="ld-muted-ink" font-size="8.5" font-weight="600" letter-spacing="1" text-anchor="middle"
       x="${r((pxa + pxb) / 2)}" y="${wy}" transform="rotate(-90 ${r((pxa + pxb) / 2)} ${wy})">EXISTING INTERIOR WALL</text>`);
 
-    // Potential downdrafts — cool air falling along the wall (see the
-    // "Avoiding downdrafts" field note).
-    const ax = pxa - 13;
+    // Potential downdrafts — cool air falling inside the wall cavity (see
+    // the "Avoiding downdrafts" field note). Arrows and label live in the
+    // wall band itself.
+    const wx = r((pxa + pxb) / 2);
+    const arrowTop = py(surf + 6);
     for (let i = 0; i < 2; i++) {
-      const x = ax - i * 13, yTop = py(surf + 7) + i * 10;
-      S.push(`<path class="ld-frost-line" fill="none" stroke-width="1.5" stroke-linecap="round" opacity="0.85"
+      const x = wx + (i === 0 ? -6 : 7), yTop = arrowTop + i * 12;
+      S.push(`<path class="ld-frost-line" fill="none" stroke-width="1.6" stroke-linecap="round"
         d="M ${x} ${yTop} q 5 7 0 14 q -5 7 0 14 q 5 7 0 14"/>`);
-      S.push(`<polygon class="ld-frost-fill" opacity="0.85" points="${x},${r(yTop + 49)} ${x - 3.4},${r(yTop + 41)} ${x + 3.4},${r(yTop + 41)}"/>`);
+      S.push(`<polygon class="ld-frost-fill" points="${x},${r(yTop + 49)} ${x - 3.4},${r(yTop + 41)} ${x + 3.4},${r(yTop + 41)}"/>`);
     }
-    const dlx = ax - 32, dly = r(py(surf * 0.55));
+    const dly = Math.min(r(arrowTop + 137), r(py(0) - 72));
     S.push(`<text class="ld-frost-ink" font-size="8.5" font-weight="600" letter-spacing="1" text-anchor="middle"
-      x="${dlx}" y="${dly}" transform="rotate(-90 ${dlx} ${dly})">POTENTIAL DOWNDRAFTS</text>`);
+      x="${wx}" y="${dly}" transform="rotate(-90 ${wx} ${dly})">POTENTIAL DOWNDRAFTS</text>`);
   }
 
   // ── Hearth base ──
@@ -807,24 +810,29 @@ function drawLightDiagram() {
   if (isFrontOverMax) S.push(escapeWedge(plane, frontHit, Math.tan(fRad), false));
   if (isBackOverMax)  S.push(escapeWedge(0, backHit, Math.tan(bRad), true));
 
-  // ── Chase walls with the recessed light trap ──
-  function chaseWall(x1In, x2In) {
-    // Wall body from the trap bottom up to the break, matte band hatched.
-    let s = `<rect class="ld-wall" x="${px(x1In)}" y="${py(breakY)}" width="${r((x2In - x1In) * ppi)}" height="${r((breakY - openTop) * ppi)}"/>`;
-    s += `<rect fill="url(#ld-hatch)" x="${px(x1In)}" y="${py(trapTop)}" width="${r((x2In - x1In) * ppi)}" height="${r(trapH * ppi)}"/>`;
-    s += `<path class="ld-edge" d="M ${px(x1In)} ${py(breakY)} V ${py(openTop)} H ${px(x2In)} V ${py(breakY)}"/>`;
-    s += `<line class="ld-edge" x1="${px(x1In)}" y1="${py(trapTop)}" x2="${px(x2In)}" y2="${py(trapTop)}"/>`;
-    s += zigzag(px(x1In), px(x2In), py(breakY));
+  // ── Chase above the recess — solid up to the break, like the printed
+  // drawings — with the matte trap band on each supporting leg ──
+  function trapLeg(innerIn, outerIn) {
+    const lo = Math.min(innerIn, outerIn);
+    let s = `<rect class="ld-wall" x="${px(lo)}" y="${py(trapTop)}" width="${r(wallT * ppi)}" height="${r(trapH * ppi)}"/>`;
+    s += `<rect fill="url(#ld-hatch)" x="${px(lo)}" y="${py(trapTop)}" width="${r(wallT * ppi)}" height="${r(trapH * ppi)}"/>`;
+    s += `<path class="ld-edge" d="M ${px(innerIn)} ${py(trapTop)} V ${py(openTop)} H ${px(outerIn)}"/>`;
     return s;
   }
-  S.push(chaseWall(plane, plane + wallT));               // front
-  if (isDouble) S.push(chaseWall(-wallT, 0));            // back mirror
+  const slabL = isDouble ? -wallT : 0, slabR = plane + wallT;
+  S.push(`<rect class="ld-wall" x="${px(slabL)}" y="${py(breakY)}" width="${r((slabR - slabL) * ppi)}" height="${r(chaseAbove * ppi)}"/>`);
+  S.push(trapLeg(plane, plane + wallT));                 // front
+  if (isDouble) S.push(trapLeg(0, -wallT));              // back mirror
   else {
     // Single mode: the partition face inside the recess carries the matte
     // band too — hatch the strip of wall behind the trap zone.
     S.push(`<rect fill="url(#ld-hatch)" x="${px(-wallT)}" y="${py(trapTop)}" width="${r(wallT * ppi)}" height="${r(trapH * ppi)}"/>`);
     S.push(`<path class="ld-edge" d="M ${px(-wallT)} ${py(trapTop)} H ${px(0)} M ${px(-wallT)} ${py(openTop)} H ${px(0)}"/>`);
   }
+  // Recess ceiling, the outer faces up to the break, and one break across.
+  S.push(`<line class="ld-edge" x1="${px(0)}" y1="${py(trapTop)}" x2="${px(plane)}" y2="${py(trapTop)}"/>`);
+  S.push(`<path class="ld-edge" d="M ${px(slabR)} ${py(breakY)} V ${py(openTop)}${isDouble ? ` M ${px(slabL)} ${py(breakY)} V ${py(openTop)}` : ''}"/>`);
+  S.push(zigzag(px(isDouble ? slabL : -partT), px(slabR), py(breakY)));
 
   // ── Labels inside the recess ──
   S.push(`<text class="ld-ink" font-size="10" font-weight="700" letter-spacing="1.5" text-anchor="middle"
@@ -885,11 +893,13 @@ function drawLightDiagram() {
   S.push(sbDim(insFront, plane, frac(setback), 'FRONT SB'));
 
   // Vertical stack outside the front wall: opening (slider), trap band, base height.
-  const vdimX = r(px(plane + wallT) + 17);
+  // The whole stack sits outside the base's front face so nothing reads as
+  // being inside the drawing.
+  const vdimX = r(px(baseR) + 16);
   const openCls = isFrontOverMax || isBackOverMax ? 'ld-danger' : 'ld-amber';
   const openLbl = 'OPENING ' + frac(openingHeight) + (isFrontOverMax || isBackOverMax ? ' — OVER MAX' : '');
   S.push(vdim(vdimX, openTop, surf, openLbl, openCls, 10.5, px(plane + wallT)));
-  S.push(vdim(vdimX, trapTop, openTop, frac(trapH), 'ld-muted', 9));
+  S.push(vdim(vdimX, trapTop, openTop, frac(trapH), 'ld-muted', 9, px(plane + wallT)));
   S.push(vdim(vdimX, surf, 0, frac(surf) + ' MIN', 'ld-muted', 9, px(baseR)));
 
   // ── Ground labels ──
@@ -899,15 +909,17 @@ function drawLightDiagram() {
   // ── Right-rail callouts with leader lines ──
   const railX = Math.max(W - marginR + 18, vdimX + 30);
   const callouts = [
-    { lines: ['NON-REFLECTIVE,', 'MATTE FINISH'], tx: px(plane + wallT / 2), ty: py(trapTop - 1) },
-    { lines: ['LIGHT TRAP'],                      tx: vdimX + 4,             ty: py((openTop + trapTop) / 2) },
-    { lines: ['INSTALLATION SURFACE'],            tx: px(baseR) - 6,         ty: py(surf) },
+    // Matte finish points at the recess ceiling; the light trap at the
+    // band's inner bottom corner, where the max line lands.
+    { lines: ['NON-REFLECTIVE,', 'MATTE FINISH'], tx: px(plane * 0.68), ty: py(trapTop) },
+    { lines: ['LIGHT TRAP'],                      tx: px(plane),        ty: py(openTop), ly0: py(openTop) + 8 },
+    { lines: ['INSTALLATION SURFACE'],            tx: px(baseR) - 6,    ty: py(surf) },
     { lines: ['TOE KICK AIR FLOW', 'IF TOP VENTS COVERED'], tx: px(baseR) - 10, ty: py(0) + 4 },
   ];
   // Nudge overlapping labels apart, top to bottom.
   let lastBottom = -Infinity;
   for (const c of callouts) {
-    c.ly = Math.max(c.ty, lastBottom + 14);
+    c.ly = Math.max(c.ly0 || c.ty, lastBottom + 14);
     lastBottom = c.ly + (c.lines.length - 1) * 11;
   }
   for (const c of callouts) {
