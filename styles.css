@@ -249,18 +249,6 @@ select {
   transition: transform 0.2s, color 0.15s;
 }
 .faq-item[open] > summary > .faq-caret { transform: rotate(180deg); color: var(--amber); }
-/* Audience marker for the one panel written for installers, not owners */
-.faq-note {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.9px;
-  color: var(--text-muted);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 2px 9px;
-  white-space: nowrap;
-}
 .faq-body {
   padding: 0 2px 20px;
   font-size: 0.85rem;
