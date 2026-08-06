@@ -34,8 +34,9 @@ body {
   margin-top: 16px;
   padding: 14px 18px;
   background: var(--amber-glow);
-  border: 1px solid var(--border-warm);
-  border-left: 3px solid var(--amber);
+  /* Same notice treatment as .gang-note below: amber border and tint all
+     round, no accent bar. The amber icon carries the warning. */
+  border: 1px solid var(--amber-dim);
   border-radius: var(--radius-sm);
   margin: 28px 0;
 }
