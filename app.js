@@ -1517,6 +1517,18 @@ hearthBtns.forEach(btn => {
   }
 })();
 
+// ── Deep-link a best-practice panel (#faq-downdraft, …) ──
+// Support emails and chat answers can point straight at one topic; a linked
+// panel has to be open when you land on it, and <details> won't do that alone.
+(function () {
+  function openFromHash() {
+    var el = document.querySelector(window.location.hash || '#_');
+    if (el && el.tagName === 'DETAILS') el.open = true;
+  }
+  window.addEventListener('hashchange', openFromHash);
+  openFromHash();
+})();
+
 // ── Init ──
 buildTable();
 resetOpeningToMax();

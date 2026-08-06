@@ -406,7 +406,7 @@
             ]},
             { t: 'text', html: 'On the <strong>width</strong>: leave <strong>\u215c\u2033 of clearance on each side</strong> \u2014 \u00be\u2033 over nominal in total, against the + \u00bc\u2033 minimum in the spec sheets. Our senior install crews recommend it so the insert seats without being forced and air keeps moving around the internals, and it\u2019s what the Enclosure Guide now calculates. Depth and height are unchanged. Watch the convention on someone else\u2019s drawing: \u215c\u2033 here is per side, not overall.' },
             { t: 'text', html: 'The Enclosure Guide calculates all of this for your exact model and size \u2014 and you can email drawings to <a href="mailto:' + SALES_EMAIL + '">' + SALES_EMAIL + '</a> for a free design review.' },
-            { t: 'links', items: [{ label: '\ud83d\udcd0 Open the Enclosure Guide', href: pURL('enclosure-guide.html') }, { label: '\ud83d\udd28 Installer field notes (framing & sealing)', href: pURL('enclosure-guide.html#field-notes') }] },
+            { t: 'links', items: [{ label: '\ud83d\udcd0 Open the Enclosure Guide', href: pURL('enclosure-guide.html') }, { label: '\ud83d\udd28 Enclosure best practices', href: pURL('enclosure-guide.html#field-notes') }] },
             { t: 'chips', items: [{ label: 'Downdrafts & sealing', send: 'How do I stop downdrafts in the enclosure?' }] }
           ]
         };
@@ -431,7 +431,7 @@
               '<strong>Keep the top clear</strong> \u2014 the unit still needs 50\u00a0sq\u00a0in of air intake per 20\u2033 of length, through the top lid or a toe kick if the lid is covered. Keep heavy items off the top.'
             ]},
             { t: 'text', html: 'Do it during the initial install while the enclosure is still open \u2014 sealing after symptoms appear means pulling an installed unit back out of a finished wall.' },
-            { t: 'links', items: [{ label: '\ud83d\udd28 Installer field notes (framing & sealing)', href: pURL('enclosure-guide.html#field-notes') }] },
+            { t: 'links', items: [{ label: '\ud83d\udd28 Enclosure best practices', href: pURL('enclosure-guide.html#field-notes') }] },
             { t: 'chips', items: [CHIP_HUMAN] }
           ]
         };

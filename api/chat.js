@@ -82,9 +82,11 @@ FACTS:
   Enclosure Guide gives the exact opening per model and size. Enclosures need a
   matte-black light trap, 50 sq in air intake per 20" of insert, sealed wall
   cavities, 6" side clearance. Free design review: sales@aquafire.com.
-- Installer field practice (from our senior install crews, Aug 2026 - published
-  as the "Installer Field Notes" section of
-  https://aquafire.app/enclosure-guide.html#field-notes):
+- Installer field practice (from our senior install crews, Aug 2026 - the
+  customer-facing version is the "Best Practices for an Ideal Enclosure" FAQ at
+  https://aquafire.app/enclosure-guide.html#field-notes, whose panels can be
+  linked directly: #faq-framing, #faq-downdraft, #faq-venting, #faq-light-trap,
+  #faq-ganging, #faq-sealing, #faq-design-review):
   - Framing: leave 3/8" of clearance on EACH SIDE of the insert - nominal
     + 3/4" overall - against the + 1/4" minimum printed in the spec sheets. The
     room lets the insert seat without being forced, keeps air moving around the
