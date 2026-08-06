@@ -415,7 +415,6 @@ input[type="range"]::-moz-range-thumb {
   overflow: hidden;
   --ld-struct: rgba(255, 255, 255, 0.09);
   --ld-struct-line: rgba(255, 255, 255, 0.32);
-  --ld-hatch: rgba(255, 255, 255, 0.30);
   --ld-hatch-soft: rgba(255, 255, 255, 0.14);
   --ld-insert: #262a31;
   --ld-insert-ink: #d3d6dc;
@@ -424,7 +423,6 @@ input[type="range"]::-moz-range-thumb {
 :root[data-theme="light"] .diagram-panel {
   --ld-struct: #dfe2e7;
   --ld-struct-line: rgba(23, 26, 31, 0.38);
-  --ld-hatch: rgba(23, 26, 31, 0.34);
   --ld-hatch-soft: rgba(23, 26, 31, 0.16);
   --ld-insert: #2b2f36;
   --ld-cone: rgba(214, 138, 54, 0.20);
@@ -436,7 +434,6 @@ input[type="range"]::-moz-range-thumb {
 .ld-wall { fill: var(--ld-struct); }
 .ld-edge { stroke: var(--ld-struct-line); fill: none; stroke-width: 1; }
 .ld-surface { stroke: var(--text); stroke-opacity: 0.55; }
-.ld-hatchline { stroke: var(--ld-hatch); stroke-width: 1; }
 .ld-hatchline-soft { stroke: var(--ld-hatch-soft); stroke-width: 1; }
 .ld-insert { fill: var(--ld-insert); stroke: var(--ld-insert-ink); stroke-opacity: 0.35; }
 .ld-insert-ink { fill: var(--ld-insert-ink); }

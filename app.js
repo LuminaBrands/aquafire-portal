@@ -641,9 +641,6 @@ function drawLightDiagram() {
 
   // ── defs: hatches (colour comes from CSS classes), flame glow ──
   S.push(`<defs>
-    <pattern id="ld-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <line class="ld-hatchline" x1="0" y1="0" x2="0" y2="5"/>
-    </pattern>
     <pattern id="ld-hatch-wall" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
       <line class="ld-hatchline-soft" x1="0" y1="0" x2="0" y2="9"/>
     </pattern>
@@ -725,9 +722,16 @@ function drawLightDiagram() {
       x="${wx}" y="${dly}" transform="rotate(-90 ${wx} ${dly})">POTENTIAL DOWNDRAFTS</text>`);
   }
 
-  // ── Hearth base ──
-  S.push(`<rect class="ld-wall" x="${px(baseL)}" y="${py(surf)}" width="${r((baseR - baseL) * ppi)}" height="${r(surf * ppi)}"/>`);
-  S.push(`<path class="ld-edge" d="M ${px(baseL)} ${py(surf)} V ${py(0)} H ${px(baseR)} V ${py(surf)}"/>`);
+  // ── Hearth base — with a toe-kick cutout at each open face, the airflow
+  // path in when the top vents are covered ──
+  const nD = 1.6, nH = 2;  // toe-kick notch depth and height
+  let baseD = `M ${px(baseL)} ${py(surf)}`;
+  baseD += isDouble
+    ? ` L ${px(baseL)} ${py(nH)} L ${px(baseL + nD)} ${py(nH)} L ${px(baseL + nD)} ${py(0)}`
+    : ` L ${px(baseL)} ${py(0)}`;
+  baseD += ` L ${px(baseR - nD)} ${py(0)} L ${px(baseR - nD)} ${py(nH)} L ${px(baseR)} ${py(nH)} L ${px(baseR)} ${py(surf)}`;
+  S.push(`<path class="ld-wall" d="${baseD} Z"/>`);
+  S.push(`<path class="ld-edge" d="${baseD}"/>`);
   // Installation surface — the emphasized top edge the insert hangs from.
   S.push(`<line class="ld-surface" stroke-width="1.6" x1="${px(baseL)}" y1="${py(surf)}" x2="${px(baseR)}" y2="${py(surf)}"/>`);
   // (The toe-kick airflow callout names the base's bottom edge directly —
@@ -815,7 +819,6 @@ function drawLightDiagram() {
   function trapLeg(innerIn, outerIn) {
     const lo = Math.min(innerIn, outerIn);
     let s = `<rect class="ld-wall" x="${px(lo)}" y="${py(trapTop)}" width="${r(wallT * ppi)}" height="${r(trapH * ppi)}"/>`;
-    s += `<rect fill="url(#ld-hatch)" x="${px(lo)}" y="${py(trapTop)}" width="${r(wallT * ppi)}" height="${r(trapH * ppi)}"/>`;
     s += `<path class="ld-edge" d="M ${px(innerIn)} ${py(trapTop)} V ${py(openTop)} H ${px(outerIn)}"/>`;
     return s;
   }
@@ -823,12 +826,6 @@ function drawLightDiagram() {
   S.push(`<rect class="ld-wall" x="${px(slabL)}" y="${py(breakY)}" width="${r((slabR - slabL) * ppi)}" height="${r(chaseAbove * ppi)}"/>`);
   S.push(trapLeg(plane, plane + wallT));                 // front
   if (isDouble) S.push(trapLeg(0, -wallT));              // back mirror
-  else {
-    // Single mode: the partition face inside the recess carries the matte
-    // band too — hatch the strip of wall behind the trap zone.
-    S.push(`<rect fill="url(#ld-hatch)" x="${px(-wallT)}" y="${py(trapTop)}" width="${r(wallT * ppi)}" height="${r(trapH * ppi)}"/>`);
-    S.push(`<path class="ld-edge" d="M ${px(-wallT)} ${py(trapTop)} H ${px(0)} M ${px(-wallT)} ${py(openTop)} H ${px(0)}"/>`);
-  }
   // Recess ceiling, the outer faces up to the break, and one break across.
   S.push(`<line class="ld-edge" x1="${px(0)}" y1="${py(trapTop)}" x2="${px(plane)}" y2="${py(trapTop)}"/>`);
   S.push(`<path class="ld-edge" d="M ${px(slabR)} ${py(breakY)} V ${py(openTop)}${isDouble ? ` M ${px(slabL)} ${py(breakY)} V ${py(openTop)}` : ''}"/>`);
@@ -923,7 +920,7 @@ function drawLightDiagram() {
     { lines: ['NON-REFLECTIVE,', 'MATTE FINISH'], tx: px(plane * 0.68), ty: py(trapTop), ly0: Math.max(py(trapTop) - 46, 58) },
     { lines: ['LIGHT TRAP'],                      tx: px(plane),        ty: py(openTop), ly0: py(openTop) + 3 },
     { lines: ['INSTALLATION SURFACE'],            tx: px(baseR) - 6,    ty: py(surf) },
-    { lines: ['TOE KICK AIR FLOW', 'IF TOP VENTS COVERED'], tx: px(baseR) - 10, ty: py(0) + 4 },
+    { lines: ['TOE KICK AIR FLOW', 'IF TOP VENTS COVERED'], tx: r(px(baseR - nD * 0.35)), ty: py(nH * 0.45) },
   ];
   // Nudge overlapping labels apart, top to bottom.
   let lastBottom = -Infinity;
