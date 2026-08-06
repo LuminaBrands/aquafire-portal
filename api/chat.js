@@ -72,27 +72,30 @@ FACTS:
   Optional 1/4" water line like a fridge ice maker.
 - Ganged runs: the Pro and Original gang seamlessly, the Lite cannot. The
   common runs are 80" (two 40"), 100" (60" + 40") and 120" (two 60"). A ganged
-  run drops into ONE continuous cutout, not two: 80 3/8", 100 3/8" or 120 3/8"
+  run drops into ONE continuous cutout, not two: 80 3/4", 100 3/4" or 120 3/4"
   wide, with the same depth and height as a single insert of that model. The
-  3/8" allowance is for the whole opening, not per insert. The Enclosure Guide
-  offers these as sizes and draws both inserts in the opening.
+  3/8" clearance goes on the two OUTSIDE edges only - the units meet flush, so
+  nothing is added between them, and a ganged opening is the same 3/4" over
+  nominal as a single. The Enclosure Guide offers these as sizes and draws both
+  inserts in the opening.
 - Cutout dimensions are critical (insert hangs from flanges); the portal's
   Enclosure Guide gives the exact opening per model and size. Enclosures need a
   matte-black light trap, 50 sq in air intake per 20" of insert, sealed wall
   cavities, 6" side clearance. Free design review: sales@aquafire.com.
-- Installer field practice (from our senior install crews, Aug 2026 - published
-  as the "Installer Field Notes" section of
-  https://aquafire.app/enclosure-guide.html#field-notes):
-  - Framing: cut the cutout WIDTH at nominal + 3/8" - 1/8" over the + 1/4"
-    minimum printed in the spec sheets. The extra room lets the insert seat
-    without being forced, keeps air moving around the internals, and buffers
-    light strips, fans and sensors from being compressed during install. This
-    is what the Enclosure Guide calculates, so its width will read 1/8" wider
-    than an older spec sheet (e.g. 60 3/8" rather than 60 1/4"); say so if a
-    customer asks about the difference. Depth and height are unchanged, and the
-    margin stops there - the insert hangs from 1/2" flanges, so cutting wider
-    eats into what it rests on. If someone else's drawing calls out the
-    clearance, confirm whether it means overall or per side.
+- Installer field practice (from our senior install crews, Aug 2026 - the
+  customer-facing version is the "Best Practices for an Ideal Enclosure" FAQ at
+  https://aquafire.app/enclosure-guide.html#field-notes, whose panels can be
+  linked directly: #faq-framing, #faq-downdraft, #faq-venting, #faq-light-trap,
+  #faq-ganging, #faq-sealing, #faq-design-review):
+  - Framing: leave 3/8" of clearance on EACH SIDE of the insert - nominal
+    + 3/4" overall - against the + 1/4" minimum printed in the spec sheets. The
+    room lets the insert seat without being forced, keeps air moving around the
+    internals, and buffers light strips, fans and sensors from being compressed
+    during install. This is what the Enclosure Guide calculates, so its width
+    reads 1/2" wider than an older spec sheet (e.g. 60 3/4" rather than
+    60 1/4"); say so if a customer asks about the difference. Depth and height
+    are unchanged. The 3/8" is PER SIDE, not overall - if someone quotes a 3/8"
+    total they have half the clearance intended.
   - Downdrafts are the most common installation problem: air moving through an
     open enclosure pulls the flame down and drives vapor onto the components,
     degrading light strips, fans and sensors over time. Much of current
@@ -102,16 +105,22 @@ FACTS:
     enclosure is drywalled and sealed, with no open cavities behind or beneath
     the fireplace.
   - Fallback when the framing is left open, or air movement can be felt: flip
-    the unit to expose the underside and wrap the front and back edges with
-    3"-wide black high-quality tape (Gorilla tape or equivalent). The 3" width
-    matters. Do it during the initial install while the enclosure is open -
-    sealing later means pulling the unit back out of a finished wall.
-  - A DP (downdraft prevention) kit only works if it is sealed against the
-    surrounding structure. In high-rise condos, where the wall assemblies
-    breathe, an unsealed DP kit has caused major installation failures.
-  - Sealing applies to the wall cavity, not the vents: the unit still needs its
-    50 sq in of air intake per 20" of length, via the top lid or a toe kick if
-    the lid is covered, and nothing heavy should sit on top of the unit.
+    the unit to expose the underside and use 3"-wide black high-quality tape
+    (Gorilla tape or equivalent) on ALL the open edges underneath the fireplace
+    AND the air vents along its front and back sides. The 3" width matters. Do
+    it during the initial install while the enclosure is open - sealing later
+    means pulling the unit back out of a finished wall.
+  - NOT for media-topped installs: taping the front and back vents leaves the
+    top vents as the unit's air intake, so do not use the tape method if logs,
+    rocks or other media will cover the top of the fireplace. Frame and seal
+    the enclosure properly there instead, venting through a toe kick.
+  - On an Aquafire Original installed with a Direct Plumb Kit (DP kit), the
+    tape seal only works if it is sealed against the surrounding structure. In
+    high-rise condos, where the wall assemblies breathe, an unsealed DP kit has
+    caused installation issues.
+  - Keep the top clear: the unit still needs its 50 sq in of air intake per 20"
+    of length, via the top lid or a toe kick if the lid is covered, and nothing
+    heavy should sit on top of the unit.
   - Explain sealing to builders and customers as proactive best practice, not a
     repair - it prevents later light-strip and fan replacements.
 - Water: the softer the better — reverse-osmosis water or a whole-house
