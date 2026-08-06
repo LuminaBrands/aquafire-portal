@@ -739,7 +739,6 @@
             { t: 'links', items: [
               { label: '\ud83d\ude80 Quick Start \u2014 pick your model, then its full guide', href: pURL('quick-start.html') },
               { label: '\ud83d\udcd0 Enclosure Guide \u2014 cutout dimensions and light trap', href: pURL('enclosure-guide.html') },
-              { label: '\ud83e\uddf1 Build Yours \u2014 plan a surround from scratch', href: pURL('builder.html') },
               { label: '\ud83d\udca7 Water Care \u2014 hardness by ZIP and cartridge timing', href: pURL('water-care.html') },
               { label: '\ud83e\uddf9 Maintenance \u2014 the cleaning and flush schedule', href: pURL('maintenance.html') },
               { label: '\ud83e\udded Troubleshooter \u2014 guided fixes for your model', href: pURL('troubleshoot.html') },

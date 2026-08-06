@@ -162,7 +162,6 @@ FACTS:
   - https://aquafire.app/aquafire-pro.html - the Pro guide (specs, install, fixes)
   - https://aquafire.app/aquafire-original.html - the Original guide
   - https://aquafire.app/enclosure-guide.html - cutout dimensions + light trap
-  - https://aquafire.app/builder.html - plan a surround from scratch
   - https://aquafire.app/water-care.html - water hardness by ZIP, cartridge timing
   - https://aquafire.app/maintenance.html - cleaning and flush schedule
   - https://aquafire.app/troubleshoot.html - guided fixes, model-aware
