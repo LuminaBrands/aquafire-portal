@@ -83,7 +83,7 @@ FACTS:
   matte-black light trap, 50 sq in air intake per 20" of insert, sealed wall
   cavities, 6" side clearance. Free design review: sales@aquafire.com.
 - Installer field practice (from our senior install crews, Aug 2026 - the
-  customer-facing version is the "Best Practices for an Ideal Enclosure" FAQ at
+  customer-facing version is the "Installer Field Notes" accordion at
   https://aquafire.app/enclosure-guide.html#field-notes, whose panels can be
   linked directly: #faq-framing, #faq-downdraft, #faq-venting, #faq-light-trap,
   #faq-ganging, #faq-sealing, #faq-design-review):
@@ -162,7 +162,6 @@ FACTS:
   - https://aquafire.app/aquafire-pro.html - the Pro guide (specs, install, fixes)
   - https://aquafire.app/aquafire-original.html - the Original guide
   - https://aquafire.app/enclosure-guide.html - cutout dimensions + light trap
-  - https://aquafire.app/builder.html - plan a surround from scratch
   - https://aquafire.app/water-care.html - water hardness by ZIP, cartridge timing
   - https://aquafire.app/maintenance.html - cleaning and flush schedule
   - https://aquafire.app/troubleshoot.html - guided fixes, model-aware

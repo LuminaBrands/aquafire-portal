@@ -1517,10 +1517,27 @@ hearthBtns.forEach(btn => {
   }
 })();
 
-// ── Deep-link a best-practice panel (#faq-downdraft, …) ──
-// Support emails and chat answers can point straight at one topic; a linked
-// panel has to be open when you land on it, and <details> won't do that alone.
+// ── Field-notes accordion ──
+// One panel open at a time. `name` on <details> does that natively; the
+// listener is the fallback for browsers that don't support it yet, and is
+// skipped where they do so the browser keeps ownership of the behaviour.
+//
+// Deep links too: support emails and chat answers point straight at a topic
+// (#faq-downdraft, …), and a linked panel has to be open when you land on it,
+// which <details> won't do on its own.
 (function () {
+  var panels = document.querySelectorAll('.faq-item');
+  if (!panels.length) return;
+
+  if (!('name' in document.createElement('details'))) {
+    panels.forEach(function (panel) {
+      panel.addEventListener('toggle', function () {
+        if (!panel.open) return;
+        panels.forEach(function (other) { if (other !== panel) other.open = false; });
+      });
+    });
+  }
+
   function openFromHash() {
     var el = document.querySelector(window.location.hash || '#_');
     if (el && el.tagName === 'DETAILS') el.open = true;

@@ -14,7 +14,7 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 |------|---------|
 | `index.html` | Landing hub — hero photo + inline Ember chat, rewards status band, three swipeable intent routes (Explore / Set up / Fix), then an "explore by model" fleet row |
 | `aquafire-pro.html` | Comprehensive Pro model guide (specs, wiring, troubleshooting, video guide) — **largest page (~1,400 lines)** |
-| `enclosure-guide.html` | Interactive enclosure dimension calculator with 3D isometric diagram, plus the **Best Practices** FAQ (`#field-notes`) — a `<details>` accordion covering framing, downdrafts, venting, the light trap, ganged runs, and the installer tape-seal method |
+| `enclosure-guide.html` | Interactive enclosure dimension calculator with 3D isometric diagram, plus the **Installer Field Notes** accordion (`#field-notes`) — exclusive `<details>` panels covering framing, downdrafts, venting, the light trap, ganged runs, the tape-seal method and design review |
 | `water-care.html` | Water hardness lookup (ZIP code DB) and softener replacement calculator |
 | `maintenance.html` | Preventative maintenance — the quarterly mist-maker clean and the six-month full system flush, each a persisted step checklist that stamps a completion date, derives the next due date from it, and awards the `mist-maker` / `system-cleaning` rewards |
 | `quick-start.html` | Model selection page linking to individual guides — also the site's "getting started" entry point since the placeholder page was retired |
@@ -22,6 +22,7 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 | `support.html` | Support hub — cards link to the Troubleshooter and the storefront warranty page (which awards the 300-point `register-warranty` reward on click-through); the claims and FAQs cards are still `#` stubs |
 | `troubleshoot.html` | **Interactive Troubleshooter** — model-aware guided decision-tree wizard |
 | `chat-insights.html` | **Internal** chat-log dashboard for the Ember widget (Firebase-gated; not in nav) — transcripts, unanswered questions, 👍/👎 rates |
+| `builder.html` | **Parked** (`builder.css` / `builder.js`) — seven-step "Build Your Fireplace" configurator: model, size, AquafireBox-or-site-built enclosure, setbacks, accessories, then a summary card, with state in the URL hash. Arrived in the 2026-06-01 bulk upload and was never finished: `PRICING` is `$X,XXX` placeholders and `SHOPIFY_URLS` are `#`. Unlinked, `Disallow`ed in `robots.txt` and `noindex`ed in `vercel.json` (Aug 2026) so the placeholder pricing can't be indexed |
 | `beam-demo.html` | **Internal** showcase for the Border Beam effect (`beam.css`/`beam.js`) — live playground, all sizes/variants, usage snippet (noindex; not in nav) |
 
 ### Stylesheets
@@ -53,8 +54,8 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 
 | File | Purpose |
 |------|---------|
-| `vercel.json` | Security headers only (no routing/build config) — CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `COOP`; plus `noindex` + `X-Frame-Options: DENY` + `no-store` on the two internal pages and `/api/*` |
-| `robots.txt` | Keeps `chat-insights.html`, `dealer-admin.html`, and `/api/` out of search indexes |
+| `vercel.json` | Security headers only (no routing/build config) — CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `COOP`; plus `noindex` + `X-Frame-Options: DENY` + `no-store` on the two internal pages, `noindex` on the parked `builder.html`, and `noindex` + `no-store` on `/api/*` |
+| `robots.txt` | Keeps `chat-insights.html`, `dealer-admin.html`, the parked `builder.html`, and `/api/` out of search indexes |
 
 ### Docs
 
@@ -190,7 +191,7 @@ the Troubleshooter.
 - **Inline styles in aquafire-pro.html.** That page has its own `<style>` block (~400 lines) since it was built as a self-contained guide. The other tools use separate CSS files.
 - **Nav is duplicated** across all HTML files (no templating). When changing nav links, update every page.
 - **Model data lives in `app.js`** as the `MODELS` object — Original, Pro, Lite each with the three single sizes (20"/40"/60"), plus the ganged runs on the Pro and Original. Update there for spec changes.
-- **Ganged runs are sizes, not a mode.** 80" (two 40"), 100" (60" + 40") and 120" (two 60") sit in `MODELS[...].sizes` alongside the singles, carrying a `units: [40, 40]` array; everything downstream (cutout numbers, Quick Reference, the isometric) reads `dims.w` as before. **The Lite has no ganged entries on purpose** — it is the one model that can't be ganged (`docs/source-material/page-compare-vs-aquafire.txt`), which is why the Enclosure Guide's size `<select>` is rebuilt per model by `renderSizeOptions()` rather than being static markup; the three options in the HTML are only the no-JS fallback. A run is **one continuous cutout** — the ⅜″ clearance sits on the two outside edges only, nothing between the butted units, so a run is the same total nominal + ¾″ as a single — and `drawCutoutDiagram` draws one box per unit above it with the seam marked. `builder.js` mirrors the same table for parity but its own size step is singles-only.
+- **Ganged runs are sizes, not a mode.** 80" (two 40"), 100" (60" + 40") and 120" (two 60") sit in `MODELS[...].sizes` alongside the singles, carrying a `units: [40, 40]` array; everything downstream (cutout numbers, Quick Reference, the isometric) reads `dims.w` as before. **The Lite has no ganged entries on purpose** — it is the one model that can't be ganged (`docs/source-material/page-compare-vs-aquafire.txt`), which is why the Enclosure Guide's size `<select>` is rebuilt per model by `renderSizeOptions()` rather than being static markup; the three options in the HTML are only the no-JS fallback. A run is **one continuous cutout** — the ⅜″ clearance sits on the two outside edges only, nothing between the butted units, so a run is the same total nominal + ¾″ as a single — and `drawCutoutDiagram` draws one box per unit above it with the seam marked. `builder.js` mirrors the same table for parity but its own size step is singles-only — and the Builder is parked (see the File Map), so keep the tables in step but don't build features there without a decision to revive it.
 - **Water hardness DB is in `water-care-app.js`** — `WATER_HARDNESS_DB` array of `[zip_prefix, city, state, ppm]` tuples.
 - **Embed mode:** Append `?embed` to any page URL to hide nav/footer (for Shopify iframe embedding). The Troubleshooter wizard lives in `<main>` so it survives embed mode.
 - **SVG diagrams** are generated in JS via string concatenation (app.js `drawCutoutDiagram` and isometric renderer).

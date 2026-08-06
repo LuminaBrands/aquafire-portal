@@ -1,5 +1,6 @@
 User-agent: *
 Disallow: /chat-insights.html
 Disallow: /dealer-admin.html
+Disallow: /builder.html
 Disallow: /api/
 Allow: /
