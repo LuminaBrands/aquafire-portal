@@ -178,8 +178,10 @@ select {
 .gang-note {
   margin-top: 22px;
   padding: 14px 18px;
+  /* Amber border and tint all round, no accent bar down one side: the tint
+     already marks it, and the caution card in the field notes below is on the
+     same treatment. */
   border: 1px solid var(--amber-dim);
-  border-left: 3px solid var(--amber);
   border-radius: var(--radius-sm);
   background: var(--amber-glow);
   font-size: 0.85rem;
