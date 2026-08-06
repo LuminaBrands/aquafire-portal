@@ -23,7 +23,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interactive Aquafire Guide</title>
-  <meta name="description" content="Ember, the Aquafire assistant — your guide to the water vapor fireplace.">
+  <meta name="description" content="The Interactive Aquafire Guide — setup, water care, maintenance and troubleshooting for your water vapor fireplace.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/IMG-2946.png?v=1785697630">
   <script>
@@ -582,8 +582,10 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     <section class="greet">
       <span class="orb" aria-hidden="true"></span>
       <div class="greet-bubble">
-        <h1>Hi, I&rsquo;m Ember. What brings you by tonight?</h1>
-        <p>I know the manuals, the specs, and every fix &mdash; ask me, or feel free to take a look around.</p>
+        <!-- The time of day is filled in by script below; the static text is
+             the no-JS fallback, so it has to read correctly on its own. -->
+        <h1 id="heroGreet">How can I help?</h1>
+        <p>The manuals, the specs, and every fix &mdash; ask away, or feel free to take a look around.</p>
       </div>
       <!-- The composer expands in place into the chat below it. Ember mounts
            into #heroChat and owns the conversation; this page owns only the
@@ -593,7 +595,7 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
             method="get" autocomplete="off" data-beam-size="md" data-beam-variant="colorful">
         <span class="composer">
           <input class="ph" id="heroInput" name="q" type="text"
-                 placeholder="Message Ember&hellip;" aria-label="Message Ember">
+                 placeholder="Ask a question&hellip;" aria-label="Ask a question">
           <button class="send" type="submit">Ask
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </button>
@@ -1123,6 +1125,19 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
     // Hero composer -> inline chat. This owns only the expand/collapse and
     // the handoff of the first message; Ember owns the conversation.
     (function () {
+      /* Greet by time of day. assistant.js carries its own copy of this for the
+         widget's opening message -- it ships to third-party pages as a single
+         script tag and cannot share a helper with this page. */
+      var hh = document.getElementById("heroGreet");
+      if (hh) {
+        var h = new Date().getHours();
+        var part = h < 5 ? "tonight"
+                 : h < 12 ? "this morning"
+                 : h < 17 ? "this afternoon"
+                 : h < 21 ? "this evening" : "tonight";
+        hh.textContent = "How can I help you " + part + "?";
+      }
+
       var greet = document.querySelector(".greet");
       var form = document.getElementById("heroComposer");
       var input = document.getElementById("heroInput");

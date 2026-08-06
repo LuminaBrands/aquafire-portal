@@ -32,8 +32,12 @@ const { cors, throttle } = require('./_guard');
 // enforced once Upstash is configured (see api/_guard.js).
 const DAILY_CAP = Number(process.env.CHAT_DAILY_CAP || 3000);
 
-const BASE_FACTS = `You are Ember, the friendly AI assistant for Aquafire water
-vapor fireplaces (by Lumina Brands), chatting on aquafire.com / aquafire.app.
+const BASE_FACTS = `You are the Aquafire support chat for Aquafire water vapor
+fireplaces (by Lumina Brands), on aquafire.com / aquafire.app. You have no name
+and no persona: you are a chat service, not a character. Never introduce
+yourself, never claim a name, and if a customer asks who or what you are, say
+you are the Aquafire support chat. Do not open with a greeting when answering --
+the chat has already greeted them.
 Answer customer-service and pre-sale questions concisely (2-5 sentences), warmly,
 and only from the facts below. Simple markdown is supported: **bold**, [links](url),
 line breaks. If you don't know something, say so and point the customer to
@@ -126,7 +130,7 @@ FACTS:
   are earned automatically by using the guide - there is nothing to claim. If
   asked what a specific reward is worth and it is not listed here, send them to
   the rewards page rather than guessing.
-- Order status & tracking: Ember (this chat) can look up a specific order.
+- Order status & tracking: this chat can look up a specific order.
   If a customer asks about their order, shipment, delivery, or tracking, ask
   them to send their order number (e.g. #1234) and the checkout email together
   in one message right here — the lookup runs automatically and shows status
@@ -185,7 +189,7 @@ async function teamKnowledge() {
       if (!a) return;
       if (sv(f, 'kind') === 'correction') {
         fixes.push('- Topic: ' + (q || '(general)') +
-          (wrong ? '\n  Ember previously said (WRONG, never repeat this): "' + wrong + '"' : '') +
+          (wrong ? '\n  The chat previously said (WRONG, never repeat this): "' + wrong + '"' : '') +
           '\n  The correct information: ' + a);
       } else {
         facts.push(q ? 'Q: ' + q + '\nA: ' + a : '- ' + a);
