@@ -12,18 +12,19 @@ enclosure-guide.html.
 
 DECISION (Stefan, Aug 2026): the cutout recommendation below was adopted as
 the portal's own figure, not just as a tip. MODELS in app.js and builder.js
-now carry nominal + 3/8" widths, so the Enclosure Guide, its Quick Reference
-table and the Fireplace Builder all report 1/8" wider than the 2026 spec
-guides in this folder. That divergence from the published + 1/4" is
+now carry nominal + 3/4" widths (3/8" per side), so the Enclosure Guide, its
+Quick Reference table and the Fireplace Builder all report 1/2" wider than the
+2026 spec guides in this folder. That divergence from the published + 1/4" is
 intentional; the guide shows the published minimum alongside its own number
 so a spec-sheet reader can see why the two differ.
 
 
 FRAMING THE CUTOUT
 
-  - Recommendation: frame the cutout WIDTH at nominal + 3/8" rather than
-    the published nominal + 1/4". For a 60" unit that is 60 3/8" instead
-    of 60 1/4" — 1/8" more room overall.
+  - Recommendation: leave 3/8" of clearance on EACH SIDE of the insert,
+    i.e. frame the cutout WIDTH at nominal + 3/4" rather than the
+    published nominal + 1/4". For a 60" unit that is 60 3/4" instead of
+    60 1/4" — 1/2" more room overall.
   - Depth and height are unchanged. The published figures are
     W = nominal + 1/4", D = 12 1/4" (Lite 9 5/8"), H = 14" min. (Pro),
     12" (Original), 11" (Lite).
@@ -38,26 +39,27 @@ FRAMING THE CUTOUT
   - Brad's summary: being slightly generous with these dimensions rather
     than holding a tight fit reduces installation-related service calls
     and component failures.
-  - AMBIGUITY, unresolved: Brad noted the extra clearance "may total 3/4"
-    in some contexts depending on how it's measured across the unit" —
-    i.e. it is not always clear whether a drawing calls out 3/8" overall
-    or 3/8" per side. Confirm which convention a drawing uses before
-    cutting. The portal states the recommendation as +3/8" OVERALL width
-    and flags the per-side question.
+  - RESOLVED (Stefan, Aug 2026): Brad's "may total 3/4" depending on how
+    it's measured across the unit" is answered — the 3/8" is per OUTSIDE
+    EDGE, i.e. per side, so 3/4" across the unit. The portal states it
+    that way and warns that a drawing calling out 3/8" overall is a
+    different, tighter opening. Superseded: an earlier revision of this
+    note, and of the portal, read the recommendation as 3/8" overall.
   - Ganged runs (Stefan, Aug 2026): customers commonly buy two inserts —
     80" as two 40s, 100" as a 60 + 40, 120" as two 60s (the Pro and
     Original only; page-compare-vs-aquafire.txt records the Lite as not
     gangable). The units butt together into one continuous ribbon, so the
-    portal treats a run as a single opening and applies the same + 3/8"
-    once, to the total: 80 3/8", 100 3/8", 120 3/8". Depth and height are
-    the single-insert figures. The published guides list the ganged sizes
+    portal treats a run as a single opening with clearance on its two
+    outside edges only — nothing between the butted units — so a run is
+    the same + 3/4" as a single: 80 3/4", 100 3/4", 120 3/4". Depth and
+    height are the single-insert figures. The guides list the ganged sizes
     under "Other Common Dimensions" as unit dimensions only (80" x 12" x
     8 3/4" etc.) and give no ganged cutout row, so the cutout figure is
     the portal's, derived the same way as the singles.
   - Not to be over-applied: the insert is suspended in the opening from
-    its 1/2"-thick flanges (published guides: "Cutout dimensions are
-    critical!"), so the generous figure is a small, deliberate margin,
-    not licence to open the cutout up further.
+    its flanges (published guides: "Cutout dimensions are critical!"),
+    so 3/8" per side is a deliberate figure, not licence to open the
+    cutout up further.
 
 
 DOWNDRAFT PREVENTION — SEALING
@@ -72,32 +74,43 @@ DOWNDRAFT PREVENTION — SEALING
   - Trigger: the installer finds an open framing scenario, or feels air
     movement around the enclosure. Common in high-rise condos and in
     homes with "open plenum" HVAC systems.
-  - Procedure: flip the unit to expose the underside and wrap the front
-    and back edges with 3"-wide black high-quality tape (Gorilla tape or
-    equivalent). This seals the unit against air movement that would
-    otherwise trigger downdrafts.
+  - Procedure: flip the unit to expose the underside and use 3"-wide
+    black high-quality tape (Gorilla tape or equivalent) on ALL the open
+    edges underneath the fireplace AND the air vents along its front and
+    back sides (Stefan, Aug 2026). This seals the unit against air
+    movement that would otherwise trigger downdrafts.
+  - NOT for media-topped installs (Stefan, Aug 2026): taping the front
+    and back vents leaves the TOP vents as the unit's air intake, so the
+    method is not recommended where logs, rocks or other media will
+    cover the top of the fireplace. Frame and seal the enclosure
+    properly there instead, venting through a toe kick.
   - Timing: do it during the initial install, while the enclosure is
     open — not after symptoms appear. Sealing later means pulling the
     installed unit back out.
   - Rationale: air and moisture infiltration degrades light strips, fans
     and sensors over time. Brad calls the tape a "band-aid" that prevents
     costly service calls.
-  - Tape spec matters: 3" wide, high quality, so it covers the front and
-    back edges properly.
+  - Tape spec matters: 3" wide, high quality, so it covers the edges
+    properly.
 
-  DP (downdraft prevention) kit:
-  - Where a unit calls for a DP kit, the kit must be sealed properly
-    against the surrounding structure. Failing to seal it in high-rise
-    condos — where the wall assemblies "breathe" — has caused major
-    installation failures.
+  DP kit = DIRECT PLUMB KIT (Stefan, Aug 2026):
+  - Note the expansion. The original write-up of this conversation read
+    "DP (Down-draft Prevention) kit"; it is the Aquafire Original's
+    Direct Plumb Kit. An earlier revision of this note and of the portal
+    carried the wrong expansion.
+  - Where an Aquafire Original is installed with a Direct Plumb Kit, the
+    tape seal only works if it is sealed against the surrounding
+    structure. Failing to seal it in high-rise condos — where the wall
+    assemblies "breathe" — has caused installation issues.
 
 
 VENTING — DO NOT SEAL THE UNIT OFF FROM ITS AIR
 
-  - Sealing is about the enclosure cavity, not the intake. Published
-    requirement: at least 50 square inches of air intake within the
-    enclosure per 20" of unit length, through the top lid or, if the lid
-    is covered, a toe kick beneath the enclosure.
+  - The tape method deliberately seals the front and back side vents,
+    which leaves the top vents as the intake. Published requirement:
+    at least 50 square inches of air intake within the enclosure per 20"
+    of unit length, through the top lid or, if the lid is covered, a toe
+    kick beneath the enclosure.
   - Brad's caution: installers should check the client is not placing
     heavy items on, or otherwise blocking, the top of the unit. This
     matters more once the enclosure has been fully sealed.

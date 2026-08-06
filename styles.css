@@ -262,9 +262,10 @@ select {
   font-size: 0.8rem;
   font-style: italic;
 }
-/* The handoff note closes the set — spanning the row keeps the grid from
-   ending on a lone orphan card at any column count. */
-.tip--closing { grid-column: 1 / -1; }
+/* Full-width cards: the read-first caution that heads the sealing group, and
+   the handoff note that closes the set — spanning the row also keeps the grid
+   from ending on a lone orphan card at any column count. */
+.tip--wide { grid-column: 1 / -1; }
 .tip--caution {
   border-color: var(--amber-dim);
   background: linear-gradient(135deg, var(--amber-glow) 0%, transparent 70%), var(--bg);
