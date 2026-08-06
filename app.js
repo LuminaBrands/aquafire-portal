@@ -55,6 +55,8 @@ const backSetbackDisp   = document.getElementById('back-setback-display');
 const openingSlider     = document.getElementById('opening-slider');
 const openingDisp       = document.getElementById('opening-display');
 const cutoutW           = document.getElementById('cutout-w');
+const framingW          = document.getElementById('framing-w');
+const publishedW        = document.getElementById('published-w');
 const cutoutD           = document.getElementById('cutout-d');
 const cutoutH           = document.getElementById('cutout-h');
 const maxOpeningEl      = document.getElementById('max-opening');
@@ -103,6 +105,12 @@ function update() {
   cutoutW.textContent = frac(dims.w);
   cutoutD.textContent = frac(dims.d);
   cutoutH.textContent = frac(dims.h);
+
+  // Field practice: crews frame the width at nominal + 3/8" rather than the
+  // published + 1/4" — see the Installer Field Notes section. The published
+  // number stays the headline; this is the extra 1/8" alongside it.
+  if (framingW)   framingW.textContent   = frac(dims.w + 0.125);
+  if (publishedW) publishedW.textContent = frac(dims.w);
 
   setbackDisp.textContent     = setback.toFixed(1) + '"';
   backSetbackDisp.textContent = backSetback.toFixed(1) + '"';

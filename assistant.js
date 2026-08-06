@@ -390,7 +390,7 @@
     },
     {
       id: 'enclosure',
-      kw: [['enclosure', 6], ['light trap', 7], ['ceiling', 4], ['light bleed', 6], ['hearth', 4], ['surround', 4], ['cabinet', 3], ['design tips', 5], ['viewing height', 6], ['airflow', 4], ['air flow', 4], ['vent', 3], ['toe kick', 6]],
+      kw: [['enclosure', 6], ['light trap', 7], ['ceiling', 4], ['light bleed', 6], ['hearth', 4], ['surround', 4], ['cabinet', 3], ['design tips', 5], ['viewing height', 6], ['airflow', 4], ['air flow', 4], ['vent', 3], ['toe kick', 6], ['cutout', 5], ['cut out', 4], ['rough opening', 6], ['framing', 5], ['frame the opening', 7]],
       answer: function () {
         return {
           feedback: true,
@@ -403,8 +403,34 @@
               '<strong>Seal wall cavities</strong> \u2014 open cavities cause downdrafts that flatten the flame.',
               '<strong>Side clearance</strong> \u2014 keep 6\u2033 from side walls to avoid light reflecting on them.'
             ]},
+            { t: 'text', html: 'One tip from our senior install crews: cut the <strong>width</strong> at nominal + \u215c\u2033 rather than the published + \u00bc\u2033 \u2014 the extra \u215b\u2033 lets the insert seat without being forced and keeps air moving around the internals. Depth and height stay exactly as published; the insert hangs from \u00bd\u2033 flanges, so this is a small deliberate margin, not room to open the cutout up further.' },
             { t: 'text', html: 'The Enclosure Guide calculates all of this for your exact model and size \u2014 and you can email drawings to <a href="mailto:' + SALES_EMAIL + '">' + SALES_EMAIL + '</a> for a free design review.' },
-            { t: 'links', items: [{ label: '\ud83d\udcd0 Open the Enclosure Guide', href: pURL('enclosure-guide.html') }] }
+            { t: 'links', items: [{ label: '\ud83d\udcd0 Open the Enclosure Guide', href: pURL('enclosure-guide.html') }, { label: '\ud83d\udd28 Installer field notes (framing & sealing)', href: pURL('enclosure-guide.html#field-notes') }] },
+            { t: 'chips', items: [{ label: 'Downdrafts & sealing', send: 'How do I stop downdrafts in the enclosure?' }] }
+          ]
+        };
+      }
+    },
+    {
+      /* Field practice from the install crews \u2014 sealing the enclosure against
+         downdrafts. Mirrored in api/chat.js BASE_FACTS; both move together.
+         Source: docs/source-material/note-installer-field-tips.txt */
+      id: 'downdraft',
+      kw: [['downdraft', 9], ['downdrafts', 9], ['down draft', 9], ['dp kit', 9], ['seal the enclosure', 8], ['sealing the enclosure', 8], ['seal the unit', 7], ['open plenum', 8], ['plenum', 6], ['wall cavity', 7], ['wall cavities', 7], ['open framing', 7], ['gorilla tape', 8], ['tape the unit', 8], ['high rise', 5], ['high-rise', 5], ['condo', 4], ['positive pressure', 7], ['air moving', 5], ['drafty', 6]],
+      answer: function () {
+        return {
+          feedback: true,
+          blocks: [
+            { t: 'text', html: 'Downdrafts are the most common cause of installation trouble \u2014 air moving through an open enclosure pulls the flame down and drives vapor onto the components, which shortens the life of light strips, fans and sensors. A lot of current construction runs \u201copen plenum\u201d positive-pressure HVAC, so this is worth handling up front on any new build.' },
+            { t: 'steps', items: [
+              '<strong>Best case</strong> \u2014 have the builder frame the opening to spec and drywall and seal the entire bottom enclosure. No open cavities behind or beneath the fireplace.',
+              '<strong>Fallback</strong> \u2014 if you find open framing, or can feel air moving around the enclosure, seal the unit that day: flip it to expose the underside and wrap the front and back edges with 3\u2033-wide black high-quality tape (Gorilla tape or equivalent). The width matters \u2014 it has to cover the edge properly.',
+              '<strong>DP kit</strong> \u2014 where a downdraft prevention kit is used, it only works if it\u2019s sealed against the surrounding structure. In high-rise condos, where the wall assemblies breathe, an unsealed DP kit has caused major installation failures.',
+              '<strong>Don\u2019t seal the vents</strong> \u2014 the unit still needs 50\u00a0sq\u00a0in of air intake per 20\u2033 of length, through the top lid or a toe kick if the lid is covered. Keep heavy items off the top.'
+            ]},
+            { t: 'text', html: 'Do it during the initial install while the enclosure is still open \u2014 sealing after symptoms appear means pulling an installed unit back out of a finished wall.' },
+            { t: 'links', items: [{ label: '\ud83d\udd28 Installer field notes (framing & sealing)', href: pURL('enclosure-guide.html#field-notes') }] },
+            { t: 'chips', items: [CHIP_HUMAN] }
           ]
         };
       }

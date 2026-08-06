@@ -1,0 +1,104 @@
+Installer field practice — framing, sealing & downdraft prevention
+==================================================================
+
+Source: Lumina Brands (Stefan), Aug 2026 — distilled from a conversation
+with Brad, senior installer. This is field practice from install crews; it
+sits alongside, not instead of, the published Specs & Installation
+Guidelines (guide-aquafire-*-specs-install-2026.txt). Where the two differ
+the difference is called out below.
+
+Published in the portal as the "Installer Field Notes" section of
+enclosure-guide.html.
+
+
+FRAMING THE CUTOUT
+
+  - Recommendation: frame the cutout WIDTH at nominal + 3/8" rather than
+    the published nominal + 1/4". For a 60" unit that is 60 3/8" instead
+    of 60 1/4" — 1/8" more room overall.
+  - Depth and height are unchanged. The published figures are
+    W = nominal + 1/4", D = 12 1/4" (Lite 9 5/8"), H = 14" min. (Pro),
+    12" (Original), 11" (Lite).
+  - Reasons given:
+      * Proper fit — the unit seats without being forced into a tight
+        enclosure.
+      * Airflow — extra space around the internal components helps
+        prevent heat build-up and extends unit life.
+      * Component safety — a buffer so light strips, fans and other
+        delicate internals are not compressed or damaged while the unit
+        is being framed in and seated.
+  - Brad's summary: being slightly generous with these dimensions rather
+    than holding a tight fit reduces installation-related service calls
+    and component failures.
+  - AMBIGUITY, unresolved: Brad noted the extra clearance "may total 3/4"
+    in some contexts depending on how it's measured across the unit" —
+    i.e. it is not always clear whether a drawing calls out 3/8" overall
+    or 3/8" per side. Confirm which convention a drawing uses before
+    cutting. The portal states the recommendation as +3/8" OVERALL width
+    and flags the per-side question.
+  - Not to be over-applied: the insert is suspended in the opening from
+    its 1/2"-thick flanges (published guides: "Cutout dimensions are
+    critical!"), so the generous figure is a small, deliberate margin,
+    not licence to open the cutout up further.
+
+
+DOWNDRAFT PREVENTION — SEALING
+
+  Ideal scenario (unchanged from the published guides, which "strongly
+  recommend sealing any open wall cavities within the enclosure to
+  prevent downdrafts"):
+  - Work with the builder to frame the opening properly and drywall and
+    seal the entire bottom enclosure.
+
+  Fallback — the tape method:
+  - Trigger: the installer finds an open framing scenario, or feels air
+    movement around the enclosure. Common in high-rise condos and in
+    homes with "open plenum" HVAC systems.
+  - Procedure: flip the unit to expose the underside and wrap the front
+    and back edges with 3"-wide black high-quality tape (Gorilla tape or
+    equivalent). This seals the unit against air movement that would
+    otherwise trigger downdrafts.
+  - Timing: do it during the initial install, while the enclosure is
+    open — not after symptoms appear. Sealing later means pulling the
+    installed unit back out.
+  - Rationale: air and moisture infiltration degrades light strips, fans
+    and sensors over time. Brad calls the tape a "band-aid" that prevents
+    costly service calls.
+  - Tape spec matters: 3" wide, high quality, so it covers the front and
+    back edges properly.
+
+  DP (downdraft prevention) kit:
+  - Where a unit calls for a DP kit, the kit must be sealed properly
+    against the surrounding structure. Failing to seal it in high-rise
+    condos — where the wall assemblies "breathe" — has caused major
+    installation failures.
+
+
+VENTING — DO NOT SEAL THE UNIT OFF FROM ITS AIR
+
+  - Sealing is about the enclosure cavity, not the intake. Published
+    requirement: at least 50 square inches of air intake within the
+    enclosure per 20" of unit length, through the top lid or, if the lid
+    is covered, a toe kick beneath the enclosure.
+  - Brad's caution: installers should check the client is not placing
+    heavy items on, or otherwise blocking, the top of the unit. This
+    matters more once the enclosure has been fully sealed.
+
+
+HVAC REALITY IN MODERN CONSTRUCTION
+
+  - Many current homes are built with "open plenum" positive-pressure
+    HVAC systems. That engineering trend routinely causes air-pressure
+    issues in fireplace enclosures, which is what makes proactive
+    sealing critical rather than optional in new construction.
+
+
+BUILDER / CUSTOMER COMMUNICATION
+
+  - Set expectations up front: present sealing as a proactive best
+    practice, not a repair. It prevents future maintenance — replacing
+    light strips or fans — which saves the builder time and preserves
+    the unit's longevity.
+  - The "band-aid" philosophy: do not wait for issues to arise. If the
+    enclosure is open, seal it during the initial install so the unit
+    does not have to be removed later for repairs.

@@ -73,6 +73,37 @@ FACTS:
 - Cutout dimensions are critical (insert hangs from flanges). Enclosures need a
   matte-black light trap, 50 sq in air intake per 20" of insert, sealed wall
   cavities, 6" side clearance. Free design review: sales@aquafire.com.
+- Installer field practice (from our senior install crews, Aug 2026 - published
+  as the "Installer Field Notes" section of
+  https://aquafire.app/enclosure-guide.html#field-notes):
+  - Framing: cut the cutout WIDTH at nominal + 3/8" rather than the published
+    + 1/4". The extra 1/8" lets the insert seat without being forced, keeps air
+    moving around the internals, and buffers light strips, fans and sensors
+    from being compressed during install. Depth and height are unchanged, and
+    this is a small deliberate margin - the insert hangs from 1/2" flanges, so
+    the cutout must not be opened up further. If a drawing calls out the
+    clearance, confirm whether it means 3/8" overall or 3/8" per side.
+  - Downdrafts are the most common installation problem: air moving through an
+    open enclosure pulls the flame down and drives vapor onto the components,
+    degrading light strips, fans and sensors over time. Much of current
+    construction runs "open plenum" positive-pressure HVAC, so seal proactively
+    on new builds rather than waiting for symptoms.
+  - Best case: the builder frames the opening to spec and the entire bottom
+    enclosure is drywalled and sealed, with no open cavities behind or beneath
+    the fireplace.
+  - Fallback when the framing is left open, or air movement can be felt: flip
+    the unit to expose the underside and wrap the front and back edges with
+    3"-wide black high-quality tape (Gorilla tape or equivalent). The 3" width
+    matters. Do it during the initial install while the enclosure is open -
+    sealing later means pulling the unit back out of a finished wall.
+  - A DP (downdraft prevention) kit only works if it is sealed against the
+    surrounding structure. In high-rise condos, where the wall assemblies
+    breathe, an unsealed DP kit has caused major installation failures.
+  - Sealing applies to the wall cavity, not the vents: the unit still needs its
+    50 sq in of air intake per 20" of length, via the top lid or a toe kick if
+    the lid is covered, and nothing heavy should sit on top of the unit.
+  - Explain sealing to builders and customers as proactive best practice, not a
+    repair - it prevents later light-strip and fan replacements.
 - Water: the softer the better — reverse-osmosis water or a whole-house
   softener is ideal. Hard water's minerals cause scale that damages mist
   makers. Otherwise the included Vapor Pure softener conditions tap water

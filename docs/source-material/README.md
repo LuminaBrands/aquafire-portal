@@ -53,6 +53,7 @@ Shopify Admin API (the sandbox can't reach aquafire.com directly).
 | File | Note |
 |------|------|
 | `note-water-fill-and-plumbing-by-model.txt` | Water fill & direct-plumb capability by model (Lumina Brands, Jul 2026) — Pro direct-plumbs out of the box + dispensing-pump drain; Original needs the Direct Plumb Kit add-on; Lite/Gatsby are manual-fill only. Supersedes conflicting older copy. |
+| `note-installer-field-tips.txt` | Installer field practice on framing, sealing and downdraft prevention (Lumina Brands, Aug 2026, from senior installer Brad) — cutout width at nominal + 3/8", the tape fallback when the enclosure isn't drywalled, sealing the DP kit, open-plenum HVAC, keeping the vents clear. Published as the "Installer Field Notes" section of `enclosure-guide.html`. |
 
 ## Manuals, warranty & reference
 
