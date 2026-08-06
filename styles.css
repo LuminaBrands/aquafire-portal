@@ -635,7 +635,7 @@ tr:hover td { background: var(--surface); }
     letter-spacing: 0.6px;
     color: var(--text-muted);
   }
-  .print-summary dd { font-size: 0.98rem; font-weight: 700; margin: 2px 0 0; }
+  .print-summary dd { font-size: 1.05rem; font-weight: 700; margin: 2px 0 0; }
   .print-summary p { margin-top: 12px; font-size: 0.76rem; color: var(--text-muted); }
 
   .card {
