@@ -44,10 +44,10 @@
     .search-row input::placeholder { color: var(--text-muted); }
     .search-row input:focus { border-color: var(--red); }
     .search-row #go {
-      padding: 14px 28px; background: var(--red); color: var(--on-ember); font-size: 0.88rem; font-weight: 600; border: none; border-radius: var(--radius-sm); cursor: pointer;
-      white-space: nowrap;
+      padding: 14px 28px; background: var(--ember-grad); color: var(--on-ember); font-size: 0.88rem; font-weight: 600; border: none; border-radius: var(--radius-sm); cursor: pointer;
+      white-space: nowrap; transition: filter 0.2s;
     }
-    .search-row #go:hover { background: var(--red-dark); }
+    .search-row #go:hover { filter: brightness(1.06); }
     .geo-icon-btn {
       display: inline-flex; align-items: center; justify-content: center;
       width: 48px; flex-shrink: 0; background: var(--surface); border: 1px solid var(--border);

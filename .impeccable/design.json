@@ -113,6 +113,16 @@
         "role": "Bottom stop of the light ground gradient",
         "displayName": "Showroom deep",
         "canonical": "#e2e5ea"
+      },
+      "ember-ramp-red": {
+        "role": "Bottom stop of the mark's ramp (--ember-grad / --ember-grad-bar), sampled from ember-mark.png; same in both themes",
+        "displayName": "Ember ramp red",
+        "canonical": "#eb4b46"
+      },
+      "ember-ramp-warm": {
+        "role": "Top stop of the mark's ramp (--ember-grad / --ember-grad-bar), sampled from the redder lower half of ember-mark.png; red-first by brand rule; same in both themes",
+        "displayName": "Ember ramp warm",
+        "canonical": "#ed7842"
       }
     },
     "typographyMeta": {

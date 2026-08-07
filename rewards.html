@@ -29,8 +29,8 @@
 
     /* ── Score card ────────────────────────────────────
        This and the homepage rewards band report the same thing, so it follows
-       the band's rules from DESIGN.md: ember for the standing total and the
-       progress fill, one flat colour in a determinate bar, and the action as a
+       the band's rules from DESIGN.md: ember text for the standing total, the
+       mark's orange-to-red ramp in the progress fill, and the action as a
        text link rather than a filled pill. */
     .rw-score {
       margin: 8px 0 32px; padding: 26px; text-align: center;
@@ -54,7 +54,7 @@
     }
     .rw-score-bar-fill {
       height: 100%; width: 0%; border-radius: 999px;
-      background: var(--ember); transition: width 0.6s var(--ease);
+      background: var(--ember-grad-bar); transition: width 0.6s var(--ease);
     }
     .rw-score-bar-text { font-size: 0.76rem; color: var(--text-dim); }
     .rw-score-cta { margin-top: 18px; }
@@ -144,16 +144,17 @@
     }
     .rw-cta h3 { margin-bottom: 8px; font-size: 1.05rem; font-weight: 700; color: var(--text-hi); }
     .rw-cta p { margin-bottom: 18px; font-size: 0.83rem; color: var(--text-mid); }
-    /* The send-button treatment: neutral fill, no chromatic glow. The old red
-       pill carried a 12px ember halo and failed AA on hover (#fff on #cf4e16
-       is 4.4:1). */
+    /* The homepage band's primary treatment: the mark's ramp with ink on top.
+       The old red pill failed AA because it put #fff on #cf4e16 (4.4:1); the
+       ramp carries dark ink instead, which clears it at both stops -- see
+       --on-ember in redesign.css. No chromatic glow, same as the band. */
     .rw-cta a {
       display: inline-block; padding: 10px 22px; border-radius: 999px;
-      background: var(--send-bg); border: 1px solid var(--send-border);
-      color: var(--send-ink); font-size: 0.88rem; font-weight: 600;
-      text-decoration: none; transition: background-color 0.25s;
+      background: var(--ember-grad); border: none;
+      color: var(--on-ember); font-size: 0.88rem; font-weight: 600;
+      text-decoration: none; transition: transform 0.3s var(--ease), filter 0.24s;
     }
-    .rw-cta a:hover { background: var(--send-bg-hover); }
+    .rw-cta a:hover { transform: translateY(-1px); filter: brightness(1.06); }
 
     @media (max-width: 600px) {
       .rw-steps { grid-template-columns: 1fr; gap: 10px; }

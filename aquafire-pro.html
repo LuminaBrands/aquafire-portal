@@ -297,7 +297,7 @@
     }
     .guide-progress-step:hover { border-color: var(--text-muted); color: var(--text); }
     .guide-progress-step.active {
-      background: var(--red); border-color: var(--red); color: #fff;
+      background: var(--ember-grad, var(--red)); border-color: transparent; color: var(--on-ember, #fff);
       box-shadow: 0 0 12px var(--red-glow);
     }
     .guide-progress-step.completed {
@@ -335,15 +335,17 @@
     }
     .guide-overlay.visible { display: flex; }
     .guide-overlay-text { color: #fff; font-size: 0.88rem; font-weight: 500; }
+        /* The mark's ramp with ink, matching the redesign's primaries; hover
+       brightens rather than swapping fills, which would flatten the ramp. */
     .guide-overlay-btn {
-      padding: 12px 36px; background: var(--red); color: #fff;
+      padding: 12px 36px; background: var(--ember-grad, var(--red)); color: var(--on-ember, #fff);
       font-size: 0.93rem; font-weight: 600;
       border: none; border-radius: var(--radius-sm); cursor: pointer;
-      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      transition: filter 0.2s, box-shadow 0.2s, transform 0.15s;
       box-shadow: 0 2px 12px var(--red-glow);
     }
     .guide-overlay-btn:hover {
-      background: var(--red-dark); box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+      filter: brightness(1.06); box-shadow: 0 4px 20px rgba(192,57,43,0.35);
       transform: translateY(-1px);
     }
     .guide-overlay-replay {
@@ -383,11 +385,12 @@
     .guide-btn:hover { background: rgba(255,255,255,0.04); border-color: var(--text-muted); }
     .guide-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
     .guide-btn-next {
-      background: var(--red); border-color: var(--red); color: #fff;
+      background: var(--ember-grad, var(--red)); border-color: transparent; color: var(--on-ember, #fff);
       box-shadow: 0 2px 12px var(--red-glow);
+      transition: filter 0.15s, box-shadow 0.15s;
     }
     .guide-btn-next:hover {
-      background: var(--red-dark); border-color: var(--red-dark);
+      filter: brightness(1.06);
       box-shadow: 0 4px 20px rgba(192,57,43,0.35);
     }
     .guide-btn-replay { border: none; background: none; padding: 10px 12px; color: var(--text-muted); }
@@ -447,7 +450,7 @@
     }
     .ts-cat-btn:hover { border-color: var(--text-muted); color: var(--text); }
     .ts-cat-btn.active {
-      background: var(--red); border-color: var(--red); color: #fff;
+      background: var(--ember-grad, var(--red)); border-color: transparent; color: var(--on-ember, #fff);
       box-shadow: 0 2px 12px var(--red-glow);
     }
     .ts-cat-btn svg { flex-shrink: 0; }
@@ -781,11 +784,11 @@
     .hub-cta-go {
       display: inline-flex; align-items: center; gap: 7px; margin-top: 12px;
       padding: 9px 16px; border-radius: 999px;
-      background: var(--red); color: #fff;
+      background: var(--ember-grad, var(--red)); color: var(--on-ember, #fff);
       font-size: 0.83rem; font-weight: 600; line-height: 1;
-      transition: background 0.2s, transform 0.2s;
+      transition: filter 0.2s, transform 0.2s;
     }
-    .hub-cta-card:hover .hub-cta-go { background: var(--red-dark); transform: translateX(2px); }
+    .hub-cta-card:hover .hub-cta-go { filter: brightness(1.06); transform: translateX(2px); }
     .hub-chapters-toggle { color: var(--text); font-size: 0.83rem; letter-spacing: 0.4px; }
 
     @media (max-width: 640px) {

@@ -40,7 +40,9 @@
   width: 24px;
   height: 24px;
   border-radius: 999px;
-  background: var(--ember);
+  /* The mark's ramp, vertically like the disc -- the avatar is a small
+     sibling of Ember's own mark. */
+  background: var(--ember-grad);
   /* Ink on the accent, not the page ground: --ground-fill is a gradient in
      light theme and was never a text colour. */
   color: var(--on-ember);
@@ -210,24 +212,25 @@
   min-height: 20px;
   margin-top: 8px;
 }
-/* The send-button treatment from the design system: neutral fill, no
-   chromatic glow. The old red pill carried a 12px halo. */
+/* The modal's one primary action takes the mark's ramp with ink on top --
+   the same treatment as the band and score-card primaries. Still no
+   chromatic glow; the old red pill's 12px halo stays gone. */
 .af-auth-submit {
   width: 100%;
   padding: 14px 20px;
   margin-top: 12px;
-  background: var(--send-bg);
-  border: 1px solid var(--send-border);
+  background: var(--ember-grad);
+  border: none;
   border-radius: 13px;
-  color: var(--send-ink);
+  color: var(--on-ember);
   font-family: inherit;
   font-size: 0.93rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: filter 0.2s;
 }
 .af-auth-submit:hover {
-  background: var(--send-bg-hover);
+  filter: brightness(1.06);
 }
 
 .af-modal-footer {
@@ -297,11 +300,12 @@
   overflow: hidden;
   margin-bottom: 6px;
 }
-/* Flat ember, not a two-stop ramp: a determinate bar reads as one quantity
-   (same rule as the homepage band and the score card). */
+/* The mark's orange-to-red ramp, same as the homepage band and the score
+   card. Still one warm quantity -- what a determinate bar must not wear is
+   the four-hue LED spectrum, which implies segments it does not have. */
 .af-dd-bar-fill {
   height: 100%;
-  background: var(--ember);
+  background: var(--ember-grad-bar);
   border-radius: 999px;
   transition: width 0.4s ease;
 }

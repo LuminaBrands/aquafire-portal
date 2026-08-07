@@ -123,8 +123,8 @@ select, input[type="number"] {
 select:hover, input[type="number"]:hover { border-color: var(--border-warm); }
 select:focus, input[type="number"]:focus {
   outline: none;
-  border-color: var(--amber-dim);
-  box-shadow: 0 0 0 3px var(--amber-glow);
+  border-color: var(--border-warm);
+  box-shadow: 0 0 0 3px var(--red-glow);
 }
 select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23878c99' stroke-width='2' fill='none'/%3E%3C/svg%3E");
@@ -163,11 +163,13 @@ select {
   letter-spacing: 0.8px;
   margin-bottom: 6px;
 }
+/* Dimension figures read in the accent's text variant, not amber -- the
+   calculator was the last amber-led surface and the brand is red-first. */
 .dim-value {
   display: block;
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--amber);
+  color: var(--ember-t, var(--red));
   font-variant-numeric: tabular-nums;
 }
 
@@ -203,7 +205,7 @@ select {
 .cutout-field-note strong { color: var(--text); font-weight: 600; }
 .cutout-field-note b,
 .cutout-field-note #published-w {
-  color: var(--amber);
+  color: var(--ember-t, var(--red));
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -214,7 +216,7 @@ select {
   border-bottom: 1px solid var(--border-warm);
   white-space: nowrap;
 }
-.cutout-field-note a:hover { color: var(--amber); border-bottom-color: currentColor; }
+.cutout-field-note a:hover { color: var(--ember-t, var(--red)); border-bottom-color: currentColor; }
 
 /* ── Best-practice FAQ (native <details>, so it works without JS) ── */
 .faq {
@@ -286,24 +288,25 @@ input[type="range"] {
   transition: background 0.15s;
 }
 input[type="range"]:hover { background: var(--surface-alt); }
+/* Thumbs wear the mark's ramp like every other filled control. */
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px; height: 20px;
   border-radius: 50%;
-  background: var(--amber);
+  background: var(--ember-grad, var(--red));
   cursor: grab;
-  box-shadow: var(--shadow-sm), 0 0 12px var(--amber-glow);
+  box-shadow: var(--shadow-sm), 0 0 12px var(--red-glow);
   transition: transform 0.12s, box-shadow 0.12s;
   border: 2px solid var(--border);
 }
 input[type="range"]::-webkit-slider-thumb:hover {
-  box-shadow: var(--shadow-sm), 0 0 20px var(--amber-glow);
+  box-shadow: var(--shadow-sm), 0 0 20px var(--red-glow);
 }
 input[type="range"]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.12); }
 input[type="range"]::-moz-range-thumb {
   width: 20px; height: 20px;
   border-radius: 50%;
-  background: var(--amber);
+  background: var(--ember-grad, var(--red));
   cursor: grab;
   border: 2px solid var(--border);
 }
@@ -312,7 +315,7 @@ input[type="range"]::-moz-range-thumb {
   text-align: right;
   font-weight: 700;
   font-size: 1.05rem;
-  color: var(--amber);
+  color: var(--ember-t, var(--red));
   font-variant-numeric: tabular-nums;
 }
 .hint {
@@ -343,8 +346,8 @@ input[type="range"]::-moz-range-thumb {
 }
 .hearth-btn + .hearth-btn { border-left: 1px solid var(--border); }
 .hearth-btn.active {
-  background: var(--amber);
-  color: var(--bg);
+  background: var(--ember-grad, var(--red));
+  color: var(--on-ember, #fff);
 }
 
 .result-card--back {
@@ -366,8 +369,8 @@ input[type="range"]::-moz-range-thumb {
   margin-top: 24px;
   padding: 22px 24px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--amber-dim);
-  background: linear-gradient(135deg, var(--amber-glow) 0%, var(--ember-glow) 100%);
+  border: 1px solid var(--border-warm);
+  background: linear-gradient(135deg, var(--red-glow) 0%, var(--ember-glow) 100%);
   position: relative;
   overflow: hidden;
 }
@@ -376,7 +379,7 @@ input[type="range"]::-moz-range-thumb {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--amber), var(--ember));
+  background: var(--ember-grad-bar, linear-gradient(90deg, var(--red), var(--ember)));
 }
 .result-label {
   display: block;
@@ -390,7 +393,7 @@ input[type="range"]::-moz-range-thumb {
   display: block;
   font-size: 2.25rem;
   font-weight: 700;
-  color: var(--amber);
+  color: var(--ember-t, var(--red));
   margin: 6px 0 2px;
   line-height: 1.1;
 }
@@ -442,9 +445,15 @@ input[type="range"]::-moz-range-thumb {
 
 /* Light */
 .ld-cone { fill: var(--ld-cone); }
+/* Depicted light only -- the cone's edge rays and the LED tray. Warm is what
+   the light IS; nothing that measures may use it. */
 .ld-amber-line { stroke: var(--amber); }
-.ld-amber-ink { fill: var(--amber); }
 .ld-amber-fill { fill: var(--amber); }
+/* Measurements and labels: the accent's text variant, so they deepen in the
+   light theme instead of going ochre. */
+.ld-dim-line { stroke: var(--ember-t); }
+.ld-dim-ink { fill: var(--ember-t); }
+.ld-dim-fill { fill: var(--ember-t); }
 .ld-flame-outer { fill: var(--ember); opacity: 0.9; }
 .ld-flame-inner { fill: var(--amber); }
 
@@ -493,7 +502,7 @@ input[type="range"]::-moz-range-thumb {
   transition: color 0.15s, border-color 0.15s;
 }
 .calc-btn:hover { color: var(--text); border-color: var(--border-warm); }
-.calc-btn:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.calc-btn:focus-visible { outline: 2px solid var(--ember-t, var(--red)); outline-offset: 2px; }
 
 /* ── Print-only spec summary (see the @media print block below) ── */
 .print-only { display: none; }
@@ -530,20 +539,22 @@ tr:hover td { background: var(--surface); }
   font-size: 1.6rem;
   margin-bottom: 24px;
 }
+/* The mark's ramp with ink, matching the redesign's primaries. Hover
+   brightens the ramp rather than swapping fills, which would flatten it. */
 .cta-button {
   display: inline-block;
   padding: 14px 40px;
-  background: var(--red);
-  color: var(--on-accent);
+  background: var(--ember-grad, var(--red));
+  color: var(--on-ember, var(--on-accent));
   font-size: 1.05rem;
   font-weight: 600;
   border-radius: var(--radius-sm);
   text-decoration: none;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: filter 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 12px var(--red-glow);
 }
 .cta-button:hover {
-  background: var(--red-dark);
+  filter: brightness(1.06);
   box-shadow: 0 4px 20px var(--red-glow);
 }
 .cta-link {

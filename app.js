@@ -294,7 +294,8 @@ function drawCutoutDiagram(dims) {
   function dimLine(x1,y1, x2,y2, label, sublabel, side, offset) {
     // side: 'below'|'right'|'along' — where to place the label
     let s = '';
-    const col = '#e8a838';
+    // Style attr, not a presentation attr: var() only resolves in CSS.
+    const col = 'var(--ember-t, #f05a5e)';
     const mutedCol = '#878c99';
     const off = offset || 0;
     // Main line
@@ -314,18 +315,18 @@ function drawCutoutDiagram(dims) {
 
     const mx = (x1+x2)/2, my = (y1+y2)/2;
     if (side === 'below') {
-      s += `<text x="${mx}" y="${my+22+off}" fill="${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="middle" font-weight="700">${label}</text>`;
+      s += `<text x="${mx}" y="${my+22+off}" style="fill:${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="middle" font-weight="700">${label}</text>`;
       if (sublabel) s += `<text x="${mx}" y="${my+38+off}" fill="${mutedCol}" font-family="Figtree,sans-serif" font-size="11" text-anchor="middle" letter-spacing="2">${sublabel}</text>`;
     } else if (side === 'right') {
-      s += `<text x="${mx+16+off}" y="${my-4}" fill="${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="start" font-weight="700">${label}</text>`;
+      s += `<text x="${mx+16+off}" y="${my-4}" style="fill:${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="start" font-weight="700">${label}</text>`;
       if (sublabel) s += `<text x="${mx+16+off}" y="${my+12}" fill="${mutedCol}" font-family="Figtree,sans-serif" font-size="11" text-anchor="start" letter-spacing="2">${sublabel}</text>`;
     } else if (side === 'left') {
-      s += `<text x="${mx-16-off}" y="${my-4}" fill="${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="end" font-weight="700">${label}</text>`;
+      s += `<text x="${mx-16-off}" y="${my-4}" style="fill:${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="end" font-weight="700">${label}</text>`;
       if (sublabel) s += `<text x="${mx-16-off}" y="${my+12}" fill="${mutedCol}" font-family="Figtree,sans-serif" font-size="11" text-anchor="end" letter-spacing="2">${sublabel}</text>`;
     } else if (side === 'along') {
       const angle = Math.atan2(dy,dx) * 180 / Math.PI;
       const tOff = 7; // perpendicular offset multiplier to clear the line
-      s += `<text x="${mx+nx*tOff}" y="${my+ny*tOff-6}" fill="${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="middle" font-weight="700" transform="rotate(${angle},${mx+nx*tOff},${my+ny*tOff-6})">${label}</text>`;
+      s += `<text x="${mx+nx*tOff}" y="${my+ny*tOff-6}" style="fill:${col}" font-family="Figtree,sans-serif" font-size="16" text-anchor="middle" font-weight="700" transform="rotate(${angle},${mx+nx*tOff},${my+ny*tOff-6})">${label}</text>`;
       if (sublabel) s += `<text x="${mx+nx*tOff}" y="${my+ny*tOff+10}" fill="${mutedCol}" font-family="Figtree,sans-serif" font-size="11" text-anchor="middle" letter-spacing="2" transform="rotate(${angle},${mx+nx*tOff},${my+ny*tOff+10})">${sublabel}</text>`;
     }
     return s;
@@ -360,14 +361,14 @@ function drawCutoutDiagram(dims) {
       <stop offset="0%" stop-color="#e8a838" stop-opacity="0.8"/><stop offset="40%" stop-color="#d45a20" stop-opacity="0.5"/><stop offset="100%" stop-color="#e8a838" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="cutout-glow" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#e8a838" stop-opacity="0.12"/><stop offset="100%" stop-color="#e8a838" stop-opacity="0.03"/>
+      <stop offset="0%" style="stop-color:var(--ember-t, #f05a5e)" stop-opacity="0.12"/><stop offset="100%" style="stop-color:var(--ember-t, #f05a5e)" stop-opacity="0.03"/>
     </linearGradient>
     <filter id="glow">
       <feGaussianBlur stdDeviation="5" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <filter id="cutout-shadow">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#e8a838" flood-opacity="0.25"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="3" style="flood-color:var(--ember-t, #f05a5e)" flood-opacity="0.25"/>
     </filter>
   </defs>`;
 
@@ -385,7 +386,7 @@ function drawCutoutDiagram(dims) {
   // ── Cutout hole (prominent) ──
   // Outer glow
   out += `<polygon points="${cFL.x},${cFL.y} ${cFR.x},${cFR.y} ${cBR.x},${cBR.y} ${cBL.x},${cBL.y}"
-    fill="url(#cutout-glow)" stroke="#e8a838" stroke-width="2.5" filter="url(#cutout-shadow)"/>`;
+    fill="url(#cutout-glow)" style="stroke:var(--ember-t, #f05a5e)" stroke-width="2.5" filter="url(#cutout-shadow)"/>`;
   // Inner dark fill
   out += `<polygon points="${cFL.x+3},${cFL.y+1} ${cFR.x-3},${cFR.y+1} ${cBR.x-3},${cBR.y+1} ${cBL.x+3},${cBL.y+1}"
     fill="#0c0e11" stroke="none"/>`;
@@ -400,7 +401,7 @@ function drawCutoutDiagram(dims) {
   // ── "CUTOUT" label — below the cutout front edge, between cutout and enclosure front ──
   const cutLabelX = (cFL.x + cFR.x) / 2;
   const cutLabelY = cFL.y + (eFTL.y - cFL.y) / 2 + cutPadD * isoY / 2;
-  out += `<text x="${cutLabelX}" y="${cutLabelY + 2}" fill="#e8a838" font-family="Figtree,sans-serif"
+  out += `<text x="${cutLabelX}" y="${cutLabelY + 2}" style="fill:var(--ember-t, #f05a5e)" font-family="Figtree,sans-serif"
     font-size="11" text-anchor="middle" font-weight="700" letter-spacing="3">CUTOUT</text>`;
 
 
@@ -413,10 +414,10 @@ function drawCutoutDiagram(dims) {
     const botY = cFL.y - 8;
     // Dashed line (stop short for arrowhead)
     out += `<line x1="${ax}" y1="${topY}" x2="${ax}" y2="${botY - 10}"
-      stroke="#e8a838" stroke-width="1.8" stroke-dasharray="5,5" opacity="0.55"/>`;
+      style="stroke:var(--ember-t, #f05a5e)" stroke-width="1.8" stroke-dasharray="5,5" opacity="0.55"/>`;
     // Arrowhead pointing down
     out += `<polygon points="${ax},${botY} ${ax-5},${botY-12} ${ax+5},${botY-12}"
-      fill="#e8a838" opacity="0.7"/>`;
+      style="fill:var(--ember-t, #f05a5e)" opacity="0.7"/>`;
   }
 
   // ── Insert boxes ──
@@ -773,15 +774,15 @@ function drawLightDiagram() {
   {
     const cx = px(ledF), cy = py(surf);
     const ex = r(cx + arcR * Math.cos(fRad)), ey = r(cy - arcR * Math.sin(fRad));
-    S.push(`<path class="ld-amber-line" fill="none" stroke-width="1.3" d="M ${r(cx + arcR)} ${cy} A ${arcR} ${arcR} 0 0 0 ${ex} ${ey}"/>`);
-    S.push(`<text class="ld-amber-ink" font-size="10.5" font-weight="700" text-anchor="start"
+    S.push(`<path class="ld-dim-line" fill="none" stroke-width="1.3" d="M ${r(cx + arcR)} ${cy} A ${arcR} ${arcR} 0 0 0 ${ex} ${ey}"/>`);
+    S.push(`<text class="ld-dim-ink" font-size="10.5" font-weight="700" text-anchor="start"
       x="${r(cx + (arcR + 6) * Math.cos(fRad / 2))}" y="${r(cy - (arcR + 6) * Math.sin(fRad / 2) + 3)}">${model.frontAngle}&#176;</text>`);
   }
   {
     const cx = px(ledB), cy = py(surf);
     const ex = r(cx - arcR * Math.cos(bRad)), ey = r(cy - arcR * Math.sin(bRad));
-    S.push(`<path class="ld-amber-line" fill="none" stroke-width="1.3" d="M ${r(cx - arcR)} ${cy} A ${arcR} ${arcR} 0 0 1 ${ex} ${ey}"/>`);
-    S.push(`<text class="ld-amber-ink" font-size="10.5" font-weight="700" text-anchor="end"
+    S.push(`<path class="ld-dim-line" fill="none" stroke-width="1.3" d="M ${r(cx - arcR)} ${cy} A ${arcR} ${arcR} 0 0 1 ${ex} ${ey}"/>`);
+    S.push(`<text class="ld-dim-ink" font-size="10.5" font-weight="700" text-anchor="end"
       x="${r(cx - (arcR + 6) * Math.cos(bRad / 2))}" y="${r(cy - (arcR + 6) * Math.sin(bRad / 2) + 3)}">${model.backAngle}&#176;</text>`);
   }
 
@@ -857,7 +858,7 @@ function drawLightDiagram() {
     const markY = isFrontOverMax ? frontHit : maxOpening;
     if (Math.abs(hMid - markY) < 1.8) hMid = Math.max(3.6, markY - 2.4);
     const xf = ledF + hMid / Math.tan(fRad), xb = ledB - hMid / Math.tan(bRad);
-    S.push(`<text class="ld-amber-ink" font-size="10" font-weight="700" letter-spacing="1.5" text-anchor="middle"
+    S.push(`<text class="ld-dim-ink" font-size="10" font-weight="700" letter-spacing="1.5" text-anchor="middle"
       x="${px(Math.max(0, xb) / 2 + Math.min(plane, xf) / 2)}" y="${py(surf + hMid)}">LIGHT PATH</text>`);
   }
 
@@ -871,9 +872,9 @@ function drawLightDiagram() {
     // its label drops below the line there so it can't strike through the
     // RECESSED LIGHT TRAP label under the ceiling.
     const labelY = yIn > openTop + 1.5 ? py(yIn) + 12 : py(yIn) - 5;
-    let s = `<line class="ld-amber-line" stroke-width="1.3" stroke-dasharray="5,3"
+    let s = `<line class="ld-dim-line" stroke-width="1.3" stroke-dasharray="5,3"
       x1="${px(atPlane)}" y1="${py(yIn)}" x2="${xEnd}" y2="${py(yIn)}"/>`;
-    s += `<text class="ld-amber-ink" font-size="9" font-weight="700" letter-spacing="0.5" text-anchor="${anchorStart ? 'start' : 'end'}"
+    s += `<text class="ld-dim-ink" font-size="9" font-weight="700" letter-spacing="0.5" text-anchor="${anchorStart ? 'start' : 'end'}"
       x="${r(px(atPlane) + dir * 5)}" y="${labelY}">${label}</text>`;
     return s;
   }
@@ -901,8 +902,8 @@ function drawLightDiagram() {
   function sbDim(x1In, x2In, value, tagTop) {
     if (x2In - x1In < 0.45) return '';
     const y = py(surf + 1), mx = px((x1In + x2In) / 2);
-    let s = hticks(px(x1In), px(x2In), y, 'ld-amber');
-    s += `<text class="ld-amber-ink" font-size="10.5" font-weight="700" text-anchor="middle" x="${mx}" y="${y - 6}">${value}</text>`;
+    let s = hticks(px(x1In), px(x2In), y, 'ld-dim');
+    s += `<text class="ld-dim-ink" font-size="10.5" font-weight="700" text-anchor="middle" x="${mx}" y="${y - 6}">${value}</text>`;
     s += `<text class="ld-muted-ink" font-size="8" letter-spacing="1" text-anchor="middle" x="${mx}" y="${y - 27}">${tagTop}</text>`;
     s += `<text class="ld-muted-ink" font-size="8" letter-spacing="1" text-anchor="middle" x="${mx}" y="${y - 18}">SETBACK</text>`;
     return s;
@@ -914,7 +915,7 @@ function drawLightDiagram() {
   // The whole stack sits outside the base's front face so nothing reads as
   // being inside the drawing.
   const vdimX = r(px(baseR) + 16);
-  const openCls = isFrontOverMax || isBackOverMax ? 'ld-danger' : 'ld-amber';
+  const openCls = isFrontOverMax || isBackOverMax ? 'ld-danger' : 'ld-dim';
   const openLbl = 'OPENING ' + frac(openingHeight) + (isFrontOverMax || isBackOverMax ? ' — OVER MAX' : '');
   S.push(vdim(vdimX, openTop, surf, openLbl, openCls, 10.5, px(plane + wallT)));
   S.push(vdim(vdimX, trapTop, openTop, frac(trapH), 'ld-muted', 9, px(plane + wallT)));
