@@ -345,9 +345,21 @@ input[type="range"]::-moz-range-thumb {
   transition: background 0.15s, color 0.15s;
 }
 .hearth-btn + .hearth-btn { border-left: 1px solid var(--border); }
+/* Selected option, not a CTA: the ramp as a ring with a faint tint, so the
+   filled ramp stays reserved for a page's primary action (DESIGN.md). */
 .hearth-btn.active {
-  background: var(--ember-grad, var(--red));
-  color: var(--on-ember, #fff);
+  position: relative;
+  background: var(--red-glow);
+  color: var(--ember-t, var(--red));
+}
+.hearth-btn.active::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  padding: 1.5px; background: var(--ember-grad, var(--red));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .result-card--back {
@@ -365,21 +377,16 @@ input[type="range"]::-moz-range-thumb {
 .controls-panel { position: sticky; top: 24px; }
 
 /* ── Result card ── */
+/* Highlight card (DESIGN.md): thin warm ring + chromatic underglow, shared
+   with the guide pages' open maintenance card. The old top accent bar and
+   tinted fill were a second emphasis language and are retired. */
 .result-card {
   margin-top: 24px;
   padding: 22px 24px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-warm);
-  background: linear-gradient(135deg, var(--red-glow) 0%, var(--ember-glow) 100%);
-  position: relative;
-  overflow: hidden;
-}
-.result-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--ember-grad-bar, linear-gradient(90deg, var(--red), var(--ember)));
+  border: 1px solid var(--hl-border, var(--border-warm));
+  background: var(--surface);
+  box-shadow: var(--hl-shadow, var(--shadow));
 }
 .result-label {
   display: block;

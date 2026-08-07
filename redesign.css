@@ -58,6 +58,15 @@
      stays put and the ramp takes dark ink. */
   --ember-grad: linear-gradient(180deg, #ed7842, #eb4b46 65%);
   --ember-grad-bar: linear-gradient(90deg, #ed7842, #eb4b46 65%);
+  /* Highlight card: a thin warm ring plus a chromatic underglow. The guide
+     pages' open maintenance card is the reference implementation; every
+     other emphasis chrome (top accent bars, thick one-sided borders) is
+     retired in its favour. The amber pair is the warning variant -- same
+     geometry, warning hue. */
+  --hl-border: rgba(240,90,94,0.42);
+  --hl-shadow: 0 2px 12px rgba(211,51,55,0.16), 0 14px 30px -18px rgba(235,75,70,0.4);
+  --hl-border-amber: rgba(232,168,56,0.42);
+  --hl-shadow-amber: 0 2px 12px rgba(232,168,56,0.10), 0 14px 30px -18px rgba(232,168,56,0.35);
   --journey-bg: rgba(255,255,255,0.035); --journey-border: rgba(255,255,255,0.08);
   --journey-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 4px 12px -8px rgba(0,0,0,0.55);
   --nub-bg: rgba(255,255,255,0.08);
@@ -116,6 +125,10 @@
   color-scheme: light;
   --ember: #d33337; --frost: #4aa8ef; --chart: #aacc33; --mag: #ff4d9e;
   --ember-t: #b02427; --frost-t: #1c76c9; --chart-t: #6f8f0a; --mag-t: #d9317f;
+  --hl-border: rgba(192,43,46,0.38);
+  --hl-shadow: 0 2px 12px rgba(176,36,39,0.10), 0 14px 30px -18px rgba(176,36,39,0.28);
+  --hl-border-amber: rgba(184,128,31,0.4);
+  --hl-shadow-amber: 0 2px 12px rgba(184,128,31,0.10), 0 14px 30px -18px rgba(184,128,31,0.30);
   --ground-fill: linear-gradient(180deg, #f1f2f5 0%, #e9ebef 40%, #e2e5ea 100%);
   --text-hi: #171a1f; --text-mid: #4c525c; --text-dim: #6a7280; --ico-ink: #6a7280;
   --stroke: #e2e4e9; --stroke-hi: rgba(23,26,31,0.12);
