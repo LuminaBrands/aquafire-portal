@@ -123,6 +123,26 @@
         "role": "Top stop of the mark's ramp (--ember-grad / --ember-grad-bar), sampled from the redder lower half of ember-mark.png; red-first by brand rule; same in both themes",
         "displayName": "Ember ramp warm",
         "canonical": "#ed7842"
+      },
+      "hl-border": {
+        "role": "Highlight card ring, dark (light: rgba(192,43,46,0.38)) -- thin warm emphasis border",
+        "displayName": "Highlight ring",
+        "canonical": "rgba(240,90,94,0.42)"
+      },
+      "hl-border-amber": {
+        "role": "Highlight card ring, warning variant, dark (light: rgba(184,128,31,0.4))",
+        "displayName": "Highlight ring (warning)",
+        "canonical": "rgba(232,168,56,0.42)"
+      },
+      "hl-glow": {
+        "role": "Chromatic underglow in --hl-shadow, dark (light: rgba(176,36,39,0.28))",
+        "displayName": "Highlight underglow",
+        "canonical": "rgba(235,75,70,0.4)"
+      },
+      "hl-glow-amber": {
+        "role": "Chromatic underglow in --hl-shadow-amber, dark (light: rgba(184,128,31,0.30))",
+        "displayName": "Highlight underglow (warning)",
+        "canonical": "rgba(232,168,56,0.35)"
       }
     },
     "typographyMeta": {

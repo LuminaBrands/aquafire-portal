@@ -28,6 +28,14 @@ colors:
   ember-ramp-warm: "#ed7842"
   ember-ramp-red: "#eb4b46"
   on-ember: "#171a1f"
+  hl-border: "rgba(240,90,94,0.42)"
+  hl-border-day: "rgba(192,43,46,0.38)"
+  hl-border-amber: "rgba(232,168,56,0.42)"
+  hl-border-amber-day: "rgba(184,128,31,0.4)"
+  hl-glow: "rgba(235,75,70,0.4)"
+  hl-glow-day: "rgba(176,36,39,0.28)"
+  hl-glow-amber: "rgba(232,168,56,0.35)"
+  hl-glow-amber-day: "rgba(184,128,31,0.30)"
   on-accent: "#ffffff"
   photo-ink: "#f3f4f6"
   photo-ink-dim: "#c9cdd5"
@@ -185,9 +193,12 @@ palette and arrives mostly on interaction.
   for exactly that reason: ink falls under AA past #eb4b46, so the ramp's
   red is as deep as an inked fill can go. Hovers brighten the ramp
   (`filter: brightness(1.06)`) rather than swapping fills, which would
-  flatten it. The flat accent remains for everything that is not a filled
-  action or a bar fill -- LED edge bars, strokes, focus tints and small
-  indicators, where a two-stop ramp would be detail too small to resolve.
+  flatten it. **The filled form belongs to a module's one primary CTA
+  alone** -- option selectors, selected chips and in-module navigation take
+  the ghost ring form instead (see Components / Ghost button). The flat
+  accent remains for everything that is not a filled action or a bar fill --
+  LED edge bars, strokes, focus tints and small indicators, where a
+  two-stop ramp would be detail too small to resolve.
 
   Note `--on-amber` is a separate token and does not follow the accent. Amber
   survives as the reward-badge colour and is a *light* fill, where white would
@@ -459,6 +470,32 @@ spring ease; LED bars slide in at the bottom edge.
 - **Fill:** near-black 40% alpha dark / near-white 72% light
 - **Hue cycling:** nth-child(4n+1..4) cycles frost → chartreuse → ember → magenta for the hover edge bar and icon tint (text-safe variants for icon color in light)
 - **Right edge:** arrow glyph; optional magenta points badge before it
+
+### Highlight card (emphasis chrome)
+- **One emphasis language for cards**: a thin warm ring (`--hl-border`, 1px)
+  plus a chromatic underglow (`--hl-shadow`) on the card's normal surface
+  fill. The guide pages' open maintenance card is the reference
+  implementation; the enclosure result card and the safety callout follow it
+- **Retired**: top accent bars, tinted gradient fills, and thick one-sided
+  borders as emphasis. They were three more highlight languages saying the
+  same thing (user call, 2026-08)
+- **Warning variant**: same geometry in the warning hue
+  (`--hl-border-amber` / `--hl-shadow-amber`) -- a warning changes the color,
+  never the chrome
+- All four tokens are dual-bound; the light bindings drop alpha slightly so
+  the glow reads as a cast, not a smudge, on the showroom ground
+
+### Ghost (ring) button -- the secondary action
+- **The filled ramp is reserved for a module's one primary CTA.** Everything
+  else that used to fill red -- option selectors, in-module navigation,
+  selected chips -- takes the ghost form: a 1.5px `--ember-grad` ring drawn
+  in a masked pseudo-element (the `.tile::before` technique, so the gradient
+  follows any radius), `--ember-t` ink, transparent at rest
+- **Selected/hover state**: a faint `--red-glow` tint fill; the ink stays
+  `--ember-t`. No shadows -- a ghost that casts a glow reads as filled
+- Current ghosts: the guide tour's Start/Next, the troubleshooting category
+  chips' active state, the guide progress step's active circle, the
+  enclosure hearth-type toggle's active segment
 
 ### Rewards band (homepage)
 - **Shape:** 24px band; column on mobile, row on desktop (total, progress,

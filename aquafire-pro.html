@@ -297,9 +297,11 @@
     }
     .guide-progress-step:hover { border-color: var(--text-muted); color: var(--text); }
     .guide-progress-step.active {
-      background: var(--ember-grad, var(--red)); border-color: transparent; color: var(--on-ember, #fff);
+      background: var(--red-glow); border-color: transparent;
+      color: var(--ember-t, var(--red));
       box-shadow: 0 0 12px var(--red-glow);
     }
+    .guide-progress-step.active:hover { border-color: transparent; color: var(--ember-t, var(--red)); }
     .guide-progress-step.completed {
       background: #1a3a2a; border-color: #2d7a4f; color: #4ade80;
     }
@@ -384,14 +386,15 @@
     }
     .guide-btn:hover { background: rgba(255,255,255,0.04); border-color: var(--text-muted); }
     .guide-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+    /* Tour navigation, not the module's CTA: the ramp as a ring (ghost).
+       The filled ramp stays on the overlay's start button alone. */
     .guide-btn-next {
-      background: var(--ember-grad, var(--red)); border-color: transparent; color: var(--on-ember, #fff);
-      box-shadow: 0 2px 12px var(--red-glow);
-      transition: filter 0.15s, box-shadow 0.15s;
+      position: relative;
+      background: none; border-color: transparent;
+      color: var(--ember-t, var(--red));
     }
     .guide-btn-next:hover {
-      filter: brightness(1.06);
-      box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+      background: var(--red-glow); border-color: transparent;
     }
     .guide-btn-replay { border: none; background: none; padding: 10px 12px; color: var(--text-muted); }
     .guide-btn-replay:hover { color: var(--text); background: none; }
@@ -449,11 +452,27 @@
       cursor: pointer; transition: all 0.2s;
     }
     .ts-cat-btn:hover { border-color: var(--text-muted); color: var(--text); }
+    /* Selected option, not a CTA: tint + ramp ring, ink in the text variant. */
     .ts-cat-btn.active {
-      background: var(--ember-grad, var(--red)); border-color: transparent; color: var(--on-ember, #fff);
-      box-shadow: 0 2px 12px var(--red-glow);
+      position: relative;
+      background: var(--red-glow); border-color: transparent;
+      color: var(--ember-t, var(--red));
     }
+    .ts-cat-btn.active:hover { border-color: transparent; color: var(--ember-t, var(--red)); }
     .ts-cat-btn svg { flex-shrink: 0; }
+    /* The ramp ring shared by ghost/selected controls: a masked pseudo, so it
+       can be a gradient and still follow each control's radius. */
+    .guide-btn-next::before,
+    .ts-cat-btn.active::before,
+    .guide-progress-step.active::before {
+      content: ""; position: absolute; inset: 0; border-radius: inherit;
+      padding: 1.5px; background: var(--ember-grad, var(--red));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+    }
 
     /* Problem accordion */
     .ts-problems { display: flex; flex-direction: column; gap: 10px; }
@@ -555,10 +574,14 @@
     .shop-card.disabled { opacity: 0.6; pointer-events: none; }
 
     /* ── Safety Callout ── */
+    /* Highlight card, warning variant (DESIGN.md): a thin ring all round
+       plus a chromatic underglow -- the thick one-sided border is retired. */
     .safety-callout {
       display: flex; gap: 16px; align-items: flex-start;
-      background: var(--surface); border: 1px solid var(--border);
-      border-left: 4px solid var(--amber); border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--hl-border-amber, var(--amber-dim));
+      border-radius: var(--radius);
+      box-shadow: var(--hl-shadow-amber);
       padding: 20px 24px; margin-bottom: 40px;
     }
     .safety-callout-icon {
@@ -593,7 +616,8 @@
       border-radius: var(--radius-sm); overflow: hidden;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .maint-frequency.open { border-color: rgba(192,57,43,0.4); box-shadow: 0 2px 12px var(--red-glow); }
+    /* The reference highlight card, now stated in the shared tokens. */
+    .maint-frequency.open { border-color: var(--hl-border, rgba(192,57,43,0.4)); box-shadow: var(--hl-shadow, 0 2px 12px var(--red-glow)); }
     .maint-frequency-header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 16px 20px; cursor: pointer; gap: 12px; transition: background 0.15s;
