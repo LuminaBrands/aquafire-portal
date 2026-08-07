@@ -45,22 +45,25 @@
   --composer-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 8px 20px -12px rgba(0,0,0,0.6);
   --send-bg: rgba(255,255,255,0.12); --send-border: rgba(255,255,255,0.12);
   --send-ink: #f3f4f6; --send-bg-hover: rgba(255,255,255,0.18);
-  /* The mark's own ramp, sampled from ember-mark.png: #f09343 at the top of
-     the disc falling to #eb4b46 at the bottom. Filled actions and determinate
+  /* The mark's own ramp, sampled from ember-mark.png -- but from the disc's
+     redder lower half: #ed7842 (upper middle) to #eb4b46 (bottom), with red
+     holding flat past 65%. The full disc tops out at a true orange (#f09343)
+     and the brand is red-first, so the ramp keeps the warmth without letting
+     orange lead (user call, 2026-08). Filled actions and determinate
      progress fills carry it -- buttons vertically, the way the disc is lit;
      bars along their length. Like the mark, it is lit from within and
      identical in both themes, so both bindings live here (the --photo-ink
-     precedent). Deepening the ramp toward the flat #d33337 accent was tried
-     on paper and rejected: no ink clears AA across orange AND deep red, so
-     the ramp stays inside the disc's own range and takes dark ink. */
-  --ember-grad: linear-gradient(180deg, #f09343, #eb4b46);
-  --ember-grad-bar: linear-gradient(90deg, #f09343, #eb4b46);
+     precedent). Deepening the red end past #eb4b46 was tried on paper and
+     rejected: ink falls under AA there (4.25:1 at #e73c3f), so the red end
+     stays put and the ramp takes dark ink. */
+  --ember-grad: linear-gradient(180deg, #ed7842, #eb4b46 65%);
+  --ember-grad-bar: linear-gradient(90deg, #ed7842, #eb4b46 65%);
   --journey-bg: rgba(255,255,255,0.035); --journey-border: rgba(255,255,255,0.08);
   --journey-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 4px 12px -8px rgba(0,0,0,0.55);
   --nub-bg: rgba(255,255,255,0.08);
   /* Type sitting ON the accent fill, which is the mark's ramp above -- a
-     *light* orange-to-red, so this is ink in both themes: 7.2:1 on #f09343
-     and 4.7:1 on #eb4b46, where white clears only 3.7:1 at the ramp's red
+     *light* warm red, so this is ink in both themes: 6.1:1 on #ed7842 and
+     4.7:1 on #eb4b46, where white clears only 3.7:1 at the ramp's red
      end. (When the fill was flat #d33337 this was white; the fill and its
      ink move together.) Like --scrim it is not a surface colour and does not
      flip with the theme.

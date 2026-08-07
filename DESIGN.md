@@ -25,7 +25,7 @@ colors:
   magenta-ink: "#d9317f"
   orb-lift: "rgba(224,100,30,0.45)"
   ember-text: "#f05a5e"
-  ember-ramp-orange: "#f09343"
+  ember-ramp-warm: "#ed7842"
   ember-ramp-red: "#eb4b46"
   on-ember: "#171a1f"
   on-accent: "#ffffff"
@@ -174,17 +174,20 @@ palette and arrives mostly on interaction.
   **Filled actions and determinate progress fills wear the mark's own ramp,
   not the flat accent**: `--ember-grad` (180deg, for buttons -- lit from the
   top the way the disc is) and `--ember-grad-bar` (90deg, along a bar),
-  sampled from ember-mark.png (#f09343 at the top of the disc to #eb4b46 at
-  the bottom). Like the mark, the ramp is lit from within and identical in
-  both themes. **Ink on it is dark** (`--on-ember` #171a1f: 7.2:1 at the
-  orange stop, 4.7:1 at the red -- no stop in the ramp clears AA under white).
-  A deeper ramp ending on flat #d33337 was rejected for exactly that reason:
-  no single ink survives both a light orange and a deep red. Hovers brighten
-  the ramp (`filter: brightness(1.06)`) rather than swapping fills, which
-  would flatten it. The flat accent remains for everything that is not a
-  filled action or a bar fill -- LED edge bars, strokes, focus tints and
-  small indicators, where a two-stop ramp would be detail too small to
-  resolve.
+  sampled from ember-mark.png. **The ramp is red-first**: it samples the
+  disc's redder lower half (#ed7842 at the upper middle to #eb4b46 at the
+  bottom) and holds flat red past 65%, because the disc's own top is a true
+  orange and orange must never lead in the branding -- the ramp keeps the
+  warmth as an overtone, not a headline. Like the mark, the ramp is lit from
+  within and identical in both themes. **Ink on it is dark** (`--on-ember`
+  #171a1f: 6.1:1 at the warm stop, 4.7:1 at the red -- no stop in the ramp
+  clears AA under white). A deeper red end toward flat #d33337 was rejected
+  for exactly that reason: ink falls under AA past #eb4b46, so the ramp's
+  red is as deep as an inked fill can go. Hovers brighten the ramp
+  (`filter: brightness(1.06)`) rather than swapping fills, which would
+  flatten it. The flat accent remains for everything that is not a filled
+  action or a bar fill -- LED edge bars, strokes, focus tints and small
+  indicators, where a two-stop ramp would be detail too small to resolve.
 
   Note `--on-amber` is a separate token and does not follow the accent. Amber
   survives as the reward-badge colour and is a *light* fill, where white would
