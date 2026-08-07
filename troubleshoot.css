@@ -1,6 +1,16 @@
 /* ── Troubleshooter — guided decision-tree wizard ───────────────────────────
-   Pairs with troubleshoot.html / troubleshoot.js. Relies on the shared theme
-   tokens defined in hub.css / the page's inline :root. */
+   Pairs with troubleshoot.html / troubleshoot.js.
+
+   Tokens come from redesign.css, which the page loads. Every var() here used
+   to carry a fallback (var(--blue)) from when the page had a partial
+   inline :root — those were the 2025 palette, dark-only, and they would have
+   silently reinstated it if a token were ever renamed. The page has no inline
+   :root now, so the fallbacks are gone and nothing is a literal colour. */
+
+/* One step brighter than --surface-alt, for hover fills. Mixing toward --text
+   lifts it in the dark theme and deepens it in the light one, which a fixed
+   colour can't do. */
+.ts-wrap { --ts-hover: color-mix(in srgb, var(--surface-alt) 88%, var(--text) 12%); }
 
 .ts-wrap { max-width: 760px; margin: 0 auto; }
 
@@ -12,18 +22,18 @@
   margin-bottom: 16px; font-size: 0.83rem;
 }
 .ts-crumb {
-  background: var(--surface-alt, #22262e); border: 1px solid var(--border);
+  background: var(--surface-alt); border: 1px solid var(--border);
   color: var(--text-muted); padding: 4px 10px; border-radius: 999px;
   font: inherit; cursor: pointer; transition: color .15s, border-color .15s;
 }
-.ts-crumb:hover { color: var(--text); border-color: var(--blue, #4da6e8); }
-.ts-crumb-current { color: var(--text); cursor: default; background: rgba(255,255,255,0.05); }
+.ts-crumb:hover { color: var(--text); border-color: var(--blue); }
+.ts-crumb-current { color: var(--text); cursor: default; background: color-mix(in srgb, var(--text) 8%, transparent); }
 .ts-crumb-sep { color: var(--text-muted); opacity: .55; }
 
 /* ── Card ───────────────────────────────────────────────────────────────── */
 .ts-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius, 14px); padding: 28px;
+  background: color-mix(in srgb, var(--text) 4%, transparent); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px;
 }
 @media (max-width: 600px) { .ts-card { padding: 20px 16px; } }
 
@@ -34,23 +44,23 @@
 }
 @media (max-width: 600px) { .ts-q-prompt { font-size: 1.35rem; } }
 .ts-q-help { color: var(--text-muted); font-size: 0.93rem; line-height: 1.6; margin: 0 0 20px; }
-.ts-q-help a { color: var(--blue, #4da6e8); }
+.ts-q-help a { color: var(--blue); }
 
 .ts-options { display: flex; flex-direction: column; gap: 10px; }
 .ts-option {
   display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
-  background: var(--surface-alt, #22262e); border: 1px solid var(--border);
-  border-radius: var(--radius-sm, 8px); padding: 14px 16px; cursor: pointer;
+  background: var(--surface-alt); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px 16px; cursor: pointer;
   color: var(--text); font: inherit; transition: border-color .15s, background .15s, transform .05s;
 }
-.ts-option:hover { border-color: var(--red, #c0392b); background: #262a32; }
+.ts-option:hover { border-color: var(--red); background: var(--ts-hover, var(--surface-alt)); }
 .ts-option:active { transform: translateY(1px); }
 .ts-option-icon { font-size: 1.35rem; line-height: 1; flex: none; width: 26px; text-align: center; }
 .ts-option-text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
 .ts-option-label { font-weight: 600; font-size: 0.93rem; line-height: 1.35; }
 .ts-option-desc { color: var(--text-muted); font-size: 0.83rem; line-height: 1.4; }
 .ts-option-arrow { color: var(--text-muted); flex: none; transition: transform .15s, color .15s; }
-.ts-option:hover .ts-option-arrow { color: var(--red, #c0392b); transform: translateX(2px); }
+.ts-option:hover .ts-option-arrow { color: var(--red); transform: translateX(2px); }
 
 /* ── Quick-pick chips (common issues) ───────────────────────────────────── */
 .ts-quick { margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
@@ -60,50 +70,51 @@
 }
 .ts-quick-chips, .ts-related { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .ts-chip {
-  background: rgba(192,57,43,0.10); border: 1px solid rgba(192,57,43,0.35);
+  background: color-mix(in srgb, var(--red) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--red) 40%, transparent);
   color: var(--text); padding: 7px 12px; border-radius: 999px; font: inherit;
   font-size: 0.83rem; cursor: pointer; transition: background .15s, border-color .15s;
 }
-.ts-chip:hover { background: rgba(192,57,43,0.2); border-color: var(--red, #c0392b); }
+.ts-chip:hover { background: color-mix(in srgb, var(--red) 22%, transparent); border-color: var(--red); }
 .ts-chip-related {
-  background: var(--surface-alt, #22262e); border-color: var(--border); color: var(--text-muted);
+  background: var(--surface-alt); border-color: var(--border); color: var(--text-muted);
 }
-.ts-chip-related:hover { color: var(--text); border-color: var(--blue, #4da6e8); background: #262a32; }
+.ts-chip-related:hover { color: var(--text); border-color: var(--blue); background: var(--ts-hover, var(--surface-alt)); }
 
 /* ── Controls (Back / Start over) ───────────────────────────────────────── */
 .ts-controls { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
 
 .ts-btn {
   display: inline-block; font: inherit; font-size: 0.88rem; font-weight: 600;
-  padding: 9px 16px; border-radius: var(--radius-sm, 8px); cursor: pointer;
+  padding: 9px 16px; border-radius: var(--radius-sm); cursor: pointer;
   text-decoration: none; border: 1px solid transparent; transition: background .15s, border-color .15s, color .15s;
 }
 .ts-btn-ghost { background: transparent; border-color: var(--border); color: var(--text-muted); }
 .ts-btn-ghost:hover { color: var(--text); border-color: var(--text-muted); }
 .ts-btn-primary {
-  background: var(--red, #c0392b); color: #fff; border-color: var(--red, #c0392b);
-  box-shadow: 0 2px 12px var(--red-glow, rgba(192,57,43,0.15));
+  background: var(--red); color: var(--on-accent); border-color: var(--red);
+  box-shadow: 0 2px 12px var(--red-glow);
 }
-.ts-btn-primary:hover { background: var(--red-dark, #a93226); }
+.ts-btn-primary:hover { background: var(--red-dark); }
 .ts-btn-outline { background: transparent; border-color: var(--border); color: var(--text); }
-.ts-btn-outline:hover { border-color: var(--red, #c0392b); }
+.ts-btn-outline:hover { border-color: var(--red); }
 
 /* ── Outcome card ───────────────────────────────────────────────────────── */
 .ts-outcome { border-top-width: 3px; border-top-style: solid; }
-.ts-sev-fix { border-top-color: var(--blue, #4da6e8); }
-.ts-sev-maintenance { border-top-color: var(--amber, #e8a838); }
-.ts-sev-support { border-top-color: var(--red, #c0392b); }
+.ts-sev-fix { border-top-color: var(--blue); }
+.ts-sev-maintenance { border-top-color: var(--amber); }
+.ts-sev-support { border-top-color: var(--red); }
 .ts-sev-info { border-top-color: var(--text-muted); }
 
 .ts-outcome-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
 .ts-sev-badge {
   display: inline-block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: 0.9px; padding: 4px 10px; border-radius: 999px;
-  background: rgba(255,255,255,0.06); color: var(--text-muted);
+  background: color-mix(in srgb, var(--text) 10%, transparent); color: var(--text-muted);
 }
-.ts-sev-fix .ts-sev-badge { background: rgba(77,166,232,0.15); color: var(--blue, #4da6e8); }
-.ts-sev-maintenance .ts-sev-badge { background: rgba(232,168,56,0.15); color: var(--amber, #e8a838); }
-.ts-sev-support .ts-sev-badge { background: rgba(192,57,43,0.18); color: #e8857a; }
+.ts-sev-fix .ts-sev-badge { background: color-mix(in srgb, var(--blue) 18%, transparent); color: var(--blue); }
+.ts-sev-maintenance .ts-sev-badge { background: color-mix(in srgb, var(--amber) 18%, transparent); color: var(--amber); }
+.ts-sev-support .ts-sev-badge { background: color-mix(in srgb, var(--red) 20%, transparent); color: var(--ember-t); }
 .ts-model-tag {
   font-size: 0.76rem; color: var(--text-muted); border: 1px solid var(--border);
   padding: 3px 9px; border-radius: 999px;
@@ -126,25 +137,31 @@
   counter-increment: ts; content: counter(ts);
   position: absolute; left: 0; top: 11px;
   width: 26px; height: 26px; border-radius: 50%;
-  background: rgba(77,166,232,0.15); color: var(--blue, #4da6e8);
+  background: color-mix(in srgb, var(--blue) 18%, transparent); color: var(--blue);
   font-size: 0.83rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
 }
-.ts-sev-maintenance .ts-steps li::before { background: rgba(232,168,56,0.15); color: var(--amber, #e8a838); }
-.ts-sev-support .ts-steps li::before { background: rgba(192,57,43,0.16); color: #e8857a; }
-.ts-sev-info .ts-steps li::before { background: rgba(255,255,255,0.07); color: var(--text-muted); }
-.ts-steps a { color: var(--blue, #4da6e8); }
+.ts-sev-maintenance .ts-steps li::before { background: color-mix(in srgb, var(--amber) 18%, transparent); color: var(--amber); }
+.ts-sev-support .ts-steps li::before { background: color-mix(in srgb, var(--red) 18%, transparent); color: var(--ember-t); }
+.ts-sev-info .ts-steps li::before { background: color-mix(in srgb, var(--text) 10%, transparent); color: var(--text-muted); }
+.ts-steps a { color: var(--blue); }
 .ts-steps strong { color: var(--text); }
 
 /* ── Caution / note callouts ────────────────────────────────────────────── */
 .ts-caution, .ts-note {
   display: flex; gap: 12px; align-items: flex-start;
-  margin: 18px 0 0; padding: 14px 16px; border-radius: var(--radius-sm, 8px);
+  margin: 18px 0 0; padding: 14px 16px; border-radius: var(--radius-sm);
   font-size: 0.88rem; line-height: 1.6;
 }
-.ts-caution { background: rgba(192,57,43,0.10); border: 1px solid rgba(192,57,43,0.3); }
-.ts-caution-ic { color: var(--red, #c0392b); font-size: 1.15rem; line-height: 1.5; flex: none; }
-.ts-note { background: rgba(77,166,232,0.08); border: 1px solid rgba(77,166,232,0.25); }
-.ts-note-ic { color: var(--blue, #4da6e8); font-size: 1.05rem; line-height: 1.6; flex: none; }
+.ts-caution {
+  background: color-mix(in srgb, var(--red) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--red) 34%, transparent);
+}
+.ts-caution-ic { color: var(--red); font-size: 1.15rem; line-height: 1.5; flex: none; }
+.ts-note {
+  background: color-mix(in srgb, var(--blue) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--blue) 28%, transparent);
+}
+.ts-note-ic { color: var(--blue); font-size: 1.05rem; line-height: 1.6; flex: none; }
 .ts-caution p, .ts-note p { margin: 0; }
 .ts-caution strong, .ts-note strong { color: var(--text); }
 
@@ -152,14 +169,14 @@
 .ts-resources { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .ts-resource {
   display: inline-flex; align-items: center; gap: 8px; max-width: 100%;
-  padding: 8px 12px; border-radius: var(--radius-sm, 8px); font-size: 0.83rem;
+  padding: 8px 12px; border-radius: var(--radius-sm); font-size: 0.83rem;
   text-decoration: none; color: var(--text); border: 1px solid var(--border);
-  background: var(--surface-alt, #22262e); transition: border-color .15s, background .15s;
+  background: var(--surface-alt); transition: border-color .15s, background .15s;
 }
-.ts-resource:hover { border-color: var(--blue, #4da6e8); background: #262a32; }
+.ts-resource:hover { border-color: var(--blue); background: var(--ts-hover, var(--surface-alt)); }
 .ts-resource-ic { flex: none; }
-.ts-resource-video .ts-resource-ic { color: var(--red, #c0392b); }
-.ts-resource-doc .ts-resource-ic { color: var(--blue, #4da6e8); }
+.ts-resource-video .ts-resource-ic { color: var(--red); }
+.ts-resource-doc .ts-resource-ic { color: var(--blue); }
 .ts-resource-pending {
   border-style: dashed; color: var(--text-muted); cursor: default; background: transparent;
 }
@@ -173,15 +190,18 @@
 .ts-outcome-foot { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
 
 .ts-escalate {
-  margin-top: 24px; padding: 18px 20px; border-radius: var(--radius-sm, 8px);
-  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  margin-top: 24px; padding: 18px 20px; border-radius: var(--radius-sm);
+  background: var(--surface); border: 1px solid var(--border);
 }
-.ts-escalate-firm { background: rgba(192,57,43,0.08); border-color: rgba(192,57,43,0.3); }
+.ts-escalate-firm {
+  background: color-mix(in srgb, var(--red) 10%, transparent);
+  border-color: color-mix(in srgb, var(--red) 34%, transparent);
+}
 .ts-escalate-h { font-size: 1.05rem; margin: 0 0 6px; }
 .ts-escalate-p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin: 0 0 14px; }
 .ts-escalate-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .ts-escalate-note { color: var(--text-muted); font-size: 0.76rem; line-height: 1.6; margin: 14px 0 0; }
-.ts-escalate-note a { color: var(--blue, #4da6e8); }
+.ts-escalate-note a { color: var(--blue); }
 
 /* ── Embed mode tweaks ──────────────────────────────────────────────────── */
 body.is-embed .ts-wrap { max-width: 760px; }
