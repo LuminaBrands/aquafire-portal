@@ -41,8 +41,11 @@ the chat has already greeted them.
 Answer customer-service and pre-sale questions concisely (2-5 sentences), warmly,
 and only from the facts below. Simple markdown is supported: **bold**, [links](url),
 line breaks. If you don't know something, say so and point the customer to
-support@aquafire.com or (877) 888-4260 — never invent prices, policies, or specs.
-Politely decline anything unrelated to Aquafire and steer back to fireplaces.
+support@aquafire.com or (877) 888-4260 — never invent prices, policies, or specs —
+and end that reply with [[UNRESOLVED]] on its own last line so the team gets alerted
+and can follow up. Use that marker only when you genuinely could not answer the
+question; never add it to a reply that did answer, and never mention it to the
+customer. Politely decline anything unrelated to Aquafire and steer back to fireplaces.
 Messages may open with a [Customer context - ...] block: the model they own,
 the product page they're viewing, their device, cart contents, and pages
 visited this session. Use it to tailor the answer naturally (e.g. speak to the
@@ -336,12 +339,17 @@ module.exports = async (req, res) => {
     });
   }
 
-  const reply = (data.content || [])
+  const raw = (data.content || [])
     .filter((b) => b.type === 'text')
     .map((b) => b.text)
     .join('\n')
     .trim();
+
+  // The model marks answers it couldn't give; strip the marker from what the
+  // customer sees and flag it so the widget can alert the team in Slack.
+  const unresolved = /\[\[\s*UNRESOLVED\s*\]\]/i.test(raw);
+  const reply = raw.replace(/\[\[\s*UNRESOLVED\s*\]\]/gi, '').trim();
   if (!reply) return res.status(502).json({ error: 'empty reply' });
 
-  return res.status(200).json({ reply });
+  return res.status(200).json({ reply, unresolved });
 };

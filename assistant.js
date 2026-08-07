@@ -20,6 +20,7 @@
      portalBase   — absolute base URL of the portal (default: script's own dir)
      markUrl      — Ember's avatar artwork (default: portalBase + ember-mark.png)
      apiEndpoint  — POST endpoint for LLM replies (optional)
+     notifyEndpoint — POST endpoint that Slack-alerts dead ends (optional)
      showInEmbed  — set true to show inside ?embed iframes (default hidden, so
                     a Shopify page embedding a portal tool doesn't get 2 widgets)
 
@@ -83,36 +84,59 @@
     : (PORTAL_BASE ? PORTAL_BASE + 'api/order-status' : '');
   var orderDown = false;
 
-  // Team notification on human handoff: fire-and-forget POST to the portal's
-  // /api/notify-handoff function (Slack webhook relay). Sent at most once per
-  // conversation. Override with cfg.notifyEndpoint, or null to disable; a 503
+  // Team alerts on Ember's dead ends: fire-and-forget POST to the portal's
+  // /api/notify-slack function (Slack webhook relay). Four kinds —
+  //   'unanswered' no KB match and AI unavailable
+  //   'unresolved' the AI answered but said it couldn't help
+  //   'llm_error'  /api/chat errored, customer got the local fallback
+  //   'handoff'    a contact card was shown
+  // Handoffs fire at most once per conversation (a second contact card is not
+  // new information); the others fire per occurrence and the function dedupes
+  // repeats. Override with cfg.notifyEndpoint, or null to disable; a 503
   // (webhook not configured yet) stops attempts for this page load.
   var NOTIFY_ENDPOINT = cfg.notifyEndpoint !== undefined
     ? cfg.notifyEndpoint
-    : (PORTAL_BASE ? PORTAL_BASE + 'api/notify-handoff' : '');
+    : (PORTAL_BASE ? PORTAL_BASE + 'api/notify-slack' : '');
   var notifyDown = false;
+  var lastUserText = '';
 
-  function notifyHandoff(mode) {
-    if (!NOTIFY_ENDPOINT || notifyDown || state.notified) return;
-    state.notified = true;
-    persist();
+  function maskEmails(s) {
+    return String(s || '').replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, function (e) {
+      return /@(aquafire|luminabrands)\.com$/i.test(e) ? e : '[email]';
+    });
+  }
+
+  function notify(kind, data) {
+    if (!NOTIFY_ENDPOINT || notifyDown) return;
+    if (kind === 'handoff') {
+      if (state.notified) return;
+      state.notified = true;
+      persist();
+    }
     try {
       var recent = state.msgs.filter(function (m) { return m.who === 'user'; })
-        .slice(-3).map(function (m) {
-          return String(m.text || '').replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, function (e) {
-            return /@(aquafire|luminabrands)\.com$/i.test(e) ? e : '[email]';
-          }).slice(0, 200);
-        });
+        .slice(-3).map(function (m) { return maskEmails(m.text).slice(0, 200); });
+      // Quote the last question the customer actually typed — "Talk to a human"
+      // is a chip, and tells the team nothing about what they were stuck on.
+      var question = (data && data.question) || lastUserText ||
+        (recent.length ? recent[recent.length - 1] : '');
       fetch(NOTIFY_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         keepalive: true,
         body: JSON.stringify(Object.assign({
-          mode: mode, page: location.pathname, host: location.hostname,
-          model: state.ctx.model || '', recent: recent
+          kind: kind, convo: state.cid,
+          page: location.pathname, host: location.hostname,
+          model: state.ctx.model || '',
+          mode: (data && data.mode) || '',
+          question: maskEmails(question).slice(0, 400),
+          reply: maskEmails(data && data.reply).slice(0, 700),
+          recent: recent
         }, visitorCtx()))
-      }).then(function (r) { if (r.status === 503) notifyDown = true; })
-        .catch(function () { /* never bother the customer over this */ });
+      }).then(function (r) {
+        // Not configured / refused — stop trying for this page load.
+        if (!r.ok && r.status !== 429) notifyDown = true;
+      }).catch(function () { /* never bother the customer over this */ });
     } catch (e) { /* ignore */ }
   }
 
@@ -1779,7 +1803,7 @@
             var btn = el('button', 'afa-chip', c.label);
             btn.addEventListener('click', function () {
               chips.classList.add('afa-spent');
-              handleUserText(c.send);
+              handleUserText(c.send, true);
             });
             chips.appendChild(btn);
           }
@@ -1815,7 +1839,7 @@
       } else if (b.t === 'contact') {
         if (!spent) {
           logEvent('handoff', { mode: b.mode || 'support' });
-          notifyHandoff(b.mode || 'support');
+          notify('handoff', { mode: b.mode || 'support' });
         }
         var email = b.mode === 'sales' ? SALES_EMAIL : b.mode === 'orders' ? ORDERS_EMAIL : SUPPORT_EMAIL;
         var c = el('div', 'afa-contact');
@@ -1923,8 +1947,11 @@
     handleUserText(text);
   }
 
-  function handleUserText(text) {
+  function handleUserText(text, viaChip) {
     pushUser(text);
+    // Alerts quote the last question the customer actually typed — "Talk to a
+    // human" is a chip, and tells the team nothing about what they were stuck on.
+    if (!viaChip) lastUserText = text;
     if (!state.started) {
       state.started = true;
       persist();
@@ -1999,6 +2026,7 @@
     } else if (llmAvailable) {
       remoteReply(text);
     } else {
+      notify('unanswered', { question: text });
       reply(FALLBACK);
     }
   }
@@ -2063,6 +2091,9 @@
     }).then(function (d) {
       clearTimeout(timer);
       if (!d || !d.reply) throw new Error('empty');
+      // The function flags replies where the AI told the customer it couldn't
+      // help — alert immediately, not behind the reply's typing delay.
+      if (d.unresolved) notify('unresolved', { question: text, reply: String(d.reply).slice(0, 700) });
       afterThink(function () {
         hideTyping();
         logEvent('llm_reply', { text: String(d.reply).slice(0, 500) });
@@ -2074,6 +2105,7 @@
     }).catch(function () {
       clearTimeout(timer);
       llmDown = true; // don't retry this page load — go straight to local KB
+      notify('llm_error', { question: text });
       afterThink(function () {
         hideTyping();
         logEvent('llm_error', {});

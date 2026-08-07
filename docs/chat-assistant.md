@@ -84,7 +84,7 @@ on the tag itself:
 | `portalBase` | `data-portal-base` | script's own directory | Absolute base URL used for portal deep links |
 | `apiEndpoint` | — | `portalBase + 'api/chat'` | POST endpoint for Claude-powered replies (below). Set `null` to disable AI mode |
 | `orderEndpoint` | — | `portalBase + 'api/order-status'` | POST endpoint for order & tracking lookup (below). Set `null` to disable the lookup flow |
-| `notifyEndpoint` | — | `portalBase + 'api/notify-handoff'` | POST endpoint for team handoff notifications (below). Set `null` to disable |
+| `notifyEndpoint` | — | `portalBase + 'api/notify-slack'` | POST endpoint that Slack-alerts Ember's dead ends (below). Set `null` to disable alerts |
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
 | `markUrl` | `data-mark-url` | `portalBase + 'ember-mark.png'` | Ember's avatar artwork, used by the launcher, the panel header, the nudge and every bot message row |
 | `beam` | `data-beam` | `'input'` | Border Beam target: `'input'` (composer field), `'panel'` (whole window), or `false` to disable |
@@ -214,25 +214,49 @@ Until credentials are set, the endpoint returns 503 and Ember falls back to the
   `error`) — and the widget masks email addresses out of every logged message,
   so no order numbers or emails ever land in `chatEvents`.
 
-## Team handoff notifications (`api/notify-handoff.js`)
+## Slack alerts for dead ends (`api/notify-slack.js`)
 
-The first time a conversation shows a contact card (customer asked for a human,
-hit a 👎 flow, or reached an escalation), the widget pings
-**`/api/notify-handoff`**, which forwards a short summary to a chat webhook:
-where they were, their model, their last few messages (emails masked), and a
-link to Chat Insights for the full transcript. At most one notification per
-conversation.
+The dashboard is a pull medium — someone has to remember to look. So the widget also
+**pushes an alert to Slack (`#chat-insights-feeback`) the moment Ember hits a dead
+end**, which is exactly when a human can still save the conversation:
+
+| Alert | Fired when |
+|---|---|
+| :grey_question: **Ember had no answer** | No knowledge-base match *and* AI mode unavailable — the customer got the generic "try one of these" reply |
+| :grey_question: **Ember didn't know the answer** | The AI replied but flagged itself `unresolved` — it told the customer it couldn't help |
+| :warning: **Ember's AI backend failed** | `/api/chat` errored or timed out; the customer got the local fallback |
+| :raising_hand: **Handoff to a human** | A contact card was shown — asked for a human, a 👎 flow, or an escalation |
+
+Each message carries the customer's question, Ember's reply (for the `unresolved`
+case), their model, what they were viewing, cart contents, the pages they've visited,
+their last few messages, and a link to Chat Insights for the full transcript — enough
+to pick the conversation up without opening anything.
+
+**Handoffs fire at most once per conversation** (a second contact card isn't new
+information). The other three fire per occurrence, with the function swallowing an
+identical repeat within 10 minutes. **Customer email addresses are masked** client-side
+*and* server-side before anything reaches Slack, and all customer text is Slack-escaped
+so a pasted `<!channel>` can't ping the workspace.
 
 **To activate (one-time):**
 
-1. In Slack: **Apps → Incoming Webhooks → Add** (or api.slack.com → Create app
-   → Incoming Webhooks), pick the channel (e.g. `#ember-chat`), copy the
-   webhook URL. (Any service accepting a `{ "text": ... }` POST works too.)
-2. Vercel → **Settings → Environment Variables** → add `HANDOFF_WEBHOOK_URL`
-   (Production + Preview) → **Redeploy**.
+1. In Slack: api.slack.com → **Create app → From scratch** → name it, pick the
+   workspace → **Incoming Webhooks** → *Add New Webhook to Workspace* → pick
+   `#chat-insights-feeback` → copy the `https://hooks.slack.com/services/…` URL.
+2. Vercel → **Settings → Environment Variables** → add `SLACK_WEBHOOK_URL`
+   (**all environments**, so previews can be tested before merge) → **Redeploy**.
 
-Until it's set, the endpoint 503s and the widget silently stops trying for the
-page load — customers never see any of this.
+Two traps worth knowing, both of which cost us a debugging round:
+
+- A **Production-scoped variable is not visible to Preview deployments.** If you're
+  testing on a PR preview, the variable has to include Preview.
+- **Env values bind at build time.** Changing the variable does nothing until that
+  specific deployment is rebuilt — and redeploying a *different* branch doesn't help.
+
+Until it's set, the endpoint 503s (with a log line saying exactly which of the two
+above applies) and the widget silently stops trying for the page load — customers
+never see any of this. The channel lives in the webhook, not in the code, so moving
+channels is a webhook swap with no deploy.
 
 ## Abuse & cost controls (`api/_guard.js`)
 
@@ -249,10 +273,10 @@ Origin headers are trivially forged by anything that isn't a browser, so this is
 a speed bump, not a boundary. The rate limits are the real control.
 
 **Rate limits that survive cold starts.** Per-IP, per minute: 12 for
-`/api/chat`, 6 for `/api/order-status`, 4 for `/api/notify-handoff`. Plus a
+`/api/chat`, 6 for `/api/order-status`, 10 for `/api/notify-slack`. Plus a
 per-endpoint daily ceiling so that rotating IPs can't run up a Claude bill or
 flood Slack: `CHAT_DAILY_CAP` (default 3000), `ORDER_LOOKUP_DAILY_CAP` (500),
-`HANDOFF_DAILY_CAP` (300).
+`ALERT_DAILY_CAP` (300).
 
 Counters live in Upstash Redis when configured, which is what makes them
 meaningful across the several lambda instances Vercel runs concurrently:
@@ -286,7 +310,12 @@ contract — the original Cloudflare Worker example below still works.
 }
 ```
 
-**Expected response:** `{ "reply": "…markdown-lite text…" }`
+**Expected response:** `{ "reply": "…markdown-lite text…", "unresolved": false }`
+
+`unresolved` is optional — set it `true` when the model couldn't actually answer, and
+the widget raises a Slack alert (see "Slack alerts" below). `api/chat.js` gets this by
+asking the model to end such replies with an `[[UNRESOLVED]]` marker, which the
+function strips before the text reaches the customer.
 
 ### Example: Cloudflare Worker
 
@@ -405,7 +434,8 @@ cents. Add rate limiting (e.g. Cloudflare's built-in) before going live.
 The widget logs anonymous conversation events so the team can see what customers ask,
 what Ember couldn't answer, and how answers were rated — and feed that back into the
 knowledge base. Review everything at **`chat-insights.html`** (internal, sign-in
-gated — same Firebase accounts as the Rewards system).
+gated — same Firebase accounts as the Rewards system). Anything Ember *couldn't*
+handle also pings Slack in real time — see "Slack alerts for dead ends" below.
 
 ### What gets logged
 
@@ -449,6 +479,41 @@ Firestore TTL on the `ts` field (e.g. 180 days).
 | `telemetry: false` | on | Kill switch — nothing is logged |
 | `firestore: {projectId, apiKey}` | portal's project | Log to a different Firebase project (`firestore: null` disables Firestore logging) |
 | `logEndpoint: 'https://…'` | unset | Also POST each event (JSON) to any webhook — Zapier, a Worker, Gorgias, your warehouse |
+
+### Slack alerts for dead ends (`api/notify-slack.js`)
+
+The dashboard is a pull medium — someone has to remember to look. So the widget also
+**pushes an alert to Slack (`#chat-insights-feeback`) the moment Ember hits a dead
+end**, which is exactly when a human can still save the conversation:
+
+| Alert | Fired when |
+|---|---|
+| :grey_question: **Ember had no answer** | No knowledge-base match *and* AI mode unavailable — the customer got the generic "try one of these" reply |
+| :grey_question: **Ember didn't know the answer** | The AI replied but flagged itself `unresolved` — it told the customer it couldn't help |
+| :warning: **Ember's AI backend failed** | `/api/chat` errored or timed out; the customer got the local fallback |
+| :raising_hand: **Handoff to a human** | A contact card was shown (support / sales / orders) — including after a 👎 |
+
+Each message carries the customer's question, the model they're on, the page they were
+reading, Ember's reply (for the `unresolved` case), the conversation id, and a link to
+Chat Insights — enough to decide whether to follow up without opening anything.
+
+**To activate alerts (one-time):**
+
+1. In Slack, create an **incoming webhook** for `#chat-insights-feeback`
+   (api.slack.com/apps → your app → *Incoming Webhooks* → *Add New Webhook to
+   Workspace* → pick the channel). Copy the `https://hooks.slack.com/services/…` URL.
+2. Vercel → `luminabrands-projects/aquafire-portal` → **Settings → Environment
+   Variables** → add `SLACK_WEBHOOK_URL` (Production), then **Redeploy**.
+
+Until it's set, `/api/notify-slack` returns 503 and the widget quietly stops trying for
+that page load — nothing about the chat changes. To move channels, just point the
+webhook somewhere else; the channel lives in the webhook, not in the code.
+
+Function behavior: same CORS allowlist as `/api/chat`, 10 alerts/min/IP, and a 10-minute
+dedupe on (kind + conversation + question) so a re-render or a repeated question doesn't
+double-post. All customer text is Slack-escaped, so a pasted `<!channel>` can't ping the
+workspace. To silence alerts from the client instead, set
+`AQUAFIRE_ASSISTANT_CONFIG.notifyEndpoint = null`.
 
 ### The improvement loop
 
