@@ -280,6 +280,26 @@ button, input, select, textarea { font-family: inherit; }
 .bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 20px 0 4px; }
 .bar .brand { padding: 11px 14px; }
 .bar .brand img { height: 17px; display: block; filter: var(--logo-filter); }
+/* The brand flame is red in both lightings (user call, 2026-08). The logo is
+   one white bitmap, so the flame is repainted by masking the mark's ramp
+   through the logo's own pixels while the img element is clipped down to the
+   wordmark and keeps the theme filter. The split is 16.4%: the flame spans
+   x 0-191 of the 1279px artwork, the wordmark starts at 230, and 210/1279
+   is mid-gap. Feature-gated because without mask support the ::before would
+   paint a solid red block -- those browsers keep the whole-logo treatment. */
+@supports ((-webkit-mask-repeat: no-repeat) or (mask-repeat: no-repeat)) {
+  .bar .brand { position: relative; }
+  .bar .brand img { clip-path: inset(0 0 0 16.4%); }
+  .bar .brand::before {
+    content: ""; position: absolute;
+    left: 14px; top: 50%; transform: translateY(-50%);
+    height: 17px; aspect-ratio: 1279 / 278;
+    background: var(--ember-grad);
+    -webkit-mask: url("https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031") no-repeat left center / 100% 100%;
+    mask: url("https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031") no-repeat left center / 100% 100%;
+    clip-path: inset(0 83.6% 0 0);
+  }
+}
 
 /* One glass capsule holding the whole link set, each item a pill only on
    hover or when current. Denser than a pill per link, which is what lets the
