@@ -282,7 +282,7 @@ button, input, select, textarea { font-family: inherit; }
 .bar .brand img { height: 17px; display: block; filter: var(--logo-filter); }
 /* The brand flame is red in both lightings (user call, 2026-08). The logo is
    one white bitmap, so the flame is repainted by masking the mark's ramp
-   through the logo's own pixels while the <img> is clipped down to the
+   through the logo's own pixels while the img element is clipped down to the
    wordmark and keeps the theme filter. The split is 16.4%: the flame spans
    x 0-191 of the 1279px artwork, the wordmark starts at 230, and 210/1279
    is mid-gap. Feature-gated because without mask support the ::before would
