@@ -1,0 +1,522 @@
+{% comment %}
+  Aquafire vs Others — Comparison Section
+  ----------------------------------------
+  Drop this file into your Shopify theme's /sections directory.
+  Add via Theme Editor: "Add section" → "Aquafire vs Others".
+{% endcomment %}
+
+<style>
+  .afc-{{ section.id }} {
+    --afc-bg-top: {{ section.settings.bg_top }};
+    --afc-bg-bot: {{ section.settings.bg_bottom }};
+    --afc-brand-1: {{ section.settings.brand_gradient_start }};
+    --afc-brand-2: {{ section.settings.brand_gradient_mid }};
+    --afc-brand-3: {{ section.settings.brand_gradient_end }};
+    --afc-ink: #0d0f12;
+    --afc-ink-soft: #5a616c;
+    --afc-card-bg: #ffffff;
+    --afc-card-border: #e6e4de;
+    --afc-row-border: #eeece6;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    padding: 72px 20px 96px;
+    background: linear-gradient(180deg, var(--afc-bg-top) 0%, var(--afc-bg-bot) 100%);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--afc-ink);
+  }
+
+  .afc-{{ section.id }}, .afc-{{ section.id }} * { box-sizing: border-box; }
+
+  .afc-{{ section.id }} {
+    {%- case section.settings.content_alignment -%}
+      {%- when 'left' -%}
+        --afc-align: flex-start;
+        --afc-text-align: left;
+        --afc-img-margin-x: 0 auto 0 0;
+        --afc-cell-pad-start: 44px;
+        --afc-cell-pad-end: 18px;
+        --afc-head-pad-start: 36px;
+        --afc-head-pad-end: 14px;
+      {%- when 'right' -%}
+        --afc-align: flex-end;
+        --afc-text-align: right;
+        --afc-img-margin-x: 0 0 0 auto;
+        --afc-cell-pad-start: 18px;
+        --afc-cell-pad-end: 44px;
+        --afc-head-pad-start: 14px;
+        --afc-head-pad-end: 36px;
+      {%- else -%}
+        --afc-align: center;
+        --afc-text-align: center;
+        --afc-img-margin-x: 0 auto;
+        --afc-cell-pad-start: 18px;
+        --afc-cell-pad-end: 18px;
+        --afc-head-pad-start: 14px;
+        --afc-head-pad-end: 14px;
+    {%- endcase -%}
+  }
+
+  .afc-{{ section.id }} .afc-wrap {
+    max-width: {{ section.settings.max_width | default: 1040 }}px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .afc-{{ section.id }} .afc-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.2rem, 6vw, 3.6rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--afc-ink);
+    margin: 0 0 18px;
+  }
+  .afc-{{ section.id }} .afc-title .afc-break { display: block; }
+
+  .afc-{{ section.id }} .afc-subtitle {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    font-weight: 400;
+    color: var(--afc-ink-soft);
+    margin: 0 0 110px;
+    line-height: 1.5;
+  }
+
+  /* ── Product heads (above the table) ── */
+  .afc-{{ section.id }} .afc-heads {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr 1fr;
+    align-items: end;
+    margin-bottom: -1px;
+  }
+  .afc-{{ section.id }} .afc-head-empty { }
+
+  .afc-{{ section.id }} .afc-head-brand,
+  .afc-{{ section.id }} .afc-head-other {
+    display: flex;
+    flex-direction: column;
+    align-items: var(--afc-align);
+    justify-content: flex-end;
+  }
+
+  .afc-{{ section.id }} .afc-head-brand {
+    position: relative;
+    padding: 14px var(--afc-head-pad-end) 20px var(--afc-head-pad-start);
+    border-radius: 22px 22px 0 0;
+    background:
+      radial-gradient(circle at 50% 35%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 55%),
+      linear-gradient(165deg, var(--afc-brand-1) 0%, var(--afc-brand-2) 55%, var(--afc-brand-3) 100%);
+    box-shadow: 0 18px 40px -20px rgba(148, 30, 20, 0.55);
+    overflow: visible;
+  }
+  .afc-{{ section.id }} .afc-head-brand > * { position: relative; z-index: 1; }
+
+  .afc-{{ section.id }} .afc-brand-photo {
+    width: auto;
+    height: 150px;
+    max-width: 92%;
+    object-fit: contain;
+    display: block;
+    margin: var(--afc-img-margin-x);
+    margin-top: -75px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.35));
+  }
+  .afc-{{ section.id }} .afc-head-brand .afc-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+
+  .afc-{{ section.id }} .afc-head-other {
+    padding: 0 var(--afc-head-pad-end) 20px var(--afc-head-pad-start);
+  }
+  .afc-{{ section.id }} .afc-other-icon {
+    width: 64px;
+    height: 64px;
+    display: block;
+    margin: var(--afc-img-margin-x);
+    margin-bottom: 14px;
+    object-fit: contain;
+    opacity: 0.7;
+  }
+  .afc-{{ section.id }} .afc-head-other .afc-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--afc-ink);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── Comparison table ── */
+  .afc-{{ section.id }} .afc-table {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr 1fr;
+    background: var(--afc-card-bg);
+    border: 1px solid var(--afc-card-border);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px -18px rgba(35, 28, 24, 0.18);
+    position: relative;
+  }
+
+  /* Brand column vertical gradient underlay — absolutely positioned over column 2 */
+  .afc-{{ section.id }} .afc-brand-col-bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 30.77%;   /* 1 / 3.25 */
+    width: 38.46%;  /* 1.25 / 3.25 */
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(180deg, var(--afc-brand-1) 0%, var(--afc-brand-2) 55%, var(--afc-brand-3) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .afc-{{ section.id }} .afc-cell {
+    position: relative;
+    z-index: 1;
+    padding: 26px var(--afc-cell-pad-end) 26px var(--afc-cell-pad-start);
+    display: flex;
+    align-items: center;
+    justify-content: var(--afc-align);
+    text-align: var(--afc-text-align);
+    font-size: 1.05rem;
+    line-height: 1.4;
+    border-top: 1px solid var(--afc-row-border);
+    min-height: 96px;
+  }
+  .afc-{{ section.id }} .afc-row:first-child .afc-cell { border-top: none; }
+
+  .afc-{{ section.id }} .afc-cell-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--afc-ink);
+    background: var(--afc-card-bg);
+  }
+
+  .afc-{{ section.id }} .afc-cell-brand {
+    color: #fff;
+    font-weight: 500;
+    background: transparent;
+    border-top-color: rgba(255, 255, 255, 0.14);
+  }
+  .afc-{{ section.id }} .afc-row:first-child .afc-cell-brand { border-top: none; }
+
+  .afc-{{ section.id }} .afc-cell-other {
+    color: var(--afc-ink);
+    background: var(--afc-card-bg);
+    font-weight: 500;
+  }
+
+  .afc-{{ section.id }} .afc-row { display: contents; }
+
+  /* ── Mobile: keep the original look, slightly tighter ── */
+  @media (max-width: 720px) {
+    .afc-{{ section.id }} { padding: 48px 14px 64px; }
+    .afc-{{ section.id }} .afc-subtitle { margin-bottom: 80px; }
+    .afc-{{ section.id }} .afc-heads { grid-template-columns: 0.9fr 1.4fr 1fr; }
+    .afc-{{ section.id }} .afc-table { grid-template-columns: 0.9fr 1.4fr 1fr; }
+    .afc-{{ section.id }} .afc-brand-col-bg { left: 27.27%; width: 42.42%; }
+    .afc-{{ section.id }} .afc-brand-photo { height: 110px; max-width: 96%; margin-top: -55px; }
+    .afc-{{ section.id }} .afc-other-icon { width: 52px; height: 52px; }
+    .afc-{{ section.id }} .afc-head-brand .afc-label { font-size: 1.15rem; }
+    .afc-{{ section.id }} .afc-head-other .afc-label { font-size: 1rem; }
+    .afc-{{ section.id }} .afc-cell {
+      padding: 20px 10px;
+      font-size: 0.9rem;
+      min-height: 78px;
+    }
+    .afc-{{ section.id }} .afc-cell-label { font-size: 0.98rem; }
+  }
+</style>
+
+<section class="afc-{{ section.id }}">
+  <div class="afc-wrap">
+    {%- if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank -%}
+      <h2 class="afc-title">
+        {%- if section.settings.heading_line_1 != blank -%}
+          <span class="afc-break">{{ section.settings.heading_line_1 }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading_line_2 != blank -%}
+          <span class="afc-break">{{ section.settings.heading_line_2 }}</span>
+        {%- endif -%}
+      </h2>
+    {%- endif -%}
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="afc-subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+
+    <div class="afc-heads">
+      <div class="afc-head-empty" aria-hidden="true"></div>
+      <div class="afc-head-brand">
+        {%- if section.settings.brand_image != blank -%}
+          {{ section.settings.brand_image
+            | image_url: width: 480
+            | image_tag:
+              class: 'afc-brand-photo',
+              alt: section.settings.brand_name,
+              loading: 'lazy',
+              widths: '240, 480',
+              sizes: '240px'
+          }}
+        {%- else -%}
+          <img
+            class="afc-brand-photo"
+            src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/PRO.png"
+            alt="{{ section.settings.brand_name | escape }}"
+            loading="lazy">
+        {%- endif -%}
+        <span class="afc-label">{{ section.settings.brand_name }}</span>
+      </div>
+      <div class="afc-head-other">
+        {%- if section.settings.other_image != blank -%}
+          {{ section.settings.other_image
+            | image_url: width: 256
+            | image_tag:
+              class: 'afc-other-icon',
+              alt: section.settings.other_name,
+              loading: 'lazy',
+              widths: '128, 256',
+              sizes: '128px'
+          }}
+        {%- else -%}
+          <svg class="afc-other-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <rect x="6" y="10" width="52" height="44" rx="4" fill="#c9c2b3"/>
+            <rect x="12" y="16" width="40" height="32" rx="2" fill="#2e2a24"/>
+            <path d="M24 40 Q32 28 40 40 Q36 36 32 40 Q28 36 24 40 Z" fill="#e8a838"/>
+          </svg>
+        {%- endif -%}
+        <span class="afc-label">{{ section.settings.other_name }}</span>
+      </div>
+    </div>
+
+    <div class="afc-table">
+      <div class="afc-brand-col-bg" aria-hidden="true"></div>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'row' -%}
+          <div class="afc-row" {{ block.shopify_attributes }}>
+            <div class="afc-cell afc-cell-label">{{ block.settings.label }}</div>
+            <div class="afc-cell afc-cell-brand">{{ block.settings.brand_value }}</div>
+            <div class="afc-cell afc-cell-other">{{ block.settings.other_value }}</div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Aquafire vs Others",
+  "tag": "section",
+  "class": "section-aquafire-comparison",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Heading — line 1",
+      "default": "Goodbye,"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading — line 2",
+      "default": "Ordinary Fireplaces"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Aquafire outperforms in safety, design, and ambience."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max content width",
+      "min": 720,
+      "max": 1400,
+      "step": 20,
+      "unit": "px",
+      "default": 1040
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "bg_top",
+      "label": "Background — top",
+      "default": "#f1efe7"
+    },
+    {
+      "type": "color",
+      "id": "bg_bottom",
+      "label": "Background — bottom",
+      "default": "#ece5d6"
+    },
+    {
+      "type": "header",
+      "content": "Aquafire column"
+    },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Column name",
+      "default": "Aquafire"
+    },
+    {
+      "type": "image_picker",
+      "id": "brand_image",
+      "label": "Product image (PNG with transparency)"
+    },
+    {
+      "type": "color",
+      "id": "brand_gradient_start",
+      "label": "Gradient — top",
+      "default": "#d4472e"
+    },
+    {
+      "type": "color",
+      "id": "brand_gradient_mid",
+      "label": "Gradient — middle",
+      "default": "#a93226"
+    },
+    {
+      "type": "color",
+      "id": "brand_gradient_end",
+      "label": "Gradient — bottom",
+      "default": "#5f1912"
+    },
+    {
+      "type": "header",
+      "content": "Others column"
+    },
+    {
+      "type": "text",
+      "id": "other_name",
+      "label": "Column name",
+      "default": "Ordinary Fireplaces"
+    },
+    {
+      "type": "image_picker",
+      "id": "other_image",
+      "label": "Icon / image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Comparison row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Flame"
+        },
+        {
+          "type": "text",
+          "id": "brand_value",
+          "label": "Aquafire value",
+          "default": "Realistic 3D vapor flame"
+        },
+        {
+          "type": "text",
+          "id": "other_value",
+          "label": "Others value",
+          "default": "Dangerous open fire"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Aquafire vs Others",
+      "blocks": [
+        {
+          "type": "row",
+          "settings": {
+            "label": "Flame",
+            "brand_value": "Realistic 3D water vapor",
+            "other_value": "Open, burning flame"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Safety",
+            "brand_value": "100% cool-to-touch",
+            "other_value": "Hot surfaces, burn risk"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Install",
+            "brand_value": "Plug & play setup",
+            "other_value": "Gas lines & venting"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Fuel",
+            "brand_value": "Just tap water",
+            "other_value": "Gas, wood, or ethanol"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Emissions",
+            "brand_value": "Zero smoke & fumes",
+            "other_value": "Smoke, CO₂, soot"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Design",
+            "brand_value": "Sleek & modular",
+            "other_value": "Bulky, fixed"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Care",
+            "brand_value": "Simple water refill",
+            "other_value": "Chimney sweeps"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
