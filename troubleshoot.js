@@ -359,8 +359,9 @@
       type: 'outcome', severity: 'info',
       lead: 'Quick water rules:',
       steps: [
-        'Use clean tap water (or bottled mineral water). Most tap water is fine as long as it isn’t very hard — under roughly 300&nbsp;mg/L CaCO₃ (ideal is about 7 grains per gallon).',
-        '<strong>Don’t</strong> use distilled, demineralized, or reverse-osmosis water — no minerals means a weak, dim flame. Also avoid well/rain/cistern water, salt-softened water, and anything scented or with additives.',
+        'Use clean tap water — and the <strong>softer, the better</strong>. Hard water’s minerals scale up the mist makers and shorten their life; the Vapor Pure softener conditions the water automatically.',
+        'Have <strong>reverse-osmosis water or a whole-house softener</strong>? Ideal — that’s the softest water you can feed it. (Using a whole-house system <em>instead of</em> Vapor Pure? Have it approved in writing by Aquafire to keep the warranty valid.)',
+        '<strong>Don’t</strong> use well, rain, or cistern water, or anything scented or with additives.',
         'Hard water leaves scale on the transducers and tank walls — descale roughly every 3 months and consider the Vapor Pure softener (it’s included free with the Pro and with the Original’s Direct Plumb Kit, and must be installed and running to keep the warranty valid).',
         'If you won’t run the unit for more than about a week, drain it — stagnant water clogs the level sensors and causes leaks.'
       ],

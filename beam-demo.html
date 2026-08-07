@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<!-- Internal component showcase for the Border Beam effect (beam.css / beam.js).
+     Not linked from any customer-facing page. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Border Beam — Aquafire Component Showcase</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="redesign.css">
+  <link rel="stylesheet" href="beam.css">
+  <style>
+    :root {
+      /* Four steps, each ~1.25x apart. Everything on the page picks one of
+         these — intermediate sizes flatten the hierarchy into mush. */
+      --t-xl: 1.8rem;
+      --t-lg: 1.2rem;
+      --t-md: 0.95rem;
+      --t-sm: 0.76rem;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font: var(--t-md)/1.6 'Figtree', system-ui, sans-serif;
+      padding: 40px 24px 80px;
+    }
+    .wrap { max-width: 1080px; margin: 0 auto; }
+    h1 {
+      font: 700 var(--t-xl)/1.2 'Figtree', sans-serif;
+      margin-bottom: 8px;
+    }
+    .lede { color: var(--text-muted); max-width: 62ch; margin-bottom: 8px; }
+    .lede code {
+      background: var(--surface-alt); padding: 1px 6px;
+      border-radius: 4px; font-size: var(--t-sm);
+    }
+    h2 {
+      font: 600 var(--t-lg)/1.3 'Figtree', sans-serif;
+      margin: 48px 0 6px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    h2:first-of-type { border-top: none; padding-top: 0; }
+    .note { color: var(--text-muted); font-size: var(--t-sm); margin-bottom: 20px; }
+
+    /* ── Live controls ── */
+    .controls {
+      display: flex; flex-wrap: wrap; gap: 18px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 18px; margin: 24px 0 8px;
+    }
+    .ctrl { display: flex; align-items: center; gap: 8px; }
+    .ctrl label {
+      font-size: var(--t-sm); font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+    .ctrl select, .ctrl input[type=range] {
+      background: var(--surface-alt); color: var(--text);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 5px 8px; font: inherit; font-size: var(--t-md);
+    }
+
+    .stage {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 360px; padding: 48px 24px;
+      background: #0d0d0f; border-radius: 24px; margin-bottom: 8px;
+    }
+    .stage[data-light] { background: #eceef2; }
+
+    .grid {
+      display: grid; gap: 28px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      margin-top: 20px;
+    }
+    .cell { display: flex; flex-direction: column; gap: 10px; }
+    .cell-label {
+      font-size: var(--t-sm); color: var(--text-muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    /* ── Sample cards ── */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+    }
+    .card h3 { font: 600 var(--t-lg)/1.3 'Figtree', sans-serif; margin-bottom: 6px; }
+    .card p { color: var(--text-muted); font-size: var(--t-md); }
+
+    .pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 36px; padding: 0 20px; border-radius: 32px;
+      background: var(--surface); border: 1px solid var(--border);
+      font-size: var(--t-md); font-weight: 600; white-space: nowrap;
+    }
+
+    /* ── Chat-input replica (port of the package's demo.tsx) ── */
+    .chat-input {
+      width: 348px; max-width: 100%; border-radius: 20px;
+      background: #1d1d1d;
+      box-shadow: inset 0 0 0 1px rgba(44,47,54,0.52),
+                  inset 0 0 50px 0 rgba(255,255,255,0.02);
+      overflow: hidden; position: relative;
+    }
+    .chat-input .body {
+      padding: 7px 7px 8px; display: flex; flex-direction: column; height: 122px;
+    }
+    .chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      height: 24px; border-radius: 36px;
+      background: rgba(255,255,255,0.04);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02),
+                  inset 0 1px 0 0 rgba(255,255,255,0.04);
+      font-size: 12px; line-height: 14px; color: #caccd2;
+    }
+    .chip.icon-only { width: fit-content; padding: 0 4px; margin-left: 1px; }
+    .chip.labelled { padding: 0 6px 0 8px; }
+    .chat-input .placeholder {
+      font-size: 13px; line-height: 16px; color: #4e4e4e; padding: 16px 4px 0;
+    }
+    .chat-input .row {
+      display: flex; align-items: center; gap: 8px; margin-top: auto;
+    }
+    .chat-input .send {
+      display: flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; margin-left: auto; padding: 0 8px;
+      border-radius: 36px; background: rgba(255,255,255,0.04);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02),
+                  inset 0 1px 0 0 rgba(255,255,255,0.04);
+    }
+    .rot90 { transform: rotate(90deg); }
+
+    .fallback {
+      display: none; background: rgba(232,168,56,0.1);
+      border: 1px solid var(--amber); color: var(--amber);
+      border-radius: var(--radius-sm); padding: 10px 14px;
+      font-size: var(--t-sm); margin-top: 16px;
+    }
+    pre {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 14px 16px; overflow-x: auto;
+      font-size: var(--t-sm); line-height: 1.55; margin-top: 14px;
+    }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Border Beam</h1>
+  <p class="lede">
+    Vanilla port of the <code>border-beam</code> npm package, rebuilt as plain CSS
+    so it runs in this build-free portal. Wrap any element in
+    <code>.af-beam</code> &mdash; children render untouched, the effect is purely additive.
+    Palette priority: red/orange dominant, then blue/magenta, then green.
+  </p>
+
+  <div class="fallback" id="fallback">
+    This browser lacks <code>@property</code> or <code>mask-composite</code> support,
+    so the beam is disabled. Content still renders normally.
+  </div>
+
+  <!-- ── Interactive playground ── -->
+  <h2>Playground</h2>
+  <p class="note">Every knob below maps to a <code>data-beam-*</code> attribute.</p>
+
+  <div class="controls">
+    <div class="ctrl">
+      <label for="c-size">Size</label>
+      <select id="c-size">
+        <option value="md" selected>md</option>
+        <option value="sm">sm</option>
+        <option value="line">line</option>
+        <option value="pulse-inner">pulse-inner</option>
+        <option value="pulse-outside">pulse-outside</option>
+      </select>
+    </div>
+    <div class="ctrl">
+      <label for="c-variant">Variant</label>
+      <select id="c-variant">
+        <option value="ember">ember</option>
+        <option value="colorful" selected>colorful</option>
+        <option value="ocean">ocean</option>
+        <option value="sunset">sunset</option>
+        <option value="mono">mono</option>
+      </select>
+    </div>
+    <div class="ctrl">
+      <label for="c-theme">Theme</label>
+      <select id="c-theme">
+        <option value="dark" selected>dark</option>
+        <option value="light">light</option>
+      </select>
+    </div>
+    <div class="ctrl">
+      <label for="c-strength">Strength</label>
+      <input type="range" id="c-strength" min="0" max="1" step="0.05" value="1">
+    </div>
+    <div class="ctrl">
+      <label for="c-duration">Speed</label>
+      <input type="range" id="c-duration" min="0.6" max="6" step="0.1" value="1.96">
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="af-beam" id="playground" data-beam-size="md" data-beam-variant="colorful">
+      <div class="chat-input">
+        <div class="body">
+          <div class="chip icon-only">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M10.4 5.59963V8.59962C10.4 9.07701 10.5896 9.53485 10.9272 9.87242C11.2648 10.21 11.7226 10.3996 12.2 10.3996C12.6774 10.3996 13.1352 10.21 13.4728 9.87242C13.8104 9.53485 14 9.07701 14 8.59962V7.99962C13.9999 6.64544 13.5417 5.33111 12.7 4.27035C11.8582 3.20958 10.6823 2.46476 9.36359 2.15701C8.04484 1.84925 6.66076 1.99665 5.43641 2.57525C4.21206 3.15384 3.21944 4.1296 2.61996 5.34386C2.02048 6.55812 1.84939 7.93947 2.13451 9.26329C2.41963 10.5871 3.14419 11.7756 4.19038 12.6354C5.23657 13.4952 6.54286 13.9758 7.89684 13.9991C9.25083 14.0224 10.5729 13.587 11.648 12.7636M10.4 7.99962C10.4 9.32511 9.32549 10.3996 8 10.3996C6.67452 10.3996 5.6 9.32511 5.6 7.99962C5.6 6.67414 6.67452 5.59963 8 5.59963C9.32549 5.59963 10.4 6.67414 10.4 7.99962Z"
+                stroke="#808388" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="placeholder">Build anything...</div>
+          <div class="row">
+            <div class="chip labelled" style="margin-left:1px;">
+              Agent
+              <svg aria-hidden="true" class="rot90" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M7 11L10 8L7 5" stroke="#8B9099" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+              </svg>
+            </div>
+            <div class="chip labelled">
+              Auto
+              <svg aria-hidden="true" class="rot90" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M7 11L10 8L7 5" stroke="#8B9099" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+              </svg>
+            </div>
+            <div class="send">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 12.6667V3.33333M12.6667 8L8 3.33333L3.33333 8" stroke="#8B8B8B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Variants ── -->
+  <h2>Color variants</h2>
+  <p class="note">
+    <code>ember</code> is the Aquafire default, built from the brand fire palette
+    (<code>--red</code> &rarr; <code>--ember</code> &rarr; <code>--amber</code>).
+    The other four carry over from the original package.
+  </p>
+  <div class="grid">
+    <div class="cell">
+      <span class="cell-label">variant="ember"</span>
+      <div class="af-beam" data-beam-variant="ember">
+        <div class="card"><h3>Aquafire Pro</h3><p>36" linear water-vapor fireplace.</p></div>
+      </div>
+    </div>
+    <div class="cell">
+      <span class="cell-label">variant="colorful" (default)</span>
+      <div class="af-beam" data-beam-variant="colorful">
+        <div class="card"><h3>Aquafire Pro</h3><p>36" linear water-vapor fireplace.</p></div>
+      </div>
+    </div>
+    <div class="cell">
+      <span class="cell-label">variant="ocean"</span>
+      <div class="af-beam" data-beam-variant="ocean">
+        <div class="card"><h3>Aquafire Pro</h3><p>36" linear water-vapor fireplace.</p></div>
+      </div>
+    </div>
+    <div class="cell">
+      <span class="cell-label">variant="sunset"</span>
+      <div class="af-beam" data-beam-variant="sunset">
+        <div class="card"><h3>Aquafire Pro</h3><p>36" linear water-vapor fireplace.</p></div>
+      </div>
+    </div>
+    <div class="cell">
+      <span class="cell-label">variant="mono"</span>
+      <div class="af-beam" data-beam-variant="mono">
+        <div class="card"><h3>Aquafire Pro</h3><p>36" linear water-vapor fireplace.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Sizes ── -->
+  <h2>Sizes</h2>
+  <p class="note">
+    <code>sm</code> and <code>md</code> rotate a beam around the border;
+    <code>line</code> travels along the bottom edge;
+    the <code>pulse-*</code> pair breathe without rotating.
+  </p>
+  <div class="grid">
+    <div class="cell">
+      <span class="cell-label">size="md"</span>
+      <div class="af-beam" data-beam-size="md">
+        <div class="card"><h3>Enclosure Guide</h3><p>Get exact cutout dimensions.</p></div>
+      </div>
+    </div>
+    <div class="cell">
+      <span class="cell-label">size="line"</span>
+      <div class="af-beam" data-beam-size="line">
+        <div class="card"><h3>Water Care</h3><p>Look up hardness by ZIP code.</p></div>
+      </div>
+    </div>
+    <div class="cell">
+      <span class="cell-label">size="pulse-inner"</span>
+      <div class="af-beam" data-beam-size="pulse-inner">
+        <div class="card"><h3>Troubleshooter</h3><p>Guided fixes for your model.</p></div>
+      </div>
+    </div>
+    <div class="cell">
+      <span class="cell-label">size="pulse-outside"</span>
+      <div class="af-beam" data-beam-size="pulse-outside">
+        <div class="card"><h3>Support</h3><p>Talk to a human.</p></div>
+      </div>
+    </div>
+    <div class="cell">
+      <span class="cell-label">size="sm" (pill)</span>
+      <div class="af-beam" data-beam-size="sm" style="width:fit-content;">
+        <span class="pill">Find a Dealer</span>
+      </div>
+    </div>
+    <div class="cell">
+      <span class="cell-label">trigger="hover" (hover the card)</span>
+      <div class="af-beam" data-beam-size="md" data-beam-trigger="hover">
+        <div class="card"><h3>Hover me</h3><p>Beam fades in on hover or focus.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Usage ── -->
+  <h2>Usage</h2>
+  <pre><code>&lt;link rel="stylesheet" href="beam.css"&gt;
+
+&lt;div class="af-beam" data-beam-size="md" data-beam-variant="ember"&gt;
+  &lt;div class="card"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script src="beam.js" defer&gt;&lt;/script&gt;</code></pre>
+</div>
+
+<script src="beam.js" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.AquafireBeam && !window.AquafireBeam.supported) {
+      document.getElementById('fallback').style.display = 'block';
+    }
+
+    var pg = document.getElementById('playground');
+    var stage = document.getElementById('stage');
+
+    function bind(id, apply) {
+      var el = document.getElementById(id);
+      el.addEventListener('input', function () { apply(el.value); });
+    }
+
+    bind('c-size', function (v) {
+      pg.setAttribute('data-beam-size', v);
+      // Radius presets differ per size, so re-derive from the wrapped child.
+      pg.style.removeProperty('--af-beam-radius');
+      window.AquafireBeam.attach(pg, { size: v });
+    });
+    bind('c-variant', function (v) { pg.setAttribute('data-beam-variant', v); });
+    bind('c-theme', function (v) {
+      pg.setAttribute('data-beam-theme', v);
+      if (v === 'light') stage.setAttribute('data-light', '');
+      else stage.removeAttribute('data-light');
+    });
+    bind('c-strength', function (v) { pg.style.setProperty('--af-beam-strength', v); });
+    bind('c-duration', function (v) { pg.style.setProperty('--af-beam-duration', v + 's'); });
+  });
+</script>
+</body>
+</html>

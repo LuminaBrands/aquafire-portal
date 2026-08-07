@@ -1,9 +1,52 @@
 {
   "detector": {
-    "ignoreRules": [],
+    "ignoreRules": [
+      "single-font"
+    ],
     "ignoreFiles": [
       "compare.html"
     ],
-    "ignoreValues": []
+    "ignoreValues": [
+      {
+        "rule": "design-system-color",
+        "value": "#000",
+        "createdAt": "2026-08-02T19:06:41.955Z",
+        "reason": "mask stencil alpha, not a palette color"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(255,255,255,0.9)",
+        "createdAt": "2026-08-02T19:57:48.280Z",
+        "reason": "atmos shaft specular edge -- light, not fill"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(255,255,255,0.5)",
+        "createdAt": "2026-08-02T19:57:48.357Z",
+        "reason": "halo centre / atmos shaft -- light, not fill"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(255,255,255,0.35)",
+        "createdAt": "2026-08-02T19:57:48.428Z",
+        "reason": "atmos secondary shaft -- light, not fill"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "assistant.js"
+        ],
+        "createdAt": "2026-08-02T19:57:48.500Z"
+      },
+      {
+        "rule": "single-font",
+        "value": "*",
+        "files": [
+          "share-install.html"
+        ],
+        "createdAt": "2026-08-03T02:30:27.941Z"
+      }
+    ]
   }
 }

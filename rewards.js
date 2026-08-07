@@ -18,7 +18,7 @@
 
   /* ── Reward Definitions ── */
   const REWARDS = {
-    'setup-guide':       { points: 500, label: 'Complete Setup Guide' },
+    'setup-guide':       { points: 500, label: 'Read a Model Guide' },
     'enclosure-builder': { points: 200, label: 'Use Enclosure Builder' },
     'water-hardness':    { points: 250, label: 'Check Water Hardness' },
     'light-trap':        { points: 200, label: 'Configure Light Trap' },
@@ -35,6 +35,7 @@
     'fireplace-setup':   { points: 500, label: 'Complete Fireplace Setup' },
     'register-warranty': { points: 300, label: 'Register Warranty' },
     'submit-review':     { points: 500, label: 'Submit a Review' },
+    'share-install':     { points: 500, label: 'Share Your Install' },
   };
 
   /* ── State ── */
@@ -98,20 +99,37 @@
     });
   }
 
+  // Resolves when the most recent save has been accepted by Firestore (or
+  // immediately when there's nothing to wait for). Used before navigating away
+  // so a click-triggered award isn't lost mid-flight.
+  var lastSave = Promise.resolve();
+  function whenSaved() { return lastSave; }
+
   function saveUserData() {
     if (db && currentUser) {
-      db.collection('users').doc(currentUser.uid).set({
+      lastSave = db.collection('users').doc(currentUser.uid).set({
         points: userPoints,
         completed: completedRewards,
         email: currentUser.email || '',
         displayName: currentUser.displayName || '',
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }, { merge: true }).catch(function (e) {
-        console.warn('Save error:', e);
+      }, { merge: true }).then(saveLocal).catch(function (e) {
+        /* The local mirror is deliberately NOT written when the server write
+           fails. Mirroring unconditionally let the two stores drift: a reward
+           the rules rejected still landed in localStorage, boot() read that
+           before auth resolved, and the total appeared at the higher figure
+           and then dropped to the server's when loadUserData answered. Points
+           that did not persist should not be shown as if they had. */
+        console.warn(
+          'Rewards save rejected by Firestore, not mirrored locally. The usual ' +
+          'cause is docs/firestore-rules.md drifting behind the REWARDS map in ' +
+          'rewards.js -- a new reward id missing from the completed allowlist, ' +
+          'or a points total above the cap. Error:', e);
       });
+    } else {
+      // Signed out, localStorage is the only store.
+      saveLocal();
     }
-    // Always mirror to localStorage as backup
-    saveLocal();
   }
 
   /* ── localStorage fallback ── */
@@ -142,6 +160,10 @@
     userPoints += reward.points;
     saveUserData();
     updateNavUI();
+    // The nav points chip and the homepage band both live in updateHomeBanner,
+    // which this was not calling -- so an award updated the account button but
+    // left the visible points total stale until the next page load.
+    updateHomeBanner();
     updateAllBadges();
     showPointsToast(reward.points, reward.label);
     return true;
@@ -180,6 +202,15 @@
 
   /* ── Nav UI ── */
   function updateNavUI() {
+    // The banner CTA is independent of the injected nav button and has to be
+    // wired even where that button does not exist -- injectNavButton() needs a
+    // `.nav-links` element, which no redesigned page has, so bailing first
+    // left the homepage's sign-in button inert.
+    updateBannerCTA();
+    wireChip();
+    wireMenuAccount();
+    wireMenuPoints();
+
     var btn = document.getElementById('af-rewards-btn');
     if (!btn) return;
 
@@ -199,12 +230,105 @@
         '<span class="af-nav-pts-icon">&#x1f525;</span>';
       btn.onclick = showModal;
     }
+  }
 
-    updateBannerCTA();
+  /* Signed in, the nav's points chip opens the profile dropdown instead of
+     navigating -- that dropdown holds the points total, progress and Sign Out.
+     It stays a real link: modified clicks still open rewards.html in a tab, the
+     burger panel keeps its own Rewards link, and the dropdown's "Redeem Your
+     Points" lands on the same page. Signed out it is left alone as a plain
+     link, because a chip that opens an empty account menu is worse than one
+     that goes to the page explaining the programme. */
+  function wireChip() {
+    var chip = document.querySelector('.pts-chip');
+    if (!chip) return;
+    if (currentUser) {
+      chip.setAttribute('aria-haspopup', 'menu');
+      chip.setAttribute('aria-expanded', 'false');
+      chip.onclick = function (ev) {
+        if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button) return;
+        ev.preventDefault();
+        showProfileDropdown(ev);
+      };
+    } else {
+      chip.removeAttribute('aria-haspopup');
+      chip.removeAttribute('aria-expanded');
+      chip.onclick = null;
+    }
+  }
+
+  /* The chip is display:none below 920px and the whole capsule collapses to the
+     burger at 760, so on a phone the dropdown above -- and with it Sign Out --
+     has nothing to hang off. The disclosure panel carries its own account item.
+
+     It is present in **both** states: Sign Out signed in, Sign In signed out.
+     It used to be removed entirely when signed out, which meant a phone had
+     nowhere to sign in from at all -- the chip that opens the modal is hidden at
+     that width. A button, not a link: it acts rather than navigating, so it does
+     not inherit `.bar .links a` and brings its own style from rewards.css. */
+  function wireMenuAccount() {
+    var nav = document.getElementById('navLinks') || document.querySelector('.bar .links');
+    if (!nav) return;
+    var b = document.getElementById('af-menu-account');
+    if (!b) {
+      b = document.createElement('button');
+      b.type = 'button';
+      b.id = 'af-menu-account';
+      nav.appendChild(b);
+    }
+    if (currentUser) {
+      b.textContent = 'Sign Out';
+      b.onclick = function () { auth.signOut(); };
+    } else {
+      b.textContent = 'Sign In';
+      b.onclick = showModal;
+    }
+  }
+
+  /* The points total on a phone. The chip carrying it is hidden below 920, and
+     the panel's Support > Rewards row is the place a visitor already looks for
+     it, so the figure rides on that row rather than arriving as a twelfth item
+     repeating a label that is already there. Panel-only (rewards.css), since
+     above the burger breakpoint the chip is doing this job. */
+  function wireMenuPoints() {
+    var row = document.querySelector('.bar .links .navgroup-menu a[href="rewards.html"]');
+    if (!row || row.querySelector('[data-rb-points]')) return;
+    var b = document.createElement('b');
+    b.className = 'af-menu-pts';
+    b.setAttribute('data-rb-points', '');
+    b.textContent = userPoints.toLocaleString() + ' pts';
+    row.appendChild(b);
   }
 
   /* ── Banner CTA (Sign In / View Profile) ── */
+  /* The homepage rewards band's primary action scrolls to the routes, which
+     are where points are actually earned. Only the homepage has them, so this
+     no-ops elsewhere. The tabs are the target on phones and are display:none
+     from 920 up, where the rail itself is the thing to land on. */
+  function scrollToEarn() {
+    var t = document.getElementById('hallTabs');
+    if (!t || getComputedStyle(t).display === 'none') t = document.getElementById('hall');
+    if (!t) return;
+    var reduce = window.matchMedia
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+
   function updateBannerCTA() {
+    // index.html rewards band: the primary action. Signed in it points at the
+    // routes below (where points are earned); signed out it opens the modal,
+    // because a button labelled "Sign in" that scrolls instead is a lie.
+    var journeyCta = document.getElementById('rb-journey-cta');
+    if (journeyCta) {
+      if (currentUser) {
+        journeyCta.innerHTML = 'Continue earning' + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>';
+        journeyCta.onclick = scrollToEarn;
+      } else {
+        journeyCta.innerHTML = 'Sign in to earn rewards' + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>';
+        journeyCta.onclick = function () { window.AquafireRewards && window.AquafireRewards.showLogin(); };
+      }
+    }
+
     // index.html banner button
     var homeCta = document.getElementById('rb-signin-cta');
     if (homeCta) {
@@ -219,6 +343,9 @@
           ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>';
         homeCta.onclick = function () { window.AquafireRewards && window.AquafireRewards.showLogin(); };
       }
+      // Signed out, the primary already says "Sign in to earn rewards";
+      // two sign-in actions side by side is just noise.
+      if (journeyCta) homeCta.style.display = currentUser ? '' : 'none';
     }
 
     // rewards.html banner button
@@ -235,10 +362,21 @@
   }
 
   /* ── Profile Dropdown ── */
+  /* The account affordance is `#af-rewards-btn` on the pre-redesign nav and the
+     points chip on the redesigned one. `injectNavButton()` needs a `.nav-links`
+     element, which no redesigned page has, so on those pages the button never
+     existed -- which left this dropdown, and with it the only Sign Out control,
+     unreachable everywhere. */
+  function accountAnchor() {
+    return document.getElementById('af-rewards-btn')
+        || document.querySelector('.pts-chip');
+  }
+
   function showProfileDropdown(e) {
     e.stopPropagation();
     closeProfileDropdown();
-    var btn = document.getElementById('af-rewards-btn');
+    var btn = accountAnchor();
+    if (!btn || !currentUser) return;
     var rect = btn.getBoundingClientRect();
 
     var dd = document.createElement('div');
@@ -271,14 +409,25 @@
       closeProfileDropdown();
     };
 
+    btn.setAttribute('aria-expanded', 'true');
+    document.addEventListener('keydown', onDropdownKey);
     setTimeout(function () {
       document.addEventListener('click', closeProfileDropdown, { once: true });
     }, 10);
   }
 
+  // A menu that only closes on an outside click traps keyboard users, and the
+  // chip it hangs off is in a sticky nav that stays put while the page scrolls.
+  function onDropdownKey(ev) {
+    if (ev.key === 'Escape') closeProfileDropdown();
+  }
+
   function closeProfileDropdown() {
     var dd = document.getElementById('af-profile-dropdown');
     if (dd) dd.remove();
+    document.removeEventListener('keydown', onDropdownKey);
+    var a = accountAnchor();
+    if (a) a.setAttribute('aria-expanded', 'false');
   }
 
   function buildProgressHTML() {
@@ -429,7 +578,9 @@
         badge.innerHTML = '<span class="af-rb-check">&#x2713;</span><span class="af-rb-pts">+' + reward.points + '</span>';
       } else {
         badge.className = 'af-reward-badge';
-        badge.innerHTML = '<span class="af-rb-flame">&#x1f525;</span><span class="af-rb-pts">+' + reward.points + ' pts</span>';
+        // The unit is its own span so the dense row/mini badges can drop it
+        // (see rewards.css) while cards keep the full "+500 pts".
+        badge.innerHTML = '<span class="af-rb-flame">&#x1f525;</span><span class="af-rb-pts">+' + reward.points + '</span><span class="af-rb-unit">pts</span>';
       }
     });
     updateHomeBanner();
@@ -440,15 +591,24 @@
     var barFill = document.getElementById('rb-home-bar-fill');
     var barLabel = document.getElementById('rb-home-bar-label');
     var ptsDisplay = document.getElementById('rb-home-points');
-    if (!barFill) return;
 
     var total = Object.keys(REWARDS).length;
     var done = Object.keys(completedRewards).length;
     var pct = total ? Math.round((done / total) * 100) : 0;
 
-    barFill.style.width = pct + '%';
+    // The journey bar is homepage-only; the points chip is in every page's nav,
+    // so each element is guarded separately rather than bailing on the first.
+    if (barFill) barFill.style.width = pct + '%';
     if (barLabel) barLabel.textContent = done + ' / ' + total + ' modules completed';
     if (ptsDisplay) ptsDisplay.textContent = userPoints.toLocaleString() + ' pts';
+    // The nav chip carries an id; the panel's copy is injected, so it is marked
+    // by attribute instead -- two elements cannot share one id.
+    var pts = userPoints.toLocaleString() + ' pts';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-rb-points]'),
+      function (el) { el.textContent = pts; });
+    // The homepage band shows the bare figure; the nav chip carries the unit.
+    var ptsBig = document.getElementById('rb-home-points-big');
+    if (ptsBig) ptsBig.textContent = userPoints.toLocaleString();
   }
 
   /* ── Auto-detection of section completion ── */
@@ -463,6 +623,10 @@
       if (href.includes('youtube.com') && href.includes('Aquafire')) awardPoints('watch-youtube');
       if (href === 'https://www.aquafire.com' && !href.includes('contact') && !href.includes('products')) awardPoints('shop-accessories');
       if (href.includes('contact')) awardPoints('contact-sales');
+      // Awarded on click-through, the same standard as the links above -- we
+      // can't see the registration itself. Dead until support.html's warranty
+      // tile stopped pointing at '#'.
+      if (href.includes('/pages/warranty')) awardPoints('register-warranty');
     });
 
     // Page-specific tracking
@@ -473,11 +637,53 @@
     } else if (path.includes('water-care')) {
       setupWaterCareTracking();
     } else if (path.includes('quick-start')) {
-      // Award points when visiting the quick start page
-      setTimeout(function () { awardPoints('quick-start'); }, 3000);
+      setupQuickStartTracking();
     } else if (path.includes('support')) {
       setTimeout(function () { awardPoints('support-hub'); }, 3000);
+    } else if (path.includes('aquafire-pro') || path.includes('aquafire-original')) {
+      // Second path to the same reward. setupQuickStartTracking awards it on
+      // click-through from Quick Start, but the homepage fleet cards link
+      // straight here, so landing on a guide has to earn it too. awardPoints
+      // is idempotent, so arriving both ways still pays once.
+      setTimeout(function () { awardPoints('setup-guide'); }, 3000);
     }
+  }
+
+  /* ── Quick Start page ──────────────────────────────────────────────────
+     Two rewards, deliberately at different depths:
+       'quick-start' (150) — for landing on the page.
+       'setup-guide' (500) — for actually opening a model's setup guide from
+         here. It used to sit on getting-started.html, which is a "coming soon"
+         placeholder that never awarded anything, so the badge was unearnable. */
+  function setupQuickStartTracking() {
+    setTimeout(function () { awardPoints('quick-start'); }, 3000);
+
+    // `.tiles.models` is the redesigned grid; `.model-grid` is the pre-redesign
+    // markup. Match either so this keeps working through the rollout.
+    var grid = document.querySelector('.tiles.models, .model-grid');
+    if (!grid) return;
+
+    grid.addEventListener('click', function (e) {
+      var link = e.target.closest('a[href]');
+      if (!link || !grid.contains(link)) return;
+      // Model guides only — not the "Coming Soon" Lite card, which isn't a link.
+      if (!/^aquafire-[a-z-]+\.html/.test(link.getAttribute('href') || '')) return;
+      if (!awardPoints('setup-guide')) return;   // already earned — let the click through
+
+      // Opening in a new tab/window leaves this page alive, so the save
+      // finishes on its own and we must not hijack the click.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+
+      // Same-tab navigation can cut off the Firestore write mid-flight, and the
+      // next page load reads Firestore back over local state — so the 500
+      // points would vanish. Hold navigation until the save lands, capped so a
+      // slow network never traps the customer on the page.
+      e.preventDefault();
+      var href = link.href, went = false;
+      var go = function () { if (!went) { went = true; window.location.href = href; } };
+      whenSaved().then(go, go);
+      setTimeout(go, 700);
+    });
   }
 
   function setupEnclosureTracking() {

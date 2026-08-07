@@ -1,0 +1,771 @@
+/* ── Aquafire portal — redesign design system ─────────────────────────────────
+   The shared layer of the "Hero Bleed x Dual Theme" direction committed in
+   index.html (see DESIGN.md and docs/redesign-handoff.md). Extracted so
+   the rollout does not paste the token system into every page -- the portal
+   has no templating, and duplicated nav is already its worst maintenance
+   problem (CLAUDE.md gotchas). One copy here; per-page CSS stays per page.
+
+   Contains: the dark/light token bindings, base reset, atmosphere and scene
+   layers, the glass primitives (.cap, .orb, the conic rim), page frame and
+   nav bar, the .row/.rows/.minis list components, and the closing/footer.
+
+   Page-specific composition (home's hero, journey band and intent wings; each
+   tool's own UI) stays inline in that page.
+
+   Themes are bound to :root[data-theme]; every page needs the tiny head script
+   that restores the saved theme before first paint, and the toggle button.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Semantic tokens. Dark = mix4 "Edge-lit" smoke; light = mix6 "Edge-lit
+   Showroom". Components below reference only tokens, never raw theme
+   colors, so the switcher swaps the whole surface at once. */
+:root {
+  color-scheme: dark;
+  --ember: #d33337; --frost: #6fc3ff; --chart: #c9e85c; --mag: #ff5fa8;
+  --ember-t: #f05a5e; --frost-t: #6fc3ff; --chart-t: #c9e85c; --mag-t: #ff5fa8;
+  --ground-fill: #101216;
+  --text-hi: #f3f4f6; --text-mid: #b9bec8; --text-dim: #8d939f; --ico-ink: #b9bec8;
+  --stroke: rgba(255,255,255,0.12); --stroke-hi: rgba(255,255,255,0.22);
+  --orb-ring: rgba(255,255,255,0.12);
+  /* Outer lift only. The mark's own artwork already shades its lower edge --
+     the inset this token used to carry was for the flat gradient orb and
+     double-darkens the icon. */
+  --orb-shadow: 0 4px 14px -4px rgba(224,100,30,0.45);
+  --cap-bg: rgba(255,255,255,0.045); --cap-bg-hover: rgba(255,255,255,0.08);
+  --cap-border: rgba(255,255,255,0.08); --cap-border-hover: rgba(255,255,255,0.15);
+  --cap-shadow: inset 0 2px 5px -2px rgba(0,0,0,0.4), 0 3px 9px -5px rgba(0,0,0,0.55);
+  --cap-shadow-hover: inset 0 2px 5px -2px rgba(0,0,0,0.35), 0 6px 14px -7px rgba(0,0,0,0.6);
+  --rim-conic: conic-gradient(
+    rgba(255,255,255,0.20) 0deg, rgba(255,255,255,0.04) 70deg,
+    rgba(255,255,255,0.17) 135deg, rgba(255,255,255,0.03) 200deg,
+    rgba(255,255,255,0.08) 268deg, rgba(255,255,255,0.55) 315deg,
+    rgba(255,255,255,0.20) 360deg);
+  --rim-opacity: 0.75;
+  --composer-bg: rgba(255,255,255,0.05); --composer-border: rgba(255,255,255,0.12);
+  --composer-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 8px 20px -12px rgba(0,0,0,0.6);
+  --send-bg: rgba(255,255,255,0.12); --send-border: rgba(255,255,255,0.12);
+  --send-ink: #f3f4f6; --send-bg-hover: rgba(255,255,255,0.18);
+  /* The mark's own ramp, sampled from ember-mark.png -- but from the disc's
+     redder lower half: #ed7842 (upper middle) to #eb4b46 (bottom), with red
+     holding flat past 65%. The full disc tops out at a true orange (#f09343)
+     and the brand is red-first, so the ramp keeps the warmth without letting
+     orange lead (user call, 2026-08). Filled actions and determinate
+     progress fills carry it -- buttons vertically, the way the disc is lit;
+     bars along their length. Like the mark, it is lit from within and
+     identical in both themes, so both bindings live here (the --photo-ink
+     precedent). Deepening the red end past #eb4b46 was tried on paper and
+     rejected: ink falls under AA there (4.25:1 at #e73c3f), so the red end
+     stays put and the ramp takes dark ink. */
+  --ember-grad: linear-gradient(180deg, #ed7842, #eb4b46 65%);
+  --ember-grad-bar: linear-gradient(90deg, #ed7842, #eb4b46 65%);
+  /* Highlight card: a thin warm ring plus a chromatic underglow. The guide
+     pages' open maintenance card is the reference implementation; every
+     other emphasis chrome (top accent bars, thick one-sided borders) is
+     retired in its favour. The amber pair is the warning variant -- same
+     geometry, warning hue. */
+  --hl-border: rgba(240,90,94,0.42);
+  --hl-shadow: 0 2px 12px rgba(211,51,55,0.16), 0 14px 30px -18px rgba(235,75,70,0.4);
+  --hl-border-amber: rgba(232,168,56,0.42);
+  --hl-shadow-amber: 0 2px 12px rgba(232,168,56,0.10), 0 14px 30px -18px rgba(232,168,56,0.35);
+  --journey-bg: rgba(255,255,255,0.035); --journey-border: rgba(255,255,255,0.08);
+  --journey-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 4px 12px -8px rgba(0,0,0,0.55);
+  --nub-bg: rgba(255,255,255,0.08);
+  /* Type sitting ON the accent fill, which is the mark's ramp above -- a
+     *light* warm red, so this is ink in both themes: 6.1:1 on #ed7842 and
+     4.7:1 on #eb4b46, where white clears only 3.7:1 at the ramp's red
+     end. (When the fill was flat #d33337 this was white; the fill and its
+     ink move together.) Like --scrim it is not a surface colour and does not
+     flip with the theme.
+     --on-amber is the other half of the pair and does not follow the accent:
+     amber (#e8a838) survives as the reward-badge colour and is a *light* fill,
+     where white would be 2.0:1. Anything drawn on amber takes this instead. */
+  --on-ember: #171a1f;
+  --on-amber: #171a1f;
+  --wing-bg: rgba(255,255,255,0.055); --wing-border: rgba(255,255,255,0.12);
+  --wing-shadow: 0 0 rgba(0,0,0,0);
+  --tip-bg: rgba(16,18,22,0.4);
+  --row-bg: rgba(13,15,19,0.4); --row-bg-hover: rgba(22,25,31,0.5);
+  --menu-bg: rgba(14,16,20,0.97);
+  /* Overlay surfaces: the auth modal, the profile dropdown and the points
+     toast (rewards.css). They float above the page, so they take the same
+     near-opaque ground the burger panel does rather than the glass fills --
+     translucency there lets the page read straight through the dialog. The
+     scrim stays dark in both themes: it is a dimmer, not a surface. */
+  --scrim: rgba(0,0,0,0.6);
+  --modal-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  --dropdown-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  /* Form errors. Distinct from ember, which is the rewards accent -- an error
+     that reads as the brand colour is not an error. */
+  --danger: #ff6b5e;
+  --row-border: rgba(255,255,255,0.07); --row-border-hover: rgba(255,255,255,0.13);
+  --row-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.45), 0 2px 7px -4px rgba(0,0,0,0.5);
+  --row-shadow-hover: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 6px 14px -7px rgba(0,0,0,0.6);
+  --badge-border: rgba(240,90,94,0.4); --badge-bg: transparent;
+  --mini-bg: rgba(16,18,22,0.35); --mini-bg-hover: rgba(16,18,22,0.35);
+  --halo-grad: radial-gradient(closest-side, rgba(211,51,55,0.16), rgba(211,51,55,0.05) 45%, transparent 72%);
+  --scene-scrim:
+    radial-gradient(130% 100% at 50% 0%, transparent 42%, rgba(16,18,22,0.5) 100%),
+    linear-gradient(180deg, rgba(16,18,22,0.62) 0%, rgba(16,18,22,0.3) 26%, rgba(16,18,22,0.5) 58%, #101216 97%);
+  --atmos-grad:
+    linear-gradient(93deg, transparent 45%, rgba(255,255,255,0.05) 48%, rgba(255,255,255,0.015) 53%, transparent 57%),
+    linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.028) 19%, rgba(255,255,255,0.028) 30%, transparent 31%),
+    linear-gradient(180deg, #14171c 0%, #101216 55%, #0b0d10 100%);
+  --puff-a-c: #262b34; --puff-b-c: #22262e; --puff-opacity: 0.5;
+  /* Type on the photograph earns its contrast from a shadow rather than a
+     ground, so unlike every other token these four are identical in both
+     themes -- the photo is the same photo in either lighting. */
+  --photo-ink: #f3f4f6; --photo-ink-dim: #c9cdd5;
+  --photo-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  --photo-shadow-sm: 0 1px 4px rgba(0,0,0,0.5), 0 1px 14px rgba(0,0,0,0.6);
+  --logo-filter: none; --logo-foot-filter: none; --logo-foot-opacity: 0.65;
+  --focus-ink: #f3f4f6;
+  --ease: cubic-bezier(0.16,1,0.3,1);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ember: #d33337; --frost: #4aa8ef; --chart: #aacc33; --mag: #ff4d9e;
+  --ember-t: #b02427; --frost-t: #1c76c9; --chart-t: #6f8f0a; --mag-t: #d9317f;
+  --hl-border: rgba(192,43,46,0.38);
+  --hl-shadow: 0 2px 12px rgba(176,36,39,0.10), 0 14px 30px -18px rgba(176,36,39,0.28);
+  --hl-border-amber: rgba(184,128,31,0.4);
+  --hl-shadow-amber: 0 2px 12px rgba(184,128,31,0.10), 0 14px 30px -18px rgba(184,128,31,0.30);
+  --ground-fill: linear-gradient(180deg, #f1f2f5 0%, #e9ebef 40%, #e2e5ea 100%);
+  --text-hi: #171a1f; --text-mid: #4c525c; --text-dim: #6a7280; --ico-ink: #6a7280;
+  --stroke: #e2e4e9; --stroke-hi: rgba(23,26,31,0.12);
+  --orb-ring: #cfd3da;
+  --orb-shadow: 0 8px 18px -8px rgba(224,100,30,0.5);
+  --cap-bg: rgba(255,255,255,0.58); --cap-bg-hover: rgba(255,255,255,0.85);
+  --cap-border: rgba(23,26,31,0.08); --cap-border-hover: rgba(23,26,31,0.13);
+  --cap-shadow: inset 0 2px 4px -1px rgba(23,26,31,0.09), 0 2px 7px -4px rgba(23,26,31,0.16);
+  --cap-shadow-hover: inset 0 2px 4px -1px rgba(23,26,31,0.07), 0 5px 12px -6px rgba(23,26,31,0.22);
+  --rim-conic: conic-gradient(
+    rgba(255,255,255,0.9) 0deg, rgba(23,26,31,0.05) 80deg,
+    rgba(23,26,31,0.18) 135deg, rgba(23,26,31,0.04) 205deg,
+    rgba(255,255,255,0.55) 285deg, #ffffff 318deg,
+    rgba(255,255,255,0.9) 360deg);
+  --rim-opacity: 0.8;
+  --composer-bg: rgba(255,255,255,0.78); --composer-border: rgba(23,26,31,0.08);
+  --composer-shadow: inset 0 2px 5px -2px rgba(23,26,31,0.08), 0 6px 16px -10px rgba(23,26,31,0.18);
+  --send-bg: #171a1f; --send-border: #171a1f;
+  --send-ink: #ffffff; --send-bg-hover: #262b33;
+  --journey-bg: rgba(255,255,255,0.7); --journey-border: rgba(23,26,31,0.07);
+  --journey-shadow: inset 0 2px 5px -2px rgba(23,26,31,0.07), 0 3px 10px -7px rgba(23,26,31,0.16);
+  --nub-bg: #e5e8ec;
+  --wing-bg: rgba(255,255,255,0.74); --wing-border: #e2e4e9;
+  --wing-shadow: 0 18px 40px -18px rgba(23,26,31,0.16), 0 3px 10px -4px rgba(23,26,31,0.07);
+  --tip-bg: #f4f5f7;
+  --row-bg: rgba(252,253,254,0.72); --row-bg-hover: #ffffff;
+  --menu-bg: rgba(255,255,255,0.97);
+  --scrim: rgba(23,26,31,0.45);
+  --modal-shadow: 0 24px 70px rgba(23,26,31,0.22);
+  --dropdown-shadow: 0 16px 44px rgba(23,26,31,0.16);
+  --danger: #c0392b;
+  --row-border: rgba(23,26,31,0.07); --row-border-hover: rgba(23,26,31,0.12);
+  --row-shadow: inset 0 2px 4px -1px rgba(23,26,31,0.08), 0 2px 6px -4px rgba(23,26,31,0.14);
+  --row-shadow-hover: inset 0 2px 4px -1px rgba(23,26,31,0.06), 0 5px 12px -6px rgba(23,26,31,0.2);
+  --badge-border: rgba(176,36,39,0.35); --badge-bg: rgba(211,51,55,0.06);
+  --mini-bg: #fafbfc; --mini-bg-hover: #ffffff;
+  --halo-grad: radial-gradient(closest-side, rgba(255,255,255,0.5), rgba(255,106,61,0.06) 46%, transparent 70%);
+  --scene-scrim:
+    radial-gradient(130% 100% at 50% 0%, transparent 42%, rgba(233,235,239,0.45) 100%),
+    linear-gradient(180deg, rgba(16,18,22,0.62) 0%, rgba(16,18,22,0.46) 36%, rgba(196,201,210,0.3) 66%, #e9ebef 97%);
+  --atmos-grad:
+    linear-gradient(93deg, transparent 45%, rgba(255,255,255,0.9) 48%, rgba(255,255,255,0.25) 53%, transparent 57%),
+    linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.5) 19%, rgba(255,255,255,0.5) 30%, transparent 31%),
+    linear-gradient(107deg, transparent 52%, rgba(255,255,255,0.35) 53%, rgba(255,255,255,0.35) 66%, transparent 67%);
+  --puff-a-c: #ffffff; --puff-b-c: #dde1e8; --puff-opacity: 0.55;
+  --photo-ink: #f3f4f6; --photo-ink-dim: #c9cdd5;
+  --photo-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  --photo-shadow-sm: 0 1px 4px rgba(0,0,0,0.5), 0 1px 14px rgba(0,0,0,0.6);
+  --logo-filter: invert(1) brightness(0.25);
+  --logo-foot-filter: invert(1) brightness(0.45); --logo-foot-opacity: 1;
+  --focus-ink: #171a1f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ground-fill); color: var(--text-hi);
+  font-family: "Figtree", system-ui, sans-serif; line-height: 1.6;
+  /* The body step of the ramp. Without it, anything not carrying an explicit
+     size fell through to the browser's 16px -- off the ramp and a step above
+     the styled body text beside it. rem is relative to :root, so setting this
+     on body does not disturb any rem-sized child. */
+  font-size: 0.93rem;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden; min-height: 100vh;
+}
+/* Bare headings, likewise: the UA gives h1 2em, h2 1.5em, h3 1.17em, none of
+   which are steps here. Element selectors, so any class-based heading style
+   still wins. */
+h1 { font-size: clamp(1.5rem, 5vw, 2rem); }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.05rem; }
+h4, h5, h6 { font-size: 0.93rem; }
+a { color: inherit; }
+/* Form controls do not inherit font-family from the page -- they fall back to
+   the UA default, which is Arial. Every control therefore had to name the face
+   itself, and any that forgot silently rendered in Arial. One rule here instead
+   of a declaration per button. Family only, not the `font` shorthand: that
+   would also reset size and weight, which controls do set for themselves. */
+button, input, select, textarea { font-family: inherit; }
+:focus-visible { outline: 2px solid var(--focus-ink); outline-offset: 3px; border-radius: 999px; }
+.atmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.atmos::before { content: ""; position: absolute; inset: 0; background: var(--atmos-grad); }
+.puff { position: absolute; border-radius: 50%; filter: blur(70px); opacity: var(--puff-opacity); }
+.puff-a { width: 480px; height: 380px; left: -14%; top: 6%; background: radial-gradient(closest-side, var(--puff-a-c), transparent 72%); animation: drift-a 46s ease-in-out infinite alternate; }
+.puff-b { width: 560px; height: 420px; right: -18%; top: 32%; background: radial-gradient(closest-side, var(--puff-b-c), transparent 70%); animation: drift-b 58s ease-in-out infinite alternate; }
+@keyframes drift-a { from { transform: translate(0,0); } to { transform: translate(60px,-36px) scale(1.1); } }
+@keyframes drift-b { from { transform: translate(0,0) scale(1.05); } to { transform: translate(-70px,44px) scale(0.96); } }
+@media (prefers-reduced-motion: reduce) { .puff { animation: none; } }
+
+/* Lobby photograph: full-bleed behind the hero, dissolving into whichever
+   ground the active theme uses. Hero type stays white in both themes
+   because it sits on the photograph, not the ground. */
+.scene { position: absolute; top: 0; left: 0; right: 0; height: 540px; z-index: 0; overflow: hidden; pointer-events: none; }
+.scene img {
+  /* The lobby photograph is 4:3 and its fireplace sits right of centre, so a
+     centred crop spent the left of a phone screen on the dark bar area and
+     clipped the flame's bright end. 62% keeps the flame running edge to edge.
+     Horizontal position only bites below 720px (above that the 4:3 source
+     already fills the width exactly) -- this is a phone-only correction.
+     Vertical 34% puts the flame just above the composer on phones and
+     directly behind it on desktop; both are deliberate. */
+  width: 100%; height: 100%; object-fit: cover; object-position: 62% 34%;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 44%, transparent 98%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 44%, transparent 98%);
+}
+.scene::after { content: ""; position: absolute; inset: 0; background: var(--scene-scrim); }
+@media (min-width: 920px) { .scene { height: 620px; } }
+
+.cap {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--cap-bg);
+  border: 1px solid var(--cap-border);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-radius: 999px; color: var(--text-mid); text-decoration: none;
+  box-shadow: var(--cap-shadow);
+  transition: background-color 0.28s, border-color 0.28s, color 0.28s, transform 0.32s var(--ease), box-shadow 0.32s var(--ease);
+}
+.cap:hover {
+  background: var(--cap-bg-hover);
+  border-color: var(--cap-border-hover); color: var(--text-hi); transform: translateY(-2px);
+  box-shadow: var(--cap-shadow-hover);
+}
+/* Ember's mark. The artwork is a finished icon -- the disc carries its own
+   baked lighting -- so nothing is layered inside it and --orb-shadow only
+   lifts it off the surface. Sized 100% 100% rather than `cover` so the
+   circle stays a circle if a call site ever gives it a non-square box. */
+.orb {
+  border-radius: 50%; flex: none; position: relative;
+  background: url("ember-mark.png") center / 100% 100% no-repeat;
+  box-shadow: var(--orb-shadow);
+}
+.orb::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid var(--orb-ring); }
+
+/* Liquid-glass rim: bevel weight varies around the perimeter as if lit
+   from the upper-left; each theme binds its own conic. */
+.cap, .composer, .journey, .row { position: relative; }
+.cap::before, .composer::before, .journey::before, .row::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  padding: 1.2px; pointer-events: none;
+  background: var(--rim-conic);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: var(--rim-opacity); transition: opacity 0.3s var(--ease);
+}
+.cap:hover::before, .composer:hover::before, .journey:hover::before, .row:hover::before { opacity: 1; }
+
+.page { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 18px; }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 20px 0 4px; }
+.bar .brand { padding: 11px 14px; }
+.bar .brand img { height: 17px; display: block; filter: var(--logo-filter); }
+/* The brand flame is red in both lightings (user call, 2026-08). The logo is
+   one white bitmap, so the flame is repainted by masking the mark's ramp
+   through the logo's own pixels while the img element is clipped down to the
+   wordmark and keeps the theme filter. The split is 16.4%: the flame spans
+   x 0-191 of the 1279px artwork, the wordmark starts at 230, and 210/1279
+   is mid-gap. Feature-gated because without mask support the ::before would
+   paint a solid red block -- those browsers keep the whole-logo treatment. */
+@supports ((-webkit-mask-repeat: no-repeat) or (mask-repeat: no-repeat)) {
+  .bar .brand { position: relative; }
+  .bar .brand img { clip-path: inset(0 0 0 16.4%); }
+  .bar .brand::before {
+    content: ""; position: absolute;
+    left: 14px; top: 50%; transform: translateY(-50%);
+    height: 17px; aspect-ratio: 1279 / 278;
+    background: var(--ember-grad);
+    -webkit-mask: url("https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031") no-repeat left center / 100% 100%;
+    mask: url("https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031") no-repeat left center / 100% 100%;
+    clip-path: inset(0 83.6% 0 0);
+  }
+}
+
+/* One glass capsule holding the whole link set, each item a pill only on
+   hover or when current. Denser than a pill per link, which is what lets the
+   full menu fit rather than only the first few. */
+.bar .links {
+  display: none; gap: 2px;
+  background: var(--cap-bg); border: 1px solid var(--cap-border);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-radius: 999px; padding: 4px;
+  box-shadow: var(--cap-shadow);
+}
+.bar .links a {
+  display: block; padding: 8px 10px; border-radius: 999px; white-space: nowrap;
+  color: var(--text-mid); text-decoration: none;
+  font-size: 0.83rem; font-weight: 500;
+  transition: color 0.24s var(--ease), background-color 0.24s var(--ease);
+}
+.bar .links a:hover { color: var(--text-hi); background: var(--cap-bg-hover); }
+.bar .links a.is-here { color: var(--text-hi); background: var(--cap-bg-hover); font-weight: 600; }
+/* ── Nav groups (Guides / Support) ──
+   The capsule carries three items: one link and two disclosures. Grouping was
+   tried and dropped once (#82/#91) when the bar held its destinations flat and
+   the dropdowns only added a click; it earns its place now that Support alone
+   holds six, four of them off-site. */
+.navgroup { position: relative; display: block; }
+.navgroup-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 8px 10px; border: 0; border-radius: 999px;
+  background: none; cursor: pointer; white-space: nowrap;
+  color: var(--text-mid); font: inherit;
+  font-size: 0.83rem; font-weight: 500;
+  transition: color 0.24s var(--ease), background-color 0.24s var(--ease);
+}
+.navgroup-btn:hover,
+.navgroup-btn[aria-expanded="true"] { color: var(--text-hi); background: var(--cap-bg-hover); }
+/* The group carries the current-page mark when the page lives inside it, so
+   the collapsed bar still says where you are. */
+.navgroup-btn.is-here { color: var(--text-hi); background: var(--cap-bg-hover); font-weight: 600; }
+.navgroup-caret { flex: none; transition: transform 0.24s var(--ease); }
+.navgroup-btn[aria-expanded="true"] .navgroup-caret { transform: rotate(180deg); }
+
+.navgroup-menu {
+  display: none; position: absolute; top: calc(100% + 9px); left: 0;
+  min-width: 218px; z-index: 40; padding: 7px;
+  flex-direction: column; gap: 2px;
+  background: var(--menu-bg); border: 1px solid var(--row-border);
+  border-radius: 15px; box-shadow: var(--row-shadow-hover);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+}
+.navgroup.is-open .navgroup-menu { display: flex; }
+.bar .links .navgroup-menu a {
+  padding: 9px 12px; border-radius: 13px; font-size: 0.83rem;
+}
+/* Same reason the burger panel marks itself with the nub fill: the capsule's
+   white-on-glass highlight disappears against a near-opaque panel in light. */
+.bar .links .navgroup-menu a:hover,
+.bar .links .navgroup-menu a.is-here { background: var(--nub-bg); color: var(--text-hi); }
+
+/* Inside the burger panel the groups are not popovers -- they are labelled
+   sections, open and stacked. A disclosure nested in a disclosure is two taps
+   to reach a link that has room to simply be there. */
+.bar .links.open .navgroup { display: block; margin-top: 6px; }
+.bar .links.open .navgroup-btn {
+  width: 100%; pointer-events: none;
+  padding: 14px 14px 6px;
+  /* Same family and size as "Set Up" and the rows beneath, so the three
+     top-level entries read as the peers they are. The label-vs-link difference
+     is carried by ink and weight rather than by a size step and small caps --
+     which had "Set Up" at body size sitting between two 0.7rem headings. */
+  font-size: 0.93rem; font-weight: 600;
+  color: var(--text-dim); background: none;
+}
+.bar .links.open .navgroup-btn.is-here { color: var(--text-dim); background: none; }
+.bar .links.open .navgroup-caret { display: none; }
+.bar .links.open .navgroup-menu {
+  display: flex; position: static; min-width: 0; padding: 0;
+  background: none; border: 0; box-shadow: none; backdrop-filter: none;
+}
+
+.bar-end { display: flex; align-items: center; gap: 7px; }
+.bar-end .cap { padding: 10px 14px; font-size: 0.83rem; font-weight: 600; }
+.pts-chip {
+  display: none; align-items: center; gap: 8px;
+  padding: 9px 15px; font-size: 0.83rem; font-weight: 600; color: var(--text-hi);
+}
+/* Reserved at the widest total the ledger can reach (4,600 pts) so the bar
+   is laid out for its worst case instead of growing into an overflow as
+   points are earned. */
+.pts-chip b {
+  color: var(--ember-t); font-weight: 700;
+  font-variant-numeric: tabular-nums; min-width: 5.4ch; text-align: right;
+}
+/* An account mark, not a status light. Signed in, this chip opens the profile
+   dropdown (rewards.js), so it has to read as "you" rather than as a live
+   indicator -- a glowing dot here said "something happened", which is not what
+   it means. Quiet on purpose: the points figure beside it is already ember, and
+   two orange things in one chip fight each other. */
+.pts-ico {
+  width: 15px; height: 15px; flex: none;
+  color: var(--text-mid);
+}
+/* One end chip. Find a Dealer is a Support menu item now, and the storefront is
+   reached through the Warranty / Service Request / Contact Us items and the
+   footer. The rewards chip stays because it is not really navigation -- it
+   reports a live points total, and rewards are always visible (DESIGN.md). */
+/* Kept for the chip's own current-page state. */
+.bar-end .cap.is-here, .bar-end .cap[aria-current="page"] {
+  color: var(--text-hi); background: var(--cap-bg-hover); border-color: var(--cap-border-hover);
+}
+.theme-btn { padding: 10px 12px; cursor: pointer; font: inherit; }
+.theme-btn svg { display: block; }
+.theme-btn .ico-moon { display: none; }
+:root[data-theme="light"] .theme-btn .ico-sun { display: none; }
+:root[data-theme="light"] .theme-btn .ico-moon { display: block; }
+
+/* ── Row lists, closing note, footer ── */
+.rows { display: flex; flex-direction: column; gap: 8px; }
+.row {
+  display: flex; align-items: center; gap: 11px; text-decoration: none;
+  background: var(--row-bg);
+  border: 1px solid var(--row-border); border-radius: 15px;
+  padding: 11px 13px 13px;
+  position: relative; overflow: hidden;
+  box-shadow: var(--row-shadow);
+  transition: background-color 0.25s, border-color 0.25s, transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.row:hover {
+  background: var(--row-bg-hover);
+  border-color: var(--row-border-hover); transform: translateY(-2px);
+  box-shadow: var(--row-shadow-hover);
+}
+.row::after {
+  content: ""; position: absolute; left: 13px; right: 13px; bottom: 0; height: 3px;
+  /* Pill: on a 3px-tall bar the radius clamps to half the height either
+     way, so this renders exactly as 3px did and stays on the scale. */
+  border-radius: 999px 999px 0 0; opacity: 0;
+  transition: opacity 0.28s;
+}
+.row:hover::after, .row:focus-visible::after, .row:active::after { opacity: 1; }
+.rows .row:nth-child(4n+1)::after { background: linear-gradient(90deg, transparent, var(--frost), transparent); }
+.rows .row:nth-child(4n+2)::after { background: linear-gradient(90deg, transparent, var(--chart), transparent); }
+.rows .row:nth-child(4n+3)::after { background: linear-gradient(90deg, transparent, var(--ember), transparent); }
+.rows .row:nth-child(4n+4)::after { background: linear-gradient(90deg, transparent, var(--mag), transparent); }
+.rows .row:nth-child(4n+1):hover .r-ico { color: var(--frost-t); }
+.rows .row:nth-child(4n+2):hover .r-ico { color: var(--chart-t); }
+.rows .row:nth-child(4n+3):hover .r-ico { color: var(--ember-t); }
+.rows .row:nth-child(4n+4):hover .r-ico { color: var(--mag-t); }
+.row .r-ico { width: 26px; height: 26px; display: grid; place-items: center; color: var(--ico-ink); flex: none; }
+.row .r-ico svg { width: 18px; height: 18px; }
+/* The wrapper span holding <b> + subtitle also matches `.row span`, so the
+   title inherits the subtitle ink unless it is stated. Row titles are
+   headings -- white, like .tile b and .phead h1 everywhere else. */
+.row b { display: block; font-size: 0.88rem; font-weight: 600; color: var(--text-hi); }
+.row span { display: block; font-size: 0.76rem; color: var(--text-dim); }
+.row .thumb { width: 38px; height: 28px; display: grid; place-items: center; flex: none; }
+.row .thumb img { width: 34px; height: 24px; object-fit: contain; }
+.row .badge {
+  flex: none; font-size: 0.7rem; font-weight: 700;
+  border-radius: 999px; padding: 3px 9px;
+}
+.row .badge.pts { color: var(--ember-t); border: 1px solid var(--badge-border); background: var(--badge-bg); }
+.row svg.arr { color: var(--text-dim); flex: none; }
+/* rewards.js inserts its badge as the first child of any [data-reward].
+   Ordering the row explicitly keeps it at the end whatever the DOM says,
+   and letting the label column grow means neither the badge nor the arrow
+   needs an auto margin. */
+.row .r-ico, .row .thumb { order: 0; }
+.row > span:not(.r-ico):not(.thumb):not(.badge):not(.af-reward-badge) {
+  order: 1; flex: 1; min-width: 0;
+}
+.row .badge, .row .af-reward-badge { order: 2; }
+.row svg.arr { order: 3; }
+/* One trailing element per row: a reward badge closes the row just as the
+   chevron does, and keeping both leaves the label under 150px on a phone,
+   which wraps the title onto two lines. */
+.row:has(.af-reward-badge) svg.arr { display: none; }
+.minis { display: flex; flex-wrap: wrap; gap: 7px; }
+.minis a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.76rem; font-weight: 500; color: var(--text-mid); text-decoration: none;
+  background: var(--mini-bg); border: 1px solid var(--stroke); border-radius: 999px; padding: 6px 12px;
+  transition: color 0.22s, background-color 0.22s;
+}
+.minis a:hover { color: var(--text-hi); background: var(--mini-bg-hover); }
+
+/* ── Close (reviews) ─────────────────────────────── */
+/* padding rather than margin-bottom: the footer carries its own 36px top
+   margin, and adjacent margins collapse to the larger of the two rather than
+   adding -- so a margin here would have bought nothing. The gap belongs to
+   this section anyway, since it is what stops the footer links reading as one
+   more row of the review module. */
+.close { margin: 56px auto 0; padding-bottom: 38px; max-width: 620px; text-align: center; }
+.close-h { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
+.close .stars { color: var(--ember-t); letter-spacing: 3px; font-size: 0.83rem; }
+.close blockquote { font-size: 1.05rem; font-weight: 500; margin-top: 10px; text-wrap: balance; }
+.close figcaption { color: var(--text-dim); font-size: 0.83rem; margin-top: 10px; }
+
+/* Every slide occupies the same grid cell, so the rail measures as tall as its
+   longest quote and the footer never shifts as they cycle. Inactive slides keep
+   their box (that is the point) but are pulled out of the a11y tree. */
+.rv { margin-top: 22px; }
+.rv-track { display: grid; }
+.rv-slide {
+  grid-area: 1 / 1;
+  /* The cell is as tall as the longest quote, so a short one would otherwise
+     sit at the top with all the slack below it. Centred, the slack splits. */
+  align-self: center;
+  opacity: 0; visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease), visibility 0.45s;
+}
+.rv-slide.is-on { opacity: 1; visibility: visible; transform: none; }
+
+.rv-dots { display: flex; justify-content: center; gap: 8px; margin-top: 18px; }
+/* The button is a fixed 20px slot and the visible pill lives in ::before, so
+   the active dot can widen without shoving the four beside it along -- the
+   growth reflows inside its own box and the row's layout never changes. A
+   7px tap target would also be too small on a phone; the slot is the hit
+   area, the pill is only what you see. */
+.rv-dots button {
+  width: 20px; height: 20px; padding: 0; border: none;
+  background: none; cursor: pointer;
+  display: grid; place-items: center;
+}
+.rv-dots button::before {
+  content: ""; display: block;
+  width: 7px; height: 7px; border-radius: 999px;
+  background: var(--nub-bg);
+  transition: background-color 0.3s, width 0.3s var(--ease);
+}
+.rv-dots button[aria-selected="true"]::before { width: 20px; background: var(--ember); }
+
+/* The ask, not a footnote. It used to be a text link inside the attribution
+   line, which put the one thing this section wants you to do below the quote
+   and at label size. */
+.rv-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 24px; padding: 13px 26px;
+  border-radius: 999px; text-decoration: none;
+  background: var(--ember-grad); color: var(--on-ember);
+  font-size: 0.93rem; font-weight: 600;
+  transition: transform 0.3s var(--ease), filter 0.24s;
+}
+.rv-cta:hover { transform: translateY(-2px); filter: brightness(1.07); }
+.rv-cta svg { transition: transform 0.3s var(--ease); }
+.rv-cta:hover svg { transform: translateX(3px); }
+/* rewards.js injects its points badge as the first child of anything carrying
+   data-reward, and its resting look is amber on glass. Dropped onto an
+   accent-filled pill that becomes amber on red: two warm colours arguing, at
+   about 2:1. On this fill it borrows the button's own ink instead, over a
+   dark tint rather than a white one -- the ink is dark now, and a lightened
+   chip under dark text washed out against the ramp. */
+.rv-cta .af-reward-badge {
+  background: rgba(23,26,31,0.14);
+  border-color: transparent;
+  color: var(--on-ember);
+}
+.foot { margin: 36px 0 30px; display: flex; align-items: center; justify-content: center; gap: 14px; color: var(--text-dim); font-size: 0.76rem; flex-wrap: wrap; }
+.foot img { height: 13px; filter: var(--logo-foot-filter); opacity: var(--logo-foot-opacity); }
+.foot a { color: var(--text-dim); text-decoration: none; }
+.foot a:hover { color: var(--text-hi); }
+
+/* ── Desktop enhancement (shared) ──
+   The bar sheds pieces as it narrows rather than wrapping or overflowing.
+   Re-measured in Chromium with Figtree loaded and the points chip at its
+   maximum (4,600 pts) after the bar became Set Up + two group disclosures:
+   capsule 256 (was 653 with six flat links), brand ~110, end chip 177.
+   The whole bar needs ~450px without the points chip and ~630px with it, so
+   the capsule now unfolds at 760 rather than 1080 -- that reaches iPad
+   portrait (768) with ~300px to spare instead of handing it a burger.
+
+   Adding a *group* costs ~85px of capsule, which the bar can absorb several
+   times over; adding an *item inside* a group costs nothing, because the menu
+   is a popover. That is the point of the grouping, and it is why the earlier
+   flat capsule had to be measured before every new link. */
+@media (min-width: 920px) {
+  .page { padding: 0 24px; }
+  .pts-chip { display: inline-flex; }
+}
+@media (min-width: 760px) {
+  .bar .links { display: flex; }
+}
+
+/* ── Inner-page chrome ────────────────────────────────────────────────────
+   The homepage is a hero page; every other page needs a nav bar with a real link
+   list, a page header, a tile grid and a full footer. These live here so the
+   rollout adds markup, not styles. */
+
+.phead { padding: 40px 0 8px; max-width: 760px; }
+.phead h1 {
+  font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700;
+  letter-spacing: -0.025em; line-height: 1.18; text-wrap: balance;
+}
+.phead p { color: var(--text-mid); font-size: 0.93rem; margin-top: 10px; }
+.pbody { padding: 22px 0 10px; }
+
+/* Card grid used by hub-style pages. */
+.tiles {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+.tile {
+  display: flex; flex-direction: column; gap: 7px;
+  padding: 20px 18px 22px; text-decoration: none;
+  background: var(--row-bg); border: 1px solid var(--row-border);
+  border-radius: 15px; position: relative; overflow: hidden;
+  box-shadow: var(--row-shadow);
+  transition: background-color 0.25s, border-color 0.25s,
+              transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.tile:hover {
+  background: var(--row-bg-hover); border-color: var(--row-border-hover);
+  transform: translateY(-2px); box-shadow: var(--row-shadow-hover);
+}
+.tile .t-ico { width: 30px; height: 30px; display: grid; place-items: center; color: var(--ico-ink); }
+.tile .t-ico svg { width: 25px; height: 25px; }
+.tile b { font-size: 0.93rem; font-weight: 600; }
+.tile p { font-size: 0.83rem; color: var(--text-dim); line-height: 1.5; }
+.tile::after {
+  content: ""; position: absolute; left: 18px; right: 18px; bottom: 0; height: 3px;
+  border-radius: 999px 999px 0 0; opacity: 0; transition: opacity 0.28s;
+}
+.tile:hover::after, .tile:focus-visible::after { opacity: 1; }
+.tiles .tile:nth-child(4n+1)::after { background: linear-gradient(90deg, transparent, var(--frost), transparent); }
+.tiles .tile:nth-child(4n+2)::after { background: linear-gradient(90deg, transparent, var(--chart), transparent); }
+.tiles .tile:nth-child(4n+3)::after { background: linear-gradient(90deg, transparent, var(--ember), transparent); }
+.tiles .tile:nth-child(4n+4)::after { background: linear-gradient(90deg, transparent, var(--mag), transparent); }
+.tiles .tile:nth-child(4n+1):hover .t-ico { color: var(--frost-t); }
+.tiles .tile:nth-child(4n+2):hover .t-ico { color: var(--chart-t); }
+.tiles .tile:nth-child(4n+3):hover .t-ico { color: var(--ember-t); }
+.tiles .tile:nth-child(4n+4):hover .t-ico { color: var(--mag-t); }
+.tile, .phead { position: relative; }
+.tile::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  padding: 1.2px; pointer-events: none; background: var(--rim-conic);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: var(--rim-opacity); transition: opacity 0.3s var(--ease);
+}
+.tile:hover::before { opacity: 1; }
+
+/* Mobile nav. home/ hides its link list under 920px because the hero carries
+   the page; inner pages need the links reachable, so they get a disclosure. */
+.nav-btn { display: inline-flex; padding: 10px 12px; cursor: pointer; font: inherit; }
+.nav-btn svg { display: block; }
+.bar .links.open {
+  display: flex; position: absolute; left: 18px; right: 18px; top: 76px;
+  flex-direction: column; gap: 2px; padding: 8px; z-index: 30;
+  background: var(--menu-bg); border: 1px solid var(--row-border);
+  border-radius: 24px; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  box-shadow: var(--row-shadow-hover);
+}
+/* Eleven rows is taller than a phone once both groups are laid out flat, and
+   the panel is absolutely positioned, so on a short page the last items would
+   sit below anything scrollable. */
+.bar .links.open { max-height: calc(100vh - 96px); overflow-y: auto; }
+.bar .links.open a { padding: 11px 14px; font-size: 0.93rem; border-radius: 13px; }
+/* The capsule's white-on-glass highlight vanishes against the near-opaque menu
+   in light theme, so the panel marks hover/current with the nub fill instead. */
+.bar .links.open a:hover, .bar .links.open a.is-here { background: var(--nub-bg); }
+/* The z-index belongs here, not on the menus. `.links` carries backdrop-filter,
+   which makes it a stacking context, so a z-index on a menu inside it is scoped
+   to the capsule and loses to any later page content -- the group dropdowns
+   rendered *under* the page heading, which read straight through them. Lifting
+   the whole bar puts both the dropdowns and the burger panel above the page. */
+.bar { position: relative; z-index: 50; }
+
+/* Full footer for inner pages (home/ keeps its one-line .foot). */
+.pfoot { margin: 54px 0 34px; padding-top: 26px; border-top: 1px solid var(--stroke); }
+.pfoot-in { display: flex; flex-wrap: wrap; gap: 30px 54px; }
+.pfoot-brand { flex: 1 1 240px; }
+.pfoot-brand img { height: 14px; filter: var(--logo-foot-filter); opacity: var(--logo-foot-opacity); }
+.pfoot-brand p { color: var(--text-dim); font-size: 0.83rem; margin-top: 10px; max-width: 34ch; }
+.pfoot-col { display: flex; flex-direction: column; gap: 7px; }
+.pfoot-col h4 { font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-dim); }
+.pfoot-col a { color: var(--text-mid); text-decoration: none; font-size: 0.83rem; }
+.pfoot-col a:hover { color: var(--text-hi); }
+.pfoot-bottom { margin-top: 26px; color: var(--text-dim); font-size: 0.76rem; }
+
+@media (min-width: 920px) {
+  .phead { padding: 52px 0 10px; }
+}
+/* Paired with the capsule breakpoint above: the moment the real nav is on
+   screen the burger is redundant. */
+@media (min-width: 760px) {
+  .nav-btn { display: none; }
+}
+
+/* ── Legacy token bridge ──────────────────────────────────────────────────
+   troubleshoot.css, styles.css and water-care-styles.css predate this design
+   system and read ~270 `var(--old-name, fallback)` references. Binding those
+   names here makes the existing tool UIs adopt the new palette AND follow the
+   theme switch; without it they silently fall back to their hardcoded 2025
+   defaults inside a redesigned page.
+
+   --ember is deliberately absent: it already exists above, bound per theme,
+   and those stylesheets read the same name. Delete a line here once its
+   consumer has been restyled onto the new tokens directly. */
+:root {
+  --bg: #101216;
+  --surface: rgba(255,255,255,0.045);
+  --surface-alt: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.12);
+  --border-warm: rgba(240,90,94,0.26);
+  --text: #f3f4f6;
+  --text-muted: #8d939f;
+  --red: #d33337;
+  --red-dark: #b02427;
+  --red-glow: rgba(211,51,55,0.16);
+  --amber: #e8a838;
+  --amber-dim: #c78820;
+  --blue: #6fc3ff;
+  --blue-dim: #2f8fd0;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --amber-glow: rgba(232,168,56,0.10);
+  --blue-glow: rgba(111,195,255,0.10);
+  --ember-glow: rgba(211,51,55,0.10);
+  --shadow: 0 2px 24px rgba(0,0,0,0.35);
+  /* Ink that sits on a saturated accent fill (DESIGN.md `on-accent`), and the
+     tight elevation a control-sized element wants — --shadow is tuned for
+     cards and goes to mush under a 20px slider thumb. */
+  --on-accent: #fff;
+  --shadow-sm: 0 1px 6px rgba(0,0,0,0.4);
+  /* A blue solid enough to carry white text: --blue and --blue-dim are tuned
+     to be read AS colour on the page ground, and neither clears AA under
+     white. Water Care's CTA and badges use these. */
+  --blue-solid: #2471a3;
+  --blue-solid-hover: #1f6391;
+  /* Water-hardness scale (soft → very hard). A sequential data ramp, not
+     brand colour — it has to stay legible as text, so the light theme uses
+     darker steps rather than the same hues. */
+  --hard-soft: #2ecc71;
+  --hard-moderate: #f1c40f;
+  --hard-hard: #e67e22;
+  --hard-vhard: #e74c3c;
+}
+:root[data-theme="light"] {
+  --bg: #eef0f3;
+  --surface: rgba(255,255,255,0.72);
+  --surface-alt: rgba(255,255,255,0.9);
+  --border: #e2e4e9;
+  --border-warm: rgba(176,36,39,0.24);
+  --text: #171a1f;
+  --text-muted: #6a7280;
+  --red: #c02b2e;
+  --red-dark: #8d1d20;
+  --red-glow: rgba(176,36,39,0.12);
+  --amber: #b8801f;
+  --amber-dim: #8f6416;
+  --blue: #1c76c9;
+  --blue-dim: #135697;
+  --amber-glow: rgba(184,128,31,0.12);
+  --blue-glow: rgba(28,118,201,0.10);
+  --ember-glow: rgba(176,36,39,0.10);
+  --shadow: 0 2px 20px rgba(23,26,31,0.10);
+  --on-accent: #fff;
+  --shadow-sm: 0 1px 5px rgba(23,26,31,0.22);
+  --blue-solid: #1c76c9;
+  --blue-solid-hover: #135697;
+  /* Darkened so the scale still reads as text on a light card; the dark
+     theme's #2ecc71 lands at 2.2:1 there. */
+  --hard-soft: #1d8348;
+  --hard-moderate: #8a6d0b;
+  --hard-hard: #a8500c;
+  --hard-vhard: #c0392b;
+}

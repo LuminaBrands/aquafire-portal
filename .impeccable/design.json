@@ -1,39 +1,255 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-31T05:00:00Z",
+  "generatedAt": "2026-08-02T22:20:00Z",
   "title": "Design System: Aquafire Owner's Portal",
   "extensions": {
     "colorMeta": {
-      "ember": { "role": "primary", "displayName": "Ember", "canonical": "#ff8a4a", "tonalRamp": ["oklch(15% 0.05 45)", "oklch(27% 0.08 45)", "oklch(39% 0.11 45)", "oklch(51% 0.13 45)", "oklch(63% 0.15 45)", "oklch(75% 0.15 45)", "oklch(85% 0.10 45)", "oklch(95% 0.04 45)"] },
-      "frost": { "role": "secondary", "displayName": "Frost", "canonical": "#6fc3ff", "tonalRamp": ["oklch(15% 0.04 240)", "oklch(27% 0.06 240)", "oklch(39% 0.08 240)", "oklch(51% 0.10 240)", "oklch(64% 0.11 240)", "oklch(78% 0.11 240)", "oklch(87% 0.08 240)", "oklch(95% 0.03 240)"] },
-      "chartreuse": { "role": "secondary", "displayName": "Chartreuse", "canonical": "#c9e85c", "tonalRamp": ["oklch(15% 0.05 115)", "oklch(27% 0.08 115)", "oklch(40% 0.11 115)", "oklch(53% 0.13 115)", "oklch(67% 0.15 115)", "oklch(80% 0.16 115)", "oklch(88% 0.16 115)", "oklch(95% 0.08 115)"] },
-      "magenta": { "role": "secondary", "displayName": "Magenta (rewards only)", "canonical": "#ff5fa8", "tonalRamp": ["oklch(15% 0.06 355)", "oklch(26% 0.09 355)", "oklch(37% 0.12 355)", "oklch(48% 0.15 355)", "oklch(59% 0.17 355)", "oklch(70% 0.19 355)", "oklch(83% 0.12 355)", "oklch(95% 0.04 355)"] },
-      "smoke": { "role": "neutral", "displayName": "Smoke (dark ground)", "canonical": "#101216", "tonalRamp": ["oklch(17% 0.008 260)", "oklch(28% 0.008 260)", "oklch(39% 0.008 260)", "oklch(50% 0.008 260)", "oklch(61% 0.008 260)", "oklch(72% 0.008 260)", "oklch(84% 0.006 260)", "oklch(95% 0.004 260)"] },
-      "showroom": { "role": "neutral", "displayName": "Showroom (light ground)", "canonical": "#e9ebef", "tonalRamp": ["oklch(17% 0.008 260)", "oklch(28% 0.008 260)", "oklch(39% 0.008 260)", "oklch(50% 0.008 260)", "oklch(61% 0.008 260)", "oklch(72% 0.008 260)", "oklch(84% 0.006 260)", "oklch(94% 0.004 260)"] }
+      "ember": {
+        "role": "primary",
+        "displayName": "Ember",
+        "canonical": "#ff8a4a",
+        "tonalRamp": [
+          "oklch(15% 0.05 45)",
+          "oklch(27% 0.08 45)",
+          "oklch(39% 0.11 45)",
+          "oklch(51% 0.13 45)",
+          "oklch(63% 0.15 45)",
+          "oklch(75% 0.15 45)",
+          "oklch(85% 0.10 45)",
+          "oklch(95% 0.04 45)"
+        ]
+      },
+      "frost": {
+        "role": "secondary",
+        "displayName": "Frost",
+        "canonical": "#6fc3ff",
+        "tonalRamp": [
+          "oklch(15% 0.04 240)",
+          "oklch(27% 0.06 240)",
+          "oklch(39% 0.08 240)",
+          "oklch(51% 0.10 240)",
+          "oklch(64% 0.11 240)",
+          "oklch(78% 0.11 240)",
+          "oklch(87% 0.08 240)",
+          "oklch(95% 0.03 240)"
+        ]
+      },
+      "chartreuse": {
+        "role": "secondary",
+        "displayName": "Chartreuse",
+        "canonical": "#c9e85c",
+        "tonalRamp": [
+          "oklch(15% 0.05 115)",
+          "oklch(27% 0.08 115)",
+          "oklch(40% 0.11 115)",
+          "oklch(53% 0.13 115)",
+          "oklch(67% 0.15 115)",
+          "oklch(80% 0.16 115)",
+          "oklch(88% 0.16 115)",
+          "oklch(95% 0.08 115)"
+        ]
+      },
+      "magenta": {
+        "role": "secondary",
+        "displayName": "Magenta (rewards only)",
+        "canonical": "#ff5fa8",
+        "tonalRamp": [
+          "oklch(15% 0.06 355)",
+          "oklch(26% 0.09 355)",
+          "oklch(37% 0.12 355)",
+          "oklch(48% 0.15 355)",
+          "oklch(59% 0.17 355)",
+          "oklch(70% 0.19 355)",
+          "oklch(83% 0.12 355)",
+          "oklch(95% 0.04 355)"
+        ]
+      },
+      "smoke": {
+        "role": "neutral",
+        "displayName": "Smoke (dark ground)",
+        "canonical": "#101216",
+        "tonalRamp": [
+          "oklch(17% 0.008 260)",
+          "oklch(28% 0.008 260)",
+          "oklch(39% 0.008 260)",
+          "oklch(50% 0.008 260)",
+          "oklch(61% 0.008 260)",
+          "oklch(72% 0.008 260)",
+          "oklch(84% 0.006 260)",
+          "oklch(95% 0.004 260)"
+        ]
+      },
+      "showroom": {
+        "role": "neutral",
+        "displayName": "Showroom (light ground)",
+        "canonical": "#e9ebef",
+        "tonalRamp": [
+          "oklch(17% 0.008 260)",
+          "oklch(28% 0.008 260)",
+          "oklch(39% 0.008 260)",
+          "oklch(50% 0.008 260)",
+          "oklch(61% 0.008 260)",
+          "oklch(72% 0.008 260)",
+          "oklch(84% 0.006 260)",
+          "oklch(94% 0.004 260)"
+        ]
+      },
+      "orb-lift": {
+        "role": "Warm cast under Ember's mark; same in both themes. Ember itself is artwork (ember-mark.png), not a CSS gradient",
+        "displayName": "Orb lift",
+        "canonical": "rgba(224,100,30,0.45)"
+      },
+      "photo-ink": {
+        "role": "Hero type on the photograph -- does not follow the theme",
+        "displayName": "Photo ink",
+        "canonical": "#f3f4f6"
+      },
+      "photo-ink-dim": {
+        "role": "Hero subtitle on the photograph -- does not follow the theme",
+        "displayName": "Photo ink dim",
+        "canonical": "#c9cdd5"
+      },
+      "showroom-deep": {
+        "role": "Bottom stop of the light ground gradient",
+        "displayName": "Showroom deep",
+        "canonical": "#e2e5ea"
+      },
+      "ember-ramp-red": {
+        "role": "Bottom stop of the mark's ramp (--ember-grad / --ember-grad-bar), sampled from ember-mark.png; same in both themes",
+        "displayName": "Ember ramp red",
+        "canonical": "#eb4b46"
+      },
+      "ember-ramp-warm": {
+        "role": "Top stop of the mark's ramp (--ember-grad / --ember-grad-bar), sampled from the redder lower half of ember-mark.png; red-first by brand rule; same in both themes",
+        "displayName": "Ember ramp warm",
+        "canonical": "#ed7842"
+      },
+      "hl-border": {
+        "role": "Highlight card ring, dark (light: rgba(192,43,46,0.38)) -- thin warm emphasis border",
+        "displayName": "Highlight ring",
+        "canonical": "rgba(240,90,94,0.42)"
+      },
+      "hl-border-amber": {
+        "role": "Highlight card ring, warning variant, dark (light: rgba(184,128,31,0.4))",
+        "displayName": "Highlight ring (warning)",
+        "canonical": "rgba(232,168,56,0.42)"
+      },
+      "hl-glow": {
+        "role": "Chromatic underglow in --hl-shadow, dark (light: rgba(176,36,39,0.28))",
+        "displayName": "Highlight underglow",
+        "canonical": "rgba(235,75,70,0.4)"
+      },
+      "hl-glow-amber": {
+        "role": "Chromatic underglow in --hl-shadow-amber, dark (light: rgba(184,128,31,0.30))",
+        "displayName": "Highlight underglow (warning)",
+        "canonical": "rgba(232,168,56,0.35)"
+      }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Ember's greeting only; white in both themes with a soft shadow (sits on the photograph)." },
-      "headline": { "displayName": "Headline", "purpose": "Wing heads and the journey band title." },
-      "title": { "displayName": "Title", "purpose": "Row-card titles, send button, nav caps." },
-      "body": { "displayName": "Body", "purpose": "Greeting subtitle, tip bubbles, descriptions." },
-      "label": { "displayName": "Label", "purpose": "Row subtitles, chips, minis, badges, journey captions." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "Ember's greeting only; white in both themes with a soft shadow (sits on the photograph)."
+      },
+      "page-title": {
+        "displayName": "Page title",
+        "purpose": "The .phead h1 on every inner page. A step below Display on purpose."
+      },
+      "section": {
+        "displayName": "Section",
+        "purpose": "Top heading inside an inner page body: Troubleshooter prompts, guide section titles, calculator results."
+      },
+      "subsection": {
+        "displayName": "Subsection",
+        "purpose": "A level under Section: guide step titles, outcome titles."
+      },
+      "minor": {
+        "displayName": "Minor",
+        "purpose": "The smallest true heading: card headings inside a subsection."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Wing heads."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Row-card titles, send button."
+      },
+      "nav": {
+        "displayName": "Nav",
+        "purpose": "Links inside the nav capsule and the bar-end chips. Sized to fit seven destinations plus two chips in a 1152px column."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Greeting subtitle, tip bubbles, descriptions, and anything with no explicit size (carried on body)."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Row subtitles, chips, minis, journey captions."
+      },
+      "labelSmall": {
+        "displayName": "Label small",
+        "purpose": "Badges only. The floor of the ramp; below it is diagram and map furniture, not type."
+      }
     },
     "shadows": [
-      { "name": "cap-rest-dark", "value": "inset 0 2px 5px -2px rgba(0,0,0,0.4), 0 3px 9px -5px rgba(0,0,0,0.55)", "purpose": "Debossed top + whisper drop for pills on smoke." },
-      { "name": "cap-hover-dark", "value": "inset 0 2px 5px -2px rgba(0,0,0,0.35), 0 6px 14px -7px rgba(0,0,0,0.6)", "purpose": "Hover: deboss eases, drop deepens as the pill lifts 2px." },
-      { "name": "row-rest-dark", "value": "inset 0 2px 6px -2px rgba(0,0,0,0.45), 0 2px 7px -4px rgba(0,0,0,0.5)", "purpose": "Row cards on smoke." },
-      { "name": "composer-dark", "value": "inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 8px 20px -12px rgba(0,0,0,0.6)", "purpose": "The composer floats slightly heavier than chips." },
-      { "name": "cap-rest-light", "value": "inset 0 2px 4px -1px rgba(23,26,31,0.09), 0 2px 7px -4px rgba(23,26,31,0.16)", "purpose": "Pills on showroom ground." },
-      { "name": "wing-light", "value": "0 18px 40px -18px rgba(23,26,31,0.16), 0 3px 10px -4px rgba(23,26,31,0.07)", "purpose": "Light-theme wings carry the larger showroom shadow." }
+      {
+        "name": "cap-rest-dark",
+        "value": "inset 0 2px 5px -2px rgba(0,0,0,0.4), 0 3px 9px -5px rgba(0,0,0,0.55)",
+        "purpose": "Debossed top + whisper drop for pills on smoke."
+      },
+      {
+        "name": "cap-hover-dark",
+        "value": "inset 0 2px 5px -2px rgba(0,0,0,0.35), 0 6px 14px -7px rgba(0,0,0,0.6)",
+        "purpose": "Hover: deboss eases, drop deepens as the pill lifts 2px."
+      },
+      {
+        "name": "row-rest-dark",
+        "value": "inset 0 2px 6px -2px rgba(0,0,0,0.45), 0 2px 7px -4px rgba(0,0,0,0.5)",
+        "purpose": "Row cards on smoke."
+      },
+      {
+        "name": "composer-dark",
+        "value": "inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 8px 20px -12px rgba(0,0,0,0.6)",
+        "purpose": "The composer floats slightly heavier than chips."
+      },
+      {
+        "name": "cap-rest-light",
+        "value": "inset 0 2px 4px -1px rgba(23,26,31,0.09), 0 2px 7px -4px rgba(23,26,31,0.16)",
+        "purpose": "Pills on showroom ground."
+      },
+      {
+        "name": "wing-light",
+        "value": "0 18px 40px -18px rgba(23,26,31,0.16), 0 3px 10px -4px rgba(23,26,31,0.07)",
+        "purpose": "Light-theme wings carry the larger showroom shadow."
+      }
     ],
     "motion": [
-      { "name": "ease-spring", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Default easing for transform lifts and rim opacity." },
-      { "name": "duration-color", "value": "0.25s-0.28s", "purpose": "Background, border, color, and edge-bar opacity transitions." },
-      { "name": "duration-lift", "value": "0.3s-0.32s", "purpose": "translateY(-2px) hover lifts and box-shadow changes." },
-      { "name": "duration-drift", "value": "46s / 58s", "purpose": "Ambient smoke-puff drift, alternating; disabled under prefers-reduced-motion." }
+      {
+        "name": "ease-spring",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Default easing for transform lifts and rim opacity."
+      },
+      {
+        "name": "duration-color",
+        "value": "0.25s-0.28s",
+        "purpose": "Background, border, color, and edge-bar opacity transitions."
+      },
+      {
+        "name": "duration-lift",
+        "value": "0.3s-0.32s",
+        "purpose": "translateY(-2px) hover lifts and box-shadow changes."
+      },
+      {
+        "name": "duration-drift",
+        "value": "46s / 58s",
+        "purpose": "Ambient smoke-puff drift, alternating; disabled under prefers-reduced-motion."
+      }
     ],
     "breakpoints": [
-      { "name": "desktop", "value": "920px" }
+      {
+        "name": "desktop",
+        "value": "920px"
+      }
     ]
   },
   "components": [
@@ -62,12 +278,20 @@
       "css": ".ds-row { display: flex; align-items: center; gap: 11px; text-decoration: none; position: relative; overflow: hidden; background: rgba(13,15,19,0.4); border: 1px solid rgba(255,255,255,0.07); border-radius: 15px; padding: 11px 13px 13px; color: #f3f4f6; font-family: Figtree, system-ui, sans-serif; box-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.45), 0 2px 7px -4px rgba(0,0,0,0.5); transition: background-color 0.25s, border-color 0.25s, transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-row::after { content: \"\"; position: absolute; left: 13px; right: 13px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; opacity: 0; background: linear-gradient(90deg, transparent, #6fc3ff, transparent); transition: opacity 0.28s; } .ds-row:hover { background: rgba(22,25,31,0.5); border-color: rgba(255,255,255,0.13); transform: translateY(-2px); box-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 6px 14px -7px rgba(0,0,0,0.6); } .ds-row:hover::after { opacity: 1; } .ds-row:hover .ds-row-ico { color: #6fc3ff; } .ds-row b { display: block; font-size: 0.88rem; font-weight: 600; } .ds-row-sub { display: block; font-size: 0.74rem; color: #8d939f; } .ds-row-ico { width: 24px; height: 24px; display: grid; place-items: center; color: #b9bec8; flex: none; transition: color 0.25s; } .ds-row-arr { margin-left: auto; color: #8d939f; flex: none; }"
     },
     {
-      "name": "Journey Band",
+      "name": "Rewards Band",
       "kind": "custom",
       "refersTo": "journey-band",
-      "description": "Rewards progress band — magenta-flagged, LED-hued nubs, the only rewards-colored surface.",
-      "html": "<a class=\"ds-journey\" href=\"#\"><span class=\"ds-j-head\"><b>The Owner&rsquo;s Journey</b><span><strong>0 / 17</strong> modules &middot; earn points as you go</span></span><span class=\"ds-j-track\"><span class=\"ds-j-node ds-lit\"><span class=\"ds-nub\"></span><small><b>Start earning</b></small></span><span class=\"ds-j-node\"><span class=\"ds-nub\"></span><small>First guide</small></span><span class=\"ds-j-node\"><span class=\"ds-nub\"></span><small>Setup done <b>+500</b></small></span><span class=\"ds-j-node\"><span class=\"ds-nub\"></span><small>Warranty <b>+300</b></small></span></span><span class=\"ds-j-cta\">Sign in &rarr;</span></a>",
-      "css": ".ds-journey { display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(18px); border-radius: 24px; padding: 18px 20px; text-decoration: none; color: #f3f4f6; font-family: Figtree, system-ui, sans-serif; box-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 4px 12px -8px rgba(0,0,0,0.55); transition: border-color 0.28s, transform 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-journey::after { content: \"\"; position: absolute; left: 22px; right: 22px; bottom: 0; height: 3px; border-radius: 3px 3px 0 0; opacity: 0; background: linear-gradient(90deg, #ff8a4a, #c9e85c 38%, #6fc3ff 68%, #ff5fa8); transition: opacity 0.28s; } .ds-journey:hover { border-color: rgba(255,255,255,0.22); transform: translateY(-2px); } .ds-journey:hover::after { opacity: 1; } .ds-j-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; } .ds-j-head b { font-size: 1.02rem; font-weight: 700; } .ds-j-head > span { font-size: 0.8rem; color: #8d939f; } .ds-j-head strong { color: #ff5fa8; font-weight: 700; } .ds-j-track { display: flex; align-items: center; gap: 6px; } .ds-j-node { flex: 1; display: flex; flex-direction: column; gap: 7px; min-width: 0; } .ds-nub { height: 5px; border-radius: 3px; background: rgba(255,255,255,0.08); } .ds-j-node.ds-lit .ds-nub { background: #ff8a4a; } .ds-j-node small { font-size: 0.7rem; color: #8d939f; line-height: 1.3; } .ds-j-node small b { color: #f3f4f6; font-weight: 600; } .ds-j-cta { font-size: 0.84rem; font-weight: 600; color: #ff5fa8; }"
+      "description": "Homepage rewards status module: the programme name with a \"Learn to earn\" badge, the standing points total, a pill progress bar with a module count, and links to the ledger and explainer. Reports state rather than a route -- the modules are collected in any order. Ember-accented; the only rewards-colored surface.",
+      "html": "<section class=\"ds-journey\"><span class=\"ds-j-sum\"><span class=\"ds-j-name\">Aquafire Rewards<em class=\"ds-j-tag\">Learn to earn</em></span><b>1,450</b><span>Reward points</span></span><button class=\"ds-j-cta\" type=\"button\">Sign In to Start Earning</button><span class=\"ds-j-prog\"><span class=\"ds-j-bar\"><span class=\"ds-j-bar-fill\"></span></span><span class=\"ds-j-meta\"><strong>5 / 17 modules completed</strong> &middot; collect them in any order</span></span><span class=\"ds-j-links\"><a href=\"#\">View your rewards &rarr;</a><a href=\"#\">How the program works</a></span></section>",
+      "css": ".ds-journey { display: flex; flex-direction: column; gap: 15px; position: relative; overflow: hidden; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(18px); border-radius: 24px; padding: 18px 20px; color: #f3f4f6; font-family: Figtree, system-ui, sans-serif; box-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 4px 12px -8px rgba(0,0,0,0.55); } .ds-j-sum { display: flex; flex-direction: column; } .ds-j-sum .ds-j-name { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 7px; font-size: 0.95rem; font-weight: 600; color: #f3f4f6; } .ds-j-sum .ds-j-tag { font-style: normal; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #ff8a4a; background: rgba(255,106,61,0.08); border: 1px solid rgba(255,138,74,0.3); border-radius: 999px; padding: 2px 8px; } .ds-j-sum b { font-size: 1.6rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.025em; font-variant-numeric: tabular-nums; color: #ff8a4a; } .ds-j-sum span { font-size: 0.76rem; color: #8d939f; } .ds-j-cta { display: inline-flex; align-items: center; gap: 6px; align-self: start; flex: none; padding: 0; background: none; border: none; cursor: pointer; font: inherit; font-size: 0.76rem; font-weight: 600; color: #ff8a4a; transition: color 0.22s; } .ds-j-cta:hover { text-decoration: underline; } .ds-j-prog { display: flex; flex-direction: column; gap: 9px; } .ds-j-bar { display: block; height: 6px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; } .ds-j-bar-fill { display: block; height: 100%; width: 29%; border-radius: 999px; background: #ff8a4a; transition: width 0.6s cubic-bezier(0.16,1,0.3,1); } .ds-j-meta { font-size: 0.76rem; color: #8d939f; } .ds-j-meta strong { color: #f3f4f6; font-weight: 700; } .ds-j-links { display: flex; flex-wrap: wrap; gap: 8px 18px; } .ds-j-links a { font-size: 0.76rem; font-weight: 600; color: #b9bec8; text-decoration: none; } .ds-j-links a:hover { text-decoration: underline; color: #f3f4f6; } @media (min-width: 920px) { .ds-journey { flex-direction: row; align-items: center; gap: 26px; padding: 18px 26px; } .ds-j-sum, .ds-j-links, .ds-j-cta { flex: none; } .ds-j-prog { flex: 1; min-width: 190px; } }"
+    },
+    {
+      "name": "Fleet Card",
+      "kind": "custom",
+      "refersTo": "fleet",
+      "description": "Homepage \"explore by model\" card. The second door into the interactive guides: the wings ask what you are trying to do, the fleet asks which model you own. Flat on the page rather than inside a glass pane, so it reads as secondary to the three routes. The description grows so the CTA pins to the bottom of every card in the row. A model with no guide yet is a div, not a link: dimmed, shot desaturated, CTA reading \"coming soon\".",
+      "html": "<div class=\"ds-fleet\"><div class=\"ds-fleet-head\"><span><b>Explore by model</b><span>Specs, install, water care and fixes &mdash; per model</span></span></div><div class=\"ds-fleet-cards\"><a class=\"ds-mcard\" href=\"#\"><span class=\"ds-mshot\"></span><b>Aquafire Pro</b><span class=\"ds-mdesc\">Full color mixing, app control and direct-plumb.</span><span class=\"ds-mcta\">Open the guide &rarr;</span></a><div class=\"ds-mcard ds-is-soon\"><span class=\"ds-mshot\"></span><b>Aquafire Lite</b><span class=\"ds-mdesc\">Compact and easy to install &mdash; for smaller spaces.</span><span class=\"ds-mcta\">Guide coming soon</span></div></div></div>",
+      "css": ".ds-fleet { font-family: Figtree, system-ui, sans-serif; color: #f3f4f6; } .ds-fleet-head { display: flex; align-items: center; gap: 12px; margin-bottom: 13px; } .ds-fleet-head b { display: block; font-size: 1.05rem; font-weight: 700; color: #f3f4f6; } .ds-fleet-head span span { display: block; font-size: 0.76rem; color: #8d939f; } .ds-fleet-cards { display: grid; gap: 12px; } .ds-mcard { display: flex; flex-direction: column; gap: 5px; padding: 16px 16px 15px; border-radius: 15px; background: rgba(13,15,19,0.4); border: 1px solid rgba(255,255,255,0.07); box-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.45), 0 2px 7px -4px rgba(0,0,0,0.5); backdrop-filter: blur(18px); text-decoration: none; color: inherit; transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), border-color 0.24s, box-shadow 0.3s cubic-bezier(0.16,1,0.3,1); } a.ds-mcard:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.13); } .ds-mshot { display: block; height: 92px; margin-bottom: 4px; } .ds-mcard b { font-size: 0.88rem; font-weight: 600; color: #f3f4f6; } .ds-mdesc { flex: 1 1 auto; font-size: 0.8rem; color: #b9bec8; } .ds-mcta { align-self: flex-start; margin-top: 7px; display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 600; color: #b9bec8; background: rgba(16,18,22,0.35); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 5px 12px; transition: color 0.24s, border-color 0.24s; } a.ds-mcard:hover .ds-mcta { color: #f3f4f6; border-color: rgba(255,255,255,0.22); } .ds-is-soon { opacity: 0.72; } @media (min-width: 920px) { .ds-fleet-cards { grid-template-columns: repeat(3, 1fr); gap: 16px; } .ds-mshot { height: 140px; } }"
     },
     {
       "name": "Theme Toggle",
@@ -81,37 +305,92 @@
       "name": "Ember Orb",
       "kind": "custom",
       "refersTo": "cap-chip",
-      "description": "The assistant's avatar — warm radial orb with a detached hairline ring; never replaced by an icon.",
+      "description": "The assistant's avatar — the ember-mark.png disc with a detached hairline ring; never redrawn as an icon or a gradient.",
       "html": "<span class=\"ds-orb\" aria-hidden=\"true\"></span>",
-      "css": ".ds-orb { display: inline-block; width: 54px; height: 54px; border-radius: 50%; position: relative; background: radial-gradient(circle at 35% 30%, #ffd9ae, #e0641e 62%, #6e2a08 100%); box-shadow: inset 0 -2px 6px rgba(0,0,0,0.35); } .ds-orb::after { content: \"\"; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); }"
+      "css": ".ds-orb { display: inline-block; width: 54px; height: 54px; border-radius: 50%; position: relative; background: url(\"ember-mark.png\") center / 100% 100% no-repeat; box-shadow: 0 4px 14px -4px rgba(224,100,30,0.45); } .ds-orb::after { content: \"\"; position: absolute; inset: -5px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); }"
+    },
+    {
+      "name": "Nav Capsule",
+      "kind": "nav",
+      "refersTo": "nav-capsule",
+      "description": "The primary nav: one glass pill container holding a link and two group disclosures (Set Up / Guides / Support), each item taking a pill only on hover, when open, or when it holds the current page. Grouping replaced a flat six-link set: eleven destinations do not fit a bar, and an item added inside a group costs no bar width. Menus open on click, not hover, so touch can reach them. The menu z-index has to sit on the bar rather than the menu, because the capsule's backdrop-filter makes it a stacking context.",
+      "html": "<nav class=\"ds-navcap\"><a href=\"#\">Set Up</a><span class=\"ds-navgrp\"><button class=\"ds-navgrp-btn\" aria-expanded=\"true\">Guides</button><span class=\"ds-navgrp-menu\"><a href=\"#\">Product Guide</a><a href=\"#\">Enclosure Surround</a><a class=\"is-here\" aria-current=\"page\" href=\"#\">Water Care</a></span></span><button class=\"ds-navgrp-btn\" aria-expanded=\"false\">Support</button></nav>",
+      "css": ".ds-navcap { position: relative; display: inline-flex; gap: 2px; background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(18px); border-radius: 999px; padding: 4px; box-shadow: inset 0 2px 5px -2px rgba(0,0,0,0.4), 0 3px 9px -5px rgba(0,0,0,0.55); } .ds-navcap a, .ds-navgrp-btn { display: block; padding: 8px 10px; border: 0; border-radius: 999px; white-space: nowrap; background: none; color: #b9bec8; text-decoration: none; cursor: pointer; font: 500 0.83rem/1.6 Figtree, system-ui, sans-serif; transition: color 0.24s cubic-bezier(0.16,1,0.3,1), background-color 0.24s cubic-bezier(0.16,1,0.3,1); } .ds-navcap a:hover, .ds-navgrp-btn:hover, .ds-navgrp-btn[aria-expanded=\"true\"] { color: #f3f4f6; background: rgba(255,255,255,0.08); } .ds-navcap a.is-here { color: #f3f4f6; background: rgba(255,255,255,0.08); font-weight: 600; } .ds-navgrp { position: relative; } .ds-navgrp-menu { display: flex; flex-direction: column; gap: 2px; position: absolute; top: calc(100% + 9px); left: 0; min-width: 218px; padding: 7px; background: rgba(14,16,20,0.97); border: 1px solid rgba(255,255,255,0.07); border-radius: 15px; box-shadow: inset 0 2px 6px -2px rgba(0,0,0,0.4), 0 6px 14px -7px rgba(0,0,0,0.6); } .ds-navgrp-menu a { border-radius: 13px; padding: 9px 12px; } .ds-navgrp-menu a:hover, .ds-navgrp-menu a.is-here { background: rgba(255,255,255,0.08); }"
+    },
+    {
+      "name": "Auth Modal",
+      "kind": "custom",
+      "refersTo": "af-modal",
+      "description": "Rewards sign-in dialog (rewards.css), shown from any page. An overlay surface: near-opaque --menu-bg rather than a glass fill, since at 3.5-12% alpha the page reads straight through a dialog. Neutral elevation, no chromatic glow. The scrim is the one token that stays dark in the light theme -- it is a dimmer, not a surface. The submit button takes the send-button treatment; form errors take --danger, deliberately not ember.",
+      "html": "<div class=\"ds-modal\"><button class=\"ds-modal-close\">&times;</button><div class=\"ds-modal-header\"><div class=\"ds-modal-flame\">&#x1f525;</div><h2 class=\"ds-modal-title\">Aquafire Rewards</h2><p class=\"ds-modal-sub\">Sign in to start earning points.</p></div><button class=\"ds-auth-google\">Continue with Google</button><label class=\"ds-form-label\">Email</label><input class=\"ds-form-input\" placeholder=\"you@example.com\"><div class=\"ds-auth-error\">Incorrect password.</div><button class=\"ds-auth-submit\">Sign In</button></div>",
+      "css": ".ds-modal { position: relative; width: 400px; max-width: 100%; padding: 36px 32px 28px; background: rgba(14,16,20,0.97); border: 1px solid rgba(255,255,255,0.12); border-radius: 24px; box-shadow: 0 24px 80px rgba(0,0,0,0.5); color: #f3f4f6; font-family: Figtree, system-ui, sans-serif; } .ds-modal-close { position: absolute; top: 14px; right: 16px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.08); border-radius: 999px; color: #8d939f; font-size: 1.05rem; line-height: 1; cursor: pointer; } .ds-modal-header { text-align: center; margin-bottom: 28px; } .ds-modal-flame { font-size: 1.6rem; margin-bottom: 8px; } .ds-modal-title { font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700; letter-spacing: -0.025em; } .ds-modal-sub { margin-top: 6px; font-size: 0.88rem; color: #b9bec8; } .ds-auth-google { display: flex; align-items: center; justify-content: center; width: 100%; padding: 13px 20px; margin-bottom: 20px; border-radius: 13px; background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.12); color: #f3f4f6; font: inherit; font-size: 0.93rem; font-weight: 600; cursor: pointer; } .ds-form-label { display: block; margin-bottom: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #8d939f; } .ds-form-input { width: 100%; padding: 13px 16px; border-radius: 13px; background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.12); color: #f3f4f6; font: inherit; font-size: 0.93rem; outline: none; } .ds-auth-error { margin-top: 8px; min-height: 20px; font-size: 0.83rem; color: #ff6b5e; } .ds-auth-submit { width: 100%; padding: 14px 20px; margin-top: 12px; border-radius: 13px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.12); color: #f3f4f6; font: inherit; font-size: 0.93rem; font-weight: 600; cursor: pointer; }"
+    },
+    {
+      "name": "Journey CTA",
+      "css": ".j-go{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:999px;background:var(--ember);color:var(--on-ember);font-size:0.83rem;font-weight:600;border:none;cursor:pointer;}",
+      "html": "<button class=\"j-go\">Continue earning</button>"
     }
   ],
   "narrative": {
     "northStar": "The Glass Hearth",
-    "overview": "The portal is a room lit by the product it explains. A photographed hotel lobby — the fireplace glowing in marble — bleeds down from the top of the page and dissolves into the atmosphere; everything the visitor touches is liquid glass floating in front of that scene. Ember, the AI concierge (a warm orb), greets from inside the room, and the page is organized as a conversation first, three intent wings second. The product's one flamboyant trait — dual-LED color mixing — appears only as thin light bars along the edges of surfaces, the way the fireplace itself wears its color. The same room exists in two lightings, switched live by a theme button: dark smoke (default) and light showroom. Every visual decision is a semantic token with a binding in each theme; the reference implementation and token source of truth is home/index.html.",
+    "overview": "The portal is a room lit by the product it explains. A photographed hotel lobby — the fireplace glowing in marble — bleeds down from the top of the page and dissolves into the atmosphere; everything the visitor touches is liquid glass floating in front of that scene. Ember, the AI concierge (a warm orb), greets from inside the room, and the page is organized as a conversation first, three intent wings second. The product's one flamboyant trait — dual-LED color mixing — appears only as thin light bars along the edges of surfaces, the way the fireplace itself wears its color. The same room exists in two lightings, switched live by a theme button: dark smoke (default) and light showroom. Every visual decision is a semantic token with a binding in each theme; the reference implementation and token source of truth is index.html.",
     "keyCharacteristics": [
-      "Mobile-first single column that fans out at one desktop breakpoint (920px)",
+      "Mobile-first single column that fans out at 920px; the nav capsule has its own wider steps (1080/1200) because the full link set does not fit sooner",
       "Photography as atmosphere, never as a framed illustration",
       "Monochrome glass at rest; LED spectrum color only on interaction edges",
       "Conversation (composer + murmur chips) is the primary action everywhere",
-      "Rewards journey is always visible, magenta-flagged, never modal"
+      "Rewards status is always visible, ember-flagged, never modal -- a standing total and module count, not a sequence"
     ],
     "rules": [
-      { "name": "The Edge-on-Hover Rule", "body": "LED spectrum color (ember→chartreuse→frost→magenta gradient bars, 3px, along a surface's bottom edge) appears only on hover/focus/active. At rest the room is monochrome glass; interaction is what lights the LEDs.", "section": "colors" },
-      { "name": "The Deepened Ink Rule", "body": "On the light ground, colored text never uses the LED bar hues — it uses the deepened variants (ember-ink #cf4e16, frost-ink #1c76c9, chartreuse-ink #6f8f0a, magenta-ink #d9317f) for contrast. Bars and nubs keep full hue in both themes.", "section": "colors" },
-      { "name": "The Two Lightings Rule", "body": "Never introduce a raw color into a component. Every color, fill, stroke, rim, and shadow references a token that defines both a dark and a light binding.", "section": "colors" },
-      { "name": "The One Family Rule", "body": "Figtree only. If a surface feels flat, fix it with weight, size, or spacing — not a new font.", "section": "typography" },
-      { "name": "The Debossed Glass Rule", "body": "Surfaces look ever-so-slightly raised yet pressed in: flat face, inset top, rim carrying the glass. Never a glossy dome, never a heavy outer glow.", "section": "elevation" },
-      { "name": "The Directional Light Rule", "body": "All rims share one implied light source, upper-left. Do not rotate the conic hot spot per component.", "section": "elevation" },
-      { "name": "The White-on-Photo Rule", "body": "Type that sits on the photograph is white in both themes; the scrim, not the text color, adapts to the theme.", "section": "components" }
+      {
+        "name": "The Edge-on-Hover Rule",
+        "body": "LED spectrum color (ember→chartreuse→frost→magenta gradient bars, 3px, along a surface's bottom edge) appears only on hover/focus/active. At rest the room is monochrome glass; interaction is what lights the LEDs.",
+        "section": "colors"
+      },
+      {
+        "name": "The Deepened Ink Rule",
+        "body": "On the light ground, colored text never uses the LED bar hues — it uses the deepened variants (ember-ink #cf4e16, frost-ink #1c76c9, chartreuse-ink #6f8f0a, magenta-ink #d9317f) for contrast. Bars and nubs keep full hue in both themes.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Lightings Rule",
+        "body": "Never introduce a raw color into a component. Every color, fill, stroke, rim, and shadow references a token that defines both a dark and a light binding.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Family Rule",
+        "body": "Figtree only. If a surface feels flat, fix it with weight, size, or spacing — not a new font.",
+        "section": "typography"
+      },
+      {
+        "name": "The Debossed Glass Rule",
+        "body": "Surfaces look ever-so-slightly raised yet pressed in: flat face, inset top, rim carrying the glass. Never a glossy dome, never a heavy outer glow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Directional Light Rule",
+        "body": "All rims share one implied light source, upper-left. Do not rotate the conic hot spot per component.",
+        "section": "elevation"
+      },
+      {
+        "name": "The White-on-Photo Rule",
+        "body": "Type that sits on the photograph is white in both themes; the scrim, not the text color, adapts to the theme.",
+        "section": "components"
+      },
+      {
+        "name": "The Peek Rule",
+        "body": "A horizontal rail has to show part of the next item past its right-edge fade, or nothing tells you it scrolls. Recipe: bleed to the viewport with negative margins, restore the content column with padding, match it with scroll-padding-left (or the rail loads scrolled and clips its first item), snap, hide the scrollbar, fade the right edge only -- a left fade eats the first item, which is where the rail rests. Card rails also equalise height and pin the last block with margin-top: auto. The control goes above the rail, not below, and where the items are a small fixed set with names it is a segmented control rather than dots: three labelled segments say what the options are, three dots only say there are three.",
+        "section": "layout"
+      }
     ],
     "dos": [
       "Do reference tokens for every color, shadow, and rim — new surfaces get both theme bindings or they don't ship.",
       "Do keep LED color on edges, nubs, badges, and icon tints; surfaces and text stay monochrome glass.",
-      "Do keep pages mobile-first with the single 920px enhancement breakpoint.",
+      "Do keep pages mobile-first, enhancing at 920px; measure before adding a nav link, since that bar is the one component with tighter steps of its own.",
       "Do use the four-layer edged-glass recipe verbatim for any new surface (flat fill, debossed top, directional rim, whisper shadow).",
       "Do keep Ember's composer the visually primary action on every page that has one.",
-      "Do label synthetic lifestyle imagery as illustrative (footer note) until brand photography replaces it."
+      "Do label synthetic lifestyle imagery as illustrative (footer note) until brand photography replaces it.",
+      "Do give a phone a swipe rail rather than a column of stacked peers, size the items so the next one peeks -- the peek is the affordance -- and label the control above it when the set is small and named."
     ],
     "donts": [
       "Don't add gradient fills, glossy domes, or outer glows to glass surfaces.",

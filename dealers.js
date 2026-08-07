@@ -86,7 +86,7 @@ var DEALERS = [
   { name:"Archies Stone and Fireplace", type:"Dealer", address:"4700 Old Broadway, Knoxville, TN 37918", lat:36.02072363345147, lng:-83.92417814571056, phone:"865-688-0123", email:"", website:"http://www.archiesweb.com/", appt:false, country:"US" },
   { name:"Earth Energy's Hearth & Patio", type:"Dealer", address:"3948 W Costco Dr, Tucson, AZ 85741", lat:32.32994412774485, lng:-111.04802387491874, phone:"520-888-8867", email:"info@eehpatio.com", website:"https://eehpatio.com/", appt:false, country:"US" },
   { name:"Max Heat LLC", type:"Dealer", address:"10315 Greenwood Ave N Unit A, Seattle, WA 98133", lat:47.704243202571405, lng:-122.35575235888585, phone:"206-724-8985", email:"", website:"https://www.maxheatfire.com/info/", appt:false, country:"US" },
-  { name:"Northfield Fireplace", type:"Dealer", address:"63 E Aurora Rd, Northfield, OH 44067", lat:41.3143, lng:-81.537, phone:"330-468-0303", email:"joe@northfieldfireplace.com", website:"https://northfieldfireplace.com", appt:false, country:"US" },
   { name:"Home and Hearth Outfitters", type:"Dealer", address:"1136 S Kalamath St Denver, CO 80223", lat:39.696, lng:-105.0002, phone:"303-722-6698", email:"", website:"https://homeandhearthoutfitters.com/", appt:false, country:"US" },
-  { name:"Okell's Fireplace", type:"Dealer", address:"134 CA-1, Hermosa Beach, CA 90254", lat:33.8561, lng:-118.3902, phone:"310-376-3448", email:"", website:"http://www.wilshirefireplace.com/", appt:false, country:"US" }
+  { name:"Okell's Fireplace", type:"Dealer", address:"134 CA-1, Hermosa Beach, CA 90254", lat:33.8561, lng:-118.3902, phone:"310-376-3448", email:"", website:"http://www.wilshirefireplace.com/", appt:false, country:"US" },
+  { name:"Embers Custom Fireplace & Gas", type:"Dealer", address:"9684 Mentor Ave, Mentor, OH 44060", lat:41.6835, lng:-81.2945, phone:"440-350-8350", email:"", website:"https://embersinc.com/mentor", appt:false, country:"US" }
 ];

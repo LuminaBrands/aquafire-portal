@@ -1,27 +1,44 @@
 ---
-name: Aquafire Owner's Portal
-description: Liquid-glass owner's guide lit by the fireplace it explains — one room, two lightings
+name: Interactive Aquafire Guide
+description: Liquid-glass product guide lit by the fireplace it explains — one room, two lightings
 colors:
   smoke: "#101216"
   vapor-white: "#f3f4f6"
   mist-gray: "#b9bec8"
   faded-gray: "#8d939f"
-  ember: "#ff8a4a"
+  ember: "#d33337"
   frost: "#6fc3ff"
   chartreuse: "#c9e85c"
   magenta: "#ff5fa8"
   showroom: "#e9ebef"
+  showroom-deep: "#e2e5ea"
   ink: "#171a1f"
   ink-mid: "#4c525c"
   ink-dim: "#6a7280"
-  ember-day: "#ff6a3d"
+  ember-day: "#d33337"
   frost-day: "#4aa8ef"
   chartreuse-day: "#aacc33"
   magenta-day: "#ff4d9e"
-  ember-ink: "#cf4e16"
+  ember-ink: "#b02427"
   frost-ink: "#1c76c9"
   chartreuse-ink: "#6f8f0a"
   magenta-ink: "#d9317f"
+  orb-lift: "rgba(224,100,30,0.45)"
+  ember-text: "#f05a5e"
+  ember-ramp-warm: "#ed7842"
+  ember-ramp-red: "#eb4b46"
+  on-ember: "#171a1f"
+  hl-border: "rgba(240,90,94,0.42)"
+  hl-border-day: "rgba(192,43,46,0.38)"
+  hl-border-amber: "rgba(232,168,56,0.42)"
+  hl-border-amber-day: "rgba(184,128,31,0.4)"
+  hl-glow: "rgba(235,75,70,0.4)"
+  hl-glow-day: "rgba(176,36,39,0.28)"
+  hl-glow-amber: "rgba(232,168,56,0.35)"
+  hl-glow-amber-day: "rgba(184,128,31,0.30)"
+  on-accent: "#ffffff"
+  photo-ink: "#f3f4f6"
+  photo-ink-dim: "#c9cdd5"
 typography:
   display:
     fontFamily: "Figtree, system-ui, sans-serif"
@@ -33,10 +50,32 @@ typography:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "1.05rem"
     fontWeight: 700
+  page-title:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "clamp(1.5rem, 5vw, 2rem)"
+    fontWeight: 700
+    lineHeight: 1.18
+    letterSpacing: "-0.025em"
+  section:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "1.6rem"
+    fontWeight: 700
+  subsection:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "1.35rem"
+    fontWeight: 700
+  minor:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "1.15rem"
+    fontWeight: 700
   title:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "0.88rem"
     fontWeight: 600
+  nav:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "0.83rem"
+    fontWeight: 500
   body:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "0.93rem"
@@ -46,6 +85,10 @@ typography:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "0.76rem"
     fontWeight: 500
+  labelSmall:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "0.7rem"
+    fontWeight: 700
 rounded:
   pill: "999px"
   pane: "26px"
@@ -86,7 +129,7 @@ components:
     padding: "18px 20px"
 ---
 
-# Design System: Aquafire Owner's Portal
+# Design System: Interactive Aquafire Guide
 
 ## Overview
 
@@ -106,7 +149,7 @@ The same room exists in two lightings, switched live by a theme button:
 and **light "showroom"** (daylight, `#e9ebef` ground, white glass with ink
 type). Every visual decision is a semantic token with a binding in each
 theme; nothing is styled for only one lighting. The reference
-implementation and token source of truth is `home/index.html`.
+implementation and token source of truth is `index.html`.
 
 The old portal look (flat dark cards, red-primary branding, Poppins/Inter)
 is the anti-reference: it read as a SaaS dashboard. This world is a
@@ -117,7 +160,7 @@ lifestyle brand's room.
 - Photography as atmosphere, never as a framed illustration
 - Monochrome glass at rest; LED spectrum color only on interaction edges
 - Conversation (composer + murmur chips) is the primary action everywhere
-- Rewards journey is always visible, magenta-flagged, never modal
+- Rewards are always visible, ember-flagged, never modal
 
 ## Colors
 
@@ -125,17 +168,110 @@ A monochrome glass world where color is reserved for the product's LED
 palette and arrives mostly on interaction.
 
 ### Primary
-- **Ember** (#ff8a4a dark / #ff6a3d light): the flame and the brand's warmth.
-  Ember's orb, the Resolve wing, halo glows, star ratings. The emotional
-  primary; still used sparingly.
+- **Ember** (#d33337, both themes): the brand's accent. The Fix wing, halo
+  glows, star ratings, and every rewards signal -- the band's standing total and
+  progress fill, the nav points chip, reward badges. The emotional primary; the
+  widest-used accent, so reach for a neutral first and let it mean something.
+
+  It is a deep red, and **it cannot be used as text**: #d33337 on the dark
+  ground is 3.9:1, under AA. Text takes `--ember-t` instead -- #f05a5e on dark
+  (5.7:1), #b02427 on light. `color: var(--ember)` / `var(--red)` is always a
+  mistake; strokes and small indicators take the accent, type takes the text
+  variant.
+
+  **Filled actions and determinate progress fills wear the mark's own ramp,
+  not the flat accent**: `--ember-grad` (180deg, for buttons -- lit from the
+  top the way the disc is) and `--ember-grad-bar` (90deg, along a bar),
+  sampled from ember-mark.png. **The ramp is red-first**: it samples the
+  disc's redder lower half (#ed7842 at the upper middle to #eb4b46 at the
+  bottom) and holds flat red past 65%, because the disc's own top is a true
+  orange and orange must never lead in the branding -- the ramp keeps the
+  warmth as an overtone, not a headline. Like the mark, the ramp is lit from
+  within and identical in both themes. **Ink on it is dark** (`--on-ember`
+  #171a1f: 6.1:1 at the warm stop, 4.7:1 at the red -- no stop in the ramp
+  clears AA under white). A deeper red end toward flat #d33337 was rejected
+  for exactly that reason: ink falls under AA past #eb4b46, so the ramp's
+  red is as deep as an inked fill can go. Hovers brighten the ramp
+  (`filter: brightness(1.06)`) rather than swapping fills, which would
+  flatten it. **The filled form belongs to a module's one primary CTA
+  alone** -- option selectors, selected chips and in-module navigation take
+  the ghost ring form instead (see Components / Ghost button). The flat
+  accent remains for everything that is not a filled action or a bar fill --
+  LED edge bars, strokes, focus tints and small indicators, where a
+  two-stop ramp would be detail too small to resolve.
+
+  Note `--on-amber` is a separate token and does not follow the accent. Amber
+  survives as the reward-badge colour and is a *light* fill, where white would
+  be 2.0:1 -- anything drawn on amber takes the dark ink.
+
+  Ember's orb keeps its warm firelight. It is a depicted flame, not an accent
+  surface, and a red sphere reads as a dot rather than an ember.
 
 ### Secondary
 - **Frost** (#6fc3ff dark / #4aa8ef light): the Explore wing and the cool
   end of the LED mix.
-- **Chartreuse** (#c9e85c dark / #aacc33 light): the Begin wing; growth and
-  setup.
-- **Magenta** (#ff5fa8 dark / #ff4d9e light): rewards and the journey band,
-  exclusively. If it's magenta, it earns points.
+- **Chartreuse** (#c9e85c dark / #aacc33 light): the Set up wing; growth and
+  setup. Also the completed/earned signal -- a done reward badge and a
+  "Complete" status chip both take the text-safe `--chart-t`.
+- **Amber** (#e8a838 dark / #b8801f light): reward badge ink only. It is the
+  one survivor of the 2025 palette, kept because the badge's gold-on-ember
+  reading is the approved look; everywhere else the rewards accent is ember.
+  Do not reach for it for anything new.
+- **Danger** (#ff6b5e dark / #c0392b light): form errors, and nothing else.
+  It **shares a hue with the accent**, and that is accepted rather than
+  overlooked. The token was originally picked to be visibly not-ember, back when
+  ember was orange; the red accent put them 6.4 degrees apart in dark and 7.1 in
+  light, which no one can perceive. Reviewed against the real case -- the
+  sign-in modal showing an error while the copy above it advertises a points
+  total in the accent -- and confirmed: red is still the conventional error
+  signal, and an error earns its meaning from its copy, its placement under the
+  field, and the `role="alert"`, not from being a different red.
+
+  So do not "fix" this by nudging the hue. A few degrees buys nothing. If errors
+  ever need to be unmistakable at a glance, the move is a different *treatment*
+  -- an icon and a tinted strip, with the accent staying bare text -- not a
+  different colour.
+- **Photo ink / photo ink dim** (#f3f4f6, #c9cdd5): the only text that does
+  not follow the theme. The hero greeting and its subtitle sit on the
+  photograph, which is the same photograph in both lightings, so they stay
+  light and lean on text-shadow for contrast instead of a token binding.
+- **Orb lift** (rgba(224,100,30,0.45)): the warm cast under Ember's mark. Ember
+  is no longer drawn in CSS -- the mark is artwork (`ember-mark.png`, a white
+  twin-flame glyph on an orange-to-red disc) and carries its own modelling, so
+  the only colour the system still states for Ember is the glow the disc throws
+  onto whatever it sits on. Not a general-purpose fill -- it appears only where
+  Ember does (the hero orb, the widget launcher, the chat avatars). Identical
+  in both themes: Ember is lit from within and does not change with the room.
+- **Magenta** (#ff5fa8 dark / #ff4d9e light): the fourth LED hue. It closes
+  the spectrum bars and takes every fourth row/tile in the hover cycle. It
+  used to be the rewards flag; rewards are ember now, and magenta carries no
+  meaning of its own.
+
+### Light (white as light, not as fill)
+Two tokens carry white at high alpha in the light theme, and neither is a
+surface colour -- both are light itself, so they are stated as literals rather
+than pulled from the neutral ramp:
+
+- `--halo-grad`, the bloom behind Ember's orb: white at **0.5** at the centre,
+  falling through ember at 0.06 to transparent. In the dark theme the same
+  token is ember at 0.15 -- a glow reads as the room's own light, and the
+  showroom's light is white where the smoke's is firelight.
+- `--atmos-grad`, the light shafts crossing the page: white at **0.9** for the
+  bright edge of the primary shaft, then **0.5** and **0.35** for the two
+  broader secondary ones. The 0.9 stop is a 3%-wide specular edge, not a
+  panel; widening it or dropping its alpha flattens the shaft into a stripe.
+
+They are deliberately outside the palette: a token that meant "white at 90%"
+in the fill ramp would invite its use as a surface, which is exactly what the
+glass fills at 3.5–12% exist to prevent.
+
+### Overlay surfaces
+The auth modal, the profile dropdown and the points toast float above the
+page rather than sitting in it, so they take the near-opaque `--menu-bg` the
+burger panel uses (97% alpha) instead of the glass fills -- at 3.5–12% the
+page reads straight through a dialog. Their elevation is `--modal-shadow` /
+`--dropdown-shadow`, both neutral. `--scrim` is the only token that stays
+dark in the light theme: it is a dimmer, not a surface.
 
 ### Neutral
 - **Smoke** (#101216): dark-theme ground; glass fills are white at 3.5–12% alpha over it.
@@ -158,7 +294,7 @@ bar hues.
 
 **The Two Lightings Rule.** Never introduce a raw color into a component.
 Every color, fill, stroke, rim, and shadow references a token that defines
-both a dark and a light binding (see `home/index.html` `:root` and
+both a dark and a light binding (see `index.html` `:root` and
 `:root[data-theme="light"]`).
 
 ## Typography
@@ -174,23 +310,76 @@ second face without revisiting this file.
 ### Hierarchy
 - **Display** (700, clamp(1.6rem, 6vw, 2.25rem), 1.18, -0.025em): Ember's
   greeting only; white in both themes with a soft shadow (it sits on the photo).
-- **Headline** (700, 1.02–1.05rem): wing heads, journey band title.
-- **Title** (600, 0.88rem): row-card titles, send button, nav caps.
-- **Body** (400–500, 0.8–0.93rem, 1.6): greeting subtitle, tip bubbles, descriptions.
-- **Label** (500–700, 0.7–0.76rem): row subtitles, murmur chips, minis, badges, journey node captions.
+  Its fixed lower bound, 1.6rem, doubles as the stat size for the rewards
+  band's standing total (tabular figures, magenta).
+- **Page title** (700, clamp(1.5rem, 5vw, 2rem)): the `.phead h1` on every
+  inner page. A step below Display on purpose — Display is Ember greeting
+  you from inside the photograph, and a section heading that shouts as loud
+  as the hero flattens the whole hierarchy.
+- **Section** (700, 1.6rem): the top heading inside an inner page's body —
+  Troubleshooter question prompts, guide section titles, calculator results.
+- **Subsection** (700, 1.35rem): a level under Section — guide step titles,
+  outcome titles.
+- **Minor** (700, 1.15rem): the smallest true heading — card headings inside
+  a subsection.
+- **Headline** (700, 1.05rem): wing heads.
+- **Title** (600, 0.88rem): row-card titles, send button.
+- **Nav** (500, 0.83rem; 600 when current): links inside the nav capsule and
+  the bar-end chips. A step below Title on purpose. The bar has to carry
+  seven destinations plus two chips inside a 1152px content column, and at
+  Title size that set measures ~65px too wide. Density is the point of the
+  capsule -- do not "fix" this back up to 0.88rem without re-measuring the
+  bar (see the breakpoint comment in redesign.css).
+- **Body** (400–500, 0.93rem, 1.6): greeting subtitle, tip bubbles,
+  descriptions, and anything with no explicit size — `body` carries this step
+  so unstyled copy lands on the ramp instead of the browser's 16px.
+- **Label** (500, 0.76rem): row subtitles, murmur chips, minis, the rewards
+  band's caption, progress meta and links.
+- **Label small** (700, 0.7rem): badges only -- the row's points chip and the
+  reward badge. The floor of the ramp; nothing goes below it.
 
 ### Named Rules
 **The One Family Rule.** Figtree only. If a surface feels flat, fix it with
 weight, size, or spacing — not a new font.
 
+**The Ten Steps Rule.** The eleven sizes above (2.25 / 1.6 / 1.35 / 1.15 /
+1.05 / 0.93 / 0.88 / 0.83 / 0.76 / 0.7rem, plus the two clamps) are the whole
+ramp. Do not introduce a size between them. The portal reached 37 distinct
+rendered sizes by adding "just a little smaller" one declaration at a time —
+0.82 beside 0.83, 14.4px beside 14.08px, two link styles 0.16px apart. None of
+that read as hierarchy; it read as noise, and it is invisible in review because
+a 0.4px difference is invisible. Sizes below 0.7rem are diagram and map
+furniture, not type.
+
+A note on the ratios: the four supporting steps (0.93 → 0.7) sit 1.05–1.09
+apart, well under the 1.25 a typographic scale would want. That is deliberate
+and it is what a dense UI needs — the contrast between a row title and its
+subtitle comes from weight and ink, not size. The strong ratios live where the
+eye actually needs them: 2.25 → 1.6 is 1.41, 1.6 → 1.35 is 1.19.
+
 ## Layout
 
 Mobile-first, one column, max-width 1200px, side padding 18px (24px on
-desktop). A single enhancement breakpoint at **920px**: the nav links
-appear, the journey band turns horizontal (label left, track center, CTA
-right), and the three intent wings fan from stacked to a 3-across row with
-equal flex. The hero (orb → greeting → composer → murmur chips) is centered
-and never exceeds 620px wide. Vertical rhythm uses the spacing scale (8 /
+desktop). A single enhancement breakpoint at **920px**: the rewards band
+turns horizontal, and the three intent wings go from a swipe rail to a
+3-across row with equal flex. (The nav capsule has its own wider
+breakpoints — see the Nav Capsule component.) The hero (orb → greeting →
+composer → murmur chips) is centered and never exceeds 620px wide.
+
+**Swipe rails.** Where a phone would otherwise stack peers into a column you
+scroll past — the murmur chips, the three wings — they become a horizontal
+snap rail instead. The recipe is fixed: bleed to the viewport edges with
+negative margins, restore the content column with padding, match it with
+`scroll-padding-left` (or the rail loads scrolled and clips its first item),
+snap, hide the scrollbar, and fade the right edge only — a left fade eats
+the first item, which is where the rail always rests. **The peek is the affordance**: size items so the next one shows past the
+fade. Above the rail sits a **segmented control, not dots** -- where the
+items are a small fixed set with names, name them: three labelled segments
+tell a visitor what their options are, where three dots only tell them
+there are three of something. It goes above the rail, with the heading that
+introduces the set; below a tall card it can fall past the fold entirely. Card rails also equalise height and
+pin the last block with `margin-top: auto`, or short cards trail off in dead
+space. Vertical rhythm uses the spacing scale (8 /
 13 / 18 / 26 / 38px); sections breathe 30–44px apart. The lobby photograph
 occupies the top 540px (620px desktop) behind the hero.
 
@@ -206,6 +395,12 @@ off it. The recipe has four layers, applied together:
 3. **Directional conic rim**: a 1.2px border ring (padding-box mask trick) whose brightness varies around the perimeter — hot spot at ~315° (upper-left), faint counter-glint at ~135°; the light theme adds a dark refracted lower-right edge. Opacity 0.75–0.8 at rest, 1 on hover.
 4. **Whisper drop shadow**, slightly bottom-biased (e.g. `0 3px 9px -5px rgba(0,0,0,0.55)` dark / `0 2px 7px -4px rgba(23,26,31,0.16)` light); light-theme wings may carry the larger showroom shadow (`0 18px 40px -18px rgba(23,26,31,0.16), 0 3px 10px -4px rgba(23,26,31,0.07)`).
 
+**Type on the photograph** is the one exception to all of the above: it has
+no surface under it, so its contrast comes from a shadow rather than a
+ground. `--photo-shadow` (0 2px 20px) for the greeting, `--photo-shadow-sm`
+(a tight 4px pass plus a 14px halo) for the subtitle. Both are identical in
+the two themes -- the photo does not change with the lighting.
+
 ### Named Rules
 **The Debossed Glass Rule.** Surfaces look ever-so-slightly raised yet
 pressed in: flat face, inset top, rim carrying the glass. Never a glossy
@@ -220,8 +415,8 @@ Capsule language. Interactive chips, buttons, and the composer are full
 pills (999px); containers step down through pane 26px → band 24px → card
 15px → tip bubble 13px (with a 4px pinched corner on the speaker's side).
 Icons are bare strokes (no plates or chips behind them), 14–30px,
-stroke-width 1.8–2.2. Ember is always a radial-gradient orb with a 1px
-detached ring at -5px. Hover states translate surfaces up 2px with the
+stroke-width 1.8–2.2. Ember is always the `ember-mark.png` disc with a 1px
+detached ring at -5px, never redrawn as an icon or a gradient. Hover states translate surfaces up 2px with the
 spring ease; LED bars slide in at the bottom edge.
 
 ## Components
@@ -231,6 +426,37 @@ spring ease; LED bars slide in at the bottom edge.
 - **Fill:** white 4.5% alpha dark / white 58% light; hover brightens fill and border, lifts 2px
 - **Text:** mid-tone gray/ink, brightening to high-emphasis on hover
 - **Rim:** directional conic (all glass surfaces carry it)
+
+### Nav capsule (primary navigation)
+- **Shape:** one full-pill glass container (999px, 4px padding, 1px border,
+  the shared cap fill/rim) holding one link and two group disclosures; each
+  item is plain text at the Nav step and only takes a pill (999px) on hover,
+  when open, or when it holds the current page
+- **Set Up · Guides ▾ · Support ▾.** Eleven destinations do not fit a flat bar
+  -- Support alone holds six, four of them off-site. Grouping was tried and
+  dropped once (#82/#91) when the bar was flat and dropdowns only added a
+  click; it earns its place at this count
+- **Group menus:** card radius (15px), near-opaque `--menu-bg`, items at the
+  Nav step with bubble-radius (13px) rows. Open on **click, not hover** --
+  hover menus are unreachable on touch, and it is the same markup on both.
+  One open at a time; Escape closes and returns focus to the button
+- **The z-index lives on `.bar`, not on the menus.** `.links` carries
+  `backdrop-filter`, which makes it a stacking context, so a z-index inside it
+  is scoped to the capsule and loses to later page content -- the menus
+  rendered *under* the page heading
+- **Cost of growth:** an item inside a group is free (the menu is a popover);
+  a new group costs ~85px of capsule. That is the point of the grouping, and
+  why the flat capsule had to be re-measured before every new link
+- **Degradation as the bar narrows:** the capsule folds into a burger
+  disclosure below 760 (the capsule is 256px wide, so iPad portrait keeps the
+  real nav), the points chip hides below 920. Never wraps, never overflows
+- **Disclosure panel:** band radius (24px), near-opaque `--menu-bg` (a
+  translucent surface let page text read through it), rows at body size,
+  hover/current marked with the nub fill because the capsule's
+  white-on-glass highlight disappears against a white panel. **Groups are
+  flattened here into labelled, always-open sections** -- a disclosure nested
+  in a disclosure is two taps to reach a link that has room to simply be
+  there. Scrolls internally past `100vh - 96px`
 
 ### Composer (Ask Ember)
 - **Shape:** pill, padding 8px (20px text inset)
@@ -245,14 +471,94 @@ spring ease; LED bars slide in at the bottom edge.
 - **Hue cycling:** nth-child(4n+1..4) cycles frost → chartreuse → ember → magenta for the hover edge bar and icon tint (text-safe variants for icon color in light)
 - **Right edge:** arrow glyph; optional magenta points badge before it
 
-### Journey band (rewards)
-- **Shape:** 24px band; column on mobile, row on desktop
-- **Track:** 4 flex nodes with 5px nubs; unlit nubs are white 8% / #e5e8ec, lit nubs take the LED hue for their position
-- **All magenta text** (count, CTA) uses magenta / magenta-ink; the band is the only rewards-colored surface
+### Highlight card (emphasis chrome)
+- **One emphasis language for cards**: a thin warm ring (`--hl-border`, 1px)
+  plus a chromatic underglow (`--hl-shadow`) on the card's normal surface
+  fill. The guide pages' open maintenance card is the reference
+  implementation; the enclosure result card and the safety callout follow it
+- **Retired**: top accent bars, tinted gradient fills, and thick one-sided
+  borders as emphasis. They were three more highlight languages saying the
+  same thing (user call, 2026-08)
+- **Warning variant**: same geometry in the warning hue
+  (`--hl-border-amber` / `--hl-shadow-amber`) -- a warning changes the color,
+  never the chrome
+- All four tokens are dual-bound; the light bindings drop alpha slightly so
+  the glow reads as a cast, not a smudge, on the showroom ground
+
+### Ghost (ring) button -- the secondary action
+- **The filled ramp is reserved for a module's one primary CTA.** Everything
+  else that used to fill red -- option selectors, in-module navigation,
+  selected chips -- takes the ghost form: a 1.5px `--ember-grad` ring drawn
+  in a masked pseudo-element (the `.tile::before` technique, so the gradient
+  follows any radius), `--ember-t` ink, transparent at rest
+- **Selected/hover state**: a faint `--red-glow` tint fill; the ink stays
+  `--ember-t`. No shadows -- a ghost that casts a glow reads as filled
+- Current ghosts: the guide tour's Start/Next, the troubleshooting category
+  chips' active state, the guide progress step's active circle, the
+  enclosure hearth-type toggle's active segment
+
+### Rewards band (homepage)
+- **Shape:** 24px band; column on mobile, row on desktop (total, progress,
+  links, then the CTA at the far end)
+- **Reports state, never a route.** The 18 modules are collected in any order,
+  so the band shows the standing total, a pill progress bar and
+  "N / 18 modules completed" -- not a sequence of steps. It replaced a 4-node
+  track that implied one
+- **Ember is the rewards accent** and stays scarce: the standing total, the
+  progress fill and the one action (sign in / view profile) take it; the
+  footer row's navigation link stays mid-tone. The fill is the mark's ramp
+  (`--ember-grad-bar`), never an LED spectrum -- still one warm quantity read
+  as one bar, where the four-hue gradient implied segments it does not have.
+  Matches the score card on rewards.html
+- **Two actions, and the rule is about glass, not weight.** The primary is an
+  opaque pill in the mark's ramp (`--ember-grad`): "Continue earning" once
+  signed in, which scrolls to the routes below where points are actually
+  earned, or "Sign in to earn rewards" when signed out, which opens the modal
+  -- a button that says "sign in" and scrolls instead is a lie. Ink on the
+  ramp, not white -- see Primary for the numbers.
+  The earlier rule here read "never a filled pill", which was too broad. The
+  thing that failed was a *bordered glass capsule* -- it borrowed the
+  composer's rounding and translucent fill and so read as another text input.
+  An opaque fill has none of that problem; nothing else on the page wears the
+  ramp as a fill. Glass is what this band's action must not be
+- **The secondary stays a text link, and steps aside when it would echo.** It
+  carries "View Profile" once signed in and hides while signed out, where it
+  would only repeat the primary
+- **It ends on its action.** Name and total, then progress, then the primary
+  pill with the two quiet links directly beneath it -- read the state, then
+  act. The links used to sit in a row of their own above the button, which put
+  navigation between the reader and the thing to do.
+  "View your rewards" and "How the program works" both pointed at
+  `rewards.html` and cost two stacked blocks between them; they are one "How
+  rewards work" link now. With the total on a baseline with its unit, that
+  took the band from 340px to 253px on a phone -- a band that reports state
+  should not be the tallest thing above the fold
+- **Named, then counted.** The band opens with "Aquafire Rewards" in heading
+  ink; the standing total sits below it on a baseline with its unit. The bare
+  number alone never said whose programme it was. A "Learn to earn" badge sat
+  beside the name for a while and was removed -- the band is already titled,
+  already ember, and already ends on an action that says the same thing
+
+### Fleet (explore by model, homepage)
+- Sits under the wings as the second door: the wings ask "what are you trying
+  to do", the fleet asks "which one do you own" -- both land in the same
+  interactive guides
+- **Flat, not another panel.** No glass pane around it, or it reads as a
+  fourth route competing with the three
+- **Shape:** card radius (15px) on the row fill, product shot over name, description
+  and an outline CTA pill. The description grows so the CTA pins to the
+  bottom edge of every card in the row
+- **Quieter than the routes.** The shot is short on phones (92px vs 140px
+  desktop) -- the section follows three full-height route cards, and a tall
+  stack here doubles the scroll for the secondary entry point
+- A model with no guide yet is a `div`, not an `a`: dimmed, shot desaturated,
+  CTA reading "coming soon"
 
 ### Wings (intent panes)
 - **Shape:** 26px pane, blur 18px; contains head (bare tinted icon + headline), Ember tip bubble, rows, minis
-- Explore = frost, Begin = chartreuse, Resolve = ember (head icon tint only — the pane itself stays neutral)
+- Head icons are neutral ink at 22px, matching the tile icons on every other
+  page; the wing's own hue (Explore = frost, Begin = chartreuse,
+  Resolve = ember) shows in its row hovers and underlines, not the head
 
 ### Theme toggle
 - A cap-styled icon button in the bar: sun icon in dark theme, moon in light.
@@ -265,6 +571,15 @@ masked vertically (`mask-image: linear-gradient(180deg, #000 0% 44%,
 transparent 98%)`) and graded by a theme-bound scrim that dissolves it into
 the active ground — smoke or showroom. Hero display text and subtitle stay
 white with soft text shadows in both themes because they sit on the photo.
+
+The source is 4:3 and the crop is `object-position: 62% 34%`, which is not a
+default worth losing. The band is a fixed height (540px, 620px from 920up), so
+a 4:3 source crops horizontally below 720px and vertically above it -- the one
+value has to serve both. 62% is a phone correction: the fireplace sits right
+of centre, and a centred crop spent the left of the screen on the dark bar
+area while clipping the flame's bright end. 34% puts the flame just above the
+composer on phones and directly behind it on desktop. Re-derive both if the
+photograph is ever replaced; neither survives a change of subject placement.
 
 ### Named Rules
 **The White-on-Photo Rule.** Type that sits on the photograph is white in

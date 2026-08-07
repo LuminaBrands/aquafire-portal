@@ -1,0 +1,31 @@
+Water fill & direct-plumb capability by model
+=============================================
+
+Source: Lumina Brands (Stefan), Jul 2026 — provided directly for the
+knowledge base. This is the authoritative statement of how each model
+connects to water; it supersedes conflicting older copy, including the
+2026 buying-guide blog's "the Pro and Original offer an optional Direct
+Plumb Kit" (the Pro needs no kit) and the earlier note here that only the
+Lite 40"/60" can't direct-plumb (no Lite size can).
+
+AQUAFIRE PRO
+  - Comes with the ability to connect directly to a water line out of the
+    box — no add-on needed.
+  - Can also be manually filled using the integrated water pump port
+    located on the top right corner of the burner.
+  - Comes with a dispensing pump, allowing the unit to be emptied at the
+    press of a button.
+
+AQUAFIRE ORIGINAL
+  - Does not come with the ability to connect directly to a water line out
+    of the box.
+  - The Direct Plumb Kit add-on enables a direct water-line connection —
+    easy install, sold and shipped separately.
+  - Can also be manually filled using the integrated water pump port
+    located on the top right corner of the burner.
+
+AQUAFIRE LITE / GATSBY
+  - Does not come with the ability to connect directly to a water line out
+    of the box, and does not currently have the option to upgrade.
+  - The units are manually filled using the integrated water pump port
+    located on the top right corner of the burner.

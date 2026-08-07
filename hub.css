@@ -39,6 +39,62 @@
 .nav-cta { margin-left: 8px; }
 .btn-sm { padding: 7px 18px; font-size: 0.8rem; }
 
+/* ── Nav Dropdowns ── */
+.nav-drop { position: relative; }
+.nav-drop-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, background 0.15s;
+}
+.nav-drop-btn::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin-top: -4px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+}
+.nav-drop:hover .nav-drop-btn,
+.nav-drop-btn:focus { color: var(--text); background: rgba(255,255,255,0.04); }
+.nav-drop-btn.active { color: var(--text); background: rgba(255,255,255,0.06); }
+.nav-drop-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  min-width: 190px;
+  padding: 6px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+/* invisible bridge so the menu doesn't close crossing the gap below the button */
+.nav-drop-menu::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+}
+.nav-drop:hover .nav-drop-menu,
+.nav-drop:focus-within .nav-drop-menu { display: block; }
+.site-nav .nav-drop-menu a { padding: 8px 12px; }
+
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -73,6 +129,32 @@
   .site-nav .nav-links a { padding: 10px 14px; font-size: 0.9rem; }
   .nav-cta { margin-left: 0; margin-top: 8px; }
   .nav-cta a { text-align: center; }
+
+  /* Dropdowns flatten into labeled groups in the mobile panel */
+  .nav-drop { position: static; }
+  .nav-drop-btn {
+    pointer-events: none;
+    padding: 12px 14px 2px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+  .nav-drop-btn::after { display: none; }
+  .nav-drop-btn.active { background: none; }
+  .nav-drop-menu,
+  .nav-drop:hover .nav-drop-menu {
+    display: block;
+    position: static;
+    min-width: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+  .nav-drop-menu::before { display: none; }
+  .site-nav .nav-drop-menu a { padding: 10px 14px 10px 22px; font-size: 0.9rem; }
 }
 
 /* ── Footer ── */

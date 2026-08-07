@@ -1,51 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aquafire Fireplace Enclosure Guide</title>
+  <title>Enclosure Guide | Interactive Aquafire Guide</title>
   <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
   <link rel="apple-touch-icon" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <script>
+    // Restore the saved theme before first paint so the page never flashes the
+    // wrong lighting. Every redesigned page carries this.
+    (function () {
+      try {
+        var t = new URLSearchParams(location.search).get("theme") || localStorage.getItem("aquafire-theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="redesign.css">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="hub.css">
   <link rel="stylesheet" href="rewards.css">
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <nav class="site-nav">
-    <div class="container nav-inner">
-      <a href="/" class="nav-logo">
+  <div class="atmos" aria-hidden="true">
+    <span class="puff puff-a"></span>
+    <span class="puff puff-b"></span>
+  </div>
+
+  <div class="page">
+    <header class="bar">
+      <a class="cap brand" href="index.html" aria-label="Aquafire home">
         <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
       </a>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="quick-start.html">Quick Start</a></li>
+      <nav class="links" id="navLinks" aria-label="Primary">
+        <a href="quick-start.html">Set Up</a>
+        <div class="navgroup">
+          <button class="navgroup-btn is-here" type="button" aria-expanded="false" aria-controls="nav-guides">Guides<svg class="navgroup-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="navgroup-menu" id="nav-guides">
+            <a href="quick-start.html">Product Guide</a>
+            <a class="is-here" aria-current="page" href="enclosure-guide.html">Enclosure Guide</a>
+            <a href="water-care.html">Water Care</a>
+            <a href="maintenance.html">Preventative Maintenance</a>
+          </div>
+        </div>
+        <div class="navgroup">
+          <button class="navgroup-btn" type="button" aria-expanded="false" aria-controls="nav-support">Support<svg class="navgroup-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="navgroup-menu" id="nav-support">
+            <a href="troubleshoot.html">Troubleshoot</a>
+            <a href="dealer-locator.html">Find a Dealer</a>
+            <a target="_blank" rel="noopener" href="https://www.aquafire.com/pages/warranty">Warranty / Register</a>
+            <a href="rewards.html">Rewards</a>
+            <a target="_blank" rel="noopener" href="https://www.aquafire.com/pages/service-request">Service Request</a>
+            <a target="_blank" rel="noopener" href="https://www.aquafire.com/pages/contact">Contact Us</a>
+          </div>
+        </div>
+      </nav>
+      <span class="bar-end">
+        <a class="cap pts-chip" href="rewards.html"><svg class="pts-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Rewards <b id="rb-home-points">0 pts</b></a>
+        <button class="cap nav-btn" id="navBtn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <button class="cap theme-btn" id="themeBtn" type="button" aria-label="Switch theme">
+          <svg class="ico-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="ico-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+      </span>
+    </header>
 
-        <li><a href="enclosure-guide.html" class="active">Enclosure Guide</a></li>
-        <li><a href="water-care.html">Water Care</a></li>
-        <li><a href="troubleshoot.html">Troubleshoot</a></li>
-        <li><a href="dealer-locator.html">Find a Dealer</a></li>
-        <li><a href="support.html">Support</a></li>
-      </ul>
-    </div>
-  </nav>
+    <header class="phead">
+      <h1>Enclosure Guide</h1>
+      <p>Get the exact finished cutout for your model and size &mdash; including the light trap that keeps LED spill off your ceiling.</p>
+    </header>
 
-  <header>
-    <div class="header-glow"></div>
-    <div class="container header-inner">
-      <h1>Enclosure Design Guide</h1>
-    </div>
-  </header>
+    <main class="pbody">
+    <!-- Print-only spec summary — filled by app.js just before printing -->
+    <section class="card print-summary print-only" id="print-summary" aria-hidden="true"></section>
 
-  <main class="container">
     <div class="header-notice">
       <svg class="header-notice-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <p>If the enclosure is not constructed to the recommended dimensions, light from the Aquafire LED system may escape the enclosure and illuminate the ceiling. To help prevent this, incorporate a light trap into the enclosure design. Refer to the chart below for recommended finished dimensions.</p>
@@ -57,7 +92,7 @@
         <div class="step-num">1</div>
         <div>
           <h2>Choose Your Model</h2>
-          <p class="card-desc">Select the Aquafire insert and size for your project.</p>
+          <p class="card-desc">Select the Aquafire insert and size for your project. Running two inserts? The Pro and Original gang into 80&quot;, 100&quot; and 120&quot; ribbons &mdash; pick the total length and the guide sizes the single opening they share.</p>
         </div>
       </div>
 
@@ -72,6 +107,8 @@
         </div>
         <div class="form-group">
           <label for="size">Size</label>
+          <!-- Options are rebuilt per model in app.js: the ganged runs exist on
+               the Pro and Original only. These three are the no-JS fallback. -->
           <select id="size">
             <option value="20">20"</option>
             <option value="40">40"</option>
@@ -111,6 +148,16 @@
           <svg id="cutout-diagram" xmlns="http://www.w3.org/2000/svg"></svg>
         </div>
       </div>
+
+      <p class="gang-note" id="gang-note" hidden></p>
+
+      <p class="cutout-field-note">
+        <strong>The width includes &frac38;&quot; of clearance on each side.</strong> That's how our senior
+        install crews cut it &mdash; &frac34;&quot; over nominal in total &mdash; so the insert seats
+        without being forced, and these are the figures the guide now uses. Working from a spec
+        sheet? Its published minimum is <span id="published-w">&mdash;</span>. Depth and height are
+        unchanged. <a href="#faq-framing">Why &rarr;</a>
+      </p>
     </section>
 
     <!-- Step 3: Light Trap Calculator -->
@@ -176,11 +223,118 @@
           <p class="formula-note">
             The max opening is based on your setback distance and the light angle of your model, rounded down to the nearest inch.
           </p>
+
+          <div class="calc-actions">
+            <button type="button" class="calc-btn" id="calc-reset">Reset to defaults</button>
+            <button type="button" class="calc-btn" id="calc-print">Print spec sheet</button>
+          </div>
         </div>
 
         <div class="diagram-panel">
-          <canvas id="light-diagram" width="700" height="500"></canvas>
+          <svg id="light-diagram" viewBox="0 0 720 620" role="img" aria-label="Light trap cross-section diagram"></svg>
         </div>
+      </div>
+    </section>
+
+    <!-- Best practices — FAQ accordion -->
+    <section class="card" id="field-notes">
+      <h2>Installer Field Notes</h2>
+      <p class="card-desc">Best practices for an ideal hearth enclosure.</p>
+
+      <div class="faq">
+        <details class="faq-item" id="faq-framing" name="enclosure-faq">
+          <summary>
+            Framing the opening
+            <svg class="faq-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-body">
+            <ul>
+              <li>Cut to the width shown above. It carries <strong>&frac38;&quot; of clearance on each side</strong> &mdash; &frac34;&quot; over nominal &mdash; so the insert seats without being forced. Depth and height are as listed.</li>
+              <li>Keep the corners <strong>sharp, not rounded</strong>. The insert drops in and hangs from its flanges, so the opening has to be accurate.</li>
+              <li>Spec sheets publish a tighter + &frac14;&quot; width. Our install crews recommend the extra room: it keeps air moving around the internals and protects the light strips and fans while the unit is worked into place.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item" id="faq-downdraft" name="enclosure-faq">
+          <summary>
+            Avoiding downdrafts
+            <svg class="faq-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-body">
+            <p>Moving air is the most common cause of installation trouble: it pulls the flame down and drives vapor onto the components.</p>
+            <ul>
+              <li><strong>Keep HVAC off the fireplace.</strong> Don't let a supply vent blow directly at the insert.</li>
+              <li><strong>Seal open wall cavities</strong> behind and beneath the enclosure. Ideally the bottom enclosure is drywalled and sealed before the insert goes in.</li>
+              <li>Many newer homes run &ldquo;open plenum&rdquo; positive-pressure HVAC, which pushes air into the enclosure. On a new build, seal as a matter of course rather than waiting for a problem.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item" id="faq-venting" name="enclosure-faq">
+          <summary>
+            Leaving room for air
+            <svg class="faq-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-body">
+            <ul>
+              <li>Allow at least <strong>50 square inches of air intake per 20&quot; of unit length</strong>, through the top lid or &mdash; if a decorative top or media covers it &mdash; through a toe kick beneath the enclosure.</li>
+              <li>Keep the top clear. Heavy items or media on the lid block the intake the unit relies on.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item" id="faq-light-trap" name="enclosure-faq">
+          <summary>
+            Planning the light trap
+            <svg class="faq-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-body">
+            <ul>
+              <li>Recess the insert and build a <strong>matte-black light trap</strong> above the opening so the LEDs don't wash onto the ceiling. The calculator above gives the maximum opening height for your setback.</li>
+              <li>Keep <strong>6&quot; of clearance from side walls</strong>, or use an open-ended or blind-corner design, so light doesn't reflect onto the adjacent surface.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item" id="faq-ganging" name="enclosure-faq">
+          <summary>
+            Running two inserts
+            <svg class="faq-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-body">
+            <ul>
+              <li>The Pro and Original gang into 80&quot;, 100&quot; and 120&quot; ribbons on a single remote. Pick the total length in step 1 and the guide sizes the opening.</li>
+              <li>A run is <strong>one continuous cutout</strong>, not two. The &frac38;&quot; clearance sits on the two outside edges only &mdash; the units meet flush, so nothing is added in the middle.</li>
+              <li>The Lite is the one model that can't be ganged.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item" id="faq-sealing" name="enclosure-faq">
+          <summary>
+            Sealing a framed-in install
+            <svg class="faq-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-body">
+            <p>When the framing is already open and can't be drywalled and sealed, our crews seal the unit itself &mdash; during the install, while the enclosure is still open.</p>
+            <ul>
+              <li>Flip the unit and run <strong>3&quot;-wide black tape</strong> (Gorilla or equivalent) over all the open edges underneath, plus the air vents along the front and back sides.</li>
+              <li><strong>Not for media-topped installs.</strong> That tape leaves the top vents as the unit's only intake, so if logs or rocks will cover the top, frame and seal the enclosure properly instead and vent through a toe kick.</li>
+              <li>On an Aquafire Original with a <strong>Direct Plumb Kit</strong>, the seal has to meet the surrounding structure. In high-rise condos, where wall assemblies breathe, an unsealed kit has caused installation issues.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item" id="faq-design-review" name="enclosure-faq">
+          <summary>
+            Getting a second opinion
+            <svg class="faq-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-body">
+            <p>Design reviews are free. Send your schematic or working drawings to <a href="mailto:sales@aquafire.com">sales@aquafire.com</a> and we'll check the dimensions, the light trap and the airflow before anything is built.</p>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -212,43 +366,61 @@
       <a href="https://www.aquafire.com" class="cta-button" target="_blank" rel="noopener">Shop Aquafire</a>
       <a href="https://www.aquafire.com/pages/contact" class="cta-link" target="_blank" rel="noopener">or contact sales to get a custom quote</a>
     </section>
-  </main>
+    </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire" height="20">
-        <p>The complete guide to your Aquafire water vapor fireplace.</p>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
+    <footer class="pfoot">
+      <div class="pfoot-in">
+        <div class="pfoot-brand">
+          <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+          <p>The complete guide to your Aquafire water vapor fireplace.</p>
+        </div>
+        <div class="pfoot-col">
           <h4>Guides</h4>
           <a href="quick-start.html">Quick Start</a>
           <a href="enclosure-guide.html">Enclosure Guide</a>
           <a href="water-care.html">Water Care</a>
           <a href="troubleshoot.html">Troubleshooter</a>
         </div>
-        <div class="footer-col">
+        <div class="pfoot-col">
           <h4>Resources</h4>
-          <a href="support.html">Support Hub</a>
+          <a href="support.html">Support</a>
           <a href="https://www.aquafire.com" target="_blank" rel="noopener">Shop Aquafire</a>
           <a href="https://www.aquafire.com/pages/contact" target="_blank" rel="noopener">Contact Sales</a>
         </div>
       </div>
-    </div>
-    <div class="footer-bottom container"><p>&copy; 2026 Aquafire. All rights reserved.</p></div>
-  </footer>
+      <div class="pfoot-bottom">&copy; 2026 Aquafire. All rights reserved.</div>
+    </footer>
+  </div>
+
 
   <script src="embed.js"></script>
+  <script src="nav.js" defer></script>
   <script src="app.js"></script>
   <script src="rewards.js"></script>
   <script>
-    const toggle = document.querySelector('.nav-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    toggle?.addEventListener('click', () => {
-      const open = navLinks?.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(open));
-    });
+    // Theme toggle + mobile nav. Shared across every redesigned page.
+    (function () {
+      var root = document.documentElement;
+      var themeBtn = document.getElementById("themeBtn");
+      var navBtn = document.getElementById("navBtn");
+      var links = document.getElementById("navLinks");
+
+      function label() {
+        themeBtn.setAttribute("aria-label",
+          root.dataset.theme === "light" ? "Switch to dark theme" : "Switch to light theme");
+      }
+      themeBtn.addEventListener("click", function () {
+        root.dataset.theme = root.dataset.theme === "light" ? "dark" : "light";
+        try { localStorage.setItem("aquafire-theme", root.dataset.theme); } catch (e) {}
+        label();
+      });
+      label();
+
+      navBtn.addEventListener("click", function () {
+        var open = links.classList.toggle("open");
+        navBtn.setAttribute("aria-expanded", String(open));
+      });
+    })();
   </script>
   <script src="assistant.js" defer></script>
 </body>

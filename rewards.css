@@ -1,28 +1,37 @@
 /* ═══════════════════════════════════════════════════════════════
    Aquafire Rewards – Styles
+
+   Retoned onto the redesign token layer (redesign.css). Everything here
+   references tokens, so the auth modal, profile dropdown and points toast
+   follow the theme switcher like the rest of the portal -- before this they
+   were hard-pinned to the 2025 dark palette and rendered as a dark dialog
+   over a light page.
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── Nav Rewards Button ── */
+/* ── Nav Rewards Button ──
+   Legacy: injectNavButton() in rewards.js needs a `.nav-links` element, which
+   no redesigned page has -- the bar carries its own `.pts-chip` instead. Kept
+   and retoned so it is not a landmine if any page is ever served the old nav. */
 .nav-rewards { margin-left: auto; }
 .af-rewards-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
-  background: rgba(192,57,43,0.1);
-  border: 1px solid rgba(192,57,43,0.25);
-  border-radius: 20px;
-  color: #e4e5e9;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.82rem;
+  background: var(--badge-bg);
+  border: 1px solid var(--badge-border);
+  border-radius: 999px;
+  color: var(--text-hi);
+  font-family: inherit;
+  font-size: 0.83rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
   white-space: nowrap;
 }
 .af-rewards-btn:hover {
-  background: rgba(192,57,43,0.18);
-  border-color: rgba(192,57,43,0.4);
+  background: var(--cap-bg-hover);
+  border-color: var(--cap-border-hover);
 }
 .af-nav-avatar {
   display: flex;
@@ -30,10 +39,14 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  border-radius: 50%;
-  background: #c0392b;
-  color: #fff;
-  font-size: 0.72rem;
+  border-radius: 999px;
+  /* The mark's ramp, vertically like the disc -- the avatar is a small
+     sibling of Ember's own mark. */
+  background: var(--ember-grad);
+  /* Ink on the accent, not the page ground: --ground-fill is a gradient in
+     light theme and was never a text colour. */
+  color: var(--on-ember);
+  font-size: 0.7rem;
   font-weight: 700;
 }
 .af-nav-points {
@@ -41,7 +54,7 @@
   align-items: center;
   gap: 4px;
 }
-.af-nav-pts-icon { font-size: 0.9rem; line-height: 1; }
+.af-nav-pts-icon { font-size: 0.88rem; line-height: 1; }
 .af-nav-pts-num { font-variant-numeric: tabular-nums; }
 .af-nav-login-label { font-weight: 500; }
 
@@ -53,7 +66,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.6);
+  background: var(--scrim);
   backdrop-filter: blur(6px);
   opacity: 0;
   transition: opacity 0.25s ease;
@@ -65,11 +78,11 @@
   position: relative;
   width: 92%;
   max-width: 400px;
-  background: #1b1e24;
-  border: 1px solid #2c3038;
-  border-radius: 20px;
+  background: var(--menu-bg);
+  border: 1px solid var(--stroke);
+  border-radius: 24px;
   padding: 36px 32px 28px;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  box-shadow: var(--modal-shadow);
   transform: translateY(20px) scale(0.96);
   transition: transform 0.25s ease;
 }
@@ -88,33 +101,35 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 8px;
-  color: #878c99;
-  font-size: 1.3rem;
+  background: var(--cap-bg);
+  border: 1px solid var(--cap-border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font-size: 1.05rem;
+  line-height: 1;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
-.af-modal-close:hover { background: rgba(255,255,255,0.1); color: #e4e5e9; }
+.af-modal-close:hover { background: var(--cap-bg-hover); color: var(--text-hi); }
 
 .af-modal-header {
   text-align: center;
   margin-bottom: 28px;
 }
 .af-modal-flame {
-  font-size: 2rem;
+  font-size: 1.6rem;
   margin-bottom: 8px;
 }
 .af-modal-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.4rem;
+  font-family: inherit;
+  font-size: clamp(1.5rem, 5vw, 2rem);
   font-weight: 700;
-  color: #e4e5e9;
+  letter-spacing: -0.025em;
+  color: var(--text-hi);
   margin: 0;
 }
 .af-modal-sub {
-  color: #878c99;
+  color: var(--text-mid);
   font-size: 0.88rem;
   margin-top: 6px;
 }
@@ -127,21 +142,21 @@
   gap: 10px;
   width: 100%;
   padding: 13px 20px;
-  border-radius: 12px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.92rem;
+  border-radius: 13px;
+  font-family: inherit;
+  font-size: 0.93rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
 .af-auth-google {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: #e4e5e9;
+  background: var(--cap-bg);
+  border: 1px solid var(--stroke);
+  color: var(--text-hi);
 }
 .af-auth-google:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(255,255,255,0.18);
+  background: var(--cap-bg-hover);
+  border-color: var(--stroke-hi);
 }
 .af-auth-icon { flex-shrink: 0; }
 
@@ -150,77 +165,78 @@
   align-items: center;
   gap: 16px;
   margin: 20px 0;
-  color: #878c99;
-  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-size: 0.83rem;
 }
 .af-auth-divider::before,
 .af-auth-divider::after {
   content: '';
   flex: 1;
   height: 1px;
-  background: #2c3038;
+  background: var(--stroke);
 }
 
 /* Email Form */
 .af-form-label {
   display: block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #878c99;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-dim);
   margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.06em;
 }
 .af-form-input {
   width: 100%;
   padding: 13px 16px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid #2c3038;
-  border-radius: 12px;
-  color: #e4e5e9;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.92rem;
+  background: var(--cap-bg);
+  border: 1px solid var(--stroke);
+  border-radius: 13px;
+  color: var(--text-hi);
+  font-family: inherit;
+  font-size: 0.93rem;
   outline: none;
   transition: border-color 0.15s;
   box-sizing: border-box;
 }
 .af-form-input:focus {
-  border-color: rgba(192,57,43,0.5);
+  border-color: var(--ember);
 }
-.af-form-input::placeholder { color: #555; }
+.af-form-input::placeholder { color: var(--text-dim); }
 .af-password-group {
   margin-top: 12px;
 }
 .af-auth-error {
-  color: #e74c3c;
-  font-size: 0.82rem;
+  color: var(--danger);
+  font-size: 0.83rem;
   min-height: 20px;
   margin-top: 8px;
 }
+/* The modal's one primary action takes the mark's ramp with ink on top --
+   the same treatment as the band and score-card primaries. Still no
+   chromatic glow; the old red pill's 12px halo stays gone. */
 .af-auth-submit {
   width: 100%;
   padding: 14px 20px;
   margin-top: 12px;
-  background: #c0392b;
+  background: var(--ember-grad);
   border: none;
-  border-radius: 12px;
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.95rem;
+  border-radius: 13px;
+  color: var(--on-ember);
+  font-family: inherit;
+  font-size: 0.93rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 12px rgba(192,57,43,0.15);
+  transition: filter 0.2s;
 }
 .af-auth-submit:hover {
-  background: #a93226;
-  box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+  filter: brightness(1.06);
 }
 
 .af-modal-footer {
   text-align: center;
-  color: #555;
-  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-size: 0.76rem;
   margin-top: 20px;
 }
 
@@ -229,81 +245,85 @@
   position: fixed;
   z-index: 10001;
   width: 280px;
-  background: #1b1e24;
-  border: 1px solid #2c3038;
-  border-radius: 14px;
+  background: var(--menu-bg);
+  border: 1px solid var(--stroke);
+  border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  box-shadow: var(--dropdown-shadow);
 }
 .af-dd-header {
   margin-bottom: 16px;
 }
 .af-dd-name {
   display: block;
-  font-family: 'Poppins', sans-serif;
+  font-family: inherit;
   font-weight: 600;
-  font-size: 0.95rem;
-  color: #e4e5e9;
+  font-size: 0.88rem;
+  color: var(--text-hi);
 }
 .af-dd-email {
   display: block;
-  font-size: 0.78rem;
-  color: #878c99;
+  font-size: 0.76rem;
+  color: var(--text-dim);
   margin-top: 2px;
 }
 .af-dd-points {
-  background: rgba(192,57,43,0.08);
-  border: 1px solid rgba(192,57,43,0.15);
-  border-radius: 10px;
+  background: var(--badge-bg);
+  border: 1px solid var(--badge-border);
+  border-radius: 13px;
   padding: 14px;
   text-align: center;
   margin-bottom: 16px;
 }
 .af-dd-pts-num {
   display: block;
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.3rem;
+  font-family: inherit;
+  font-size: 1.05rem;
   font-weight: 700;
-  color: #e8a838;
+  font-variant-numeric: tabular-nums;
+  color: var(--ember-t);
 }
 .af-dd-pts-label {
   display: block;
-  font-size: 0.72rem;
-  color: #878c99;
+  font-size: 0.7rem;
+  color: var(--text-dim);
   margin-top: 2px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.06em;
 }
 .af-dd-progress { margin-bottom: 16px; }
 .af-dd-bar-wrap { }
 .af-dd-bar {
   height: 6px;
-  background: #22262e;
-  border-radius: 3px;
+  background: var(--nub-bg);
+  border-radius: 999px;
   overflow: hidden;
   margin-bottom: 6px;
 }
+/* The mark's orange-to-red ramp, same as the homepage band and the score
+   card. Still one warm quantity -- what a determinate bar must not wear is
+   the four-hue LED spectrum, which implies segments it does not have. */
 .af-dd-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #c0392b, #e8a838);
-  border-radius: 3px;
+  background: var(--ember-grad-bar);
+  border-radius: 999px;
   transition: width 0.4s ease;
 }
 .af-dd-bar-label {
-  font-size: 0.72rem;
-  color: #878c99;
+  font-size: 0.7rem;
+  color: var(--text-dim);
 }
 .af-dd-redeem {
   display: block;
   width: 100%;
   padding: 10px;
   margin-bottom: 8px;
-  background: rgba(192,57,43,0.12);
-  border: 1px solid rgba(192,57,43,0.3);
-  border-radius: 8px;
-  color: #e4724a;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.82rem;
+  background: var(--badge-bg);
+  border: 1px solid var(--badge-border);
+  border-radius: 13px;
+  color: var(--ember-t);
+  font-family: inherit;
+  font-size: 0.83rem;
   font-weight: 600;
   text-align: center;
   text-decoration: none;
@@ -311,21 +331,21 @@
   transition: background 0.15s, border-color 0.15s;
   box-sizing: border-box;
 }
-.af-dd-redeem:hover { background: rgba(192,57,43,0.2); border-color: rgba(192,57,43,0.5); }
+.af-dd-redeem:hover { background: var(--cap-bg-hover); border-color: var(--stroke-hi); }
 .af-dd-signout {
   width: 100%;
   padding: 10px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid #2c3038;
-  border-radius: 8px;
-  color: #878c99;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.82rem;
+  background: var(--cap-bg);
+  border: 1px solid var(--stroke);
+  border-radius: 13px;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 0.83rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
-.af-dd-signout:hover { background: rgba(255,255,255,0.08); color: #e4e5e9; }
+.af-dd-signout:hover { background: var(--cap-bg-hover); color: var(--text-hi); }
 
 /* ── Reward Badges ── */
 .af-reward-badge {
@@ -333,30 +353,88 @@
   align-items: center;
   gap: 4px;
   padding: 4px 10px;
-  background: rgba(232,168,56,0.08);
-  border: 1px solid rgba(232,168,56,0.18);
-  border-radius: 20px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #e8a838;
+  background: var(--badge-bg);
+  border: 1px solid var(--badge-border);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--amber);
   white-space: nowrap;
   vertical-align: middle;
   transition: background 0.2s, border-color 0.2s;
 }
+/* Chartreuse is this system's completed/growth hue -- the emerald here
+   predated the redesign palette and matched nothing else on the page. */
 .af-reward-badge--done {
-  background: rgba(46,204,113,0.08);
-  border-color: rgba(46,204,113,0.2);
-  color: #2ecc71;
+  background: var(--nub-bg);
+  border-color: var(--stroke);
+  color: var(--chart-t);
 }
-.af-rb-flame { font-size: 0.8rem; line-height: 1; }
-.af-rb-check { font-size: 0.8rem; line-height: 1; }
+.af-rb-flame { font-size: 0.83rem; line-height: 1; }
+.af-rb-check { font-size: 0.83rem; line-height: 1; }
 .af-rb-pts { font-variant-numeric: tabular-nums; }
+
+/* Compact form for the redesign's dense components.
+   redesign.css's `.row span` out-specifies the plain `.af-reward-badge` rule
+   above, which silently stripped the badge's own size and color; and the badge
+   is injected as firstChild, so `.row`/`.minis` reorder it to the end. At full
+   size it took the row's leading column and wrapped the label onto three
+   lines. */
+.row .af-reward-badge,
+.minis a .af-reward-badge,
+.close figcaption a .af-reward-badge,
+.foot a .af-reward-badge {
+  flex: none;
+  font-size: 0.7rem;
+  line-height: 1.6;
+  padding: 2px 7px;
+  gap: 3px;
+  color: var(--amber);
+}
+.row .af-reward-badge--done,
+.minis a .af-reward-badge--done,
+.close figcaption a .af-reward-badge--done,
+.foot a .af-reward-badge--done { color: var(--chart-t); }
+.row .af-reward-badge span,
+.minis a .af-reward-badge span,
+.close figcaption a .af-reward-badge span,
+.foot a .af-reward-badge span {
+  display: inline;
+  font-size: inherit;
+  color: inherit;
+}
+/* "+500" instead of "+500 pts" here -- 22px of a phone row's ~150px label
+   column is not worth a unit the flame already implies. Cards keep it. */
+.row .af-reward-badge .af-rb-unit,
+.minis a .af-reward-badge .af-rb-unit,
+.close figcaption a .af-reward-badge .af-rb-unit,
+.foot a .af-reward-badge .af-rb-unit { display: none; }
+/* Injected as firstChild, so in a run of prose it landed mid-sentence and
+   pushed the link's own words onto the next line. Ordered after the label
+   instead. (These links carry no resting underline -- see redesign.css -- or
+   it would run under the badge; a descendant cannot cancel an ancestor's.) */
+.close figcaption a,
+.foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.close figcaption a .af-reward-badge,
+.foot a .af-reward-badge { order: 2; }
 
 /* Badge positioning on bento tiles */
 .bento-tile .af-reward-badge {
   position: absolute;
   top: 12px;
   right: 12px;
+}
+
+/* Redesign tiles are column flex, so an in-flow badge stretches the full card
+   width and reads as a banner. Corner chip, same as every other card type. */
+.tile .af-reward-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
 }
 
 /* Badge positioning on section cards */
@@ -411,10 +489,10 @@
   align-items: center;
   gap: 8px;
   padding: 32px 48px;
-  background: radial-gradient(ellipse at center, rgba(232,168,56,0.08) 0%, #1b1e24 70%);
-  border: 1px solid rgba(232,168,56,0.3);
-  border-radius: 20px;
-  box-shadow: 0 0 60px rgba(232,168,56,0.15), 0 20px 60px rgba(0,0,0,0.5);
+  background: var(--menu-bg);
+  border: 1px solid var(--badge-border);
+  border-radius: 24px;
+  box-shadow: var(--modal-shadow);
   overflow: visible;
 }
 .af-toast-icon-ring {
@@ -424,8 +502,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(232,168,56,0.1);
-  border: 2px solid rgba(232,168,56,0.3);
+  background: var(--badge-bg);
+  border: 2px solid var(--badge-border);
   animation: af-pulse-ring 1.2s ease-out;
 }
 @keyframes af-pulse-ring {
@@ -449,10 +527,11 @@
   gap: 4px;
 }
 .af-toast-points {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.5rem;
+  font-family: inherit;
+  font-size: clamp(1.5rem, 5vw, 2rem);
   font-weight: 700;
-  color: #e8a838;
+  font-variant-numeric: tabular-nums;
+  color: var(--ember-t);
   animation: af-pts-count 0.6s 0.4s ease both;
 }
 @keyframes af-pts-count {
@@ -460,8 +539,8 @@
   100% { transform: translateY(0); opacity: 1; }
 }
 .af-toast-label {
-  font-size: 0.85rem;
-  color: #878c99;
+  font-size: 0.83rem;
+  color: var(--text-mid);
   animation: af-label-fade 0.5s 0.6s ease both;
 }
 @keyframes af-label-fade {
@@ -480,7 +559,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #e8a838;
+  background: var(--amber);
 }
 .af-spark-1 { top: 20%; left: 10%;  animation: af-spark-fly 0.8s 0.2s ease-out both; }
 .af-spark-2 { top: 15%; right: 12%; animation: af-spark-fly 0.8s 0.35s ease-out both; }
@@ -514,5 +593,55 @@
 }
 
 @media (max-width: 560px) {
-  .af-modal { border-radius: 16px; }
+  .af-modal { border-radius: 15px; }
 }
+
+/* ── Sign Out in the mobile disclosure panel ──────────────────────────
+   The nav's points chip hides below 920px and the capsule collapses to the
+   burger at 1080, so the profile dropdown that normally holds Sign Out has
+   nothing to anchor to on a phone. rewards.js appends this button to the same
+   `.links` container the panel is built from; it mirrors `.bar .links a` in
+   redesign.css rather than reusing it, because a button is not a link and the
+   nav's own rules are scoped to `a`. */
+#af-menu-account {
+  display: none;
+  width: 100%;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  color: var(--text-mid);
+  transition: color 0.24s var(--ease), background-color 0.24s var(--ease);
+}
+.bar .links.open #af-menu-account {
+  display: block;
+  /* Ruled off from the links above it: everything else in the panel goes
+     somewhere, this one acts on the account. */
+  margin-top: 8px;
+  padding: 14px 14px 11px;
+  border-top: 1px solid var(--row-border);
+  border-radius: 0 0 13px 13px;
+  font-size: 0.93rem;
+  font-weight: 500;
+}
+.bar .links.open #af-menu-account:hover {
+  color: var(--text-hi);
+  background: var(--nub-bg);
+}
+
+/* The points total on the panel's Rewards row. Panel-only: above the burger
+   breakpoint the bar-end chip carries the figure, and showing it in both places
+   would state the same number twice in one bar. */
+.af-menu-pts { display: none; }
+.bar .links.open .navgroup-menu a .af-menu-pts {
+  display: inline;
+  margin-left: auto;
+  padding-left: 12px;
+  color: var(--ember-t);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+/* Every panel row is a flex line rather than selecting the one that has a
+   badge -- uniform, and no :has() dependency for a single right-aligned span. */
+.bar .links.open .navgroup-menu a { display: flex; align-items: center; }

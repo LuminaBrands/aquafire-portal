@@ -2,23 +2,33 @@
    /api/notify-slack — Slack alerts for Ember's dead ends (Vercel function).
 
    The widget POSTs here whenever Ember can't answer a question or hands the
-   customer off to a human, and we relay a short card to the Slack channel
-   behind SLACK_WEBHOOK_URL (#chat-insights-feeback).
+   customer off to a human, and we relay a card to the Slack channel behind
+   SLACK_WEBHOOK_URL (#chat-insights-feeback). Four kinds:
 
-   Setup: create a Slack incoming webhook for the channel and set
-   SLACK_WEBHOOK_URL in the Vercel project's environment variables. Until it's
-   set this returns 503 and the widget silently stops trying — the chat itself
-   is never affected (alerts are fire-and-forget, like the Firestore telemetry).
+     unanswered  no knowledge-base match and AI mode unavailable
+     unresolved  the AI answered but told the customer it couldn't help
+     llm_error   /api/chat errored or timed out; local fallback was used
+     handoff     a contact card was shown (support / sales / orders)
+
+   Setup: Slack -> apps -> Incoming Webhooks -> pick the channel -> copy the
+   webhook URL -> save it as SLACK_WEBHOOK_URL in the Vercel project's
+   environment variables (all environments, so previews can be tested too) ->
+   redeploy. Until it's set this returns 503 and the widget silently stops
+   trying for the page load — the chat itself is never affected.
 
    Zero dependencies on purpose (repo convention: no package.json / no build).
    ────────────────────────────────────────────────────────────────────────── */
 
 'use strict';
 
-const INSIGHTS_URL = 'https://aquafire.app/chat-insights.html';
+// CORS/origin enforcement + rate limiting live in api/_guard.js (shared).
+const { cors, throttle } = require('./_guard');
 
-const ALLOWED_ORIGIN =
-  /^https:\/\/((www\.)?aquafire\.(app|com)|[a-z0-9-]+-luminabrands-projects\.vercel\.app)$/;
+// Endpoint-wide daily ceiling — keeps the team's channel from being flooded
+// (only enforced once Upstash is configured; see api/_guard.js).
+const DAILY_CAP = Number(process.env.ALERT_DAILY_CAP || 300);
+
+const INSIGHTS_URL = 'https://aquafire.app/chat-insights.html';
 
 // What each alert kind looks like in Slack.
 const KINDS = {
@@ -51,19 +61,33 @@ const MODEL_NAMES = {
 
 /* ── Helpers ────────────────────────────────────────────────────────────── */
 
-// Slack mrkdwn escaping — also neutralizes <!channel>/<!here> style pings.
-function esc(s) {
+const EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
+
+// Slack mrkdwn escaping — also neutralizes <!channel>/<!here> style pings —
+// plus customer email masking (our own addresses are kept, they're public).
+function clean(s, max) {
   return String(s == null ? '' : s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    .replace(EMAIL_RE, (m) => (/@(aquafire|luminabrands)\.com$/i.test(m) ? m : '[email]'))
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\s+/g, ' ').trim().slice(0, max);
 }
 
 function field(body, key, max) {
-  const v = body[key];
-  return typeof v === 'string' ? v.replace(/\s+/g, ' ').trim().slice(0, max) : '';
+  return typeof body[key] === 'string' ? clean(body[key], max) : '';
 }
 
-function safeUrl(u) {
-  return /^https?:\/\/[^\s<>"]{1,300}$/.test(u) ? u : '';
+/* ── Dedupe ─────────────────────────────────────────────────────────────────
+   Swallow the same alert repeating inside a conversation (a re-render, or the
+   customer rephrasing the identical question). Per-instance and best effort —
+   the widget already caps handoffs at one per conversation. */
+const seen = new Map();
+function duplicate(key) {
+  const now = Date.now();
+  for (const [k, t] of seen) if (now - t > 10 * 60 * 1000) seen.delete(k);
+  if (seen.has(key)) return true;
+  seen.set(key, now);
+  if (seen.size > 2000) seen.clear();
+  return false;
 }
 
 /* ── Config diagnostics ─────────────────────────────────────────────────
@@ -82,90 +106,60 @@ function warnUnset(webhook) {
     'redeploy afterwards, since env values are bound at build time.');
 }
 
-/* ── Best-effort per-instance rate limit + dedupe ───────────────────────── */
-const hits = new Map();
-function rateLimited(ip) {
-  const now = Date.now();
-  const arr = (hits.get(ip) || []).filter((t) => now - t < 60 * 1000);
-  arr.push(now);
-  hits.set(ip, arr);
-  if (hits.size > 5000) hits.clear();
-  return arr.length > 10;
-}
-
-// Swallow the same alert repeating inside a conversation (double render,
-// customer retrying the identical question, refresh restoring state).
-const seen = new Map();
-function duplicate(key) {
-  const now = Date.now();
-  for (const [k, t] of seen) if (now - t > 10 * 60 * 1000) seen.delete(k);
-  if (seen.has(key)) return true;
-  seen.set(key, now);
-  if (seen.size > 2000) seen.clear();
-  return false;
-}
-
 /* ── Slack payload ──────────────────────────────────────────────────────── */
 function slackMessage(kind, d) {
   const k = KINDS[kind];
-  const bits = [];
-  if (d.model) bits.push(esc(MODEL_NAMES[d.model] || d.model));
-  if (kind === 'handoff' && d.mode) bits.push(esc(d.mode) + ' contact card');
-  const page = safeUrl(d.page);
-  if (page) {
-    let label = page;
-    try {
-      const u = new URL(page);
-      label = u.hostname.replace(/^www\./, '') + (u.pathname === '/' ? '' : u.pathname);
-    } catch (e) { /* keep raw */ }
-    bits.push('<' + page + '|' + esc(label) + '>');
-  }
-  if (d.convo) bits.push('convo `' + esc(d.convo) + '`');
-  bits.push('<' + INSIGHTS_URL + '|Chat Insights>');
 
   const blocks = [{
     type: 'section',
     text: {
       type: 'mrkdwn',
-      text: '*' + k.emoji + ' ' + k.title + '*' +
-        (d.question ? '\n>' + esc(d.question) : '')
+      text: '*' + k.emoji + ' ' + k.title + '*' + (d.question ? '\n>' + d.question : '')
     }
   }];
 
   if (d.reply) {
     blocks.push({
       type: 'section',
-      text: { type: 'mrkdwn', text: '*Ember replied:*\n' + esc(d.reply) }
+      text: { type: 'mrkdwn', text: '*Ember replied:*\n' + d.reply }
     });
   }
+
+  // What the customer was doing — the difference between "someone needs help"
+  // and knowing enough to help them without opening the dashboard.
+  const facts = [];
+  if (d.model) facts.push('*Their model:* ' + (MODEL_NAMES[d.model] || d.model));
+  if (d.product) facts.push('*Viewing:* ' + d.product);
+  if (d.cart) facts.push('*Cart:* ' + d.cart);
+  if (d.journey) facts.push('*Journey:* ' + d.journey);
+  if (d.recent.length > 1) {
+    facts.push('*Earlier:* ' + d.recent.slice(0, -1).map((m) => '"' + m + '"').join(' · '));
+  }
+  if (facts.length) {
+    blocks.push({ type: 'section', text: { type: 'mrkdwn', text: facts.join('\n') } });
+  }
+
   if (k.note) {
     blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: '_' + k.note + '_' }] });
   }
-  blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: bits.join(' · ') }] });
+
+  const meta = [];
+  if (kind === 'handoff' && d.mode) meta.push(d.mode + ' contact card');
+  if (d.host || d.page) meta.push(d.host + d.page + (d.device ? ' (' + d.device + ')' : ''));
+  if (d.convo) meta.push('convo `' + d.convo + '`');
+  meta.push('<' + INSIGHTS_URL + '|Chat Insights>');
+  blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: meta.join(' · ') }] });
 
   return {
-    // Notification preview — escaped too, so a pasted <!channel> can't ping.
-    text: k.title + (d.question ? ' — "' + esc(d.question) + '"' : ''),
+    // Notification preview — already escaped, so a pasted <!channel> can't ping.
+    text: k.title + (d.question ? ' — "' + d.question + '"' : ''),
     blocks: blocks
   };
 }
 
 /* ── Handler ────────────────────────────────────────────────────────────── */
 module.exports = async (req, res) => {
-  const origin = req.headers.origin || '';
-  const allowed = ALLOWED_ORIGIN.test(origin);
-  if (allowed) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-  }
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'method not allowed' });
-
-  // Browsers always send Origin on a cross-origin POST; same-origin calls from
-  // aquafire.app may omit it. Anything else with a foreign Origin is refused.
-  if (origin && !allowed) return res.status(403).json({ error: 'forbidden' });
+  if (!cors(req, res)) return;
 
   const webhook = process.env.SLACK_WEBHOOK_URL || '';
   if (!/^https:\/\/hooks\.slack\.com\//.test(webhook)) {
@@ -176,8 +170,9 @@ module.exports = async (req, res) => {
     });
   }
 
-  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if (rateLimited(ip)) return res.status(429).json({ error: 'slow down' });
+  if (await throttle(req, 'alert', 10, DAILY_CAP)) {
+    return res.status(429).json({ error: 'slow down' });
+  }
 
   const body = req.body || {};
   const kind = field(body, 'kind', 20);
@@ -187,26 +182,34 @@ module.exports = async (req, res) => {
     convo: field(body, 'convo', 40),
     model: field(body, 'model', 20),
     mode: field(body, 'mode', 20),
-    page: field(body, 'page', 300),
+    page: field(body, 'page', 120),
+    host: field(body, 'host', 60),
     question: field(body, 'question', 400),
-    reply: field(body, 'reply', 700)
+    reply: field(body, 'reply', 700),
+    device: field(body, 'device', 10),
+    product: field(body, 'product', 60),
+    cart: field(body, 'cart', 200),
+    journey: field(body, 'journey', 250),
+    recent: (Array.isArray(body.recent) ? body.recent : [])
+      .slice(-3).map((m) => clean(m, 200)).filter(Boolean)
   };
 
   if (duplicate(kind + '|' + d.convo + '|' + d.mode + '|' + d.question)) {
     return res.status(200).json({ ok: true, deduped: true });
   }
 
+  let upstream;
   try {
-    const r = await fetch(webhook, {
+    upstream = await fetch(webhook, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(slackMessage(kind, d)),
-      signal: AbortSignal.timeout(6000)
+      signal: AbortSignal.timeout(8000)
     });
-    if (!r.ok) return res.status(502).json({ error: 'slack ' + r.status });
   } catch (e) {
-    return res.status(502).json({ error: 'slack unreachable' });
+    return res.status(502).json({ error: 'webhook unreachable' });
   }
+  if (!upstream.ok) return res.status(502).json({ error: 'webhook ' + upstream.status });
 
   return res.status(200).json({ ok: true });
 };
