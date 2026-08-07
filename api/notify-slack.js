@@ -66,6 +66,22 @@ function safeUrl(u) {
   return /^https?:\/\/[^\s<>"]{1,300}$/.test(u) ? u : '';
 }
 
+/* ── Config diagnostics ─────────────────────────────────────────────────
+   A missing webhook is silent by design (the chat must never break), which
+   makes it look identical to "no alerts happened". Say so once per instance
+   so the runtime log explains the 503 instead of just recording it. */
+let warnedUnset = false;
+function warnUnset(webhook) {
+  if (warnedUnset) return;
+  warnedUnset = true;
+  console.warn('[notify-slack] SLACK_WEBHOOK_URL is ' +
+    (webhook ? 'set but is not a https://hooks.slack.com/ URL' : 'not set') +
+    ' in this deployment\'s environment, so alerts are being dropped. Check the ' +
+    'variable is scoped to the environment this deployment runs in — a ' +
+    'Production-only variable is NOT visible to Preview deployments — and ' +
+    'redeploy afterwards, since env values are bound at build time.');
+}
+
 /* ── Best-effort per-instance rate limit + dedupe ───────────────────────── */
 const hits = new Map();
 function rateLimited(ip) {
@@ -153,6 +169,7 @@ module.exports = async (req, res) => {
 
   const webhook = process.env.SLACK_WEBHOOK_URL || '';
   if (!/^https:\/\/hooks\.slack\.com\//.test(webhook)) {
+    warnUnset(webhook);
     // 503 tells the widget to stop trying for this page load.
     return res.status(503).json({
       error: 'Slack alerts not configured — set SLACK_WEBHOOK_URL in the Vercel project settings'
