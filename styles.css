@@ -568,8 +568,16 @@ tr:hover td { background: var(--surface); }
      children can interleave in one column; the svg carries the panel
      chrome itself. The --ld-* tokens still inherit — display: contents
      removes the box, not the element. */
-  .calculator-layout { display: flex; flex-direction: column; }
+  /* align-items must return to stretch here — the desktop grid's `start`
+     otherwise carries over and shrinks every control to content width,
+     which is what collapsed the slider tracks to their browser default. */
+  .calculator-layout { display: flex; flex-direction: column; align-items: stretch; }
   .controls-panel, .diagram-panel { display: contents; }
+  /* The value rides the label line so the track gets the full card width —
+     same 1/2" increments, more pixels per step under the thumb. */
+  .controls-panel .form-group { position: relative; }
+  .controls-panel .slider-value { position: absolute; top: -7px; right: 0; }
+  .controls-panel input[type="range"] { width: 100%; }
   #light-diagram {
     order: 1;
     /* Bleed a little past the card padding so the drawing runs larger. */
