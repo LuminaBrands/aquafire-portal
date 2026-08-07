@@ -25,6 +25,9 @@ colors:
   magenta-ink: "#d9317f"
   orb-lift: "rgba(224,100,30,0.45)"
   ember-text: "#f05a5e"
+  ember-ramp-orange: "#f09343"
+  ember-ramp-red: "#eb4b46"
+  on-ember: "#171a1f"
   on-accent: "#ffffff"
   photo-ink: "#f3f4f6"
   photo-ink-dim: "#c9cdd5"
@@ -162,12 +165,26 @@ palette and arrives mostly on interaction.
   progress fill, the nav points chip, reward badges. The emotional primary; the
   widest-used accent, so reach for a neutral first and let it mean something.
 
-  It is a deep red, and that has two consequences the old orange did not have.
-  **Ink on it is white** (`--on-ember`, 4.9:1 -- the old dark ink would be
-  3.6:1). And **it cannot be used as text**: #d33337 on the dark ground is
-  3.9:1, under AA. Text takes `--ember-t` instead -- #f05a5e on dark (5.7:1),
-  #b02427 on light. `color: var(--ember)` / `var(--red)` is always a mistake;
-  fills and strokes take the accent, type takes the text variant.
+  It is a deep red, and **it cannot be used as text**: #d33337 on the dark
+  ground is 3.9:1, under AA. Text takes `--ember-t` instead -- #f05a5e on dark
+  (5.7:1), #b02427 on light. `color: var(--ember)` / `var(--red)` is always a
+  mistake; strokes and small indicators take the accent, type takes the text
+  variant.
+
+  **Filled actions and determinate progress fills wear the mark's own ramp,
+  not the flat accent**: `--ember-grad` (180deg, for buttons -- lit from the
+  top the way the disc is) and `--ember-grad-bar` (90deg, along a bar),
+  sampled from ember-mark.png (#f09343 at the top of the disc to #eb4b46 at
+  the bottom). Like the mark, the ramp is lit from within and identical in
+  both themes. **Ink on it is dark** (`--on-ember` #171a1f: 7.2:1 at the
+  orange stop, 4.7:1 at the red -- no stop in the ramp clears AA under white).
+  A deeper ramp ending on flat #d33337 was rejected for exactly that reason:
+  no single ink survives both a light orange and a deep red. Hovers brighten
+  the ramp (`filter: brightness(1.06)`) rather than swapping fills, which
+  would flatten it. The flat accent remains for everything that is not a
+  filled action or a bar fill -- LED edge bars, strokes, focus tints and
+  small indicators, where a two-stop ramp would be detail too small to
+  resolve.
 
   Note `--on-amber` is a separate token and does not follow the accent. Amber
   survives as the reward-badge colour and is a *light* fill, where white would
@@ -449,20 +466,21 @@ spring ease; LED bars slide in at the bottom edge.
   track that implied one
 - **Ember is the rewards accent** and stays scarce: the standing total, the
   progress fill and the one action (sign in / view profile) take it; the
-  footer row's navigation link stays mid-tone. The fill is flat ember, not an LED spectrum
-  -- a determinate bar reads as one quantity, and a four-hue gradient implied
-  segments it does not have. Matches the amber score card on rewards.html
-- **Two actions, and the rule is about glass, not weight.** The primary is a
-  solid ember pill: "Continue earning" once signed in, which scrolls to the
-  routes below where points are actually earned, or "Sign in to earn rewards"
-  when signed out, which opens the modal -- a button that says "sign in" and
-  scrolls instead is a lie. Ink on ember, not white: white on `#ff8a4a` is
-  2.2:1, ink is 7.5:1 dark and 6.1:1 light.
+  footer row's navigation link stays mid-tone. The fill is the mark's ramp
+  (`--ember-grad-bar`), never an LED spectrum -- still one warm quantity read
+  as one bar, where the four-hue gradient implied segments it does not have.
+  Matches the score card on rewards.html
+- **Two actions, and the rule is about glass, not weight.** The primary is an
+  opaque pill in the mark's ramp (`--ember-grad`): "Continue earning" once
+  signed in, which scrolls to the routes below where points are actually
+  earned, or "Sign in to earn rewards" when signed out, which opens the modal
+  -- a button that says "sign in" and scrolls instead is a lie. Ink on the
+  ramp, not white -- see Primary for the numbers.
   The earlier rule here read "never a filled pill", which was too broad. The
   thing that failed was a *bordered glass capsule* -- it borrowed the
   composer's rounding and translucent fill and so read as another text input.
-  An opaque fill has none of that problem; nothing else on the page is solid
-  ember. Glass is what this band's action must not be
+  An opaque fill has none of that problem; nothing else on the page wears the
+  ramp as a fill. Glass is what this band's action must not be
 - **The secondary stays a text link, and steps aside when it would echo.** It
   carries "View Profile" once signed in and hides while signed out, where it
   would only repeat the primary

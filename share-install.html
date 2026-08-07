@@ -242,19 +242,19 @@
     }
     .si-bar-fill {
       display: block; height: 100%; width: 100%; border-radius: 999px;
-      background: var(--ember);
+      background: var(--ember-grad-bar);
       /* scaleX, not width: upload progress fires on every chunk, and a
          transform is composited where a width change relayouts each time. */
       transform: scaleX(0); transform-origin: left center;
       transition: transform 0.25s linear;
     }
 
-    /* Same treatment as the homepage rewards band's primary: solid ember with
-       ink on top, never a glass capsule. */
+    /* Same treatment as the homepage rewards band's primary: the mark's ramp
+       with ink on top, never a glass capsule. */
     .si-go {
       display: inline-flex; align-items: center; gap: 9px;
       margin-top: 16px; padding: 11px 20px; border-radius: 999px;
-      background: var(--ember); border: none; cursor: pointer;
+      background: var(--ember-grad); border: none; cursor: pointer;
       font: inherit; font-size: 0.88rem; font-weight: 600; color: var(--on-ember);
       transition: transform 0.3s var(--ease), filter 0.24s;
     }

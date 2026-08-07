@@ -617,9 +617,12 @@
       flex: 1; height: 6px; border-radius: 999px;
       background: var(--track-bg); overflow: hidden;
     }
+    /* The mark's ramp, like every determinate bar on the portal. Chartreuse
+       stays the *done* signal -- the label at completion, the check marks and
+       the step spine -- while the moving fill wears the brand's warmth. */
     .prog-fill {
       display: block; height: 100%; width: 0; border-radius: 999px;
-      background: var(--chart); transition: width 0.45s var(--ease);
+      background: var(--ember-grad-bar); transition: width 0.45s var(--ease);
     }
     .prog-label {
       font-size: 0.76rem; font-weight: 700; color: var(--text-dim);

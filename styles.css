@@ -530,20 +530,22 @@ tr:hover td { background: var(--surface); }
   font-size: 1.6rem;
   margin-bottom: 24px;
 }
+/* The mark's ramp with ink, matching the redesign's primaries. Hover
+   brightens the ramp rather than swapping fills, which would flatten it. */
 .cta-button {
   display: inline-block;
   padding: 14px 40px;
-  background: var(--red);
-  color: var(--on-accent);
+  background: var(--ember-grad, var(--red));
+  color: var(--on-ember, var(--on-accent));
   font-size: 1.05rem;
   font-weight: 600;
   border-radius: var(--radius-sm);
   text-decoration: none;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: filter 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 12px var(--red-glow);
 }
 .cta-button:hover {
-  background: var(--red-dark);
+  filter: brightness(1.06);
   box-shadow: 0 4px 20px var(--red-glow);
 }
 .cta-link {

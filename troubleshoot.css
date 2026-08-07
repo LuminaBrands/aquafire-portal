@@ -80,11 +80,15 @@
 }
 .ts-btn-ghost { background: transparent; border-color: var(--border); color: var(--text-muted); }
 .ts-btn-ghost:hover { color: var(--text); border-color: var(--text-muted); }
+/* The mark's ramp with ink, matching the redesign's primaries; the flat red +
+   white pair is only the no-token fallback. Hover brightens the ramp rather
+   than swapping fills, which would flatten the gradient. */
 .ts-btn-primary {
-  background: var(--red, #c0392b); color: #fff; border-color: var(--red, #c0392b);
+  background: var(--ember-grad, var(--red, #c0392b)); color: var(--on-ember, #fff); border-color: transparent;
   box-shadow: 0 2px 12px var(--red-glow, rgba(192,57,43,0.15));
+  transition: filter .15s;
 }
-.ts-btn-primary:hover { background: var(--red-dark, #a93226); }
+.ts-btn-primary:hover { filter: brightness(1.06); }
 .ts-btn-outline { background: transparent; border-color: var(--border); color: var(--text); }
 .ts-btn-outline:hover { border-color: var(--red, #c0392b); }
 
