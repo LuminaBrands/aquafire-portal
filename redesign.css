@@ -343,7 +343,10 @@ button, input, select, textarea { font-family: inherit; }
 .cap:hover::before, .composer:hover::before, .journey:hover::before, .row:hover::before { opacity: 1; }
 
 .page { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 18px; }
-.bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 20px 0 4px; }
+/* Left-anchored: the capsule sits beside the brand and the chips hold the
+   right edge (user call, 2026-08). space-between centred the capsule between
+   two unequal-width neighbours, so it aligned with nothing. */
+.bar { display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 20px 0 4px; }
 .bar .brand { padding: 11px 14px; }
 .bar .brand img { height: 17px; display: block; filter: var(--logo-filter); }
 /* The brand flame is red in both lightings (user call, 2026-08). The logo is
@@ -445,7 +448,7 @@ button, input, select, textarea { font-family: inherit; }
   background: none; border: 0; box-shadow: none; backdrop-filter: none;
 }
 
-.bar-end { display: flex; align-items: center; gap: 7px; }
+.bar-end { display: flex; align-items: center; gap: 7px; margin-left: auto; }
 .bar-end .cap { padding: 10px 14px; font-size: 0.83rem; font-weight: 600; }
 .pts-chip {
   display: none; align-items: center; gap: 8px;
