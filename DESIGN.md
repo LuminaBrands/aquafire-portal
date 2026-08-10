@@ -159,6 +159,7 @@ lifestyle brand's room.
 - Mobile-first single column that fans out at one desktop breakpoint (920px)
 - Photography as atmosphere, never as a framed illustration
 - Monochrome glass at rest; LED spectrum color only on interaction edges
+  (one ambient exception: the dark theme's aurora ribbon — see Colors → Aurora)
 - Conversation (composer + murmur chips) is the primary action everywhere
 - Rewards are always visible, ember-flagged, never modal
 
