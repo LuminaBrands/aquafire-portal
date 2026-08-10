@@ -111,18 +111,23 @@
     linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.028) 19%, rgba(255,255,255,0.028) 30%, transparent 31%),
     linear-gradient(180deg, #14171c 0%, #101216 55%, #0b0d10 100%);
   --puff-a-c: #262b34; --puff-b-c: #22262e; --puff-opacity: 0.5;
-  /* Aurora: a skewed, heavily-blurred five-stop ribbon screen-blended over the
-     smoke ground (stefan's ask, 2026-08, after buy.cloaked.com). Like the
-     atmos shafts these literals are light, not fill. Narrow/wide pair because
-     the ribbon's angle changes at the 700px breakpoint, not with the theme. */
+  /* Aurora: a skewed, heavily-blurred LED-spectrum ribbon screen-blended over
+     the smoke ground (stefan's ask, 2026-08, after buy.cloaked.com's
+     background; recolored from Cloaked's stops to the house spectrum the same
+     month). Stops run the spectrum bars' canonical ember->chartreuse->frost->
+     magenta order and mix from the live tokens, so a palette retune re-lights
+     the ribbon for free. Narrow/wide pair because the ribbon's angle changes
+     at the 700px breakpoint, not with the theme. */
   --aurora-grad: linear-gradient(-30deg,
-    rgba(255,122,0,0.65) 5.3%, rgba(240,83,107,0.65) 26.61%,
-    rgba(142,131,234,0.65) 56.26%, rgba(0,196,154,0.65) 82.21%,
-    rgba(41,190,232,0.65) 94.26%);
+    color-mix(in srgb, var(--ember) 65%, transparent) 5.3%,
+    color-mix(in srgb, var(--chart) 65%, transparent) 38%,
+    color-mix(in srgb, var(--frost) 65%, transparent) 68%,
+    color-mix(in srgb, var(--mag) 65%, transparent) 94.26%);
   --aurora-grad-wide: linear-gradient(-84deg,
-    rgba(255,122,0,0.65) 5.3%, rgba(240,83,107,0.65) 26.61%,
-    rgba(142,131,234,0.65) 56.26%, rgba(0,196,154,0.65) 82.21%,
-    rgba(41,190,232,0.65) 94.26%);
+    color-mix(in srgb, var(--ember) 65%, transparent) 5.3%,
+    color-mix(in srgb, var(--chart) 65%, transparent) 38%,
+    color-mix(in srgb, var(--frost) 65%, transparent) 68%,
+    color-mix(in srgb, var(--mag) 65%, transparent) 94.26%);
   --aurora-opacity: 0.45; --aurora-opacity-wide: 0.3;
   /* Type on the photograph earns its contrast from a shadow rather than a
      ground, so unlike every other token these four are identical in both

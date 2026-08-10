@@ -265,6 +265,17 @@ They are deliberately outside the palette: a token that meant "white at 90%"
 in the fill ramp would invite its use as a surface, which is exactly what the
 glass fills at 3.5–12% exist to prevent.
 
+### Aurora (dark-theme ambient light)
+`--aurora-grad` / `--aurora-grad-wide` draw a skewed, 95px-blurred ribbon
+screen-blended into the dark atmosphere layer (user call, 2026-08, after
+buy.cloaked.com's background). Its stops are the LED spectrum in the
+canonical ember→chartreuse→frost→magenta order, mixed from the live tokens
+at 65% via `color-mix`, so a palette retune re-lights the ribbon for free.
+This is the one place spectrum colour appears at rest: it is atmosphere —
+light, not fill, never a surface — so the Edge-on-Hover rule still governs
+every component. The showroom binds `--aurora-opacity` to 0: screen blending
+washes to white over the light ground, and the showroom's light stays white.
+
 ### Overlay surfaces
 The auth modal, the profile dropdown and the points toast float above the
 page rather than sitting in it, so they take the near-opaque `--menu-bg` the
