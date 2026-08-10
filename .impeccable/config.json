@@ -52,6 +52,12 @@
         "value": "60px",
         "createdAt": "2026-08-10T13:52:29.316Z",
         "reason": "User-supplied aurora ribbon (buy.cloaked.com ask): shape is blurred 95px, radius is a soft mask, not a UI corner"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(0,0,0,0.5)",
+        "createdAt": "2026-08-10T14:41:34.990Z",
+        "reason": "Mask stencil alpha in the hero photo's dissolve ramp (user-requested fade), not a palette color -- same class as the existing #000 ignore"
       }
     ]
   }
