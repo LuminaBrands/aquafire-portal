@@ -133,7 +133,7 @@
     color-mix(in srgb, var(--chart) 65%, transparent) 38%,
     color-mix(in srgb, var(--frost) 65%, transparent) 68%,
     color-mix(in srgb, var(--mag) 65%, transparent) 94.26%);
-  --aurora-opacity: 0.38; --aurora-opacity-wide: 0.25;
+  --aurora-opacity: 0.28; --aurora-opacity-wide: 0.16;
   /* Type on the photograph earns its contrast from a shadow rather than a
      ground, so unlike every other token these four are identical in both
      themes -- the photo is the same photo in either lighting. */
@@ -287,8 +287,8 @@ button, input, select, textarea { font-family: inherit; }
      photo is fully gone by 90%, before the scene's foot, so no edge can
      appear whatever the aurora is doing beneath. The scrim used to finish
      the job with an opaque ground plate; it ends transparent now. */
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 38%, rgba(0,0,0,0.5) 66%, transparent 90%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 38%, rgba(0,0,0,0.5) 66%, transparent 90%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 34%, rgba(0,0,0,0.5) 62%, transparent 86%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 34%, rgba(0,0,0,0.5) 62%, transparent 86%);
 }
 .scene::after { content: ""; position: absolute; inset: 0; background: var(--scene-scrim); }
 @media (min-width: 920px) { .scene { height: 620px; } }
