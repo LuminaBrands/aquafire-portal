@@ -46,6 +46,12 @@
           "share-install.html"
         ],
         "createdAt": "2026-08-03T02:30:27.941Z"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "60px",
+        "createdAt": "2026-08-10T13:52:29.316Z",
+        "reason": "User-supplied aurora ribbon (buy.cloaked.com ask): shape is blurred 95px, radius is a soft mask, not a UI corner"
       }
     ]
   }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-02T22:20:00Z",
+  "generatedAt": "2026-08-10T14:08:51Z",
   "title": "Design System: Aquafire Owner's Portal",
   "extensions": {
     "colorMeta": {
@@ -337,7 +337,7 @@
     "keyCharacteristics": [
       "Mobile-first single column that fans out at 920px; the nav capsule has its own wider steps (1080/1200) because the full link set does not fit sooner",
       "Photography as atmosphere, never as a framed illustration",
-      "Monochrome glass at rest; LED spectrum color only on interaction edges",
+      "Monochrome glass at rest; LED spectrum color only on interaction edges (one ambient exception: the dark theme's aurora ribbon -- a skewed, 95px-blurred spectrum gradient screen-blended into the atmosphere layer, mixed from the live LED tokens; the light showroom binds its opacity to 0 and keeps white shafts instead)",
       "Conversation (composer + murmur chips) is the primary action everywhere",
       "Rewards status is always visible, ember-flagged, never modal -- a standing total and module count, not a sequence"
     ],

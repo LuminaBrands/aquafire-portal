@@ -106,11 +106,30 @@
   --scene-scrim:
     radial-gradient(130% 100% at 50% 0%, transparent 42%, rgba(16,18,22,0.5) 100%),
     linear-gradient(180deg, rgba(16,18,22,0.62) 0%, rgba(16,18,22,0.3) 26%, rgba(16,18,22,0.5) 58%, #101216 97%);
+  /* One ambient light per theme (user call, 2026-08): the smoke's is the
+     aurora below, so the dark shafts are retired and this is ground alone.
+     The showroom keeps its white shafts -- it has no aurora. */
   --atmos-grad:
-    linear-gradient(93deg, transparent 45%, rgba(255,255,255,0.05) 48%, rgba(255,255,255,0.015) 53%, transparent 57%),
-    linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.028) 19%, rgba(255,255,255,0.028) 30%, transparent 31%),
     linear-gradient(180deg, #14171c 0%, #101216 55%, #0b0d10 100%);
   --puff-a-c: #262b34; --puff-b-c: #22262e; --puff-opacity: 0.5;
+  /* Aurora: a skewed, heavily-blurred LED-spectrum ribbon screen-blended over
+     the smoke ground (stefan's ask, 2026-08, after buy.cloaked.com's
+     background; recolored from Cloaked's stops to the house spectrum the same
+     month). Stops run the spectrum bars' canonical ember->chartreuse->frost->
+     magenta order and mix from the live tokens, so a palette retune re-lights
+     the ribbon for free. Narrow/wide pair because the ribbon's angle changes
+     at the 700px breakpoint, not with the theme. */
+  --aurora-grad: linear-gradient(-30deg,
+    color-mix(in srgb, var(--ember) 65%, transparent) 5.3%,
+    color-mix(in srgb, var(--chart) 65%, transparent) 38%,
+    color-mix(in srgb, var(--frost) 65%, transparent) 68%,
+    color-mix(in srgb, var(--mag) 65%, transparent) 94.26%);
+  --aurora-grad-wide: linear-gradient(-84deg,
+    color-mix(in srgb, var(--ember) 65%, transparent) 5.3%,
+    color-mix(in srgb, var(--chart) 65%, transparent) 38%,
+    color-mix(in srgb, var(--frost) 65%, transparent) 68%,
+    color-mix(in srgb, var(--mag) 65%, transparent) 94.26%);
+  --aurora-opacity: 0.45; --aurora-opacity-wide: 0.3;
   /* Type on the photograph earns its contrast from a shadow rather than a
      ground, so unlike every other token these four are identical in both
      themes -- the photo is the same photo in either lighting. */
@@ -174,6 +193,10 @@
     linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.5) 19%, rgba(255,255,255,0.5) 30%, transparent 31%),
     linear-gradient(107deg, transparent 52%, rgba(255,255,255,0.35) 53%, rgba(255,255,255,0.35) 66%, transparent 67%);
   --puff-a-c: #ffffff; --puff-b-c: #dde1e8; --puff-opacity: 0.55;
+  /* No aurora in the showroom: screen-blending washes to white over the light
+     ground, and the showroom's light is white shafts, not firelight spectrum.
+     The gradients inherit from :root; only the opacity flips off. */
+  --aurora-opacity: 0; --aurora-opacity-wide: 0;
   --photo-ink: #f3f4f6; --photo-ink-dim: #c9cdd5;
   --photo-shadow: 0 2px 20px rgba(0,0,0,0.5);
   --photo-shadow-sm: 0 1px 4px rgba(0,0,0,0.5), 0 1px 14px rgba(0,0,0,0.6);
@@ -216,6 +239,32 @@ button, input, select, textarea { font-family: inherit; }
 @keyframes drift-a { from { transform: translate(0,0); } to { transform: translate(60px,-36px) scale(1.1); } }
 @keyframes drift-b { from { transform: translate(0,0) scale(1.05); } to { transform: translate(-70px,44px) scale(0.96); } }
 @media (prefers-reduced-motion: reduce) { .puff { animation: none; } }
+/* Aurora ribbon, atop the shafts and puffs but under all content. ::after so
+   it composites over ::before's ground inside .atmos's own stacking context --
+   screen blend needs that ground beneath it, and out here it can never blend
+   against page content. The 60px radius only rounds a shape that is then
+   blurred 95px; it is a soft mask, not a UI corner. */
+.atmos::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 110vw; height: 100vh;
+  border-radius: 60px;
+  filter: blur(95px);
+  mix-blend-mode: screen;
+  background: var(--aurora-grad);
+  transform: translate3d(-60%, -50%, 0) skew(-5deg, -30deg);
+  opacity: var(--aurora-opacity);
+  transition: opacity 0.3s;
+}
+@media (min-width: 700px) {
+  .atmos::after {
+    height: 160vh;
+    background: var(--aurora-grad-wide);
+    transform: translate3d(-50%, -50%, 0) skew(-5deg, -30deg);
+    opacity: var(--aurora-opacity-wide);
+  }
+}
 
 /* Lobby photograph: full-bleed behind the hero, dissolving into whichever
    ground the active theme uses. Hero type stays white in both themes
