@@ -273,8 +273,11 @@ canonical ember→chartreuse→frost→magenta order, mixed from the live tokens
 at 65% via `color-mix`, so a palette retune re-lights the ribbon for free.
 This is the one place spectrum colour appears at rest: it is atmosphere —
 light, not fill, never a surface — so the Edge-on-Hover rule still governs
-every component. The showroom binds `--aurora-opacity` to 0: screen blending
-washes to white over the light ground, and the showroom's light stays white.
+every component. Each theme carries one ambient light (user call, 2026-08):
+the ribbon replaced the dark theme's angled shafts, so its `--atmos-grad` is
+ground alone, while the showroom keeps its white shafts and binds
+`--aurora-opacity` to 0 — screen blending washes to white over the light
+ground, and the showroom's light stays white.
 
 ### Overlay surfaces
 The auth modal, the profile dropdown and the points toast float above the

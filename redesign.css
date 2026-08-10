@@ -106,9 +106,10 @@
   --scene-scrim:
     radial-gradient(130% 100% at 50% 0%, transparent 42%, rgba(16,18,22,0.5) 100%),
     linear-gradient(180deg, rgba(16,18,22,0.62) 0%, rgba(16,18,22,0.3) 26%, rgba(16,18,22,0.5) 58%, #101216 97%);
+  /* One ambient light per theme (user call, 2026-08): the smoke's is the
+     aurora below, so the dark shafts are retired and this is ground alone.
+     The showroom keeps its white shafts -- it has no aurora. */
   --atmos-grad:
-    linear-gradient(93deg, transparent 45%, rgba(255,255,255,0.05) 48%, rgba(255,255,255,0.015) 53%, transparent 57%),
-    linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.028) 19%, rgba(255,255,255,0.028) 30%, transparent 31%),
     linear-gradient(180deg, #14171c 0%, #101216 55%, #0b0d10 100%);
   --puff-a-c: #262b34; --puff-b-c: #22262e; --puff-opacity: 0.5;
   /* Aurora: a skewed, heavily-blurred LED-spectrum ribbon screen-blended over
