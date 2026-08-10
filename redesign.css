@@ -111,6 +111,19 @@
     linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.028) 19%, rgba(255,255,255,0.028) 30%, transparent 31%),
     linear-gradient(180deg, #14171c 0%, #101216 55%, #0b0d10 100%);
   --puff-a-c: #262b34; --puff-b-c: #22262e; --puff-opacity: 0.5;
+  /* Aurora: a skewed, heavily-blurred five-stop ribbon screen-blended over the
+     smoke ground (stefan's ask, 2026-08, after buy.cloaked.com). Like the
+     atmos shafts these literals are light, not fill. Narrow/wide pair because
+     the ribbon's angle changes at the 700px breakpoint, not with the theme. */
+  --aurora-grad: linear-gradient(-30deg,
+    rgba(255,122,0,0.65) 5.3%, rgba(240,83,107,0.65) 26.61%,
+    rgba(142,131,234,0.65) 56.26%, rgba(0,196,154,0.65) 82.21%,
+    rgba(41,190,232,0.65) 94.26%);
+  --aurora-grad-wide: linear-gradient(-84deg,
+    rgba(255,122,0,0.65) 5.3%, rgba(240,83,107,0.65) 26.61%,
+    rgba(142,131,234,0.65) 56.26%, rgba(0,196,154,0.65) 82.21%,
+    rgba(41,190,232,0.65) 94.26%);
+  --aurora-opacity: 0.45; --aurora-opacity-wide: 0.3;
   /* Type on the photograph earns its contrast from a shadow rather than a
      ground, so unlike every other token these four are identical in both
      themes -- the photo is the same photo in either lighting. */
@@ -174,6 +187,10 @@
     linear-gradient(107deg, transparent 18%, rgba(255,255,255,0.5) 19%, rgba(255,255,255,0.5) 30%, transparent 31%),
     linear-gradient(107deg, transparent 52%, rgba(255,255,255,0.35) 53%, rgba(255,255,255,0.35) 66%, transparent 67%);
   --puff-a-c: #ffffff; --puff-b-c: #dde1e8; --puff-opacity: 0.55;
+  /* No aurora in the showroom: screen-blending washes to white over the light
+     ground, and the showroom's light is white shafts, not firelight spectrum.
+     The gradients inherit from :root; only the opacity flips off. */
+  --aurora-opacity: 0; --aurora-opacity-wide: 0;
   --photo-ink: #f3f4f6; --photo-ink-dim: #c9cdd5;
   --photo-shadow: 0 2px 20px rgba(0,0,0,0.5);
   --photo-shadow-sm: 0 1px 4px rgba(0,0,0,0.5), 0 1px 14px rgba(0,0,0,0.6);
@@ -216,6 +233,32 @@ button, input, select, textarea { font-family: inherit; }
 @keyframes drift-a { from { transform: translate(0,0); } to { transform: translate(60px,-36px) scale(1.1); } }
 @keyframes drift-b { from { transform: translate(0,0) scale(1.05); } to { transform: translate(-70px,44px) scale(0.96); } }
 @media (prefers-reduced-motion: reduce) { .puff { animation: none; } }
+/* Aurora ribbon, atop the shafts and puffs but under all content. ::after so
+   it composites over ::before's ground inside .atmos's own stacking context --
+   screen blend needs that ground beneath it, and out here it can never blend
+   against page content. The 60px radius only rounds a shape that is then
+   blurred 95px; it is a soft mask, not a UI corner. */
+.atmos::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 110vw; height: 100vh;
+  border-radius: 60px;
+  filter: blur(95px);
+  mix-blend-mode: screen;
+  background: var(--aurora-grad);
+  transform: translate3d(-60%, -50%, 0) skew(-5deg, -30deg);
+  opacity: var(--aurora-opacity);
+  transition: opacity 0.3s;
+}
+@media (min-width: 700px) {
+  .atmos::after {
+    height: 160vh;
+    background: var(--aurora-grad-wide);
+    transform: translate3d(-50%, -50%, 0) skew(-5deg, -30deg);
+    opacity: var(--aurora-opacity-wide);
+  }
+}
 
 /* Lobby photograph: full-bleed behind the hero, dissolving into whichever
    ground the active theme uses. Hero type stays white in both themes
