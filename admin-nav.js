@@ -15,6 +15,7 @@
   'use strict';
 
   var PAGES = [
+    { href: 'admin.html', label: 'Home' },
     { href: 'chat-insights.html', label: 'Chat Admin' },
     { href: 'dealer-admin.html', label: 'Dealer Portal' },
     { href: 'help-admin.html', label: 'Help Center' }
