@@ -21,6 +21,8 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 | `share-install.html` | Photo submission — uploads one install shot to Firebase Storage (`installs/<uid>/`) and awards the 500-point `share-install` reward. Needs Storage enabled + the rules in `docs/storage-rules.md` |
 | `support.html` | Support hub — cards link to the Troubleshooter and the storefront warranty page (which awards the 300-point `register-warranty` reward on click-through); the claims and FAQs cards are still `#` stubs |
 | `troubleshoot.html` | **Interactive Troubleshooter** — model-aware guided decision-tree wizard |
+| `help.html` | **Help Center** — browsable/searchable help-article library (`help.css` + `help.js` engine + `help-articles.js` data; published `helpArticles` Firestore docs merge over the static catalogue at load). See `docs/help-center.md` |
+| `help-admin.html` | **Internal** article editor for the Help Center (Firebase-gated, verified `@luminabrands.com` only; not in nav) — markdown-lite editor + preview writing to the `helpArticles` collection; drafts, publish, and same-slug overrides of built-in articles |
 | `chat-insights.html` | **Internal** chat-log dashboard for the Ember widget (Firebase-gated; not in nav) — transcripts, unanswered questions, 👍/👎 rates |
 | `builder.html` | **Parked** (`builder.css` / `builder.js`) — seven-step "Build Your Fireplace" configurator: model, size, AquafireBox-or-site-built enclosure, setbacks, accessories, then a summary card, with state in the URL hash. Arrived in the 2026-06-01 bulk upload and was never finished: `PRICING` is `$X,XXX` placeholders and `SHOPIFY_URLS` are `#`. Unlinked, `Disallow`ed in `robots.txt` and `noindex`ed in `vercel.json` (Aug 2026) so the placeholder pricing can't be indexed |
 | `beam-demo.html` | **Internal** showcase for the Border Beam effect (`beam.css`/`beam.js`) — live playground, all sizes/variants, usage snippet (noindex; not in nav) |
@@ -33,6 +35,7 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 | `styles.css` | Enclosure guide — forms, SVG diagram, cards, step layout |
 | `water-care-styles.css` | Water care — hardness scale, map tiles, calculator UI |
 | `troubleshoot.css` | Troubleshooter — wizard cards, option buttons, breadcrumb, outcome/escalation styling |
+| `help.css` | Help Center — search capsule, category tiles, article prose/tables/callouts (`ha-` prefixed, redesign tokens with fallbacks) |
 | `beam.css` | **Border Beam** — animated border-glow effect (`.af-beam`); opt-in, loaded by `index.html` + `beam-demo.html` |
 
 ### JavaScript
@@ -42,6 +45,8 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 | `app.js` | Enclosure guide — model data, dimension math, SVG/Canvas rendering, slider controls |
 | `water-care-app.js` | Water care — 2,000+ ZIP code hardness DB, autocomplete, US map, replacement timeline |
 | `troubleshoot.js` | Troubleshooter — `TREE` decision-tree data + wizard render/nav engine; `LINKS`/`VIDEOS` maps |
+| `help.js` | Help Center engine — home/category/article views, `?category=`/`?article=` deep links, client-side search, and the published-`helpArticles` Firestore merge (same-slug docs override the static catalogue) |
+| `help-articles.js` | Help Center data — `HELP_CATEGORIES` (6) + `HELP_ARTICLES` (29); schema + copy rules in its header and `docs/help-center.md` |
 | `embed.js` | Strips nav/footer when page loaded in iframe (`?embed` query param) |
 | `assistant.js` | **"Ember" AI chat widget** — self-contained (injects own CSS), embeddable on Shopify via one script tag; `INTENTS` knowledge base + Claude-API backend (`/api/chat` by default). See `docs/chat-assistant.md` |
 | `beam.js` | **Border Beam** controller — injects the bloom layer, auto-detects the wrapped child's radius, drives activate/deactivate; pairs with `beam.css` |
@@ -54,13 +59,14 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 | File | Purpose |
 |------|---------|
 | `vercel.json` | Security headers only (no routing/build config) — CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `COOP`; plus `noindex` + `X-Frame-Options: DENY` + `no-store` on the two internal pages, `noindex` on the parked `builder.html`, and `noindex` + `no-store` on `/api/*` |
-| `robots.txt` | Keeps `chat-insights.html`, `dealer-admin.html`, the parked `builder.html`, and `/api/` out of search indexes |
+| `robots.txt` | Keeps `chat-insights.html`, `dealer-admin.html`, `help-admin.html`, the parked `builder.html`, and `/api/` out of search indexes |
 
 ### Docs
 
 | Path | Contents |
 |------|----------|
 | `docs/source-material/` | Plain-text extracts of the Aquafire help-center articles, install/spec guides, warranty, and manuals the Troubleshooter tree is built from (+ `README.md` index) |
+| `docs/help-center.md` | **Help Center docs** — architecture, where each article's content came from, the `helpArticles` Firestore merge/override rules, team-authoring flow, and the copy guardrails |
 | `docs/chat-assistant.md` | Chat widget docs — Shopify install, config options, optional Claude-API proxy example, KB maintenance rules |
 | `docs/embedding.md` | Putting a portal page in an iframe on the store — the `?embed` / `?theme=` params, measured page heights, the allowed `frame-ancestors` origins, and why third-party storage means the theme must be passed explicitly (and why rewards pages should not be embedded) |
 | `docs/storage-rules.md` | **Source of truth for the Firebase Storage rules** — same hand-published arrangement as the Firestore ones; covers the `installs/` path, the size and content-type limits, and what must be switched on before `share-install.html` works |
@@ -136,9 +142,10 @@ identical on all 13 nav-bearing pages:
 ```
 Guides                        Support
   Product Guide                 Troubleshoot
-  Enclosure Guide               Find a Dealer
-  Water Care                    Warranty / Register  (storefront)
-  Preventative Maintenance      Rewards
+  Enclosure Guide               Help Center
+  Water Care                    Find a Dealer
+  Preventative Maintenance      Warranty / Register  (storefront)
+                                Rewards
                                 Service Request      (storefront)
                                 Contact Us           (storefront)
 ```
@@ -207,6 +214,7 @@ the Troubleshooter.
 - **Chat Slack alerts** — whenever Ember can't answer (no intent match + AI unavailable, an AI reply flagged `unresolved`, or `/api/chat` failing) or shows a contact card, the widget POSTs to `/api/notify-slack` (`api/notify-slack.js`), which relays a Block Kit card to `#chat-insights-feeback` via the `SLACK_WEBHOOK_URL` incoming webhook (shared `api/_guard.js` for CORS + rate limiting, customer emails masked, handoffs capped at one per conversation). Unset webhook → 503 → the widget stops trying for that page load; disable client-side with `AQUAFIRE_ASSISTANT_CONFIG.notifyEndpoint = null`. `api/chat.js` detects "I don't know" replies by asking the model to append an `[[UNRESOLVED]]` marker, which it strips before returning `{ reply, unresolved }`. Docs: `docs/chat-assistant.md`.
 - **Chat AI mode** — unmatched questions POST to `/api/chat` (`api/chat.js` — deployed by Vercel automatically, no package.json). Team-editable knowledge lives in the `chatKnowledge` Firestore collection, managed via the "Teach Ember" flow in `chat-insights.html`; the function caches it ~5 min. The widget falls back to the local `INTENTS` KB whenever the endpoint errors (`llmDown` per page load).
 - **Chat order lookup** — the `order_status` intent runs a guided flow (order # + checkout email → POST `/api/order-status` → status card with tracking links). Both values must match the order server-side; telemetry logs outcomes only and masks emails out of all logged text. Falls back to the account-page/orders@ answer when the endpoint 503s (`orderDown` per page load) or `orderEndpoint` is null.
+- **Help articles live in `help-articles.js` plus the `helpArticles` Firestore collection.** The static catalogue ships in the repo; team-authored docs saved as published in `help-admin.html` merge over it at load, and a doc with a built-in slug overrides that article without a deploy. Article copy follows the same guardrails as the chat ("Ember" never customer-facing, ⅜″-total cutout language, prices only as store links, facts traceable to `docs/source-material/` or the live help center) — `docs/help-center.md` is the maintenance doc. The `helpArticles` rules live in `docs/firestore-rules.md` and must be hand-published in the console.
 - **Troubleshooter decision tree lives in `troubleshoot.js`** as the `TREE` object — a map of `nodeId → node`. Nodes are either `question` (prompt + options/quickPicks) or `outcome` (steps, caution, video, article links, escalation). Model-specific copy uses functions that receive the model id (`'pro' | 'original' | 'lite' | 'unknown'`). `app_entry` is a `router` node that resolves Pro → `app_connect`, others → `app_not_pro`. URL params: `?model=pro|original|lite` pre-selects the model; `?node=<id>` deep-links a node (useful for support emails). Resource URLs are in the `LINKS` map; **how-to video URLs are TODO placeholders in the `VIDEOS` map** — until filled in, the tool shows a "video coming soon" chip. When the underlying help articles change, update the tree and the matching file in `docs/source-material/`.
 - **Ember can mount inline.** `AQUAFIRE_ASSISTANT_CONFIG.mount = '<selector>'` renders the panel into that container instead of the corner launcher (launcher, nudge and mobile takeover all switch off), and `window.AquafireAssistant` (`open` / `ask` / `close` / `reset` / `isOpen` / `root`) drives it; calls before load are queued. Closing from the panel's own header or Escape fires a bubbling `aquafire:close` so the host can collapse its container. `index.html` is the first consumer: its hero composer is a real `<form>` that expands in place into `#heroChatMount` (`.greet.is-chatting` folds the orb/greeting/chips away and grows `.hero-chat`), the murmur chips seed the conversation via `data-ask` instead of navigating, and without JS the form still submits to `support.html`. Ember owns the conversation; the page owns only the expand/collapse. `assistant.js` now runs on the same tokens as `redesign.css` (`--afa-*`, dark by default with a `:root[data-theme="light"] .afa-root` binding), so an inline host only has to rebind what its own container provides -- `--afa-bg` and `--afa-head-bg`. Note the light block out-specifies a plain `.host .afa-root` override, so a host must list a `:root[data-theme="light"]` selector too or the panel turns opaque when the page switches (see `index.html`).
 - **Border Beam lives in `beam.css` + `beam.js`** — a vanilla port of the `border-beam` npm package (MIT), rebuilt as plain CSS because the portal has no React/build step. Wrap anything in `<div class="af-beam" data-beam-size="md" data-beam-variant="colorful">`; children render untouched, so the effect is purely additive and degrades to a plain container without JS. Sizes `sm | md | line | pulse-inner | pulse-outside`, variants `ember | colorful | ocean | sunset | mono` (`colorful` is the default; `ember` is the on-brand fire palette and tightens the hue cycle to 10deg so reds don't drift magenta). **Beam colour priority (standing rule for any future palette work): red/orange dominant, then blue/magenta, then green.** It is enforced by weight, not by count — colours are assigned to blobs by area, so moving a colour to a different `--afb-*` index changes its weight; the split is documented in `beam.css` and currently splits 49/35/16 by blob area. Note `sm`/`md` sweep a conic gradient, which parameterises by angle rather than arc length, so on a very wide element the beam crawls the long edges and moves fast across the short ends. An `offset-path` `rim` size that travelled by arc length was tried and removed — the even travel was correct but the look wasn't what the effect is after; the diffuse conic glow is the wanted character. The orbit runs at a deliberate 4s — the package's stock 1.96s pulls the eye off the content the beam is meant to frame. Needs `@property` + `mask-composite`; `beam.js` feature-gates and no-ops on older browsers. Beams pause when scrolled offscreen, and `prefers-reduced-motion` freezes them lit rather than hiding them. **`beam.css`/`beam.js` are opt-in.** Loaded by `beam-demo.html` and by `index.html`, where the hero composer is wrapped in `.composer-beam.af-beam` at `size="md"` (the composer spends both its own pseudo-elements on the glass rim and hover underline, so the beam needs the wrapper) and `data-beam-theme` is synced to the page theme by the existing toggle script. The Ember chat widget is the one live consumer, but it does *not* use these files: `assistant.js` inlines its own trimmed copy under the `afa-` namespace (it ships as a single script tag on Shopify and can't link a stylesheet), applied to the composer field and brightened while Ember is generating. Toggle with `AQUAFIRE_ASSISTANT_CONFIG.beam` = `'input' | 'panel' | false` and `.beamVariant` = `'colorful' | 'ember'`. **`index.html` sets `beam = false`** in a head script: its hero composer already beams and is the page's primary action, so the widget must not beam there too. `index.html` now loads `assistant.js` and mounts Ember inline in the hero, so that head script is load-bearing — **don't drop it.** **Changing the beam look means editing both places.** Note `assistant.js` declares its own `var CSS` (the stylesheet string), which shadows the global `CSS` object — feature detection there must use `window.CSS`. The `#fff` literals in the CSS are mask stencils (alpha channels), not palette colors — impeccable's `design-system-color` rule flags them as false positives.
@@ -236,8 +244,8 @@ SSO protection (which only covers `*.vercel.app` preview URLs). **A file committ
 is a published file, whether or not anything links to it.** Never commit business
 exports, dashboards, snapshots, or customer data.
 
-- **The two internal pages are gated in the browser** (`chat-insights.html`,
-  `dealer-admin.html`): Firebase Auth, verified `@luminabrands.com` only. Rewards
+- **The three internal pages are gated in the browser** (`chat-insights.html`,
+  `dealer-admin.html`, `help-admin.html`): Firebase Auth, verified `@luminabrands.com` only. Rewards
   customers hold accounts in the same Firebase project, so `request.auth != null` /
   "is signed in" is never a sufficient check — always test the email domain.
   `dealer-admin.html` gates the *editing tool*; `dealers.js` itself is public data that

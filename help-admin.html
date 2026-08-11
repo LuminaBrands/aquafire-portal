@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Articles | Aquafire</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="hub.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #121417; --surface: #1b1e24; --surface-alt: #22262e;
+      --border: #2c3038; --text: #e4e5e9; --text-muted: #878c99;
+      --red: #c0392b; --red-dark: #a93226; --red-glow: rgba(192,57,43,0.15);
+      --amber: #e8a838; --blue: #4da6e8; --green: #27ae60;
+      --radius: 14px; --radius-sm: 8px;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 24px 64px; }
+
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 18px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .topbar h1 { font-size: 1.3rem; }
+    .topbar .sub { color: var(--text-muted); font-size: 0.82rem; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px;
+      font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 600;
+      border: none; border-radius: var(--radius-sm); cursor: pointer; }
+    .btn-primary { background: var(--red); color: #fff; box-shadow: 0 2px 12px var(--red-glow); }
+    .btn-primary:hover { background: var(--red-dark); }
+    .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--red); }
+    .btn-danger { background: none; color: #e77; border: 1px solid rgba(220,80,80,0.4); }
+    .btn-danger:hover { background: rgba(220,80,80,0.12); }
+    .btn-xs { padding: 5px 12px; font-size: 0.72rem; }
+    .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+    /* Auth gate */
+    .auth-card { max-width: 400px; margin: 64px auto; padding: 36px 32px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .auth-card h2 { margin-bottom: 6px; }
+    .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px; }
+    .auth-card input { width: 100%; margin-bottom: 10px; padding: 11px 14px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text);
+      font-family: inherit; font-size: 0.9rem; outline: none; }
+    .auth-card input:focus { border-color: var(--red); }
+    .auth-card .btn { width: 100%; justify-content: center; margin-bottom: 10px; }
+    .auth-err { color: #e77; font-size: 0.8rem; min-height: 18px; }
+
+    /* Panels + controls */
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 18px 20px; margin-bottom: 18px; }
+    .panel h3 { font-size: 0.95rem; margin-bottom: 4px; }
+    .panel h3 span, .panel .phint { color: var(--text-muted); font-weight: 400; font-size: 0.78rem; }
+    .panel .phint { display: block; margin-bottom: 10px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 20px 0 18px; }
+    .fchip { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text-muted); font-size: 0.8rem; cursor: pointer;
+      font-family: inherit; }
+    .fchip.active { border-color: var(--red); color: var(--text); background: var(--red-glow); }
+    .controls input[type=search] { flex: 1; min-width: 180px; padding: 9px 14px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text);
+      font-family: inherit; font-size: 0.85rem; outline: none; }
+    .controls input[type=search]:focus { border-color: var(--red); }
+
+    /* Article rows */
+    .arow { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0;
+      border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .arow:last-child { border-bottom: none; }
+    .arow .grow { flex: 1; min-width: 0; }
+    .arow .ttl { font-weight: 600; }
+    .arow .meta { color: var(--text-muted); font-size: 0.76rem; }
+    .arow .acts { flex-shrink: 0; display: flex; gap: 6px; }
+    .tag { font-size: 0.66rem; padding: 2px 8px; border-radius: 999px; background: var(--surface-alt);
+      border: 1px solid var(--border); color: var(--text-muted); margin-right: 5px;
+      display: inline-block; vertical-align: middle; }
+    .tag.ok { color: var(--green); border-color: rgba(39,174,96,0.4); }
+    .tag.warn { color: var(--amber); border-color: rgba(232,168,56,0.4); }
+    .tag.info { color: var(--blue); border-color: rgba(77,166,232,0.4); }
+    .muted { color: var(--text-muted); font-size: 0.85rem; }
+
+    /* Editor */
+    .edit-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px;
+      align-items: start; }
+    .field { margin-bottom: 14px; }
+    .field label, .flabel { display: block; font-size: 0.78rem; color: var(--text-muted);
+      margin: 0 0 4px; }
+    .field input[type=text], .field select, .field textarea {
+      width: 100%; padding: 10px 13px; background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text); font-family: inherit;
+      font-size: 0.88rem; outline: none; resize: vertical; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--red); }
+    .field .help { font-size: 0.74rem; color: var(--text-muted); margin-top: 4px; }
+    .field .help code { background: var(--surface-alt); border-radius: 4px; padding: 1px 5px; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .checks { display: flex; flex-wrap: wrap; gap: 14px; padding: 4px 0; }
+    .checks label { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem;
+      color: var(--text); margin: 0; cursor: pointer; }
+    .slugrow { display: flex; gap: 8px; align-items: center; }
+    .slugrow input { flex: 1; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .override { border: 1px solid rgba(232,168,56,0.4); background: rgba(232,168,56,0.08);
+      border-radius: var(--radius-sm); padding: 10px 12px; font-size: 0.78rem; margin-top: 8px; }
+    .override label { display: flex; gap: 8px; align-items: flex-start; color: var(--text);
+      font-size: 0.78rem; margin: 6px 0 0; cursor: pointer; }
+    #md { min-height: 380px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.82rem; line-height: 1.55; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
+    .tb { background: var(--surface-alt); border: 1px solid var(--border); color: var(--text-muted);
+      border-radius: 6px; padding: 4px 9px; font-size: 0.72rem; cursor: pointer;
+      font-family: inherit; }
+    .tb:hover { border-color: var(--red); color: var(--text); }
+    .guard { font-size: 0.74rem; color: var(--text-muted); line-height: 1.5; }
+    .guard li { margin-left: 16px; }
+    .lint { margin-top: 8px; font-size: 0.76rem; color: var(--amber); }
+    .lint div { margin-top: 3px; }
+    .editbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      margin: 18px 0 6px; }
+    .editbar .spacer { flex: 1; }
+    .saveerr { color: #e77; font-size: 0.8rem; min-height: 18px; }
+    .savedok { color: var(--green); font-size: 0.8rem; }
+
+    /* Preview pane — a rough stand-in for help.css on the customer page */
+    .preview-wrap { position: sticky; top: 18px; }
+    .preview { background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 22px; max-height: 76vh; overflow-y: auto; }
+    .preview .ptitle { font-family: 'Poppins', sans-serif; font-size: 1.35rem; font-weight: 700;
+      margin-bottom: 4px; }
+    .preview .pteaser { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 14px;
+      padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .preview h2 { font-size: 1.05rem; margin: 20px 0 8px; }
+    .preview h3 { font-size: 0.92rem; margin: 16px 0 6px; color: var(--amber); }
+    .preview p { font-size: 0.88rem; margin: 0 0 10px; }
+    .preview ul, .preview ol { margin: 0 0 12px 20px; font-size: 0.88rem; }
+    .preview li { margin-bottom: 5px; }
+    .preview a { color: var(--blue); }
+    .preview code { background: var(--surface-alt); border: 1px solid var(--border);
+      border-radius: 4px; padding: 1px 5px; font-size: 0.82em; }
+    .preview table { width: 100%; border-collapse: collapse; margin: 0 0 14px; font-size: 0.82rem;
+      display: block; overflow-x: auto; }
+    .preview th, .preview td { border: 1px solid var(--border); padding: 7px 10px; text-align: left;
+      vertical-align: top; }
+    .preview th { background: var(--surface-alt); font-weight: 600; }
+    .preview .ha-note, .preview .ha-caution { border-left: 3px solid var(--blue);
+      background: rgba(77,166,232,0.08); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 10px 14px; margin: 0 0 14px; font-size: 0.85rem; }
+    .preview .ha-note > :last-child, .preview .ha-caution > :last-child { margin-bottom: 0; }
+    .preview .ha-caution { border-left-color: var(--amber); background: rgba(232,168,56,0.08); }
+
+    .setup-hint { border-color: rgba(232,168,56,0.5); }
+    .setup-hint code { background: var(--bg); border-radius: 6px; font-size: 0.78rem; padding: 1px 5px; }
+    .setup-hint pre { background: var(--bg); border-radius: 6px; font-size: 0.76rem; padding: 12px;
+      overflow-x: auto; margin-top: 8px; }
+
+    @media (max-width: 900px) {
+      .edit-grid { grid-template-columns: 1fr; }
+      .preview-wrap { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div>
+        <h1>&#x1f4d8; Help Articles</h1>
+        <span class="sub">Author and publish Help Center articles &middot; internal</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <span id="who" class="sub"></span>
+        <button class="btn btn-secondary" id="refreshBtn" style="display:none;">Refresh</button>
+        <button class="btn btn-secondary" id="signOutBtn" style="display:none;">Sign out</button>
+      </div>
+    </div>
+
+    <!-- Auth gate -->
+    <div class="auth-card" id="authCard">
+      <h2>Team sign-in</h2>
+      <p>Article drafts are internal until published &mdash; team access only.</p>
+      <button class="btn btn-primary" id="googleBtn">Continue with Google</button>
+      <input type="email" id="email" placeholder="Email" autocomplete="username">
+      <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+      <button class="btn btn-secondary" id="emailBtn">Sign in with email</button>
+      <div class="auth-err" id="authErr"></div>
+      <button class="btn btn-secondary" id="switchBtn" style="display:none;margin-top:10px;">Sign out &amp; use a team account</button>
+    </div>
+
+    <!-- App (rendered only for verified team accounts) -->
+    <div id="app" style="display:none;">
+
+      <!-- List view -->
+      <div id="listView">
+        <div class="controls">
+          <button class="fchip active" data-f="all">All</button>
+          <button class="fchip" data-f="published">Published</button>
+          <button class="fchip" data-f="draft">Drafts</button>
+          <input type="search" id="search" placeholder="Search title, slug or teaser&hellip;">
+          <button class="btn btn-primary" id="newBtn">+ New article</button>
+        </div>
+
+        <div class="panel">
+          <h3>Team articles <span>&mdash; live on the Help Center as soon as they&rsquo;re published</span></h3>
+          <div id="docList"><span class="muted">Loading&hellip;</span></div>
+        </div>
+
+        <div class="panel">
+          <h3>Built-in articles <span>&mdash; shipped in <code>help-articles.js</code></span></h3>
+          <span class="phint">Read-only here. Create a doc with the same slug to override one &mdash;
+            the published doc replaces the built-in article on the customer page.</span>
+          <div id="staticList"><span class="muted">Loading&hellip;</span></div>
+        </div>
+      </div>
+
+      <!-- Editor view -->
+      <div id="editView" style="display:none;">
+        <div class="editbar">
+          <button class="btn btn-secondary" id="backBtn">&larr; All articles</button>
+          <span class="muted" id="editWhat"></span>
+          <span class="spacer"></span>
+          <button class="btn btn-danger btn-xs" id="deleteBtn" style="display:none;">Delete</button>
+          <button class="btn btn-secondary" id="unpublishBtn" style="display:none;">Unpublish</button>
+          <button class="btn btn-secondary" id="draftBtn">Save draft</button>
+          <button class="btn btn-primary" id="publishBtn">Publish</button>
+        </div>
+        <div class="saveerr" id="saveErr"></div>
+
+        <div class="edit-grid">
+          <div>
+            <div class="field">
+              <label for="fTitle">Title</label>
+              <input type="text" id="fTitle" maxlength="120" placeholder="e.g. Winter Storage">
+            </div>
+
+            <div class="field">
+              <label for="fSlug">Slug <span id="slugAuto" class="muted" style="font-size:0.72rem;">&mdash; following the title</span></label>
+              <div class="slugrow">
+                <input type="text" id="fSlug" maxlength="80" placeholder="winter-storage">
+                <button class="btn btn-secondary btn-xs" id="slugReset" type="button">Reset to title</button>
+              </div>
+              <div class="help">Kebab-case, stable forever &mdash; it is the article&rsquo;s URL
+                (<code>help.html?article=&lt;slug&gt;</code>) and what <em>related</em> lists point at.</div>
+              <div id="slugMsg"></div>
+            </div>
+
+            <div class="row2">
+              <div class="field">
+                <label for="fCat">Category</label>
+                <select id="fCat"></select>
+              </div>
+              <div class="field">
+                <span class="flabel">Applies to</span>
+                <div class="checks">
+                  <label><input type="checkbox" class="fModel" value="original"> Original</label>
+                  <label><input type="checkbox" class="fModel" value="pro"> Pro</label>
+                  <label><input type="checkbox" class="fModel" value="lite"> Lite</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="fTeaser">Teaser</label>
+              <textarea id="fTeaser" rows="2" maxlength="220"
+                placeholder="One plain sentence &mdash; shown on list cards."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="fKeywords">Search keywords</label>
+              <input type="text" id="fKeywords" placeholder="power, won't turn on, adaptor">
+              <div class="help">Comma-separated, lowercase. Words a customer would type that
+                aren&rsquo;t already in the title.</div>
+            </div>
+
+            <div class="field">
+              <label for="fRelated">Related articles</label>
+              <input type="text" id="fRelated" placeholder="my-aquafire-is-beeping, general-cleaning">
+              <div class="help">Comma-separated slugs, 2&ndash;4. They must already exist &mdash;
+                built-in or team.</div>
+              <div id="relMsg"></div>
+            </div>
+
+            <div class="field">
+              <span class="flabel">Body</span>
+              <div class="toolbar" id="toolbar">
+                <button class="tb" type="button" data-tb="h2">H2</button>
+                <button class="tb" type="button" data-tb="h3">H3</button>
+                <button class="tb" type="button" data-tb="bold"><strong>B</strong></button>
+                <button class="tb" type="button" data-tb="italic"><em>I</em></button>
+                <button class="tb" type="button" data-tb="ul">&bull; List</button>
+                <button class="tb" type="button" data-tb="ol">1. List</button>
+                <button class="tb" type="button" data-tb="link">Link</button>
+                <button class="tb" type="button" data-tb="code">Code</button>
+                <button class="tb" type="button" data-tb="table">Table</button>
+                <button class="tb" type="button" data-tb="note">Note</button>
+                <button class="tb" type="button" data-tb="caution">Caution</button>
+              </div>
+              <textarea id="md" spellcheck="true" placeholder="## Start here&#10;&#10;Plain paragraphs, **bold**, [links](troubleshoot.html).&#10;&#10;1. Numbered steps&#10;2. one per line&#10;&#10;&gt; note: a helpful aside&#10;&gt; caution: something that can damage the unit"></textarea>
+              <div class="help">Markdown-lite: <code>##</code>/<code>###</code> headings,
+                <code>**bold**</code>, <code>*italic*</code>, <code>`code`</code>,
+                <code>[text](url)</code>, <code>-</code> and <code>1.</code> lists,
+                <code>| pipe | tables |</code>, and <code>&gt; note:</code> /
+                <code>&gt; caution:</code> callouts. Everything else is escaped &mdash; raw HTML
+                will not render.</div>
+              <div class="lint" id="lint"></div>
+            </div>
+
+            <div class="panel" style="margin-top:18px;">
+              <h3>Before you publish</h3>
+              <div class="guard">
+                <ul>
+                  <li>Warm, plain second-person voice, US English &mdash; same as the rest of the portal.</li>
+                  <li>No prices or MSRP. Link the store page instead
+                    (<code>https://www.aquafire.com/&hellip;</code>, opens in a new tab).</li>
+                  <li>Cutout clearance is nominal <strong>+ &#8541;&#8243; in total</strong>, split across the
+                    outside edges &mdash; never &ldquo;per side&rdquo;, never the spec sheet&rsquo;s
+                    + &frac14;&#8243;. Prefer linking <code>enclosure-guide.html</code> over restating numbers.</li>
+                  <li>Never name the chat assistant in customer copy &mdash; internally it&rsquo;s
+                    Ember, to customers it is just &ldquo;the chat&rdquo;.</li>
+                  <li>Every fact traces to <code>docs/source-material/</code> or an already-published
+                    portal page. No invented specs, phone numbers or URLs.</li>
+                  <li>Portal links are relative (<code>troubleshoot.html</code>); other help articles are
+                    <code>help.html?article=&lt;slug&gt;</code>.</li>
+                  <li>Fractions with the inch mark: &#8541;&#8243;, 14&#8539;&#8243;.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-wrap">
+            <div class="preview" id="preview"></div>
+            <div class="muted" style="font-size:0.74rem;margin-top:8px;">
+              Approximate &mdash; the customer page styles these tags with <code>help.css</code>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Built-in catalogue. Optional: the page works (Firestore articles only) if it 404s. -->
+  <script src="help-articles.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var $ = function (id) { return document.getElementById(id); };
+
+      /* ── Markdown-lite → article HTML ────────────────────────────────────
+         Escape FIRST, convert after: nothing an author types can become
+         markup, so the stored `html` is safe to inject on the customer page
+         (help.js does not escape it). Because escaping runs first, the block
+         parser matches `&gt;` rather than `>` for callouts.
+         Output is limited to the spec's tag set:
+           h2 h3 p ul ol li table thead tbody tr th td a strong em code
+           + div.ha-note / div.ha-caution                                    */
+
+      function escHtml(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      // Relative portal links, http(s) and mailto only. Anything else
+      // (javascript:, data:, protocol-relative) renders as plain text.
+      function safeUrl(u) {
+        var v = String(u || '').trim();
+        if (!v || v.indexOf('//') === 0) return '';
+        var scheme = /^([a-z][a-z0-9+.\-]*):/i.exec(v);
+        if (scheme && ['http', 'https', 'mailto'].indexOf(scheme[1].toLowerCase()) === -1) return '';
+        return v;
+      }
+
+      function inlineMd(t) {
+        var codes = [];
+        // Pull code spans out first so their contents aren't re-formatted.
+        t = t.replace(/`([^`]+)`/g, function (m, c) {
+          codes.push(c); return ' C' + (codes.length - 1) + ' ';
+        });
+        // One level of nested parens is allowed in the URL — mailto:a(b) and
+        // javascript:alert(1) both have to be swallowed whole, or the rejected
+        // half leaks into the text as a stray ")".
+        t = t.replace(/\[([^\]\n]+)\]\(((?:[^()\s]|\([^()\s]*\))+)\)/g, function (m, label, url) {
+          var href = safeUrl(url);
+          if (!href) return label;
+          var ext = /^https?:/i.test(href);
+          return '<a href="' + href + '"' +
+            (ext ? ' target="_blank" rel="noopener"' : '') + '>' + label + '</a>';
+        });
+        t = t.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+        t = t.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+        return t.replace(/ C(\d+) /g, function (m, i) {
+          return '<code>' + codes[+i] + '</code>';
+        });
+      }
+
+      var RE_QUOTE = /^\s*&gt;\s?/;
+      var RE_HEAD = /^\s*(#{1,3})\s+(.*)$/;
+      var RE_UL = /^\s*(?:-|\*)\s+(.*)$/;
+      var RE_OL = /^\s*\d+[.)]\s+(.*)$/;
+      var RE_TABLE = /^\s*\|/;
+
+      function isBlockStart(line) {
+        return RE_QUOTE.test(line) || RE_HEAD.test(line) || RE_UL.test(line) ||
+               RE_OL.test(line) || RE_TABLE.test(line);
+      }
+
+      function tableCells(line) {
+        var s = line.trim().replace(/^\|/, '').replace(/\|\s*$/, '');
+        return s.split('|').map(function (c) { return c.trim(); });
+      }
+
+      function renderTable(rows) {
+        var head = null, body = rows;
+        if (rows.length > 1 && rows[1].every(function (c) { return /^:?-{2,}:?$/.test(c); })) {
+          head = rows[0]; body = rows.slice(2);
+        }
+        var out = '<table>';
+        if (head) {
+          out += '<thead><tr>' + head.map(function (c) {
+            return '<th>' + inlineMd(c) + '</th>';
+          }).join('') + '</tr></thead>';
+        }
+        out += '<tbody>' + body.map(function (r) {
+          return '<tr>' + r.map(function (c) {
+            return '<td>' + inlineMd(c) + '</td>';
+          }).join('') + '</tr>';
+        }).join('') + '</tbody></table>';
+        return out;
+      }
+
+      function renderBlocks(lines, depth) {
+        var out = [], i = 0;
+        while (i < lines.length) {
+          var line = lines[i];
+          if (!line.trim()) { i++; continue; }
+
+          // Callouts: > note: … / > caution: … (default note)
+          if (RE_QUOTE.test(line)) {
+            var buf = [];
+            while (i < lines.length && RE_QUOTE.test(lines[i])) {
+              buf.push(lines[i].replace(RE_QUOTE, '')); i++;
+            }
+            var kind = 'ha-note';
+            var m = /^\s*(note|info|caution|warning)\s*:\s*/i.exec(buf[0] || '');
+            if (m) {
+              kind = /^(caution|warning)$/i.test(m[1]) ? 'ha-caution' : 'ha-note';
+              buf[0] = buf[0].slice(m[0].length);
+            }
+            var inner = depth < 2
+              ? renderBlocks(buf, depth + 1)
+              : '<p>' + inlineMd(buf.join(' ').trim()) + '</p>';
+            out.push('<div class="' + kind + '">' + (inner || '') + '</div>');
+            continue;
+          }
+
+          // Headings (# is promoted to h2 — h1 is the page's own title)
+          var h = RE_HEAD.exec(line);
+          if (h) {
+            var tag = h[1].length >= 3 ? 'h3' : 'h2';
+            out.push('<' + tag + '>' + inlineMd(h[2].trim()) + '</' + tag + '>');
+            i++; continue;
+          }
+
+          // Tables
+          if (RE_TABLE.test(line)) {
+            var rows = [];
+            while (i < lines.length && RE_TABLE.test(lines[i])) { rows.push(tableCells(lines[i])); i++; }
+            out.push(renderTable(rows));
+            continue;
+          }
+
+          // Lists
+          if (RE_UL.test(line) || RE_OL.test(line)) {
+            var ordered = !RE_UL.test(line);
+            var re = ordered ? RE_OL : RE_UL;
+            var items = [];
+            while (i < lines.length && re.test(lines[i])) {
+              items.push('<li>' + inlineMd(re.exec(lines[i])[1].trim()) + '</li>');
+              i++;
+            }
+            out.push('<' + (ordered ? 'ol' : 'ul') + '>' + items.join('') +
+                     '</' + (ordered ? 'ol' : 'ul') + '>');
+            continue;
+          }
+
+          // Paragraph — runs until a blank line or the next block
+          var para = [];
+          while (i < lines.length && lines[i].trim() && !isBlockStart(lines[i])) {
+            para.push(lines[i].trim()); i++;
+          }
+          out.push('<p>' + inlineMd(para.join(' ')) + '</p>');
+        }
+        return out.join('\n');
+      }
+
+      function mdToHtml(src) {
+        var lines = String(src == null ? '' : src).replace(/\r\n?/g, '\n').split('\n').map(escHtml);
+        return renderBlocks(lines, 0);
+      }
+
+      /* ── Copy lint (advisory, never blocking) ── */
+      function lintCopy(md) {
+        var hits = [];
+        if (/(^|[\s(])\$\s?\d/.test(md))
+          hits.push('Looks like a price — link the store page instead of quoting numbers.');
+        if (/per\s+side/i.test(md))
+          hits.push('Cutout clearance is ⅜″ in total, never per side.');
+        if (/\bember\b/i.test(md))
+          hits.push('That’s the chat’s internal name — customer copy calls it “the chat”.');
+        if (/a-fireplace\.com/i.test(md))
+          hits.push('Replace a-fireplace.com links with the aquafire.com equivalent, or drop them.');
+        if (/(⅜|3\/8)/.test(md) && !/in total|over nominal/i.test(md))
+          hits.push('Say “⅜″ in total” (or link enclosure-guide.html) so it can’t be read as per side.');
+        if (/1\/4|¼/.test(md) && /cutout|clearance/i.test(md))
+          hits.push('The portal’s cutout figure is + ⅜″ in total, not the spec sheet’s + ¼″.');
+        return hits;
+      }
+
+      /* ── Built-in catalogue (help-articles.js may not be deployed yet) ── */
+      var FALLBACK_CATS = [
+        { id: 'learn', title: 'Learn Before You Buy' },
+        { id: 'install', title: 'Installation & Enclosures' },
+        { id: 'using', title: 'Using Your Aquafire' },
+        { id: 'fix', title: 'Troubleshooting' },
+        { id: 'care', title: 'Care & Maintenance' },
+        { id: 'warranty', title: 'Warranty & Support' }
+      ];
+      var CATS = (typeof HELP_CATEGORIES !== 'undefined' && HELP_CATEGORIES &&
+                  HELP_CATEGORIES.length) ? HELP_CATEGORIES : FALLBACK_CATS;
+      var STATIC = (typeof HELP_ARTICLES !== 'undefined' && HELP_ARTICLES) ? HELP_ARTICLES : [];
+      var MODELS = ['original', 'pro', 'lite'];
+
+      function catTitle(id) {
+        for (var i = 0; i < CATS.length; i++) if (CATS[i].id === id) return CATS[i].title;
+        return id || '(no category)';
+      }
+
+      (function fillCats() {
+        var sel = $('fCat');
+        sel.innerHTML = '';
+        CATS.forEach(function (c) {
+          var o = document.createElement('option');
+          o.value = c.id; o.textContent = c.title + '  (' + c.id + ')';
+          sel.appendChild(o);
+        });
+      })();
+
+      function esc(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      /* ── Firebase ── */
+      if (typeof firebase === 'undefined') {
+        $('authErr').textContent =
+          'Could not load the Firebase SDK — check your network or ad-blocker and reload.';
+        return;
+      }
+
+      // Same project as rewards.js / chat-insights.html
+      var firebaseConfig = {
+        apiKey: "AIzaSyAAeoOt4NJxh_ITaWNMBV-Ed-mM5Ac5a7Q",
+        authDomain: "aquafire-portal.firebaseapp.com",
+        projectId: "aquafire-portal",
+        storageBucket: "aquafire-portal.firebasestorage.app",
+        messagingSenderId: "589960398521",
+        appId: "1:589960398521:web:3c5852186e59fdf0847d68"
+      };
+      if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+      var auth = firebase.auth();
+      var db = firebase.firestore();
+      var COL = 'helpArticles';
+
+      /* ── Auth gate ──────────────────────────────────────────────────────
+         Rewards customers hold accounts in this same Firebase project, so
+         "signed in" is never enough: the email must be verified AND on the
+         team domain. The Firestore rules enforce the same test server-side —
+         this only decides whether the editor chrome is drawn at all, and
+         nothing editorial renders before onAuthStateChanged resolves.
+
+         A signed-in non-team account is shown the gate, never signed out:
+         that would drop a customer's rewards session just because they
+         opened this URL. They're offered the switch instead.               */
+      var TEAM_EMAIL = /@luminabrands\.com$/i;
+      function isTeam(user) {
+        return !!user && !!user.email && user.emailVerified && TEAM_EMAIL.test(user.email);
+      }
+
+      $('googleBtn').onclick = function () {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        auth.signInWithPopup(provider)
+          .catch(function (e) { $('authErr').textContent = e.message; });
+      };
+      $('emailBtn').onclick = function () {
+        auth.signInWithEmailAndPassword($('email').value, $('password').value)
+          .catch(function (e) { $('authErr').textContent = e.message; });
+      };
+      $('signOutBtn').onclick = function () { auth.signOut(); };
+      $('switchBtn').onclick = function () { $('authErr').textContent = ''; auth.signOut(); };
+
+      auth.onAuthStateChanged(function (user) {
+        var authed = isTeam(user);
+        if (user && !authed) {
+          $('authErr').textContent = user.emailVerified
+            ? 'Signed in as ' + user.email + ' — not a Lumina Brands team account.'
+            : 'Verify ' + (user.email || 'your email address') + ' first, then sign in again.';
+        }
+        $('switchBtn').style.display = (user && !authed) ? '' : 'none';
+        $('authCard').style.display = authed ? 'none' : '';
+        $('app').style.display = authed ? '' : 'none';
+        $('signOutBtn').style.display = authed ? '' : 'none';
+        $('refreshBtn').style.display = authed ? '' : 'none';
+        $('who').textContent = authed ? (user.email || '') : '';
+        if (authed) { $('authErr').textContent = ''; load(); }
+        else { showList(); }
+      });
+
+      /* ── Data ── */
+      var docs = [];               // [{ id, d }] every helpArticles doc, drafts included
+      var byId = {};
+
+      function load() {
+        $('docList').innerHTML = '<span class="muted">Loading&hellip;</span>';
+        // Team accounts may list the whole collection (see docs/firestore-rules.md);
+        // the customer page must query .where('published','==',true) instead.
+        db.collection(COL).get().then(function (snap) {
+          docs = []; byId = {};
+          snap.forEach(function (doc) {
+            var rec = { id: doc.id, d: doc.data() || {} };
+            docs.push(rec); byId[doc.id] = rec;
+          });
+          docs.sort(function (a, b) {
+            return String(a.d.title || a.id).toLowerCase() < String(b.d.title || b.id).toLowerCase() ? -1 : 1;
+          });
+          renderList();
+        }).catch(function (e) { showSetupHint(e); });
+        renderStatic();
+      }
+      $('refreshBtn').onclick = load;
+
+      function showSetupHint(e) {
+        $('docList').innerHTML =
+          '<div class="panel setup-hint" style="margin:0;">' +
+          '<h3>&#x1f527; Couldn’t read <code>' + COL + '</code> (' + esc(e && e.code ? e.code : 'error') + ')</h3>' +
+          '<p class="muted">If this is <code>permission-denied</code>, publish the <code>' + COL +
+          '</code> block from <code>docs/firestore-rules.md</code> in the Firebase console ' +
+          '(<strong>aquafire-portal &rarr; Firestore &rarr; Rules</strong>). Rules do not deploy from the repo.</p>' +
+          '<pre>match /' + COL + '/{slug} {\n' +
+          '  allow read: if resource.data.published == true || isTeam();\n' +
+          '  allow create, update, delete: if isTeam();\n' +
+          '}</pre></div>';
+      }
+
+      /* ── List view ── */
+      var filter = 'all';
+      document.querySelectorAll('.fchip').forEach(function (b) {
+        b.onclick = function () {
+          document.querySelectorAll('.fchip').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          filter = b.getAttribute('data-f');
+          renderList();
+        };
+      });
+      $('search').oninput = function () { renderList(); renderStatic(); };
+
+      function staticSlugs() {
+        return STATIC.map(function (a) { return a.slug; });
+      }
+      function knownSlugs() {
+        var s = {};
+        staticSlugs().forEach(function (x) { s[x] = 1; });
+        docs.forEach(function (r) { s[r.id] = 1; });
+        return s;
+      }
+
+      function matchQ(hay) {
+        var q = ($('search').value || '').toLowerCase().trim();
+        if (!q) return true;
+        return hay.toLowerCase().indexOf(q) !== -1;
+      }
+
+      function renderList() {
+        var el = $('docList');
+        el.innerHTML = '';
+        var sset = {}; staticSlugs().forEach(function (s) { sset[s] = 1; });
+        var shown = 0;
+        docs.forEach(function (r) {
+          var d = r.d;
+          if (filter === 'published' && !d.published) return;
+          if (filter === 'draft' && d.published) return;
+          if (!matchQ([r.id, d.title, d.teaser].join(' '))) return;
+          shown++;
+          var row = document.createElement('div');
+          row.className = 'arow';
+          var tags = d.published
+            ? '<span class="tag ok">published</span>'
+            : '<span class="tag warn">draft</span>';
+          if (sset[r.id]) tags += '<span class="tag info">overrides built-in</span>';
+          row.innerHTML =
+            '<div class="grow"><div class="ttl">' + tags + esc(d.title || r.id) + '</div>' +
+            '<div class="meta">' + esc(r.id) + ' &middot; ' + esc(catTitle(d.category)) +
+            ' &middot; ' + esc((d.models || []).join(', ') || 'no models') +
+            ' &middot; updated ' + esc(d.updated || '–') +
+            (d.authorEmail ? ' &middot; ' + esc(d.authorEmail) : '') + '</div>' +
+            (d.teaser ? '<div class="meta">' + esc(d.teaser) + '</div>' : '') + '</div>' +
+            '<div class="acts"><button class="btn btn-secondary btn-xs">Edit</button></div>';
+          row.querySelector('button').onclick = function () { openEditor(r.id); };
+          el.appendChild(row);
+        });
+        if (!shown) {
+          el.innerHTML = '<span class="muted">' + (docs.length
+            ? 'No articles match this filter.'
+            : 'Nothing yet — click <strong>+ New article</strong> to write one.') + '</span>';
+        }
+      }
+
+      function renderStatic() {
+        var el = $('staticList');
+        if (!STATIC.length) {
+          el.innerHTML = '<span class="muted">No built-in catalogue loaded &mdash; ' +
+            '<code>help-articles.js</code> isn’t deployed yet, or failed to load. ' +
+            'Team articles below still work.</span>';
+          return;
+        }
+        el.innerHTML = '';
+        var shown = 0;
+        STATIC.forEach(function (a) {
+          if (!matchQ([a.slug, a.title, a.teaser].join(' '))) return;
+          shown++;
+          var overridden = !!byId[a.slug];
+          var row = document.createElement('div');
+          row.className = 'arow';
+          row.innerHTML =
+            '<div class="grow"><div class="ttl">' +
+            (overridden ? '<span class="tag info">overridden</span>' : '<span class="tag">built-in</span>') +
+            esc(a.title || a.slug) + '</div>' +
+            '<div class="meta">' + esc(a.slug) + ' &middot; ' + esc(catTitle(a.category)) +
+            ' &middot; ' + esc((a.models || []).join(', ')) +
+            ' &middot; updated ' + esc(a.updated || '–') + '</div></div>' +
+            '<div class="acts"><button class="btn btn-secondary btn-xs">' +
+            (overridden ? 'Edit override' : 'Override') + '</button></div>';
+          row.querySelector('button').onclick = function () {
+            if (overridden) openEditor(a.slug); else overrideStatic(a);
+          };
+          el.appendChild(row);
+        });
+        if (!shown) el.innerHTML = '<span class="muted">No built-in articles match this filter.</span>';
+      }
+
+      function showList() {
+        $('listView').style.display = '';
+        $('editView').style.display = 'none';
+        window.scrollTo(0, 0);
+      }
+      $('backBtn').onclick = function () {
+        if (dirty && !confirm('Discard unsaved changes?')) return;
+        showList();
+      };
+
+      /* ── Editor ── */
+      var editingId = null;     // existing doc id (= slug), null for a new article
+      var loadedDoc = null;     // the doc data as loaded, for createdAt / published
+      var slugTouched = false;
+      var dirty = false;
+
+      function setModels(list) {
+        var set = {};
+        (list || []).forEach(function (m) { set[m] = 1; });
+        document.querySelectorAll('.fModel').forEach(function (cb) { cb.checked = !!set[cb.value]; });
+      }
+      function getModels() {
+        var out = [];
+        document.querySelectorAll('.fModel').forEach(function (cb) { if (cb.checked) out.push(cb.value); });
+        return out;
+      }
+      function splitList(s) {
+        return String(s || '').split(',').map(function (x) { return x.trim(); })
+          .filter(function (x) { return !!x; });
+      }
+      function slugify(s) {
+        return String(s || '').toLowerCase()
+          .replace(/['’]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '')
+          .slice(0, 80);
+      }
+
+      function newArticle() {
+        editingId = null; loadedDoc = null; slugTouched = false; dirty = false;
+        $('fTitle').value = ''; $('fSlug').value = '';
+        $('fCat').value = CATS[0] ? CATS[0].id : '';
+        setModels(MODELS);
+        $('fTeaser').value = ''; $('fKeywords').value = ''; $('fRelated').value = '';
+        $('md').value = '';
+        afterFormLoad('New article');
+      }
+      $('newBtn').onclick = newArticle;
+
+      function openEditor(id) {
+        var rec = byId[id];
+        if (!rec) { newArticle(); return; }
+        editingId = id; loadedDoc = rec.d; slugTouched = true; dirty = false;
+        var d = rec.d;
+        $('fTitle').value = d.title || '';
+        $('fSlug').value = d.slug || id;
+        $('fCat').value = d.category || (CATS[0] ? CATS[0].id : '');
+        setModels(d.models && d.models.length ? d.models : MODELS);
+        $('fTeaser').value = d.teaser || '';
+        $('fKeywords').value = (d.keywords || []).join(', ');
+        $('fRelated').value = (d.related || []).join(', ');
+        $('md').value = d.md || '';
+        if (!d.md && d.html) {
+          $('saveErr').textContent = '';
+          $('lint').innerHTML = '<div>This doc has no markdown source — saving will replace ' +
+            'its stored HTML with whatever you write here.</div>';
+        }
+        afterFormLoad((d.published ? 'Editing published' : 'Editing draft') + ': ' + (d.title || id));
+      }
+
+      // Prefill from a built-in article so the override keeps its identity.
+      function overrideStatic(a) {
+        editingId = null; loadedDoc = null; slugTouched = true; dirty = true;
+        $('fTitle').value = a.title || '';
+        $('fSlug').value = a.slug || '';
+        $('fCat').value = a.category || (CATS[0] ? CATS[0].id : '');
+        setModels(a.models && a.models.length ? a.models : MODELS);
+        $('fTeaser').value = a.teaser || '';
+        $('fKeywords').value = (a.keywords || []).join(', ');
+        $('fRelated').value = (a.related || []).join(', ');
+        $('md').value = '';
+        afterFormLoad('Overriding built-in: ' + (a.title || a.slug));
+        $('saveErr').textContent = '';
+        $('lint').innerHTML = '<div>The built-in body lives as HTML in <code>help-articles.js</code> ' +
+          '— it can’t be loaded back into markdown. Write the replacement body in full, ' +
+          'then tick the override box under the slug.</div>';
+      }
+
+      function afterFormLoad(label) {
+        $('editWhat').textContent = label;
+        $('saveErr').textContent = '';
+        $('deleteBtn').style.display = editingId ? '' : 'none';
+        $('unpublishBtn').style.display = (editingId && loadedDoc && loadedDoc.published) ? '' : 'none';
+        $('slugAuto').style.display = slugTouched ? 'none' : '';
+        $('listView').style.display = 'none';
+        $('editView').style.display = '';
+        checkSlug(); checkRelated(); renderPreview();
+        window.scrollTo(0, 0);
+        $('fTitle').focus();
+      }
+
+      $('fTitle').oninput = function () {
+        dirty = true;
+        if (!slugTouched) { $('fSlug').value = slugify($('fTitle').value); checkSlug(); }
+        renderPreview();
+      };
+      $('fSlug').oninput = function () {
+        dirty = true; slugTouched = true; $('slugAuto').style.display = 'none'; checkSlug();
+      };
+      $('slugReset').onclick = function () {
+        slugTouched = false; $('slugAuto').style.display = '';
+        $('fSlug').value = slugify($('fTitle').value);
+        checkSlug();
+      };
+      $('fRelated').oninput = function () { dirty = true; checkRelated(); };
+      $('fTeaser').oninput = function () { dirty = true; renderPreview(); };
+      ['fCat', 'fKeywords'].forEach(function (id) {
+        $(id).oninput = $(id).onchange = function () { dirty = true; };
+      });
+      document.querySelectorAll('.fModel').forEach(function (cb) {
+        cb.onchange = function () { dirty = true; };
+      });
+
+      function checkSlug() {
+        var slug = $('fSlug').value.trim();
+        var msg = $('slugMsg');
+        msg.innerHTML = '';
+        if (!slug) return;
+        var clean = slugify(slug);
+        if (clean !== slug) {
+          msg.innerHTML = '<div class="lint">Not kebab-case — saving will store <code>' +
+            esc(clean) + '</code>.</div>';
+        }
+        if (byId[clean] && clean !== editingId) {
+          msg.innerHTML += '<div class="lint" style="color:#e77;">A team article already uses ' +
+            '<code>' + esc(clean) + '</code>. Edit that one, or pick another slug.</div>';
+          return;
+        }
+        if (staticSlugs().indexOf(clean) !== -1) {
+          msg.innerHTML +=
+            '<div class="override"><strong>' + esc(clean) + '</strong> is a built-in article. ' +
+            'A published doc with this slug <em>replaces</em> it on the customer page.' +
+            '<label><input type="checkbox" id="fOverride"> Yes — override the built-in article.</label></div>';
+        }
+      }
+
+      function checkRelated() {
+        var rel = splitList($('fRelated').value);
+        var known = knownSlugs();
+        var self = slugify($('fSlug').value);
+        var bad = rel.filter(function (s) { return !known[s] && s !== self; });
+        var out = '';
+        if (bad.length) {
+          out += '<div class="lint" style="color:#e77;">Unknown slug' + (bad.length > 1 ? 's' : '') +
+            ': <code>' + bad.map(esc).join('</code>, <code>') + '</code></div>';
+        }
+        if (rel.indexOf(self) !== -1) {
+          out += '<div class="lint">An article shouldn’t list itself as related.</div>';
+        }
+        if (rel.length && (rel.length < 2 || rel.length > 4)) {
+          out += '<div class="lint">2–4 related articles reads best (you have ' + rel.length + ').</div>';
+        }
+        $('relMsg').innerHTML = out;
+        return bad;
+      }
+
+      /* ── Toolbar ── */
+      function withSel(fn) {
+        var ta = $('md');
+        var s = ta.selectionStart, e = ta.selectionEnd;
+        var res = fn(ta.value.slice(s, e), ta.value, s, e);
+        ta.value = res.value;
+        ta.focus();
+        ta.setSelectionRange(res.start, res.end);
+        dirty = true;
+        renderPreview();
+      }
+      function wrap(before, after, placeholder) {
+        withSel(function (sel, val, s, e) {
+          var body = sel || placeholder;
+          return {
+            value: val.slice(0, s) + before + body + after + val.slice(e),
+            start: s + before.length,
+            end: s + before.length + body.length
+          };
+        });
+      }
+      function linePrefix(makePrefix) {
+        withSel(function (sel, val, s, e) {
+          // widen the selection to whole lines
+          var ls = val.lastIndexOf('\n', s - 1) + 1;
+          var le = val.indexOf('\n', e); if (le === -1) le = val.length;
+          var block = val.slice(ls, le) || 'Item';
+          var n = 0;
+          var out = block.split('\n').map(function (l) { return makePrefix(++n) + l; }).join('\n');
+          return { value: val.slice(0, ls) + out + val.slice(le), start: ls, end: ls + out.length };
+        });
+      }
+      function insertBlock(text) {
+        withSel(function (sel, val, s, e) {
+          var pre = val.slice(0, s);
+          var lead = (!pre || /\n\n$/.test(pre)) ? '' : (/\n$/.test(pre) ? '\n' : '\n\n');
+          var out = lead + text;
+          return { value: pre + out + val.slice(e), start: s + out.length, end: s + out.length };
+        });
+      }
+      $('toolbar').onclick = function (ev) {
+        var b = ev.target.closest ? ev.target.closest('.tb') : null;
+        if (!b) return;
+        var k = b.getAttribute('data-tb');
+        if (k === 'h2') linePrefix(function () { return '## '; });
+        else if (k === 'h3') linePrefix(function () { return '### '; });
+        else if (k === 'bold') wrap('**', '**', 'bold text');
+        else if (k === 'italic') wrap('*', '*', 'italic text');
+        else if (k === 'code') wrap('`', '`', 'code');
+        else if (k === 'ul') linePrefix(function () { return '- '; });
+        else if (k === 'ol') linePrefix(function (n) { return n + '. '; });
+        else if (k === 'link') wrap('[', '](troubleshoot.html)', 'link text');
+        else if (k === 'table') insertBlock('| Symptom | What to do |\n| --- | --- |\n|  |  |\n|  |  |\n');
+        else if (k === 'note') insertBlock('> note: \n');
+        else if (k === 'caution') insertBlock('> caution: \n');
+      };
+
+      /* ── Preview ── */
+      var previewTimer = null;
+      $('md').oninput = function () {
+        dirty = true;
+        clearTimeout(previewTimer);
+        previewTimer = setTimeout(renderPreview, 150);
+      };
+      function renderPreview() {
+        var md = $('md').value;
+        var head = '<div class="ptitle">' + (esc($('fTitle').value) || 'Untitled') + '</div>' +
+          '<div class="pteaser">' + (esc($('fTeaser').value) || 'No teaser yet.') + '</div>';
+        $('preview').innerHTML = head + (mdToHtml(md) ||
+          '<p style="color:var(--text-muted);">The body preview appears here as you type.</p>');
+        var hits = lintCopy(md + ' ' + $('fTitle').value + ' ' + $('fTeaser').value);
+        $('lint').innerHTML = hits.map(function (h) { return '<div>⚠ ' + esc(h) + '</div>'; }).join('');
+      }
+
+      /* ── Save / publish / delete ── */
+      function collect(published) {
+        var slug = slugify($('fSlug').value);
+        var title = $('fTitle').value.trim();
+        var teaser = $('fTeaser').value.trim();
+        var md = $('md').value;
+        var models = getModels();
+        var rel = splitList($('fRelated').value);
+
+        if (!title) return { err: 'Give the article a title.' };
+        if (!slug) return { err: 'The slug can’t be empty.' };
+        if (byId[slug] && slug !== editingId)
+          return { err: 'A team article already uses the slug “' + slug + '”.' };
+        var ov = $('fOverride');
+        if (staticSlugs().indexOf(slug) !== -1 && (!ov || !ov.checked))
+          return { err: 'That slug belongs to a built-in article — tick the override box to replace it.' };
+        if (!models.length) return { err: 'Pick at least one model this applies to.' };
+        if (published) {
+          if (!teaser) return { err: 'A teaser is required before publishing.' };
+          if (!md.trim()) return { err: 'The body is empty.' };
+          var bad = checkRelated();
+          if (bad.length) return { err: 'Related slugs don’t exist: ' + bad.join(', ') };
+        }
+
+        var now = new Date();
+        var data = {
+          slug: slug,
+          title: title,
+          category: $('fCat').value,
+          models: models,
+          teaser: teaser,
+          keywords: splitList($('fKeywords').value).map(function (k) { return k.toLowerCase(); }),
+          related: rel,
+          updated: now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2),
+          md: md,
+          html: mdToHtml(md),
+          published: !!published,
+          authorEmail: (auth.currentUser && auth.currentUser.email) || '',
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          createdAt: (loadedDoc && loadedDoc.createdAt) ||
+                     firebase.firestore.FieldValue.serverTimestamp()
+        };
+        return { slug: slug, data: data };
+      }
+
+      function save(published) {
+        var res = collect(published);
+        if (res.err) { $('saveErr').textContent = res.err; return; }
+        $('saveErr').textContent = '';
+        setBusy(true);
+        var col = db.collection(COL);
+        var write;
+        if (editingId && editingId !== res.slug) {
+          // Slug change: the doc id is the slug, so move it atomically.
+          var batch = db.batch();
+          batch.set(col.doc(res.slug), res.data);
+          batch.delete(col.doc(editingId));
+          write = batch.commit();
+        } else {
+          write = col.doc(res.slug).set(res.data);
+        }
+        write.then(function () {
+          editingId = res.slug;
+          loadedDoc = res.data;
+          slugTouched = true;
+          dirty = false;
+          $('editWhat').textContent = (published ? 'Published' : 'Saved as draft') + ': ' + res.data.title;
+          $('unpublishBtn').style.display = published ? '' : 'none';
+          $('deleteBtn').style.display = '';
+          setBusy(false);
+          load();
+        }).catch(function (e) {
+          setBusy(false);
+          $('saveErr').textContent = 'Save failed: ' + (e.code || '') + ' ' + e.message +
+            (String(e.code) === 'permission-denied'
+              ? ' — publish the helpArticles rules from docs/firestore-rules.md.' : '');
+        });
+      }
+      function setBusy(b) {
+        ['draftBtn', 'publishBtn', 'unpublishBtn', 'deleteBtn'].forEach(function (id) {
+          $(id).disabled = b;
+        });
+      }
+
+      $('draftBtn').onclick = function () { save(false); };
+      $('publishBtn').onclick = function () { save(true); };
+      $('unpublishBtn').onclick = function () {
+        if (!editingId) return;
+        if (!confirm('Unpublish this article? It disappears from the Help Center immediately.')) return;
+        save(false);
+      };
+      $('deleteBtn').onclick = function () {
+        if (!editingId) return;
+        if (!confirm('Delete “' + (loadedDoc && loadedDoc.title || editingId) +
+                     '”? This can’t be undone.')) return;
+        setBusy(true);
+        db.collection(COL).doc(editingId).delete().then(function () {
+          setBusy(false); dirty = false; load(); showList();
+        }).catch(function (e) {
+          setBusy(false);
+          $('saveErr').textContent = 'Delete failed: ' + e.message;
+        });
+      };
+
+      window.addEventListener('beforeunload', function (e) {
+        if (dirty && $('editView').style.display !== 'none') {
+          e.preventDefault(); e.returnValue = '';
+        }
+      });
+
+      renderStatic();
+    })();
+  </script>
+</body>
+</html>
