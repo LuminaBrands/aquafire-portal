@@ -3,12 +3,13 @@
    ────────────────────────────────────────────────────────── */
 
 // ── Model Data ──
-// Cutout widths carry 3/8" of clearance on EACH SIDE — nominal + 3/4" overall,
-// against the published nominal + 1/4". That is the install crews' figure
-// (Aug 2026, confirmed per-side Aug 2026): the insert seats without being
-// forced, air keeps moving around the internals, and light strips and fans
-// aren't compressed during install. Depth and height are the published
-// figures. Both this and builder.js carry the same table; move them together.
+// Cutout widths carry 3/8" of clearance IN TOTAL — nominal + 3/8", split
+// across the two outside edges — against the published nominal + 1/4". That
+// is the install crews' figure (Aug 2026, confirmed total Aug 2026): the
+// insert seats without being forced, air keeps moving around the internals,
+// and light strips and fans aren't compressed during install. Depth and
+// height are the published figures. Both this and builder.js carry the same
+// table; move them together.
 // See docs/source-material/note-installer-field-tips.txt
 const MODELS = {
   original: {
@@ -19,12 +20,12 @@ const MODELS = {
     lightOffsetBack: 4.6,   // back of insert → back edge of LED opening
     lightWidth: 3,          // depth of LED opening (front-to-back)
     sizes: {
-      20: { w: 20.75, d: 12.25, h: 12 },
-      40: { w: 40.75, d: 12.25, h: 12 },
-      60: { w: 60.75, d: 12.25, h: 12 },
-      80:  { w: 80.75,  d: 12.25, h: 12, units: [40, 40] },
-      100: { w: 100.75, d: 12.25, h: 12, units: [60, 40] },
-      120: { w: 120.75, d: 12.25, h: 12, units: [60, 60] },
+      20: { w: 20.375, d: 12.25, h: 12 },
+      40: { w: 40.375, d: 12.25, h: 12 },
+      60: { w: 60.375, d: 12.25, h: 12 },
+      80:  { w: 80.375,  d: 12.25, h: 12, units: [40, 40] },
+      100: { w: 100.375, d: 12.25, h: 12, units: [60, 40] },
+      120: { w: 120.375, d: 12.25, h: 12, units: [60, 60] },
     },
   },
   pro: {
@@ -35,12 +36,12 @@ const MODELS = {
     lightOffsetBack: 4.6,
     lightWidth: 3,
     sizes: {
-      20: { w: 20.75, d: 12.25, h: 14 },
-      40: { w: 40.75, d: 12.25, h: 14 },
-      60: { w: 60.75, d: 12.25, h: 14 },
-      80:  { w: 80.75,  d: 12.25, h: 14, units: [40, 40] },
-      100: { w: 100.75, d: 12.25, h: 14, units: [60, 40] },
-      120: { w: 120.75, d: 12.25, h: 14, units: [60, 60] },
+      20: { w: 20.375, d: 12.25, h: 14 },
+      40: { w: 40.375, d: 12.25, h: 14 },
+      60: { w: 60.375, d: 12.25, h: 14 },
+      80:  { w: 80.375,  d: 12.25, h: 14, units: [40, 40] },
+      100: { w: 100.375, d: 12.25, h: 14, units: [60, 40] },
+      120: { w: 120.375, d: 12.25, h: 14, units: [60, 60] },
     },
   },
   // The Lite carries no ganged sizes on purpose — it is the one model that
@@ -54,9 +55,9 @@ const MODELS = {
     lightOffsetBack: 3.75,
     lightWidth: 3,
     sizes: {
-      20: { w: 20.75, d: 9.625, h: 11 },
-      40: { w: 40.75, d: 9.625, h: 11 },
-      60: { w: 60.75, d: 9.625, h: 11 },
+      20: { w: 20.375, d: 9.625, h: 11 },
+      40: { w: 40.375, d: 9.625, h: 11 },
+      60: { w: 60.375, d: 9.625, h: 11 },
     },
   },
 };
@@ -159,10 +160,10 @@ function update() {
   cutoutD.textContent = frac(dims.d);
   cutoutH.textContent = frac(dims.h);
 
-  // The width above carries 3/8" per side. This is the published + 1/4"
-  // overall minimum it sits above (so 1/2" narrower), for anyone checking the
-  // number against a spec sheet.
-  if (publishedW) publishedW.textContent = frac(dims.w - 0.5);
+  // The width above carries 3/8" of clearance in total. This is the published
+  // + 1/4" overall minimum it sits above (so 1/8" narrower), for anyone
+  // checking the number against a spec sheet.
+  if (publishedW) publishedW.textContent = frac(dims.w - 0.125);
 
   if (gangNote) {
     if (dims.units) {
@@ -170,7 +171,7 @@ function update() {
       gangNote.innerHTML = `<strong>${sizeKey}" run — ${dims.units.length} inserts, one opening.</strong> `
         + `Order ${comboLabel(dims.units).replace('units', 'inserts')} of the ${model.name}. `
         + `They butt together into a continuous ribbon of flame on a single remote, so the cutout is one `
-        + `${frac(dims.w)} opening, not two. The ⅜" clearance is on the two outside edges only — nothing between the units, they meet flush.`;
+        + `${frac(dims.w)} opening, not two. The ⅜" of clearance is split across the two outside edges — nothing between the units, they meet flush.`;
       gangNote.hidden = false;
     } else {
       gangNote.hidden = true;
@@ -217,7 +218,7 @@ function drawCutoutDiagram(dims) {
   // Scale: map inches → SVG px, fitting a 60" cutout (+8" clearance) into
   // ~420px. Smaller sizes stay proportionally smaller, as they should; a
   // ganged run is wider than that reference, so it scales down to fit.
-  const scale = 420 / (Math.max(dims.w, 60.75) + clearance * 2);
+  const scale = 420 / (Math.max(dims.w, 60.375) + clearance * 2);
   const w = dims.w * scale;
   const d = dims.d * scale;
   const h = dims.h * scale;
@@ -245,8 +246,8 @@ function drawCutoutDiagram(dims) {
   // ── Inserts (floating above enclosure) ──
   // A ganged run is two inserts butted together into one continuous ribbon, so
   // the row is drawn unit by unit. A single size is a run of one. These are the
-  // inserts' nominal widths, not the cutout's — the 3/8" per side is the room
-  // they drop into, a hairline at this scale.
+  // inserts' nominal widths, not the cutout's — the 3/8" total clearance is
+  // the room they drop into, a hairline at this scale.
   const unitSizes = dims.units || [Math.round(dims.w)];
   const gap = 70;
   const insCx = encCx;
@@ -1050,7 +1051,7 @@ function fillPrintSummary() {
   document.getElementById('print-summary').innerHTML =
     `<h2>Aquafire enclosure spec</h2><dl>` +
     rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('') +
-    `</dl><p>Cutout width includes &frac38;" of clearance per side (&frac34;" over nominal). ` +
+    `</dl><p>Cutout width includes &frac38;" of clearance in total (&frac38;" over nominal, split across the two outside edges). ` +
     `Opening heights are measured from the installation surface. aquafire.app/enclosure-guide</p>`;
 }
 let themeBeforePrint = null;

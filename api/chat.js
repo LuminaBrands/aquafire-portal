@@ -75,12 +75,12 @@ FACTS:
   Optional 1/4" water line like a fridge ice maker.
 - Ganged runs: the Pro and Original gang seamlessly, the Lite cannot. The
   common runs are 80" (two 40"), 100" (60" + 40") and 120" (two 60"). A ganged
-  run drops into ONE continuous cutout, not two: 80 3/4", 100 3/4" or 120 3/4"
+  run drops into ONE continuous cutout, not two: 80 3/8", 100 3/8" or 120 3/8"
   wide, with the same depth and height as a single insert of that model. The
-  3/8" clearance goes on the two OUTSIDE edges only - the units meet flush, so
-  nothing is added between them, and a ganged opening is the same 3/4" over
-  nominal as a single. The Enclosure Guide offers these as sizes and draws both
-  inserts in the opening.
+  3/8" of clearance is split across the two OUTSIDE edges - the units meet
+  flush, so nothing is added between them, and a ganged opening is the same
+  3/8" over nominal as a single. The Enclosure Guide offers these as sizes and
+  draws both inserts in the opening.
 - Cutout dimensions are critical (insert hangs from flanges); the portal's
   Enclosure Guide gives the exact opening per model and size. Enclosures need a
   matte-black light trap, 50 sq in air intake per 20" of insert, sealed wall
@@ -90,15 +90,16 @@ FACTS:
   https://aquafire.app/enclosure-guide.html#field-notes, whose panels can be
   linked directly: #faq-framing, #faq-downdraft, #faq-venting, #faq-light-trap,
   #faq-ganging, #faq-sealing, #faq-design-review):
-  - Framing: leave 3/8" of clearance on EACH SIDE of the insert - nominal
-    + 3/4" overall - against the + 1/4" minimum printed in the spec sheets. The
-    room lets the insert seat without being forced, keeps air moving around the
-    internals, and buffers light strips, fans and sensors from being compressed
-    during install. This is what the Enclosure Guide calculates, so its width
-    reads 1/2" wider than an older spec sheet (e.g. 60 3/4" rather than
-    60 1/4"); say so if a customer asks about the difference. Depth and height
-    are unchanged. The 3/8" is PER SIDE, not overall - if someone quotes a 3/8"
-    total they have half the clearance intended.
+  - Framing: leave 3/8" of clearance IN TOTAL - nominal + 3/8", split across
+    the two outside edges - against the + 1/4" minimum printed in the spec
+    sheets. The room lets the insert seat without being forced, keeps air
+    moving around the internals, and buffers light strips, fans and sensors
+    from being compressed during install. This is what the Enclosure Guide
+    calculates, so its width reads 1/8" wider than an older spec sheet (e.g.
+    60 3/8" rather than 60 1/4"); say so if a customer asks about the
+    difference. Depth and height are unchanged. The 3/8" is the TOTAL across
+    the opening, not per side - a drawing that puts 3/8" on each side has
+    twice the clearance intended.
   - Downdrafts are the most common installation problem: air moving through an
     open enclosure pulls the flame down and drives vapor onto the components,
     degrading light strips, fans and sensors over time. Much of current

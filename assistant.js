@@ -359,7 +359,7 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'Inserts come in <strong>20\u2033, 40\u2033 and 60\u2033</strong> widths (the Lite adds a 16\u2033 Mini). All are about 12\u2033 deep and 11\u215c\u2033 tall, designed for a flush, drop-in install.' },
-            { t: 'text', html: 'Cutout dimensions are critical \u2014 the insert hangs from its flanges, so the opening has to be right (e.g. a 40\u2033 unit needs a 40\u00be\u2033 \u00d7 12\u00bc\u2033 opening with 12\u201314\u2033 of depth below, depending on model). That width carries \u215c\u2033 of clearance on each side \u2014 \u00be\u2033 over nominal, against the \u00bc\u2033 in the spec sheets \u2014 which our install crews recommend so the insert seats without being forced. Two inserts can also be ganged into an 80\u2033, 100\u2033 or 120\u2033 run sharing one opening. Our Enclosure Guide calculates it for your exact model and size:' },
+            { t: 'text', html: 'Cutout dimensions are critical \u2014 the insert hangs from its flanges, so the opening has to be right (e.g. a 40\u2033 unit needs a 40\u215c\u2033 \u00d7 12\u00bc\u2033 opening with 12\u201314\u2033 of depth below, depending on model). That width carries \u215c\u2033 of clearance in total \u2014 \u215c\u2033 over nominal, split across the two outside edges, against the \u00bc\u2033 in the spec sheets \u2014 which our install crews recommend so the insert seats without being forced. Two inserts can also be ganged into an 80\u2033, 100\u2033 or 120\u2033 run sharing one opening. Our Enclosure Guide calculates it for your exact model and size:' },
             { t: 'links', items: [{ label: '\ud83d\udcd0 Enclosure dimension calculator', href: pURL('enclosure-guide.html') }] },
             { t: 'chips', items: [{ label: 'Can I make a longer flame?', send: 'Can I combine multiple units?' }, { label: 'Installation basics', send: 'How is it installed?' }] }
           ]
@@ -374,7 +374,7 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'Yes! Pro and Original inserts gang together seamlessly to create up to <strong>20 feet (240\u2033) of continuous flame</strong>, all controlled from a single remote. Common combos: two 40\u2033 units for 80\u2033, a 60\u2033 + 40\u2033 for 100\u2033, or two 60\u2033 units for 120\u2033. (The Lite is the one model that can\u2019t be ganged.)' },
-            { t: 'text', html: 'A ganged run drops into <strong>one continuous cutout</strong>, not two: 80\u00be\u2033, 100\u00be\u2033 or 120\u00be\u2033 wide, with depth and height the same as a single insert. The \u215c\u2033 clearance goes on the two outside edges only \u2014 the units meet flush, so nothing is added in the middle.' },
+            { t: 'text', html: 'A ganged run drops into <strong>one continuous cutout</strong>, not two: 80\u215c\u2033, 100\u215c\u2033 or 120\u215c\u2033 wide, with depth and height the same as a single insert. The \u215c\u2033 of clearance is split across the two outside edges \u2014 the units meet flush, so nothing is added in the middle.' },
             { t: 'links', items: [{ label: '\ud83d\udcd0 Size a ganged cutout in the Enclosure Guide', href: pURL('enclosure-guide.html') }] }
           ]
         };
@@ -428,7 +428,7 @@
               '<strong>Seal wall cavities</strong> \u2014 open cavities cause downdrafts that flatten the flame.',
               '<strong>Side clearance</strong> \u2014 keep 6\u2033 from side walls to avoid light reflecting on them.'
             ]},
-            { t: 'text', html: 'On the <strong>width</strong>: leave <strong>\u215c\u2033 of clearance on each side</strong> \u2014 \u00be\u2033 over nominal in total, against the + \u00bc\u2033 minimum in the spec sheets. Our senior install crews recommend it so the insert seats without being forced and air keeps moving around the internals, and it\u2019s what the Enclosure Guide now calculates. Depth and height are unchanged. Watch the convention on someone else\u2019s drawing: \u215c\u2033 here is per side, not overall.' },
+            { t: 'text', html: 'On the <strong>width</strong>: leave <strong>\u215c\u2033 of clearance in total</strong> \u2014 \u215c\u2033 over nominal, split across the two outside edges, against the + \u00bc\u2033 minimum in the spec sheets. Our senior install crews recommend it so the insert seats without being forced and air keeps moving around the internals, and it\u2019s what the Enclosure Guide now calculates. Depth and height are unchanged. Watch the convention on someone else\u2019s drawing: \u215c\u2033 here is the total across the opening, not per side.' },
             { t: 'text', html: 'The Enclosure Guide calculates all of this for your exact model and size \u2014 and you can email drawings to <a href="mailto:' + SALES_EMAIL + '">' + SALES_EMAIL + '</a> for a free design review.' },
             { t: 'links', items: [{ label: '\ud83d\udcd0 Open the Enclosure Guide', href: pURL('enclosure-guide.html') }, { label: '\ud83d\udd28 Enclosure best practices', href: pURL('enclosure-guide.html#field-notes') }] },
             { t: 'chips', items: [{ label: 'Downdrafts & sealing', send: 'How do I stop downdrafts in the enclosure?' }] }
