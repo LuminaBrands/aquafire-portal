@@ -85,7 +85,8 @@ on the tag itself:
 | `apiEndpoint` | — | `portalBase + 'api/chat'` | POST endpoint for Claude-powered replies (below). Set `null` to disable AI mode |
 | `orderEndpoint` | — | `portalBase + 'api/order-status'` | POST endpoint for order & tracking lookup (below). Set `null` to disable the lookup flow |
 | `notifyEndpoint` | — | `portalBase + 'api/notify-slack'` | POST endpoint that Slack-alerts Ember's dead ends (below). Set `null` to disable alerts |
-| `collectEmail` | — | on | Offer a "leave your email" form after contact cards and dead ends so the team can follow up (below). Set `false` to disable |
+| `collectEmail` | — | on | Offer a "leave your email" form — before contact cards, after dead ends — so the team can follow up (below). Set `false` to disable |
+| `emailEndpoint` | — | `portalBase + 'api/collect-email'` | POST endpoint that stores submitted follow-up emails in Mailchimp (below). Set `null` to disable storage (Slack alert + telemetry still fire) |
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
 | `markUrl` | `data-mark-url` | `portalBase + 'ember-mark.png'` | Ember's avatar artwork, used by the launcher, the panel header, the nudge and every bot message row |
 | `beam` | `data-beam` | `'input'` | Border Beam target: `'input'` (composer field), `'panel'` (whole window), or `false` to disable |
@@ -227,7 +228,7 @@ end**, which is exactly when a human can still save the conversation:
 | :grey_question: **Ember didn't know the answer** | The AI replied but flagged itself `unresolved` — it told the customer it couldn't help |
 | :warning: **Ember's AI backend failed** | `/api/chat` errored or timed out; the customer got the local fallback |
 | :raising_hand: **Handoff to a human** | A contact card was shown — asked for a human, a 👎 flow, or an escalation |
-| :email: **Customer left their email** | The customer filled in the follow-up form the widget offers after a contact card or a dead end |
+| :email: **Customer left their email** | The customer filled in the follow-up form the widget offers before a contact card (or after a dead end) |
 
 Each message carries the customer's question, Ember's reply (for the `unresolved`
 case), their model, what they were viewing, cart contents, the pages they've visited,
@@ -506,11 +507,40 @@ Each message carries the customer's question, the model they're on, the page the
 reading, Ember's reply (for the `unresolved` case), the conversation id, and a link to
 Chat Insights — enough to decide whether to follow up without opening anything.
 
-**The follow-up form:** after any contact card or dead end, the widget offers (once per
-conversation) a one-field form — "Prefer we reach out? Leave your email and a real
-person will follow up." Submitting fires the :email: alert and logs a `contact_left`
-event, which tags the conversation with the address in Chat Insights. Disable with
+**The follow-up form:** on a handoff the widget asks **before** showing the contact
+card — "Before I hand you over — want the team to reach out instead?" with a one-field
+email form and a "No thanks — just show me the contact info" skip link; the card
+appears once the customer answers or skips. After a dead end the form is offered
+underneath the reply instead. Either way it's once per conversation. Submitting fires
+the :email: alert, logs a `contact_left` event (which tags the conversation with the
+address in Chat Insights), and stores the address in Mailchimp via
+`/api/collect-email` (below). Disable the whole feature with
 `AQUAFIRE_ASSISTANT_CONFIG.collectEmail = false`.
+
+### Storing follow-up emails in Mailchimp (`api/collect-email.js`)
+
+Submitted addresses are upserted into the Mailchimp audience and tagged
+**`chat-follow-up`**, so chat leads are segmentable and the address survives beyond
+the Slack scrollback. The upsert is idempotent (members are keyed by the md5 of the
+lowercased address) and uses `status_if_new` — **an existing member's subscription
+status is never changed**, so someone who unsubscribed from marketing stays
+unsubscribed; only the tag lands.
+
+**To activate (one-time):**
+
+1. Mailchimp → profile → **Extras → API keys** → create a key (its `-usNN` suffix
+   names the data-center; the function derives it automatically).
+2. Audience → **Settings → Audience name and defaults** → copy the **Audience ID**.
+3. Vercel → **Settings → Environment Variables** → add `MAILCHIMP_API_KEY` and
+   `MAILCHIMP_LIST_ID` (all environments) → **Redeploy**.
+
+Optional: `MAILCHIMP_TAG` (default `chat-follow-up`), `MAILCHIMP_STATUS` for
+brand-new members (default `subscribed`; use `pending` for double-opt-in if that
+fits your compliance posture better — the address was consented for a *support
+follow-up*, not a newsletter), `EMAIL_DAILY_CAP` (default 200). Until the key and
+list are set the endpoint returns 503 and nothing breaks — the address still
+reaches Slack and Chat Insights. Same `api/_guard.js` CORS + rate limiting as the
+other functions (5/min/IP).
 
 **To activate alerts (one-time):**
 
