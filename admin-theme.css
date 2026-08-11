@@ -1,0 +1,55 @@
+/* ── Admin light theme ───────────────────────────────────────────────────────
+   Dual-theme bindings for the internal pages (admin.html, chat-insights.html,
+   dealer-admin.html, help-admin.html), matching the customer portal's switch:
+   same `data-theme` attribute on <html>, same `aquafire-theme` localStorage
+   key (so the choice follows the team between portal and admin), restored
+   before first paint by the head script each page carries. The toggle itself
+   lives in the shared header (admin-nav.js).
+
+   The dark palette stays the default, defined in each page's own :root block —
+   this file only rebinds the tokens for light and patches the few hub.css
+   literals that don't run through tokens. Load it after hub.css, before the
+   page's inline <style>. */
+
+:root {
+  /* Error/danger ink. Not in the pages' own :root blocks on purpose: the doc
+     order (hub.css → this file → page <style>) means a page copy would win. */
+  --danger: #e77766;
+}
+
+:root[data-theme="light"] {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface-alt: #eceef1;
+  --border: #d8dbe0;
+  --border-warm: #e0d5c2;
+  --text: #23262c;
+  --text-muted: #5b6170;
+  /* Reds hold; glow softens on white. Amber/blue drop to their documented
+     -dim siblings so they keep contrast on light surfaces. */
+  --red-glow: rgba(192, 57, 43, 0.12);
+  --amber: #c78820;
+  --blue: #2980b9;
+  --green: #1e8449;
+  --danger: #b3372a;
+}
+
+/* hub.css .site-nav literals (the bar itself + its white-alpha hover fills) */
+[data-theme="light"] .site-nav {
+  background: rgba(252, 252, 253, 0.92);
+  border-bottom-color: var(--border);
+}
+[data-theme="light"] .site-nav .nav-links a:hover { color: var(--text); background: rgba(0, 0, 0, 0.05); }
+[data-theme="light"] .site-nav .nav-links a.active { color: var(--text); background: rgba(0, 0, 0, 0.08); }
+[data-theme="light"] .nav-drop:hover .nav-drop-btn,
+[data-theme="light"] .nav-drop-btn:focus { color: var(--text); background: rgba(0, 0, 0, 0.05); }
+[data-theme="light"] .nav-drop-menu { box-shadow: 0 12px 32px rgba(30, 34, 40, 0.18); }
+
+/* The brand mark is the white logo PNG — same filter trick as the portal bar */
+[data-theme="light"] .site-nav .nav-logo img { filter: invert(1) brightness(0.25); }
+
+/* Shared-header extras (admin-nav.js injects the elements; the hover fills
+   are white-alpha in its own CSS, rebound here for light) */
+[data-theme="light"] .admin-auth-btn:hover,
+[data-theme="light"] .admin-view-btn:hover,
+[data-theme="light"] .admin-theme-btn:hover { color: var(--text); background: rgba(0, 0, 0, 0.05); }

@@ -74,6 +74,11 @@
   // through window.AquafireAssistant. Used by the redesign hero composer,
   // which expands in place into this panel rather than opening a bubble.
   var MOUNT = cfg.mount || dataAttr('mount') || null;
+
+  // Proactive teaser nudge. On by default; cfg.nudge = false (or
+  // data-nudge="off") suppresses it -- used by chat-insights.html, where the
+  // widget is mounted for testing and an unprompted pop-up is just noise.
+  var NUDGE = cfg.nudge !== false && dataAttr('nudge') !== 'off';
   // Order & tracking lookup: the order_status flow POSTs { order, email } to
   // the portal's /api/order-status function (a Shopify Admin API proxy —
   // api/order-status.js). Override with cfg.orderEndpoint, or set it to null
@@ -1636,7 +1641,7 @@
     // Proactive teaser \u2014 fires once the visitor shows engagement (scrolling
     // around or a few clicks), with a 30s dwell fallback. Once per session,
     // never over an open or previously-used chat.
-    if (!host && !state.nudged && !state.open && !state.msgs.length) {
+    if (NUDGE && !host && !state.nudged && !state.open && !state.msgs.length) {
       var armedAt = Date.now(), scrolled = 0, lastY = window.pageYOffset || 0, clicks = 0, fallbackTimer;
       var onScroll = function () {
         var y = window.pageYOffset || 0;

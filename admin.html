@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!-- Admin homepage — big-card launcher for the internal tools. Deliberately on
+     the pre-redesign admin look (hub.css + the 2025 palette) like the other
+     admin pages. No Firebase gate of its own: the page holds no data, and every
+     destination runs its own verified-@luminabrands.com gate. Kept out of
+     search by robots.txt + the vercel.json internal-page headers + the meta
+     below. -->
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | Aquafire</title>
+  <meta name="robots" content="noindex">
+    <script>
+    // Restore the saved theme before first paint - same key as the customer
+    // portal, so the choice follows the team between the two surfaces.
+    (function () {
+      try {
+        var t = new URLSearchParams(location.search).get("theme") || localStorage.getItem("aquafire-theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    })();
+  </script>
+<link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="admin-theme.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #121417; --surface: #1b1e24; --surface-alt: #22262e;
+      --border: #2c3038; --text: #e4e5e9; --text-muted: #878c99;
+      --red: #c0392b; --red-glow: rgba(192,57,43,0.15);
+      --amber: #e8a838; --blue: #4da6e8;
+      --radius: 14px; --radius-sm: 8px;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+    a { color: inherit; }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+
+    .intro { padding: 42px 0 10px; }
+    .intro h1 { font-size: 1.6rem; }
+    .intro p { color: var(--text-muted); font-size: 0.9rem; }
+
+    .tool-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px; margin: 28px 0 60px;
+    }
+    .tool-card {
+      display: flex; flex-direction: column; gap: 10px; min-height: 220px;
+      padding: 26px 26px 22px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      text-decoration: none; position: relative; overflow: hidden;
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+    /* Bento-style top accent bar (the old design's card signature) */
+    .tool-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent, var(--red));
+    }
+    .tool-card:hover {
+      border-color: var(--accent, var(--red));
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    }
+    .tool-card .ico { font-size: 1.6rem; line-height: 1; }
+    .tool-card h2 { font-size: 1.08rem; }
+    .tool-card p { color: var(--text-muted); font-size: 0.86rem; flex: 1; }
+    .tool-card .go {
+      color: var(--accent, var(--red)); font-size: 0.84rem; font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+    }
+    .tool-card:hover .go { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <!-- Shared admin header (admin-nav.js injects it here) -->
+  <script src="admin-nav.js" defer></script>
+
+  <div class="container">
+    <header class="intro">
+      <h1>Aquafire Admin</h1>
+      <p>Internal tools for the portal &middot; Lumina Brands team</p>
+    </header>
+
+    <main class="tool-grid">
+      <a class="tool-card" href="chat-insights.html" style="--accent: var(--red);">
+        <span class="ico" aria-hidden="true">&#x1f4ac;</span>
+        <h2>Chat Admin</h2>
+        <p>Review chat conversations, feedback and unanswered questions. Teach the chat new answers, and test the live widget without leaving the dashboard.</p>
+        <span class="go">Open Chat Admin &rarr;</span>
+      </a>
+
+      <a class="tool-card" href="dealer-admin.html" style="--accent: var(--blue);">
+        <span class="ico" aria-hidden="true">&#x1f4cd;</span>
+        <h2>Dealer Portal</h2>
+        <p>Add, edit and manage authorized dealers. Save &amp; Publish commits straight to the live dealer map on the customer site.</p>
+        <span class="go">Open Dealer Portal &rarr;</span>
+      </a>
+
+      <a class="tool-card" href="help-admin.html" style="--accent: var(--amber);">
+        <span class="ico" aria-hidden="true">&#x1f4d8;</span>
+        <h2>Help Center</h2>
+        <p>Author and publish Help Center articles &mdash; new ones go live without a deploy, and a matching slug overrides a built-in article.</p>
+        <span class="go">Open Help Center &rarr;</span>
+      </a>
+    </main>
+  </div>
+</body>
+</html>
