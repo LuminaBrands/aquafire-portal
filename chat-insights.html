@@ -460,13 +460,14 @@
       $('search').oninput = function () { render(); };
 
       function convoFlags(c) {
-        var f = { fallback: 0, down: 0, handoff: 0, llm: 0, msgs: 0, up: 0 };
+        var f = { fallback: 0, down: 0, handoff: 0, llm: 0, msgs: 0, up: 0, email: '' };
         c.events.forEach(function (e) {
           if (e.type === 'user_message') { f.msgs++; if (e.intent === 'fallback') f.fallback++; }
           if (e.type === 'feedback' && e.vote === 'down') f.down++;
           if (e.type === 'feedback' && e.vote === 'up') f.up++;
           if (e.type === 'handoff') f.handoff++;
           if (e.type === 'llm_reply') f.llm++;
+          if (e.type === 'contact_left' && e.email) f.email = e.email;
         });
         return f;
       }
@@ -528,7 +529,8 @@
           if (filter === 'llm' && !f.llm) return;
           if (q && !c.events.some(function (e) {
             return (e.text || '').toLowerCase().indexOf(q) !== -1 ||
-                   (e.comment || '').toLowerCase().indexOf(q) !== -1;
+                   (e.comment || '').toLowerCase().indexOf(q) !== -1 ||
+                   (e.email || '').toLowerCase().indexOf(q) !== -1;
           })) return;
           shown++;
           var firstMsg = '';
@@ -542,6 +544,7 @@
           if (f.down) tags += '<span class="tag bad">&#x1f44e; &times;' + f.down + '</span>';
           if (f.up) tags += '<span class="tag">&#x1f44d; &times;' + f.up + '</span>';
           if (f.handoff) tags += '<span class="tag info">handoff</span>';
+          if (f.email) tags += '<span class="tag info">&#x1f4e7; ' + esc(f.email) + '</span>';
           if (f.llm) tags += '<span class="tag info">AI</span>';
           if (c.first.model) tags += '<span class="tag">' + esc(c.first.model) + '</span>';
           if (c.first.host) tags += '<span class="tag">' + esc(c.first.host) + '</span>';
@@ -587,6 +590,10 @@
           } else if (e.type === 'handoff') {
             div.className = 'ev sys';
             div.innerHTML = '<div class="body">&#x1f91d; handoff shown (' + esc(e.mode || 'support') + ')</div>';
+          } else if (e.type === 'contact_left') {
+            div.className = 'ev sys';
+            div.innerHTML = '<div class="body">&#x1f4e7; left their email for a follow-up: ' +
+              '<a href="mailto:' + esc(e.email || '') + '">' + esc(e.email || '') + '</a></div>';
           } else if (e.type === 'convo_start') {
             div.className = 'ev sys';
             var cb = [];
@@ -606,11 +613,11 @@
 
       /* ── Export ── */
       $('exportBtn').onclick = function () {
-        var rows = [['convo', 'ts', 'type', 'intent', 'text', 'vote', 'comment', 'mode', 'model', 'page', 'host']];
+        var rows = [['convo', 'ts', 'type', 'intent', 'text', 'vote', 'comment', 'mode', 'email', 'model', 'page', 'host']];
         Object.keys(convos).forEach(function (k) {
           if (!convos[k].events.some(function (e) { return e.type === 'user_message'; })) return;
           convos[k].events.forEach(function (e) {
-            rows.push([e.convo, e.ts, e.type, e.intent, e.text, e.vote, e.comment, e.mode, e.model, e.page, e.host]
+            rows.push([e.convo, e.ts, e.type, e.intent, e.text, e.vote, e.comment, e.mode, e.email, e.model, e.page, e.host]
               .map(function (v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }));
           });
         });

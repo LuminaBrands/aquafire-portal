@@ -9,6 +9,9 @@
      unresolved  the AI answered but told the customer it couldn't help
      llm_error   /api/chat errored or timed out; local fallback was used
      handoff     a contact card was shown (support / sales / orders)
+     callback    the customer left their email for a follow-up (the one
+                 alert that carries a customer address unmasked — it's
+                 deliberate, consented contact info, not transcript PII)
 
    Setup: Slack -> apps -> Incoming Webhooks -> pick the channel -> copy the
    webhook URL -> save it as SLACK_WEBHOOK_URL in the Vercel project's
@@ -51,6 +54,11 @@ const KINDS = {
     emoji: ':raising_hand:',
     title: 'Handoff to a human',
     note: ''
+  },
+  callback: {
+    emoji: ':email:',
+    title: 'Customer left their email',
+    note: 'They asked for a human follow-up — reply to the address above.'
   }
 };
 
@@ -118,6 +126,13 @@ function slackMessage(kind, d) {
     }
   }];
 
+  if (d.email) {
+    blocks.push({
+      type: 'section',
+      text: { type: 'mrkdwn', text: '*Reach them at:* <mailto:' + d.email + '|' + d.email + '>' }
+    });
+  }
+
   if (d.reply) {
     blocks.push({
       type: 'section',
@@ -152,7 +167,7 @@ function slackMessage(kind, d) {
 
   return {
     // Notification preview — already escaped, so a pasted <!channel> can't ping.
-    text: k.title + (d.question ? ' — "' + d.question + '"' : ''),
+    text: k.title + (d.email ? ' — ' + d.email : '') + (d.question ? ' — "' + d.question + '"' : ''),
     blocks: blocks
   };
 }
@@ -193,6 +208,16 @@ module.exports = async (req, res) => {
     recent: (Array.isArray(body.recent) ? body.recent : [])
       .slice(-3).map((m) => clean(m, 200)).filter(Boolean)
   };
+
+  // The customer's consented follow-up address — the one field clean()'s
+  // mask must not touch, accepted only on the 'callback' kind. Re-matched
+  // against EMAIL_RE, whose character set is also what makes the value safe
+  // to embed in the mrkdwn below without further escaping.
+  if (kind === 'callback') {
+    const m = typeof body.email === 'string' ? body.email.slice(0, 120).match(EMAIL_RE) : null;
+    if (!m) return res.status(400).json({ error: 'bad request' });
+    d.email = m[0];
+  }
 
   if (duplicate(kind + '|' + d.convo + '|' + d.mode + '|' + d.question)) {
     return res.status(200).json({ ok: true, deduped: true });
