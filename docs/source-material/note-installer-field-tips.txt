@@ -12,19 +12,19 @@ enclosure-guide.html.
 
 DECISION (Stefan, Aug 2026): the cutout recommendation below was adopted as
 the portal's own figure, not just as a tip. MODELS in app.js and builder.js
-now carry nominal + 3/4" widths (3/8" per side), so the Enclosure Guide, its
-Quick Reference table and the Fireplace Builder all report 1/2" wider than the
-2026 spec guides in this folder. That divergence from the published + 1/4" is
-intentional; the guide shows the published minimum alongside its own number
-so a spec-sheet reader can see why the two differ.
+now carry nominal + 3/8" widths (3/8" total clearance), so the Enclosure
+Guide, its Quick Reference table and the Fireplace Builder all report 1/8"
+wider than the 2026 spec guides in this folder. That divergence from the
+published + 1/4" is intentional; the guide shows the published minimum
+alongside its own number so a spec-sheet reader can see why the two differ.
 
 
 FRAMING THE CUTOUT
 
-  - Recommendation: leave 3/8" of clearance on EACH SIDE of the insert,
-    i.e. frame the cutout WIDTH at nominal + 3/4" rather than the
-    published nominal + 1/4". For a 60" unit that is 60 3/4" instead of
-    60 1/4" — 1/2" more room overall.
+  - Recommendation: leave 3/8" of clearance IN TOTAL, split across the
+    two outside edges, i.e. frame the cutout WIDTH at nominal + 3/8"
+    rather than the published nominal + 1/4". For a 60" unit that is
+    60 3/8" instead of 60 1/4" — 1/8" more room overall.
   - Depth and height are unchanged. The published figures are
     W = nominal + 1/4", D = 12 1/4" (Lite 9 5/8"), H = 14" min. (Pro),
     12" (Original), 11" (Lite).
@@ -39,26 +39,28 @@ FRAMING THE CUTOUT
   - Brad's summary: being slightly generous with these dimensions rather
     than holding a tight fit reduces installation-related service calls
     and component failures.
-  - RESOLVED (Stefan, Aug 2026): Brad's "may total 3/4" depending on how
-    it's measured across the unit" is answered — the 3/8" is per OUTSIDE
-    EDGE, i.e. per side, so 3/4" across the unit. The portal states it
-    that way and warns that a drawing calling out 3/8" overall is a
-    different, tighter opening. Superseded: an earlier revision of this
-    note, and of the portal, read the recommendation as 3/8" overall.
+  - RE-RESOLVED (Stefan, Aug 2026): the 3/8" is the TOTAL clearance
+    across the opening, which always includes the two (all) outside
+    edges — nominal + 3/8", not + 3/4". The portal states it that way
+    and warns that a drawing putting 3/8" on each side has twice the
+    clearance intended. Superseded: an intermediate revision of this
+    note, and of the portal, read the recommendation as 3/8" per side
+    (nominal + 3/4") after a per-side reading of Brad's summary; the
+    original 3/8"-overall reading was correct.
   - Ganged runs (Stefan, Aug 2026): customers commonly buy two inserts —
     80" as two 40s, 100" as a 60 + 40, 120" as two 60s (the Pro and
     Original only; page-compare-vs-aquafire.txt records the Lite as not
     gangable). The units butt together into one continuous ribbon, so the
     portal treats a run as a single opening with clearance on its two
     outside edges only — nothing between the butted units — so a run is
-    the same + 3/4" as a single: 80 3/4", 100 3/4", 120 3/4". Depth and
+    the same + 3/8" as a single: 80 3/8", 100 3/8", 120 3/8". Depth and
     height are the single-insert figures. The guides list the ganged sizes
     under "Other Common Dimensions" as unit dimensions only (80" x 12" x
     8 3/4" etc.) and give no ganged cutout row, so the cutout figure is
     the portal's, derived the same way as the singles.
   - Not to be over-applied: the insert is suspended in the opening from
     its flanges (published guides: "Cutout dimensions are critical!"),
-    so 3/8" per side is a deliberate figure, not licence to open the
+    so 3/8" in total is a deliberate figure, not licence to open the
     cutout up further.
 
 
