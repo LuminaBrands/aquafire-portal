@@ -643,5 +643,19 @@
       }
     })();
   </script>
+
+  <!-- Ember in test trim, for the admin header's "Test Chat" button: telemetry
+       off (test runs must not pollute the very data this dashboard shows), no
+       Slack alerts, no Mailchimp writes, no proactive teaser. The AI endpoint
+       stays live so real answers can be exercised. -->
+  <script>
+    window.AQUAFIRE_ASSISTANT_CONFIG = {
+      telemetry: false,
+      notifyEndpoint: null,
+      emailEndpoint: null,
+      nudge: false
+    };
+  </script>
+  <script src="assistant.js" defer></script>
 </body>
 </html>
