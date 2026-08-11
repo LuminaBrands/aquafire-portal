@@ -85,11 +85,12 @@
   var orderDown = false;
 
   // Team alerts on Ember's dead ends: fire-and-forget POST to the portal's
-  // /api/notify-slack function (Slack webhook relay). Four kinds —
+  // /api/notify-slack function (Slack webhook relay). Five kinds —
   //   'unanswered' no KB match and AI unavailable
   //   'unresolved' the AI answered but said it couldn't help
   //   'llm_error'  /api/chat errored, customer got the local fallback
   //   'handoff'    a contact card was shown
+  //   'callback'   the customer left their email for a follow-up
   // Handoffs fire at most once per conversation (a second contact card is not
   // new information); the others fire per occurrence and the function dedupes
   // repeats. Override with cfg.notifyEndpoint, or null to disable; a 503
@@ -99,6 +100,32 @@
     : (PORTAL_BASE ? PORTAL_BASE + 'api/notify-slack' : '');
   var notifyDown = false;
   var lastUserText = '';
+
+  // Offer to collect the customer's email for a human follow-up — asked
+  // before a contact card is shown, and after dead-end replies (once per
+  // conversation). Disable with cfg.collectEmail = false. The address rides
+  // the 'callback' Slack alert, is logged as a 'contact_left' event — the one
+  // deliberate, consented exception to the "no customer emails in telemetry"
+  // rule; the incidental-email masks below stay in force for everything
+  // else — and is stored in Mailchimp via /api/collect-email
+  // (api/collect-email.js). Override the store with cfg.emailEndpoint, or
+  // null to disable storage while keeping the Slack alert.
+  var COLLECT_EMAIL = cfg.collectEmail !== false;
+  var EMAIL_ENDPOINT = cfg.emailEndpoint !== undefined
+    ? cfg.emailEndpoint
+    : (PORTAL_BASE ? PORTAL_BASE + 'api/collect-email' : '');
+
+  function storeEmail(email) {
+    if (!EMAIL_ENDPOINT) return;
+    try {
+      fetch(EMAIL_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+        body: JSON.stringify({ email: email, convo: state.cid })
+      }).catch(function () { /* Slack alert + telemetry still carry it */ });
+    } catch (e) { /* ignore */ }
+  }
 
   function maskEmails(s) {
     return String(s || '').replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, function (e) {
@@ -129,6 +156,9 @@
           page: location.pathname, host: location.hostname,
           model: state.ctx.model || '',
           mode: (data && data.mode) || '',
+          // The customer's consented follow-up address — the one field the
+          // masks don't touch, and only on the 'callback' kind.
+          email: kind === 'callback' ? String((data && data.email) || '') : undefined,
           question: maskEmails(question).slice(0, 400),
           reply: maskEmails(data && data.reply).slice(0, 700),
           recent: recent
@@ -1087,7 +1117,7 @@
   var state = { open: false, nudged: false, msgs: [], ctx: { model: null, awaiting: null } };
   try {
     var saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; state.started = !!p.started; state.notified = !!p.notified; state.journey = p.journey || []; }
+    if (saved) { var p = JSON.parse(saved); state.msgs = p.msgs || []; state.ctx = p.ctx || state.ctx; state.nudged = !!p.nudged; state.open = !!p.open; state.cid = p.cid; state.started = !!p.started; state.notified = !!p.notified; state.emailAsked = !!p.emailAsked; state.contactEmail = p.contactEmail || null; state.journey = p.journey || []; }
   } catch (e) { /* private mode etc. */ }
 
   /* ── Visitor context — anonymous browsing signals (no PII) ─────────────
@@ -1136,7 +1166,7 @@
   function persist() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid, started: state.started, notified: state.notified, journey: state.journey
+        msgs: state.msgs.slice(-40), ctx: state.ctx, nudged: state.nudged, open: state.open, cid: state.cid, started: state.started, notified: state.notified, emailAsked: state.emailAsked, contactEmail: state.contactEmail, journey: state.journey
       }));
     } catch (e) { /* ignore */ }
   }
@@ -1367,6 +1397,13 @@
     '.afa-fb-form input{flex:1;background:var(--afa-surface2);border:1px solid var(--afa-border-soft);border-radius:999px;padding:6px 12px;color:var(--afa-text);font-size:12px;font-family:inherit;outline:none;}',
     '.afa-fb-form input:focus{border-color:var(--afa-ember);}',
     '.afa-fb-form button{flex-shrink:0;}',
+    '.afa-email{display:flex;flex-direction:column;gap:7px;margin-top:2px;font-size:11.5px;color:var(--afa-muted);}',
+    '.afa-email button{font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--afa-border-soft);transition:background .22s;white-space:nowrap;}',
+    '.afa-email button:hover{background:var(--afa-hover);}',
+    '.afa-email input.afa-email-bad{border-color:var(--afa-ember);}',
+    '.afa-email-done{color:var(--afa-text);}',
+    '.afa-email-skip{align-self:flex-start;font-size:11.5px;color:var(--afa-muted);text-decoration:underline;text-underline-offset:2px;padding:2px 0;}',
+    '.afa-email-skip:hover{color:var(--afa-text);}',
 
     /* Typing */
     '.afa-typing{display:inline-flex;gap:4px;padding:12px 14px;}',
@@ -1864,6 +1901,10 @@
       var col = el('div', 'afa-col');
       renderBlocks(col, m.blocks, restoring);
       if (m.feedback && !restoring) col.appendChild(feedbackEl());
+      // Dead-end replies offer the follow-up form underneath; contact-card
+      // messages are handled ask-first in pushBot instead.
+      if (!restoring && COLLECT_EMAIL && !state.emailAsked && !state.contactEmail && m.emailAsk)
+        col.appendChild(emailCaptureEl());
       row.appendChild(col);
     }
     msgsEl.appendChild(row);
@@ -1907,10 +1948,84 @@
     return fb;
   }
 
+  /* Follow-up email capture — once per conversation, so the team can reach
+     out instead of waiting for the customer to email in. On a handoff it is
+     asked BEFORE the contact card (renderEmailAsk below); after a dead-end
+     reply it is appended underneath. Submitting fires the 'callback' Slack
+     alert, logs a 'contact_left' event, and stores the address via
+     /api/collect-email (Mailchimp) — the one consented exception to the
+     telemetry email mask. */
+  function emailCaptureEl(opts) {
+    opts = opts || {};
+    state.emailAsked = true; persist();
+    var wrap = el('div', 'afa-email');
+    var lead = opts.lead || 'Prefer we reach out? Leave your email and a real person will follow up.';
+    wrap.appendChild(el('div', opts.bubble ? 'afa-bubble' : 'afa-email-lead', lead));
+    var form = el('div', 'afa-fb-form afa-email-form');
+    var inp = el('input');
+    inp.type = 'email'; inp.maxLength = 120;
+    inp.placeholder = 'you@example.com';
+    inp.setAttribute('aria-label', 'Your email address for a follow-up');
+    var send = el('button', null, 'Request follow-up');
+    function submitEmail() {
+      // Take the matched address only — the regex's character set is what
+      // keeps the value safe to echo back below.
+      var m = inp.value.trim().match(EMAIL_RE);
+      if (!m) { inp.classList.add('afa-email-bad'); inp.focus(); return; }
+      var val = m[0];
+      state.contactEmail = val; persist();
+      notify('callback', { email: val });
+      logEvent('contact_left', { email: val });
+      storeEmail(val);
+      wrap.innerHTML = '<span class="afa-email-done">Thanks \u2014 the team will be in touch at <strong>' + val + '</strong>.</span>';
+      if (opts.onSubmit) opts.onSubmit();
+    }
+    send.addEventListener('click', submitEmail);
+    inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitEmail(); });
+    inp.addEventListener('input', function () { inp.classList.remove('afa-email-bad'); });
+    form.appendChild(inp); form.appendChild(send);
+    wrap.appendChild(form);
+    if (opts.skipLabel && opts.onSkip) {
+      var skip = el('button', 'afa-email-skip', opts.skipLabel);
+      skip.addEventListener('click', opts.onSkip);
+      wrap.appendChild(skip);
+    }
+    return wrap;
+  }
+
+  /* The ask-first step on a handoff: renders the email form as its own bot
+     row and holds the contact-card message back until the customer answers
+     or skips. Both paths call done() exactly once. */
+  function renderEmailAsk(onDone) {
+    var row = el('div', 'afa-row afa-bot');
+    row.appendChild(el('div', 'afa-mini-avatar'));
+    var col = el('div', 'afa-col');
+    var fired = false;
+    function done() { if (fired) return; fired = true; onDone(); }
+    col.appendChild(emailCaptureEl({
+      bubble: true,
+      lead: 'Great! We\u2019d love to help you out. What is your email?',
+      onSubmit: done,
+      skipLabel: 'No thanks \u2014 just show me the contact info',
+      onSkip: function () { row.remove(); done(); }
+    }));
+    row.appendChild(col);
+    msgsEl.appendChild(row);
+    scrollToMsg(row);
+  }
+
   function pushBot(res) {
-    var m = { who: 'bot', blocks: res.blocks, feedback: !!res.feedback };
+    var m = { who: 'bot', blocks: res.blocks, feedback: !!res.feedback, emailAsk: !!res.emailAsk };
     state.msgs.push(m); persist();
-    renderMessage(m);
+    // A message carrying a contact card waits behind the email ask (once per
+    // conversation) — the follow-up offer converts better before the
+    // customer already has the support address in front of them.
+    if (COLLECT_EMAIL && !state.emailAsked && !state.contactEmail &&
+        (m.blocks || []).some(function (b) { return b.t === 'contact'; })) {
+      renderEmailAsk(function () { renderMessage(m); });
+    } else {
+      renderMessage(m);
+    }
     if (!state.open) launcher.classList.add('afa-unread');
   }
 
@@ -2028,7 +2143,7 @@
       remoteReply(text);
     } else {
       notify('unanswered', { question: text });
-      reply(FALLBACK);
+      reply(function () { var r = FALLBACK(); r.emailAsk = true; return r; });
     }
   }
 
@@ -2100,6 +2215,7 @@
         logEvent('llm_reply', { text: String(d.reply).slice(0, 500) });
         pushBot({
           feedback: true,
+          emailAsk: !!d.unresolved,
           blocks: [{ t: 'text', html: mdLite(d.reply) }, { t: 'chips', items: [CHIP_HUMAN] }]
         });
       });
@@ -2110,7 +2226,8 @@
       afterThink(function () {
         hideTyping();
         logEvent('llm_error', {});
-        pushBot(FALLBACK());
+        var r = FALLBACK(); r.emailAsk = true;
+        pushBot(r);
       });
     });
   }

@@ -254,7 +254,7 @@
   <header class="page-header">
     <div class="container">
       <h1>Dealer Management</h1>
-      <p class="page-sub">Add, edit, and manage Aquafire authorized dealers. Download the updated file to deploy changes.</p>
+      <p class="page-sub">Add, edit, and manage Aquafire authorized dealers. Publishing commits straight to the live site.</p>
     </div>
   </header>
 
@@ -309,17 +309,22 @@
       <strong>How to publish changes:</strong>
       <ol>
         <li>Add or edit dealers using the table above</li>
-        <li>Click <strong>Save &amp; Publish</strong> to download the updated <code>dealers.js</code> file</li>
-        <li>Replace the existing <code>dealers.js</code> in the site repository with the downloaded file</li>
-        <li>Deploy — changes go live immediately</li>
+        <li>Click <strong>Save &amp; Publish</strong> — it commits the updated <code>dealers.js</code> to GitHub for you</li>
+        <li>Vercel deploys automatically; the locator shows the change in about a minute</li>
       </ol>
+      <p style="margin:8px 0 0;color:var(--text-muted);font-size:0.85rem;">
+        Fallback: if publishing is down, <strong>Download .js</strong> saves the file so you can
+        replace <code>dealers.js</code> in the site repository by hand (setup &amp; troubleshooting:
+        <code>docs/dealer-admin.md</code> in the repo).
+      </p>
     </div>
 
     <!-- Status bar -->
     <div class="status-bar">
       <span class="status-text" id="statusText">No changes</span>
       <button class="btn btn-sm btn-secondary" onclick="resetAll()">Reset</button>
-      <button class="btn btn-primary" onclick="downloadDealersJS()" id="publishBtn" disabled>Save &amp; Publish</button>
+      <button class="btn btn-sm btn-secondary" onclick="downloadDealersJS()" title="Fallback: download dealers.js for a manual commit">Download .js</button>
+      <button class="btn btn-primary" onclick="publishDealers()" id="publishBtn" disabled>Save &amp; Publish</button>
     </div>
   </main>
 
@@ -483,6 +488,23 @@
   var sortField = 'name';
   var sortAsc = true;
   var STORAGE_KEY = 'aquafire-dealer-draft';
+
+  // SHA-256 of the dealers.js this page loaded — sent with a publish so the
+  // server can refuse to overwrite a file someone else changed since (409).
+  // Stays null if the fetch fails; the server then skips the staleness check.
+  var baseHash = null;
+  (function computeBaseHash() {
+    if (!window.fetch || !window.crypto || !crypto.subtle) return;
+    fetch('dealers.js', { cache: 'no-store' })
+      .then(function(r) { return r.arrayBuffer(); })
+      .then(function(buf) { return crypto.subtle.digest('SHA-256', buf); })
+      .then(function(digest) {
+        baseHash = Array.prototype.map.call(new Uint8Array(digest), function(b) {
+          return ('0' + b.toString(16)).slice(-2);
+        }).join('');
+      })
+      .catch(function() {});
+  })();
 
   function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
 
@@ -806,7 +828,103 @@
     document.getElementById('draftBanner').classList.remove('show');
   }
 
-  // ─── Download ───
+  // ─── Publish ───
+  // POSTs the working list to /api/publish-dealers, which verifies the team
+  // sign-in, rebuilds dealers.js server-side and commits it to GitHub; Vercel
+  // redeploys automatically. See docs/dealer-admin.md.
+  function changeSummary() {
+    var diff = workingDealers.length - DEALERS.length;
+    var s = workingDealers.length + ' dealers';
+    if (diff > 0) s += ' (+' + diff + ' added)';
+    else if (diff < 0) s += ' (' + Math.abs(diff) + ' removed)';
+    else s += ' (edited)';
+    return s;
+  }
+
+  function publishDealers() {
+    var user = firebase.auth().currentUser;
+    if (!user) {
+      alert('Sign in with your team account first.');
+      return;
+    }
+    if (!confirm('Publish ' + workingDealers.length + ' dealers to aquafire.app?')) return;
+
+    var btn = document.getElementById('publishBtn');
+    btn.disabled = true;
+    btn.textContent = 'Publishing…';
+
+    var send = function(forceFreshToken) {
+      return user.getIdToken(forceFreshToken).then(function(idToken) {
+        return fetch('/api/publish-dealers', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            idToken: idToken,
+            dealers: workingDealers,
+            baseHash: baseHash,
+            summary: changeSummary()
+          })
+        });
+      });
+    };
+
+    send(false)
+      .then(function(r) {
+        // Expired session: retry once with a force-refreshed token.
+        if (r.status === 401) return send(true);
+        return r;
+      })
+      .then(function(r) {
+        return r.json().catch(function() { return {}; }).then(function(data) {
+          handlePublishResult(r.status, data);
+        });
+      })
+      .catch(function() {
+        finishPublish('Network error — nothing was published. Your changes are safe here; try again, or use Download .js for a manual commit.');
+      });
+  }
+
+  function handlePublishResult(status, data) {
+    if (status === 200 && data.ok) {
+      // Reset the baseline so the page reads "No changes", and drop the draft.
+      DEALERS = JSON.parse(JSON.stringify(workingDealers));
+      localStorage.removeItem(STORAGE_KEY);
+      if (data.contentHash) baseHash = data.contentHash;
+      renderTable();
+      finishPublish(null);
+      var el = document.getElementById('statusText');
+      if (data.noChange) {
+        el.innerHTML = 'Already up to date — nothing to publish';
+      } else {
+        el.innerHTML = 'Published — live in ~1 min once Vercel redeploys' +
+          (data.commit && data.commit.url
+            ? ' &middot; <a href="' + esc(data.commit.url) + '" target="_blank" rel="noopener">view commit</a>'
+            : '');
+      }
+      return;
+    }
+    if (status === 401) {
+      finishPublish('Session expired — sign out and back in, then publish again.');
+    } else if (status === 409) {
+      finishPublish('Someone else published changes since you loaded this page. Use Download .js to keep a backup of your work, then reload and re-apply it.');
+    } else if (status === 429) {
+      finishPublish('Rate limited — wait a minute and try again.');
+    } else {
+      finishPublish('Publish failed' + (data && data.error ? ': ' + data.error : ' (' + status + ')') +
+        ' — your changes are safe here. Try again, or use Download .js for a manual commit.');
+    }
+  }
+
+  // Restores the button and (optionally) shows a message. A null message
+  // means success: updateStatus() repaints from the fresh baseline first.
+  function finishPublish(message) {
+    var btn = document.getElementById('publishBtn');
+    btn.textContent = 'Save & Publish';
+    updateStatus();
+    if (message) document.getElementById('statusText').innerHTML = esc(message);
+  }
+
+  // ─── Download (fallback) ───
   function downloadDealersJS() {
     var lines = [];
     lines.push('// \u2500\u2500\u2500 Dealer Type Colors \u2500\u2500\u2500');

@@ -215,5 +215,9 @@ this hardening pass, so it's deliberately not done here.
 
 `chatEvents` transcripts can contain whatever a customer typed (emails are
 masked by `assistant.js` before logging, but names, addresses, and order
-details may still appear). Treat the collection as customer data and set a
-Firestore TTL policy on the `ts` field — 180 days is a reasonable default.
+details may still appear). One deliberate exception to the email mask: the
+`contact_left` event stores the address a customer typed into the widget's
+follow-up form — consented contact info collected precisely so the team can
+reach out and Chat Insights can identify the visitor. Treat the collection as
+customer data and set a Firestore TTL policy on the `ts` field — 180 days is
+a reasonable default.
