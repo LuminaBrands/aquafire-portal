@@ -1,15 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Help Articles | Aquafire</title>
   <meta name="robots" content="noindex">
-  <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+    <script>
+    // Restore the saved theme before first paint - same key as the customer
+    // portal, so the choice follows the team between the two surfaces.
+    (function () {
+      try {
+        var t = new URLSearchParams(location.search).get("theme") || localStorage.getItem("aquafire-theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    })();
+  </script>
+<link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="admin-theme.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -39,7 +50,7 @@
     .btn-primary:hover { background: var(--red-dark); }
     .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
     .btn-secondary:hover { border-color: var(--red); }
-    .btn-danger { background: none; color: #e77; border: 1px solid rgba(220,80,80,0.4); }
+    .btn-danger { background: none; color: var(--danger, #e77); border: 1px solid rgba(220,80,80,0.4); }
     .btn-danger:hover { background: rgba(220,80,80,0.12); }
     .btn-xs { padding: 5px 12px; font-size: 0.72rem; }
     .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
@@ -54,7 +65,7 @@
       font-family: inherit; font-size: 0.9rem; outline: none; }
     .auth-card input:focus { border-color: var(--red); }
     .auth-card .btn { width: 100%; justify-content: center; margin-bottom: 10px; }
-    .auth-err { color: #e77; font-size: 0.8rem; min-height: 18px; }
+    .auth-err { color: var(--danger, #e77); font-size: 0.8rem; min-height: 18px; }
 
     /* Panels + controls */
     .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
@@ -125,7 +136,7 @@
     .editbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
       margin: 18px 0 6px; }
     .editbar .spacer { flex: 1; }
-    .saveerr { color: #e77; font-size: 0.8rem; min-height: 18px; }
+    .saveerr { color: var(--danger, #e77); font-size: 0.8rem; min-height: 18px; }
     .savedok { color: var(--green); font-size: 0.8rem; }
 
     /* Preview pane — a rough stand-in for help.css on the customer page */
@@ -892,7 +903,7 @@
             esc(clean) + '</code>.</div>';
         }
         if (byId[clean] && clean !== editingId) {
-          msg.innerHTML += '<div class="lint" style="color:#e77;">A team article already uses ' +
+          msg.innerHTML += '<div class="lint" style="color:var(--danger, #e77);">A team article already uses ' +
             '<code>' + esc(clean) + '</code>. Edit that one, or pick another slug.</div>';
           return;
         }
@@ -911,7 +922,7 @@
         var bad = rel.filter(function (s) { return !known[s] && s !== self; });
         var out = '';
         if (bad.length) {
-          out += '<div class="lint" style="color:#e77;">Unknown slug' + (bad.length > 1 ? 's' : '') +
+          out += '<div class="lint" style="color:var(--danger, #e77);">Unknown slug' + (bad.length > 1 ? 's' : '') +
             ': <code>' + bad.map(esc).join('</code>, <code>') + '</code></div>';
         }
         if (rel.indexOf(self) !== -1) {

@@ -5,17 +5,28 @@
      destination runs its own verified-@luminabrands.com gate. Kept out of
      search by robots.txt + the vercel.json internal-page headers + the meta
      below. -->
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin | Aquafire</title>
   <meta name="robots" content="noindex">
-  <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+    <script>
+    // Restore the saved theme before first paint - same key as the customer
+    // portal, so the choice follows the team between the two surfaces.
+    (function () {
+      try {
+        var t = new URLSearchParams(location.search).get("theme") || localStorage.getItem("aquafire-theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    })();
+  </script>
+<link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="admin-theme.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {

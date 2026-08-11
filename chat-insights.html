@@ -1,15 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat Insights | Aquafire</title>
   <meta name="robots" content="noindex">
-  <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
+    <script>
+    // Restore the saved theme before first paint - same key as the customer
+    // portal, so the choice follows the team between the two surfaces.
+    (function () {
+      try {
+        var t = new URLSearchParams(location.search).get("theme") || localStorage.getItem("aquafire-theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    })();
+  </script>
+<link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="hub.css">
+  <link rel="stylesheet" href="admin-theme.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -50,7 +61,7 @@
       font-family: inherit; font-size: 0.9rem; outline: none; }
     .auth-card input:focus { border-color: var(--red); }
     .auth-card .btn { width: 100%; justify-content: center; margin-bottom: 10px; }
-    .auth-err { color: #e77; font-size: 0.8rem; min-height: 18px; }
+    .auth-err { color: var(--danger, #e77); font-size: 0.8rem; min-height: 18px; }
 
     /* Stats */
     .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;
@@ -92,7 +103,7 @@
     .kb-item .kb-x { margin-left: auto; flex-shrink: 0; color: var(--text-muted);
       background: none; border: 1px solid var(--border); border-radius: 6px;
       padding: 3px 9px; cursor: pointer; font-size: 0.72rem; }
-    .kb-item .kb-x:hover { border-color: #e77; color: #e77; }
+    .kb-item .kb-x:hover { border-color: var(--danger, #e77); color: var(--danger, #e77); }
 
     /* Teach modal */
     .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100;
@@ -121,7 +132,7 @@
     .tags { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
     .tag { font-size: 0.66rem; padding: 2px 8px; border-radius: 999px; background: var(--surface-alt);
       border: 1px solid var(--border); color: var(--text-muted); }
-    .tag.bad { color: #e77; border-color: rgba(220,80,80,0.4); }
+    .tag.bad { color: var(--danger, #e77); border-color: rgba(220,80,80,0.4); }
     .tag.warn { color: var(--amber); border-color: rgba(232,168,56,0.4); }
     .tag.info { color: var(--blue); border-color: rgba(77,166,232,0.4); }
 
