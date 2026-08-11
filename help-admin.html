@@ -384,7 +384,7 @@
         var codes = [];
         // Pull code spans out first so their contents aren't re-formatted.
         t = t.replace(/`([^`]+)`/g, function (m, c) {
-          codes.push(c); return ' C' + (codes.length - 1) + ' ';
+          codes.push(c); return '\u0000C' + (codes.length - 1) + '\u0000';
         });
         // One level of nested parens is allowed in the URL — mailto:a(b) and
         // javascript:alert(1) both have to be swallowed whole, or the rejected
@@ -398,7 +398,7 @@
         });
         t = t.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
         t = t.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
-        return t.replace(/ C(\d+) /g, function (m, i) {
+        return t.replace(/\u0000C(\d+)\u0000/g, function (m, i) {
           return '<code>' + codes[+i] + '</code>';
         });
       }
