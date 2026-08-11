@@ -48,6 +48,7 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 | `help.js` | Help Center engine — home/category/article views, `?category=`/`?article=` deep links, client-side search, and the published-`helpArticles` Firestore merge (same-slug docs override the static catalogue) |
 | `help-articles.js` | Help Center data — `HELP_CATEGORIES` (6) + `HELP_ARTICLES` (29); schema + copy rules in its header and `docs/help-center.md` |
 | `embed.js` | Strips nav/footer when page loaded in iframe (`?embed` query param) |
+| `admin-nav.js` | **Shared admin header** for the three internal pages — injects a `.site-nav`-styled bar (deliberately the pre-redesign hub.css look, so admin reads as a different surface than the customer portal) with Chat Admin / Dealer Portal / Help Center links + an auth-aware Sign in/Sign out button riding the page's own Firebase session. One `<script defer>` tag per page; the pages' own gates stay in charge of sign-in. Uses its own `.nav-inner` width rules because every admin page redefines `.container` locally |
 | `assistant.js` | **"Ember" AI chat widget** — self-contained (injects own CSS), embeddable on Shopify via one script tag; `INTENTS` knowledge base + Claude-API backend (`/api/chat` by default). See `docs/chat-assistant.md` |
 | `beam.js` | **Border Beam** controller — injects the bloom layer, auto-detects the wrapped child's radius, drives activate/deactivate; pairs with `beam.css` |
 | `api/chat.js` | **Vercel serverless function** for Ember's AI answers — Claude API (`claude-opus-4-8`), zero npm deps (raw fetch, keeps the repo build-free); grounded in `BASE_FACTS` + the `chatKnowledge` Firestore collection; needs `ANTHROPIC_API_KEY` env var in Vercel |
@@ -249,7 +250,9 @@ is a published file, whether or not anything links to it.** Never commit busines
 exports, dashboards, snapshots, or customer data.
 
 - **The three internal pages are gated in the browser** (`chat-insights.html`,
-  `dealer-admin.html`, `help-admin.html`): Firebase Auth, verified `@luminabrands.com` only. Rewards
+  `dealer-admin.html`, `help-admin.html`): Firebase Auth, verified `@luminabrands.com` only, and
+  they share the injected `admin-nav.js` header (sign-out lives there; each page keeps its own
+  sign-in gate). Rewards
   customers hold accounts in the same Firebase project, so `request.auth != null` /
   "is signed in" is never a sufficient check — always test the email domain.
   `dealer-admin.html` gates the *editing tool*; `dealers.js` itself is public data that
