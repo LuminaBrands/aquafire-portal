@@ -508,7 +508,7 @@ reading, Ember's reply (for the `unresolved` case), the conversation id, and a l
 Chat Insights — enough to decide whether to follow up without opening anything.
 
 **The follow-up form:** on a handoff the widget asks **before** showing the contact
-card — "Before I hand you over — want the team to reach out instead?" with a one-field
+card — "Great! We'd love to help you out. What is your email?" with a one-field
 email form and a "No thanks — just show me the contact info" skip link; the card
 appears once the customer answers or skips. After a dead end the form is offered
 underneath the reply instead. Either way it's once per conversation. Submitting fires

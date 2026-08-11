@@ -2003,7 +2003,7 @@
     function done() { if (fired) return; fired = true; onDone(); }
     col.appendChild(emailCaptureEl({
       bubble: true,
-      lead: 'Before I hand you over \u2014 want the team to reach out instead? Leave your email and a real person will follow up.',
+      lead: 'Great! We\u2019d love to help you out. What is your email?',
       onSubmit: done,
       skipLabel: 'No thanks \u2014 just show me the contact info',
       onSkip: function () { row.remove(); done(); }
