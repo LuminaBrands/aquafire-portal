@@ -66,10 +66,16 @@
     /* Autocomplete */
     .search-wrap { position: relative; flex: 1; }
     .search-wrap input { width: 100%; }
+    /* An overlay, so it takes the near-opaque --menu-bg (like the nav menus
+       and the Leaflet popups below), not the glass --surface fill — on the
+       glass fill the result cards showed through the suggestions. The blur
+       frosts whatever leaks through the remaining 3%. */
     .ac-list {
       position: absolute; top: 100%; left: 0; right: 0; z-index: 900;
-      background: var(--surface); border: 1px solid var(--border); border-top: none;
+      background: var(--menu-bg); border: 1px solid var(--border); border-top: none;
       border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      box-shadow: var(--dropdown-shadow);
       max-height: 240px; overflow-y: auto; display: none;
     }
     .ac-list.open { display: block; }
