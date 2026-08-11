@@ -89,5 +89,5 @@ var DEALERS = [
   { name:"Home and Hearth Outfitters", type:"Dealer", address:"1136 S Kalamath St Denver, CO 80223", lat:39.696, lng:-105.0002, phone:"303-722-6698", email:"", website:"https://homeandhearthoutfitters.com/", appt:false, country:"US" },
   { name:"Okell's Fireplace", type:"Dealer", address:"134 CA-1, Hermosa Beach, CA 90254", lat:33.8561, lng:-118.3902, phone:"310-376-3448", email:"", website:"http://www.wilshirefireplace.com/", appt:false, country:"US" },
   { name:"Embers Custom Fireplace & Gas", type:"Dealer", address:"9684 Mentor Ave, Mentor, OH 44060", lat:41.6835, lng:-81.2945, phone:"440-350-8350", email:"", website:"https://embersinc.com/mentor", appt:false, country:"US" },
-  { name:"Design and Build With Tony", type:"Dealer", address:"2467 Lake Shore Blvd West Etobicoke ON", lat:43.6307, lng:-79.4762, phone:"416-885-8544", email:"tony@tonysfireplaces.ca", website:"https://tonysfireplaces.ca/", appt:false, country:"CA" }
+  { name:"Texas Fireplace", type:"Dealer", address:"8050 Jetstar Dr #175, Irving, TX 75063", lat:32.916755109435336, lng:-97.0023550570924, phone:"214-286-5143", email:"", website:"https://www.txfireplace.com/", appt:false, country:"US" }
 ];
