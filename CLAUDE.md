@@ -48,13 +48,14 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 | `api/chat.js` | **Vercel serverless function** for Ember's AI answers — Claude API (`claude-opus-4-8`), zero npm deps (raw fetch, keeps the repo build-free); grounded in `BASE_FACTS` + the `chatKnowledge` Firestore collection; needs `ANTHROPIC_API_KEY` env var in Vercel |
 | `api/notify-slack.js` | **Vercel serverless function** that Slack-alerts Ember's dead ends to `#chat-insights-feeback` — unanswered questions, AI "I don't know" replies, AI outages, human handoffs, and follow-up email capture; handoffs once per conversation, emails masked (except the `callback` alert's consented address); needs `SLACK_WEBHOOK_URL` env var, 503s gracefully until set |
 | `api/collect-email.js` | **Vercel serverless function** that stores chat follow-up emails in Mailchimp — idempotent upsert (md5-keyed) + `chat-follow-up` tag; `status_if_new` only, so an unsubscribed member is never re-subscribed; needs `MAILCHIMP_API_KEY` + `MAILCHIMP_LIST_ID` env vars, 503s gracefully until set |
-| `api/_guard.js` | **Shared library** for the functions above (underscore = not a route) — CORS **and** origin enforcement (403 on a missing/foreign `Origin`), plus rate limiting that survives cold starts via Upstash Redis REST (`UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`), falling back to the old per-instance counter when unset |
+| `api/publish-dealers.js` | **Vercel serverless function** behind dealer-admin's Save & Publish — verifies the caller's Firebase ID token server-side (identitytoolkit `accounts:lookup`, verified `@luminabrands.com` only), validates every dealer record, rebuilds `dealers.js` itself (never commits client-built text; `COLORS` is pinned in the function) and commits it to the repo's default branch via the GitHub Contents API, so Vercel redeploys it live. Needs a fine-grained PAT in `GITHUB_DEALERS_TOKEN`; 503s (and the admin page falls back to download) until set. Setup/runbook: `docs/dealer-admin.md` |
+| `api/_guard.js` | **Shared library** for the API functions above (underscore = not a route) — CORS **and** origin enforcement (403 on a missing/foreign `Origin`), plus rate limiting that survives cold starts via Upstash Redis REST (`UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`), falling back to the old per-instance counter when unset |
 
 ### Config
 
 | File | Purpose |
 |------|---------|
-| `vercel.json` | Security headers only (no routing/build config) — CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `COOP`; plus `noindex` + `X-Frame-Options: DENY` + `no-store` on the two internal pages, `noindex` on the parked `builder.html`, and `noindex` + `no-store` on `/api/*` |
+| `vercel.json` | Security headers only (no routing/build config) — CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `COOP`; plus `noindex` + `X-Frame-Options: DENY` + `no-store` on the two internal pages (separate blocks — dealer-admin's CSP additionally allows `nominatim.openstreetmap.org` in `connect-src` for its geocode helper), `noindex` on the parked `builder.html`, and `noindex` + `no-store` on `/api/*` |
 | `robots.txt` | Keeps `chat-insights.html`, `dealer-admin.html`, the parked `builder.html`, and `/api/` out of search indexes |
 
 ### Docs
@@ -66,6 +67,7 @@ The **Interactive Aquafire Guide** (`aquafire.app`) — static documentation and
 | `docs/embedding.md` | Putting a portal page in an iframe on the store — the `?embed` / `?theme=` params, measured page heights, the allowed `frame-ancestors` origins, and why third-party storage means the theme must be passed explicitly (and why rewards pages should not be embedded) |
 | `docs/storage-rules.md` | **Source of truth for the Firebase Storage rules** — same hand-published arrangement as the Firestore ones; covers the `installs/` path, the size and content-type limits, and what must be switched on before `share-install.html` works |
 | `docs/firestore-rules.md` | **Source of truth for the Firestore security rules** (`users` / `chatEvents` / `chatKnowledge`) — they're published by hand in the Firebase console, so update this file in the same PR; also covers App Check and the rewards-points limitation |
+| `docs/dealer-admin.md` | Dealer publishing setup & runbook — the fine-grained GitHub PAT (`GITHUB_DEALERS_TOKEN`), the smoke test that commits nothing, the failure-mode table, the pinned-`COLORS` caveat, and how to switch publishing to PR-mode later |
 
 ## Architecture
 
@@ -243,14 +245,19 @@ exports, dashboards, snapshots, or customer data.
   customers hold accounts in the same Firebase project, so `request.auth != null` /
   "is signed in" is never a sufficient check — always test the email domain.
   `dealer-admin.html` gates the *editing tool*; `dealers.js` itself is public data that
-  powers the customer-facing locator.
+  powers the customer-facing locator. Its Save & Publish flow, though, is enforced
+  server-side: `/api/publish-dealers` re-verifies the Firebase ID token and the email
+  domain before committing anything — the browser gate is UX, the API check is the
+  boundary. It's the repo's first server-side ID-token check
+  (identitytoolkit `accounts:lookup`); copy that pattern for future privileged
+  endpoints instead of trusting the page gate.
 - **Firestore rules are the real access control** for anything in Firebase, and they
   live in the console, not the repo — `docs/firestore-rules.md` is the source of truth.
 - **The `api/*` functions enforce their origin and rate-limit through `api/_guard.js`.**
   Use `cors(req, res)` + `throttle(req, bucket, perIpPerMin, dailyCap)` in any new
   function rather than rolling per-file copies. Origin headers are spoofable, so the
   rate limits (and the daily caps: `CHAT_DAILY_CAP`, `ORDER_LOOKUP_DAILY_CAP`,
-  `ALERT_DAILY_CAP`) are what actually bound cost and abuse.
+  `ALERT_DAILY_CAP`, `DEALER_PUBLISH_DAILY_CAP`) are what actually bound cost and abuse.
 - **Customer-supplied text must be escaped before `innerHTML`** — `mdLite()` in
   `assistant.js` (escape-then-linkify, so AI/LLM output can't inject markup) and `esc()`
   in `chat-insights.html` (transcripts are attacker-controlled input to an admin page).
