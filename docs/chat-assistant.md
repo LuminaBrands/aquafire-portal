@@ -85,6 +85,8 @@ on the tag itself:
 | `apiEndpoint` | — | `portalBase + 'api/chat'` | POST endpoint for Claude-powered replies (below). Set `null` to disable AI mode |
 | `orderEndpoint` | — | `portalBase + 'api/order-status'` | POST endpoint for order & tracking lookup (below). Set `null` to disable the lookup flow |
 | `notifyEndpoint` | — | `portalBase + 'api/notify-slack'` | POST endpoint that Slack-alerts Ember's dead ends (below). Set `null` to disable alerts |
+| `collectEmail` | — | on | Offer a "leave your email" form — before contact cards, after dead ends — so the team can follow up (below). Set `false` to disable |
+| `emailEndpoint` | — | `portalBase + 'api/collect-email'` | POST endpoint that stores submitted follow-up emails in Mailchimp (below). Set `null` to disable storage (Slack alert + telemetry still fire) |
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
 | `markUrl` | `data-mark-url` | `portalBase + 'ember-mark.png'` | Ember's avatar artwork, used by the launcher, the panel header, the nudge and every bot message row |
 | `beam` | `data-beam` | `'input'` | Border Beam target: `'input'` (composer field), `'panel'` (whole window), or `false` to disable |
@@ -226,6 +228,7 @@ end**, which is exactly when a human can still save the conversation:
 | :grey_question: **Ember didn't know the answer** | The AI replied but flagged itself `unresolved` — it told the customer it couldn't help |
 | :warning: **Ember's AI backend failed** | `/api/chat` errored or timed out; the customer got the local fallback |
 | :raising_hand: **Handoff to a human** | A contact card was shown — asked for a human, a 👎 flow, or an escalation |
+| :email: **Customer left their email** | The customer filled in the follow-up form the widget offers before a contact card (or after a dead end) |
 
 Each message carries the customer's question, Ember's reply (for the `unresolved`
 case), their model, what they were viewing, cart contents, the pages they've visited,
@@ -236,7 +239,10 @@ to pick the conversation up without opening anything.
 information). The other three fire per occurrence, with the function swallowing an
 identical repeat within 10 minutes. **Customer email addresses are masked** client-side
 *and* server-side before anything reaches Slack, and all customer text is Slack-escaped
-so a pasted `<!channel>` can't ping the workspace.
+so a pasted `<!channel>` can't ping the workspace. The one exception to the mask is the
+**Customer left their email** alert's dedicated address field: that address was typed
+into the follow-up form on purpose so the team can reply, and it still never appears in
+transcript or question text.
 
 **To activate (one-time):**
 
@@ -450,11 +456,14 @@ One small event per action to the `chatEvents` Firestore collection (project
 | `feedback` | vote (`up`/`down`), intent | 👍/👎 tapped on an answer |
 | `feedback_comment` | comment, intent | Optional "what went wrong" text after a 👎 |
 | `handoff` | mode (support/sales/orders) | A contact card is shown |
+| `contact_left` | email | The customer filled in the follow-up email form — the **one event that stores a customer email on purpose**, so Chat Insights can identify the conversation and the team can reply |
 | `llm_reply` / `llm_error` | text | AI-mode reply / endpoint failure |
 
 Every event also carries a random per-session conversation id, timestamp, page, host,
 and the customer's model (if known). No accounts, no cookies, no fingerprinting — the
-only personal data is whatever the customer types.
+only personal data is whatever the customer types, plus the consented `contact_left`
+address above (incidental emails in `text`/`comment` fields are still masked before
+logging).
 
 ### One-time setup: Firestore rules
 
@@ -492,10 +501,46 @@ end**, which is exactly when a human can still save the conversation:
 | :grey_question: **Ember didn't know the answer** | The AI replied but flagged itself `unresolved` — it told the customer it couldn't help |
 | :warning: **Ember's AI backend failed** | `/api/chat` errored or timed out; the customer got the local fallback |
 | :raising_hand: **Handoff to a human** | A contact card was shown (support / sales / orders) — including after a 👎 |
+| :email: **Customer left their email** | The follow-up form was filled in — the alert carries the address unmasked so the team can reply |
 
 Each message carries the customer's question, the model they're on, the page they were
 reading, Ember's reply (for the `unresolved` case), the conversation id, and a link to
 Chat Insights — enough to decide whether to follow up without opening anything.
+
+**The follow-up form:** on a handoff the widget asks **before** showing the contact
+card — "Great! We'd love to help you out. What is your email?" with a one-field
+email form and a "No thanks — just show me the contact info" skip link; the card
+appears once the customer answers or skips. After a dead end the form is offered
+underneath the reply instead. Either way it's once per conversation. Submitting fires
+the :email: alert, logs a `contact_left` event (which tags the conversation with the
+address in Chat Insights), and stores the address in Mailchimp via
+`/api/collect-email` (below). Disable the whole feature with
+`AQUAFIRE_ASSISTANT_CONFIG.collectEmail = false`.
+
+### Storing follow-up emails in Mailchimp (`api/collect-email.js`)
+
+Submitted addresses are upserted into the Mailchimp audience and tagged
+**`chat-follow-up`**, so chat leads are segmentable and the address survives beyond
+the Slack scrollback. The upsert is idempotent (members are keyed by the md5 of the
+lowercased address) and uses `status_if_new` — **an existing member's subscription
+status is never changed**, so someone who unsubscribed from marketing stays
+unsubscribed; only the tag lands.
+
+**To activate (one-time):**
+
+1. Mailchimp → profile → **Extras → API keys** → create a key (its `-usNN` suffix
+   names the data-center; the function derives it automatically).
+2. Audience → **Settings → Audience name and defaults** → copy the **Audience ID**.
+3. Vercel → **Settings → Environment Variables** → add `MAILCHIMP_API_KEY` and
+   `MAILCHIMP_LIST_ID` (all environments) → **Redeploy**.
+
+Optional: `MAILCHIMP_TAG` (default `chat-follow-up`), `MAILCHIMP_STATUS` for
+brand-new members (default `subscribed`; use `pending` for double-opt-in if that
+fits your compliance posture better — the address was consented for a *support
+follow-up*, not a newsletter), `EMAIL_DAILY_CAP` (default 200). Until the key and
+list are set the endpoint returns 503 and nothing breaks — the address still
+reaches Slack and Chat Insights. Same `api/_guard.js` CORS + rate limiting as the
+other functions (5/min/IP).
 
 **To activate alerts (one-time):**
 

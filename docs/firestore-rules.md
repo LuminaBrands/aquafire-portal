@@ -76,7 +76,7 @@ service cloud.firestore {
     match /chatEvents/{id} {
       allow create: if request.resource.data.keys().hasOnly(
              ['v', 'type', 'convo', 'ts', 'page', 'host',
-              'model', 'text', 'intent', 'vote', 'comment', 'mode'])
+              'model', 'text', 'intent', 'vote', 'comment', 'mode', 'email'])
         && request.resource.data.type is string
         && request.resource.data.type.size() <= 40
         && request.resource.data.convo is string
@@ -87,6 +87,11 @@ service cloud.firestore {
         && (!('comment' in request.resource.data.keys())
             || (request.resource.data.comment is string
                 && request.resource.data.comment.size() <= 300))
+        // The consented follow-up address from the widget's contact_left
+        // event — the one field that carries a customer email on purpose.
+        && (!('email' in request.resource.data.keys())
+            || (request.resource.data.email is string
+                && request.resource.data.email.size() <= 120))
         && (!('page' in request.resource.data.keys())
             || (request.resource.data.page is string
                 && request.resource.data.page.size() <= 300));
@@ -186,5 +191,9 @@ this hardening pass, so it's deliberately not done here.
 
 `chatEvents` transcripts can contain whatever a customer typed (emails are
 masked by `assistant.js` before logging, but names, addresses, and order
-details may still appear). Treat the collection as customer data and set a
-Firestore TTL policy on the `ts` field — 180 days is a reasonable default.
+details may still appear). One deliberate exception to the email mask: the
+`contact_left` event stores the address a customer typed into the widget's
+follow-up form — consented contact info collected precisely so the team can
+reach out and Chat Insights can identify the visitor. Treat the collection as
+customer data and set a Firestore TTL policy on the `ts` field — 180 days is
+a reasonable default.
