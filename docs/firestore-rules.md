@@ -77,7 +77,7 @@ service cloud.firestore {
     match /chatEvents/{id} {
       allow create: if request.resource.data.keys().hasOnly(
              ['v', 'type', 'convo', 'ts', 'page', 'host',
-              'model', 'text', 'intent', 'vote', 'comment', 'mode'])
+              'model', 'text', 'intent', 'vote', 'comment', 'mode', 'email'])
         && request.resource.data.type is string
         && request.resource.data.type.size() <= 40
         && request.resource.data.convo is string
@@ -88,6 +88,11 @@ service cloud.firestore {
         && (!('comment' in request.resource.data.keys())
             || (request.resource.data.comment is string
                 && request.resource.data.comment.size() <= 300))
+        // The consented follow-up address from the widget's contact_left
+        // event — the one field that carries a customer email on purpose.
+        && (!('email' in request.resource.data.keys())
+            || (request.resource.data.email is string
+                && request.resource.data.email.size() <= 120))
         && (!('page' in request.resource.data.keys())
             || (request.resource.data.page is string
                 && request.resource.data.page.size() <= 300));
