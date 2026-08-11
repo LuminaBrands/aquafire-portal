@@ -150,6 +150,8 @@
   </style>
 </head>
 <body>
+  <!-- Shared admin header (admin-nav.js injects it here) -->
+  <script src="admin-nav.js" defer></script>
   <div class="container">
     <div class="topbar">
       <div>
@@ -160,7 +162,6 @@
         <span id="who" class="sub"></span>
         <button class="btn btn-secondary" id="exportBtn" style="display:none;">Export CSV</button>
         <button class="btn btn-secondary" id="refreshBtn" style="display:none;">Refresh</button>
-        <button class="btn btn-secondary" id="signOutBtn" style="display:none;">Sign out</button>
       </div>
     </div>
 
@@ -278,7 +279,7 @@
         auth.signInWithEmailAndPassword($('email').value, $('password').value)
           .catch(function (e) { $('authErr').textContent = e.message; });
       };
-      $('signOutBtn').onclick = function () { auth.signOut(); };
+      /* Sign-out lives in the shared admin header (admin-nav.js). */
 
       /* Team-only: the Firestore rules are the real gate (verified
          @luminabrands.com emails only), but rewards customers hold accounts in
@@ -310,7 +311,6 @@
         $('switchBtn').style.display = (user && !authed) ? '' : 'none';
         $('authCard').style.display = authed ? 'none' : '';
         $('dash').style.display = authed ? '' : 'none';
-        $('signOutBtn').style.display = authed ? '' : 'none';
         $('refreshBtn').style.display = authed ? '' : 'none';
         $('exportBtn').style.display = authed ? '' : 'none';
         $('who').textContent = authed ? (user.email || user.displayName || '') : '';

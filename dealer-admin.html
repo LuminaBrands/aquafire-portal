@@ -199,42 +199,8 @@
 </head>
 <body class="gated">
 
-  <!-- Nav -->
-  <nav class="site-nav">
-    <div class="container nav-inner">
-      <a href="/" class="nav-logo">
-        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
-      </a>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li class="nav-drop">
-          <button type="button" class="nav-drop-btn" aria-haspopup="true">Guides</button>
-          <ul class="nav-drop-menu">
-            <li><a href="quick-start.html">Quick Start</a></li>
-            <li><a href="builder.html">Build Yours</a></li>
-            <li><a href="enclosure-guide.html">Enclosure Guide</a></li>
-          </ul>
-        </li>
-        <li class="nav-drop">
-          <button type="button" class="nav-drop-btn" aria-haspopup="true">Care</button>
-          <ul class="nav-drop-menu">
-            <li><a href="water-care.html">Water Care</a></li>
-            <li><a href="maintenance.html">Maintenance</a></li>
-            <li><a href="troubleshoot.html">Troubleshoot</a></li>
-          </ul>
-        </li>
-        <li><a href="dealer-locator.html">Find a Dealer</a></li>
-        <li><a href="support.html">Support</a></li>
-        <li><a href="https://www.aquafire.com" target="_blank" rel="noopener">Retail Site</a></li>
-        <li class="nav-cta">
-          <a href="quick-start.html" class="btn-primary btn-sm">Get Started</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <!-- Shared admin header (admin-nav.js injects it here) -->
+  <script src="admin-nav.js" defer></script>
 
   <!-- Auth gate (team accounts only) -->
   <div class="container" id="authGate">
@@ -986,13 +952,6 @@
     document.getElementById('filterType').addEventListener('change', renderTable);
     document.getElementById('filterCountry').addEventListener('change', renderTable);
 
-    // Nav toggle
-    var tog = document.querySelector('.nav-toggle');
-    var links = document.querySelector('.nav-links');
-    if (tog) tog.addEventListener('click', function() {
-      var open = links.classList.toggle('open');
-      tog.setAttribute('aria-expanded', open);
-    });
   });
   </script>
 </body>

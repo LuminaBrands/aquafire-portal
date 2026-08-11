@@ -167,6 +167,8 @@
   </style>
 </head>
 <body>
+  <!-- Shared admin header (admin-nav.js injects it here) -->
+  <script src="admin-nav.js" defer></script>
   <div class="container">
     <div class="topbar">
       <div>
@@ -176,7 +178,6 @@
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
         <span id="who" class="sub"></span>
         <button class="btn btn-secondary" id="refreshBtn" style="display:none;">Refresh</button>
-        <button class="btn btn-secondary" id="signOutBtn" style="display:none;">Sign out</button>
       </div>
     </div>
 
@@ -606,7 +607,7 @@
         auth.signInWithEmailAndPassword($('email').value, $('password').value)
           .catch(function (e) { $('authErr').textContent = e.message; });
       };
-      $('signOutBtn').onclick = function () { auth.signOut(); };
+      /* Sign-out lives in the shared admin header (admin-nav.js). */
       $('switchBtn').onclick = function () { $('authErr').textContent = ''; auth.signOut(); };
 
       auth.onAuthStateChanged(function (user) {
@@ -619,7 +620,6 @@
         $('switchBtn').style.display = (user && !authed) ? '' : 'none';
         $('authCard').style.display = authed ? 'none' : '';
         $('app').style.display = authed ? '' : 'none';
-        $('signOutBtn').style.display = authed ? '' : 'none';
         $('refreshBtn').style.display = authed ? '' : 'none';
         $('who').textContent = authed ? (user.email || '') : '';
         if (authed) { $('authErr').textContent = ''; load(); }
