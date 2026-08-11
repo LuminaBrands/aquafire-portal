@@ -47,10 +47,12 @@
 .ha-search-inline { margin: 0 0 20px; }
 
 /* ── App shell ──────────────────────────────────────────────────────────── */
-/* Capped so the six category tiles land 3-up and the row lists stay readable
-   — the 1200px page width is for hero layouts, not for text. */
-#help-app { max-width: 980px; }
-.ha-view .tiles { grid-template-columns: repeat(auto-fit, minmax(238px, 1fr)); }
+/* Full page column, like support.html's tiles — the browse grid and row lists
+   line up with the nav bar's edges. Long-form reading stays capped separately
+   (.ha-article and friends at 760px, matching .phead). */
+/* 300px min keeps the six category tiles 3-up at the full 1164px column
+   (4-up would need ~1250px), collapsing to 2-up then 1-up as the page narrows. */
+.ha-view .tiles { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
 .ha-view .rows { margin-top: 12px; }
 
 .ha-h {
