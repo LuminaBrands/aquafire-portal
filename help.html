@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<!-- Redesigned to the committed direction. Model cards use the shared .tile
-     component with a product shot. -->
+<!-- Help Center. Chrome is copied from support.html (the reference inner page);
+     everything below .phead is rendered by help.js into #help-app, so ?embed
+     keeps working — the browser lives in <main>, not in the chrome. -->
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quick Start | Interactive Aquafire Guide</title>
-  <meta name="description" content="Pick your Aquafire model to open its full interactive guide.">
+  <title>Help Center | Interactive Aquafire Guide</title>
+  <meta name="description" content="Searchable Aquafire help articles — installation and enclosures, everyday use, troubleshooting, cleaning and maintenance, warranty and support.">
   <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
   <link rel="apple-touch-icon" href="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/favicon_98cc15d4-4cfb-40c8-aba5-f28f981d1f37.png?v=1679932368">
   <script>
@@ -24,6 +25,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="redesign.css">
   <link rel="stylesheet" href="rewards.css">
+  <link rel="stylesheet" href="help.css">
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -40,7 +42,7 @@
         <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
       </a>
       <nav class="links" id="navLinks" aria-label="Primary">
-        <a class="is-here" aria-current="page" href="quick-start.html">Set Up</a>
+        <a href="quick-start.html">Set Up</a>
         <div class="navgroup">
           <button class="navgroup-btn" type="button" aria-expanded="false" aria-controls="nav-guides">Guides<svg class="navgroup-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
           <div class="navgroup-menu" id="nav-guides">
@@ -51,10 +53,10 @@
           </div>
         </div>
         <div class="navgroup">
-          <button class="navgroup-btn" type="button" aria-expanded="false" aria-controls="nav-support">Support<svg class="navgroup-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <button class="navgroup-btn is-here" type="button" aria-expanded="false" aria-controls="nav-support">Support<svg class="navgroup-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
           <div class="navgroup-menu" id="nav-support">
             <a href="troubleshoot.html">Troubleshoot</a>
-            <a href="help.html">Help Center</a>
+            <a href="help.html" class="is-here" aria-current="page">Help Center</a>
             <a href="dealer-locator.html">Find a Dealer</a>
             <a target="_blank" rel="noopener" href="https://www.aquafire.com/pages/warranty">Warranty / Register</a>
             <a href="rewards.html">Rewards</a>
@@ -76,33 +78,33 @@
     </header>
 
     <header class="phead">
-      <h1>Quick Start</h1>
-      <p>Pick your model &mdash; each guide covers specs, install, water care and fixes.</p>
+      <h1>Help Center</h1>
+      <p>Answers straight from the manuals, the install guides and the service bench &mdash; searchable, and written for the fireplace you actually own.</p>
+
+      <form class="ha-search" id="ha-search-form" role="search" action="help.html">
+        <label class="ha-vh" for="ha-search-input">Search the help center</label>
+        <span class="ha-search-field">
+          <svg class="ha-search-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input class="ha-search-input" id="ha-search-input" name="q" type="search" autocomplete="off" spellcheck="false"
+                 placeholder="Search &mdash; beeping, cleaning, cutout, remote&hellip;">
+          <button class="ha-search-clear" id="ha-search-clear" type="button" hidden aria-label="Clear search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          </button>
+        </span>
+      </form>
     </header>
 
     <main class="pbody">
-      <section data-reward="quick-start">
-      <div class="tiles models">
-        <a class="tile model" href="aquafire-original.html">
-          <img src="model-original.jpg" alt="Aquafire Original" width="1264" height="842">
-          <b>Aquafire Original</b>
-          <p>The classic water vapor fireplace. Available in 20&Prime;, 40&Prime; and 60&Prime;.</p>
-          <span class="pill">View guide &rarr;</span>
-        </a>
-        <a class="tile model" href="aquafire-pro.html">
-          <img src="model-pro.jpg" alt="Aquafire Pro" width="1400" height="1400">
-          <b>Aquafire Pro</b>
-          <p>Premium model with enhanced flame realism and wider light angles.</p>
-          <span class="pill">View guide &rarr;</span>
-        </a>
-        <div class="tile model is-soon">
-          <img src="model-lite.jpg" alt="Aquafire Lite" width="1400" height="933">
-          <b>Aquafire Lite</b>
-          <p>Compact and easy to install &mdash; perfect for smaller spaces.</p>
-          <span class="pill">Coming soon</span>
-        </div>
+      <div id="help-app">
+        <noscript>
+          <div class="ha-panel">
+            <h2>JavaScript required</h2>
+            <p>The article browser needs JavaScript to search and open articles. In the meantime,
+              the <a href="support.html">Support hub</a> links everything you may need, and the
+              <a href="troubleshoot.html">Troubleshooter</a> can still point you at a fix.</p>
+          </div>
+        </noscript>
       </div>
-      </section>
     </main>
 
     <footer class="pfoot">
@@ -130,23 +132,6 @@
     </footer>
   </div>
 
-  <style>
-    /* Page-specific: model cards carry product shots. */
-    .tiles.models { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-    /* Room photographs now, not transparent cutouts -- fill and clip rather
-       than letterbox, and no drop-shadow off a rectangle. */
-    .tile.model img {
-      width: 100%; height: 150px; object-fit: cover;
-      margin-bottom: 10px; border-radius: 13px;
-    }
-    .tile .pill {
-      align-self: flex-start; margin-top: 4px; font-size: 0.76rem; font-weight: 600;
-      color: var(--text-mid); background: var(--mini-bg);
-      border: 1px solid var(--stroke); border-radius: 999px; padding: 5px 11px;
-    }
-    .tile.is-soon { opacity: 0.72; }
-    .tile.is-soon .pill { color: var(--text-dim); }
-  </style>
   <script src="embed.js"></script>
   <script src="nav.js" defer></script>
   <script src="rewards.js"></script>
@@ -157,6 +142,7 @@
       var themeBtn = document.getElementById("themeBtn");
       var navBtn = document.getElementById("navBtn");
       var links = document.getElementById("navLinks");
+
       function label() {
         themeBtn.setAttribute("aria-label",
           root.dataset.theme === "light" ? "Switch to dark theme" : "Switch to light theme");
@@ -167,12 +153,15 @@
         label();
       });
       label();
+
       navBtn.addEventListener("click", function () {
         var open = links.classList.toggle("open");
         navBtn.setAttribute("aria-expanded", String(open));
       });
     })();
   </script>
+  <script src="help-articles.js"></script>
+  <script src="help.js"></script>
   <script src="assistant.js" defer></script>
 </body>
 </html>

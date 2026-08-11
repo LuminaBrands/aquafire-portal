@@ -7,13 +7,14 @@ Firebase CLI config). They're edited in the Firebase console:
 This file is the source of truth for what *should* be published. If you change
 the rules in the console, update this file in the same PR.
 
-One project holds three unrelated things, which is the trap to keep in mind:
+One project holds four unrelated things, which is the trap to keep in mind:
 
 | Collection | Written by | Read by |
 |---|---|---|
 | `users/{uid}` | `rewards.js` (customers, from the browser) | the signed-in customer |
 | `chatEvents` | `assistant.js` (anonymous visitors) | the team, in `chat-insights.html` |
 | `chatKnowledge` | the team, in `chat-insights.html` | `api/chat.js` (public read) |
+| `helpArticles` | the team, in `help-admin.html` | `help.js` (public read, published only) |
 
 **Rewards customers hold Firebase accounts in this project.** So
 `request.auth != null` is never sufficient for anything internal — team access
@@ -108,9 +109,32 @@ service cloud.firestore {
       allow read: if true;
       allow create, update, delete: if isTeam();
     }
+
+    // ── Help Center articles (help-admin.html → help.js) ─────────────────
+    // Doc id is the article slug. Drafts live in the same collection as
+    // published articles, so the public read is conditional on the document
+    // rather than on the collection.
+    match /helpArticles/{slug} {
+      // Published articles are world-readable — they are the customer-facing
+      // Help Center. Drafts are team-only, which is what the `published`
+      // check buys: a draft is not "unlisted", it is unreadable.
+      allow read: if resource.data.published == true || isTeam();
+
+      allow create, update, delete: if isTeam();
+    }
   }
 }
 ```
+
+`helpArticles` is the one collection whose read rule constrains how the
+customer page may query it. A rule on `resource.data` is evaluated per
+document, but Firestore refuses a *list* query it can't prove will only return
+allowed documents — so `help.js` must ask for
+`collection('helpArticles').where('published','==',true)`. An unfiltered
+`.get()` is denied outright, even though every document it would have returned
+is published. `help-admin.html` lists the collection unfiltered on purpose:
+it only ever runs that query behind the team gate, where `isTeam()` carries the
+read.
 
 Adjust the domain pattern if the team signs in with something else (e.g.
 `'.*@(luminabrands|aquafire)[.]com'`), or swap `isTeam()` for an explicit UID

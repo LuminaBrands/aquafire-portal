@@ -169,6 +169,7 @@ FACTS:
   - https://aquafire.app/water-care.html - water hardness by ZIP, cartridge timing
   - https://aquafire.app/maintenance.html - cleaning and flush schedule
   - https://aquafire.app/troubleshoot.html - guided fixes, model-aware
+  - https://aquafire.app/help.html - searchable help articles for every model
   - https://aquafire.app/dealer-locator.html - authorised dealers near you
   - https://aquafire.app/support.html - warranty, claims, contact
   - https://aquafire.app/rewards.html - the rewards programme
