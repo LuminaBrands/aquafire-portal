@@ -740,9 +740,9 @@
     .hub-chapters-chevron { transition: transform 0.3s; flex-shrink: 0; }
     .hub-chapters-toggle[aria-expanded="true"] .hub-chapters-chevron { transform: rotate(180deg); }
     .hub-chapters-content {
-      max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+      display: grid; grid-template-rows: 0fr; overflow: hidden; transition: grid-template-rows 0.4s ease;
     }
-    .hub-chapters-content--open { max-height: 1200px; }
+    .hub-chapters-content--open { grid-template-rows: 1fr; }
     .hub-chapters-content .hub-grid { margin-top: 10px; }
 
     /* Extra links row below chapters */
