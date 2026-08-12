@@ -13,7 +13,7 @@ portal.
 | `help.css` | Page styles, `ha-` prefixed, redesign tokens with fallbacks. |
 | `help.js` | Render + search engine: home / category / article views, `?category=<id>` / `?article=<slug>` deep links with pushState, live client-side search, Firestore merge (below). |
 | `help-articles.js` | The built-in catalogue: `HELP_CATEGORIES` (6) + `HELP_ARTICLES` (29). Schema is documented in the file header. |
-| `help-admin.html` | **Internal** team editor (not in nav; noindexed in `vercel.json` + `robots.txt`). Firebase-gated to verified `@luminabrands.com` — same rule as `chat-insights.html`: signed-in alone is never sufficient. |
+| `help-admin.html` | **Internal** team editor (not in nav; noindexed in `vercel.json` + `robots.txt`). Firebase-gated to verified `@luminabrands.com` — same rule as `chat-insights.html`: signed-in alone is never sufficient. Toolbar supports inserting images (upload to Storage or by URL) — see "Article images" below. |
 
 ## Where article content came from
 
@@ -51,6 +51,24 @@ markdown-lite source (`md`) and the rendered `html`, plus `published`.
 - the query **must** filter `.where('published', '==', true)` — the security
   rules deny unfiltered public list queries;
 - any Firestore failure is silent and the static catalogue still renders.
+
+## Article images
+
+The editor's markdown-lite body supports `![alt](url)` — write it directly, or
+use the toolbar: **Insert image** uploads a file (≤ 5 MB, `image/*`) to
+Firebase Storage at `help-media/<timestamp>-<name>` and writes the markdown
+for you once the upload finishes; **by URL** skips the upload and just asks
+for a link (for an image already hosted elsewhere, e.g. the Shopify CDN). Both
+insert at the cursor and refresh the live preview. Uploaded URLs render at
+`https://firebasestorage.googleapis.com/...`; `vercel.json`'s `img-src` allows
+`'self'`, `cdn.shopify.com` and `firebasestorage.googleapis.com` for that
+reason — an image host outside those three won't render on either the
+customer page or the editor preview.
+
+The `help-media/` Storage rules (public read, team-only write, `docs/storage-rules.md`)
+must be published in the console before the upload button works — same
+one-time setup step as the `helpArticles` Firestore rules, and the same
+failure mode: the editor gate is UX, the rules are the real boundary.
 
 ## Copy rules (also enforced as an advisory lint in the editor)
 

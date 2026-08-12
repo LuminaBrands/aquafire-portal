@@ -129,6 +129,7 @@
       border-radius: 6px; padding: 4px 9px; font-size: 0.72rem; cursor: pointer;
       font-family: inherit; }
     .tb:hover { border-color: var(--red); color: var(--text); }
+    .tb[disabled] { opacity: 0.6; cursor: not-allowed; }
     .guard { font-size: 0.74rem; color: var(--text-muted); line-height: 1.5; }
     .guard li { margin-left: 16px; }
     .lint { margin-top: 8px; font-size: 0.76rem; color: var(--amber); }
@@ -153,6 +154,8 @@
     .preview ul, .preview ol { margin: 0 0 12px 20px; font-size: 0.88rem; }
     .preview li { margin-bottom: 5px; }
     .preview a { color: var(--blue); }
+    .preview img { max-width: 100%; height: auto; display: block; margin: 12px 0;
+      border-radius: var(--radius-sm); border: 1px solid var(--border); }
     .preview code { background: var(--surface-alt); border: 1px solid var(--border);
       border-radius: 4px; padding: 1px 5px; font-size: 0.82em; }
     .preview table { width: 100%; border-collapse: collapse; margin: 0 0 14px; font-size: 0.82rem;
@@ -311,14 +314,21 @@
                 <button class="tb" type="button" data-tb="table">Table</button>
                 <button class="tb" type="button" data-tb="note">Note</button>
                 <button class="tb" type="button" data-tb="caution">Caution</button>
+                <button class="tb" type="button" data-tb="image">&#128247; Insert image</button>
+                <button class="tb" type="button" data-tb="imageurl">by URL&hellip;</button>
               </div>
+              <input type="file" id="imgFile" accept="image/*" hidden>
               <textarea id="md" spellcheck="true" placeholder="## Start here&#10;&#10;Plain paragraphs, **bold**, [links](troubleshoot.html).&#10;&#10;1. Numbered steps&#10;2. one per line&#10;&#10;&gt; note: a helpful aside&#10;&gt; caution: something that can damage the unit"></textarea>
               <div class="help">Markdown-lite: <code>##</code>/<code>###</code> headings,
                 <code>**bold**</code>, <code>*italic*</code>, <code>`code`</code>,
-                <code>[text](url)</code>, <code>-</code> and <code>1.</code> lists,
+                <code>[text](url)</code>, <code>![alt](url)</code> images,
+                <code>-</code> and <code>1.</code> lists,
                 <code>| pipe | tables |</code>, and <code>&gt; note:</code> /
                 <code>&gt; caution:</code> callouts. Everything else is escaped &mdash; raw HTML
-                will not render.</div>
+                will not render. &ldquo;Insert image&rdquo; uploads to Firebase Storage
+                (<code>help-media/</code>, needs <code>docs/storage-rules.md</code> published) and
+                writes the markdown for you &mdash; &ldquo;by URL&rdquo; skips the upload and asks
+                for a link instead.</div>
               <div class="lint" id="lint"></div>
             </div>
 
@@ -361,6 +371,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
   <script>
     (function () {
       'use strict';
@@ -392,11 +403,30 @@
         return v;
       }
 
+      // Images may only be http(s) or a relative portal path — safeUrl()
+      // already blocks javascript:/data:, this additionally drops mailto:,
+      // which is meaningless as an <img src>.
+      function safeImgUrl(u) {
+        var v = safeUrl(u);
+        if (!v) return '';
+        var scheme = /^([a-z][a-z0-9+.\-]*):/i.exec(v);
+        if (scheme && scheme[1].toLowerCase() !== 'http' && scheme[1].toLowerCase() !== 'https') return '';
+        return v;
+      }
+
       function inlineMd(t) {
         var codes = [];
         // Pull code spans out first so their contents aren't re-formatted.
         t = t.replace(/`([^`]+)`/g, function (m, c) {
           codes.push(c); return '\u0000C' + (codes.length - 1) + '\u0000';
+        });
+        // Images before links — same `[label](url)` shape with a leading `!`,
+        // so this has to consume the whole `![alt](url)` first or the link
+        // rule below eats the `[alt](url)` half and leaves a stray `!`.
+        t = t.replace(/!\[([^\]\n]*)\]\(((?:[^()\s]|\([^()\s]*\))+)\)/g, function (m, alt, url) {
+          var src = safeImgUrl(url);
+          if (!src) return alt;
+          return '<img src="' + src + '" alt="' + alt + '" loading="lazy">';
         });
         // One level of nested parens is allowed in the URL — mailto:a(b) and
         // javascript:alert(1) both have to be swallowed whole, or the rejected
@@ -975,6 +1005,21 @@
           return { value: pre + out + val.slice(e), start: s + out.length, end: s + out.length };
         });
       }
+      // Drops `![describe the image](url)` at the cursor (replacing any
+      // selection, same as the other toolbar buttons), then re-renders.
+      function insertImageMd(url) {
+        withSel(function (sel, val, s, e) {
+          var md = '![describe the image](' + url + ')';
+          return { value: val.slice(0, s) + md + val.slice(e), start: s + md.length, end: s + md.length };
+        });
+      }
+      function insertImageByUrl() {
+        var url = window.prompt('Image URL (https://…):', 'https://');
+        if (!url) return;
+        url = url.trim();
+        if (!url) return;
+        insertImageMd(url);
+      }
       $('toolbar').onclick = function (ev) {
         var b = ev.target.closest ? ev.target.closest('.tb') : null;
         if (!b) return;
@@ -990,7 +1035,62 @@
         else if (k === 'table') insertBlock('| Symptom | What to do |\n| --- | --- |\n|  |  |\n|  |  |\n');
         else if (k === 'note') insertBlock('> note: \n');
         else if (k === 'caution') insertBlock('> caution: \n');
+        else if (k === 'image') { if (!b.disabled) $('imgFile').click(); }
+        else if (k === 'imageurl') insertImageByUrl();
       };
+
+      /* ── Image upload (help-media/, help-admin.html only) ──────────────
+         Firebase Storage, same pattern as share-install.html's upload but a
+         team-only path with public read (docs/storage-rules.md). Progress and
+         errors surface on the toolbar button itself, since there's no dedicated
+         upload UI here. */
+      var MAX_IMG_BYTES = 5 * 1024 * 1024;
+      $('imgFile').onchange = function () {
+        var file = this.files && this.files[0];
+        this.value = ''; // so picking the same file twice still fires change
+        if (!file) return;
+        $('saveErr').textContent = '';
+        if (!/^image\//.test(file.type || '')) {
+          $('saveErr').textContent = 'That doesn’t look like an image file.';
+          return;
+        }
+        if (file.size > MAX_IMG_BYTES) {
+          $('saveErr').textContent = 'That image is ' + (file.size / 1048576).toFixed(1) +
+            ' MB — the limit is 5 MB.';
+          return;
+        }
+        uploadImage(file);
+      };
+      function uploadImage(file) {
+        var btn = $('toolbar').querySelector('[data-tb="image"]');
+        var label = btn.innerHTML;
+        if (typeof firebase === 'undefined' || !firebase.storage) {
+          $('saveErr').textContent = 'Image uploads are unavailable right now — the Storage SDK did not load.';
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Uploading… 0%';
+        var safe = (file.name || 'image').replace(/[^A-Za-z0-9._-]/g, '_').slice(-80);
+        var path = 'help-media/' + Date.now() + '-' + safe;
+        var task = firebase.storage().ref(path).put(file, { contentType: file.type || 'image/jpeg' });
+        task.on('state_changed', function (snap) {
+          var pct = snap.totalBytes ? Math.round((snap.bytesTransferred / snap.totalBytes) * 100) : 0;
+          btn.textContent = 'Uploading… ' + pct + '%';
+        }, function (e) {
+          btn.disabled = false; btn.innerHTML = label;
+          $('saveErr').textContent = 'Upload failed: ' + (e && e.message ? e.message : e) +
+            (e && e.code === 'storage/unauthorized'
+              ? ' — publish the help-media rules from docs/storage-rules.md.' : '');
+        }, function () {
+          task.snapshot.ref.getDownloadURL().then(function (url) {
+            btn.disabled = false; btn.innerHTML = label;
+            insertImageMd(url);
+          }).catch(function (e) {
+            btn.disabled = false; btn.innerHTML = label;
+            $('saveErr').textContent = 'Uploaded, but couldn’t read back the URL: ' + e.message;
+          });
+        });
+      }
 
       /* ── Preview ── */
       var previewTimer = null;
