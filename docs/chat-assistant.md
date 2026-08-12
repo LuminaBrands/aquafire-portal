@@ -20,7 +20,7 @@ on **aquafire.com (Shopify)** and configuring it.
 | Install planning | Install steps, enclosure/light-trap/airflow guidance, water-line options, deep links into the Enclosure Guide + Water Care tools |
 | Support | Guided troubleshooting flow (model → symptom), beep-code decoding, flame/leak/power/remote/app/light fixes, how-to video links, help-article links, deep links into the Troubleshooter (`?node=` / `?model=`) |
 | Service | Warranty terms & registration, serial-number lookup help, replacement parts cards, order-status pointers |
-| Human handoff | "Talk to a human" → support/sales/orders contact cards (email, phone, service request), plus 👎-feedback escalation |
+| Human handoff | "Talk to a human" (typed, or the footer link) → routed contact card (email, phone, service request) — `support@` for product help, `ces@` for orders, sales and everything else, with a which-team question when the conversation hasn't already made it obvious — plus 👎-feedback escalation |
 | Memory | Remembers the visitor's model and the conversation across page navigation (sessionStorage) |
 
 The widget hides itself automatically on pages loaded with `?embed` (the Shopify
@@ -85,8 +85,8 @@ on the tag itself:
 | `apiEndpoint` | — | `portalBase + 'api/chat'` | POST endpoint for Claude-powered replies (below). Set `null` to disable AI mode |
 | `orderEndpoint` | — | `portalBase + 'api/order-status'` | POST endpoint for order & tracking lookup (below). Set `null` to disable the lookup flow |
 | `notifyEndpoint` | — | `portalBase + 'api/notify-slack'` | POST endpoint that Slack-alerts Ember's dead ends (below). Set `null` to disable alerts |
-| `collectEmail` | — | on | Offer a "leave your email" form — before contact cards, after dead ends — so the team can follow up (below). Set `false` to disable |
-| `emailEndpoint` | — | `portalBase + 'api/collect-email'` | POST endpoint that stores submitted follow-up emails in Mailchimp (below). Set `null` to disable storage (Slack alert + telemetry still fire) |
+| `collectEmail` | — | on | Ask for the customer's email in the conversation — before a handoff's contact card, after dead ends — so the team can follow up (below). Set `false` to disable |
+| `emailEndpoint` | — | `portalBase + 'api/collect-email'` | POST endpoint that stores collected follow-up emails in Mailchimp (below). Set `null` to disable storage (Slack alert + telemetry still fire) |
 | `showInEmbed` | `data-embed="show"` | hidden | Show the widget inside `?embed` iframes |
 | `markUrl` | `data-mark-url` | `portalBase + 'ember-mark.png'` | Ember's avatar artwork, used by the launcher, the panel header, the nudge and every bot message row |
 | `beam` | `data-beam` | `'input'` | Border Beam target: `'input'` (composer field), `'panel'` (whole window), or `false` to disable |
@@ -202,7 +202,7 @@ Shopify token never reaches the browser.
 `SHOPIFY_ORDERS_TOKEN` — it takes precedence when set.)
 
 Until credentials are set, the endpoint returns 503 and Ember falls back to the
-"check your account / email orders@" answer — nothing breaks.
+"check your account / email ces@" answer — nothing breaks.
 
 **Security & privacy:**
 
@@ -228,7 +228,7 @@ end**, which is exactly when a human can still save the conversation:
 | :grey_question: **Ember didn't know the answer** | The AI replied but flagged itself `unresolved` — it told the customer it couldn't help |
 | :warning: **Ember's AI backend failed** | `/api/chat` errored or timed out; the customer got the local fallback |
 | :raising_hand: **Handoff to a human** | A contact card was shown — asked for a human, a 👎 flow, or an escalation |
-| :email: **Customer left their email** | The customer filled in the follow-up form the widget offers before a contact card (or after a dead end) |
+| :email: **Customer left their email** | The customer replied with their address when the widget asked before a contact card (or invited one after a dead end) |
 
 Each message carries the customer's question, Ember's reply (for the `unresolved`
 case), their model, what they were viewing, cart contents, the pages they've visited,
@@ -241,8 +241,8 @@ identical repeat within 10 minutes. **Customer email addresses are masked** clie
 *and* server-side before anything reaches Slack, and all customer text is Slack-escaped
 so a pasted `<!channel>` can't ping the workspace. The one exception to the mask is the
 **Customer left their email** alert's dedicated address field: that address was typed
-into the follow-up form on purpose so the team can reply, and it still never appears in
-transcript or question text.
+in reply to the follow-up ask on purpose so the team can respond, and it still never
+appears in transcript or question text.
 
 **To activate (one-time):**
 
@@ -455,8 +455,8 @@ One small event per action to the `chatEvents` Firestore collection (project
 | `bot_reply` | text, intent | Every local-KB answer (so transcripts show both sides) |
 | `feedback` | vote (`up`/`down`), intent | 👍/👎 tapped on an answer |
 | `feedback_comment` | comment, intent | Optional "what went wrong" text after a 👎 |
-| `handoff` | mode (support/sales/orders) | A contact card is shown |
-| `contact_left` | email | The customer filled in the follow-up email form — the **one event that stores a customer email on purpose**, so Chat Insights can identify the conversation and the team can reply |
+| `handoff` | mode (support/sales/orders/other) | A contact card is shown |
+| `contact_left` | email | The customer replied with their address to the follow-up ask — the **one event that stores a customer email on purpose**, so Chat Insights can identify the conversation and the team can reply. (The `user_message` carrying the typed address is still masked as usual — only this dedicated field holds it.) |
 | `llm_reply` / `llm_error` | text | AI-mode reply / endpoint failure |
 
 Every event also carries a random per-session conversation id, timestamp, page, host,
@@ -500,21 +500,37 @@ end**, which is exactly when a human can still save the conversation:
 | :grey_question: **Ember had no answer** | No knowledge-base match *and* AI mode unavailable — the customer got the generic "try one of these" reply |
 | :grey_question: **Ember didn't know the answer** | The AI replied but flagged itself `unresolved` — it told the customer it couldn't help |
 | :warning: **Ember's AI backend failed** | `/api/chat` errored or timed out; the customer got the local fallback |
-| :raising_hand: **Handoff to a human** | A contact card was shown (support / sales / orders) — including after a 👎 |
-| :email: **Customer left their email** | The follow-up form was filled in — the alert carries the address unmasked so the team can reply |
+| :raising_hand: **Handoff to a human** | A contact card was shown (support / sales / orders / other) — including after a 👎 |
+| :email: **Customer left their email** | The customer replied with their address — the alert carries it unmasked so the team can reply |
 
 Each message carries the customer's question, the model they're on, the page they were
 reading, Ember's reply (for the `unresolved` case), the conversation id, and a link to
 Chat Insights — enough to decide whether to follow up without opening anything.
 
-**The follow-up form:** on a handoff the widget asks **before** showing the contact
-card — "Great! We'd love to help you out. What is your email?" with a one-field
-email form and a "No thanks — just show me the contact info" skip link; the card
-appears once the customer answers or skips. After a dead end the form is offered
-underneath the reply instead. Either way it's once per conversation. Submitting fires
-the :email: alert, logs a `contact_left` event (which tags the conversation with the
-address in Chat Insights), and stores the address in Mailchimp via
-`/api/collect-email` (below). Disable the whole feature with
+**The handoff flow** runs up to three conversational steps, each skipped once the
+conversation has already answered it:
+
+1. **Email.** The widget asks first — *"Great! We'd love to help you out. What is
+   your email?"* — and the customer just **types the address as their next message**
+   (no form, no skip link). Email comes before the routing question on purpose: a
+   customer who has already left their address is more committed to answering what
+   follows. A plain "no thanks" continues the handoff without the address; any other
+   reply is treated as a fresh question and answered normally. Asked once per
+   conversation.
+2. **Route.** The contact card is addressed by what the conversation was about —
+   `support@aquafire.com` for help with a fireplace they own, `ces@aquafire.com` for
+   existing orders, placing an order, and anything else. Matched intents stamp the
+   topic as the conversation goes; when a handoff has no topic on record, the widget
+   asks *"is your question about…"* with four quick picks (existing order / placing
+   an order / my fireplace / something else). A reply that doesn't read as an answer
+   is treated as a fresh question and answered normally.
+3. **Card.** The routed contact card (email, phone, service request).
+
+The footer's "Talk to a human" link starts this same in-chat flow (it's no longer a
+mailto). After a dead end the widget instead invites a reply — "just reply with your
+email address" — under the answer. A collected address fires the :email: alert, logs a
+`contact_left` event (which tags the conversation with the address in Chat Insights),
+and is stored in Mailchimp via `/api/collect-email` (below). Disable collection with
 `AQUAFIRE_ASSISTANT_CONFIG.collectEmail = false`.
 
 ### Storing follow-up emails in Mailchimp (`api/collect-email.js`)
