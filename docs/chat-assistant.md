@@ -510,17 +510,20 @@ Chat Insights — enough to decide whether to follow up without opening anything
 **The handoff flow** runs up to three conversational steps, each skipped once the
 conversation has already answered it:
 
-1. **Route.** The contact card is addressed by what the conversation was about —
+1. **Email.** The widget asks first — *"Great! We'd love to help you out. What is
+   your email?"* — and the customer just **types the address as their next message**
+   (no form, no skip link). Email comes before the routing question on purpose: a
+   customer who has already left their address is more committed to answering what
+   follows. A plain "no thanks" continues the handoff without the address; any other
+   reply is treated as a fresh question and answered normally. Asked once per
+   conversation.
+2. **Route.** The contact card is addressed by what the conversation was about —
    `support@aquafire.com` for help with a fireplace they own, `ces@aquafire.com` for
    existing orders, placing an order, and anything else. Matched intents stamp the
-   topic as the conversation goes; when a handoff starts with no topic on record, the
-   widget asks *"is your question about…"* with four quick picks (existing order /
-   placing an order / my fireplace / something else). A reply that doesn't read as an
-   answer is treated as a fresh question and answered normally.
-2. **Email.** Before showing the card the widget asks *"Great! We'd love to help you
-   out. What is your email?"* — the customer just **types the address as their next
-   message** (no form, no skip link; a plain "no thanks" shows the card anyway, and
-   any other reply is answered normally). Asked once per conversation.
+   topic as the conversation goes; when a handoff has no topic on record, the widget
+   asks *"is your question about…"* with four quick picks (existing order / placing
+   an order / my fireplace / something else). A reply that doesn't read as an answer
+   is treated as a fresh question and answered normally.
 3. **Card.** The routed contact card (email, phone, service request).
 
 The footer's "Talk to a human" link starts this same in-chat flow (it's no longer a

@@ -277,8 +277,9 @@
      anything general; support@ only for help with a fireplace they own.
      Matched intents stamp state.ctx.topic from the map below; when a
      handoff starts with no topic on record, the chat asks which team the
-     question is for. A handoff runs up to three steps — route, email ask
-     (so the team can reach out), then the contact card — and skips any
+     question is for. A handoff runs up to three steps — email ask first
+     (a customer who has left their address is more committed to answering
+     what follows), then route, then the contact card — and skips any
      step already answered this conversation. The pending steps are
      answered by the customer's next message via state.ctx.awaiting in
      handleUserText ('contact_route' / 'contact_email'). */
@@ -294,9 +295,9 @@
     lights_issue: 'support', drain: 'support'
   };
 
-  function routeAsk() {
+  function routeAsk(lead) {
     return { blocks: [
-      { t: 'text', html: 'Happy to connect you \u2014 so I can point you to the right team, is your question about\u2026' },
+      { t: 'text', html: lead || 'Happy to connect you \u2014 so I can point you to the right team, is your question about\u2026' },
       { t: 'chips', items: [
         { label: '\ud83d\udce6 An existing order', send: 'An existing order' },
         { label: '\ud83d\uded2 Help placing an order', send: 'Help placing an order' },
@@ -327,16 +328,19 @@
   }
 
   function handoffAnswer(route, intro) {
-    if (!route) {
-      state.ctx.awaiting = 'contact_route'; persist();
-      return routeAsk();
-    }
     if (COLLECT_EMAIL && !state.emailAsked && !state.contactEmail) {
       state.emailAsked = true;
-      state.ctx.awaiting = 'contact_email'; state.ctx.route = route; persist();
+      // route 'ask' = handoff with no topic yet: the routing question comes
+      // after the address arrives (null stays reserved for dead-end invites,
+      // which owe no contact card).
+      state.ctx.awaiting = 'contact_email'; state.ctx.route = route || 'ask'; persist();
       return { blocks: (intro ? [{ t: 'text', html: intro }] : []).concat([
         { t: 'text', html: 'Great! We\u2019d love to help you out. What is your email?' }
       ]) };
+    }
+    if (!route) {
+      state.ctx.awaiting = 'contact_route'; persist();
+      return routeAsk();
     }
     return cardAnswer(route, intro);
   }
@@ -2129,9 +2133,13 @@
         storeEmail(em);
         reply(function () {
           // EMAIL_RE's character set is what keeps the address safe to echo
-          var blocks = [{ t: 'text', html: 'Thanks \u2014 the team will be in touch at <strong>' + em + '</strong>.' }];
-          if (pendingRoute) blocks.push(contactBlock(pendingRoute));
-          return { blocks: blocks };
+          var confirm = { t: 'text', html: 'Thanks \u2014 the team will be in touch at <strong>' + em + '</strong>.' };
+          if (pendingRoute === 'ask') {
+            state.ctx.awaiting = 'contact_route'; persist();
+            return { blocks: [confirm].concat(routeAsk('So I can point you to the right team, is your question about\u2026').blocks) };
+          }
+          if (pendingRoute) return { blocks: [confirm, contactBlock(pendingRoute)] };
+          return { blocks: [confirm] };
         });
         return;
       }
@@ -2139,6 +2147,10 @@
         lastIntentId = 'contact_email';
         logEvent('user_message', { text: text.slice(0, 300), intent: 'contact_email_declined' });
         reply(function () {
+          if (pendingRoute === 'ask') {
+            state.ctx.awaiting = 'contact_route'; persist();
+            return routeAsk('No problem \u2014 so I can point you to the right team, is your question about\u2026');
+          }
           return pendingRoute
             ? { blocks: [{ t: 'text', html: 'No problem \u2014 you can reach the team directly anytime:' }, contactBlock(pendingRoute)] }
             : { blocks: [{ t: 'text', html: 'No problem \u2014 I\u2019m here if anything else comes up.' }] };
