@@ -33,7 +33,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 | `admin.html` | Admin homepage — launcher cards for the three gated tools (no gate of its own; holds no data) |
 | `chat-insights.html` | Chat-log dashboard for Ember (Firebase-gated) — transcripts, unanswered questions, 👍/👎, "Teach Ember" flow. Its Test Chat button mounts the real widget in test trim: telemetry/Slack/Mailchimp/nudge off, AI endpoint live |
 | `dealer-admin.html` | Dealer editor (Firebase-gated) — Save & Publish via `/api/publish-dealers`. Runbook: `docs/dealer-admin.md` |
-| `help-admin.html` | Help-article editor (Firebase-gated) — markdown-lite editor writing to the `helpArticles` collection |
+| `help-admin.html` | Help-article editor (Firebase-gated) — markdown-lite editor writing to the `helpArticles` collection. Toolbar inserts `![alt](url)` images, either uploaded to Storage (`help-media/`) or by URL |
 | `beam-demo.html` | Border Beam showcase/playground (`docs/border-beam.md`) |
 | `compare.html`, `ember-icon-lab.html`, `image-options.html` + `v1/–v5/`, `v4a/–v4e/`, `mix1/–mix6/`, `b1/–b3/`, `tools/shoot/` | Redesign exploration comps, icon/imagery pickers, comp gallery, screenshot harness. Icon lab is delete-when-decided |
 
@@ -82,7 +82,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 - `robots.txt` — keeps the internal pages, `builder.html`, and `/api/` out of indexes.
 - `DESIGN.md` + `.impeccable/design.json` — the carbonized redesign contract (tokens, world, glass recipe).
 - `PRODUCT.md` — impeccable product schema.
-- `docs/` — `history.md` (decision record), `help-center.md`, `chat-assistant.md`, `embedding.md`, `dealer-admin.md`, `border-beam.md`, `firestore-rules.md` + `storage-rules.md` (**source of truth for the hand-published Firebase rules** — update in the same PR as any rule change), `redesign-handoff.md`, `source-material/` (plain-text extracts of the help articles, install/spec guides, warranty and manuals that the Troubleshooter, chat KB and help articles are built from).
+- `docs/` — `history.md` (decision record), `help-center.md`, `chat-assistant.md`, `embedding.md`, `dealer-admin.md`, `border-beam.md`, `firestore-rules.md` + `storage-rules.md` (**source of truth for the hand-published Firebase rules** — `installs/` + `help-media/`; update in the same PR as any rule change), `redesign-handoff.md`, `source-material/` (plain-text extracts of the help articles, install/spec guides, warranty and manuals that the Troubleshooter, chat KB and help articles are built from).
 - Committed assets: `model-pro/original/lite.jpg`, `install-example.jpg`, `ember-mark.png`, favicons, `tour-*.svg`, `AWPR 40-100.pdf`. Everything else is on the Shopify CDN — see Gotchas.
 
 ## Design System
