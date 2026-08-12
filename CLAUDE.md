@@ -56,7 +56,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 | `app.js` | Enclosure guide — `MODELS` data, dimension math, SVG/Canvas rendering, sliders |
 | `water-care-app.js` | Water care — `WATER_HARDNESS_DB` (2,000+ `[zip_prefix, city, state, ppm]` tuples), autocomplete, US map, timeline |
 | `troubleshoot.js` | Troubleshooter — `TREE` decision-tree data + wizard engine; `LINKS`/`VIDEOS` maps |
-| `help.js` / `help-articles.js` | Help Center engine + static catalogue (`HELP_CATEGORIES` ×6, `HELP_ARTICLES` ×29); published `helpArticles` Firestore docs merge over it at load, same-slug docs override |
+| `help.js` / `help-articles.js` | Help Center engine + static catalogue (`HELP_CATEGORIES` ×8, `HELP_ARTICLES` ×76 — verbatim clone of the live Gorgias help center + 4 portal-native articles, images self-hosted in `help-img/`); published `helpArticles` Firestore docs merge over it at load, same-slug docs override |
 | `nav.js` | **Shared** nav group disclosures (Guides/Support) for all nav-bearing pages; each page's inline script still owns theme toggle + burger |
 | `rewards.js` | Firebase Auth + Firestore points engine; injects reward badges as first child of `[data-reward]` |
 | `dealers.js` | **Public** dealer database + `COLORS` — powers the customer locator; rebuilt server-side by `/api/publish-dealers` |
