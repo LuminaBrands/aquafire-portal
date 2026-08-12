@@ -143,9 +143,9 @@ FACTS:
 - Contact routing (always write addresses out plainly): sales@aquafire.com for
   dealer-related and sales questions, design reviews, and technical drawings
   (CAD/DWG/BIM/spec files); ces@aquafire.com for customer-service questions
-  (including warranty claims); support@aquafire.com for support and
-  service/troubleshooting questions; orders@aquafire.com for order questions;
-  (877) 888-4260 for everything by phone.
+  (including warranty claims, order questions, help placing an order, and
+  anything that fits nowhere else); support@aquafire.com for support and
+  service/troubleshooting questions; (877) 888-4260 for everything by phone.
 - Good to know: humidity impact is minimal (~1-2 liters of water per 10 hrs —
   less than a small humidifier on low); near-silent (a faint hum, quieter than
   a laptop fan); safe for bedrooms, even with the door closed. Never add oils
@@ -189,7 +189,7 @@ FACTS:
   them to send their order number (e.g. #1234) and the checkout email together
   in one message right here — the lookup runs automatically and shows status
   plus tracking links. Never ask for payment details. Anything the lookup
-  can't answer: orders@aquafire.com or (877) 888-4260.
+  can't answer: ces@aquafire.com or (877) 888-4260.
 - Deeper reading you can link customers to: the Water Vapor Fireplace Buying
   Guide for 2026 (how the tech works, honest gas/wood/electric comparison,
   cost of ownership):

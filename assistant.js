@@ -106,9 +106,12 @@
   var notifyDown = false;
   var lastUserText = '';
 
-  // Offer to collect the customer's email for a human follow-up — asked
-  // before a contact card is shown, and after dead-end replies (once per
-  // conversation). Disable with cfg.collectEmail = false. The address rides
+  // Offer to collect the customer's email for a human follow-up — on a
+  // handoff the chat asks for it before the contact card, after dead-end
+  // replies it invites one; either way the customer types the address as
+  // their next message (once per conversation — see the 'contact_email'
+  // branch in handleUserText). Disable with cfg.collectEmail = false.
+  // The address rides
   // the 'callback' Slack alert, is logged as a 'contact_left' event — the one
   // deliberate, consented exception to the "no customer emails in telemetry"
   // rule; the incidental-email masks below stay in force for everything
@@ -175,9 +178,9 @@
     } catch (e) { /* ignore */ }
   }
 
-  var SUPPORT_EMAIL = 'support@aquafire.com';
-  var SALES_EMAIL = 'sales@aquafire.com';
-  var ORDERS_EMAIL = 'orders@aquafire.com';
+  var SUPPORT_EMAIL = 'support@aquafire.com'; // product help for owners
+  var SALES_EMAIL = 'sales@aquafire.com';     // design reviews & drawings
+  var CES_EMAIL = 'ces@aquafire.com';         // orders, sales & everything else
   var PHONE = '(877) 888-4260';
   var PHONE_TEL = '+18778884260';
 
@@ -267,6 +270,76 @@
   }
 
   var CHIP_HUMAN = { label: '\ud83d\udcac Talk to a human', send: 'Talk to a human' };
+
+  /* ── Handoff routing ───────────────────────────────────────────────────
+     A contact card is addressed by what the conversation was about: ces@
+     (customer experience) for existing orders, placing an order, and
+     anything general; support@ only for help with a fireplace they own.
+     Matched intents stamp state.ctx.topic from the map below; when a
+     handoff starts with no topic on record, the chat asks which team the
+     question is for. A handoff runs up to three steps — route, email ask
+     (so the team can reach out), then the contact card — and skips any
+     step already answered this conversation. The pending steps are
+     answered by the customer's next message via state.ctx.awaiting in
+     handleUserText ('contact_route' / 'contact_email'). */
+  var ROUTE_TOPIC = {
+    order_status: 'orders', shipping: 'orders', returns: 'orders',
+    pricing: 'sales', compare: 'sales', competitors: 'sales',
+    where_buy: 'sales', sales_human: 'sales',
+    warranty: 'support', serial: 'support', water_quality: 'support',
+    cleaning: 'support', maint_reminder: 'support', parts: 'support',
+    ts_start: 'support', beeping: 'support', flame_low: 'support',
+    flame_smoky: 'support', leak: 'support', smell: 'support',
+    power_issue: 'support', remote_issue: 'support', app_issue: 'support',
+    lights_issue: 'support', drain: 'support'
+  };
+
+  function routeAsk() {
+    return { blocks: [
+      { t: 'text', html: 'Happy to connect you \u2014 so I can point you to the right team, is your question about\u2026' },
+      { t: 'chips', items: [
+        { label: '\ud83d\udce6 An existing order', send: 'An existing order' },
+        { label: '\ud83d\uded2 Help placing an order', send: 'Help placing an order' },
+        { label: '\ud83d\udd25 Help with my fireplace', send: 'Help with my fireplace' },
+        { label: '\ud83d\udcac Something else', send: 'Something else' }
+      ]}
+    ]};
+  }
+
+  // Which team a routing answer names — null means it doesn't read as an
+  // answer at all (a fresh question instead), which handleUserText sends
+  // through normal matching.
+  function routeFromChoice(norm) {
+    if (/something else|neither|none of| other | general /.test(norm)) return 'other';
+    if (/existing order|my order|order status|order number|already (ordered|bought|purchased)|track|refund|return|cancel/.test(norm)) return 'orders';
+    if (/plac(e|ing) an order|help (ordering|buying)|want to (buy|order|purchase)|purchas|quote| buy /.test(norm)) return 'sales';
+    if (/fireplace|support|troubleshoot|not working|broken|help with/.test(norm)) return 'support';
+    return null;
+  }
+
+  function cardAnswer(route, intro) {
+    var blocks = [
+      { t: 'text', html: intro || 'Of course \u2014 here\u2019s the fastest way to reach the team:' },
+      contactBlock(route)
+    ];
+    if (route === 'support') blocks.push({ t: 'text', html: 'Tip: including your <strong>model, serial number</strong> (back plate or under the top lid) and a short video of the issue gets you a faster answer.' });
+    return { blocks: blocks };
+  }
+
+  function handoffAnswer(route, intro) {
+    if (!route) {
+      state.ctx.awaiting = 'contact_route'; persist();
+      return routeAsk();
+    }
+    if (COLLECT_EMAIL && !state.emailAsked && !state.contactEmail) {
+      state.emailAsked = true;
+      state.ctx.awaiting = 'contact_email'; state.ctx.route = route; persist();
+      return { blocks: (intro ? [{ t: 'text', html: intro }] : []).concat([
+        { t: 'text', html: 'Great! We\u2019d love to help you out. What is your email?' }
+      ]) };
+    }
+    return cardAnswer(route, intro);
+  }
 
   var INTENTS = [
 
@@ -539,7 +612,7 @@
           blocks: [
             { t: 'text', html: 'You can order factory-direct at <a href="' + STORE + '" target="_blank" rel="noopener">aquafire.com</a>, or see one running in person at an authorized dealer:' },
             { t: 'links', items: [{ label: '\ud83d\udccd Find a dealer near you', href: pURL('dealer-locator.html') }, { label: '\ud83d\uded2 Shop all models', href: STORE }] },
-            { t: 'text', html: 'Questions about ordering or stock? Email <a href="mailto:' + ORDERS_EMAIL + '">' + ORDERS_EMAIL + '</a> or call ' + PHONE + '.' }
+            { t: 'text', html: 'Questions about ordering or stock? Email <a href="mailto:' + CES_EMAIL + '">' + CES_EMAIL + '</a> or call ' + PHONE + '.' }
           ]
         };
       }
@@ -553,7 +626,7 @@
           blocks: [
             { t: 'text', html: 'Aquafire units ship fully crated for protection (e.g. a 40\u2033 unit is 90\u00a0lbs crated). For current lead times, freight questions, or tracking on an order, the orders team has the live answer:' },
             { t: 'links', items: [{ label: '\ud83d\udc64 Check your order in your account', href: STORE + '/account' }] },
-            { t: 'text', html: '\ud83d\udce7 <a href="mailto:' + ORDERS_EMAIL + '">' + ORDERS_EMAIL + '</a> &nbsp;\u00b7&nbsp; \ud83d\udcde <a href="tel:' + PHONE_TEL + '">' + PHONE + '</a>' }
+            { t: 'text', html: '\ud83d\udce7 <a href="mailto:' + CES_EMAIL + '">' + CES_EMAIL + '</a> &nbsp;\u00b7&nbsp; \ud83d\udcde <a href="tel:' + PHONE_TEL + '">' + PHONE + '</a>' }
           ]
         };
       }
@@ -587,7 +660,7 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'For returns, exchanges, or order changes, our team handles those case-by-case \u2014 reach out with your order number and they\u2019ll take care of you. Note that any warranty return needs an RMA first (units sent back without one can\u2019t be accepted).' },
-            contactBlock('support')
+            contactBlock('orders')
           ]
         };
       }
@@ -646,7 +719,7 @@
               'The included <strong>Vapor Pure\u2122 water softener must be installed</strong> (or your whole-house softener approved in writing) for coverage to remain valid.',
               'Claims start with troubleshooting + remote diagnostics with Aquafire support; repair is the primary remedy, and returns need an RMA first.'
             ]},
-            { t: 'text', html: 'To start a claim: <a href="' + STORE + '/pages/service-request" target="_blank" rel="noopener">submit a service request</a>, or contact <a href="mailto:ces@aquafire.com">ces@aquafire.com</a> / ' + PHONE + ' with your model, serial number and contact details.' },
+            { t: 'text', html: 'To start a claim: <a href="' + STORE + '/pages/service-request" target="_blank" rel="noopener">submit a service request</a>, or contact <a href="mailto:' + CES_EMAIL + '">' + CES_EMAIL + '</a> / ' + PHONE + ' with your model, serial number and contact details.' },
             { t: 'chips', items: [{ label: 'Where\u2019s my serial number?', send: 'Where is my serial number?' }, CHIP_HUMAN] }
           ]
         };
@@ -1019,25 +1092,14 @@
       id: 'human',
       kw: [['human', 8], ['agent', 6], ['real person', 9], ['speak to someone', 9], ['talk to someone', 9], ['talk to a person', 9], ['speak to a person', 9], ['talk to a human', 9], ['customer service', 7], ['support team', 7], ['contact', 5], ['call', 4], ['email', 4], ['phone number', 7], ['representative', 7]],
       answer: function () {
-        return {
-          blocks: [
-            { t: 'text', html: 'Of course \u2014 here\u2019s the fastest way to reach the team:' },
-            contactBlock('support'),
-            { t: 'text', html: 'Tip: including your <strong>model, serial number</strong> (back plate or under the top lid) and a short video of the issue gets you a faster answer.' }
-          ]
-        };
+        return handoffAnswer(state.ctx.topic || null);
       }
     },
     {
       id: 'sales_human',
       kw: [['talk to sales', 9], ['sales team', 8], ['quote', 6], ['design review', 8], ['review my plans', 8], ['designer', 5], ['architect', 5], ['spec sheet', 6]],
       answer: function () {
-        return {
-          blocks: [
-            { t: 'text', html: 'Our sales & design team helps with quotes, spec sheets, and free reviews of your enclosure drawings:' },
-            contactBlock('sales')
-          ]
-        };
+        return handoffAnswer('sales', 'Our sales & design team helps with quotes, spec sheets, and free reviews of your enclosure drawings.');
       }
     }
   ];
@@ -1402,13 +1464,6 @@
     '.afa-fb-form input{flex:1;background:var(--afa-surface2);border:1px solid var(--afa-border-soft);border-radius:999px;padding:6px 12px;color:var(--afa-text);font-size:12px;font-family:inherit;outline:none;}',
     '.afa-fb-form input:focus{border-color:var(--afa-ember);}',
     '.afa-fb-form button{flex-shrink:0;}',
-    '.afa-email{display:flex;flex-direction:column;gap:7px;margin-top:2px;font-size:11.5px;color:var(--afa-muted);}',
-    '.afa-email button{font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--afa-border-soft);transition:background .22s;white-space:nowrap;}',
-    '.afa-email button:hover{background:var(--afa-hover);}',
-    '.afa-email input.afa-email-bad{border-color:var(--afa-ember);}',
-    '.afa-email-done{color:var(--afa-text);}',
-    '.afa-email-skip{align-self:flex-start;font-size:11.5px;color:var(--afa-muted);text-decoration:underline;text-underline-offset:2px;padding:2px 0;}',
-    '.afa-email-skip:hover{color:var(--afa-text);}',
 
     /* Typing */
     '.afa-typing{display:inline-flex;gap:4px;padding:12px 14px;}',
@@ -1601,7 +1656,13 @@
       row.appendChild(inputEl);
     }
     row.appendChild(sendBtn);
-    var legal = el('div', 'afa-legal', 'AI assistant \u2014 answers can be imperfect. <a href="mailto:' + SUPPORT_EMAIL + '">Talk to a human</a> anytime.');
+    // "Talk to a human" starts the in-chat handoff (routing question, email
+    // ask, contact card) rather than jumping straight to a mailto.
+    var legal = el('div', 'afa-legal', 'AI assistant \u2014 answers can be imperfect. <a href="#" role="button">Talk to a human</a> anytime.');
+    legal.querySelector('a').addEventListener('click', function (e) {
+      e.preventDefault();
+      handleUserText('Talk to a human', true);
+    });
     foot.appendChild(row); foot.appendChild(legal);
 
     panel.appendChild(head); panel.appendChild(msgsEl); panel.appendChild(foot);
@@ -1884,9 +1945,11 @@
           logEvent('handoff', { mode: b.mode || 'support' });
           notify('handoff', { mode: b.mode || 'support' });
         }
-        var email = b.mode === 'sales' ? SALES_EMAIL : b.mode === 'orders' ? ORDERS_EMAIL : SUPPORT_EMAIL;
+        // Routing: support questions go to support@; orders, sales and
+        // everything else go to ces@ (customer experience).
+        var email = b.mode === 'support' ? SUPPORT_EMAIL : CES_EMAIL;
         var c = el('div', 'afa-contact');
-        c.innerHTML = '<h5>' + (b.mode === 'sales' ? 'Sales & design' : b.mode === 'orders' ? 'Orders' : 'Aquafire support') + '</h5>' +
+        c.innerHTML = '<h5>' + (b.mode === 'sales' ? 'Sales & design' : b.mode === 'orders' ? 'Orders' : b.mode === 'other' ? 'Aquafire team' : 'Aquafire support') + '</h5>' +
           '<a href="mailto:' + email + '">\ud83d\udce7 ' + email + '</a>' +
           '<a href="tel:' + PHONE_TEL + '">\ud83d\udcde ' + PHONE + '</a>' +
           '<a href="' + STORE + '/pages/service-request" target="_blank" rel="noopener">\ud83d\udee0\ufe0f Submit a service request</a>';
@@ -1906,10 +1969,6 @@
       var col = el('div', 'afa-col');
       renderBlocks(col, m.blocks, restoring);
       if (m.feedback && !restoring) col.appendChild(feedbackEl());
-      // Dead-end replies offer the follow-up form underneath; contact-card
-      // messages are handled ask-first in pushBot instead.
-      if (!restoring && COLLECT_EMAIL && !state.emailAsked && !state.contactEmail && m.emailAsk)
-        col.appendChild(emailCaptureEl());
       row.appendChild(col);
     }
     msgsEl.appendChild(row);
@@ -1946,7 +2005,7 @@
       form.appendChild(inp); form.appendChild(send);
       fb.appendChild(el('span', null, 'Sorry about that.'));
       fb.appendChild(form);
-      pushBot({ blocks: [contactBlock('support')] });
+      pushBot({ blocks: [contactBlock(state.ctx.topic || 'support')] });
       inp.focus();
     });
     fb.appendChild(yes); fb.appendChild(no);
@@ -1954,83 +2013,27 @@
   }
 
   /* Follow-up email capture — once per conversation, so the team can reach
-     out instead of waiting for the customer to email in. On a handoff it is
-     asked BEFORE the contact card (renderEmailAsk below); after a dead-end
-     reply it is appended underneath. Submitting fires the 'callback' Slack
-     alert, logs a 'contact_left' event, and stores the address via
+     out instead of waiting for the customer to email in. On a handoff the
+     chat asks for the address before the contact card (handoffAnswer);
+     after a dead-end reply, pushBot below invites one. Either way the
+     customer types the address as their next message — handleUserText's
+     'contact_email' branch picks it up, fires the 'callback' Slack alert,
+     logs a 'contact_left' event, and stores the address via
      /api/collect-email (Mailchimp) — the one consented exception to the
      telemetry email mask. */
-  function emailCaptureEl(opts) {
-    opts = opts || {};
-    state.emailAsked = true; persist();
-    var wrap = el('div', 'afa-email');
-    var lead = opts.lead || 'Prefer we reach out? Leave your email and a real person will follow up.';
-    wrap.appendChild(el('div', opts.bubble ? 'afa-bubble' : 'afa-email-lead', lead));
-    var form = el('div', 'afa-fb-form afa-email-form');
-    var inp = el('input');
-    inp.type = 'email'; inp.maxLength = 120;
-    inp.placeholder = 'you@example.com';
-    inp.setAttribute('aria-label', 'Your email address for a follow-up');
-    var send = el('button', null, 'Request follow-up');
-    function submitEmail() {
-      // Take the matched address only — the regex's character set is what
-      // keeps the value safe to echo back below.
-      var m = inp.value.trim().match(EMAIL_RE);
-      if (!m) { inp.classList.add('afa-email-bad'); inp.focus(); return; }
-      var val = m[0];
-      state.contactEmail = val; persist();
-      notify('callback', { email: val });
-      logEvent('contact_left', { email: val });
-      storeEmail(val);
-      wrap.innerHTML = '<span class="afa-email-done">Thanks \u2014 the team will be in touch at <strong>' + val + '</strong>.</span>';
-      if (opts.onSubmit) opts.onSubmit();
-    }
-    send.addEventListener('click', submitEmail);
-    inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitEmail(); });
-    inp.addEventListener('input', function () { inp.classList.remove('afa-email-bad'); });
-    form.appendChild(inp); form.appendChild(send);
-    wrap.appendChild(form);
-    if (opts.skipLabel && opts.onSkip) {
-      var skip = el('button', 'afa-email-skip', opts.skipLabel);
-      skip.addEventListener('click', opts.onSkip);
-      wrap.appendChild(skip);
-    }
-    return wrap;
-  }
-
-  /* The ask-first step on a handoff: renders the email form as its own bot
-     row and holds the contact-card message back until the customer answers
-     or skips. Both paths call done() exactly once. */
-  function renderEmailAsk(onDone) {
-    var row = el('div', 'afa-row afa-bot');
-    row.appendChild(el('div', 'afa-mini-avatar'));
-    var col = el('div', 'afa-col');
-    var fired = false;
-    function done() { if (fired) return; fired = true; onDone(); }
-    col.appendChild(emailCaptureEl({
-      bubble: true,
-      lead: 'Great! We\u2019d love to help you out. What is your email?',
-      onSubmit: done,
-      skipLabel: 'No thanks \u2014 just show me the contact info',
-      onSkip: function () { row.remove(); done(); }
-    }));
-    row.appendChild(col);
-    msgsEl.appendChild(row);
-    scrollToMsg(row);
-  }
-
   function pushBot(res) {
-    var m = { who: 'bot', blocks: res.blocks, feedback: !!res.feedback, emailAsk: !!res.emailAsk };
-    state.msgs.push(m); persist();
-    // A message carrying a contact card waits behind the email ask (once per
-    // conversation) — the follow-up offer converts better before the
-    // customer already has the support address in front of them.
-    if (COLLECT_EMAIL && !state.emailAsked && !state.contactEmail &&
-        (m.blocks || []).some(function (b) { return b.t === 'contact'; })) {
-      renderEmailAsk(function () { renderMessage(m); });
-    } else {
-      renderMessage(m);
+    var m = { who: 'bot', blocks: res.blocks, feedback: !!res.feedback };
+    if (res.emailAsk && COLLECT_EMAIL && !state.emailAsked && !state.contactEmail) {
+      state.emailAsked = true;
+      state.ctx.awaiting = 'contact_email'; state.ctx.route = null;
+      var ask = { t: 'text', html: 'If you\u2019d like a human to follow up instead, just reply with your <strong>email address</strong> and the team will reach out.' };
+      var last = m.blocks[m.blocks.length - 1];
+      m.blocks = (last && last.t === 'chips')
+        ? m.blocks.slice(0, -1).concat([ask, last])
+        : m.blocks.concat([ask]);
     }
+    state.msgs.push(m); persist();
+    renderMessage(m);
     if (!state.open) launcher.classList.add('afa-unread');
   }
 
@@ -2087,12 +2090,62 @@
     // pending model question from guided troubleshooting
     if (state.ctx.awaiting === 'ts_model') {
       state.ctx.awaiting = null;
+      state.ctx.topic = 'support';
       if (!m) state.ctx.model = 'unknown';
       persist();
       lastIntentId = 'ts_menu';
       logEvent('user_message', { text: text.slice(0, 300), intent: 'ts_model_select' });
       reply(function () { return tsMenu(); });
       return;
+    }
+
+    // pending routing question from a handoff — which team is this for?
+    if (state.ctx.awaiting === 'contact_route') {
+      var route = routeFromChoice(norm);
+      if (route) {
+        state.ctx.awaiting = null;
+        state.ctx.topic = route; persist(); // remember, so we don't re-ask
+        lastIntentId = 'contact_route';
+        logEvent('user_message', { text: text.slice(0, 300), intent: 'contact_route' });
+        reply(function () { return handoffAnswer(route); });
+        return;
+      }
+      // doesn't read as an answer — treat it as a fresh question below
+      state.ctx.awaiting = null; persist();
+    }
+
+    // pending email ask from a handoff or a dead end — the address arrives
+    // as the customer's next message, not via a form
+    if (state.ctx.awaiting === 'contact_email') {
+      state.ctx.awaiting = null;
+      var pendingRoute = state.ctx.route || null; state.ctx.route = null; persist();
+      var em = (text.match(EMAIL_RE) || [])[0] || null;
+      if (em) {
+        state.contactEmail = em; persist();
+        lastIntentId = 'contact_email';
+        logEvent('user_message', { text: text.slice(0, 300), intent: 'contact_email' });
+        logEvent('contact_left', { email: em });
+        notify('callback', { email: em });
+        storeEmail(em);
+        reply(function () {
+          // EMAIL_RE's character set is what keeps the address safe to echo
+          var blocks = [{ t: 'text', html: 'Thanks \u2014 the team will be in touch at <strong>' + em + '</strong>.' }];
+          if (pendingRoute) blocks.push(contactBlock(pendingRoute));
+          return { blocks: blocks };
+        });
+        return;
+      }
+      if (/ (no|nope|nah|not now|rather not|skip|don\u2019t|dont|won\u2019t|wont) /.test(norm)) {
+        lastIntentId = 'contact_email';
+        logEvent('user_message', { text: text.slice(0, 300), intent: 'contact_email_declined' });
+        reply(function () {
+          return pendingRoute
+            ? { blocks: [{ t: 'text', html: 'No problem \u2014 you can reach the team directly anytime:' }, contactBlock(pendingRoute)] }
+            : { blocks: [{ t: 'text', html: 'No problem \u2014 I\u2019m here if anything else comes up.' }] };
+        });
+        return;
+      }
+      // anything else is a fresh question — answer it normally below
     }
 
     // Order lookup: parse from the RAW text (normalize strips @ and #)
@@ -2111,6 +2164,7 @@
         if (lastSeenEmail || lastSeenOrderNum) {
           if (lastSeenEmail) state.ctx.orderEmail = lastSeenEmail;
           if (lastSeenOrderNum) state.ctx.orderNum = lastSeenOrderNum;
+          state.ctx.topic = 'orders';
           persist();
           lastIntentId = 'order_lookup';
           logEvent('user_message', { text: text.slice(0, 300), intent: 'order_lookup' });
@@ -2129,7 +2183,7 @@
         state.ctx.awaiting = null; state.ctx.orderNum = null; state.ctx.orderEmail = null; persist();
       } else if (lastSeenEmail && lastSeenOrderNum) {
         // both volunteered in one message (e.g. after an AI answer suggested it)
-        state.ctx.orderEmail = lastSeenEmail; state.ctx.orderNum = lastSeenOrderNum; persist();
+        state.ctx.orderEmail = lastSeenEmail; state.ctx.orderNum = lastSeenOrderNum; state.ctx.topic = 'orders'; persist();
         lastIntentId = 'order_lookup';
         logEvent('user_message', { text: text.slice(0, 300), intent: 'order_lookup' });
         orderLookup();
@@ -2138,6 +2192,7 @@
     }
 
     var intent = matchIntent(text);
+    if (intent && ROUTE_TOPIC[intent.id]) { state.ctx.topic = ROUTE_TOPIC[intent.id]; persist(); }
     var llmAvailable = API_ENDPOINT && !llmDown;
     lastIntentId = intent ? intent.id : (llmAvailable ? 'llm' : 'fallback');
     logEvent('user_message', { text: text.slice(0, 300), intent: lastIntentId });
@@ -2281,7 +2336,7 @@
         { t: 'text', html: 'I can\u2019t look up individual orders right now, but two quick options:' },
         { t: 'steps', items: [
           'Log in to <a href="' + STORE + '/account" target="_blank" rel="noopener">your aquafire.com account</a> \u2014 every order shows live status and tracking.',
-          'Or email <a href="mailto:' + ORDERS_EMAIL + '">' + ORDERS_EMAIL + '</a> with your order number and the team will check right away.'
+          'Or email <a href="mailto:' + CES_EMAIL + '">' + CES_EMAIL + '</a> with your order number and the team will check right away.'
         ]},
         contactBlock('orders')
       ]
