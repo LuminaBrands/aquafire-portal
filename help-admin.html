@@ -760,8 +760,17 @@
             ' &middot; updated ' + esc(d.updated || '–') +
             (d.authorEmail ? ' &middot; ' + esc(d.authorEmail) : '') + '</div>' +
             (d.teaser ? '<div class="meta">' + esc(d.teaser) + '</div>' : '') + '</div>' +
-            '<div class="acts"><button class="btn btn-secondary btn-xs">Edit</button></div>';
-          row.querySelector('button').onclick = function () { openEditor(r.id); };
+            '<div class="acts"><button class="btn btn-secondary btn-xs" data-act="edit">Edit</button>' +
+            (d.published
+              ? '<button class="btn btn-secondary btn-xs" data-act="unpublish">Unpublish</button>'
+              : '') + '</div>';
+          row.querySelector('[data-act="edit"]').onclick = function () { openEditor(r.id); };
+          var unpub = row.querySelector('[data-act="unpublish"]');
+          if (unpub) unpub.onclick = function () {
+            unpub.disabled = true;
+            unpublishDoc(r.id, d.title, false, function (m) { alert(m); })
+              .then(function () { unpub.disabled = false; });
+          };
           el.appendChild(row);
         });
         if (!shown) {
@@ -968,10 +977,15 @@
           return;
         }
         if (staticSlugs().indexOf(clean) !== -1) {
+          // A doc that already exists under this slug is already the override —
+          // it was confirmed when it was created, so don't make every later save
+          // (or a re-publish after unpublishing) re-tick the box.
+          var already = clean === editingId;
           msg.innerHTML +=
             '<div class="override"><strong>' + esc(clean) + '</strong> is a built-in article. ' +
             'A published doc with this slug <em>replaces</em> it on the customer page.' +
-            '<label><input type="checkbox" id="fOverride"> Yes — override the built-in article.</label></div>';
+            '<label><input type="checkbox" id="fOverride"' + (already ? ' checked' : '') +
+            '> Yes — override the built-in article.</label></div>';
         }
       }
 
@@ -1226,10 +1240,53 @@
 
       $('draftBtn').onclick = function () { save(false); };
       $('publishBtn').onclick = function () { save(true); };
+      /* Unpublishing is a one-field write, not a re-save of the form: it has to
+         work from the list (where there is no form at all) and on a doc that
+         overrides a built-in article, whose slug would otherwise trip the
+         override guard in collect(). The body is left exactly as published, so
+         publishing again restores the same article. */
+      function unpublishDoc(id, title, warnDirty, onErr) {
+        // Unpublishing an override doesn't remove the article from the Help
+        // Center — the built-in one it was replacing takes over again.
+        var overrides = staticSlugs().indexOf(id) !== -1;
+        var msg = 'Unpublish “' + (title || id) + '”? ' + (overrides
+          ? 'The built-in article takes over on the Help Center again, immediately.'
+          : 'It disappears from the Help Center immediately.') +
+          '\n\nThe article is kept as a draft — you can publish it again.';
+        if (warnDirty) {
+          msg += '\n\nUnsaved edits in the form are not written. Save them first if you want to keep them.';
+        }
+        if (!confirm(msg)) return Promise.resolve(false);
+        return db.collection(COL).doc(id).update({
+          published: false,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(function () {
+          load();
+          return true;
+        }).catch(function (e) {
+          onErr('Unpublish failed: ' + (e.code || '') + ' ' + e.message +
+            (String(e.code) === 'permission-denied'
+              ? ' — publish the helpArticles rules from docs/firestore-rules.md.' : ''));
+          return false;
+        });
+      }
+
       $('unpublishBtn').onclick = function () {
         if (!editingId) return;
-        if (!confirm('Unpublish this article? It disappears from the Help Center immediately.')) return;
-        save(false);
+        var id = editingId;
+        setBusy(true);
+        unpublishDoc(id, loadedDoc && loadedDoc.title, dirty, function (m) {
+          $('saveErr').textContent = m;
+        }).then(function (ok) {
+          setBusy(false);
+          if (!ok) return;
+          if (loadedDoc) loadedDoc.published = false;
+          $('saveErr').textContent = '';
+          $('unpublishBtn').style.display = 'none';
+          $('editWhat').textContent = 'Unpublished (kept as a draft): ' +
+            ((loadedDoc && loadedDoc.title) || id);
+          syncViewLink();
+        });
       };
       $('deleteBtn').onclick = function () {
         if (!editingId) return;
