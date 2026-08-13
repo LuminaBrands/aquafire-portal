@@ -231,8 +231,10 @@
 
         <div class="panel">
           <h3>Built-in articles <span>&mdash; shipped in <code>help-articles.js</code></span></h3>
-          <span class="phint">Read-only here. Create a doc with the same slug to override one &mdash;
-            the published doc replaces the built-in article on the customer page.</span>
+          <span class="phint">Shipped with the site, so they can&rsquo;t be deleted here.
+            <strong>Edit</strong> writes a team article on the same slug, which replaces the
+            built-in one on the customer page once published. <strong>Hide</strong> takes the
+            article off the Help Center entirely &mdash; reversible, and nothing is deleted.</span>
           <div id="staticList"><span class="muted">Loading&hellip;</span></div>
         </div>
       </div>
@@ -690,8 +692,11 @@
             return String(a.d.title || a.id).toLowerCase() < String(b.d.title || b.id).toLowerCase() ? -1 : 1;
           });
           renderList();
-        }).catch(function (e) { showSetupHint(e); });
-        renderStatic();
+          // Inside the callback: the built-in rows read byId for their team
+          // state (edited / hidden), so rendering them before the query
+          // resolves would show that state one refresh out of date.
+          renderStatic();
+        }).catch(function (e) { showSetupHint(e); renderStatic(); });
       }
       $('refreshBtn').onclick = load;
 
@@ -743,6 +748,9 @@
         var shown = 0;
         docs.forEach(function (r) {
           var d = r.d;
+          // Hide instructions aren't articles — they live on the built-in row
+          // below, as that article's "hidden" state.
+          if (d.hidden) return;
           if (filter === 'published' && !d.published) return;
           if (filter === 'draft' && d.published) return;
           if (!matchQ([r.id, d.title, d.teaser].join(' '))) return;
@@ -752,7 +760,7 @@
           var tags = d.published
             ? '<span class="tag ok">published</span>'
             : '<span class="tag warn">draft</span>';
-          if (sset[r.id]) tags += '<span class="tag info">overrides built-in</span>';
+          if (sset[r.id]) tags += '<span class="tag info">edits built-in</span>';
           row.innerHTML =
             '<div class="grow"><div class="ttl">' + tags + esc(d.title || r.id) + '</div>' +
             '<div class="meta">' + esc(r.id) + ' &middot; ' + esc(catTitle(d.category)) +
@@ -793,20 +801,35 @@
         STATIC.forEach(function (a) {
           if (!matchQ([a.slug, a.title, a.teaser].join(' '))) return;
           shown++;
-          var overridden = !!byId[a.slug];
+          var rec = byId[a.slug];
+          var hidden = !!(rec && rec.d && rec.d.hidden);
+          var edited = !!rec && !hidden;
           var row = document.createElement('div');
           row.className = 'arow';
           row.innerHTML =
             '<div class="grow"><div class="ttl">' +
-            (overridden ? '<span class="tag info">overridden</span>' : '<span class="tag">built-in</span>') +
+            (hidden ? '<span class="tag warn">hidden</span>'
+              : edited ? '<span class="tag info">edited</span>'
+              : '<span class="tag">built-in</span>') +
             esc(a.title || a.slug) + '</div>' +
             '<div class="meta">' + esc(a.slug) + ' &middot; ' + esc(catTitle(a.category)) +
             ' &middot; ' + esc((a.models || []).join(', ')) +
-            ' &middot; updated ' + esc(a.updated || '–') + '</div></div>' +
-            '<div class="acts"><button class="btn btn-secondary btn-xs">' +
-            (overridden ? 'Edit override' : 'Override') + '</button></div>';
-          row.querySelector('button').onclick = function () {
-            if (overridden) openEditor(a.slug); else overrideStatic(a);
+            ' &middot; updated ' + esc(a.updated || '–') +
+            (hidden ? ' &middot; not on the Help Center' : '') + '</div></div>' +
+            '<div class="acts">' +
+            // A hidden article can't be edited until it's back — otherwise a
+            // save would quietly resurrect it.
+            (hidden ? '' : '<button class="btn btn-secondary btn-xs" data-act="edit">Edit</button>') +
+            '<button class="btn btn-secondary btn-xs" data-act="hide">' +
+            (hidden ? 'Unhide' : 'Hide') + '</button></div>';
+          var ed = row.querySelector('[data-act="edit"]');
+          if (ed) ed.onclick = function () {
+            if (edited) openEditor(a.slug); else overrideStatic(a);
+          };
+          var hb = row.querySelector('[data-act="hide"]');
+          hb.onclick = function () {
+            hb.disabled = true;
+            setHidden(a, !hidden).then(function () { hb.disabled = false; });
           };
           el.appendChild(row);
         });
@@ -972,8 +995,12 @@
             esc(clean) + '</code>.</div>';
         }
         if (byId[clean] && clean !== editingId) {
-          msg.innerHTML += '<div class="lint" style="color:var(--danger, #e77);">A team article already uses ' +
-            '<code>' + esc(clean) + '</code>. Edit that one, or pick another slug.</div>';
+          msg.innerHTML += '<div class="lint" style="color:var(--danger, #e77);">' +
+            (byId[clean].d.hidden
+              ? '<code>' + esc(clean) + '</code> is hidden from the Help Center. Unhide it under ' +
+                '<strong>Built-in articles</strong> before writing to this slug.'
+              : 'A team article already uses <code>' + esc(clean) +
+                '</code>. Edit that one, or pick another slug.') + '</div>';
           return;
         }
         if (staticSlugs().indexOf(clean) !== -1) {
@@ -1265,6 +1292,62 @@
           return true;
         }).catch(function (e) {
           onErr('Unpublish failed: ' + (e.code || '') + ' ' + e.message +
+            (String(e.code) === 'permission-denied'
+              ? ' — publish the helpArticles rules from docs/firestore-rules.md.' : ''));
+          return false;
+        });
+      }
+
+      /* Hiding a built-in article. help-articles.js ships with the site, so a
+         built-in can't be deleted from here — instead the customer page reads
+         a hide instruction out of the same collection it merges articles from
+         (see mergeTeamArticles in help.js). A doc that already carries an
+         edited body keeps it while hidden, so unhiding restores exactly what
+         was there; a hide with nothing else in it is deleted on unhide. */
+      function setHidden(a, hide) {
+        var rec = byId[a.slug];
+        var title = (rec && rec.d.title) || a.title || a.slug;
+        var msg = hide
+          ? 'Hide “' + title + '” from the Help Center?\n\nIt disappears for customers ' +
+            'immediately — category list, search and direct links.\n\nNothing is deleted: ' +
+            'unhide puts it back' + (rec ? ', with your edits intact' : '') + '.'
+          : 'Unhide “' + title + '”? It returns to the Help Center immediately.';
+        if (!confirm(msg)) return Promise.resolve(false);
+
+        var ts = firebase.firestore.FieldValue.serverTimestamp();
+        var col = db.collection(COL);
+        var write;
+        if (hide && rec) {
+          // published: true is what makes the hide visible to the customer
+          // query; remember the doc's own state so unhiding can restore it.
+          write = col.doc(a.slug).update({
+            hidden: true, hiddenWasPublished: !!rec.d.published,
+            published: true, updatedAt: ts
+          });
+        } else if (hide) {
+          write = col.doc(a.slug).set({
+            slug: a.slug, title: a.title || a.slug, category: a.category || '',
+            models: a.models || [], teaser: '', keywords: [], related: [],
+            updated: a.updated || '', md: '', html: '',
+            hidden: true, published: true,
+            authorEmail: (auth.currentUser && auth.currentUser.email) || '',
+            createdAt: ts, updatedAt: ts
+          });
+        } else if (rec && (rec.d.md || rec.d.html)) {
+          write = col.doc(a.slug).update({
+            hidden: false, published: rec.d.hiddenWasPublished !== false, updatedAt: ts
+          });
+        } else if (rec) {
+          write = col.doc(a.slug).delete();   // the doc was only ever the hide
+        } else {
+          return Promise.resolve(false);
+        }
+
+        return write.then(function () {
+          load();
+          return true;
+        }).catch(function (e) {
+          alert((hide ? 'Hide' : 'Unhide') + ' failed: ' + (e.code || '') + ' ' + e.message +
             (String(e.code) === 'permission-denied'
               ? ' — publish the helpArticles rules from docs/firestore-rules.md.' : ''));
           return false;

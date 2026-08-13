@@ -489,18 +489,37 @@
        query on helpArticles is denied. */
     db.collection('helpArticles').where('published', '==', true).get().then(function (snap) {
       var touched = {}, changed = false;
+      var replacements = [], hides = [];
       snap.forEach(function (doc) {
         var d = doc.data() || {};
-        if (!d.slug || !d.html) return;
-        var a = {
+        if (!d.slug) return;
+        /* A doc flagged hidden is an instruction, not an article: it retires
+           that slug from the Help Center (help-admin's "Hide" on a built-in
+           article, the only way to drop one without a deploy). It carries
+           published: true so this query — and the security rules — can see
+           it; the flag, not the field, is what it means. */
+        if (d.hidden) { hides.push(String(d.slug)); return; }
+        if (!d.html) return;
+        replacements.push({
           slug: String(d.slug), title: d.title || String(d.slug), category: d.category || '',
           models: d.models || ['original', 'pro', 'lite'], updated: d.updated || '',
           teaser: d.teaser || '', keywords: d.keywords || [], related: d.related || [],
           html: d.html
-        };
+        });
+      });
+      replacements.forEach(function (a) {
         var i = slugIndex(a.slug);
         if (i >= 0) ARTICLES[i] = a; else ARTICLES.push(a);
         touched[a.slug] = a.category;
+        changed = true;
+      });
+      /* Hides are applied after the replacements so a hide always wins for a
+         given slug, whatever order Firestore returned the docs in. */
+      hides.forEach(function (slug) {
+        var i = slugIndex(slug);
+        if (i < 0) return;
+        touched[slug] = ARTICLES[i].category;
+        ARTICLES.splice(i, 1);
         changed = true;
       });
       if (!changed) return;
