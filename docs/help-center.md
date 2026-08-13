@@ -12,29 +12,30 @@ portal.
 | `help.html` | Page shell (standard redesign chrome). App renders into `#help-app` inside `<main>`, so `?embed` works. |
 | `help.css` | Page styles, `ha-` prefixed, redesign tokens with fallbacks. |
 | `help.js` | Render + search engine: home / category / article views, `?category=<id>` / `?article=<slug>` deep links with pushState, live client-side search, Firestore merge (below). |
-| `help-articles.js` | The built-in catalogue: `HELP_CATEGORIES` (6) + `HELP_ARTICLES` (29). Schema is documented in the file header. |
+| `help-articles.js` | The built-in catalogue: `HELP_CATEGORIES` (8) + `HELP_ARTICLES` (76). Schema is documented in the file header. |
+| `help-img/` | Self-hosted article images — compressed WebP copies of the live help-center images, referenced from article bodies. |
 | `help-admin.html` | **Internal** team editor (not in nav; noindexed in `vercel.json` + `robots.txt`). Firebase-gated to verified `@luminabrands.com` — same rule as `chat-insights.html`: signed-in alone is never sufficient. Toolbar supports inserting images (upload to Storage or by URL) — see "Article images" below. |
 
 ## Where article content came from
 
-Built Aug 2026 as the union of:
+Re-synced Aug 2026 as a **word-for-word clone of the live help center**
+(`aquafire.gorgias.help`): all 72 live articles were crawled and converted
+verbatim (Gorgias markup → the schema in the `help-articles.js` header),
+with article images downloaded, compressed to WebP and self-hosted in
+`help-img/`. Four portal-native articles from the original source-material
+build were kept alongside (remotes/smart-home control, lights-and-beeps
+reference, preventative maintenance, limited warranty) — they have no live
+counterpart.
 
-- **`docs/source-material/` extracts** (17 articles) — the archived help-center
-  articles, warranty, Vapor Pure manual and sticker keys, reformatted for the
-  web with internal editorial matter stripped.
-- **The live help center via search snippets** (12 articles) — the remote
-  sandbox couldn't fetch `aquafire.gorgias.help` directly, so articles like
-  Delivery Inspection, Glass Enclosure Options and Outdoor Installation
-  Guidelines were written strictly within verified search-result fragments.
-  They are deliberately short; extend them from the live articles, don't pad.
+Because the sync is verbatim, some cloned articles diverge from the copy
+rules below (e.g. the live MSRP Pricing articles are now ported, and the
+live Vapor Pure article's AF300/AF700 figures disagree with the local
+manual). Divergences are enumerated in the sync PR for a product-team
+decision, not silently fixed — resolve them on the live help center first,
+then re-sync.
 
-Deliberately not ported: **MSRP Pricing** (pricing lives on the store — link,
-never restate), and the marketing pages (buying guide, "Why Aquafire?") which
-belong to the storefront.
-
-Known discrepancy to verify with the product team: the Vapor Pure article uses
-the local manual's AF300/AF700 mounting dimensions, which disagree with the
-live help-center article's figures.
+The pre-sync build (source-material extracts + search-snippet articles) is
+described in the git history of this file if the provenance ever matters.
 
 ## Team authoring (no deploy needed)
 

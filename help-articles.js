@@ -1,913 +1,930 @@
 /* ──────────────────────────────────────────────────────────────────────────
    Aquafire Help Center — article data.
 
-   The full 29-article catalogue: converted from the archived help-center
-   extracts in docs/source-material/ and from verified live help-center
-   content (aquafire.gorgias.help), per docs/help-center.md. Team-authored
-   articles in the helpArticles Firestore collection (help-admin.html) merge
-   over this file at load — a matching slug overrides the built-in article.
+   The full 76-article catalogue: a word-for-word clone of the live help
+   center (aquafire.gorgias.help, synced 2026-08) plus four portal-native
+   articles (remotes/smart-home, lights-and-beeps reference, preventative
+   maintenance, limited warranty) kept from the source-material build.
+   Team-authored articles in the helpArticles Firestore collection
+   (help-admin.html) merge over this file at load — a matching slug
+   overrides the built-in article.
+
+   Article images are self-hosted under help-img/ (compressed WebP copies
+   of the live help-center images).
 
    Schema:
      HELP_CATEGORIES: { id, title, blurb, icon }
        icon — key into the ICONS map in help.js
-              ('spark' | 'hammer' | 'flame' | 'wrench' | 'drop' | 'shield')
+              ('spark' | 'hammer' | 'flame' | 'wrench' | 'drop' | 'cart' |
+               'shield' | 'brief')
 
      HELP_ARTICLES:   { slug, title, category, models, updated, teaser,
                         keywords, related, html }
        slug     — kebab-case, stable, used in ?article=<slug>
        category — a HELP_CATEGORIES id
        models   — ['original','pro','lite']; all three = applies to everything
-       updated  — 'YYYY-MM'
+       updated  — 'YYYY-MM' (live article's last-updated month)
        teaser   — one plain-text sentence for list cards
        keywords — lowercase search boosters beyond the title words
        related  — 2–4 slugs, must exist (unknown slugs are dropped silently)
        html     — body HTML. Allowed tags: h2 h3 p ul ol li table thead tbody
-                  tr th td a strong em code, plus <div class="ha-note"> and
-                  <div class="ha-caution">. Tables are wrapped in a scroll
-                  container by the engine — just write <table>.
+                  tr th td a strong em u code img iframe hr br, plus
+                  <div class="ha-note"> and <div class="ha-caution">. Tables
+                  are wrapped in a scroll container by the engine — just
+                  write <table>. Images point into help-img/.
 
-   Copy rules (see docs/help-center.md): never name the chat anything but
-   “the chat”; cutout clearance is nominal + ⅜″ IN TOTAL across the outside
-   edges and should link to enclosure-guide.html rather than restate numbers;
-   no prices, no invented specs — facts trace to docs/source-material/ or the
-   live help center.
+   Body copy is cloned verbatim from the live help center — resync from the
+   live articles rather than editing wording here (see docs/help-center.md).
+   Known divergences from the portal's documented conventions are listed in
+   the sync PR, not silently fixed.
    ────────────────────────────────────────────────────────────────────────── */
 
 var HELP_CATEGORIES = [
   {
-    id: 'learn',
-    title: 'Learn Before You Buy',
-    blurb: 'How the water vapor flame works, what the model codes mean, and where every guide and tool lives.',
-    icon: 'spark'
+    id: "learn",
+    title: "Learn Before You Buy",
+    blurb: "How the water vapor flame works, what the model codes mean, and where every guide and tool lives.",
+    icon: "spark"
   },
   {
-    id: 'install',
-    title: 'Installation & Enclosures',
-    blurb: 'Framing and cutouts, glass, airflow, side-light reflections and outdoor installs — everything before the first fill.',
-    icon: 'hammer'
+    id: "install",
+    title: "Installation & Enclosures",
+    blurb: "Framing and cutouts, glass, airflow, side-light reflections and outdoor installs — everything before the first fill.",
+    icon: "hammer"
   },
   {
-    id: 'using',
-    title: 'Using Your Aquafire',
-    blurb: 'Day-to-day operation: shaping the flame, pairing remotes, and smart-home or app control.',
-    icon: 'flame'
+    id: "using",
+    title: "Using Your Aquafire",
+    blurb: "Day-to-day operation: shaping the flame, pairing remotes, and smart-home or app control.",
+    icon: "flame"
   },
   {
-    id: 'fix',
-    title: 'Troubleshooting',
-    blurb: 'Symptom-by-symptom fixes for power, water, flame appearance, lights, remotes and beeps.',
-    icon: 'wrench'
+    id: "fix",
+    title: "Troubleshooting",
+    blurb: "Symptom-by-symptom fixes for power, water, flame appearance, lights, remotes and beeps.",
+    icon: "wrench"
   },
   {
-    id: 'care',
-    title: 'Care & Maintenance',
-    blurb: 'Cleaning schedules, mist-maker service, and keeping your water gentle on the insert.',
-    icon: 'drop'
+    id: "care",
+    title: "Care & Maintenance",
+    blurb: "Cleaning schedules, mist-maker service, and keeping your water gentle on the insert.",
+    icon: "drop"
   },
   {
-    id: 'warranty',
-    title: 'Warranty & Support',
-    blurb: 'What your coverage includes, how to register it, finding your serial number, and reaching a person.',
-    icon: 'shield'
+    id: "orders",
+    title: "Billing & Shipping",
+    blurb: "Payment terms, lead times, shipping options and costs, delivery inspection, sales tax and returns.",
+    icon: "cart"
+  },
+  {
+    id: "warranty",
+    title: "Warranty & Support",
+    blurb: "What your coverage includes, how to register it, finding your serial number, and reaching a person.",
+    icon: "shield"
+  },
+  {
+    id: "pro",
+    title: "Professional Resources",
+    blurb: "Dealer warranties and purchase agreements, brand guidelines, design files and integration protocols.",
+    icon: "brief"
   }
 ];
 
 var HELP_ARTICLES = [
   {
-    slug: 'is-aquafire-humidifying',
-    title: 'Is Aquafire Humidifying?',
-    category: 'learn',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'No — the mist is too fine and too dry to raise room humidity the way a humidifier does.',
-    keywords: ['humidifier', 'humidity', 'moisture', 'wet', 'mist', 'damp'],
-    related: ['product-resources', 'room-air-flow-considerations', 'general-cleaning', 'mist-maker-cleaning-replacement'],
-    html: '<p>' +
-      'Aquafire is not a humidifier. It releases water vapor to create the flame effect, but not enough of it to noticeably raise the humidity in a room.</p>' +
-      '<p>' +
-      'The mist itself is different from what a traditional humidifier puts out. It is fine, almost dry to the touch — not the wet mist or steam you would get from a humidifying appliance. You can run your Aquafire in a normal room without expecting it to change how humid the air feels.</p>' +
-      '<div class="ha-note">' +
-      'If you are weighing Aquafire against a real fireplace or a humidifier for a specific room, our team can help — reach out from <a href="support.html">' +
-      'Support</a>.</div>'
+    slug: "is-aquafire-humidifying",
+    title: "Is Aquafire Humidifying?",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "No — the mist is too fine and too dry to raise room humidity the way a humidifier does.",
+    keywords: ["humidifier", "humidity", "moisture", "wet", "mist", "damp"],
+    related: ["product-resources", "room-air-flow-considerations", "general-cleaning", "mist-maker-cleaning-replacement"],
+    html: "<p>To put it simply: <strong>Aquafire it not a humidifier</strong>.</p><p>It does technically release water vapor into the air but it does not create enough moisture to affect the moisture levels in a room. </p><p>In fact, the water output is so minimal if you put a piece of paper on the water vapor (flame) for 24 hours the paper will remain dry!</p><p>This means you do not need to worry about protecting anything in your enclosure from moisture as there is not enough water output to create excessive condensation.</p><p><em>For example: The Aquafire 20\" holds 2L of water and takes 20 hours to deplete. That means a little over 3oz of water is released into the room per hour. </em></p><p>The Aquafire provides ambiance, freedom from worrying about heat, burns gas line or fumes, a beautiful focal point for your space... Not humidity!</p>"
   },
   {
-    slug: 'decoding-aquafire-skus',
-    title: 'Decoding Aquafire SKUs',
-    category: 'learn',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'A quick key to what the letters and numbers in an Aquafire model number mean.',
-    keywords: ['sku', 'model number', 'part number', 'awa', 'awpr', 'awl', 'which model'],
-    related: ['product-resources', 'is-aquafire-humidifying', 'installation-without-direct-plumb-kits'],
-    html: '<p>' +
-      'Every Aquafire insert has a model number (SKU) that tells you the series, size, and specific variant at a glance. Here is how to read one.</p>' +
-      '<h2>Series prefix</h2><table><thead><tr><th>Prefix</th><th>Series</th></tr></thead><tbody><tr>' +
-      '<td><code>AWPR</code></td><td>Aquafire Pro</td></tr><tr><td><code>AWA</code></td><td>' +
-      'Aquafire (Original)</td></tr><tr><td><code>AWL</code></td><td>Aquafire Lite</td></tr></tbody>' +
-      '</table><p>A digit right after the prefix (for example the <code>2</code> in <code>' +
-      'AWPR2-20-50</code> or the <code>3</code> in <code>AWA3-40-100</code>' +
-      ') marks a generation of that series. A Lite SKU can also carry a <code>-GAT</code>' +
-      ' suffix for the Gatsby freestanding variant.</p><h2>Size</h2><p>' +
-      'The number after the series/generation is the nominal insert width in inches — <code>20</code>' +
-      ', <code>40</code>, or <code>60</code> (Lite also offers a <code>16</code>' +
-      '). This is the size you will see throughout the guides and in the <a href="enclosure-guide.html">' +
-      'Enclosure Guide</a>.</p><p>The final number in the SKU (for example the <code>50</code>/<code>' +
-      '100</code>/<code>150</code>' +
-      ' you will see following the size) is a model-specific code tied to that particular size and series — you will see it consistently paired with the same width across a series\' SKUs.</p>' +
-      '<div class="ha-note">' +
-      'Not sure which SKU matches the unit in front of you? The serial plate carries the full model number — see <a href="help.html?article=identifying-serial-number">' +
-      'Identifying Your Serial Number</a>' +
-      '. For size and cutout math for any model, use the <a href="enclosure-guide.html">' +
-      'Enclosure Guide</a>.</div>'
+    slug: "decoding-aquafire-skus",
+    title: "Decoding Aquafire SKUs",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "A quick key to what the letters and numbers in an Aquafire model number mean.",
+    keywords: ["sku", "model number", "part number", "awa", "awpr", "awl", "which model"],
+    related: ["product-resources", "is-aquafire-humidifying", "installation-without-direct-plumb-kits"],
+    html: "<p>Let's break down the different SKUs you'll encounter as you explore the Aquafire Website.</p><p>AWA = Aquafire Original</p><p>AWPR = Aquafire Pro</p><p>AWL = Aquafire Lite</p><table><tbody><tr><td><strong>MODEL - </strong></td><td><strong>SIZE IN INCHES - </strong></td><td><strong>SIZE IN CENTIMETERS</strong></td></tr><tr><td>AWA</td><td>20</td><td>50</td></tr><tr><td>AWA</td><td>40</td><td>100</td></tr><tr><td>AWA</td><td>60</td><td>150</td></tr><tr><td>AWPR</td><td>20</td><td>50</td></tr><tr><td>AWPR</td><td>40</td><td>100</td></tr><tr><td>AWPR</td><td>60</td><td>150</td></tr><tr><td>AWL</td><td>16</td><td>42</td></tr><tr><td>AWL</td><td>20</td><td>50</td></tr><tr><td>AWL</td><td>40</td><td>100</td></tr><tr><td>AWL</td><td>60</td><td>150</td></tr></tbody></table><p>Any other SKU you see, will be a combination of multiple Aquafires. For instance, AWA-80-200 is someone looking for an 80\" Aquafire Original. In order to achieve this, they will need to purchase 2 AWA-40-100's and install them in one enclosure.</p><p>AWPR-100-250 is a 100\" Aquafire Pro. This customer will need to purchase 1 AWPR-40-100 and 1 AWPR-60-150 and install into one enclosure to achieve the 100\" of water vapor flame.</p><p>You are unable to gang together the Aquafire Lite series. The largest size available for the Aquafire Lite is 60\".</p>"
   },
   {
-    slug: 'product-resources',
-    title: 'Product Resources',
-    category: 'learn',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Every interactive tool and guide on the Aquafire portal, in one place.',
-    keywords: ['resources', 'tools', 'guides', 'links', 'where do i find'],
-    related: ['decoding-aquafire-skus', 'glass-enclosure-options', 'preventative-maintenance'],
-    html: '<p>' +
-      'The Interactive Aquafire Guide has a tool or guide for every stage of owning an Aquafire — from picking a model to keeping it running for years. Here is the full set.</p>' +
-      '<h2>Getting started</h2><ul><li><a href="quick-start.html">Quick Start</a>' +
-      ' — pick your model and jump straight to its full guide.</li><li><a href="aquafire-pro.html">' +
-      'Aquafire Pro Guide</a> — specs, wiring, and troubleshooting for the Pro.</li><li>' +
-      '<a href="aquafire-original.html">Aquafire Original Guide</a>' +
-      ' — the same, for the classic model.</li></ul><h2>Planning your install</h2><ul><li>' +
-      '<a href="enclosure-guide.html">Enclosure Guide</a>' +
-      ' — cutout dimensions, the light trap calculator, and the Installer Field Notes accordion.</li>' +
-      '</ul><h2>Keeping it running</h2><ul><li><a href="water-care.html">Water Care</a>' +
-      ' — look up your local water hardness by ZIP code and get a softener replacement timeline.</li>' +
-      '<li><a href="maintenance.html">Maintenance</a>' +
-      ' — step-by-step, checkbox-tracked mist maker and full system cleaning schedules.</li><li>' +
-      '<a href="troubleshoot.html">Troubleshooter</a>' +
-      ' — a guided, model-aware wizard for fixing an issue.</li></ul><h2>Buying and support</h2><ul>' +
-      '<li><a href="dealer-locator.html">Find a Dealer</a> — authorized Aquafire dealers near you.</li>' +
-      '<li><a href="rewards.html">Rewards</a>' +
-      ' — earn points for exploring guides, using the tools, and completing setup.</li></ul>'
+    slug: "product-resources",
+    title: "Product Resources",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Every interactive tool and guide on the Aquafire portal, in one place.",
+    keywords: ["resources", "tools", "guides", "links", "where do i find"],
+    related: ["decoding-aquafire-skus", "glass-enclosure-options", "preventative-maintenance"],
+    html: "<p><strong><u>Aquafire 20\"</u></strong></p><p><strong>Quick Specs:</strong></p><p><strong>SKU:</strong> AWA3-20-50</p><p><strong>Dimensions:</strong> L 20 in. x W 12.9 in. x H 8.7 in.</p><p><strong>Tank capacity:</strong> 2 Liters</p><p><strong>Run time:</strong> 20 hours</p><p><strong>Power:</strong> 40 Watts</p><p><strong>Weight:</strong> 26.5 lbs</p><p><strong>Resources:</strong></p><p><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AQUAFIRE-AWA_20-50.PDF?v=1689872569\">STEP File (PDF)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWA_20-50.STEP?v=1689872570\">STEP file (STP)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWA_20-50.dwg?v=1746201779\">Product Drawing (DWG)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire_20-50.rfa?v=1746202089\">BIM File (RFA)</a></p><p><strong>Diagrams:</strong></p><p><img src=\"help-img/product-resources-1.webp\" alt=\"AWA 20-50 installation diagram\"></p><p><strong>3D Model:</strong></p><iframe src=\"https://sketchfab.com/models/0015965bc91944bcbe3be1b18432a461/embed\" title=\"AWA 20-50 Water Vapor Electric Fireplace Insert\" loading=\"lazy\" allowfullscreen></iframe><hr><p><strong>Aquafire 40\"</strong></p><p><strong>Quick Specs:</strong></p><p><strong>SKU:</strong> AWA3-40-100</p><p><strong>Dimensions:</strong> L 40 in. x W 12.9 in. x H 8.7 in.</p><p><strong>Tank capacity:</strong> 4 Liters</p><p><strong>Run time:</strong> 20 hours</p><p><strong>Power:</strong> 87 Watts</p><p><strong>Weight:</strong> 48.5 lbs</p><p><strong>Resources:</strong></p><p><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AQUAFIRE-AWA_40-100.PDF?v=1689872577\">STEP File (PDF)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWA_20-50.STEP?v=1689872570\">STEP file (STP)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWA_40-100.dwg?v=1746201805\">Product Drawing (DWG)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire_40-100.rfa?v=1746202089\">BIM File (RFA)</a></p><p><strong>Diagrams:</strong></p><p><img src=\"help-img/product-resources-2.webp\" alt=\"AWA 40-100 installation diagram\"></p><p><strong>3D Model:</strong></p><iframe src=\"https://sketchfab.com/models/11be6749940b4d51b59f1b911f8040c9/embed\" title=\"AWA 40-100 Water Vapor Electric Fireplace Insert\" loading=\"lazy\" allowfullscreen></iframe><hr><p><strong>Aquafire 60\" </strong></p><p><strong>Quick Specs:</strong></p><p><strong>SKU:</strong> AWA3-60-150</p><p><strong>Dimensions:</strong> L 60 in. x W 12.9 in. x H 8.7 in.</p><p><strong>Tank capacity:</strong> 6 Liters</p><p><strong>Run time:</strong> 20 hours</p><p><strong>Power:</strong> 125 Watts</p><p><strong>Weight:</strong> 70.5 lbs</p><p><strong>Resources:</strong></p><p><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AQUAFIRE-AWA_40-100.PDF?v=1689872577\">STEP File (PDF)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWA_20-50.STEP?v=1689872570\">STEP file (STP)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWA_60-150.dwg?v=1746201805\">Product Drawing (DWG)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire_60-150.rfa?v=1746202089\">BIM File (RFA)</a></p><p><strong>Diagrams:</strong></p><p><img src=\"help-img/product-resources-3.webp\" alt=\"AWA 60-150 installation diagram\"></p><p><strong>3D Model:</strong></p><iframe src=\"https://sketchfab.com/models/1441231c32c04479965c0ae68be24346/embed\" title=\"AWA 60-150 Water Vapor Electric Fireplace Insert\" loading=\"lazy\" allowfullscreen></iframe><hr>"
   },
   {
-    slug: 'delivery-inspection',
-    title: 'Delivery Inspection',
-    category: 'install',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Check your Aquafire before you sign for it — a few minutes now protects any damage claim later.',
-    keywords: ['delivery', 'shipping', 'damage', 'freight', 'unboxing', 'received damaged'],
-    related: ['product-resources', 'aquafire-limited-warranty', 'identifying-serial-number'],
-    html: '<p>' +
-      'Take a few minutes with your Aquafire at the door before you accept the delivery — it makes all the difference if anything needs to be claimed later.</p>' +
-      '<ol><li>Inspect the exterior of the box and crate before you sign the carrier\'s receipt.</li>' +
-      '<li>' +
-      'If you see any visible damage, note it with the driver before you sign — this is required to file a damage claim afterward.</li>' +
-      '<li>' +
-      'Photograph any damage to the packaging before you unpack the unit. Proof of the packaging condition is required for a claim.</li>' +
-      '</ol><div class="ha-caution">' +
-      'Signing for the delivery without noting visible damage can make a freight claim difficult later — inspect first, then sign.</div>' +
-      '<p>' +
-      'If you find damage after unpacking, or have questions about a claim, reach out through <a href="support.html">' +
-      'Support</a>.</p>'
+    slug: "buying-early-in-the-construction-phase",
+    title: "Buying early in the construction phase? READ ME FIRST",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "If you buy your Aquafire early, test it in the enclosure, then store it in its crate until construction is finished.",
+    keywords: ["early purchase", "construction dust", "storage", "crate", "void warranty", "debris"],
+    related: ["product-resources", "does-the-aquafire-make-a-sound", "decoding-aquafire-skus"],
+    html: "<p>There are many reasons to order your Aquafire early in the construction process. You can ensure your custom-designed enclosure <a href=\"help.html?article=how-to-avoid-ceiling-light-bleed\">captures the light</a> and highlights the Aquafire best. However, we ask if you receive your Aquafire early, do not leave it installed while construction is occurring. Construction debris and dust can easily get into the Aquafire, causing internal issues and voiding your warranty.</p><p>Our recommendation is to test them in the enclosure and then safely store them in their crates after testing. They should be treated like a large television or similar investment that isn't fully installed until the end of construction.</p>"
   },
   {
-    slug: 'installation-without-direct-plumb-kits',
-    title: 'Installation Without a Direct Plumb Kit',
-    category: 'install',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'What manual-fill installs look like, and which models can add a direct water-line connection.',
-    keywords: ['direct plumb kit', 'manual fill', 'water line', 'no plumbing', 'fill pump'],
-    related: ['product-resources', 'mist-maker-cleaning-replacement', 'vapor-pure-water-softener'],
-    html: '<p>' +
-      'Not every Aquafire installation connects to a water line, and that is completely normal — every model can be filled manually. Direct water-line capability differs by model, so here is what to expect for each.</p>' +
-      '<h2>Aquafire Pro</h2><p>' +
-      'The Pro connects directly to a water line right out of the box — no add-on kit needed. It can also be filled manually using its integrated water pump, and it includes a dispensing pump so the unit can be emptied at the press of a button.</p>' +
-      '<h2>Aquafire Original</h2><p>' +
-      'The Original does not connect to a water line out of the box. The Direct Plumb Kit is an easy-install add-on, sold and shipped separately, that enables a direct connection. Without it — or before it is installed — the Original is filled manually using its integrated water pump, the same way as the Pro.</p>' +
-      '<h2>Aquafire Lite / Gatsby</h2><p>' +
-      'The Lite and Gatsby do not connect to a water line out of the box, and there is currently no upgrade path to add one. These units are filled manually using their integrated water pump.</p>' +
-      '<div class="ha-note">' +
-      'Whether or not your install is direct-plumbed, sealing the enclosure against downdrafts still matters — see <a href="help.html?article=room-air-flow-considerations">' +
-      'Room Air Flow Considerations</a>.</div>'
+    slug: "does-the-aquafire-make-a-sound",
+    title: "Does the Aquafire make a sound?",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "The Aquafire runs almost silently — no crackling or artificial fire sound effects, even in bedrooms.",
+    keywords: ["noise", "quiet", "loud", "crackling sound", "sound effects", "bedroom"],
+    related: ["buying-early-in-the-construction-phase", "does-the-aquafire-provide-heat", "product-resources"],
+    html: "<p>No. There are no crackling or artificial fire sounds embedded in the Aquafire burners. They produce little to no noise when operating making it an easy addition to public spaces, bedrooms, kitchens and really any space that you want a fire feature without the hassle and danger of an actual fire.</p>"
   },
   {
-    slug: 'glass-enclosure-options',
-    title: 'Glass Enclosure Options',
-    category: 'install',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'A fully sealed glass front causes condensation — here is how to design one that works.',
-    keywords: ['glass', 'enclosure', 'condensation', 'sealed', 'vented glass'],
-    related: ['room-air-flow-considerations', 'avoid-side-light-reflections', 'product-resources'],
-    html: '<p>' +
-      'Because Aquafire has no heat or flame, there is no restriction on the materials you can use to build the enclosure — including glass. There is one design rule worth planning around, though: never seal it completely.</p>' +
-      '<ul><li>A <strong>removable half glass wall</strong> is one recommended approach.</li><li>' +
-      'If you want a full glass front, build it as a <strong>top- or bottom-vented structure</strong>' +
-      ' rather than fully sealed, so the vents can bring in fresh air and let the vapor dissipate.</li>' +
-      '<li>A fully sealed glass enclosure will cause <strong>condensation</strong>' +
-      ' to build up on the inside of the glass.</li><li>' +
-      'Whatever design you use, make sure the glass is <strong>' +
-      'removable for cleaning and service</strong>.</li></ul><div class="ha-note">' +
-      'For the cutout dimensions and venting your enclosure needs behind the glass, use the <a href="enclosure-guide.html">' +
-      'Enclosure Guide</a> — its Installer Field Notes cover venting and sealing in more depth.</div>'
+    slug: "does-the-aquafire-provide-heat",
+    title: "Does the Aquafire provide heat?",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "The Aquafire produces the look of flame with no real heat, so enclosure materials don't need heat or smoke protection.",
+    keywords: ["heat output", "warm", "hot to touch", "flammable materials", "wood enclosure", "fire risk"],
+    related: ["does-the-aquafire-make-a-sound", "do-you-sell-fireplace-surrounds-or-accessories", "buying-early-in-the-construction-phase"],
+    html: "<p>No. The Aquafire Water Vapor Fireplace Burners produce the look of fire without the heat. This allows for unlimited enclosure material options since you do not have to protect the enclosure from heat or smoke.</p>"
   },
   {
-    slug: 'room-air-flow-considerations',
-    title: 'Room Air Flow Considerations',
-    category: 'install',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Air currents are the most common cause of a flame that will not rise properly — here is how to keep them out.',
-    keywords: ['downdraft', 'air flow', 'hvac', 'flame low', 'flame won\'t rise', 'sealing'],
-    related: ['glass-enclosure-options', 'flame-low-or-uneven', 'installation-without-direct-plumb-kits'],
-    html: '<p>' +
-      'Aquafire\'s flame is water vapor rising and catching light — which means air currents around the enclosure can pull it down or keep it from rising at all. Getting the air flow right is one of the most important parts of a good install.</p>' +
-      '<ul><li>' +
-      'Air currents and suction near the enclosure can pull the flame down into the fireplace.</li><li>' +
-      'Seal any open wall cavities in the enclosure and beneath the insert — an open cavity behind or below the unit can create airflow that drags the flame downward and drives excess vapor onto the components over time.</li>' +
-      '<li>' +
-      'Keep HVAC supply vents from blowing directly at the insert. Direct air currents stop the vapor from rising vertically and limit how tall the flame can get.</li>' +
-      '<li>' +
-      'Many newer homes run positive-pressure ("open plenum") HVAC, which pushes air into an unsealed enclosure. On a new build, seal proactively rather than waiting for a problem to show up.</li>' +
-      '</ul><p>' +
-      'The enclosure still needs its own air intake to breathe — allow at least 50 square inches of intake per 20" of unit length, through the top lid or, if the top is covered by decorative media, through a toe kick beneath the enclosure.</p>' +
-      '<div class="ha-note">The <a href="enclosure-guide.html#field-notes">Installer Field Notes</a>' +
-      ' on the Enclosure Guide cover downdraft sealing and venting step by step, including a fallback sealing method for enclosures that are already framed.</div>' +
-      '<p>' +
-      'If your flame already looks low or uneven, see <a href="help.html?article=flame-low-or-uneven">' +
-      'Flame Issues — Low or Uneven "Flame"</a>.</p>'
+    slug: "do-you-sell-fireplace-surrounds-or-accessories",
+    title: "Do you sell fireplace surrounds or accessories?",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Aquafire doesn't currently sell fireplace surrounds or accessories, but more offerings are in the works.",
+    keywords: ["mantel", "trim kit", "add-ons", "coming soon", "hearth accessories", "product lineup"],
+    related: ["does-the-aquafire-provide-heat", "do-i-need-to-waterproof-the-aquafire-enclosure", "does-the-aquafire-make-a-sound"],
+    html: "<p>We are working to expand our Aquafire accessory offerings so please check back soon for updates!</p>"
   },
   {
-    slug: 'avoid-side-light-reflections',
-    title: 'How to Avoid Side-Light Reflections',
-    category: 'install',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Keep the flame\'s color off the hearth walls and ceiling with the right clearance and finish.',
-    keywords: ['light reflection', 'side light', 'rgb', 'orange light on wall', 'hearth glow'],
-    related: ['glass-enclosure-options', 'room-air-flow-considerations', 'product-resources'],
-    html: '<p>' +
-      'The orange (or RGB, on Pro) light from Aquafire\'s flame can reflect off the sides of the hearth and onto the ceiling if the enclosure is built too tight around the insert. A few design choices keep the light where it belongs.</p>' +
-      '<ul><li>Keep at least <strong>6" of clearance</strong>' +
-      ' from the edge of the insert to the hearth wall on each side. For example, a 60" opening with a 40" insert leaves that clearance built in.</li>' +
-      '<li>Paint the interior of the hearth in a <strong>dark, matte finish</strong>' +
-      ' — a reflective surface will carry more light onto the ceiling and walls.</li><li>A <strong>' +
-      'blind corner</strong>' +
-      ' design hides the side light from a viewer looking at the fireplace head-on.</li></ul>' +
-      '<div class="ha-note">The <a href="enclosure-guide.html">Enclosure Guide</a>' +
-      ' sizes your cutout and light trap for you, and its Installer Field Notes go into side clearance and light trap planning in more depth.</div>'
+    slug: "do-i-need-to-waterproof-the-aquafire-enclosure",
+    title: "Do I need to waterproof the Aquafire enclosure?",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "No — Aquafire's water vapor is so fine and minimal it won't dampen or require waterproofing your enclosure materials.",
+    keywords: ["waterproofing", "enclosure material", "humidity", "dry mist", "moisture", "wet"],
+    related: ["do-you-sell-fireplace-surrounds-or-accessories", "why-we-utilize-uv-c-technology", "does-the-aquafire-provide-heat"],
+    html: "<p>No!</p><p>The Aquafire produces minimal mist and the cool mist that is created is very fine, almost dry-to-the-touch. You won't find a wet mist or steam like a traditional humidifier. To test the limits of the cool, dry mist, we placed a piece of paper directly above the vapor flame for multiple hours and it never became wet. For more information about the ultrasonic transducer, check out the <a href=\"https://www.aquafire.com/pages/how-it-works\">How It Works</a> Section of our website!</p><p>The Aquafire and Aquafire Pro require 2L of water per 20\" section in order to run for 20 hours. That means a 20\" burner puts out 2L of water every 20 hours. A 40\" puts out 4L of water every 20 hours and a 60\" puts out 6L of water every 20 hours. The minimal water output keeps your surrounding dry and has minimal effect on the humidity level of your home or business.</p>"
   },
   {
-    slug: 'outdoor-installation-guidelines',
-    title: 'Outdoor Installation Guidelines',
-    category: 'install',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Aquafire can go outdoors under cover, but it needs protection from wind, rain, and freezing weather.',
-    keywords: ['outdoor', 'patio', 'porch', 'weather', 'freeze', 'wind', 'outside'],
-    related: ['glass-enclosure-options', 'room-air-flow-considerations', 'general-cleaning'],
-    html: '<p>' +
-      'Aquafire is not rated for full outdoor exposure, but it can be installed outside if the location is protected. Keep these in mind when planning an outdoor spot:</p>' +
-      '<ul><li><strong>Covered or roofed locations only.</strong>' +
-      ' A covered porch keeps rain and debris out of the enclosure — an exposed installation risks water and debris getting into the unit.</li>' +
-      '<li><strong>Use a wind screen.</strong>' +
-      ' Wind and cross-breezes affect the flame the same way indoor air currents do, so shield the insert from open-air wind.</li>' +
-      '<li><strong>Drain before freezing weather.</strong>' +
-      ' Water left in the tank can freeze and damage the unit, so drain it ahead of cold snaps.</li>' +
-      '</ul><p>' +
-      'The Pro\'s flexible fill/drain hose can be used for outdoor cleanings, but a wet/dry vac is preferred when there is debris to remove, since it will not clog the drain lines the way a hose can.</p>' +
-      '<div class="ha-note">' +
-      'For general cleaning steps and schedule, see <a href="help.html?article=general-cleaning">' +
-      'General Cleaning</a> and the interactive checklists on <a href="maintenance.html">' +
-      'Maintenance</a>.</div>'
+    slug: "why-we-utilize-uv-c-technology",
+    title: "Why we utilize UV-C Technology",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "UV-C lights built into every Aquafire Original and Pro sanitize the vapor and kill airborne microbes for peace of mind.",
+    keywords: ["sanitize", "germs", "bacteria", "safety feature", "hvac-like", "mist purification"],
+    related: ["do-i-need-to-waterproof-the-aquafire-enclosure", "media-accessory-use-with-aquafire", "do-you-sell-fireplace-surrounds-or-accessories"],
+    html: "<p>The UV-C lights are an important safety feature included in every Aquafire Original and Aquafire Pro to provide peace of mind for the homeowner/purchaser and the people that come in contact with the vapor flames.</p><p><img src=\"help-img/why-we-utilize-uv-c-technology-1.webp\" alt=\"UV-C sanitation system diagram\"></p><p>All Aquafire Originals and Aquafire Pros are equipped with a UV-C lighting system, much like modern HVAC Systems. Each 20\" section houses it's own UV-C light. So a 40\" burner will have 2 UV-C lights and a 60\" will have 3 UV-C lights. This system is there to sanitize the vapor produced and all air movement created by the front and rear fans. It kills 99% of airborne microbial, fungal or viral organisms in the mist. The UV-C lights turn on regularly even when the unit is not running (but does need to be plugged into a power source). They are tucked within the burner and are not visible to the viewer.</p>"
   },
   {
-    slug: 'adjusting-the-flame',
-    title: 'Adjusting the Aquafire Flame',
-    category: 'using',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Your Aquafire’s flame needs a bit of tuning for your room — here is how to dial in density, speed, humidity, airflow, and the front fan ring lift.',
-    keywords: ['flame adjustment', 'density', 'speed', 'remote control', 'airflow', 'humidity', 'fan filter', 'fine-tune'],
-    related: ['flame-appearance-troubleshooting', 'flame-smoky-foggy', 'room-air-flow-considerations', 'remotes-and-smart-home-control'],
-    html: '<h2>Every room is different</h2><p>' +
-      'Your Aquafire’s flame needs to be customized to your specific space. Every home has its own airflow and humidity levels, and both affect how the vapor flame looks. A few small tweaks are usually all it takes to get it looking right.</p>' +
-      '<ol><li><strong>Adjust the flame density and speed on the remote control.</strong>' +
-      ' We suggest setting both to their lowest settings first, then adjusting density and speed separately from there. Press the &ldquo;&minus;&rdquo; button until the beeping stops — that means you have reached the lowest setting. The Aquafire Pro remote has a few extra features, but the density and speed icons work the same way.</li>' +
-      '<li><strong>Check and adjust the humidity levels in your room.</strong>' +
-      ' You may need to adjust the room’s HVAC to bring humidity down, since high humidity can produce a foggy-looking flame. If your flame looks smoky or foggy, see <a href="help.html?article=flame-smoky-foggy">' +
-      'Flame Issues &mdash; Smoky or Foggy Appearance</a>.</li><li><strong>' +
-      'Note and adjust the airflow in your room.</strong>' +
-      ' Is an HVAC vent pointed directly at the Aquafire? Does a door near the flame open and close often? Does the vapor seem to get pulled down every time the HVAC turns on (this is called down-drafting)? Any of these airflow situations can affect the vapor flame and should be corrected — excess vapor pushed back onto the insert can cause electrical shorts and internal damage over time.</li>' +
-      '<li><strong>Check the ring lift covering the front fans.</strong>' +
-      ' First make sure it is fully seated in its holder. From there, you can lift it up a small amount at a time to adjust the flame.</li>' +
-      '</ol><div class="ha-caution"><strong>Go slow on the ring lift.</strong>' +
-      ' Lifting it even a quarter inch can release an excess of vapor. Adjust it in small increments and watch how the flame responds before lifting it further.</div>'
+    slug: "media-accessory-use-with-aquafire",
+    title: "Media/Accessory Use with Aquafire",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "How to cover the Aquafire's top vents with rock, log sets or glass media while keeping enough clear air intake for the flame effect.",
+    keywords: ["river rock", "log set", "glass stones", "toe kick", "air intake", "covering the vents"],
+    related: ["why-we-utilize-uv-c-technology", "installing-multiple-aquafires", "do-i-need-to-waterproof-the-aquafire-enclosure"],
+    html: "<p>You are absolutely able to put rocks or other media on the Aquafire. When the top vents are covered, you'll need air coming into the vents located on the front and back bottom of the Aquafire. This is usually accomplished by a toe kick that is open to the room for adequate air intake (see image below). We recommend putting whatever media or accessories you like - river rock*, a lightweight log set*, glass stones*... the possibilities are endless - on a lightweight cut out that sits on top of the Aquafire and is easy to remove. This will come in handy when you go to do light cleaning and any necessary maintenance.</p><p><img src=\"help-img/media-accessory-use-with-aquafire-1.webp\" alt=\"Toe kick air intake gap beneath an Aquafire enclosure\">The air intake requirements are as follows:</p><ul><li>20\" burner requires 50 sq inches of unrestricted air intake</li><li>40\" burner requires 100 sq inches of unrestricted air intake</li><li>60\" burner requires 150 sq inches of unrestricted air intake</li><li>Etc... if you have multiples installed into one enclosure, each 20\" needs at least 50 sq inches of unrestricted air intake to create the vapor flame effect. </li></ul><p>Installation examples of media and/or materials covering the top vents:</p><p><img src=\"help-img/media-accessory-use-with-aquafire-2.webp\" alt=\"Media covering the top vents of an Aquafire installation, example 1\"></p><p><img src=\"help-img/media-accessory-use-with-aquafire-3.webp\" alt=\"Media covering the top vents of an Aquafire installation, example 2\"></p><p><img src=\"help-img/media-accessory-use-with-aquafire-4.webp\" alt=\"Media covering the top vents of an Aquafire installation, example 3\"></p><p><img src=\"help-img/media-accessory-use-with-aquafire-5.webp\" alt=\"Media covering the top vents of an Aquafire installation, example 4\"></p><p><em>*Aquafire does not sell fireplace accessories. They will need to be purchased separately and are at the discretion of the purchaser.</em></p>"
   },
   {
-    slug: 'remotes-and-smart-home-control',
-    title: 'Remotes, Pairing & Smart-Home Control',
-    category: 'using',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'How the remote pairs to your Aquafire, controlling multiple inserts together, and connecting a smart-home switch.',
-    keywords: ['remote', 'pairing', 'smart home', 'dry contact', 'sync remote', 'multiple fireplaces one remote'],
-    related: ['remote-control-issues', 'pro-phone-app-not-connecting', 'my-aquafire-is-beeping'],
-    html: '<p>' +
-      'Every Aquafire insert can be controlled by its included remote, and also carries a Dry Contact Port for integrating with a smart-home system or a remote switch.</p>' +
-      '<h2>Pairing a remote</h2><ol><li>' +
-      'Press and hold the power button on the fireplace until it flashes.</li><li>' +
-      'Press any button on the remote — you\'ll hear a beep confirming the pairing.</li></ol><p>' +
-      'If the remote turns the fireplace on/off but does not respond to flame or color adjustments, the battery may be low, or it may need to be re-synced with the same steps above.</p>' +
-      '<p>Remotes take a <strong>CR-2032 lithium battery</strong>.</p><h2>' +
-      'Controlling multiple inserts on one remote</h2><p>' +
-      'Multiple inserts can be paired to a single remote — following the same pairing steps on each unit syncs them together. From one remote, on/off and flame height/speed are controlled together across all paired inserts; color is controlled together only on Aquafire Pro.</p>' +
-      '<h2>Smart-home and remote-switch integration</h2><p>' +
-      'Every Aquafire insert includes a Dry Contact Port, which is the connection point for wiring in a smart-home controller or a remote switch alongside the included remote.</p>' +
-      '<div class="ha-note">' +
-      'Remote not responding at all after trying the steps above? See <a href="help.html?article=remote-control-issues">' +
-      'Remote Control Issues</a>.</div>'
+    slug: "installing-multiple-aquafires",
+    title: "Installing Multiple Aquafires",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Each Aquafire burner in a multi-unit install needs its own separate water and power connection, even when one remote controls all of them.",
+    keywords: ["water connection", "power connection", "multi-burner", "ganged install", "separate hookups", "one remote"],
+    related: ["media-accessory-use-with-aquafire", "is-the-aquafire-ul-listed", "why-we-utilize-uv-c-technology"],
+    html: "<p><strong>Does each burner need its own water connection?<br></strong><br><em>Yes!</em></p><p>Although multiple Aquafires can be installed into one enclosure and controlled by one remote, the internal components of the Aquafires do not connect. Therefore, each Aquafire will need its own water and power connection. <br><br><strong>Does each burner need its own power connection?</strong></p><p><em>Yes!</em></p><p>Although multiple Aquafires can be installed into one enclosure and controlled by one remote, the internal components of the Aquafires do not connect. Therefore, each Aquafire will need its own water and power connection.</p>"
   },
   {
-    slug: 'pro-phone-app-not-connecting',
-    title: 'Aquafire Pro — Phone App Not Connecting',
-    category: 'using',
-    models: ['pro'],
-    updated: '2026-08',
-    teaser: 'The AFIREWATER Prestige App only pairs with 2.4 GHz Wi-Fi networks — here is why, and the latest update on a broader connectivity fix.',
-    keywords: ['wifi', 'app', 'won\'t connect', '2.4ghz', 'afirewater', 'prestige app', 'pairing', 'pro'],
-    related: ['remotes-and-smart-home-control', 'product-resources', 'decoding-aquafire-skus'],
-    html: '<h2>Before you connect</h2><p>' +
-      'Congratulations on installing your new Aquafire Pro! If you plan to operate it through the AFIREWATER Prestige App, there are a couple of details to sort out before you pair it.</p>' +
-      '<h3>2.4 GHz networks only</h3><p>' +
-      'The Aquafire Pro will only connect to a 2.4 GHz router network. Many home routers can create a 2.4 GHz network alongside their faster 4G/5G networks. Aquafire water vapor fireplace inserts are sold worldwide, and not every country has access to the faster networks common in the US, so the international manufacturer of the Wi-Fi module still uses a 2.4 GHz-only chip. Connect your phone to your router’s 2.4 GHz network before you try to pair.</p>' +
-      '<h3>Follow the pairing steps in order</h3><p>' +
-      'Once you are on the correct network, follow the app’s download and connection instructions precisely and in sequence. Customers who try to connect out of order run into far more issues than those who follow the step-by-step guidelines in the Owner’s Manual (pages 9–10).</p>' +
-      '<div class="ha-note"><strong>Update, May 29, 2026:</strong>' +
-      ' Wi-Fi chip changes, router security protocols, and phone operating-system updates have all been breaking connectivity for some customers even on a correct 2.4 GHz network. Our team is actively working on a broader fix. If you are still unable to connect after confirming you are on a 2.4 GHz network and following the manual step by step, check back here or watch your email for updates.</div>'
+    slug: "is-the-aquafire-ul-listed",
+    title: "Is the Aquafire UL Listed?",
+    category: "learn",
+    models: ["original", "pro", "lite"],
+    updated: "2026-07",
+    teaser: "The Aquafire is UL-listed: a decorative, non-heating, low-voltage system built on Class 2 power supplies.",
+    keywords: ["ul listed", "safety certification", "low voltage", "class 2", "certified", "non-heating"],
+    related: ["installing-multiple-aquafires", "product-resources-pro", "media-accessory-use-with-aquafire"],
+    html: "<p>The Aquafire is a decorative, non-heating, low-voltage system using UL-listed Class 2 power supplies. Beyond that, the system operates exclusively at low voltage.</p><p>For additional questions please reach out to us directly at ces@aquafire.com</p>"
   },
   {
-    slug: 'power-issues',
-    title: 'Power Issues',
-    category: 'fix',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Is your Aquafire not turning on? Work through this problem-and-solution chart to find a fix.',
-    keywords: ['power', 'won\'t turn on', 'power supply', 'breaker', 'fuse', 'buzzing sound', 'dead'],
-    related: ['my-aquafire-is-beeping', 'lights-and-beeps-reference', 'water-issues'],
-    html: '<h2>Not turning on?</h2><p>Review the chart below to find a solution.</p><div class="ha-note">' +
-      'Most common power issues can be prevented with a whole-insert cleaning. We recommend cleaning your insert 2&ndash;3 times a year depending on frequency of use and water quality. Start with <a href="help.html?article=general-cleaning">' +
-      'General Cleaning</a> or the <a href="maintenance.html">maintenance checklists</a>' +
-      ' to see if that solves your problem first.</div><table><thead><tr><th>Problem</th><th>' +
-      'Possible cause</th><th>Solution</th></tr></thead><tbody><tr><td>' +
-      'Unit fails to turn on when using the power button on the fireplace</td><td>' +
-      'Power supply not properly plugged in</td><td>' +
-      'Check the power supply connections and look for a green LED on the power supply indicating it is powered.</td>' +
-      '</tr><tr><td>&nbsp;</td><td>Wall outlet may not be powered</td><td>' +
-      'Check the breaker main panel in the building to see if a breaker has been tripped or turned off.</td>' +
-      '</tr><tr><td>Power supply indicator light is green, but unit still will not turn on</td><td>' +
-      'Main fuse inside the fireplace may be blown</td><td>Contact <a href="support.html">support</a>' +
-      ' for assistance.</td></tr><tr><td>Power supply indicator light is red</td><td>' +
-      'Power supply has somehow been damaged</td><td>Contact <a href="support.html">support</a>' +
-      ' for assistance.</td></tr><tr><td>' +
-      'Unit turns on, but power button flashes and immediately shuts off</td><td>' +
-      'Possible internal component failure due to rough handling during shipping</td><td>' +
-      'Contact <a href="support.html">support</a> for assistance.</td></tr><tr><td>' +
-      'Unit appears to have power, but a buzzing sound is heard</td><td>' +
-      'Power supply may not be fully plugged in on the back of the unit</td><td>' +
-      'Check that the 90&deg; fitting is securely plugged in on the back of the unit. If it is and the buzzing continues, contact <a href="support.html">' +
-      'support</a>.</td></tr><tr><td>&nbsp;</td><td>' +
-      'Power supply is fully plugged in on the back of the unit, but buzzing persists</td><td>' +
-      'The main power outlet may be loose. Contact <a href="support.html">support</a>' +
-      ' for assistance.</td></tr></tbody></table>'
+    slug: "product-resources-pro",
+    title: "Product Resources",
+    category: "learn",
+    models: ["pro"],
+    updated: "2026-06",
+    teaser: "SKUs, dimensions, and downloadable STEP/DWG/RFA files and 3D models for every Aquafire Pro size.",
+    keywords: ["sku", "step file", "dwg", "bim", "rfa", "cad drawing", "3d model", "spec sheet"],
+    related: ["is-the-aquafire-ul-listed", "installing-multiple-aquafires", "media-accessory-use-with-aquafire"],
+    html: "<h3>Aquafire Pro 20\"</h3><p><strong>Quick Specs:</strong></p><p><strong>SKU:</strong> AWPR3-20-50</p><p><strong>Dimensions: </strong>L 20 in. x W 12.9 in. x H 11.3 in.</p><p><strong>Tank capacity:</strong> 2 Liters</p><p><strong>Run time:</strong> 20 hours</p><p><strong>Power:</strong> 65 Watts</p><p><strong>Weight:</strong> 35.2 lbs</p><p><strong>Resources:</strong></p><p><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AQUAFIRE-PRO-AWPR_20-50.PDF?v=1689872612\">STEP File (PDF)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWPR_20-50.STEP?v=1689872612\">STEP file (STP)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWPR_20-50.dwg?v=1746201824\">Product Drawing (DWG)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire_Pro_20-50.rfa?v=1746202089\">BIM File (RFA)</a></p><p><strong>Diagrams:</strong></p><p><img src=\"help-img/product-resources-pro-1.webp\" alt=\"AWPR-20-50 installation diagram\"></p><p><strong>3D Model:</strong></p><iframe src=\"https://sketchfab.com/models/0015965bc91944bcbe3be1b18432a461/embed\" title=\"AWA 20-50 Water Vapor Electric Fireplace Insert\" loading=\"lazy\" allowfullscreen></iframe><hr><h3>Aquafire Pro 40\"</h3><p><strong>Quick Specs:</strong></p><p><strong>SKU:</strong> AWPR3-40-100</p><p><strong>Dimensions: </strong>L 40 in. x W 12.9 in. x H 11.3 in.</p><p><strong>Tank capacity:</strong> 4 Liters</p><p><strong>Run time:</strong> 20 hours</p><p><strong>Power:</strong> 130 Watts</p><p><strong>Weight:</strong> 59.5 lbs</p><p><strong>Resources:</strong></p><p><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AQUAFIRE-PRO-AWPR_40-100.PDF?v=1689872620\">STEP File (PDF)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWPR_40-100.STEP?v=1689872621\">STEP file (STP)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWPR_40-100.dwg?v=1746201824\">Product Drawing (DWG)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire_Pro_40-100.rfa?v=1746202089\">BIM File (RFA)</a></p><p><strong>Diagrams:</strong></p><p><img src=\"help-img/product-resources-pro-2.webp\" alt=\"AWPR-40-100 installation diagram\"></p><p><strong>3D Model:</strong></p><iframe src=\"https://sketchfab.com/models/11be6749940b4d51b59f1b911f8040c9/embed\" title=\"AWA 40-100 Water Vapor Electric Fireplace Insert\" loading=\"lazy\" allowfullscreen></iframe><hr><h3>Aquafire Pro 60\"</h3><p><strong>Quick Specs:</strong></p><p><strong>SKU:</strong> AWPR3-60-150</p><p><strong>Dimensions: </strong>L 60 in. x W 12.9 in. x H 11.3 in.</p><p><strong>Tank capacity:</strong> 6 Liters</p><p><strong>Run time:</strong> 20 hours</p><p><strong>Power:</strong> 195 Watts</p><p><strong>Weight:</strong> 86 lbs</p><p><strong>Resources:</strong></p><p><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AQUAFIRE-PRO-AWPR_60-150.PDF?v=1689872628\">STEP File (PDF)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWPR_60-150.STEP?v=1689872628\">STEP file (STP)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/AWPR_60-150.dwg?v=1746201824\">Product Drawing (DWG)</a><br><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire_Pro_60-150.rfa?v=1746202089\">BIM File (RFA)</a></p><p><strong>Diagrams:</strong></p><p><img src=\"help-img/product-resources-pro-3.webp\" alt=\"AWPR-60-150 installation diagram\"></p><p><strong>3D Model:</strong></p><iframe src=\"https://sketchfab.com/models/394dfbd4d52940ec81cfe571ccb1c0b2/embed\" title=\"AWPR 60-150 Water Vapor Electric Fireplace AFIRE\" loading=\"lazy\" allowfullscreen></iframe>"
   },
   {
-    slug: 'water-issues',
-    title: 'Water Issues',
-    category: 'fix',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Got water problems — a musty smell, a leak, or a beep-and-shutoff? Review the chart below to find a solution.',
-    keywords: ['water', 'leak', 'musty smell', 'stale water', 'float sensor', 'low water', 'beep and shut off'],
-    related: ['my-aquafire-is-beeping', 'general-cleaning', 'flame-low-or-uneven'],
-    html: '<h2>Got water problems?</h2><p>Review the chart below to find a solution.</p>' +
-      '<div class="ha-note">' +
-      'Most common water issues can be prevented with a whole-insert cleaning. We recommend cleaning your insert 2&ndash;3 times a year depending on frequency of use and water quality. Start with <a href="help.html?article=general-cleaning">' +
-      'General Cleaning</a> or the <a href="maintenance.html">maintenance checklists</a>' +
-      ' to see if that solves your problem first.</div><table><thead><tr><th>Problem</th><th>' +
-      'Possible cause</th><th>Solution</th></tr></thead><tbody><tr><td>' +
-      'Musty or stale smell when unit is running</td><td>' +
-      'Old or stale water, generally from lack of use</td><td>' +
-      'Drain and refill with fresh water. Consider cleaning per the <a href="maintenance.html">' +
-      'preventative maintenance</a> guidelines.</td></tr><tr><td>' +
-      'Leak detected after the unit has been unused for an extended period of time</td><td>' +
-      'Float sensor in the mist tank may be stuck, creating an above-normal water level in the mist tube</td>' +
-      '<td>' +
-      'Drain excess water to the proper level, then lift and plunge the mist maker rack vigorously 10&ndash;15 times to free up the float sensor in the mist tank. Let the unit run and recheck that the correct water level is maintained.</td>' +
-      '</tr><tr><td>Unit beeps then turns off</td><td>Low water level</td><td>' +
-      'Refill the unit manually, or verify that the water feed is on if the unit is permanently plumbed.</td>' +
-      '</tr></tbody></table>'
+    slug: "installation-without-direct-plumb-kits",
+    title: "Installation without Direct Plumb Kits",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "What manual-fill installs look like, and which models can add a direct water-line connection.",
+    keywords: ["direct plumb kit", "manual fill", "water line", "no plumbing", "fill pump"],
+    related: ["product-resources", "mist-maker-cleaning-replacement", "vapor-pure-water-softener"],
+    html: "<p>An important read for those installing an Aquafire Original without a direct plumb kit.</p><p>Please check that the water valve is in the off position before filling your Aquafire Original with water. If the water valve is left open and there is no direct plumb kit attached, water will leak from this valve.</p><p><img src=\"help-img/installation-without-direct-plumb-kits-1.webp\" alt=\"Water valve in the open position\"><img src=\"help-img/installation-without-direct-plumb-kits-2.webp\" alt=\"Water valve in the closed position\"></p>"
   },
   {
-    slug: 'remote-control-issues',
-    title: 'Remote Control Issues',
-    category: 'fix',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Remote not turning the fireplace on or off, or not responding to flame changes? Try these fixes before contacting support.',
-    keywords: ['remote', 'battery', 'cr-2032', 'sync', 'won\'t respond', 'flame adjustment', 'color'],
-    related: ['remotes-and-smart-home-control', 'power-issues', 'flame-appearance-troubleshooting'],
-    html: '<h2>Common remote fixes</h2><p>' +
-      'The chart below covers easy solutions for common issues with the remote control for your Aquafire and Aquafire Pro.</p>' +
-      '<table><thead><tr><th>Problem</th><th>Possible cause</th><th>Solution</th></tr></thead><tbody>' +
-      '<tr><td>Remote control does not turn the fireplace on or off</td><td>Possible dead battery</td>' +
-      '<td>Install a new CR-2032 (lithium) battery.</td></tr><tr><td>&nbsp;</td><td>' +
-      'Remote may not be synced to this particular fireplace</td><td>' +
-      'Push and hold the power button on the fireplace until it flashes, then press any button on the remote. Use this same process to sync multiple fireplaces to a single remote.</td>' +
-      '</tr><tr><td>' +
-      'Remote powers the fireplace on/off, but does not seem to respond to flame adjustments or color changes</td>' +
-      '<td>Possible low battery</td><td>Install a new CR-2032 (lithium) battery.</td></tr><tr><td>' +
-      '&nbsp;</td><td>Possible sync issue</td><td>' +
-      'Push and hold the power button on the fireplace until it flashes, then press any button on the remote. Use this same process to sync multiple fireplaces to a single remote.</td>' +
-      '</tr><tr><td>Remote does not work despite trying all steps above</td><td>' +
-      'Remote may be malfunctioning</td><td>Contact <a href="support.html">support</a>' +
-      ' for assistance.</td></tr></tbody></table>'
+    slug: "glass-enclosure-options",
+    title: "Glass Enclosure Options",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "A fully sealed glass front causes condensation — here is how to design one that works.",
+    keywords: ["glass", "enclosure", "condensation", "sealed", "vented glass"],
+    related: ["room-air-flow-considerations", "avoid-side-light-reflections", "product-resources"],
+    html: "<p>The beauty of Aquafire is you get the glow and ambiance of a traditional fire without the added danger that traditional fires bring. There is no need to protect yourself or other people from the flames by installing a glass wall or fireplace grate. <strong>In fact, completely enclosing the fireplace hearth and/or burner in glass can create condensation as the vapor flames are not able to dissipate into the ambient air.</strong> If you need to put glass in front of the Aquafire, we strongly recommend a removable half glass wall or a glass structure with openings at the top or bottom so that fresh air can get to the top vents of the Aquafire and so the vapor flames can dissipate. It needs to be removable to allow for cleaning and service.</p><p>A half or pony glass wall can be useful in a couple of scenarios:</p><ul><li>You have a strong air current or draft that is affecting the flame height.</li><li>You need to protect the Aquafire from guests/visitors reaching into or putting things into the fireplace.</li><li>It is a see-through fireplace that has one side exposed to the outdoors. In that case, you could put a complete glass wall on one side and have the other open to the indoor space.</li></ul>"
   },
   {
-    slug: 'light-issues-aquafire',
-    title: 'Light Issues — Aquafire (AWA)',
-    category: 'fix',
-    models: ['original'],
-    updated: '2026-08',
-    teaser: 'Lights not coming on, or a dead cell in your Aquafire’s light strip? Here are the easy fixes to check first.',
-    keywords: ['lights', 'light strip', 'won\'t turn on', 'led', 'light cell', 'connection', 'awa', 'original'],
-    related: ['my-lights-wont-turn-on', 'lights-and-beeps-reference', 'general-cleaning'],
-    html: '<h2>Light issues on your Aquafire</h2><p>' +
-      'The chart below covers easy solutions for common light issues on your Aquafire (AWA).</p><table>' +
-      '<thead><tr><th>Problem</th><th>Possible cause</th><th>Solution</th></tr></thead><tbody><tr><td>' +
-      'Lights are not on when the unit is on</td><td>Loose connection on the light strip(s)</td><td>' +
-      'Check the connection on the right end of the light strip to make sure it is securely connected.</td>' +
-      '</tr><tr><td>&nbsp;</td><td>Possible problem with the light strip or LED driver card</td><td>' +
-      'Contact <a href="support.html">support</a> for further assistance.</td></tr><tr><td>' +
-      'One or more light cells are not working on an individual light strip</td><td>' +
-      'There is a problem with the light strip</td><td>Contact <a href="support.html">support</a>' +
-      ' for further assistance.</td></tr></tbody></table><p>' +
-      'If your lights are not turning on at all, see <a href="help.html?article=my-lights-wont-turn-on">' +
-      'My Lights Won’t Turn On</a> for the most common root causes and how to prevent them.</p>'
+    slug: "room-air-flow-considerations",
+    title: "Room Air Flow Considerations",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Air currents are the most common cause of a flame that will not rise properly — here is how to keep them out.",
+    keywords: ["downdraft", "air flow", "hvac", "flame low", "flame won't rise", "sealing"],
+    related: ["glass-enclosure-options", "flame-low-or-uneven", "installation-without-direct-plumb-kits"],
+    html: "<p><strong>Downdrafts</strong></p><p>Open wall cavities beneath the fireplace can cause air to be pulled into the open wall and out of the enclosure. This pressure change creates suction which can pull the flame downward into the fireplace effecting the height and appearance of the flame</p><p>We recommend to seal off any open wall cavities within the enclosure and beneath the Aquafire to keep air current from pulling down on the flame.</p><p><strong>Air Currents</strong></p><p>Avoid blowing air currents from HVAC units directly toward the Aquafire. Direct air currents can prevent vapor from rising vertically as designed and limit the flame height</p><p><img src=\"help-img/room-air-flow-considerations-1.webp\" alt=\"Diagram of air currents affecting flame height\"></p><p><strong>Aquafire Air Vents</strong></p><p>Air vents are situated atop the Aquafire to enable airflow when the device is placed within an enclosure. Should there be a preference for a decorative top or media obstructing these vents, the enclosure design needs to facilitate adequate airflow through the sides or bottom. See <a href=\"help.html?article=media-accessory-use-with-aquafire\">this article</a> for additional information regarding air intake requirements and media use</p><p><img src=\"help-img/room-air-flow-considerations-2.webp\" alt=\"Aquafire air vent placement diagram\"></p>"
   },
   {
-    slug: 'light-issues-aquafire-pro',
-    title: 'Light Issues — Aquafire Pro (AWPR)',
-    category: 'fix',
-    models: ['pro'],
-    updated: '2026-08',
-    teaser: 'Amber or RGB lights not coming on in your Aquafire Pro? Check remote buttons and connections before contacting support.',
-    keywords: ['lights', 'rgb', 'orange lights', 'color', 'light strip', 'won\'t turn on', 'led', 'awpr'],
-    related: ['my-lights-wont-turn-on', 'lights-and-beeps-reference', 'remotes-and-smart-home-control'],
-    html: '<h2>Light issues on your Aquafire Pro</h2><p>' +
-      'The chart below covers easy solutions for common light issues on your Aquafire Pro (AWPR).</p>' +
-      '<table><thead><tr><th>Problem</th><th>Possible cause</th><th>Solution</th></tr></thead><tbody>' +
-      '<tr><td>Lights are not on when the unit is on</td><td>' +
-      'Loose connection on the light strip(s)</td><td>' +
-      'Check the connection on the right end of the light strip to make sure it is securely connected.</td>' +
-      '</tr><tr><td>&nbsp;</td><td>Possible problem with the light strip or LED driver card</td><td>' +
-      'Contact <a href="support.html">support</a> for further assistance.</td></tr><tr><td>' +
-      'Orange lights are not on when the unit is on</td><td>' +
-      'Orange button on the remote may be turned off</td><td>' +
-      'Use the remote or phone app to turn the light strips on/off for the desired effect.</td></tr>' +
-      '<tr><td>Colored lights are not on when the unit is on</td><td>' +
-      'RGB button on the remote may be turned off</td><td>' +
-      'The RGB button must be on to select RGB colors.</td></tr><tr><td>' +
-      'One or more light cells are not working on an individual light strip</td><td>' +
-      'There is a problem with the light strip or LED driver card</td><td>' +
-      'Contact <a href="support.html">support</a> for assistance.</td></tr></tbody></table><p>' +
-      'If your lights are not turning on at all, see <a href="help.html?article=my-lights-wont-turn-on">' +
-      'My Lights Won’t Turn On</a> for the most common root causes and how to prevent them.</p>'
+    slug: "avoid-side-light-reflections",
+    title: "How to avoid side-light reflections",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Keep the flame's color off the hearth walls and ceiling with the right clearance and finish.",
+    keywords: ["light reflection", "side light", "rgb", "orange light on wall", "hearth glow"],
+    related: ["glass-enclosure-options", "room-air-flow-considerations", "product-resources"],
+    html: "<p>A side-light reflection is not necessarily a bad thing! Some customers love the light reflections and ambiance they create.</p>\n<p>However, if you would like to minimize the side-light reflections as much as possible, please reference below.</p>\n<p>What causes the light reflections?</p>\n<p>Side light reflections are created when the orange and/or RGB lights (model dependent) reflect off the closest surface. That is usually the side of the hearth and the ceiling of the hearth. We go over how to reduce ceiling light reflections (or light bleed) <a href=\"help.html?article=how-to-avoid-ceiling-light-bleed\">here</a>.</p>\n<p>Examples of side-light reflections:</p>\n<p><img src=\"help-img/avoid-side-light-reflections-1.webp\" alt=\"Example of a side-light reflection on a fireplace surround\"></p>\n<p><img src=\"help-img/avoid-side-light-reflections-2.webp\" alt=\"Example of a side-light reflection on a fireplace surround\"></p>\n<p><img src=\"help-img/avoid-side-light-reflections-3.webp\" alt=\"Example of a side-light reflection on a fireplace surround\"></p>\n<p><img src=\"help-img/avoid-side-light-reflections-4.webp\" alt=\"Side-light reflection on a marble fireplace surround\"></p>\n<p><img src=\"help-img/avoid-side-light-reflections-5.webp\" alt=\"Example of improper side lighting\"></p>\n<p>To avoid this, you'll need 6 inches or more clearance from the edge of the Aquafire burner to the edge of the hearth wall. The further away the hearth wall, the less light reflection you'll see. Pretty simple!</p>\n<p>In practice, this means you'll need to purchase an Aquafire at least 12\" or more shorter than the opening of your fireplace.</p>\n<ul>\n<li>If your fireplace opening is 5 ft wide (60\"), we recommend the 40\" Aquafire.</li>\n<li>If it is 100\" wide, we recommend 2 40\" Aquafires to make 80\", etc...</li>\n<li>Please reach out to us with your design plans and dimensions if you still have questions!</li>\n</ul>\n<p>Examples of reduced reflections:</p>\n<p><img src=\"help-img/avoid-side-light-reflections-6.webp\" alt=\"Example of a reduced side-light reflection\"></p>\n<p><img src=\"help-img/avoid-side-light-reflections-7.webp\" alt=\"Example of a reduced side-light reflection\"></p>\n<p>Design can also help minimize side light reflections if you don't have 6\" or more clearance on each side.</p>\n<ul>\n<li>Using Dark, Matte, light absorbing paint in the inside of the hearth can significantly reduce all light reflections within the hearth.</li>\n<li>Using dark reflective materials on the side (and back if desired) can help disguise the side lighting as well. You'll still see the side lighting but the material can diffuse the effect and, in person, the focus is on the vapor flame movement over the actual light reflections. <img src=\"help-img/avoid-side-light-reflections-8.webp\" alt=\"Dark side material diffusing side lighting, example 1\"><img src=\"help-img/avoid-side-light-reflections-9.webp\" alt=\"Dark side material diffusing side lighting, example 2\"></li>\n<li>Finally, a blind corner is an effective way to hide the side light reflections from the head-on viewer.<ul><li>Drawing of a blind corner <img src=\"help-img/avoid-side-light-reflections-10.webp\" alt=\"Diagram of a blind corner enclosure design\"></li><li>Real-Life Examples of a blind corner <img src=\"help-img/avoid-side-light-reflections-11.webp\" alt=\"Photo of a blind corner installation\"></li></ul></li>\n</ul>"
   },
   {
-    slug: 'my-lights-wont-turn-on',
-    title: 'My Lights Won’t Turn On',
-    category: 'fix',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Checked the connections and remote buttons and your lights still will not turn on? They may have shorted out — here is why, and how to prevent it going forward.',
-    keywords: ['lights', 'led', 'shorted', 'wear item', 'downdraft', 'scaling', 'replacement lights'],
-    related: ['light-issues-aquafire', 'light-issues-aquafire-pro', 'room-air-flow-considerations', 'general-cleaning'],
-    html: '<h2>Start with the basics</h2><p>' +
-      'First, check that the light connections are tight and that the proper buttons on the remote control are activated. See the light-issues article for your model: <a href="help.html?article=light-issues-aquafire">' +
-      'Aquafire (AWA)</a> or <a href="help.html?article=light-issues-aquafire-pro">' +
-      'Aquafire Pro (AWPR)</a>.</p><p>' +
-      'If your lights are still not turning on, the most likely answer is that they have shorted out and need to be replaced. LED lights in a wet environment have a shorter lifespan and do need periodic replacement, which is why we consider them a wear item. We sell replacement LED lights directly through our website: <a href="https://www.aquafire.com/collections/replacement-parts" target="_blank" rel="noopener">' +
-      'aquafire.com/collections/replacement-parts</a>.</p><h2>What causes lights to short out</h2><p>' +
-      'If you feel the lights have shorted prematurely, the top three causes are:</p><ul><li>' +
-      'Excess mist falling back onto the light connection — most commonly from strong air currents in the room pushing vapor onto the lighting connections, or from down-drafting (vapor pulled down into the interior of the Aquafire when the HVAC turns on, caused by openings in the walls behind or beneath the enclosure). See <a href="help.html?article=room-air-flow-considerations">' +
-      'Room Air Flow Considerations</a>.</li><li>Scaling accumulating on the light connection.</li><li>' +
-      'Water leaking onto the light connection from improper manual filling or other customer interaction.</li>' +
-      '</ul><p>' +
-      'Once lights have shorted, it is hard to bring them back to life. You can prevent excess vapor and scaling going forward with:</p>' +
-      '<ul><li>Regular cleaning — see <a href="help.html?article=general-cleaning">General Cleaning</a>' +
-      ' and the <a href="maintenance.html">maintenance checklists</a>.</li><li>' +
-      'A water softener, such as the <a href="help.html?article=vapor-pure-water-softener">' +
-      'Vapor Pure</a>.</li><li>' +
-      'Redirecting any strong air currents in the room so vapor is not pushed back onto the lights.</li>' +
-      '<li>' +
-      'Insulating or installing a barrier in the open wall space underneath and behind your Aquafire enclosure.</li>' +
-      '<li>' +
-      'Avoiding running the Aquafire 24/7 — constant operation causes excess vapor to settle on the lighting connections.</li>' +
-      '<li>' +
-      'Setting the flame density and speed to a lower setting. See <a href="help.html?article=adjusting-the-flame">' +
-      'Adjusting the Aquafire Flame</a>.</li></ul>'
+    slug: "outdoor-installation-guidelines",
+    title: "Outdoor Installation Guidelines",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Aquafire can go outdoors under cover, but it needs protection from wind, rain, and freezing weather.",
+    keywords: ["outdoor", "patio", "porch", "weather", "freeze", "wind", "outside"],
+    related: ["glass-enclosure-options", "room-air-flow-considerations", "general-cleaning"],
+    html: "<p>The Aquafire is not typically placed outdoors or rated for outdoor use, but can be installed with proper precautions. It needs to be under a covered porch or roof as rain and debris can easily get inside the Aquafire if left exposed. A wind screen is needed around the Aquafire to protect the vapor flames from heavy winds and cross-breezes. You will also need to drain the Aquafire before potentially freezing weather.</p>\n<p>Do not put the Aquafire in a completely closed glass container. Doing so can create condensation since the vapor flames are not able to dissipate into the ambient air.</p>\n<p>That being said, we have had plenty of customers successfully install the Aquafire in an outdoor setting. The picture below is an Aquafire fire feature on the porch of a restaurant in Disney's Coronado Springs Resort. This install has clear, glass wind screens around the perimeter of the installation to keep strong wind currents from disrupting the flame:</p>\n<p><img src=\"help-img/outdoor-installation-guidelines-1.webp\" alt=\"Aquafire fire feature on a covered restaurant porch with glass wind screens\"></p>\n<p>Completely outdoor installation in glass container with air allowances:</p>\n<p><img src=\"help-img/outdoor-installation-guidelines-2.webp\" alt=\"Outdoor Aquafire installation in a glass container with air allowance, view 1\"></p>\n<p><img src=\"help-img/outdoor-installation-guidelines-3.webp\" alt=\"Outdoor Aquafire installation in a glass container with air allowance, view 2\"></p>\n<p><img src=\"help-img/outdoor-installation-guidelines-4.webp\" alt=\"Outdoor Aquafire installation in a glass container with air allowance, view 3\"></p>"
   },
   {
-    slug: 'flame-appearance-troubleshooting',
-    title: 'Flame Appearance Troubleshooting',
-    category: 'fix',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Flame too short, too smoky, or moving at the wrong speed? Review the chart below to find a fix.',
-    keywords: ['flame height', 'smoky flame', 'flame speed', 'mist volume', 'short flame', 'uneven'],
-    related: ['flame-low-or-uneven', 'flame-smoky-foggy', 'adjusting-the-flame'],
-    html: '<h2>Is your vapor flame not behaving as it should?</h2><p>' +
-      'Review the chart below to find a solution.</p><div class="ha-note">' +
-      'Most common flame issues can be prevented with a whole-insert cleaning. We recommend cleaning your insert 2&ndash;3 times a year depending on frequency of use and water quality. Start with <a href="help.html?article=general-cleaning">' +
-      'General Cleaning</a> or the <a href="maintenance.html">maintenance checklists</a>' +
-      ' to see if that solves your problem first.</div><table><thead><tr><th>Problem</th><th>' +
-      'Possible cause</th><th>Solution</th></tr></thead><tbody><tr><td>' +
-      'Flame height is less than 6&Prime; in all sections</td><td>' +
-      'Possible airflow issue due to enclosure design or ambient room currents</td><td>' +
-      'Verify the fireplace is getting sufficient air and that no AC vents, fans, or air currents are preventing the mist from rising vertically.</td>' +
-      '</tr><tr><td>&nbsp;</td><td>Flame volume may be low</td><td>' +
-      'Use the remote (or phone app) to increase the volume of mist by pressing &ldquo;+&rdquo;.</td>' +
-      '</tr><tr><td>Flame height is less than 6&Prime; in one section only</td><td>' +
-      'Mist maker may need to be cleaned</td><td>Follow <a href="help.html?article=general-cleaning">' +
-      'General Cleaning</a> for the mist maker. Consider cleaning all mist makers at once.</td></tr>' +
-      '<tr><td>&nbsp;</td><td>Water level in the mist tube may be too high</td><td>' +
-      'Remove excess water to the proper level (the height of the black mushroom cap). See <a href="help.html?article=flame-low-or-uneven">' +
-      'Flame Issues &mdash; Low or Uneven Flame</a>.</td></tr><tr><td>' +
-      'Flames appear more &ldquo;smoky&rdquo; than desired</td><td>Excess mist is being generated</td>' +
-      '<td>' +
-      'Use the remote (or phone app) to decrease the volume of mist by pressing &ldquo;&minus;&rdquo;.</td>' +
-      '</tr><tr><td>Slower flame movement is desired</td><td>Flame speed setting is too high</td><td>' +
-      'Use the remote (or phone app) to decrease the speed of mist by pressing &ldquo;&minus;&rdquo;.</td>' +
-      '</tr><tr><td>Faster flame movement is desired</td><td>Flame speed setting is too low</td><td>' +
-      'Use the remote (or phone app) to increase the speed of mist by pressing &ldquo;+&rdquo;.</td>' +
-      '</tr></tbody></table>'
+    slug: "installation-guide-and-manuals-aquafire",
+    title: "Installation Guide and Manuals",
+    category: "install",
+    models: ["original"],
+    updated: "2026-02",
+    teaser: "Download the Aquafire Original's installation manual and light trap PDF, and watch the quick start guide video.",
+    keywords: ["installation manual pdf", "light trap considerations", "quick start video", "setup guide", "install guide download", "getting started video"],
+    related: ["outdoor-installation-guidelines", "installation-guide-and-manuals-pro", "avoid-side-light-reflections"],
+    html: "<p>🛠️ <a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire-AWA-Install-Guide-2024_43bc1f19-1dbd-4f28-be50-61c9aed1b887.pdf?v=1743515073\"><strong>Installation Manual</strong></a></p><hr><p>🔆 <a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Light_Path_Compare.pdf?v=1706218129\"><strong>Light Trap Considerations</strong></a></p><hr><p>🟢 <strong>Quick Start Guide:</strong><br><iframe src=\"https://www.youtube.com/embed/wX6jVbk4zho?si=K-06RmEYqVRuEI9a\" title=\"Aquafire Original quick start guide\" loading=\"lazy\" allowfullscreen></iframe></p><hr>"
   },
   {
-    slug: 'flame-low-or-uneven',
-    title: 'Flame Issues — Low or Uneven “Flame”',
-    category: 'fix',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Flames uneven, missing, or shorter than usual? Start with the float sensor and mist maker — the two most common culprits.',
-    keywords: ['low flame', 'uneven flame', 'float sensor', 'mist maker', 'high water', 'no flame', 'buildup'],
-    related: ['general-cleaning', 'mist-maker-cleaning-replacement', 'flame-appearance-troubleshooting'],
-    html: '<h2>Flames uneven, low, or missing?</h2><p>' +
-      'If you have ever turned on your Aquafire or Aquafire Pro and the flames did not look quite right, this article is for you.</p>' +
-      '<p>' +
-      'The common culprit for uneven or low mist is high water in the mist tanks. First and foremost, your insert needs to be cleaned multiple times a year and run regularly to turn over fresh water &mdash; follow the <a href="maintenance.html">' +
-      'preventative maintenance checklists</a>' +
-      ' to keep your insert running optimally. If that does not solve the issue, or your insert is within its first 90 days, high water is usually caused by a stuck float sensor or a mist maker that needs cleaning or replacement.</p>' +
-      '<h2>Step 1: check the float sensor</h2><ol><li>Take off the top lid.</li><li>' +
-      'Open the mist maker tanks. There is one tank per 20&Prime; — a 20&Prime; insert has one mist maker tank, a 40&Prime; has two, and a 60&Prime; has three.</li>' +
-      '<li>' +
-      'Compare the water levels. Ideally the water should just barely reach the top of the black mushroom cap. Does the water look higher in the section with uneven mist?</li>' +
-      '<li>' +
-      'If it looks high, remove some of that water. Then agitate the mist maker by lifting it up and down to create an internal wave that frees the stuck float sensor in the lower mist maker tank.</li>' +
-      '</ol><h2>Step 2: check the condition of the mist maker</h2><p>' +
-      'If the float sensor check did not solve the issue, check the mist maker itself:</p><ol><li>' +
-      'Take off the top lid and open the mist maker tanks.</li><li>' +
-      'Unplug the mist maker and carefully remove the interior rack. When you are close to the top, tip the rack into the mist maker tank to empty excess water and avoid spillage.</li>' +
-      '<li>' +
-      'Examine the mist maker. It should be free of debris, with visible space between the bottom of the mist maker and the rack it is attached to.</li>' +
-      '<li>' +
-      'If it has buildup or sediment attached, the mist maker cannot operate properly, which results in low or uneven mist. Follow <a href="help.html?article=general-cleaning">' +
-      'General Cleaning</a>' +
-      ' for the mist maker cleaning steps and then try turning your insert on again.</li></ol><p>' +
-      'If none of these steps solve the issue, reach out to our Technical Support team by completing a <a href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">' +
-      'service request</a>. They will be happy to go over additional troubleshooting techniques.</p>'
+    slug: "installation-guide-and-manuals-pro",
+    title: "Installation Guide and Manuals",
+    category: "install",
+    models: ["pro"],
+    updated: "2026-02",
+    teaser: "Links to the Aquafire Pro installation manual and light trap PDF, plus the quick start video walkthrough.",
+    keywords: ["install guide", "pdf manual", "quick start video", "light path", "setup"],
+    related: ["installation-guide-and-manuals-aquafire", "installation-guide-and-manuals-lite", "outdoor-installation-guidelines"],
+    html: "<p>🛠️ <a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire-Pro-AWPR-Install-Guide-2024_47ecaba7-1daf-486d-912c-859d32d4d398.pdf?v=1743515157\">Installation Manual</a></p><hr><p>🔆 <a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Light_Path_Compare.pdf?v=1706218129\">Light Trap Considerations</a></p><hr><p>🟢 <strong>Quick Start Guide:</strong></p><p><iframe src=\"https://www.youtube.com/embed/GUAZ0h0Zv18\" title=\"Aquafire Pro quick start guide video\" loading=\"lazy\" allowfullscreen></iframe></p>"
   },
   {
-    slug: 'flame-smoky-foggy',
-    title: 'Flame Issues — Smoky or Foggy Appearance',
-    category: 'fix',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'A smoky or foggy-looking flame usually comes down to room humidity, flame settings, or the front fan sponge filters.',
-    keywords: ['smoky flame', 'foggy flame', 'humidity', 'sponge filter', 'fan filter', 'overproduction'],
-    related: ['adjusting-the-flame', 'flame-appearance-troubleshooting', 'room-air-flow-considerations'],
-    html: '<h2>What causes a smoky or foggy flame?</h2><p>' +
-      'A smoky or foggy flame effect can be caused by a few factors:</p><ol><li>' +
-      'High humidity in the room.</li><li>' +
-      'Flame settings that have not been customized to your environment.</li><li>' +
-      'Sponge filters covering the front fans are seated too high.</li><li>' +
-      'Sponge filters covering the front fans are too thin for your environment.</li></ol><h2>' +
-      'Solutions</h2><ol><li><strong>High humidity in the room</strong>' +
-      ' &mdash; lower the humidity by closing doors near the unit and adjusting the room’s HVAC.</li>' +
-      '<li><strong>Customize your flame settings</strong>' +
-      ' &mdash; see <a href="help.html?article=adjusting-the-flame">Adjusting the Aquafire Flame</a>' +
-      '.</li><li><strong>Sponge filter seating</strong>' +
-      ' &mdash; check that the filters covering your front fans are fully seated. Moving the front fan filters up by even a quarter inch can push out too much mist and create a foggy effect, and can potentially cause mist overproduction that damages internal electrical connections and light strips. There is one filter per 20&Prime; — a 20&Prime; has one fan filter, a 40&Prime; has two, and a 60&Prime; has three.</li>' +
-      '<li><strong>Thin sponge filter</strong>' +
-      ' &mdash; newer Aquafire and Aquafire Pro units shipped with a thinner front fan filter to increase flame height and density. It is not a universal fit for every installation, and the thinner filter has been known to cause a foggy look in some rooms. If you would like to request new fan filter covers, email <a href="mailto:ces@aquafire.com">' +
-      'ces@aquafire.com</a>' +
-      '. We provide free front fan filters to any Aquafire or Aquafire Pro still under warranty &mdash; have your serial number and size (20&Prime;, 40&Prime;, or 60&Prime;) ready. See <a href="help.html?article=identifying-serial-number">' +
-      'Identifying Your Serial Number</a>.</li><li><strong>Quick test</strong>' +
-      ' &mdash; to check whether a thin sponge filter is the issue, cut a thin piece of paper (about a quarter the size of the front sponge) or a strip of painter’s tape and place it over the bottom half of the sponge. This should noticeably reduce a foggy flame appearance if filter thickness is the cause.</li>' +
-      '</ol>'
+    slug: "installation-guide-and-manuals-lite",
+    title: "Installation Guide and Manuals",
+    category: "install",
+    models: ["lite"],
+    updated: "2026-02",
+    teaser: "Download the Aquafire Lite installation manual and light-trap guide, plus a quick start video walkthrough.",
+    keywords: ["pdf download", "quick start video", "light trap pdf", "setup guide", "youtube", "manuals"],
+    related: ["installation-guide-and-manuals-pro", "how-to-install-the-direct-plumb-kit", "installation-guide-and-manuals-aquafire"],
+    html: "<p>🛠️ <a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire-AWA-Install-Guide-2024.pdf?v=1706218129\">Installation Manual</a></p><hr><p>🔆 <a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Light_Path_Compare.pdf?v=1706218129\">Light Trap Considerations</a></p><hr><p>🟢 <strong>Quick Start Guide:</strong><br><strong><iframe src=\"https://www.youtube.com/embed/dH6uRV3GdvI\" title=\"Aquafire Lite Quick Start\" loading=\"lazy\" allowfullscreen></iframe></strong></p>"
   },
   {
-    slug: 'my-aquafire-is-beeping',
-    title: 'My Aquafire Is Beeping!',
-    category: 'fix',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Do not stress — your Aquafire is trying to tell you about its water level or power supply. Here is what each beep pattern means.',
-    keywords: ['beeping', 'beeps', 'low water', 'overflow', 'power adaptor', 'alarm', 'flashing lights'],
-    related: ['lights-and-beeps-reference', 'water-issues', 'power-issues'],
-    html: '<h2>What the beep means</h2><p>' +
-      'Do not stress — your Aquafire is trying to communicate a water level or power issue with you. Beeping can signal a few things:</p>' +
-      '<ol><li><strong>2 quick beeps &mdash; low or no water.</strong>' +
-      ' The unit will beep and turn off when it is low or out of water. Refill your Aquafire and turn it back on. It can take multiple fills to completely fill your Aquafire the first time &mdash; this is completely normal, and it will fill correctly and completely on subsequent refills.</li>' +
-      '<li><strong>3 long beeps &mdash; overflow protection or high water in the mist tube.</strong>' +
-      ' On newer models (AWA2/AWA3, AWPR2/AWPR3), high water detected in the mist tube triggers a series of alarm beeping and flashing lights before the insert shuts off. This is a protection feature to prevent water overflow, and is usually caused by a stuck float sensor. See <a href="help.html?article=flame-low-or-uneven">' +
-      'Flame Issues &mdash; Low or Uneven Flame</a> to remedy a stuck float sensor.</li><li><strong>' +
-      '1 short beep &mdash; power adaptor issue.</strong>' +
-      ' Short, quick beeps can signal a problem with the AC power adaptor. First check that the power adaptor is fully plugged in at the wall outlet, the back of the Aquafire, and the power block itself. If everything is tightly connected and the beeping continues, there may be an issue with the power adaptor itself — contact our Customer Experience Team at <a href="mailto:ces@aquafire.com">' +
-      'ces@aquafire.com</a> for further instructions.</li></ol><p>' +
-      'For a quick-reference table of every light and beep pattern side by side, see <a href="help.html?article=lights-and-beeps-reference">' +
-      'Lights &amp; Beeps Reference</a>.</p>'
+    slug: "how-to-install-the-direct-plumb-kit",
+    title: "How to Install the Direct Plumb Kit",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "A video walkthrough for installing the direct plumb kit, with a warning about the warranty and leak risks of doing it incorrectly.",
+    keywords: ["plumbing", "water line", "leaks", "video guide", "warranty void", "incomplete fill"],
+    related: ["installation-guide-and-manuals-lite", "accessing-the-water-connection-after-install", "installation-guide-and-manuals-pro"],
+    html: "<p>Please reference our step-by-step guide for installing the direct plumb kit:</p><p><iframe src=\"https://www.youtube.com/embed/ir3aeb3v_WA?autoplay=1&mute=1&wmode=opaque&rel=0\" title=\"How to install the direct plumb kit\" loading=\"lazy\" allowfullscreen></iframe></p><p>Improper installation of the Direct Plumb Kit can void your warranty, cause leaks and incomplete filling and/or damage the Aquafire Original.</p>"
   },
   {
-    slug: 'lights-and-beeps-reference',
-    title: 'Lights & Beeps Reference',
-    category: 'fix',
-    models: ['original', 'pro'],
-    updated: '2026-08',
-    teaser: 'The quick-reference key printed on your unit’s sticker — every light and beep pattern, its alert, and its probable cause, for both the Aquafire and Aquafire Pro.',
-    keywords: ['lights and beeps', 'sticker', 'alert codes', 'beep pattern', 'logo flashing', 'reference key'],
-    related: ['my-aquafire-is-beeping', 'power-issues', 'water-issues', 'preventative-maintenance'],
-    html: '<h2>How to read this table</h2><p>' +
-      'This mirrors the Lights &amp; Beeps Key sticker on your unit. Match what you are seeing and hearing to the rows below to identify the alert and its probable cause. For step-by-step fixes, see <a href="help.html?article=my-aquafire-is-beeping">' +
-      'My Aquafire Is Beeping!</a>.</p><h3>Aquafire (AWA)</h3><table><thead><tr><th>Lights</th><th>' +
-      'Beeps</th><th>Alert</th><th>Probable cause</th></tr></thead><tbody><tr><td>&nbsp;</td><td>' +
-      'Two quick beeps, every two seconds</td><td>Low / No Water</td><td>' +
-      'The water supply has not been turned on, or water needs to be added.</td></tr><tr><td>' +
-      'Logo flashes for 30 sec</td><td>None</td><td>Maintenance Reminder</td><td>' +
-      'Due for preventative maintenance cleaning &mdash; press and hold the middle and left buttons together to reset.</td>' +
-      '</tr><tr><td>Logo, lights cycling</td><td>Three long beeps, every second</td><td>' +
-      'Overflow / High Water Alert</td><td>' +
-      'If not overflowing, this alert typically indicates a stuck float sensor.</td></tr><tr><td>' +
-      'Logo flashing together</td><td>One short beep, every two seconds</td><td>Voltage Alert</td><td>' +
-      'Possible shortage or a problem with the power adapter.</td></tr></tbody></table><h3>' +
-      'Aquafire Pro (AWPR)</h3><table><thead><tr><th>Lights</th><th>Beeps</th><th>Alert</th><th>' +
-      'Probable cause</th></tr></thead><tbody><tr><td>&nbsp;</td><td>' +
-      'Two quick beeps, every two seconds</td><td>Low / No Water</td><td>' +
-      'The water supply has not been turned on, or water needs to be added.</td></tr><tr><td>' +
-      'Flashes for 30 sec</td><td>None</td><td>Maintenance Reminder</td><td>' +
-      'Due for preventative maintenance cleaning &mdash; press and hold the middle and left buttons together to reset.</td>' +
-      '</tr><tr><td>Lights cycling</td><td>Three long beeps, every second</td><td>' +
-      'Overflow / High Water Alert</td><td>' +
-      'If not overflowing, this alert typically indicates a stuck float sensor.</td></tr><tr><td>' +
-      'Flashing together</td><td>One short beep, every two seconds</td><td>Voltage Alert</td><td>' +
-      'Possible shortage or a problem with the power adapter.</td></tr></tbody></table>'
+    slug: "accessing-the-water-connection-after-install",
+    title: "Accessing the Water Connection After Install",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Where the Aquafire’s water connection sits after install, and how to plan a shutoff or access panel for it.",
+    keywords: ["water shutoff", "access panel", "direct plumb kit", "turn off water", "water line", "multiple units"],
+    related: ["how-to-install-the-direct-plumb-kit", "common-enclosure-dimensions", "installation-guide-and-manuals-lite"],
+    html: "<p>Once installed, there are few reasons why you would need to directly access the water connection to your Aquafire Original with Direct Plumb Kit or Aquafire Pro, however you will want the ability to shut off the water to the Aquafire at certain points.</p><p>Installing an external shut off valve to the water line connected to your Aquafire is highly recommended. This should be close and convenient to the installation.</p><p>You can also create an access panel near the water connection, to be able to manually cut off water to your Aquafire Original (with direct plumb kit installed) or Aquafire Pro**.</p><p>The water connection is located on the bottom left side of the Aquafire. Please reference the photo below.</p><p><em>The below picture is for the Aquafire Pro.</em></p><p><em>The Aquafire Original with direct plumb kit will be in the same location but is a secondary piece</em></p><p><img src=\"help-img/accessing-the-water-connection-after-install-1.webp\" alt=\"Water connection location on the bottom left side of the Aquafire Pro\"></p><p>**For multiple Aquafires installed into one enclosure or housing, you would need to create an access panel for each Aquafire, since they each have their own water connection. An external shut off valve is preferred in this type of installation**</p>"
   },
   {
-    slug: 'general-cleaning',
-    title: 'General Cleaning for Aquafire and Aquafire Pro',
-    category: 'care',
-    models: ['original', 'pro'],
-    updated: '2026-08',
-    teaser: 'Descaling and cleaning your insert regularly keeps it running well — here is the mist maker routine and the full-system deep clean, step by step.',
-    keywords: ['cleaning', 'descale', 'vinegar', 'mist maker cleaning', 'whole system clean', 'drain'],
-    related: ['preventative-maintenance', 'mist-maker-cleaning-replacement', 'vapor-pure-water-softener'],
-    html: '<h2>Why regular cleaning matters</h2><p>' +
-      'For your fireplace insert to operate properly and have a long, healthy life, it needs to be descaled and cleaned regularly. How often depends on your water quality, how often the insert runs, and whether you have a <a href="help.html?article=vapor-pure-water-softener">' +
-      'Vapor Pure water softener</a>' +
-      ' installed. Without a softener, minerals in hard water can cling to electrical components and interior tank walls, increasing maintenance needs, decreasing performance, and shortening the life of your Aquafire.</p>' +
-      '<p>' +
-      'Cleaning your mist makers and insert is not a daunting task — once you have practiced it, it is a quick 10&ndash;15 minute process.</p>' +
-      '<h2>Recommended cleaning schedule</h2><p>' +
-      'For an Aquafire or Aquafire Pro running an average of 20 hours a week with moderate water hardness:</p>' +
-      '<ul><li><strong>Mist maker cleaning:</strong> every 3 months</li><li><strong>' +
-      'Whole insert cleaning:</strong> every 6 months</li></ul><p>The <a href="maintenance.html">' +
-      'maintenance checklists</a>' +
-      ' track both of these for you and stamp a completion date each time you finish one.</p><h2>' +
-      'Cleaning just the mist makers</h2><ol><li>' +
-      'Turn your fireplace off, then unplug the mist maker wire from the power port at each of the large round mist tube housings.</li>' +
-      '<li>' +
-      'Remove the mist maker racks from the mist tubes. For small to moderate scale or buildup, apply a few drops of white vinegar directly onto the white disc at the center of the mist maker. Let it sit for 3 minutes, rinse it off, and return the rack to the mist tube. Do not forget to reattach the power cord.</li>' +
-      '<li>' +
-      'For heavier buildup or visible calcification, remove the mist maker from the tube, remove the 4 screws attaching it to the rack, and soak it directly in white vinegar for 10&ndash;20 minutes. A soft small brush (toothbrush, paint brush, etc.) can loosen stubborn deposits &mdash; including the bottom of the mist maker. Keep the power cord out of the vinegar.</li>' +
-      '<li>' +
-      'When soaking is complete, rinse thoroughly with water, using a soft brush if needed on the white surface, metal casing, and bottom. Do not use a stiff-bristle brush or a Scotch-Brite pad on the mist makers &mdash; it can cause permanent damage.</li>' +
-      '<li>Reattach the mist maker to the rack and place the rack back in the mist tube.</li><li>' +
-      'Reconnect the mist maker power feed to the power port, pushing the wire all the way down the slot in the side of the mist tube before replacing the cap.</li>' +
-      '</ol><h2>Cleaning the entire system</h2><ol><li>' +
-      'Connect the flexible hose that came with your fireplace to the drain port on the front of the unit (AWA/AWP models) or on the top (AWPR series).</li>' +
-      '<li>' +
-      'Put the other end of the hose in a 3&ndash;5 gallon bucket and press and hold the left button (B2) to start draining. When the drain cycle stops, some water will remain in the lower tank reservoirs — this is normal. Remove the remaining cups of water from each mist tube with a small 1/4&Prime; siphon hose, a large turkey baster, or a small sponge. Avoid anything that could flake off or leave debris.</li>' +
-      '<li>' +
-      'Add approximately 1/2 gallon of vinegar via the fill/drain hose (running the manual fill cycle with B1), or pour equal amounts directly into the mist tubes without overfilling. The system has enough vinegar when the level in the mist tube is just above the top of the mist maker (about 2&Prime;). Overfilling may cause excess vinegar to leak from the front fans.</li>' +
-      '<li>' +
-      'Let the vinegar sit for 10&ndash;20 minutes to loosen hard water scaling on the float sensors.</li>' +
-      '<li>' +
-      'After soaking (before draining), agitate the vinegar in each lower tank by raising and lowering the mist maker rack vigorously 10&ndash;15 times per tube, to help break up residue on the float sensors.</li>' +
-      '<li>' +
-      'Drain the vinegar the same way you drained the water, using the drain hose and B2 button.</li>' +
-      '<li>' +
-      'Once the vinegar is out, fill the unit with fresh water &mdash; either by turning the water back on (if permanently plumbed) or using the hose and fill cycle (B1).</li>' +
-      '<li>' +
-      'Fill and drain the entire system twice more to make sure all vinegar and contaminants are cleared. After the third fill, run the unit as you normally would.</li>' +
-      '</ol><div class="ha-caution">Do not operate the fireplace during the vinegar soak.</div>' +
-      '<div class="ha-note">' +
-      'Prefer a wet/dry vac over the fill/drain hose when draining for a cleaning — it handles loosened debris without risking a clog in the drain lines or pump.</div>' +
-      '<div class="ha-note">' +
-      'It is normal to see mist issues for 2&ndash;3 days after a deep clean while leftover debris continues to slough off. If issues persist, open the mist tubes, check for debris, and re-agitate the mist rack and float sensor. The more frequently you clean the insert, the less likely you are to see this delayed debris.</div>'
+    slug: "common-enclosure-dimensions",
+    title: "Common Enclosure Dimensions",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "A chart matching common front setbacks and opening heights to how much light the Aquafire and Aquafire Pro let escape onto the ceiling.",
+    keywords: ["setback", "opening height", "ceiling glow", "light bleed", "reflection", "hearth depth"],
+    related: ["accessing-the-water-connection-after-install", "how-to-avoid-ceiling-light-bleed", "how-to-install-the-direct-plumb-kit"],
+    html: "<p>Aquafire uses a series of powerful LED light strips to illuminate the water vapor creating the illusion of real flames. Depending on the design of an enclosure and overall fireplace surround, these lights can escape the front of the enclosure and potentially project onto the ceiling of the room. Some clients enjoy this feature stating it gives additional warmth to the overall experience while others find that it distracts from the fireplace and the overall effect they desire.</p>\n<p>It is important to understand the relationship between the opening height of an enclosure and the setback from the front of the enclosure. While variables such as ceiling heights and material selections can impact light reflection and overall appearance, the chart below lists the most common setbacks and opening heights for the AWA and AWPR series. <strong>If your project requires that you vary from these, it’s recommended you test prior to final construction of your enclosure.</strong></p>\n<p><em>The </em><em>👍</em><em> means light is generally contained while </em>🚫 <em>indicates some light may escape and be visible depending on ceiling height. The opening height assumes there is an additional 5\" or more recessed light trap in addition to the listed height. </em></p>\n<table><thead><tr><th>Front Set Back*</th><th>Opening Height*</th><th>Aquafire (AWA)</th><th>Aquafire Pro (AWPR)</th></tr></thead><tbody>\n<tr><td rowspan=\"4\">2\"</td><td>12\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td>14\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td>16\"</td><td>🚫</td><td>🚫</td></tr>\n<tr><td>18\"</td><td>🚫</td><td>🚫</td></tr>\n<tr><td rowspan=\"4\">3\"</td><td>12\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td>14\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td>16\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td>18\"</td><td>🚫</td><td>🚫</td></tr>\n<tr><td rowspan=\"4\">4\"</td><td>12\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td>14\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td>16\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td>18\"</td><td>🚫</td><td>🚫</td></tr>\n<tr><td rowspan=\"4\">5\"</td><td>12\"</td><td>👍</td><td>👍</td></tr>\n<tr><td>14\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td>16\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td>18\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td rowspan=\"4\">6\"</td><td>12\"</td><td>👍</td><td>👍</td></tr>\n<tr><td>14\"</td><td>👍</td><td>👍</td></tr>\n<tr><td>16\"</td><td>👍</td><td>🚫</td></tr>\n<tr><td>18\"</td><td>👍</td><td>🚫</td></tr>\n</tbody></table>\n<p><em>Chart Key<img src=\"help-img/common-enclosure-dimensions-1.webp\" alt=\"Chart key showing thumbs up and no-entry symbols\"></em></p>\n<p><em>Red Lines indicate the <strong>opening height.</strong></em></p>\n<p><img src=\"help-img/common-enclosure-dimensions-2.webp\" alt=\"Photo showing the front setback measurement marked with red lines\"></p>\n<p><em>Red Lines indicate the <strong>front set back</strong>. This applies to the overhang and front bottom of the enclosure.</em></p>\n<p><img src=\"help-img/common-enclosure-dimensions-3.webp\" alt=\"Diagram comparing an uneven setback to the top setback\"><img src=\"help-img/common-enclosure-dimensions-4.webp\" alt=\"Photo of light reflecting on the ceiling from a mismatched setback\"></p>\n<p><em>Overhang (and light trap) must match the front set back. Having mismatched setbacks can result in light bleeds (see results below)</em></p>\n<p><em>Results of the mismatched overhang (light trap) vs. front setback</em></p>"
   },
   {
-    slug: 'preventative-maintenance',
-    title: 'Preventative Maintenance Schedule',
-    category: 'care',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'The recommended cleaning cadence for your Aquafire, tracked with an interactive checklist.',
-    keywords: ['maintenance schedule', 'how often clean', 'cleaning schedule', 'pm', 'checklist'],
-    related: ['mist-maker-cleaning-replacement', 'general-cleaning', 'vapor-pure-water-softener'],
-    html: '<p>' +
-      'A quick recurring clean keeps your Aquafire\'s flame full and even, and extends the life of its mist makers and internal components. The recommended cadence, for a fireplace running an average of 20 hours a week with moderately hard water, is:</p>' +
-      '<table><thead><tr><th>Procedure</th><th>Cadence</th></tr></thead><tbody><tr><td>' +
-      'Mist Maker Cleaning</td><td>Every 3 months</td></tr><tr><td>Full System Cleaning</td><td>' +
-      'Every 6 months</td></tr></tbody></table><p>' +
-      'How often you actually need to clean depends on your water quality, how much the fireplace runs, and whether a Vapor Pure water softener is installed — harder water and more run time both call for more frequent cleaning.</p>' +
-      '<div class="ha-note">The <a href="maintenance.html">Maintenance</a>' +
-      ' page walks through both procedures as step-by-step checklists, tracks your progress, and works out your next due date from the last time you completed one.</div>' +
-      '<p>For the individual steps, see <a href="help.html?article=mist-maker-cleaning-replacement">' +
-      'Mist Maker Cleaning or Replacement</a> and <a href="help.html?article=general-cleaning">' +
-      'General Cleaning</a>.</p>'
+    slug: "how-to-avoid-ceiling-light-bleed",
+    title: "How to avoid ceiling light bleed",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Why Aquafire's light strips can spill onto the ceiling, and how a light trap, shorter viewing window or deeper setback stops it.",
+    keywords: ["ceiling glow", "light spill", "viewing window", "light trap", "hearth setback", "led bleed"],
+    related: ["common-enclosure-dimensions", "light-path-comparisons", "accessing-the-water-connection-after-install"],
+    html: "<p>Aquafire uses a series of powerful LED light strips to illuminate the water vapor creating the illusion of real flames. Depending on the design of an enclosure and overall fireplace surround, these lights can escape the front of the enclosure and potentially project onto the ceiling of the room. Some customers enjoy this feature stating it gives additional warmth to the overall experience while others find that it distracts from the fireplace and the overall effect they desire</p><p>Light Bleed Examples:</p><p><img src=\"help-img/how-to-avoid-ceiling-light-bleed-1.webp\" alt=\"Aquafire light bleed visible on the ceiling above a TV installation\"></p><p><img src=\"help-img/how-to-avoid-ceiling-light-bleed-2.webp\" alt=\"Example of a poorly designed light trap allowing light bleed\"></p><p>To avoid this, we recommend:</p><ul><li>Creating a <a href=\"help.html?article=light-trap-examples\">light trap</a></li><li>Minimizing the viewing window height (see <a href=\"help.html?article=light-path-comparisons\">light path comparisons</a>)</li><li>Increasing the distance from the front of burner to edge of hearth with matching cover (see <a href=\"help.html?article=common-enclosure-dimensions\">common setbacks</a>)</li></ul>"
   },
   {
-    slug: 'mist-maker-cleaning-replacement',
-    title: 'Mist Maker Cleaning or Replacement',
-    category: 'care',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'How to clean a mist maker, when to replace one as a wear item, and how to tell which one has failed.',
-    keywords: ['mist maker', 'flame low', 'flame uneven', 'replace mist maker', 'vinegar clean', 'float sensor'],
-    related: ['preventative-maintenance', 'flame-low-or-uneven', 'general-cleaning'],
-    html: '<p>' +
-      'The mist maker is what turns water into the vapor your Aquafire\'s flame is made of. It is a wear item, and cleaning it regularly is the single best thing you can do to keep the flame full and even.</p>' +
-      '<h2>Cleaning</h2><p>' +
-      'Put a few drops of white vinegar directly on the white disc at the center of the mist maker. Let it sit for 3 minutes, then rinse it off before returning it to the mist tube.</p>' +
-      '<h2>Diagnosing a low or uneven flame</h2><p>' +
-      'High water level in the mist tank is the most common cause of a low or uneven flame. Check that the water sits just at the top of the black mushroom cap — if it looks high, the float sensor may be stuck. Agitate the mist maker rack up and down to unstick it, then recheck the level.</p>' +
-      '<p>' +
-      'If that does not fix it, take a look at the mist maker itself: it should be free of debris, with visible space between the bottom of the mist maker and the rack it sits on. Buildup or sediment on it will produce a low or uneven mist.</p>' +
-      '<h2>Testing for a dead mist maker</h2><p>' +
-      'If one section is misting less than the others, swap its mist maker rack with a working one from a different section. If the weak mist follows the rack you moved, that mist maker has failed and needs to be replaced.</p>' +
-      '<h2>Replacement</h2><p>Mist makers are a wear item and typically last <strong>' +
-      '2,000–3,000 operating hours</strong>' +
-      ' before they need replacing. A warranty replacement ships with its own installation instructions.</p>' +
-      '<div class="ha-note">The <a href="maintenance.html">Maintenance</a>' +
-      ' page has the full mist maker cleaning checklist, tracks your progress, and reminds you when the next clean is due.</div>'
+    slug: "light-path-comparisons",
+    title: "Light Path Comparisons",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "See the recommended enclosure dimensions that keep the Aquafire's light trapped inside instead of bleeding onto the ceiling.",
+    keywords: ["light on ceiling", "light trap", "enclosure depth", "viewing window height", "ceiling glow", "light bleed chart"],
+    related: ["how-to-avoid-ceiling-light-bleed", "light-trap-examples", "common-enclosure-dimensions"],
+    html: "<p>The light from the Aquafire may shine past the top of the enclosure and illuminate the room ceiling. If you do not desire additional illumination you will need to create <a href=\"help.html?article=light-trap-examples\">a light trap</a> or <a href=\"help.html?article=common-enclosure-dimensions\">design your enclosure accordingly</a>. Reference the chart below to determine the recommended enclosure dimensions to trap the light within the enclosure. It is recommended to choose enclosure dimensions that fall along the diagonal line on the chart.</p><p><img src=\"help-img/light-path-comparisons-1.webp\" alt=\"Chart of enclosure dimensions that keep the Aquafire's light trapped, view 1\"></p><p><img src=\"help-img/light-path-comparisons-2.webp\" alt=\"Chart of enclosure dimensions that keep the Aquafire's light trapped, view 2\"></p>"
   },
   {
-    slug: 'vapor-pure-water-softener',
-    title: 'Vapor Pure Water Softener — Installation & Use',
-    category: 'care',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'How to plumb in and set up your Vapor Pure water softener, and how to test water hardness to know when the cartridge needs replacing.',
-    keywords: ['vapor pure', 'water softener', 'hardness test', 'cartridge', 'install', 'hard water', 'af300', 'af700'],
-    related: ['general-cleaning', 'water-issues', 'mist-maker-cleaning-replacement'],
-    html: '<h2>Before you start</h2><p>' +
-      'The Vapor Pure system connects to a cold water supply only, ahead of your Aquafire. A licensed plumber should confirm water pressure will not exceed 100 PSI, and should be consulted on local plumbing codes.</p>' +
-      '<div class="ha-caution">' +
-      'Horseshoe clips must be used on every tubing connection, and only the fittings provided with the system should be used. Use Teflon tape only on threaded fittings. Skipping either of these voids the warranty.</div>' +
-      '<div class="ha-caution">' +
-      'Do not use with water that is microbiologically unsafe or of unknown quality without adequate disinfection before or after the unit.</div>' +
-      '<h2>Space requirements</h2><p>' +
-      'Mount components in a vertical, upright position only — under a kitchen sink or on a beam/wall in the basement both work, as long as there is room on both sides of the head for the water connections.</p>' +
-      '<table><thead><tr><th>Cartridge</th><th>Total install space</th><th>' +
-      'Minimum clearance under the head</th></tr></thead><tbody><tr><td>AF300</td><td>' +
-      '13&Prime; H x 6&Prime; W x 5&Prime; D</td><td>' +
-      '9&Prime;, so the cartridge can be lowered for removal</td></tr><tr><td>AF700</td><td>' +
-      '21&Prime; H x 6&Prime; W x 5&Prime; D</td><td>' +
-      '17&Prime;, so the cartridge can be lowered for removal</td></tr></tbody></table><h2>' +
-      'Installation steps</h2><ol><li>' +
-      'Attach the bracket to the head using the 4 short 1/2&Prime; screws provided.</li><li>' +
-      'Using the bracket as a template, mark and screw in the 2 long 1&Prime; screws to mount the head in a position that lets you conveniently run tubing from the cold water supply to the head’s inlet, and from the head’s outlet to the Aquafire unit (or filtered-water dispenser).</li>' +
-      '<li>Turn off the cold water shutoff.</li><li>' +
-      'If installing an Aquafire Pro unit or an Aquafire with a Direct Plumb Kit, do so using the instructions included with it, but do not run tubing to it yet.</li>' +
-      '<li>' +
-      'Cut a length of tubing (each section at least 2&Prime; long, cut square) to connect the cold water supply attachment to the head, and insert it into the collet until it meets the tube stop (a full 3/4&Prime;). Secure it with a horseshoe locking clip between the collet and the connector body.</li>' +
-      '<li>' +
-      'Cut and connect a second length of tubing from the head’s outlet fitting to the shutoff on the Aquafire unit or Direct Plumb Kit.</li>' +
-      '<li>' +
-      'Align the unlock icon on the cartridge label with the head’s inlet fitting, push the cartridge up into the head, then turn it to the right until it stops (about a quarter turn).</li>' +
-      '<li>' +
-      'Confirm the Aquafire shutoff valve lever is turned clockwise until it stops (off), then slowly turn the cold water supply lever counterclockwise just enough to start water flowing. Check for leaks as the cartridge fills.</li>' +
-      '<li>' +
-      'Slowly turn the Aquafire shutoff lever counterclockwise until it stops (on), then turn the cold water supply lever fully to the on position. Check for leaks over the next 24 hours.</li>' +
-      '</ol><div class="ha-note">' +
-      'Filtered water may look cloudy for 1&ndash;3 days as the cartridge purges air. Fill a glass and let it stand — if the cloudiness is just air bubbles, it will clear as they rise. If cloudiness persists, contact your dealer.</div>' +
-      '<h2>Testing water hardness and replacing the cartridge</h2><ol><li>' +
-      'Lift the Aquafire lid to access the water tanks, then unscrew the top tank cap labeled &ldquo;WATER&rdquo; to test the water in the top tank.</li>' +
-      '<li>' +
-      'Follow the instructions on the foil test-strip wrapper, then match the strip’s color to the color chart on the wrapper and note the result.</li>' +
-      '</ol><p>' +
-      'Replace the cartridge when the Total Hardness strip shows any shade different from 50, or the Iron strip shows any shade different from 0 &mdash; whichever comes first, or at least annually.</p>' +
-      '<p>' +
-      'You can look up your local water hardness and get a personalized softener replacement timeline on the <a href="water-care.html">' +
-      'Water Care</a> page.</p>'
+    slug: "light-trap-examples",
+    title: "Light Trap Examples",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "Photo comparisons of enclosures with and without a properly built light trap.",
+    keywords: ["ceiling glow", "light bleed", "reflection", "photos", "before and after", "recessed", "border"],
+    related: ["light-path-comparisons", "light-trap-examples-copy", "how-to-avoid-ceiling-light-bleed"],
+    html: "<p>A light trap is essential when constructing your water vapor fireplace enclosure. The light emitted by the vapor flames travels upwards, and without a properly dimensioned enclosure, this light can escape into your room and onto the ceiling, detracting from the ambiance. A light trap ensures the glow remains concentrated within the fireplace area, enhancing the visual effect.</p><p>Light Trap Examples</p><hr><p>Example 1:</p><p><img src=\"help-img/light-trap-examples-1.webp\" alt=\"Enclosure with a 6 inch light trap border around the hearth top\"></p><p>A 6\" border was added around the entire top of the hearth to prevent the viewer from seeing the hearth ceiling light reflections while viewing head-on.</p><p><img src=\"help-img/light-trap-examples-2.webp\" alt=\"Same enclosure viewed head-on, no ceiling reflection visible\">Same enclosure when viewing head on</p><hr><p>Example 2:</p><p><img src=\"help-img/light-trap-examples-3.webp\" alt=\"View looking under the fireplace hearth showing the recessed light trap\"></p><p>View when looking under the fireplace hearth. Recessed light trap prevents the viewer from seeing the hearth ceiling reflections when viewing head-on.</p><p><img src=\"help-img/light-trap-examples-4.webp\" alt=\"Same enclosure viewed head-on\"></p><p>Same enclosure when viewing head-on</p><hr><p>Example 3:</p><p><img src=\"help-img/light-trap-examples-5.webp\" alt=\"Enclosure with no light trap, ceiling reflection visible when viewed head-on\"></p><p>No light trap was added. Light reflection is visible when viewing head-on</p><hr>"
   },
   {
-    slug: 'aquafire-limited-warranty',
-    title: 'Aquafire Limited Warranty',
-    category: 'warranty',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Two years residential, one year commercial, repair-first — the full terms of Aquafire’s limited warranty, and how to file a claim.',
-    keywords: ['warranty', 'coverage', 'claim', 'rma', 'wear items', 'exclusions', 'register'],
-    related: ['identifying-serial-number', 'general-cleaning', 'preventative-maintenance'],
-    html: '<div class="ha-caution"><strong>Register within 30 days.</strong>' +
-      ' To validate your warranty, you must complete warranty registration within thirty (30) days of receiving your vapor appliance at <a href="https://www.aquafire.com/pages/warranty" target="_blank" rel="noopener">' +
-      'aquafire.com/pages/warranty</a>' +
-      '. Failure to register within this period will prevent you from submitting any warranty claims for your Aquafire product.</div>' +
-      '<h2>Coverage</h2><p>' +
-      'Aquafire Inc. warrants to the original end-user purchaser that its water vapor fireplaces and fire feature products shall be free from defects in materials and workmanship under normal use and service for:</p>' +
-      '<ul><li><strong>Residential applications:</strong> two (2) years from the date of purchase</li>' +
-      '<li><strong>Commercial applications:</strong> one (1) year from the date of purchase</li></ul>' +
-      '<p>' +
-      'This warranty applies only to products purchased through an authorized Aquafire dealer, and is non-transferable except where required by law.</p>' +
-      '<h2>Repair-first policy</h2><p>' +
-      'Repair is the primary and preferred remedy. Before any replacement is considered, the dealer and/or customer must:</p>' +
-      '<ul><li>Complete all required troubleshooting steps.</li><li>' +
-      'Participate in remote diagnostics with Aquafire Technical Support.</li><li>' +
-      'Install replacement components when directed by Aquafire Technical Support.</li><li>' +
-      'Make reasonable efforts to perform field repair as instructed.</li></ul><p>' +
-      'Only if an Aquafire Technical Support technician determines, in their sole professional judgment, that the product cannot be effectively repaired in the field will replacement be considered.</p>' +
-      '<h2>Replacement authorization</h2><p>' +
-      'Replacement is not automatic and will only be authorized if all of the following are met:</p>' +
-      '<ol><li>The product is within the applicable warranty period.</li><li>' +
-      'Required troubleshooting and diagnostics have been completed in good faith.</li><li>' +
-      'Aquafire Technical Support determines that field repair cannot reasonably be completed.</li><li>' +
-      'Written replacement authorization is issued by Aquafire Inc. (email authorization is sufficient).</li>' +
-      '</ol><p>Verbal statements do not constitute authorization.</p><p>' +
-      'Aquafire does not authorize advance replacement, cross-shipment, or shipment of a replacement unit prior to receipt and inspection of the original unit, unless expressly authorized in writing.</p>' +
-      '<h2>Returns (RMA)</h2><p>' +
-      'If a replacement is approved, Aquafire will issue a Return Material Authorization (RMA). No product may be returned without one; unauthorized returns are refused and returned at the sender’s expense. Returned products must be prepared for shipment following Aquafire’s packaging and drainage instructions &mdash; failing to do so may void warranty coverage.</p>' +
-      '<h2>What is not covered</h2><p>' +
-      'This warranty does not apply to products damaged or adversely affected by:</p><ul><li>' +
-      'Modification, alteration, tampering, or unauthorized repair.</li><li>' +
-      'Failure to follow installation instructions.</li><li>' +
-      'Improper maintenance, including use of dirty or contaminated water, mineral scaling, or component failure from accumulated dirt, dust, or debris.</li>' +
-      '<li>Failure to maintain recommended water treatment or filtration.</li><li>' +
-      'Abuse, negligence, accidental damage, or misuse.</li><li>Normal wear and tear.</li><li>' +
-      'Acts of God (floods, fires, lightning, natural disasters).</li><li>' +
-      'Damage caused during transportation by third-party carriers. If shipping damage is evident at delivery, report it to the carrier immediately and document it with photographs.</li>' +
-      '</ul><p>Cosmetic issues that do not affect functional performance are not covered.</p><h2>' +
-      'Wear items</h2><p>' +
-      'Transducer mist makers and LED lighting components are considered normal wear items. They are covered only during initial installation testing, or if found defective during setup or within ninety (90) days of purchase.</p>' +
-      '<h2>Costs not covered</h2><p>' +
-      'Unless expressly authorized in writing, this warranty does not cover labor costs, installation or reinstallation costs, removal of installed units, on-site service calls, travel time or technician expenses, shipping costs, loss of use, loss of profits, property damage, or incidental/consequential damages.</p>' +
-      '<h2>Water quality requirement</h2><p>' +
-      'Operating the product requires proper water quality and maintenance. Failure to maintain water quality per the Owner’s Manual &mdash; including recommended filtration or water softening &mdash; may cause scaling or component damage and may void coverage. The included <a href="help.html?article=vapor-pure-water-softener">' +
-      'Vapor Pure water softening system</a>' +
-      ' must be installed and in operation prior to using your Aquafire for this warranty to remain valid. You can check your local water hardness on the <a href="water-care.html">' +
-      'Water Care</a>' +
-      ' page. If you use an existing whole-house softener instead of the supplied Vapor Pure system, its brand, model, and specifications must be submitted to Aquafire for written approval prior to operation, or coverage may be voided.</p>' +
-      '<h2>Filing a claim</h2><p>' +
-      'Contact Aquafire Customer Service by phone at 877-888-4260 or email at <a href="mailto:ces@aquafire.com">' +
-      'ces@aquafire.com</a>' +
-      ', or submit a <a href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">' +
-      'service request</a>' +
-      '. Have ready: product model number, serial number (see <a href="help.html?article=identifying-serial-number">' +
-      'Identifying Your Serial Number</a>' +
-      '), your name, address, and a contact phone number. Technical Support will guide the troubleshooting and repair process.</p>' +
-      '<p>' +
-      'For consumers covered by consumer protection laws in their country or jurisdiction of residence, the benefits of this warranty are in addition to any rights and remedies provided under those laws.</p>'
+    slug: "light-trap-examples-copy",
+    title: "Light Trap Examples copy",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "Three real installation photos comparing enclosures with and without a light trap, showing how border and recess depth control ceiling reflections.",
+    keywords: ["ceiling reflection", "light bleed", "hearth border", "recessed hearth", "head-on view", "light trap"],
+    related: ["light-trap-examples", "recommended-enclosure-finishes", "light-path-comparisons"],
+    html: "<p>A light trap is essential when constructing your water vapor fireplace enclosure. The light emitted by the vapor flames travels upwards, and without a properly dimensioned enclosure, this light can escape into your room and onto the ceiling, detracting from the ambiance. A light trap ensures the glow remains concentrated within the fireplace area, enhancing the visual effect.</p><p><br>Light Trap Examples</p><hr><p>Example 1:</p><p><img src=\"help-img/light-trap-examples-1.webp\" alt=\"Light trap example 1: enclosure with a 6 inch border around the hearth top\"></p><p>A 6\" border was added around the entire top of the hearth to prevent the viewer from seeing the hearth ceiling light reflections while viewing head-on.</p><p><img src=\"help-img/light-trap-examples-2.webp\" alt=\"Light trap example 1: same enclosure viewed head-on\">Same enclosure when viewing head on</p><hr><p>Example 2:</p><p><img src=\"help-img/light-trap-examples-3.webp\" alt=\"Light trap example 2: view looking under the fireplace hearth\"></p><p>View when looking under the fireplace hearth. Recessed light trap prevents the viewer from seeing the hearth ceiling reflections when viewing head-on.</p><p><img src=\"help-img/light-trap-examples-4.webp\" alt=\"Light trap example 2: same enclosure viewed head-on\"></p><p>Same enclosure when viewing head-on</p><hr><p>Example 3:</p><p><img src=\"help-img/light-trap-examples-5.webp\" alt=\"Light trap example 3: enclosure with no light trap, reflection visible head-on\"></p><p>No light trap was added. Light reflection is visible when viewing head-on</p><hr>"
   },
   {
-    slug: 'identifying-serial-number',
-    title: 'Identifying Your Serial Number',
-    category: 'warranty',
-    models: ['original', 'pro', 'lite'],
-    updated: '2026-08',
-    teaser: 'Your serial number is needed for any service request — here are the two places to find it on your unit.',
-    keywords: ['serial number', 'service request', 'info plate', 'top lid', 'rear plate', 'warranty claim'],
-    related: ['aquafire-limited-warranty', 'power-issues', 'product-resources'],
-    html: '<h2>Two places to look</h2><p>' +
-      'When you submit a request for service, we need a handful of details to locate your sale and your fireplace in our system. Your serial number is one of the most important, and it is typically found in two places:</p>' +
-      '<ol><li><strong>Under the top lid.</strong>' +
-      ' Common on AWA and AWPR models, but not commonly found on the AWP model.</li><li><strong>' +
-      'The rear information plate.</strong>' +
-      ' Located on the back of all models. If the unit is installed into an enclosure, you will need to fully remove the insert to access it.</li>' +
-      '</ol><div class="ha-note">' +
-      'Have your serial number handy any time you contact Aquafire for a service request. See <a href="help.html?article=aquafire-limited-warranty">' +
-      'Aquafire Limited Warranty</a>' +
-      ' for what else to have ready, or start a <a href="https://www.aquafire.com/pages/service-request" target="_blank" rel="noopener">' +
-      'service request</a> directly.</div>'
+    slug: "recommended-enclosure-finishes",
+    title: "Recommended enclosure finishes",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-07",
+    teaser: "Dark, matte, non-reflective enclosure finishes make the Aquafire vapor flame look deeper and more realistic.",
+    keywords: ["matte black paint", "light reflections", "shiny tile", "mirrored surfaces", "viewing window height", "aquafirebox"],
+    related: ["light-trap-examples-copy", "designing-without-a-light-trap", "light-trap-examples"],
+    html: "<p>One of the most effective ways to enhance the realism of the Aquafire vapor flame is to minimize unwanted light reflections inside the fireplace enclosure.</p><p>The darker and less reflective the surrounding surfaces, the greater the perceived depth of vapor flame and the more convincing the effect becomes.</p><p>The <a href=\"https://www.aquafire.com/products/aquafirebox-modular-firebox\">Aquafire®Box</a> takes the guesswork out of design and enclosure dimensions but if you are designing your own enclosure, the options are endless for finishes since you do not have to protect your enclosure from heat or water. The enclosure finishes are completely up to the homeowner/purchaser. This means you can create a truly custom look that fits in with your existing decor and/or design plan.</p><p>To create an enclosure that highlights the Aquafire flames while minimizing light reflections, we recommend the follow enclosure finishing guidelines:</p><ul><li>High-quality, durable, ultra-matte black paint. We highly recommend <a href=\"https://www.stagelightingstore.com/Rosco-Supersaturated-Paint-6003-Velour-Black-Quart?srsltid=AfmBOor1bHQK7iJdzzvjPc3ORku22aFngV4vsKoOtz85r5q29730MWQ9\">Rosco Velour Black</a> or <a href=\"https://culturehustle.com/collections/elevate-your-art/products/black-4-0?tw_source=google&amp;tw_adid=&amp;tw_campaign=23348662259&amp;tw_kwdid=&amp;gad_source=1&amp;gad_campaignid=23843842074&amp;gbraid=0AAAABB1-gGpABcPC2Kwm-1n8PmLrXdkNx&amp;gclid=CjwKCAjwpefSBhBvEiwAzyEtZ1EHmvHx9Ciewcbd1u-dsaoto1KL-CBibZ0Ca-iHjKXcwukzkdkdNRoC6l0QAvD_BwE\">Black Paint 4.0</a>. <ul><li>Rosco Velour Black was originally developed for the entertainment industry. It has been used for decades in theaters, television studios, museums and commercial displays where controlling reflected light is critical</li><li>Black Paint 4.0 offers even lower light reflectivity and was originally developed for artwork, museum displays, photography and other low-contact applications where maximum light absorption is the primary goal. This paint may require more careful handling and maintenance than paint designed for architectural use.</li></ul></li><li>Dark, non-reflective finishes. Choosing shiny or mirrored tile can cause the LED lights to bounce</li><li>If you are adding river rock, logs or other media to the top of your Aquafire, have it attached to a lightweight sheet of plywood or similar so that it is easily removable for cleaning and maintenance. See <a href=\"help.html?article=media-accessory-use-with-aquafire\">THIS</a> entry for more information.</li><li>If installing in a traditional hearth design, please create a <a href=\"help.html?article=light-trap-examples\">light trap</a> or consider the <a href=\"https://www.aquafire.com/products/aquafirebox-modular-firebox\">Aquafire®Box</a> for a simplified installation experience</li><li>Reduce the viewing window height to 12\"-18\" inches. See our <a href=\"help.html?article=common-enclosure-dimensions\">common setbacks</a> article for more detailed information or use our <a href=\"enclosure-guide.html\">Interactive Enclosure Guide</a> to see your exact measurements.</li></ul>"
+  },
+  {
+    slug: "designing-without-a-light-trap",
+    title: "Designing without a Light Trap",
+    category: "install",
+    models: ["original", "pro", "lite"],
+    updated: "2026-04",
+    teaser: "Installing an Aquafire proud of the wall without a light trap looks great but reflects light onto the ceiling unless the light path is interrupted.",
+    keywords: ["ceiling glare", "proud install", "not recessed", "led reflection", "light bleed", "hearth-free"],
+    related: ["recommended-enclosure-finishes", "light-trap-examples-copy", "light-trap-examples"],
+    html: "<p>One of the many design options for the Aquafire is to install it without a light trap, proud of a wall or not recessed into a hearth. The examples given in the <a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire-Pro-AWPR-Specs_Install-Guide-2026-Compressed.pdf?v=1770224039\">installation guide</a> are below:</p><p><img src=\"help-img/designing-without-a-light-trap-1.webp\" alt=\"Light trap installation guide diagram example 1\"></p><p><img src=\"help-img/designing-without-a-light-trap-2.webp\" alt=\"Light trap installation guide diagram example 2\"></p><p><img src=\"help-img/designing-without-a-light-trap-3.webp\" alt=\"Light trap installation guide diagram example 3\"></p><p>This is a popular design idea but it does have one major design considerations to be aware of when creating this type of enclosure - <strong>you will see light reflections on the ceiling</strong>!</p><p>The powerful LED lights do need to go somewhere and they will reflect all the way to the ceiling if you do not interrupt the light path with a <a href=\"help.html?article=light-path-comparisons\">light trap</a>. Some real-life examples of this installation type are below:</p><p><img src=\"help-img/designing-without-a-light-trap-4.webp\" alt=\"Real-life light-trap-free installation example 1\"></p><p><img src=\"help-img/designing-without-a-light-trap-5.webp\" alt=\"Real-life light-trap-free installation example 2\"></p><p><img src=\"help-img/designing-without-a-light-trap-6.webp\" alt=\"Real-life light-trap-free installation example 3\"></p><p><img src=\"help-img/designing-without-a-light-trap-7.webp\" alt=\"Real-life light-trap-free installation example 4\"></p>"
+  },
+  {
+    slug: "adjusting-the-flame",
+    title: "Adjusting the Aquafire Flame",
+    category: "using",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Your Aquafire’s flame needs a bit of tuning for your room — here is how to dial in density, speed, humidity, airflow, and the front fan ring lift.",
+    keywords: ["flame adjustment", "density", "speed", "remote control", "airflow", "humidity", "fan filter", "fine-tune"],
+    related: ["flame-appearance-troubleshooting", "flame-smoky-foggy", "room-air-flow-considerations", "remotes-and-smart-home-control"],
+    html: "<p>Your Aquafire flames need to be customized to your specific environment. Every Aquafire home has its own air flow and humidity levels which will affect the vapor flames differently. You can perform small tweaks to the Aquafire to get it looking perfect in your individual space.</p><p>1. <u>Adjust the Flame Density and Flame Speed on the remote control.</u> We suggest setting them to the lowest settings and then adjusting density and speed separately. You'll press the - button until the beeping stops, that means you've reached the lowest setting.</p><p><img src=\"help-img/adjusting-the-flame-1.webp\" alt=\"Aquafire remote control showing the flame density and speed buttons\"></p><p><em>View: Aquafire Remote Control. The Aquafire Pro remote control will have additional features but the density and speed icons are the same</em></p><p>2. <u>Check and adjust the humidity levels in your room.</u> You may need to adjust the HVAC in the room to lower humidity levels as high humidity levels can produce a foggy effect. Also reference <a href=\"help.html?article=flame-smoky-foggy\">this article</a> if you are experiencing a foggy or smoky flame.</p><p>3. <u>Note and adjust the airflow in your room.</u> Is an HVAC vent pointed directly at the Aquafire? Is a door constantly opening and closing near the flame? Does the vapor seem to be pulled down every time the HVAC turns on (<a href=\"help.html?article=flame-downdrafting\">this is called down-drafting</a>)? All of these airflow situations can affect the vapor flame and need to be adjusted to prevent excess vapor from being pushed onto the Aquafire which can cause electrical shorts and internal damage.</p><p>4. <u>Check the ring lift covering the front fans.</u> First, ensure they are fully seated in the holder, then you can lift up by a centimeter at a time to adjust the flame. Please note that adjusting up by even a 1/4\" can release an excess of vapor and cause water damage to internal electrical components. Please adjust these with caution.</p><p><img src=\"help-img/adjusting-the-flame-2.webp\" alt=\"Aquafire Pro top plate removed, looking down into the interior of the AWPR2-20-50\"></p><p><em>View: Aquafire Pro Top Plate Removed, looking down into the interior of the AWPR2-20-50</em></p><p><img src=\"help-img/adjusting-the-flame-3.webp\" alt=\"Aquafire Pro front panel and top plate removed, looking at the front of the AWPR-20-50\"></p><p><em>View: Aquafire Pro, Front Panel Removed and Top Plate removed looking at front of AWPR-20-50</em></p>"
+  },
+  {
+    slug: "pro-phone-app-not-connecting",
+    title: "5/29/26 UPDATE: Aquafire Pro - Phone App not connecting",
+    category: "using",
+    models: ["pro"],
+    updated: "2026-05",
+    teaser: "The AFIREWATER Prestige App only pairs with 2.4 GHz Wi-Fi networks — here is why, and the latest update on a broader connectivity fix.",
+    keywords: ["wifi", "app", "won't connect", "2.4ghz", "afirewater", "prestige app", "pairing", "pro"],
+    related: ["remotes-and-smart-home-control", "product-resources", "decoding-aquafire-skus"],
+    html: "<p>Due to recent updates involving WiFi chip upgrades, enhanced security protocols, and Apple operating system changes, the Aquafire App has temporarily lost connectivity functionality. Our team is fully aware of the issue and is actively working to restore reliable app performance as quickly as possible.</p><p>Resolving this matter is a top priority for us, and we are committed to keeping you informed throughout the process. We will provide updates here and through company emails to notify you as soon as connectivity has been fully restored.</p><p>We sincerely appreciate your patience and understanding during this system upgrade and thank you for your continued support. If you have additional questions, please reach out to us directly at sales@aquafire.com.</p><p>Sincerely, The Aquafire Team</p>"
+  },
+  {
+    slug: "how-do-i-control-multiple-aquafires",
+    title: "How do I control multiple Aquafires?",
+    category: "using",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Step-by-step instructions for syncing several Aquafires to one master remote so they turn on, change flame height, and change color together.",
+    keywords: ["pairing remotes", "sync multiple units", "master remote", "gang units", "one remote control", "seamless fireplace"],
+    related: ["pro-phone-app-not-connecting", "how-to-use-the-dry-contact-port", "adjusting-the-flame"],
+    html: "<p>Multiple Aquafires can be paired to one remote so that they turn on/off together, change flame height/speed together and change color together (Aquafire Pro Model only). To the outside, they appear as one seamless fireplace. Up to 8 burners can be paired to one remote, that translates to 40 feet of flame!</p>\n<p>To pair multiple Aquafires to one remote, please follow the instructions below:</p>\n<ol>\n<li>Before turning the Aquafire off, make sure each Aquafire is on the same setting. We recommend turning everything to the lowest setting and picking the same LED color. This ensures all Aquafires will start from the same operating baseline when you press the ON/OFF button.</li>\n<li>Choose 1 remote and press the power button to figure out which Aquafire it belongs to, then turn off that Aquafire. This is now your master Aquafire and remote.</li>\n<li>Turn all Aquafires off.</li>\n<li>Manually push and hold the power button on the Aquafire Control Panel (far right button) until it blinks (3-5 seconds), then release the power button.</li>\n<li>While the power button is blinking, push any button on the remote. The Aquafire should power off and this completes the sync process.</li>\n<li>Complete steps 3-4 for each Aquafire until all are paired to the Master Remote.</li>\n</ol>"
+  },
+  {
+    slug: "how-to-use-the-dry-contact-port",
+    title: "How to use the Dry Contact Port - Gen 1 and Gen 2",
+    category: "using",
+    models: ["original", "pro", "lite"],
+    updated: "2026-07",
+    teaser: "How to wire the Dry Contact Port so a smart-home system or remote switch can turn the Aquafire on and off.",
+    keywords: ["smart home", "remote switch", "automation", "on off control", "wiring", "rs485", "generation 1", "generation 2"],
+    related: ["how-do-i-control-multiple-aquafires", "remotes-and-smart-home-control", "pro-phone-app-not-connecting"],
+    html: "<p><strong>NOTE</strong>: These instructions are for Generation 1 and Generation 2 Aquafire Original and Aquafire Pro. The SKU will be: AWA, AWA2, AWP, AWPR or AWPR2. For Generation 3, the dry contact port location is actually an RS485 Interface. For the full communication protocol, please reference <a href=\"help.html?article=rs485-integration-protocol\">THIS</a> help article. </p><p>There are multiple ways to control your Aquafire Original and Aquafire Pro. If you have a Smart Home system or would like to connect to a remote switch control, there is a Dry Contact Port on every Aquafire to assist with this type of installation.</p><p>The Dry Contact Port only controls the ON/OFF Function of the Aquafire Original or Aquafire Pro. It does not allow you to control the lights, flame height/speed or the dimming feature.</p><iframe src=\"https://www.youtube.com/embed/tPMtkN3CsEk?&wmode=opaque&rel=0\" title=\"How to use the Dry Contact Port\" loading=\"lazy\" allowfullscreen></iframe>"
+  },
+  {
+    slug: "remotes-and-smart-home-control",
+    title: "Remotes, Pairing & Smart-Home Control",
+    category: "using",
+    models: ["original", "pro", "lite"],
+    updated: "2026-08",
+    teaser: "How the remote pairs to your Aquafire, controlling multiple inserts together, and connecting a smart-home switch.",
+    keywords: ["remote", "pairing", "smart home", "dry contact", "sync remote", "multiple fireplaces one remote"],
+    related: ["remote-control-issues", "pro-phone-app-not-connecting", "my-aquafire-is-beeping"],
+    html: "<p>Every Aquafire insert can be controlled by its included remote, and also carries a Dry Contact Port for integrating with a smart-home system or a remote switch.</p><h2>Pairing a remote</h2><ol><li>Press and hold the power button on the fireplace until it flashes.</li><li>Press any button on the remote — you'll hear a beep confirming the pairing.</li></ol><p>If the remote turns the fireplace on/off but does not respond to flame or color adjustments, the battery may be low, or it may need to be re-synced with the same steps above.</p><p>Remotes take a <strong>CR-2032 lithium battery</strong>.</p><h2>Controlling multiple inserts on one remote</h2><p>Multiple inserts can be paired to a single remote — following the same pairing steps on each unit syncs them together. From one remote, on/off and flame height/speed are controlled together across all paired inserts; color is controlled together only on Aquafire Pro.</p><h2>Smart-home and remote-switch integration</h2><p>Every Aquafire insert includes a Dry Contact Port, which is the connection point for wiring in a smart-home controller or a remote switch alongside the included remote.</p><div class=\"ha-note\">Remote not responding at all after trying the steps above? See <a href=\"help.html?article=remote-control-issues\">Remote Control Issues</a>.</div>"
+  },
+  {
+    slug: "power-issues",
+    title: "Power Issues",
+    category: "fix",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Is your Aquafire not turning on? Work through this problem-and-solution chart to find a fix.",
+    keywords: ["power", "won't turn on", "power supply", "breaker", "fuse", "buzzing sound", "dead"],
+    related: ["my-aquafire-is-beeping", "lights-and-beeps-reference", "water-issues"],
+    html: "<p>Is your Aquafire not turning on? Review the chart below to find a solution!</p><hr><p>*Important Tip: Most common issues can be prevented with a whole system cleaning. We recommend cleaning your Aquafire(s) 2-3 times a year depending on frequency of use and water quality. Please start with our <a href=\"help.html?article=general-cleaning\"><strong>Preventative Maintenance Guide</strong></a> to see if that solves your problem</p><table><thead><tr><th>Problem</th><th>Possible Cause</th><th>Solution</th></tr></thead><tbody><tr><td rowspan=\"2\"><strong>Unit fails to turn on when using the power button on the fireplace</strong></td><td>Power supply not properly plugged in</td><td>Check power supply connections and look for green LED on power supply indicating that it's powered</td></tr><tr><td>Wall outlet may not be powered</td><td>Check breaker main panel in building to see if breaker has been tripped or turned off</td></tr><tr><td><strong>Power supply indicator light is green, but unit still won't turn on</strong></td><td>Main fuse inside the fireplace may be blown</td><td>Contact support for assistance</td></tr><tr><td><strong>Power supply indicator light is red</strong></td><td>Power supply has somehow been damaged</td><td>Contact support for assistance</td></tr><tr><td><strong>Unit turns on, but power button flashes and immediately shuts off</strong></td><td>Possible internal component failure due to rough handling during shipping</td><td>Contact support for assistance</td></tr><tr><td rowspan=\"2\"><strong>Unit appears to have power, but a \"buzzing\" sound is heard</strong></td><td>Power supply may not be fully plugged in on the back of the unit</td><td>Check that 90 degree fitting is securely plugged in on the back of the unit. If it is and buzzing continues, contact support</td></tr><tr><td>Power supply is fully plugged in on the back of the unit, but buzzing persists</td><td>Main power outlet may be loose. Contact support for assistance</td></tr></tbody></table>"
+  },
+  {
+    slug: "water-issues",
+    title: "Water Issues",
+    category: "fix",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Got water problems — a musty smell, a leak, or a beep-and-shutoff? Review the chart below to find a solution.",
+    keywords: ["water", "leak", "musty smell", "stale water", "float sensor", "low water", "beep and shut off"],
+    related: ["my-aquafire-is-beeping", "general-cleaning", "flame-low-or-uneven"],
+    html: "<p>Got water problems? Review the chart below to find a solution!</p><hr><p>*Important Tip: Most common issues can be prevented with a whole system cleaning. We recommend cleaning your Aquafire(s) 2-3 times a year depending on frequency of use and water quality. Please start with our <a href=\"help.html?article=general-cleaning\">Preventative Maintenance Guide</a> to see if that solves your problem </p><table><thead><tr><th>Problem</th><th>Possible Cause</th><th>Solution</th></tr></thead><tbody><tr><td><strong>Musty or stale smell when unit is running</strong></td><td>Old or stale water generally created from lack of use</td><td>Drain and refill with fresh water. Consider cleaning per the <a href=\"https://www.aquafire.com/pages/maintenance\">PM maintenance guidelines</a></td></tr><tr><td><strong>Leak detected after unit has been unused for an extended period of time</strong></td><td>Float sensor in mist tank may be stuck creating above normal water level in mist tube</td><td>Drain excess water to proper level; Lift and plunge mist maker rack vigorously 10-15 times to free up float sensor in mist tank. Allow unit to run and recheck to make sure correct water level is maintained</td></tr><tr><td><strong>Unit beeps then turns off</strong></td><td>Low water level</td><td>Refill unit manually or verify that water feed is on if unit is permanently plumbed</td></tr></tbody></table>"
+  },
+  {
+    slug: "remote-control-issues",
+    title: "Remote Control Issues",
+    category: "fix",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "Remote not turning the fireplace on or off, or not responding to flame changes? Try these fixes before contacting support.",
+    keywords: ["remote", "battery", "cr-2032", "sync", "won't respond", "flame adjustment", "color"],
+    related: ["remotes-and-smart-home-control", "power-issues", "flame-appearance-troubleshooting"],
+    html: "<p>The chart below contains easy solutions for common issues you may encounter with the remote control for your Aquafire and Aquafire Pro</p><hr><table><thead><tr><th>Problem</th><th>Possible Cause</th><th>Solution</th></tr></thead><tbody><tr><td rowspan=\"2\"><strong>Remote control does not turn fireplace on/off</strong></td><td>Possible dead battery</td><td>Install new CR-2032 battery (Lithium)</td></tr><tr><td>Remote may not be synced to this particular fireplace</td><td>Push and hold the power button on the fireplace until it flashes, then hit any button on the remote. Use this process to sync multiple fireplaces to a single remote</td></tr><tr><td rowspan=\"2\"><strong>Remote control powers the fireplace on/off, but doesn't seem to respond to flame adjustments or color changes</strong></td><td>Possible low battery</td><td>Install new CR-2032 battery (Lithium)</td></tr><tr><td>Possible sync issue</td><td>Push and hold the power button on the fireplace until it flashes, then hit any button on the remote. Use this process to sync multiple fireplaces to a single remote</td></tr><tr><td><strong>Remote does not work despite trying all steps listed above</strong></td><td>Remote may be malfunctioning</td><td>Contact support for assistance</td></tr></tbody></table>"
+  },
+  {
+    slug: "light-issues-aquafire",
+    title: "Light Issues - Aquafire",
+    category: "fix",
+    models: ["original"],
+    updated: "2026-02",
+    teaser: "Lights not coming on, or a dead cell in your Aquafire’s light strip? Here are the easy fixes to check first.",
+    keywords: ["lights", "light strip", "won't turn on", "led", "light cell", "connection", "awa", "original"],
+    related: ["my-lights-wont-turn-on", "lights-and-beeps-reference", "general-cleaning"],
+    html: "<p>The chart below contains easy solutions for common light issues you may encounter with your Aquafire (AWA)</p><hr><table><thead><tr><th>Problem</th><th>Possible Cause</th><th>Solution</th></tr></thead><tbody><tr><td rowspan=\"2\"><strong>Lights are not on when unit is on</strong></td><td>Loose connection on light strip(s)</td><td>Check connection on right end of light strip to make sure it is securely connected</td></tr><tr><td>Possible problem with the light strip or LED driver card</td><td>Contact support for further assistance</td></tr><tr><td><strong>One or more light cells are not working on an individual light strip</strong></td><td>There is a problem with the light strip</td><td>Contact support for further assistance</td></tr></tbody></table>"
+  },
+  {
+    slug: "light-issues-aquafire-pro",
+    title: "Light Issues - Aquafire Pro",
+    category: "fix",
+    models: ["pro"],
+    updated: "2026-02",
+    teaser: "Amber or RGB lights not coming on in your Aquafire Pro? Check remote buttons and connections before contacting support.",
+    keywords: ["lights", "rgb", "orange lights", "color", "light strip", "won't turn on", "led", "awpr"],
+    related: ["my-lights-wont-turn-on", "lights-and-beeps-reference", "remotes-and-smart-home-control"],
+    html: "<p>The chart below contains easy solutions for common light issues you may encounter with your Aquafire Pro (AWPR)</p><hr><table><thead><tr><th>Problem</th><th>Possible Cause</th><th colspan=\"2\">Solution</th></tr></thead><tbody><tr><td rowspan=\"3\"><strong>Lights are not on when unit is on</strong></td><td>Loose connection on light strip(s)</td><td colspan=\"2\">Check connection on right end of light strip to make sure it is securely connected</td></tr><tr><td>Possible problem with the light strip or LED driver card</td><td colspan=\"2\">Contact support for further assistance</td></tr><tr><td>Orange button and RBG Button may be turned off</td><td rowspan=\"3\">Use remote or phone app to turn light strips on/off for desired effect.<br>RGB button must be on to select RGB colors</td><td rowspan=\"3\"><img src=\"help-img/light-issues-aquafire-pro-1.webp\" alt=\"Orange Light Strip\"></td></tr><tr><td><strong>Orange lights are not on when unit is on</strong></td><td>Orange button on remote may be turned off</td></tr><tr><td><strong>Colored lights are not on when unit is on</strong></td><td>RGB button on remote may be turned off</td></tr><tr><td><strong>One or more light cells are not working on an individual light strip</strong></td><td>There is a problem with the light strip or LED driver card</td><td colspan=\"2\">Contact support for assistance</td></tr></tbody></table>"
+  },
+  {
+    slug: "my-lights-wont-turn-on",
+    title: "My Lights Won't Turn On",
+    category: "fix",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "Checked the connections and remote buttons and your lights still will not turn on? They may have shorted out — here is why, and how to prevent it going forward.",
+    keywords: ["lights", "led", "shorted", "wear item", "downdraft", "scaling", "replacement lights"],
+    related: ["light-issues-aquafire", "light-issues-aquafire-pro", "room-air-flow-considerations", "general-cleaning"],
+    html: "<p>First check that the light connections are tight and the proper buttons on the remote control are activated. See the appropriate Light Issues Help Article for your Aquafire Model.</p><p>If they are still not turning on, the most likely answer is they have shorted out and need to be replaced. LED lights in a wet environment will cut the lifespan and therefore do need to be replaced periodically, which is why we consider them a wear item. We sell replacement LED lights directly through our website: <a href=\"https://www.aquafire.com/collections/replacement-parts\">https://www.aquafire.com/collections/replacement-parts</a></p><p>If you feel the lights have shorted prematurely, the top 3 causes of lights not functioning properly are:</p><ul><li>Excess mist falling back onto the light connection. The most common causes of this are:<ul><li>Strong air currents in the room that push the vapor onto the lighting connections</li><li><a href=\"help.html?article=flame-downdrafting\">Down-drafting</a> - which is when the vapor is pulled down into the interior of the Aquafire when the HVAC turns on. It is caused by openings within the walls behind/underneath the Aquafire enclosure</li></ul></li><li>Scaling accumulating on the light connection</li><li>Any kind of water leaking onto the light connection due to improper manual filling or other customer interaction.</li></ul><p>Once the lights have shorted, it is hard to bring them back to life. However, you can prevent the excess vapor and scaling with:</p><ul><li>Regular cleaning</li><li>A water softener, such as the <a href=\"https://www.aquafire.com/products/vapor-pure-filter-softener-system?selling_plan=692756185408&variant=49117901390144\">Vapor Pure</a></li><li>Redirecting any strong air currents in the room so vapor is not being pushed back onto the lights.</li><li>Insulating or installing a barrier in the open wall space underneath and behind your Aquafire enclosure.</li><li>Refrain from operating the Aquafires 24/7. Constant operation will cause excess vapor to settle on the lighting connections.</li><li>Set the flame settings (density and speed) to a lower setting</li><li><img src=\"help-img/my-lights-wont-turn-on-1.webp\" alt=\"Flame density and speed settings on the remote control\"></li><li><a href=\"help.html?article=adjusting-the-flame\">Adjust the flame for your environment</a></li></ul>"
+  },
+  {
+    slug: "flame-appearance-troubleshooting",
+    title: "Flame Appearance Troubleshooting",
+    category: "fix",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Flame too short, too smoky, or moving at the wrong speed? Review the chart below to find a fix.",
+    keywords: ["flame height", "smoky flame", "flame speed", "mist volume", "short flame", "uneven"],
+    related: ["flame-low-or-uneven", "flame-smoky-foggy", "adjusting-the-flame"],
+    html: "<p>Is your vapor flame not behaving as it should? Review the chart below to find a solution!</p><hr><p>*Important Tip: Most common issues can be prevented with a whole system cleaning. We recommend cleaning your Aquafire(s) 2-3 times a year depending on frequency of use and water quality. Please start with our <a href=\"help.html?article=general-cleaning\">Preventative Maintenance Guide</a> to see if that solves your problem</p><table><thead><tr><th>Problem</th><th>Possible Cause</th><th>Solution</th></tr></thead><tbody><tr><td rowspan=\"2\"><strong>Flame height is less than 6\" high in all sections</strong></td><td>Possible air flow issue due to enclosure design or ambient room currents</td><td>Verify that fireplace is getting sufficient air and that no AC vents, fans, or air currents are impacting the mist from rising vertically</td></tr><tr><td>Flame volume may be low</td><td>Use remote (or phone app) to increase volume of mist by pressing the \"+\"<br><img src=\"help-img/flame-appearance-troubleshooting-1.webp\" alt=\"Remote control mist volume plus button\"></td></tr><tr><td rowspan=\"2\"><strong>Flame height is less than 6\" high in one section only</strong></td><td>Mist maker may need to be cleaned</td><td>Follow PM instructions for cleaning mist maker. Consider cleaning all mist makers</td></tr><tr><td>Water level in mist tube may be too high</td><td>Remove excess water to proper level which is the height of the black mushroom cap - Reference <a href=\"help.html?article=flame-low-or-uneven\">this related article</a></td></tr><tr><td><strong>Flames appear more \"smoky\" than desired</strong></td><td>Excess mist is being generated</td><td>Use remote (or phone app) to decrease volume of mist by pressing the \"-\"<br><img src=\"help-img/flame-appearance-troubleshooting-2.webp\" alt=\"Remote control mist volume minus button\"></td></tr><tr><td><strong>Slower flame movement is desired</strong></td><td>Flame speed setting is too high</td><td>Use remote (or phone app) to decrease speed of mist by pressing the \"-\"<br><img src=\"help-img/flame-appearance-troubleshooting-3.webp\" alt=\"Remote control flame speed minus button\"></td></tr><tr><td><strong>Faster flame movement is desired</strong></td><td>Flame speed setting is too low</td><td>Use remote (or phone app) to increase speed of mist by pressing the \"+\"<br><img src=\"help-img/flame-appearance-troubleshooting-4.webp\" alt=\"Remote control flame speed plus button\"></td></tr></tbody></table>"
+  },
+  {
+    slug: "flame-low-or-uneven",
+    title: "Flame Issues - Low or Uneven \"Flame\"",
+    category: "fix",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Flames uneven, missing, or shorter than usual? Start with the float sensor and mist maker — the two most common culprits.",
+    keywords: ["low flame", "uneven flame", "float sensor", "mist maker", "high water", "no flame", "buildup"],
+    related: ["general-cleaning", "mist-maker-cleaning-replacement", "flame-appearance-troubleshooting"],
+    html: "<p>Flames uneven?</p>\n<p>Flames non-existent?</p>\n<p>Flames not as tall as they normally are?</p>\n<p>If you have ever turned on your Aquafire and the flames don't look quite right, then this article is for you!</p>\n<p>The common culprit for uneven or low mist is <strong>high water levels in the mist tanks</strong>. First and foremost, your Aquafire needs to be cleaned multiple times a year and run regularly to turn over fresh water. Please follow our <a href=\"help.html?article=general-cleaning\">Preventative Maintenance Guide</a> to keep your Aquafire running optimally! If preventative maintenance didn't solve the issue or your Aquafire is within the first 90 days, then high water is usually caused by a stuck float sensor or a mist maker that needs to be cleaned or replaced.</p>\n<p>To check the float sensor:</p>\n<ul>\n<li>Take off the top lid<ul><li>Open the mist maker tanks, there will be 1 tank per 20\". A 20\" Aquafire will have 1 Mist Maker Tank, a 40\" will have 2 and a 60\" will have 3. The example below is for an Aquafire Original 40\" (AWA-40-100):<img src=\"help-img/flame-low-or-uneven-1.webp\" alt=\"Mist maker tanks opened on an Aquafire Original 40 inch\"></li></ul></li>\n<li>Compare the water levels, ideally, the water should just barely come to the top of the black mushroom cap. Does the water look higher in the one that has uneven mist?<img src=\"help-img/flame-low-or-uneven-2.webp\" alt=\"Diagram comparing normal and high water levels in the mist maker tank\"></li>\n<li>If it looks a bit high, you'll need to remove some of that water. Then agitate the mist maker by lifting the mist maker up and down to create an internal wave to unstick the float sensor in the lower mist maker tank. <a href=\"https://www.youtube.com/watch?v=Y_caX56hz-k&amp;t=222s\">This video</a> shows that process starting at the 3:40 minute mark.</li>\n</ul>\n<p>If that doesn't solve the issue, please check the condition of your mist maker:</p>\n<ul>\n<li>Take off the top lid</li>\n<li>Open the mist maker tanks. The example below is for an Aquafire Original 40\" (AWA-40-100):<img src=\"help-img/flame-low-or-uneven-3.webp\" alt=\"Mist maker tanks opened for inspection on an Aquafire Original 40 inch\"></li>\n<li>Unplug the mist maker and carefully remove the interior rack.</li>\n<li>When you are close to the top, tip the rack into the mist maker tank to empty excess water and prevent water spillage. <iframe src=\"https://www.youtube.com/embed/cJ1LZDUxzu4?&wmode=opaque&rel=0\" title=\"Removing the mist maker rack without spilling water\" loading=\"lazy\" allowfullscreen></iframe></li>\n<li>Examine the mist maker, does it look like it needs to be cleaned - it should be free of debris and you should be able to see space between the bottom of the mist maker and the rack it is attached to.<img src=\"help-img/flame-low-or-uneven-4.webp\" alt=\"Mist maker showing buildup and sediment that needs cleaning\"></li>\n<li>If it has buildup or sediment attached, the mist maker is not able to operate as it should and that results in a low or uneven mist. Please follow our mist maker cleaning videos, <a href=\"https://www.youtube.com/watch?v=gQx12sy2Npg&amp;t=31s\">Part 1</a> and <a href=\"https://www.youtube.com/watch?v=8Jaj3N2YUKI&amp;t=204s\">Part 2</a> and try turning on your Aquafire again.</li>\n</ul>\n<p>If none of these processes solve the issue, please reach out to our Technical Support by completing this request form: <a href=\"https://www.aquafire.com/pages/service-request\">https://www.aquafire.com/pages/service-request</a>. They will be happy go over additional troubleshooting techniques.</p>"
+  },
+  {
+    slug: "flame-smoky-foggy",
+    title: "Flame Issues - Smoky / Foggy Appearance",
+    category: "fix",
+    models: ["original", "pro", "lite"],
+    updated: "2026-05",
+    teaser: "A smoky or foggy-looking flame usually comes down to room humidity, flame settings, or the front fan sponge filters.",
+    keywords: ["smoky flame", "foggy flame", "humidity", "sponge filter", "fan filter", "overproduction"],
+    related: ["adjusting-the-flame", "flame-appearance-troubleshooting", "room-air-flow-considerations"],
+    html: "<p>Has your flame ever looked like this?</p><p><img src=\"help-img/flame-smoky-foggy-1.webp\" alt=\"Smoky or foggy flame appearance on an Aquafire\"></p><p>This smoky or foggy flame effect can be caused by a couple of factors:</p><ol><li>High humidity in the room</li><li>Flame needs to be customized to your environment</li><li>Sponge Filters covering the front fans are pulled up too high</li><li>Sponge Filters covering the front fans are too thin for your environment</li></ol><p>The solutions to this common issue are below:</p><ol><li>High humidity in the room - lower the humidity in the room by closing any doors and adjusting the HVAC in the room</li><li>You can find instructions for customizing your Aquafire to your environment <a href=\"help.html?article=adjusting-the-flame\">HERE</a></li><li>Sponge Filter Solutions - first check that your filters covering your front fans are fully seated. Just moving the front fan filters up by a 1/4\" can push out too much mist and create a foggy effect and potentially cause a mist overproduction that can damage internal electrical connections and light strips. The ring lift for the front fan filters can be found here. There is 1 filter per 20\". So a 20\" has 1 fan filter, a 40\" has 2 fan filters and a 60\" has 3 fan filters:<img src=\"help-img/flame-smoky-foggy-2.webp\" alt=\"Front fan sponge filter and ring lift positioning\"></li><li>Thin Sponge Filter - Newer Aquafire and Aquafire Pro's came with a thinner front fan filter to increase flame height and density. However, it is not a universal fit for all installations. The thinner sponge filter has been known to cause the foggy look for some. We have thicker sponge filters upon request. If you would like to request new fan filter covers please send an email to <a href=\"mailto:ces@aquafire.com\">ces@aquafire.com</a>. We will provide free front fan filters to all Aquafire and Aquafire Pro's still under warranty. We will need the serial number and size (20\", 40\" and 60\") of your Aquafire or Aquafire Pro.</li><li>A temporary solution to test if the sponge filter is too thin is to cut a thin piece of paper such as a post-it note to be about a quarter of the size of the front sponge and place it there. Or take painters tape and place it on the bottom half of the sponge. This should dramatically reduce the foggy flame appearance if the sponge filter thickness is the issue. See video demonstration <a href=\"https://drive.google.com/file/d/12Ui8f5_WUm1hLCNTSFwRTd95f6URVB0H/view?usp=sharing\">HERE</a>.</li></ol>"
+  },
+  {
+    slug: "my-aquafire-is-beeping",
+    title: "My Aquafire is beeping!",
+    category: "fix",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Do not stress — your Aquafire is trying to tell you about its water level or power supply. Here is what each beep pattern means.",
+    keywords: ["beeping", "beeps", "low water", "overflow", "power adaptor", "alarm", "flashing lights"],
+    related: ["lights-and-beeps-reference", "water-issues", "power-issues"],
+    html: "<p>Do not stress, your Aquafire is trying to communicate it's water level or power issue with you!</p>\n<p>Beeping can signal a few things:</p>\n<p>1. <strong><em>2 quick beeps =</em></strong><strong> low/no wa</strong><strong>ter</strong>. It will beep and turn off when it is low and/or out of water. Please refill your Aquafire and turn it on again.</p>\n<p><em>Important note: It can take multiple fills to completely fill your Aquafire the first time. This is completely normal. Your Aquafire will fill correctly and completely on subsequent refills.</em></p>\n<iframe src=\"https://www.youtube.com/embed/elCwmtnKpZo\" title=\"What the Beep? Low/no Water Beeps\" loading=\"lazy\" allowfullscreen></iframe>\n<p>2. <strong><em>3 long beeps</em> =</strong> <strong>overflow protection or </strong><strong>high water in the mist tube</strong>. If it's our newer models - AWA2/AWA3 or AWPR2/AWPR3 - when high water is detected in the mist tube the Aquafire will go through a series of alarm beeping, flashing lights and then eventually turn off. This is a protection feature to prevent water overflow and is usually caused by a stuck float sensor. Please reference <a href=\"help.html?article=flame-low-or-uneven\">THIS ARTICLE</a> to remedy a stuck float sensor.</p>\n<iframe src=\"https://www.youtube.com/embed/FqJP-wLYBhY\" title=\"What the Beep? Overflow Beeps\" loading=\"lazy\" allowfullscreen></iframe>\n<p>3. <strong><em>1 short beep</em> = </strong><strong>shortage or </strong><strong>an i</strong><strong>ssue with the power adaptor</strong>. Short, quick beeps can signal there is a power issue with the AC Power Adaptor. First, check that the power adaptor is fully plugged into the wall outlet, the back of the Aquafire and the power block itself. If everything seems tightly connected, there may be an issue with the power adaptor itself. Please complete this quick service form to get connected with a trained Aquafire Service Technician for further maintenance instructions: <a href=\"https://www.aquafire.com/pages/service-request\">https://www.aquafire.com/pages/service-request</a></p>\n<iframe src=\"https://www.youtube.com/embed/Dk-9FRpVdzk\" title=\"What the Beep? Voltage or Transformer Beeps\" loading=\"lazy\" allowfullscreen></iframe>"
+  },
+  {
+    slug: "flame-downdrafting",
+    title: "Flame Issues - Downdrafting",
+    category: "fix",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "A short video showing what flame downdrafting looks like and what causes it.",
+    keywords: ["hvac", "air vent", "flame pulled down", "blowing air", "video", "vapor draft"],
+    related: ["my-aquafire-is-beeping", "replacing-a-front-fan-video", "flame-smoky-foggy"],
+    html: "<iframe src=\"https://www.youtube.com/embed/X8-3aOp_DJs\" title=\"Aquafire downdraft\" loading=\"lazy\" allowfullscreen></iframe>"
+  },
+  {
+    slug: "replacing-a-front-fan-video",
+    title: "Replacing a Front Fan - Video",
+    category: "fix",
+    models: ["original", "pro"],
+    updated: "2026-02",
+    teaser: "Watch the video and gather two simple tools before replacing the front fan on a drained, unplugged Aquafire or Aquafire Pro.",
+    keywords: ["front fan replacement", "phillips screwdriver", "draining tool", "wet dry vac", "front panel removal", "fan video"],
+    related: ["flame-downdrafting", "replacing-a-light-strip-video", "my-aquafire-is-beeping"],
+    html: "<p>Please review <a href=\"https://drive.google.com/file/d/1ztbVdIY4f-KngfTqDU1MOg3Ojvyv4TLJ/view?usp=sharing\">this video</a> before replacing the front fan.</p><p>Tools needed:</p><ul><li>Phillips Head Screw Driver</li><li>Draining Tool (<a href=\"https://www.aquafire.com/products/filling-and-draining-tube\">fill/drain hose</a> provided with all Aquafire/Aquafire Pro, manual siphon, or wet/dry vac)</li></ul><p>The video starts at the halfway mark after the Aquafire has been completely drained, pulled from the enclosure, unplugged and front panel removed.</p>"
+  },
+  {
+    slug: "replacing-a-light-strip-video",
+    title: "Replacing a Light Strip - Video",
+    category: "fix",
+    models: ["original", "pro"],
+    updated: "2026-05",
+    teaser: "A short video walkthrough for safely replacing an Aquafire light strip, plus the screw size you'll need to rebuy them.",
+    keywords: ["light strip replacement", "video guide", "m3 screws", "led strip", "hardware store", "amazon"],
+    related: ["replacing-a-front-fan-video", "lights-and-beeps-reference", "flame-downdrafting"],
+    html: "<p>Please review this <a href=\"https://drive.google.com/file/d/1yHMDiPNfYbHZed0qfgnZ59zsI3Oakqea/view?usp=sharing\">short video</a> before replacing a light strip.</p><p>Each light strip comes with 10 small screws. All 10 screws are needed for replacement. We don't actively stock the replacement screws but they can be locally sourced through your hardware store or Amazon. The screw size is M3 x 8mm.</p><p>Amazon Link for M3 x 8mm replacement screws: <a href=\"https://a.co/d/04bmeecn\">https://a.co/d/04bmeecn</a></p>"
+  },
+  {
+    slug: "lights-and-beeps-reference",
+    title: "Lights & Beeps Reference",
+    category: "fix",
+    models: ["original", "pro"],
+    updated: "2026-08",
+    teaser: "The quick-reference key printed on your unit’s sticker — every light and beep pattern, its alert, and its probable cause, for both the Aquafire and Aquafire Pro.",
+    keywords: ["lights and beeps", "sticker", "alert codes", "beep pattern", "logo flashing", "reference key"],
+    related: ["my-aquafire-is-beeping", "power-issues", "water-issues", "preventative-maintenance"],
+    html: "<h2>How to read this table</h2><p>This mirrors the Lights &amp; Beeps Key sticker on your unit. Match what you are seeing and hearing to the rows below to identify the alert and its probable cause. For step-by-step fixes, see <a href=\"help.html?article=my-aquafire-is-beeping\">My Aquafire Is Beeping!</a>.</p><h3>Aquafire (AWA)</h3><table><thead><tr><th>Lights</th><th>Beeps</th><th>Alert</th><th>Probable cause</th></tr></thead><tbody><tr><td>&nbsp;</td><td>Two quick beeps, every two seconds</td><td>Low / No Water</td><td>The water supply has not been turned on, or water needs to be added.</td></tr><tr><td>Logo flashes for 30 sec</td><td>None</td><td>Maintenance Reminder</td><td>Due for preventative maintenance cleaning &mdash; press and hold the middle and left buttons together to reset.</td></tr><tr><td>Logo, lights cycling</td><td>Three long beeps, every second</td><td>Overflow / High Water Alert</td><td>If not overflowing, this alert typically indicates a stuck float sensor.</td></tr><tr><td>Logo flashing together</td><td>One short beep, every two seconds</td><td>Voltage Alert</td><td>Possible shortage or a problem with the power adapter.</td></tr></tbody></table><h3>Aquafire Pro (AWPR)</h3><table><thead><tr><th>Lights</th><th>Beeps</th><th>Alert</th><th>Probable cause</th></tr></thead><tbody><tr><td>&nbsp;</td><td>Two quick beeps, every two seconds</td><td>Low / No Water</td><td>The water supply has not been turned on, or water needs to be added.</td></tr><tr><td>Flashes for 30 sec</td><td>None</td><td>Maintenance Reminder</td><td>Due for preventative maintenance cleaning &mdash; press and hold the middle and left buttons together to reset.</td></tr><tr><td>Lights cycling</td><td>Three long beeps, every second</td><td>Overflow / High Water Alert</td><td>If not overflowing, this alert typically indicates a stuck float sensor.</td></tr><tr><td>Flashing together</td><td>One short beep, every two seconds</td><td>Voltage Alert</td><td>Possible shortage or a problem with the power adapter.</td></tr></tbody></table>"
+  },
+  {
+    slug: "general-cleaning",
+    title: "General Cleaning for Aquafire and Aquafire Pro",
+    category: "care",
+    models: ["original", "pro"],
+    updated: "2026-06",
+    teaser: "Descaling and cleaning your insert regularly keeps it running well — here is the mist maker routine and the full-system deep clean, step by step.",
+    keywords: ["cleaning", "descale", "vinegar", "mist maker cleaning", "whole system clean", "drain"],
+    related: ["preventative-maintenance", "mist-maker-cleaning-replacement", "vapor-pure-water-softener"],
+    html: "<p>In order for all Aquafire models to operate properly and ensure a long, healthy life, they need to be descaled and cleaned regularly. How often will depend on the quality of your water, how often the Aquafires are in operation and if you have a <a href=\"https://www.aquafire.com/products/vapor-pure-filter-softener-system?selling_plan=692756185408&variant=49117901390144\">Vapor Pure water softener</a> installed. The Vapor Pure water softener was engineered alongside water quality experts to be specifically used with the Aquafire Original and Aquafire Pro to not only reduce or eliminate water hardness but to also filter out magnesium, iron (which causes \"sludge\" that accumulates in the tanks and mist makers) and eliminate odors such as chlorine. Without the Vapor Pure water softener, the minerals present in hard water can cling to the electrical components as well as the interior tanks walls which will require increased maintenance, decreased overall performance and ultimately shorten the life of your Aquafire.</p><p>Cleaning your mist makers and Aquafire system should not be a daunting task! Once practiced, it can be a quick 10-15 minute process.</p><p>Our recommended cleaning schedule for an Aquafire Original or Aquafire Pro running an average of 20 hours a week with moderate water hardness is:</p><p><strong>Mist Maker Cleaning</strong>: Every 3 months</p><p><strong>Whole Aquafire Cleaning</strong>: Every 6 months</p><p>Steps for cleaning only the mist makers:</p><ul><li>Turn your fireplace off then unplug the mist maker wire from the power port located at each of the large round mist tube housings</li><li>Remove mist maker racks from the mist tubes. For small to moderate scale or buildup, apply a few drops of white vinegar directly onto the white disc at center of mist maker. Let it sit for 3 minutes before rinsing it off and returning the rack to the mist tube. Don't forget to re-attach the power cord.</li><li>If you notice heavier buildup or visible calcification deposits, follow steps above to remove the mist maker from the mist tube, then remove the 4 screws that attach the mist maker to the rack and soak the mist maker by submerging directly into white vinegar for 10-20 minutes. You can use a soft small brush (toothbrush, paint brush, etc...) to loosen any stubborn deposits. Remember to clean the bottom of the mist maker as well. Take care not to submerge the power cord attached to the mist maker.</li><li>When the soaking period is complete, rinse thoroughly with water. You can use a soft small brush to gently brush the white surface of the mist maker as well as metal casing and the bottom to remove any visible stains. Do not use a stiff bristle brush or a Scotch-brite pad on the mist makers as this can cause permanent damage to them</li><li>Re-attach the mist maker to the rack and then place the mist maker rack back into the mist tube</li><li>Reconnect the mist maker power feed to the power port being sure to push the wire all the way down the slot in the side of the mist tube before putting the cap back on.</li></ul><iframe src=\"https://www.youtube.com/embed/gQx12sy2Npg?&wmode=opaque&rel=0\" title=\"Mist maker cleaning video\" loading=\"lazy\" allowfullscreen></iframe><p>Steps for cleaning the entire system:</p><ul><li>Turn off the water feed if your unit is direct plumbed.</li><li>Remove all water from both tanks (Main Tank and Mist Maker Tank) with a small wet/dry vac. We recommend this <a href=\"https://www.amazon.com/CRAFTSMAN-CMXEVBE17250-gallon-Portable-Attachments/dp/B07QXWG93C/ref=sr_1_5?crid=2RGZSY0INLCLW&dib=eyJ2IjoiMSJ9.YuhdCkQeA69W8kRtizBcErUdh9zOZ9zTAXkBA0bQvKMq4UHIr22wihsQ43rkz1LAgGHHLa2XMLCPswVLRwXHeO6IhCsUhqts0Zcgw7yEmhzz7LO0JSNNhBLOOUC94Hi2YqC1aLvo-xxXGbQQAZyJ671Up5pTgkxqiSnpzutX6CsnPb6eTvnWh2rEaUPZv-LglPQZPz8ONQ4kkpZRixhOhOmT1a6Np0NOTyeQEYUzPeM2YBm2oJz8omF5ffd4a1yZPiHPi1RY4wGZN28x-fIQog3c9nVmx4CG8McnbIdFJUE.x_uJTO7Q0_IGAaFp39U_7IRME2_uweAAxEQ951WFHPg&dib_tag=se&keywords=wet%252Bdry%252Bvac%252Bsmall&qid=1781640950&sprefix=wet%252Bdry%252Bvac%252Bsmall%252Caps%252C200&sr=8-5&th=1\">brand</a> if you don't have one on hand. It is a great idea to invest in one as it will make the yearly cleanings a quick and simple process.<ul><li>For Aquafire Pro - you are able to use the flexible fill/drain hose that comes with your Aquafire Pro. Be aware that if you have debris or buildup in your Aquafire tanks, using the drain hose can cause debris to clog drain lines and water pumps as you empty the Aquafire. We recommend always using a wet/dry vac for cleanings.</li></ul></li><li>Once the water is out, add approximately 1/2 gallon of vinegar by using your fill/drain hose and pressing the B1 button to run the manual fill cycle or simply pour equal amounts of vinegar directly into the mist tubes being careful not to overfill. The system will have enough in it when the vinegar level in the mist tube is just above the top of the mist maker itself (approx. 2”). Overfilling may result in excess vinegar leaking out of the front fans.</li><li>Like the mist maker soak above, let the vinegar sit in the tanks for approx. 10-20 minutes to loosen hard water scaling that may have collected on the float sensors</li><li><strong>Do Not operate the fireplace during this vinegar cleaning process</strong></li><li>After the soak period is complete (and before you drain it), agitate the vinegar in each of the lower tanks to help break up any remaining residue on the float sensors. Do this by raising and lowering the mist maker rack vigorously so you can hear it splashing in the lower tank. Do this 10-15 times in each of the mist tubes in your unit</li><li>For Aquafires produced after 2019 (will not apply to the Premium), you can remove the float sensor from the bottom tank to check for buildup. They can be easily unscrewed from each tank. A pair of long needle-nose pliers is recommended to make it easier. See photo below for location of float sensor removal</li><li><img src=\"help-img/general-cleaning-1.webp\" alt=\"Float sensor removal location in the bottom tank\"></li><li>Drain the vinegar using the wet/dry vac.</li><li>Once the vinegar is out, fill the unit with fresh water either by turning the water back on (if permanently plumbed), or by using the hose and fill cycle (B1) button</li><li>You’ll want to fill and drain the entire system twice to ensure that you’ve removed all the vinegar and contaminates suspended in the water. After you’ve filled the system back up for the 3rd time, go ahead and run the Aquafire as you would normally.</li></ul><iframe src=\"https://www.youtube.com/embed/8Jaj3N2YUKI?&wmode=opaque&rel=0\" title=\"Whole system cleaning video\" loading=\"lazy\" allowfullscreen></iframe><p>IMPORTANT NOTE: 2-3 days after a cleaning you may experience mist issues. This is most likely caused by leftover debris from your initial cleaning. Debris can continue to slough off days after a deep vinegar clean. This is completely normal! If you continue to experience mist issues, please open the mist tubes, check for debris and re-agitate the mist rack and float sensor. At this point, you may need to flush out the water to rid the tank of debris or complete another full clean.<br><br>The more frequently you clean the system, the less likely you are to experience delayed debris after a cleaning. Once you get into a cleaning schedule, mist and float sensor issues should dissipate.</p>"
+  },
+  {
+    slug: "mist-maker-cleaning-replacement",
+    title: "Mist Maker Cleaning or Replacement",
+    category: "care",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "How to clean a mist maker, when to replace one as a wear item, and how to tell which one has failed.",
+    keywords: ["mist maker", "flame low", "flame uneven", "replace mist maker", "vinegar clean", "float sensor"],
+    related: ["preventative-maintenance", "flame-low-or-uneven", "general-cleaning"],
+    html: "<p>If you have been enjoying your Aquafire for an extended amount of time, you may notice your \"flame\" getting lower and lower until it eventually disappears. This is a normal function of all Aquafire Models and signals it is time to replace your mist maker(s)!</p><p>Mist makers are considered a wear item and need to be replace every 2,000 - 3,000 operating hours. This can be extended or shortened based on water quality and maintenance schedules. Testing for a dead mist maker and replacement is a simple process that the average owner can complete.</p><p>To test for a dead mist maker you will need to swap mist maker racks within your Aquafire.</p><ul><li>Unplug at least 2 mist makers <iframe src=\"https://www.youtube.com/embed/cJ1LZDUxzu4?&wmode=opaque&rel=0\" title=\"Testing mist makers by swapping racks\" loading=\"lazy\" allowfullscreen></iframe></li><li>Swap the racks and plug them back in.</li><li>The non-misting side should follow the mist maker. This is a clear sign that particular mist maker is not functioning properly and needs to be replaced.</li></ul><p>Replacing them is an easy process, please reference this quick video on the proper way to replace your mist maker</p><p><iframe src=\"https://www.youtube.com/embed/4_DM8TfNAqs?&wmode=opaque&rel=0\" title=\"How to replace your mist maker\" loading=\"lazy\" allowfullscreen></iframe></p><p>When you are ready to order mist makers, please visit our <a href=\"https://www.aquafire.com/collections/replacement-parts\">Replacement Parts Online Store</a>. If you have any questions before ordering, reach out to <a href=\"mailto:ces@aquafire.com\">ces@aquafire.com</a> for assistance!</p>"
+  },
+  {
+    slug: "vapor-pure-water-softener",
+    title: "Vapor Pure Instruction Manual",
+    category: "care",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "How to plumb in and set up your Vapor Pure water softener, and how to test water hardness to know when the cartridge needs replacing.",
+    keywords: ["vapor pure", "water softener", "hardness test", "cartridge", "install", "hard water", "af300", "af700"],
+    related: ["general-cleaning", "water-issues", "mist-maker-cleaning-replacement"],
+    html: "<p><a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/VaporPure_QuickStart.pdf?v=1757344654\"><img src=\"help-img/vapor-pure-water-softener-1.webp\" alt=\"Vapor Pure Quick Start guide cover\"></a><strong>Watch the installation video:</strong></p>\n<p><iframe src=\"https://www.youtube.com/embed/_gI-9peJIIY?&wmode=opaque&rel=0\" title=\"Vapor Pure installation video\" loading=\"lazy\" allowfullscreen></iframe></p>\n<p><strong>Detailed Instructions</strong></p>\n<p><u>What’s included in the box?</u></p>\n<p>The box should contain the following items:</p>\n<ul>\n<li>1 Head</li>\n<li>1 Bracket</li>\n<li>1 AF Series Replacement Cartridge</li>\n<li>1 bag containing:\n<ul>\n<li>1 Tee</li>\n<li>1 Shutoff Valve</li>\n<li>7 Horseshoe Clips</li>\n<li>2 Long 1” Screws</li>\n<li>4 Short 1/2” Screws- to attach Bracket to Head</li>\n<li>12 Hardness Test Strips</li>\n</ul>\n</li>\n<li>1 6’ length of ¼” tubing</li>\n</ul>\n<p><u>Tools/Materials required (Not included):</u></p>\n<ul>\n<li>Phillips Screwdriver</li>\n<li>Utility Knife</li>\n<li>Permanent Marker</li>\n<li>Tape Measure</li>\n<li>Safety Glasses</li>\n<li>Optional Tools: Teflon tape; Adjustable Wrenches; Drill</li>\n</ul>\n<p><u>Plumbing Considerations:</u></p>\n<p>CONNECT TO A COLD WATER SUPPLY PIPE ONLY.</p>\n<p>SHUT OFF COLD WATER SUPPLY PIPE (SEE DIAGRAM 1).</p>\n<p>PREVIEW DIAGRAM 1, CONNECTOR FITTING PAGE AND INSTALL CARTRIDGE INSTRUCTIONS.</p>\n<p>NOTE FLOW OF WATER “ARROW” ON SYSTEM (SEE DIAGRAM 1).</p>\n<p>DETERMINE PLACEMENT OF SYSTEM AND FLOW ARROW DIRECTION BEFORE ATTACHING BRACKET TO HEAD.</p>\n<p>HORSESHOE CLIPS MUST BE USED ON ALL TUBING CONNECTIONS OF SYSTEM – FAILURE TO DO SO VOIDS WARRANTY.</p>\n<p>FITTINGS PROVIDED WITH SYSTEM MUST BE USED.</p>\n<p>USE TEFLON TAPE ONLY ON FITTINGS WITH THREADS. USE OF ANYTHING ELSE VOIDS WARRANTY.</p>\n<p><u>Note the Flow Arrow, Inlet (I), and Outlet (O) fittings on the Head (See Diagram 1).</u></p>\n<p><u>FLOW DIRECTION OF WATER:</u></p>\n<p>Please see Diagram 1</p>\n<ol>\n<li>Water flows from the Cold Water Supply pipe to the Inlet Shutoff to the Inlet fitting of Head.</li>\n<li>Water then flows from the Outlet fitting of Head to the Tee, Shut Off for Flushing cartridge, and Aquafire unit or filtered-water dispenser.</li>\n</ol>\n<p><u>MOUNTING OF COMPONENTS and CONNECTING THE TUBING</u></p>\n<p>Please make sure the Lever of Inlet Shutoff will be easy to reach when the system is mounted.</p>\n<p>Please make sure the Lever of Shutoff for Flushing cartridge will be easy to reach when the system is mounted.</p>\n<p><u>Installation Location:</u></p>\n<p>Total space needed for complete installation of the AF300: 16” H x 12” W x 5” D.</p>\n<p>Total space needed for complete installation of the AF700: 21” H x 12” W x 5” D.</p>\n<p>The location selected for the system components should:</p>\n<ol>\n<li>Allow space to mount Head. Mount Components only in a vertical/upright position as shown in the Diagram 1.</li>\n<li>Provide a solid mount for the Head. Head can be installed under the kitchen sink. However, it can also be installed on a beam/wall in the basement</li>\n<li>Allow a minimum clearance of 2” under the Cartridge so that the cartridge can be lowered for easy removal</li>\n<li>Allow space on both sides of the Head for the water connections</li>\n</ol>\n<p>Check with local plumbing codes and consult your licensed plumber for proper installation.</p>\n<p><u>Installation</u></p>\n<p><u>Attach Bracket to Head using 4 short 1/2” screws provided.</u></p>\n<ol>\n<li>Using the Bracket as template, mark and then screw in 2 long 1” screws to mount Head in a position to conveniently attach the tubing from the Cold Water Supply pipe to the Inlet Shut off, then to the Inlet of Head, then the tubing from the Outlet of Head to the Tee, Shut off for Flushing, and Aquafire unit or filtered-water dispenser. (See Diagram 1). Allow a minimum clearance of 17” under the Head so that the cartridge can be lowered for easy removal</li>\n<li>Mount Head and tighten screws</li>\n<li>Turn off Cold Water Shutoff. (See Diagram 1)</li>\n<li><u>See Page concerning Connector Fittings and locate collet</u></li>\n<li>Install Aquafire unit or filtered-water dispenser (Sold separately) using the instructions included with it, but do not run tubing to it at this time. NOTE: Aquafire unit may already be installed.</li>\n<li>Install Cold Water Supply pipe attachment (Sold separately) using the instructions included with the pipe attachment. (See Diagram 1). NOTE: Cold Water Supply pipe attachment may already be installed</li>\n<li>SECTIONS OF TUBING SHOULD BE A MINIMUM OF 2” IN LENGTH. Cut a length of tubing long enough to connect the Cold Water Supply pipe attachment to the Inlet Shutoff, close to where the Head is mounted. Cut tubing square. (See Diagram 1 and Connector Fitting Page). NOTE: Inlet Shutoff may already be installed and connected to Cold Water Supply pipe attachment.</li>\n<li>Connect one end of the tubing to the Cold Water Supply pipe attachment and the other end to the Inlet Shutoff (See Diagram 1 and Connector Fitting Page). If using soft copper tubing, remove burrs and sharp edges. Ensure the outside diameter of tubing is free of score marks. Insert tubing into collet. There will be some resistance when tube is initially inserted. Make sure tubing is inserted all the way into collet until it meets the tube stop, a full 3/4”. Tube may be gripped but not sealed if not fully inserted. After insertion gently pull on the tubing so that the collet around the tubing comes just far enough away from the body of the Connector fitting to be able to slide a horseshoe locking clip between the collet and the Connector body.</li>\n<li>Cut a length of tubing long enough to connect the Inlet Shutoff to the Head. Cut tubing square. (See Diagram 1 and Connector Fitting Page)</li>\n<li>Connect one end of the tubing to the Inlet Shutoff and the other end to the Inlet Fitting (I) of the Head. (See Diagram 1 and Connector Fitting Page)</li>\n<li>Cut a length of tubing long enough to connect the Outlet fitting (O) of Head to the Tee. Cut tubing square. (See Diagram 1 and Connector Fitting Page)</li>\n<li>Connect one end of tubing to the Outlet fitting (O) of Head and the other end to the Tee. (See Diagram 1 and Connector Fitting Page)</li>\n<li>Cut a length of tubing long enough to connect the Tee to the Aquafire unit or water dispenser. Cut tubing square. (See Diagram 1 and Connector Fitting Page)</li>\n<li>Connect one end of tube to the Tee and the other end to the Aquafire unit or water dispenser. (See Diagram 1 and Connector Fitting Page)</li>\n<li>Measure 4”-5” of tubing. Cut tubing square. (See Diagram 1 and Connector Fitting Page)</li>\n<li>Connect one end of tubing to the Tee and the other end to the Shutoff to Flush the cartridge. (See Diagram 1 and Connector Fitting Page)</li>\n<li>Connect the full length of the remaining tubing to the Shutoff to Flush the cartridge. Cut tubing square. (See Diagram 1 and Connector Fitting Page)</li>\n</ol>\n<p><u>Install Cartridge</u></p>\n<ol>\n<li>Align Mark/Dot on cartridge Label with the Inlet Fitting of Head (I) and insert cartridge.</li>\n<li>Grasp Head firmly with one hand and with other hand push cartridge up into Head.</li>\n<li>Continue grasping Head firmly with one hand and with other hand turn cartridge to the right until it stops, about 1/4 of a turn.</li>\n<li>Make sure Lever on Inlet Shutoff has been turned clockwise until it stops in off position. (See Diagram 1)</li>\n<li>Open Shut off to Flush the cartridge by turning the lever counter-clockwise so that the lever is in a straight line with the Shutoff body. (See Diagram 1)</li>\n<li>Place a bucket under the Shutoff to Flush the cartridge or extend the tubing from the Shutoff to reach a sink or drain</li>\n<li>Open Cold Water Supply pipe. Check for leaks from the Cold Water Supply pipe attachment, tubing and Inlet Shutoff</li>\n<li>Slowly turn Inlet Shutoff Lever counterclockwise just enough to have water start flowing</li>\n<li>Cartridge will now fill with water and begin to flow out of Shutoff to Flush cartridge</li>\n<li>Let water run for at least 10 minutes</li>\n<li>Slowly turn the lever on Inlet Shutoff counterclockwise until it stops in ON position. Lever of Inlet Shutoff will be straight in line with the body of Shutoff.</li>\n<li>Let water run for at least 5 minutes.</li>\n<li>Turn Lever of Shutoff to Flush Cartridge clockwise to off position (See Diagram 1), and check for leaks.</li>\n<li>Check for leaks within 24 hrs.</li>\n</ol>\n<p>Note: Filtered water may appear cloudy for 1 – 3 days as the cartridges are purged of air. You can check to make sure it is only air bubbles causing the cloudiness by filling a large glass with water and letting it stand. The bubbles will rise and the water will become clear. The water is fine to drink. If the cloudiness persists, please contact your local dealer.</p>\n<p><u>Diagram 1</u></p>\n<p><img src=\"help-img/vapor-pure-water-softener-2.webp\" alt=\"Vapor Pure Diagram 1: flow direction, inlet and outlet fittings\"></p>\n<p><u>Connector Fittings</u></p>\n<p>Using Connectors, Tubing, and provided horseshoe clips</p>\n<p>FOR REVERSE OSMOSIS INSTALLATIONS - USE PLASTIC TUBING ONLY</p>\n<p><u>Connecting the Flexible Tubing</u></p>\n<p>1. Cut a length of tubing long enough for the desired connection. Cut tubing square. If using soft copper tubing, remove burrs and sharp edges. Ensure outside diameter of tubing is free of score marks.</p>\n<p>2. Insert tubing into Collet of fitting. There will be some resistance when tube is initially inserted.</p>\n<p>3. <u>Make sure tubing is inserted all the way into Collet until it meets the tube stop, a full 3/4”.</u> Tube may be gripped but not sealed if not fully inserted.</p>\n<p>4. After insertion gently pull on the tubing to assure that it is secure. By pulling, the collet around the tube will come out far enough from the body of the Connector fitting to be able to <u>slide a horseshoe-shaped locking clip</u> between the collet and the Connector body.</p>\n<p>5. Turn on the Cold Water Supply to the system and check for leaks.</p>\n<p>6. Check for leaks within 24 hrs.</p>\n<p><u>Using Hardness Test Strips v2</u></p>\n<p>Any Questions? Please call 877-888-4260.</p>\n<p>For Test Strips that are Individually Foil Wrapped</p>\n<p><u>Test the New cartridge.</u></p>\n<p>Follow the instructions on the foil wrapper for performing the test.</p>\n<p>Match color on strip with color chart on the foil wrapper. Note result.</p>\n<p><u>Test at least once per month.</u></p>\n<p>Change cartridge when the color of the strip matches the color on the bottle corresponding to a number which is equal to or greater than 40, or at least annually.</p>"
+  },
+  {
+    slug: "maintenance-reminder-info-and-resetting",
+    title: "Maintenance Reminder - Info and Resetting Instructions",
+    category: "care",
+    models: ["original", "pro", "lite"],
+    updated: "2026-07",
+    teaser: "Your Aquafire Original or Pro flashes its indicator lights every six months as a cleaning reminder — here's how to reset the timer.",
+    keywords: ["flashing lights", "maintenance reminder", "reset button", "beeping", "six months", "control panel"],
+    related: ["vapor-pure-water-softener", "preventative-maintenance", "mist-maker-cleaning-replacement"],
+    html: "<p>All Aquafire Original* (Generation 3 - AWA3) and Aquafire Pro* (Generation 3 - AWPR3) come equipped with a 6-month Maintenance Reminder Setting. This setting was already activated when you received your Aquafire.</p><p>This reminder is to ensure you are sticking to a regular maintenance and cleaning schedule. Regular cleaning - see our <a href=\"https://www.aquafire.com/pages/maintenance\">Preventative Maintenance Guide</a> - ensures longevity and efficient operation of your Aquafire.</p><p>The Maintenance Reminder occurs when you see 3 indictor lights on the control module flash simultaneously. They will flash 8 times and then stop. There is no sound alarm and the flashing does not affect the normal operation of the fireplace. The flashing will occur every time you turn on your Aquafire Original or Aquafire Pro until it is reset.</p><p>It can be turned off and reset using the instructions below:</p><ol><li>Press and hold the Water Inlet Button (B1) and the Drain Button (B2) simultaneously for approximately 5 seconds.</li><li>After hearing 4 beep sounds (beep, beep, beep, beep), the maintenance reminder reset is completed and the flashing will cease.</li><li>It will flash again in 6-months, as the next reminder to complete a Preventative Maintenance Cleaning.</li></ol><p>Aquafire Original (AWA3) Control with Logo</p><p>(Some AWA3s will have a Logo over the B2 button and some will have a clear button. In both instances, that spot will still flash and can be pressed to reset the maintenance reminder)</p><p><img src=\"help-img/maintenance-reminder-info-and-resetting-1.webp\" alt=\"Aquafire Original AWA3 control panel with maintenance reminder lights flashing\"></p><p>Aquafire Pro (AWPR3) and Aquafire Original (AWA3) Control</p><p><img src=\"help-img/maintenance-reminder-info-and-resetting-2.webp\" alt=\"Aquafire Pro AWPR3 control panel with maintenance reminder lights flashing\"></p><p><em>*Not available on the Aquafire Lite (AWL)</em></p>"
+  },
+  {
+    slug: "preventative-maintenance",
+    title: "Preventative Maintenance Schedule",
+    category: "care",
+    models: ["original", "pro", "lite"],
+    updated: "2026-08",
+    teaser: "The recommended cleaning cadence for your Aquafire, tracked with an interactive checklist.",
+    keywords: ["maintenance schedule", "how often clean", "cleaning schedule", "pm", "checklist"],
+    related: ["mist-maker-cleaning-replacement", "general-cleaning", "vapor-pure-water-softener"],
+    html: "<p>A quick recurring clean keeps your Aquafire's flame full and even, and extends the life of its mist makers and internal components. The recommended cadence, for a fireplace running an average of 20 hours a week with moderately hard water, is:</p><table><thead><tr><th>Procedure</th><th>Cadence</th></tr></thead><tbody><tr><td>Mist Maker Cleaning</td><td>Every 3 months</td></tr><tr><td>Full System Cleaning</td><td>Every 6 months</td></tr></tbody></table><p>How often you actually need to clean depends on your water quality, how much the fireplace runs, and whether a Vapor Pure water softener is installed — harder water and more run time both call for more frequent cleaning.</p><div class=\"ha-note\">The <a href=\"maintenance.html\">Maintenance</a> page walks through both procedures as step-by-step checklists, tracks your progress, and works out your next due date from the last time you completed one.</div><p>For the individual steps, see <a href=\"help.html?article=mist-maker-cleaning-replacement\">Mist Maker Cleaning or Replacement</a> and <a href=\"help.html?article=general-cleaning\">General Cleaning</a>.</p>"
+  },
+  {
+    slug: "delivery-inspection",
+    title: "Delivery Inspection",
+    category: "orders",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Check your Aquafire before you sign for it — a few minutes now protects any damage claim later.",
+    keywords: ["delivery", "shipping", "damage", "freight", "unboxing", "received damaged"],
+    related: ["product-resources", "aquafire-limited-warranty", "identifying-serial-number"],
+    html: "<p>Thank you for choosing Aquafire for your project. Customer satisfaction is a top priority and we want to ensure you are satisfied with your product(s). We carefully inspect each product when received at our warehouse to ensure they are in great condition before shipping to you. We want to make sure it arrives the same way.</p><p>For your protection, a signature is required from someone 18 years of age or older. Before signing YOU MUST inform the driver of any damage to the exterior of the package. Failure to do so will compromise your ability to file a claim should there be damage to the unit upon opening.</p><p><strong>Please take these steps PRIOR to signing the receiving ticket from the carrier:</strong></p><ol><li>Carefully inspect the exterior of the package.</li><li>Take note of any visible damage to the package.</li><li>If you see any damage to the package notify the agent delivering the unit and ensure they notate the damage on the paperwork or tablet (may be an electronic signature) BEFORE you sign.</li><li>Get a copy for your record.</li><li>Only once this is complete you should sign for the package.</li></ol><p><strong>If you notice any damages with the packaging, please take pictures first before proceeding to unpackage the unit and inspect for further damage. Pictures are required as proof.</strong></p><p>Unpack the unit carefully. Any items must be returned to us in its original packing. (Please see Return Policy document for more information.)</p><h2>Please Test Your Aquafire Immediately!</h2><p>Even if you do not plan to install your Aquafire immediately. Please test the Aquafire within 3-4 days of receipt. You will need to check if the Aquafire is functioning properly. If there are any issues, please contact our Technical Support by completing this request form: <a href=\"https://www.aquafire.com/pages/service-request\">https://www.aquafire.com/pages/service-request</a>. Aquafires are warrantied for 2 years for residential installations and 1 year for commercial installations. Almost all repairs are easy enough for you to handle yourself with the expert guidance of our technical support department. (Please see Return Policy document for further information.</p><p><strong>LOST ITEMS NOT COVERED UNDER WARRANTY, including the power adapter, fill/drain hose, and remote control. These items are all located INSIDE the Styrofoam that surrounds the unit and can be easily missed.</strong></p><p>Thanks for choosing Aquafire!</p>"
+  },
+  {
+    slug: "payment-terms",
+    title: "Payment Terms",
+    category: "orders",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Orders must be paid in full before shipping — Aquafire does not offer Net 30/60/90 or other payment plans.",
+    keywords: ["net 30", "net 60", "financing", "invoice", "credit terms", "pay before shipping"],
+    related: ["delivery-inspection", "lead-times", "what-are-my-shipping-options"],
+    html: "<p>All orders must be paid in full before your Aquafire or Replacement Parts leave our warehouse. We do not offer Net 30, 60, 90 or alternative payment plans.</p>"
+  },
+  {
+    slug: "lead-times",
+    title: "Lead Times",
+    category: "orders",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "How long it takes Aquafire's warehouse to process and ship an in-stock order.",
+    keywords: ["shipping time", "processing time", "how long", "delivery", "order status", "backorder", "in stock"],
+    related: ["payment-terms", "what-are-my-shipping-options", "delivery-inspection"],
+    html: "<p>When in stock and after payment is received, it takes our warehouse 1-3 business days to process an order and an additional 1-2 weeks for delivery depending on carrier and final delivery location.</p>"
+  },
+  {
+    slug: "what-are-my-shipping-options",
+    title: "What are my shipping options?",
+    category: "orders",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Explains how Aquafires ship: UPS Ground for smaller orders, pallet delivery by LTL freight with a lift-gate for orders of three or more, and adult signature required.",
+    keywords: ["ups ground", "freight delivery", "lift-gate", "pallet shipping", "loading straps", "adult signature"],
+    related: ["lead-times", "how-much-does-it-cost-to-ship", "payment-terms"],
+    html: "<p>All Aquafires (20\", 40\", 60\"), Direct Plumb Kits and Vapor Pures are shipped via UPS Ground. The 60\" Aquafires will come with 2 loading straps to assist the UPS Drivers and purchaser with moving the larger crates.</p>\n<p>Larger orders (3 or more Aquafires, regardless of size, going to one address) will ship together, on a pallet and delivered by an LTL Freight Carrier. The freight carrier will call the provided delivery contact 1 day before delivery to set an approximate delivery date and time frame. By default, we include a lift-gate delivery so no special equipment is required to receive your order. If you do not need a lift-gate, please let us know during invoicing.</p>\n<p>An adult signature is required for all deliveries by either UPS or LTL Freight Carrier.</p>"
+  },
+  {
+    slug: "how-much-does-it-cost-to-ship",
+    title: "How much does it cost to ship?",
+    category: "orders",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Shipping and freight costs are already built into your Aquafire's price, so checkout won't show a separate shipping charge.",
+    keywords: ["shipping cost", "freight included", "checkout", "no line item", "delivery cost", "free shipping"],
+    related: ["what-are-my-shipping-options", "will-i-be-charged-sales-tax", "lead-times"],
+    html: "<p>Shipping and freight prices are included in the final price of your Aquafire - therefore you will not see a separate line item for shipping.</p>"
+  },
+  {
+    slug: "will-i-be-charged-sales-tax",
+    title: "Will I be charged Sales Tax?",
+    category: "orders",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "Sales tax is not included in Aquafire pricing and only applies to orders shipped to GA, NC, and TN.",
+    keywords: ["sales tax", "customs fees", "duties", "checkout", "which states", "tax exempt"],
+    related: ["how-much-does-it-cost-to-ship", "return-policy", "what-are-my-shipping-options"],
+    html: "<p>Our prices do not include sales tax, customs fees and duties or customs storage fees - these are the responsibility of the purchaser. You will only see sales tax added to your order on shipments to GA, NC, and TN.</p>"
+  },
+  {
+    slug: "return-policy",
+    title: "Return Policy",
+    category: "orders",
+    models: ["original", "pro", "lite"],
+    updated: "2026-05",
+    teaser: "How order changes, returns, damage claims and warranty repairs work, plus the steps to follow if you need to send a unit back.",
+    keywords: ["restocking fee", "damaged shipment", "warranty registration", "service request", "return freight", "cancel order", "refund"],
+    related: ["will-i-be-charged-sales-tax", "msrp-pricing-aquafire", "how-much-does-it-cost-to-ship"],
+    html: "<h2>Purchase with Confidence</h2><p>We know that shopping online can sometimes be as stressful as it is convenient. At Lumina Brands, we try to ease your mind and make that process as pain-free as possible.</p><h2>Return Policy</h2><p><u>Order Changes or Cancellations</u> Orders are typically processed within 2 business days after an order has been placed. Changes or cancellations are only possible for orders that have not yet shipped or are on backorder. Custom orders cannot be canceled or changed.</p><p><u>Returns and Exchanges</u></p><p>Return Orders will incur a 20% restocking fee. You are responsible for any return freight. All returned items must arrive to us in the original packaging, include all original packing materials and documentation, and be unused. Orders not returned in original packaging are subject to denial of refund.</p><p>We require photographs of the packaging before the item is shipped back to us to ensure proper packaging.</p><h2>Damages</h2><p>Be sure to inspect items upon arrival and check for any damage thoroughly. Claims for damaged items must be made within 3 business days after arrival. All damages must be noted with the carrier upon delivery. To file a damage claim, please call us at (877) 888-4260 or email us at ces@aquafire.com and we will be happy to work with you to resolve any issues. If your order is received damaged, with the correct documentation you provided within the specified timelines, we will either repair or replace your item. ‘Refer to our aFire After Purchase Service Policy’ which requires acknowledgment prior to shipment. BEFORE SIGNING WITH UPS, photograph all damage, starting with the exterior of your package. Note on the form, before signing, that the package is damaged. See our Delivery Inspection Instructions.</p><h2>Warranties</h2><p>All Aquafire Products are warrantied for 2 Years against defects in workmanship and materials. Please refer to the warranty supplied with your purchase.</p><p>You must ensure you have correctly installed your unit and that no ‘hard’ water has been used to fill these units, and that all proper plumbing and electrical connections and requirements are met so the warranty is not voided. (We strongly suggest taking pictures of your installation). Please complete your warranty registration <a href=\"https://www.aquafire.com/pages/warranty\">HERE</a> once your Aquafire is installed. We reserve the right to assist you remotely in repairing any warranty defects in your home as most repairs can be completed within 1 hour once proper parts are received. We will work with you directly for simple repairs and provide warranty parts free of charge. Refer to the ‘aFire After Purchase Service Policy’ which requires your signature prior to shipment.</p><h2>Replacement Parts</h2><p>If replacement parts or pieces are required while the unit is under warranty, please reach out to Aquafire Technical Support to troubleshoot the issue and order new parts. You can submit a service request <a href=\"https://www.aquafire.com/pages/service-request\">HERE</a>. Tracking numbers are sent once parts have shipped. If the unit is not under warranty, we will invoice for the required parts and payment must be received prior to shipping.</p><h2>Technical Support</h2><p>Complete a service request to connect with an Aquafire Service Technician. Once the request is received, a trained Aquafire Service Technician will reach out to you within 1-2 business days. Service request form: <a href=\"https://www.aquafire.com/pages/service-request\">https://www.aquafire.com/pages/service-request</a></p><p>Should your unit have any missing/damaged parts or faulty parts within the timeframe of the warranty, please follow these steps:</p><ol><li>Please have your order information ready (product/model, invoice number, name of person who purchased the unit, company name, etc.) and complete a <a href=\"https://www.aquafire.com/pages/service-request\">service request</a>.</li><li>We need an overview of the issue. Pictures and/or videos will be required in order to better assess the problem.</li><li>A virtual service appointment will be set and parts will be sent after assessment.</li><li>We will follow up within 5 days of the delivery of replacement parts to ensure that everything is functioning properly.</li></ol><p>If you have received authorization to return your item from the Aquafire Customer Experience Team please follow the following instructions in order to preserve your right to any credit that may be due to you.</p><p>Note! You must use ONLY the original packaging in which your unit arrived in.</p><ul><li>All water must be drained from the unit. Please check both tanks - main tank and mist maker tube/tank - for water. We recommend using a small Wet Vac to completely empty the water from both tanks. Leaving even a small amount of water in either tank can cause internal electrical damage which can delay the return and in some cases, void the refund.</li><li>Repack the unit into the interior carton using the original packing materials and crate in the manner you received them.</li><li>Be sure to include all accessories and manuals (charging block, remote, drain tubing, etc.)</li><li>Take a photo of the interior of the packed carton, and a photo of the sealed carton and email these to us. ( ces@aquafire.com )</li><li>Once photos are received and approved, we will arrange pick up of your unit.</li><li>Upon receipt and inspection of your original unit at our warehouse, we will issue a refund within 10 business days minus 20% restocking fee and any cost of return freight.</li></ul>"
+  },
+  {
+    slug: "msrp-pricing-aquafire",
+    title: "MSRP Pricing",
+    category: "orders",
+    models: ["original"],
+    updated: "2026-02",
+    teaser: "Links to a downloadable MSRP pricing sheet for the Aquafire.",
+    keywords: ["price list", "pricing sheet", "dealer pricing", "download pdf", "suggested retail price"],
+    related: ["return-policy", "msrp-pricing-pro", "will-i-be-charged-sales-tax"],
+    html: "<p><a href=\"https://drive.google.com/file/d/1KUIzHMi9r3XaasF7HrdiLt4Zfn9EvjT_/view?usp=sharing\">MSRP Pricing</a> for Aquafire</p>"
+  },
+  {
+    slug: "msrp-pricing-pro",
+    title: "MSRP Pricing",
+    category: "orders",
+    models: ["pro"],
+    updated: "2026-02",
+    teaser: "Download the MSRP price list for the Aquafire Pro.",
+    keywords: ["price list", "cost", "dealer pricing", "price sheet", "download", "how much"],
+    related: ["msrp-pricing-aquafire", "msrp-pricing-lite", "return-policy"],
+    html: "<p><a href=\"https://drive.google.com/file/d/1KUIzHMi9r3XaasF7HrdiLt4Zfn9EvjT_/view?usp=sharing\">MSRP Pricing</a> for Aquafire Pro</p>"
+  },
+  {
+    slug: "msrp-pricing-lite",
+    title: "MSRP Pricing",
+    category: "orders",
+    models: ["lite"],
+    updated: "2026-02",
+    teaser: "A link to the current MSRP pricing sheet for the Aquafire Lite.",
+    keywords: ["msrp", "price sheet", "lite pricing", "dealer pricing"],
+    related: ["msrp-pricing-pro", "msrp-pricing-gatsby", "msrp-pricing-aquafire"],
+    html: "<p><a href=\"https://drive.google.com/file/d/1KUIzHMi9r3XaasF7HrdiLt4Zfn9EvjT_/view?usp=sharing\">MSRP Pricing</a> for Aquafire Lite</p>"
+  },
+  {
+    slug: "msrp-pricing-gatsby",
+    title: "MSRP Pricing",
+    category: "orders",
+    models: ["lite"],
+    updated: "2026-02",
+    teaser: "A link to the current MSRP price sheet for the Aquafire Gatsby model.",
+    keywords: ["gatsby", "price list", "dealer pricing", "cost", "how much", "price sheet"],
+    related: ["msrp-pricing-lite", "msrp-pricing-pro", "msrp-pricing-aquafire"],
+    html: "<p><a href=\"https://drive.google.com/file/d/1KUIzHMi9r3XaasF7HrdiLt4Zfn9EvjT_/view?usp=sharing\">MSRP Pricing</a> for Aquafire Gatsby</p>"
+  },
+  {
+    slug: "identifying-serial-number",
+    title: "Identifying Serial Number",
+    category: "warranty",
+    models: ["original", "pro", "lite"],
+    updated: "2026-06",
+    teaser: "Your serial number is needed for any service request — here are the two places to find it on your unit.",
+    keywords: ["serial number", "service request", "info plate", "top lid", "rear plate", "warranty claim"],
+    related: ["aquafire-limited-warranty", "power-issues", "product-resources"],
+    html: "<p>When you submit a request for service, we need specific information to locate your sale and your Aquafire in our system. One of the most important pieces of information is your serial number, It is typically located in two places:</p><p><img src=\"help-img/identifying-serial-number-1.webp\" alt=\"Serial number sticker visible after removing the top lid\"></p><p>This one can be seen once you remove the top lid. It is common on AWA and AWPR models but not commonly found on the AWP model.</p><p><img src=\"help-img/identifying-serial-number-2.webp\" alt=\"Informational plate with serial number on the back of the unit\"></p><p>This informational plate is located on the back of all Aquafire models. If installed into an enclosure, you'll need to completely remove your Aquafire to find the serial number.</p><p><u>Please have your serial number handy when you contact Aquafire for any service requests</u></p>"
+  },
+  {
+    slug: "aquafire-limited-warranty",
+    title: "Aquafire Limited Warranty",
+    category: "warranty",
+    models: ["original", "pro", "lite"],
+    updated: "2026-08",
+    teaser: "Two years residential, one year commercial, repair-first — the full terms of Aquafire’s limited warranty, and how to file a claim.",
+    keywords: ["warranty", "coverage", "claim", "rma", "wear items", "exclusions", "register"],
+    related: ["identifying-serial-number", "general-cleaning", "preventative-maintenance"],
+    html: "<div class=\"ha-caution\"><strong>Register within 30 days.</strong> To validate your warranty, you must complete warranty registration within thirty (30) days of receiving your vapor appliance at <a href=\"https://www.aquafire.com/pages/warranty\" target=\"_blank\" rel=\"noopener\">aquafire.com/pages/warranty</a>. Failure to register within this period will prevent you from submitting any warranty claims for your Aquafire product.</div><h2>Coverage</h2><p>Aquafire Inc. warrants to the original end-user purchaser that its water vapor fireplaces and fire feature products shall be free from defects in materials and workmanship under normal use and service for:</p><ul><li><strong>Residential applications:</strong> two (2) years from the date of purchase</li><li><strong>Commercial applications:</strong> one (1) year from the date of purchase</li></ul><p>This warranty applies only to products purchased through an authorized Aquafire dealer, and is non-transferable except where required by law.</p><h2>Repair-first policy</h2><p>Repair is the primary and preferred remedy. Before any replacement is considered, the dealer and/or customer must:</p><ul><li>Complete all required troubleshooting steps.</li><li>Participate in remote diagnostics with Aquafire Technical Support.</li><li>Install replacement components when directed by Aquafire Technical Support.</li><li>Make reasonable efforts to perform field repair as instructed.</li></ul><p>Only if an Aquafire Technical Support technician determines, in their sole professional judgment, that the product cannot be effectively repaired in the field will replacement be considered.</p><h2>Replacement authorization</h2><p>Replacement is not automatic and will only be authorized if all of the following are met:</p><ol><li>The product is within the applicable warranty period.</li><li>Required troubleshooting and diagnostics have been completed in good faith.</li><li>Aquafire Technical Support determines that field repair cannot reasonably be completed.</li><li>Written replacement authorization is issued by Aquafire Inc. (email authorization is sufficient).</li></ol><p>Verbal statements do not constitute authorization.</p><p>Aquafire does not authorize advance replacement, cross-shipment, or shipment of a replacement unit prior to receipt and inspection of the original unit, unless expressly authorized in writing.</p><h2>Returns (RMA)</h2><p>If a replacement is approved, Aquafire will issue a Return Material Authorization (RMA). No product may be returned without one; unauthorized returns are refused and returned at the sender’s expense. Returned products must be prepared for shipment following Aquafire’s packaging and drainage instructions &mdash; failing to do so may void warranty coverage.</p><h2>What is not covered</h2><p>This warranty does not apply to products damaged or adversely affected by:</p><ul><li>Modification, alteration, tampering, or unauthorized repair.</li><li>Failure to follow installation instructions.</li><li>Improper maintenance, including use of dirty or contaminated water, mineral scaling, or component failure from accumulated dirt, dust, or debris.</li><li>Failure to maintain recommended water treatment or filtration.</li><li>Abuse, negligence, accidental damage, or misuse.</li><li>Normal wear and tear.</li><li>Acts of God (floods, fires, lightning, natural disasters).</li><li>Damage caused during transportation by third-party carriers. If shipping damage is evident at delivery, report it to the carrier immediately and document it with photographs.</li></ul><p>Cosmetic issues that do not affect functional performance are not covered.</p><h2>Wear items</h2><p>Transducer mist makers and LED lighting components are considered normal wear items. They are covered only during initial installation testing, or if found defective during setup or within ninety (90) days of purchase.</p><h2>Costs not covered</h2><p>Unless expressly authorized in writing, this warranty does not cover labor costs, installation or reinstallation costs, removal of installed units, on-site service calls, travel time or technician expenses, shipping costs, loss of use, loss of profits, property damage, or incidental/consequential damages.</p><h2>Water quality requirement</h2><p>Operating the product requires proper water quality and maintenance. Failure to maintain water quality per the Owner’s Manual &mdash; including recommended filtration or water softening &mdash; may cause scaling or component damage and may void coverage. The included <a href=\"help.html?article=vapor-pure-water-softener\">Vapor Pure water softening system</a> must be installed and in operation prior to using your Aquafire for this warranty to remain valid. You can check your local water hardness on the <a href=\"water-care.html\">Water Care</a> page. If you use an existing whole-house softener instead of the supplied Vapor Pure system, its brand, model, and specifications must be submitted to Aquafire for written approval prior to operation, or coverage may be voided.</p><h2>Filing a claim</h2><p>Contact Aquafire Customer Service by phone at 877-888-4260 or email at <a href=\"mailto:ces@aquafire.com\">ces@aquafire.com</a>, or submit a <a href=\"https://www.aquafire.com/pages/service-request\" target=\"_blank\" rel=\"noopener\">service request</a>. Have ready: product model number, serial number (see <a href=\"help.html?article=identifying-serial-number\">Identifying Your Serial Number</a>), your name, address, and a contact phone number. Technical Support will guide the troubleshooting and repair process.</p><p>For consumers covered by consumer protection laws in their country or jurisdiction of residence, the benefits of this warranty are in addition to any rights and remedies provided under those laws.</p>"
+  },
+  {
+    slug: "brand-guidelines",
+    title: "Brand Guidelines",
+    category: "pro",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "Download the Aquafire brand guidelines PDF, logo assets, and full guideline page images.",
+    keywords: ["brand guide", "logo files", "zip download", "brand assets", "press kit", "logo pack"],
+    related: ["photo-assets", "professional-product-resources", "converting-step-files-into-revit"],
+    html: "<p><a href=\"https://attachments.gorgias.help/uploads.gorgias.io/PG09N6gmbp74j5gK/Aquafire_Brand_Guidelines_2023-2d8372ce-2f7e-4bc8-bb68-a1c0fbb9840d.pdf\">Aquafire Brand Guidelines 2023.pdf</a> 1.4MB</p><p>Download zip file of <a href=\"https://drive.google.com/drive/folders/155NtXYb4gcdn8B4knQzp42QSeAiM19Lf?usp=drive_link\">logo assets here</a></p><p><img src=\"help-img/brand-guidelines-1.webp\" alt=\"Aquafire Brand Guidelines 2023, page 1\"></p><p><img src=\"help-img/brand-guidelines-2.webp\" alt=\"Aquafire Brand Guidelines 2023, page 2\"></p><p><img src=\"help-img/brand-guidelines-3.webp\" alt=\"Aquafire Brand Guidelines 2023, page 3\"></p><p><img src=\"help-img/brand-guidelines-4.webp\" alt=\"Aquafire Brand Guidelines 2023, page 4\"></p><p><img src=\"help-img/brand-guidelines-5.webp\" alt=\"Aquafire Brand Guidelines 2023, page 5\"></p><p><img src=\"help-img/brand-guidelines-6.webp\" alt=\"Aquafire Brand Guidelines 2023, page 6\"></p><p><img src=\"help-img/brand-guidelines-7.webp\" alt=\"Aquafire Brand Guidelines 2023, page 7\"></p><p><img src=\"help-img/brand-guidelines-8.webp\" alt=\"Aquafire Brand Guidelines 2023, page 8\"></p><p><img src=\"help-img/brand-guidelines-9.webp\" alt=\"Aquafire Brand Guidelines 2023, page 9\"></p><p><img src=\"help-img/brand-guidelines-10.webp\" alt=\"Aquafire Brand Guidelines 2023, page 10\"></p><p><img src=\"help-img/brand-guidelines-11.webp\" alt=\"Aquafire Brand Guidelines 2023, page 11\"></p><p><img src=\"help-img/brand-guidelines-12.webp\" alt=\"Aquafire Brand Guidelines 2023, page 12\"></p><p><img src=\"help-img/brand-guidelines-13.webp\" alt=\"Aquafire Brand Guidelines 2023, page 13\"></p><p><img src=\"help-img/brand-guidelines-14.webp\" alt=\"Aquafire Brand Guidelines 2023, page 14\"></p>"
+  },
+  {
+    slug: "photo-assets",
+    title: "Photo Assets",
+    category: "pro",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "Links to Google Drive folders with Aquafire installation, lifestyle, and product photography for download.",
+    keywords: ["installation photos", "lifestyle photography", "product photography", "photo downloads", "google drive", "image assets"],
+    related: ["brand-guidelines", "professional-product-resources", "converting-step-files-into-revit"],
+    html: "<p><a href=\"https://drive.google.com/drive/folders/1LDEEPGyqnW-Q_iWx85XCpNOx9vcgxvqj?usp=drive_link\">Installation Photos</a></p>\n<hr>\n<p><a href=\"https://drive.google.com/drive/folders/1bmvgOIIbAOuaGL28cQ9St0eN_Ho-AwZ1?usp=sharing\">Lifestyle Photography</a></p>\n<hr>\n<p><a href=\"https://drive.google.com/drive/folders/135bsXh37PnmxZAST1bEld58dKnVDkZHE?usp=drive_link\">Product Photography</a></p>"
+  },
+  {
+    slug: "professional-product-resources",
+    title: "Product Resources",
+    category: "pro",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "Find installation guidelines, BIM files, CAD drawings, user manuals, and light-path guidance for pros.",
+    keywords: ["bim files", "cad drawings", "spec downloads", "dealer resources", "installation guidelines", "light path"],
+    related: ["photo-assets", "converting-step-files-into-revit", "brand-guidelines"],
+    html: "<p>&#x1F528; <a href=\"https://drive.google.com/drive/folders/1UHpFdGV831VMCSZ9fG5bTwZ7Ofwntmx6?usp=sharing\">Installation Guidelines</a></p><hr><p>&#x1F4D0; <a href=\"https://drive.google.com/drive/folders/1gsexJGtBahuIM1AV8FR8KAOxB27wyHJl?usp=drive_link\">BIM Files</a></p><hr><p>&#x270F; <a href=\"https://drive.google.com/drive/folders/1zJTebky43HmIgFSkuANBtz1ha5YxBR7N?usp=drive_link\">CAD Drawings</a></p><hr><p>&#x1F4D6; <a href=\"https://drive.google.com/file/d/1DUJnIEbwlDMorA4hqENVXXPEVj56O6cb/view?usp=drive_link\">User Manuals</a></p><hr><p>&#x1F4A1; <a href=\"https://drive.google.com/file/d/1abbcEw89MhWLqfkYsjSwtro41HRCQB1y/view?usp=drive_link\">Light Path Considerations</a></p>"
+  },
+  {
+    slug: "converting-step-files-into-revit",
+    title: "Converting STEP files into Revit",
+    category: "pro",
+    models: ["original", "pro", "lite"],
+    updated: "2026-02",
+    teaser: "How to bring Aquafire's STEP (.STP) files into Revit using AutoCAD, Inventor, Fusion 360, or Navisworks.",
+    keywords: ["cad", "autocad", "inventor", "fusion 360", "navisworks", "bim", "3d model import", "dwg"],
+    related: ["professional-product-resources", "rs485-integration-protocol", "photo-assets"],
+    html: "<h3><strong>We have STEP files and </strong><a href=\"help.html?article=product-resources-pro\"><strong>3D models</strong></a><strong> for use in your design projects. If you need to convert these provided STEP files into Revit, please see the steps below: </strong></h3><h3>Issue:</h3><p>How to import STEP (.STP) file directly into a Revit project or family?</p><h3>Causes:</h3><p>Revit does not support STP direct import.</p><h3>Solution:</h3><p>To get the file into Revit, use one of the following options:</p><ul><li>Use alternate format out of the host software to then be used in Revit (DWG/SAT).</li></ul><h3>Link using AutoCAD</h3><ol><li>Import STEP into AutoCAD.</li><li>Save the file as a DWG.</li><li>Import DWG file into Revit.</li></ol><h3>Via Inventor or Fusion 360</h3><ol><li>Open the STEP File with either Inventor or Fusion 360<em>.</em></li><li>After opening the file with one of the programs above please Export As an SAT file.</li><li>Open Revit and click on Insert.</li><li>In the Insert tab pick between Link CAD or Import CAD and select the SAT file type.</li></ol><h3>Via Navisworks Manage or Simulate</h3><ol><li>Open the file in Navisworks.</li><li>Save it as NWD file.</li><li>Open Revit and to click on the Insert panel.</li><li>Select the Coordination Model.</li><li>Press Add and search for the NWD/NWC files.</li></ol><p><strong>Note: </strong>The STP file can not be edited once loaded into Revit. Make any needed changes to the file prior to linking the file into Revit.</p>"
+  },
+  {
+    slug: "rs485-integration-protocol",
+    title: "RS485 Integration Protocol",
+    category: "pro",
+    models: ["pro"],
+    updated: "2026-07",
+    teaser: "Technical RS485 serial-communication reference for professional integrators wiring Generation 3 Aquafire units into automation systems.",
+    keywords: ["building automation", "bms integration", "smart home wiring", "aviation connector", "baud rate", "command frame"],
+    related: ["converting-step-files-into-revit", "dealer-warranty", "professional-product-resources"],
+    html: "<p>NOTE: For use in Generation 3 Aquafire Original and Aquafire Pro. The SKU will be: AWA3 and AWPR3.</p><p><strong>WARNING</strong>: <strong>Only intended for customer integration companies or professional integrations. Not intended for the end user or Smart Homes Systems such as Alexa, Google, etc... Please consult a professional integration expert before exploring the RS485 Communication Protocol.</strong></p><p><strong>The RS485 Circuitry card can be found in the main wire harness tray located in the rear of the fireplace. You can access it by removing the back panel of the Aquafire, then removing the the cover on the wire chase. <img src=\"help-img/rs485-integration-protocol-1.webp\" alt=\"RS485 circuitry card location in wire chase\"></strong></p><p><strong>RS485 Serial Communication Interface</strong></p><p>For Building Automation and Control Systems</p><p>Compatible with:</p><ul><li>Building Management Systems (BMS)</li><li>Hospitality Automation Systems</li><li>Smart Home Controllers</li><li>Third-party Automation Platforms</li></ul><hr><p><strong>Document Information</strong></p><table><tbody><tr><td><strong>Field</strong></td><td><strong>Value</strong></td></tr><tr><td>Document</td><td>RS485 Integration</td></tr><tr><td>Product Series</td><td>Pro</td></tr><tr><td>Manufacturer</td><td>Aquafire®</td></tr><tr><td>Communication Protocol</td><td>RS485</td></tr><tr><td>Document Version</td><td>1.0</td></tr><tr><td>Release Year</td><td>2026</td></tr></tbody></table><hr><p><strong>Protocol Summary</strong></p><table><tbody><tr><td><strong>Parameter</strong></td><td><strong>Value</strong></td></tr><tr><td>Protocol</td><td>RS485</td></tr><tr><td>Communication Mode</td><td>Half-duplex</td></tr><tr><td>Baud Rate</td><td>9600</td></tr><tr><td>Data Format</td><td>8 Data Bits, 1 stop Bit, No Parity</td></tr><tr><td>Maixmum Devices</td><td>30</td></tr><tr><td>Recommended Distance</td><td>Up to 300m</td></tr><tr><td>Device Address Range</td><td>01-255</td></tr><tr><td>Default Address</td><td>01</td></tr><tr><td>Termination Resistor</td><td>Internal</td></tr></tbody></table><hr><p>1. <strong>Introduction</strong></p><p>This document describes the RS485 communication protocol used to control <strong>Aquafire® Pro fireplaces</strong> from external automation systems.</p><p>The RS485 interface allows integration with a wide range of automation platforms including:</p><ul><li>Building Management Systems (BMS)</li><li>Hospitality Automation Systems</li><li>Residential control systems</li><li>Third-party automation controllers supporting RS485 serial communication</li></ul><p>The fireplace operates as a <strong>child device</strong> and responds to commands sent by a <strong>parent </strong><strong>controller.</strong></p><p>The communication protocol has been designed to be:</p><ul><li>simple</li><li>reliable</li><li>easy to integrate</li></ul><p>Typical applications include:</p><ul><li>hotels</li><li>restaurants</li><li>commercial spaces</li><li>residential installations</li><li>automation systems</li></ul><hr><p>2. <strong>Integration Responsibility and Support Scope</strong></p><p>Aquafire fireplaces operate as<strong> RS485 child devices</strong>.</p><p>External automation systems such as <strong>Building Management Systems (BMS), smart </strong><strong>home platforms, or custom integration controllers</strong> operate as <strong>parent devices</strong> and are responsible for communication management, programming logic, and overall system integration.</p><p>Aquafire provides the <strong>RS485 communication protocol and device functionality </strong><strong>required for integration</strong> with external automation systems.</p><p>Because automation platforms vary between installations, the <strong>configuration, </strong><strong>programming, and troubleshooting of third-party automation systems must be </strong><strong>handled by the system integrator or the manufacturer of the automation platform</strong>.</p><p>Aquafire technical support covers:</p><ul><li>device operation</li><li>RS485 protocol documentation</li><li>command structure</li><li>how the fireplace responds to commands</li></ul><p>Aquafire <strong>does not provide programming or configuration support for third-party </strong><strong>automation systems</strong>, including:</p><ul><li>BMS configuration</li><li>smart home controller programming</li><li>automation platform configuration</li><li>network or Wi-Fi infrastructure issue</li><li>troubleshooting unrelated to the fireplace hardware</li></ul><p>For integration issues, the system integrator should verify that the automation controller configuration and RS485 communication setup follow the protocol described in this document before contacting Aquafire support.</p><hr><p>3. <strong>Safety and Integration Notice</strong></p><p>The RS485 interface is intended for integration by <strong>qualified installers or system </strong><strong>integrators</strong>.</p><p>Before connecting the RS485 interface:</p><ul><li>Ensure the fireplace is properly installed</li><li>Follow all applicable electrical regulations</li><li>Use a shielded twisted-pair communication cable</li></ul><p>The automation controller must manage communication timing and system supervision.</p><hr><p>4. <strong>Quick Start for Integrators</strong></p><p>To integrate the fireplace into an automation system:</p><ol><li>Connect RS485 A and RS485 B to the automation controller</li><li>Configure the device address if required</li><li>Send commands using the frame format defined in this document</li><li>Use the status query command to monitor device status</li></ol><p>Communication parameters:</p><p>Baud Rate: <strong>9600</strong></p><p>Data Bits: <strong>8</strong></p><p>Stop Bits: <strong>1</strong></p><p>Parity: <strong>None</strong></p><hr><p>5. <strong>System Architecture</strong></p><p>The fireplace communicates using a <strong>parent / child architecture</strong>.</p><p>The automation controller operates as the <strong>parent device.</strong></p><p>The fireplace operates as a <strong>child device</strong>.</p><p>Example RS485 network:</p><p>Controller</p><p>│</p><p>│ RS485 BUS</p><p>│</p><p>────────────────────────</p><p>Fireplace #1 (Address 01)</p><p>Fireplace #2 (Address 02)</p><p>Fireplace #3 (Address 03)</p><p>────────────────────────</p><p>System behavior:</p><ul><li>The parent sends commands or queries</li><li>The fireplace responds only when addressed</li><li>Invalid addresses are ignored</li><li>Invalid commands are ignored</li><li>If communication is interrupted, the fireplace maintains its current operating state</li><li>A watchdog mechanism is implemented in the device</li></ul><p>Maximum devices per RS485 bus:</p><p><strong>30 devices</strong></p><p>Device address range:</p><p><strong>01 – 255</strong></p><p>Default device address:</p><p><strong>01</strong></p><hr><p>6. <strong>Physical Layer Specifications</strong></p><table><tbody><tr><td><strong>Parameter</strong></td><td><strong>Value</strong></td></tr><tr><td>Communication Mode</td><td>Half-duplex</td></tr><tr><td>Interface</td><td>RS485</td></tr><tr><td>Wiring</td><td>RS485 A / B</td></tr><tr><td>Ground</td><td>Optional</td></tr><tr><td>Baud Rate</td><td>9600</td></tr><tr><td>Data Bits</td><td>8</td></tr><tr><td>Stop Bits</td><td>1</td></tr><tr><td>Parity</td><td>None</td></tr><tr><td>Maximum Devices</td><td>30</td></tr><tr><td>Recommended Distance</td><td>Up to 300m</td></tr><tr><td>Termination Resistor</td><td>Internal termination included</td></tr></tbody></table><p>Recommended cable:</p><ul><li>Shielded twisted-pair cable</li></ul><p>Typical specification:</p><ul><li><strong>18 AWG – 20 AWG</strong></li></ul><p>Important note:</p><p>If communication does not work, verify that <strong>RS485 A and RS485 B lines are not</strong></p><p><strong>reversed</strong>.</p><hr><p>7. <strong>RS485 Connector</strong></p><p>RS485 communication is provided through an aviation connector.</p><p>Two connector versions exist depending on the production batch.</p><hr><p><strong>Version 1 – Early production units (2-pin connector)</strong></p><p>Units shipped in early production batches were equipped with a <strong>2-wire RS485 aviation connector</strong> without ground.</p><p>Pin Function</p><p>Pin 1 RS485 A</p><p>Pin 2 RS485 B</p><p>Ground is <strong>not required</strong> for RS485 communication.</p><hr><p><strong>Version 2 – Current production units (3-pin connector)</strong></p><p>Current production units use a <strong>GX12-3 aviation connector.</strong></p><p><strong>Pin Function</strong></p><p>Pin 1 RS485 A</p><p>Pin 2 RS485 B</p><p>Pin 3 GND (optional)</p><p>The ground connection is optional but may improve communication stability in certain</p><p>installations.</p><hr><p>8. <strong>Communication Frame Structure</strong></p><p>All communication frames follow the structure below:</p><p>START CODE + ADDRESS + COMMAND + DATA + END CODE</p><p>Example frame format:</p><p>55 5A AA CC DD FE FF</p><p><strong>Field Description</strong></p><p>55 5A Start code</p><p>AA Device address</p><p>CC Command code</p><p>DD Command data</p><p>FE FF End code</p><hr><p>9. <strong>Frame Example</strong></p><p>Example command frame:</p><p>55 5A 01 31 01 FE FF</p><p><strong>Byte Value Description</strong></p><p>1 55 Start byte 1</p><p>2 5A Start byte 2</p><p>3 01 Device address</p><p>4 31 Command</p><p>5 01 Data</p><p>6 FE End byte 1</p><p>7 FF End byte 2</p><p>This frame structure is used for <strong>all commands and responses.</strong></p><hr><p>10. <strong>Command List</strong></p><table><tbody><tr><td><strong>Function</strong></td><td></td><td><strong>Command Data</strong></td></tr><tr><td>Power ON/OFF</td><td>0x31</td><td>00 = OFF / 01 = ON</td></tr><tr><td>Flame Level increase / decrease</td><td>0x32</td><td>00 = Decrease / 01 = Increase</td></tr><tr><td>Rear Fan Speed</td><td>0x33</td><td>00 = Decrease / 01 = Increase</td></tr><tr><td>Orange Light</td><td>0x34</td><td>00 = OFF / 01 = ON</td></tr><tr><td>RGB Light</td><td>0x35</td><td>00 = OFF / 01 = ON</td></tr><tr><td>Brightness</td><td>0x36</td><td>00 = Decrease / 01 = Increase</td></tr><tr><td>FADE Mode</td><td>0x37</td><td>01 = Enable</td></tr><tr><td>RGB color selection</td><td>0x40</td><td>See RGB color mapping</td></tr></tbody></table><hr><p>11. <strong>Status Query</strong></p><p>Status request command:</p><p>55 5A 01 50 00 FE FF</p><p>Device response format:</p><p>55 5A 01 50 X1 X2 X3 X4 X5 FE FF</p><hr><p>12. <strong>Status Byte Definition</strong></p><table><tbody><tr><td><strong>Bit</strong></td><td><strong>Function</strong></td></tr><tr><td>Bit0</td><td>Power Active</td></tr><tr><td>Bit1</td><td>Orange Light Active</td></tr><tr><td>Bit2</td><td>RGB Active</td></tr><tr><td>Bit3</td><td>FADE Active</td></tr><tr><td>Bit4-7</td><td>Reserved</td></tr></tbody></table><p>Bits <strong>4–7 are reserved for future use </strong>and are currently not used.</p><hr><p>13. <strong>Parameter Levels</strong></p><table><tbody><tr><td><strong>Parameter</strong></td><td><strong>Range</strong></td></tr><tr><td>Flame Level</td><td>0x01 – 0x05</td></tr><tr><td>Fan Speed</td><td>0x01 – 0x05</td></tr><tr><td>Brightness</td><td>0x01 – 0x05</td></tr></tbody></table><p>Total levels:</p><p><strong>5 levels</strong></p><hr><p>14. <strong>RGB Color Mapping</strong></p><table><tbody><tr><td><strong>Value</strong></td><td><strong>Function</strong></td></tr><tr><td>0x00</td><td>RGB OFF</td></tr><tr><td>0x01 – 0x05</td><td>Red Levels</td></tr><tr><td>0x06 – 0x0A</td><td>Green Levels</td></tr><tr><td>0x0B – 0x0F</td><td>Blue Levels</td></tr></tbody></table><hr><p>15. <strong>Communication Behavior</strong></p><p>Communication rules:</p><p>• The controller manages communication timing</p><p>• The fireplace responds only when addressed</p><p>• Invalid addresses are ignored</p><p>• Invalid commands are ignored</p><p>• The controller must manage communication timeout</p><p>• If several consecutive queries receive no response, the connection should be</p><p>considered lost</p><p>• The fireplace maintains</p><hr><p>16. <strong>Troubleshooting</strong></p><table><tbody><tr><td><strong>Issue</strong></td><td><strong>Possible Cause</strong></td></tr><tr><td>No response from device</td><td>Incorrect RS485 wiring</td></tr><tr><td>No communication</td><td>Device address mismatch</td></tr><tr><td>Unstable communication</td><td>Cable too long or not shielded</td></tr><tr><td>Multiple devices not responding</td><td>RS485 polarity reversed</td></tr></tbody></table><hr><p>17. <strong>Communication Timing</strong></p><p>Recommended communication parameters:</p><p>• After sending a command, wait 100 ms for a response</p><p>• If no response is received, retry up to 3 times</p><p>• If repeated queries fail, the connection should be considered lost</p><hr><p><strong>Document Version</strong></p><p>Document Title: <strong>RS485 Integration Manual</strong></p><p>Manufacturer: <strong>Aquafire®</strong></p><p>Product Series: <strong>Pro Series</strong></p><p>Document Version: <strong>1.0</strong></p><p>Release Year: <strong>2026</strong></p>"
+  },
+  {
+    slug: "dealer-warranty",
+    title: "Dealer Warranty",
+    category: "pro",
+    models: ["original", "pro", "lite"],
+    updated: "2026-04",
+    teaser: "Full text of Aquafire's dealer limited warranty: coverage periods, the repair-first policy, RMA steps and what voids coverage.",
+    keywords: ["rma", "repair first policy", "cross-shipment", "vapor pure required", "two year warranty", "wear items"],
+    related: ["rs485-integration-protocol", "dealer-purchase-agreement", "converting-step-files-into-revit"],
+    html: "<p><strong>Limited Warranty - Dealer</strong></p><p><strong>1. Limited Warranty Coverage<br></strong>Aquaﬁre Inc. (“Aquaﬁre”) warrants to the original end-user purchaser that its water vapor ﬁreplaces and ﬁre feature products (the “Product”) shall be free from defects in materials and workmanship under normal use and service for the following periods:</p><p>Residential Applications: <strong>Two (2) years</strong> from the date of purchase.<br>Commercial Applications: <strong>One (1) year</strong> from the date of purchase</p><p>This Limited Warranty applies only to Products purchased through an authorized Aquaﬁre dealer and is non-transferable, except where otherwise required by applicable law.</p><p><strong>2. Exclusive Remedy – Repair First Policy<br></strong>Repair is the primary and preferred remedy under this Limited Warranty. Before any replacement will be considered, the Online Dealer and/or customer must:</p><ul><li>Complete all required troubleshooting steps</li><li>Participate in remote diagnostics with Aquaﬁre Technical Support</li><li>Install replacement components when directed by Aquaﬁre Technical Support</li><li>Make reasonable eﬀorts to perform ﬁeld repair as instructed by Aquaﬁre Technical Support</li></ul><p>Only if an Aquaﬁre Technical Support Technician determines, in their sole professional judgment, that the Product cannot be eﬀectively repaired in the ﬁeld, will replacement be considered.</p><p><strong>3. Replacement Authorization Requirements<br></strong>Replacement is not automatic and will only be authorized if all of the following conditions are met:</p><ol><li>The Product is within the applicable warranty period</li><li>Required troubleshooting and diagnostics have been completed in good faith</li><li>Aquaﬁre Technical Support determines that repair cannot reasonably be completed in the ﬁeld</li><li>Written replacement authorization is issued by Aquaﬁre Inc. (email authorization is suﬃcient)</li></ol><p>Verbal statements do not constitute authorization. Aquaﬁre reserves the sole discretion to determine whether repair or replacement is appropriate.</p><p><strong>4. No Advance Replacement or Cross-Shipment<br></strong>Aquaﬁre does not authorize advance replacement, cross-shipment, or shipment of replacement units prior to receipt and inspection of the original unit unless express written authorization is provided by Aquaﬁre.</p><p>No Online Dealer, employee, or third party is authorized to promise or imply advance replacement.</p><p>If an Online Dealer provides a replacement unit to its customer without Aquaﬁre’s prior written approval, Aquaﬁre shall have no obligation to reimburse the Online Dealer, and the Online Dealer assumes full ﬁnancial responsibility for such action.</p><p><strong>5. Return Material Authorization (RMA)<br></strong>If replacement is approved, Aquaﬁre will issue a Return Material Authorization (RMA).</p><ul><li>No Product may be returned without an RMA.</li><li>Unauthorized returns will be refused and returned at the sender’s expense.</li><li>Returned Products must be prepared for shipment in accordance with Aquaﬁre’s packaging and drainage instructions.</li></ul><p>Failure to properly prepare the unit for return shipment may void warranty coverage.</p><p><strong>6. Warranty Exclusions</strong><br>This Limited Warranty does not apply to Products that have been damaged or adversely aﬀected by:</p><ul><li>Modiﬁcation, alteration, tampering, or unauthorized repair.</li><li>Failure to follow installation instructions.</li><li>Improper maintenance, including the use of dirty or contaminated water, mineral scaling, or failure of components (such as fans, vents, or sensors) resulting from the accumulation of dirt, dust, or other debris within the unit.</li><li>Failure to maintain recommended water treatment or ﬁltration.</li><li>Abuse, negligence, accidental damage, or misuse.</li><li>Normal wear and tear.</li><li>Acts of God, including but not limited to ﬂoods, ﬁres, lightning, or natural disasters.</li><li>Damage caused during transportation by third-party carriers.</li></ul><p>If shipping damage is evident at delivery, the damage must be reported to the carrier immediately and documented with photographs.</p><p>Cosmetic issues that do not aﬀect functional performance are not covered under warranty.</p><p><strong>7. Consumable / Wear Components<br></strong>Certain components are considered normal wear items, including:</p><ul><li>Transducer mist makers</li><li>LED lighting components</li></ul><p>These items are covered only during initial installation testing. However, if such components are found to be defective during setup or within ninety (90) days from the date of purchase, they will be covered under this Limited Warranty.</p><p>All Replacement Parts are covered under this Limited Warranty. If a replacement part fails within ninety (90) days from date of purchase, Aquafire will ship an identical part under this Limited Warranty. </p><p><strong>8. Costs Not Covered<br></strong>This Limited Warranty does not cover the following costs unless expressly authorized in writing by Aquaﬁre:</p><ul><li>Labor costs</li><li>Installation or reinstallation costs</li><li>Removal of installed units</li><li>On-site service calls</li><li>Travel time or technician expenses</li><li>Shipping costs</li><li>Loss of use</li><li>Loss of proﬁts</li><li>Property damage</li><li>Incidental or consequential damages</li></ul><p>The Online Dealer and/or customer is responsible for all such costs unless otherwise agreed in writing by Aquaﬁre.</p><p><strong>9. Limitation of Liability<br></strong>Repair or replacement of the Product, as determined by Aquaﬁre, shall be the sole and exclusive remedy under this Limited Warranty. Aquaﬁre shall not be liable for any incidental, indirect, or consequential damages arising from the use of the Product or from any breach of this warranty, except to the extent prohibited by applicable law. Any implied warranties, including merchantability or ﬁtness for a particular purpose, are limited in duration to the term of this Limited Warranty to the extent permitted by law.</p><p><strong>10. Warranty Claim Procedure</strong></p><p>To initiate a warranty claim, contact Aquaﬁre Customer Service:</p><p>Phone: 877-888-4260<br>Email: <a href=\"mailto:ces@aquafire.com\">ces@aquaﬁre.com</a></p><p>When requesting warranty service, please provide:</p><ul><li>Product model number</li><li>Serial number</li><li>Customer name</li><li>Address</li><li>City, State, Zip Code</li><li>Contact phone number</li></ul><p>The above information can be submitted via this link on the Aquaﬁre website: <a href=\"https://www.aquafire.com/pages/service-request\">https://www.aquaﬁre.com/pages/service-request</a></p><p><em>Technical Support will guide the troubleshooting and repair process.</em></p><p><strong>11. Water Quality Requirement</strong></p><p>Operation of the Product requires proper water quality and maintenance. Failure to maintain water quality in accordance with the Aquaﬁre Owner’s Manual, including use of recommended ﬁltration or water softening systems where required, may result in scaling or component damage and may void warranty coverage.</p><p><em><strong>The included Vapor Pure™ Water Softening System must be installed and in operation prior to operating the Aquaﬁre Vapor Fireplace for this warranty to remain valid. If the installation utilizes an existing whole-house water softening system in lieu of the supplied Vapor Pure™ system, the brand, model, and technical speciﬁcations of that system must be submitted to Aquaﬁre for written approval prior to operation of the appliance. Failure to obtain such approval may void warranty coverage.</strong></em></p><p><strong>12. Consumer Rights<br></strong>For consumers covered by consumer protection laws in their country or jurisdiction of residence, the beneﬁts provided by this Limited Warranty are in addition to any rights and remedies provided under applicable consumer protection laws.</p>"
+  },
+  {
+    slug: "dealer-purchase-agreement",
+    title: "Dealer Purchase Agreement",
+    category: "pro",
+    models: ["original", "pro", "lite"],
+    updated: "2026-04",
+    teaser: "Dealer instructions for handling warranty replacements, including how to repack or return a unit and what to expect from Aquafire's Customer Experience team.",
+    keywords: ["dealer warranty", "replacement unit", "repack", "return freight", "wet vac", "damaged unit", "restocking"],
+    related: ["dealer-warranty", "online-dealer-warranty", "rs485-integration-protocol"],
+    html: "<p><strong>Purchase Agreement - Dealer</strong></p><p>Congratulations on your purchase of the most advanced Water Vapor Fireplaces available today. Your customers can expect problem free performance by following our simple care and maintenance procedures that will maximize longevity of the equipment.</p><p>Once you have completed our introductory training for customer service and technical support you should be able to diagnose and handle most situations quickly and easily. In those rare events when you experience a problem with the operation of the unit you cannot readily resolve, please contact our customer experience specialist to schedule an appointment with one of our trained and experienced service technicians who can assist you. While we are not able to provide any on-site repairs, we will provide you access to our experienced Online Service Technicians who are able to diagnose, provide you necessary warranty parts, and then during a FaceTime call, guide you through necessary repairs. You will be required to make the physical repairs with the guidance of our technician in real time.</p><p>AQUAFIRE® Fireplaces are designed to be ‘plug and play’ - almost every part is easily accessible and with the guidance of our technician can be readily replaced or repaired by any lay person - no special skills are required.</p><p>While many problems are resolved in the first call, if the unit requires replacement parts, it may take 2-3 calls to properly diagnose and complete the repair. We do our best to minimize the time required, but in rare cases this process might take additional sessions. If after a reasonable attempt to repair the unit with your cooperation, our Technician may determine the problem cannot be resolved in the field - this is rare. In this case, if the unit is still under warranty, your Customer Experience Specialist will work with you to arrange a replacement unit and the return of your customer’s defective unit.</p><p>Please carefully read the replacement policy below for units under warranty which have been deemed by our Technician not repairable in the field:</p><p><u>Replacement Policy</u></p><p>If your customer’s unit is under warranty and a service technician has advised you that a replacement is necessary, please follow the instructions below. Let us know if you have any questions or concerns. We try to make this as simple and expedient as possible for you.</p><p><strong>1. If your customer has the original packing materials and crate follow these instructions:</strong></p><ul><li>Completely drain all water from the unit. Please check both tanks - main tank and mist maker tube/tank - for water. We recommend using a small Wet Vac to completely empty the water from both tanks. Leaving even a small amount of water in either tank can cause internal electrical damage which can delay or even void your replacement.</li><li>Repack the unit into the interior carton using the original packing materials and crate.</li><li>Be sure to include all accessories and manuals (charging block, remote, drain tubing, etc)</li><li>Take photos of the interior of the packed carton, then the sealed carton and email these to a Customer Experience Specialist</li><li>Once received, we will arrange pick up of your unit</li><li>Once the unit is received at our warehouse and inspected, we will send out your replacement unit. In the event the unit arrives damaged due to above procedures not being followed (not shipping related) or any missing components, we will prorate accordingly and issue an invoice to you. We will expect our payment from you, It is your responsibility to settle the matter with your customer.</li><li>A service tech will give your customer a courtesy call on your receipt to ensure the unit is properly set up and working.</li></ul><p><strong>2. If they DO NOT have the original packing materials and crate follow these instructions:</strong></p><ul><li>Upon approval, we will ship the replacement unit to your customer.</li><li>Upon receipt of the replacement unit, your customer can remove the unit and its accessories from the crate and replace it with their original unit and accessories being returned.</li><li>The customer needs to completely drain all water from the unit. Plese check both tanks - main tank and mist maker tube/tank - for water. We recommend using a small Wet Vac to completely empty the water from both tanks. Leaving even a small amount of water in either tank can cause internal electrical damage which can delay or even void your return.</li><li>Take photos of the interior of the crate prior to closing, then of the sealed crate ready for shipment</li><li>Upon receipt of these photos your Customer Experience Specialist will arrange pick up of the original unit.</li><li>Once the unit is received at our warehouse, inspected and determined to be in good condition and all above procedures were followed we will close this case. In the event the unit was damaged due to above procedures not being followed or any missing components, we will prorate accordingly and issue an invoice to you. We will expect our payment from you, It is your responsibility to settle the matter with your customer.</li></ul>"
+  },
+  {
+    slug: "online-dealer-warranty",
+    title: "Online Dealer Warranty",
+    category: "pro",
+    models: ["original", "pro", "lite"],
+    updated: "2026-04",
+    teaser: "The Aquafire limited warranty terms for online dealers, covering the repair-first policy, replacement approval, and how to file a claim.",
+    keywords: ["repair first", "rma", "return authorization", "warranty claim", "replacement policy", "water quality", "vapor pure"],
+    related: ["dealer-purchase-agreement", "online-dealer-purchase-agreement", "dealer-warranty"],
+    html: "<h2>Limited Warranty - Online Dealer</h2><h3>1. Limited Warranty Coverage</h3><p>Aquaﬁre Inc. (“Aquaﬁre”) warrants to the original end-user purchaser that its water vapor ﬁreplaces and ﬁre feature products (the “Product”) shall be free from defects in materials and workmanship under normal use and service for the following periods:</p><p>Residential Applications: <strong>Two (2) years </strong>from the date of purchase.<br>Commercial Applications: <strong>One (1) year </strong>from the date of purchase</p><p>This Limited Warranty applies only to Products purchased through an authorized Aquaﬁre dealer and is non-transferable, except where otherwise required by applicable law.</p><h3>2. Exclusive Remedy – Repair First Policy</h3><p>Repair is the primary and preferred remedy under this Limited Warranty. Before any replacement will be considered, the Online Dealer and/or customer must:</p><ul><li>Complete all required troubleshooting steps</li><li>Participate in remote diagnostics with Aquaﬁre Technical Support</li><li>Install replacement components when directed by Aquaﬁre Technical Support</li><li>Make reasonable eﬀorts to perform ﬁeld repair as instructed by Aquaﬁre Technical Support</li></ul><p>Only if an Aquaﬁre Technical Support Technician determines, in their sole professional judgment, that the Product cannot be eﬀectively repaired in the ﬁeld, will replacement be considered.</p><h3>3. Replacement Authorization Requirements</h3><p>Replacement is not automatic and will only be authorized if all of the following conditions are met:</p><ol><li>The Product is within the applicable warranty period</li><li>Required troubleshooting and diagnostics have been completed in good faith</li><li>Aquaﬁre Technical Support determines that repair cannot reasonably be completed in the ﬁeld</li><li>Written replacement authorization is issued by Aquaﬁre Inc. (email authorization is suﬃcient)</li></ol><p>Verbal statements do not constitute authorization. Aquaﬁre reserves the sole discretion to determine whether repair or replacement is appropriate.</p><h3>4. No Advance Replacement or Cross-Shipment</h3><p>Aquaﬁre does not authorize advance replacement, cross-shipment, or shipment of replacement units prior to receipt and inspection of the original unit unless express written authorization is provided by Aquaﬁre.</p><p>No Online Dealer, employee, or third party is authorized to promise or imply advance replacement.</p><p>If an Online Dealer provides a replacement unit to its customer without Aquaﬁre’s prior written approval, Aquaﬁre shall have no obligation to reimburse the Online Dealer, and the Online Dealer assumes full ﬁnancial responsibility for such action.</p><h3>5. Return Material Authorization (RMA)</h3><p>If replacement is approved, Aquaﬁre will issue a Return Material Authorization (RMA).</p><ul><li>No Product may be returned without an RMA.</li><li>Unauthorized returns will be refused and returned at the sender’s expense.</li><li>Returned Products must be prepared for shipment in accordance with Aquaﬁre’s packaging and drainage instructions.</li></ul><p>Failure to properly prepare the unit for return shipment may void warranty coverage.</p><h3>6. Warranty Exclusions</h3><p>This Limited Warranty does not apply to Products that have been damaged or adversely aﬀected by:</p><ul><li>Modiﬁcation, alteration, tampering, or unauthorized repair.</li><li>Failure to follow installation instructions.</li><li>Improper maintenance, including the use of dirty or contaminated water, mineral scaling, or failure of components (such as fans, vents, or sensors) resulting from the accumulation of dirt, dust, or other debris within the unit.</li><li>Failure to maintain recommended water treatment or ﬁltration.</li><li>Abuse, negligence, accidental damage, or misuse.</li><li>Normal wear and tear.</li><li>Acts of God, including but not limited to ﬂoods, ﬁres, lightning, or natural disasters.</li><li>Damage caused during transportation by third-party carriers.</li></ul><p>If shipping damage is evident at delivery, the damage must be reported to the carrier immediately and documented with photographs.</p><p>Cosmetic issues that do not aﬀect functional performance are not covered under warranty.</p><h3>7. Consumable / Wear Components</h3><p>Certain components are considered normal wear items, including:</p><ul><li>Transducer mist makers</li><li>LED lighting components</li></ul><p>These items are covered only during initial installation testing. However, if such components are found to be defective during setup or within ninety (90) days from the date of purchase, they will be covered under this Limited Warranty.</p><p>All Replacement Parts are covered under this Limited Warranty. If a replacement part fails within ninety (90) days from date of purchase, Aquafire will ship an identical part under this Limited Warranty.</p><h3>8. Costs Not Covered</h3><p>This Limited Warranty does not cover the following costs unless expressly authorized in writing by Aquaﬁre:</p><ul><li>Labor costs</li><li>Installation or reinstallation costs</li><li>Removal of installed units</li><li>On-site service calls</li><li>Travel time or technician expenses</li><li>Shipping costs</li><li>Loss of use</li><li>Loss of proﬁts</li><li>Property damage</li><li>Incidental or consequential damages</li></ul><p>The Online Dealer and/or customer is responsible for all such costs unless otherwise agreed in writing by Aquaﬁre.</p><h3>9. Limitation of Liability</h3><p>Repair or replacement of the Product, as determined by Aquaﬁre, shall be the sole and exclusive remedy under this Limited Warranty. Aquaﬁre shall not be liable for any incidental, indirect, or consequential damages arising from the use of the Product or from any breach of this warranty, except to the extent prohibited by applicable law. Any implied warranties, including merchantability or ﬁtness for a particular purpose, are limited in duration to the term of this Limited Warranty to the extent permitted by law.</p><h3>10. Warranty Claim Procedure</h3><p>To initiate a warranty claim, contact Aquaﬁre Customer Service:</p><p>Phone: 877-888-4260<br>Email: <a href=\"mailto:ces@aquafire.com\">ces@aquaﬁre.com</a></p><p>When requesting warranty service, please provide:</p><ul><li>Product model number</li><li>Serial number</li><li>Customer name</li><li>Address</li><li>City, State, Zip Code</li><li>Contact phone number</li></ul><p>The above information can be submitted via this link on the Aquaﬁre website: <a href=\"https://www.aquafire.com/pages/service-request\">https://www.aquaﬁre.com/pages/service-request</a></p><p><em>Technical Support will guide the troubleshooting and repair process.</em></p><h3>11. Water Quality Requirement</h3><p>Operation of the Product requires proper water quality and maintenance. Failure to maintain water quality in accordance with the Aquaﬁre Owner’s Manual, including use of recommended ﬁltration or water softening systems where required, may result in scaling or component damage and may void warranty coverage.</p><p><em><strong>The included Vapor Pure™ Water Softening System must be installed and in operation prior to operating the Aquaﬁre Vapor Fireplace for this warranty to remain valid. If the installation utilizes an existing whole-house water softening system in lieu of the supplied Vapor Pure™ system, the brand, model, and technical speciﬁcations of that system must be submitted to Aquaﬁre for written approval prior to operation of the appliance. Failure to obtain such approval may void warranty coverage.</strong></em></p><h3>12. Consumer Rights</h3><p>For consumers covered by consumer protection laws in their country or jurisdiction of residence, the beneﬁts provided by this Limited Warranty are in addition to any rights and remedies provided under applicable consumer protection laws.</p>"
+  },
+  {
+    slug: "online-dealer-purchase-agreement",
+    title: "Online Dealer Purchase Agreement",
+    category: "pro",
+    models: ["original", "pro", "lite"],
+    updated: "2026-04",
+    teaser: "Replacement policy for online dealers: how to package, photograph, and return a warranty unit, with or without the original crate.",
+    keywords: ["replacement policy", "online dealer", "warranty replacement unit", "repack the unit", "wet vac", "drain the tanks", "customer experience specialist", "original crate"],
+    related: ["online-dealer-warranty", "dealer-purchase-agreement", "dealer-warranty"],
+    html: "<p><strong>Purchase Agreement - Online Dealer</strong></p><p>Congratulations on your purchase of the most advanced Water Vapor Fireplaces available today. Your customers can expect problem free performance by following our simple care and maintenance procedures that will maximize longevity of the equipment.</p><p>Once you have completed our introductory training for customer service and technical support personnel you should be able to diagnose and handle most repairs quickly and easily on your own. You will have access to our trained technical support representatives for a period of 6 months following this training. However, In those rare events when you experience a problem with the operation of the unit you cannot readily resolve after this timeline, you may contract with our technical support team to further assist diagnosis and repair of a problematic fireplace. If under warranty we will provide this service free of charge. If outside warranty charges may apply. This will be determined at time of service. While we are not able to provide any on-site repairs, any assistance provided will be virtual utilizing FaceTime calls where our tech can guide you through necessary repairs and diagnosis. You will be required to make the physical repairs with the guidance of our technician in real time.</p><p>AQUAFIRE® Fireplaces are designed to be ‘plug and play’ - almost every part is easily accessible and in most instances no special skills are required.</p><p>Please carefully read the replacement policy below for units under warranty which have been deemed by our Technician not repairable in the field:</p><p><u>Replacement Policy</u></p><p>If your customer’s unit is under warranty and a service technician has advised you that a replacement is necessary, please follow the instructions below. Let us know if you have any questions or concerns. We try to make this as simple and expedient as possible for you.</p><p><strong>1. If your customer has the original packing materials and crate follow these instructions:</strong></p><ul><li>Completely drain all water from the unit. Please check both tanks - main tank and mist maker tube/tank - for water. We recommend using a small Wet Vac to completely empty the water from both tanks. Leaving even a small amount of water in either tank can cause internal electrical damage which can delay or even void your replacement.</li><li>Repack the unit into the interior carton using the original packing materials and crate.</li><li>Be sure to include all accessories and manuals (charging block, remote, drain tubing, etc)</li><li>Take photos of the interior of the packed carton, then the sealed carton and email these to a Customer Experience Specialist</li><li>Once received, we will arrange pick up of your unit</li><li>Once the unit is received at our warehouse and inspected, we will send out your replacement unit. In the event the unit arrives damaged due to above procedures not being followed (not shipping related) or any missing components, we will prorate accordingly and issue an invoice to you. We will expect our payment from you, It is your responsibility to settle the matter with your customer.</li><li>A service tech will give your customer a courtesy call on your receipt to ensure the unit is properly set up and working.</li></ul><p><strong>2. If they DO NOT have the original packing materials and crate follow these instructions:</strong></p><ul><li>Upon approval, we will ship the replacement unit to your customer.</li><li>Upon receipt of the replacement unit, your customer can remove the unit and its accessories from the crate and replace it with their original unit and accessories being returned.</li><li>The customer needs to completely drain all water from the unit. Plese check both tanks - main tank and mist maker tube/tank - for water. We recommend using a small Wet Vac to completely empty the water from both tanks. Leaving even a small amount of water in either tank can cause internal electrical damage which can delay or even void your return.</li><li>Take photos of the interior of the crate prior to closing, then of the sealed crate ready for shipment</li><li>Upon receipt of these photos your Customer Experience Specialist will arrange pick up of the original unit.</li><li>Once the unit is received at our warehouse, inspected and determined to be in good condition and all above procedures were followed we will close this case. In the event the unit was damaged due to above procedures not being followed or any missing components, we will prorate accordingly and issue an invoice to you. We will expect our payment from you, It is your responsibility to settle the matter with your customer.</li></ul>"
   }
 ];

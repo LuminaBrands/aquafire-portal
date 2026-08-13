@@ -53,6 +53,8 @@
     drop:   S + '<path d="M12 3.5c3 3.6 5.5 6.4 5.5 9.4a5.5 5.5 0 0 1-11 0c0-3 2.5-5.8 5.5-9.4z"/></svg>',
     shield: S + '<path d="M12 3l7.5 3.5v5c0 4.5-3 8.3-7.5 9.5-4.5-1.2-7.5-5-7.5-9.5v-5z"/><path d="m9.2 11.8 2 2 3.6-3.8"/></svg>',
     doc:    S + '<path d="M6 3.5h7L18.5 9v11.5h-12z"/><path d="M13 3.5V9h5.5"/><path d="M9 13h6M9 16.5h4"/></svg>',
+    cart:   S + '<path d="M3.5 4.5h2.4l2.2 11h10.4l2-8H7.1"/><circle cx="9.5" cy="19.3" r="1.5"/><circle cx="16.9" cy="19.3" r="1.5"/></svg>',
+    brief:  S + '<rect x="3.5" y="7.5" width="17" height="12" rx="1.8"/><path d="M9 7.5V5.8A1.8 1.8 0 0 1 10.8 4h2.4A1.8 1.8 0 0 1 15 5.8v1.7M3.5 12.5h17"/></svg>',
     arrow:  '<svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>'
   };
   function icon(name) { return ICONS[name] || ICONS.doc; }
