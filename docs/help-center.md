@@ -44,6 +44,16 @@ described in the git history of this file if the provenance ever matters.
 environments need that block pasted before saves work). Docs store both the
 markdown-lite source (`md`) and the rendered `html`, plus `published`.
 
+**Unpublishing** is available in two places: an **Unpublish** button on every
+published row in the team list, and the one in the editor bar. Both write a
+single field (`published: false`) rather than re-saving the form, so they work
+without a form loaded and on a doc that overrides a built-in article — a full
+save of an override is gated behind the "yes, override the built-in" checkbox,
+which unpublishing has no way to satisfy from a list row. The body is left
+exactly as published: publishing again restores the same article, and for an
+override the built-in article takes over in the meantime rather than the page
+404ing.
+
 The editor's **View** button (between *Save draft* and *Publish*) opens the
 customer page for the slug currently in the form — `help.html?article=<slug>`,
 new tab. It follows the slug as you type it, and its tooltip says whether that
