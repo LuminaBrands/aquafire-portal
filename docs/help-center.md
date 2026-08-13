@@ -44,6 +44,13 @@ described in the git history of this file if the provenance ever matters.
 environments need that block pasted before saves work). Docs store both the
 markdown-lite source (`md`) and the rendered `html`, plus `published`.
 
+The editor's **View** button (between *Save draft* and *Publish*) opens the
+customer page for the slug currently in the form — `help.html?article=<slug>`,
+new tab. It follows the slug as you type it, and its tooltip says whether that
+slug is on the Help Center yet: a draft that overrides nothing shows the
+not-found view until it's published, while an override opens the built-in
+article it is about to replace.
+
 `help.js` merges published docs over the built-in catalogue on load:
 
 - a doc whose `slug` matches a built-in article **replaces** it (hot-fixing

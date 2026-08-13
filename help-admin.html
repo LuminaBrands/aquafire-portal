@@ -54,6 +54,10 @@
     .btn-danger:hover { background: rgba(220,80,80,0.12); }
     .btn-xs { padding: 5px 12px; font-size: 0.72rem; }
     .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+    /* Link-shaped buttons (the editor's "View") — a { color: inherit } above
+       keeps the palette, this drops the underline and the dead state. */
+    a.btn { text-decoration: none; }
+    .btn.is-off { opacity: 0.5; cursor: not-allowed; }
 
     /* Auth gate */
     .auth-card { max-width: 400px; margin: 64px auto; padding: 36px 32px; background: var(--surface);
@@ -242,6 +246,7 @@
           <button class="btn btn-danger btn-xs" id="deleteBtn" style="display:none;">Delete</button>
           <button class="btn btn-secondary" id="unpublishBtn" style="display:none;">Unpublish</button>
           <button class="btn btn-secondary" id="draftBtn">Save draft</button>
+          <a class="btn btn-secondary" id="viewBtn" href="help.html" target="_blank" rel="noopener">View</a>
           <button class="btn btn-primary" id="publishBtn">Publish</button>
         </div>
         <div class="saveerr" id="saveErr"></div>
@@ -922,7 +927,32 @@
         cb.onchange = function () { dirty = true; };
       });
 
+      /* "View" opens the customer article page for whatever slug is in the
+         form — the same URL help.js resolves (?article=<slug>). It stays
+         enabled for drafts (so you can see the built-in article you're about
+         to override), and says so in its tooltip when the slug isn't on the
+         Help Center yet. */
+      function syncViewLink() {
+        var a = $('viewBtn');
+        var slug = slugify($('fSlug').value);
+        a.href = slug ? 'help.html?article=' + encodeURIComponent(slug) : 'help.html';
+        var published = (editingId === slug && loadedDoc)
+          ? !!loadedDoc.published
+          : !!(byId[slug] && byId[slug].d.published);
+        var live = !!slug && (published || staticSlugs().indexOf(slug) !== -1);
+        a.classList.toggle('is-off', !slug);
+        a.title = !slug
+          ? 'Give the article a slug first.'
+          : live
+            ? 'Open help.html?article=' + slug + ' in a new tab.'
+            : 'Not on the Help Center yet — publish first, then this opens the live article.';
+      }
+      $('viewBtn').onclick = function (e) {
+        if (this.classList.contains('is-off')) e.preventDefault();
+      };
+
       function checkSlug() {
+        syncViewLink();
         var slug = $('fSlug').value.trim();
         var msg = $('slugMsg');
         msg.innerHTML = '';
@@ -1178,6 +1208,7 @@
           $('editWhat').textContent = (published ? 'Published' : 'Saved as draft') + ': ' + res.data.title;
           $('unpublishBtn').style.display = published ? '' : 'none';
           $('deleteBtn').style.display = '';
+          syncViewLink();
           setBusy(false);
           load();
         }).catch(function (e) {

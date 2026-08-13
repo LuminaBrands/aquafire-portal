@@ -58,6 +58,30 @@
         "value": "rgba(0,0,0,0.5)",
         "createdAt": "2026-08-10T14:41:34.990Z",
         "reason": "Mask stencil alpha in the hero photo's dissolve ramp (user-requested fade), not a palette color -- same class as the existing #000 ignore"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-08-13T14:01:06.670Z",
+        "reason": "User confirmed Inter is intentional: it is the portal's documented body face in DESIGN.md/CLAUDE.md, shared by every page"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "help-admin.html"
+        ],
+        "createdAt": "2026-08-13T14:01:10.614Z",
+        "reason": "User confirmed intentional: the editor preview pane mirrors help.css's .ha-note/.ha-caution left-accent callouts so the preview matches the live article"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "help-admin.html"
+        ],
+        "createdAt": "2026-08-13T14:02:02.845Z",
+        "reason": "Same user-confirmed Inter usage as the shared overused-font=inter ignore; the Google Fonts <link> finding carries no extractable value, so it can only be scoped by file"
       }
     ]
   }
