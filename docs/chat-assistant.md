@@ -582,11 +582,16 @@ Ember doesn't self-modify (by design — a brand voice shouldn't drift unsupervi
 It improves through a short human-in-the-loop cycle; 15 minutes a week is plenty:
 
 1. **Teach Ember (no code):** in Chat Insights, every entry in "Top unanswered
-   questions" has an **Answer** button — type the correct answer and save. It lands
-   in the `chatKnowledge` Firestore collection and the AI uses it within ~5 minutes
-   (the function caches knowledge briefly). Use **+ Add knowledge** for anything
-   proactive (shipping policies, promos, new products); **Remove** retires stale
-   entries. Everything here is customer-visible material — never secrets.
+   questions" has an **Answer** button — write the correct information in plain
+   notes and save; like corrections, saved knowledge is treated as staff shorthand
+   and rephrased in Ember's own voice, so there's no need to draft customer copy.
+   It lands in the `chatKnowledge` Firestore collection and the AI uses it within
+   ~5 minutes (the function caches knowledge briefly). Use **+ Add knowledge** for
+   anything proactive (shipping policies, promos, new products); **Remove** retires
+   stale entries. Be unambiguous about numbers, model names, and yes/no facts —
+   vagueness gets paraphrased into a confident guess. Everything here is
+   world-readable by Firestore rule, so it must be customer-visible material —
+   never secrets.
 2. **Correct a bad answer:** every bot answer in a transcript has a **🔧 Correct this**
    button — it captures the question and what Ember said, and you write plain notes on
    what's actually correct (no need to draft customer copy). Saved as a `correction`

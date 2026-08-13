@@ -222,7 +222,9 @@ review (sales@aquafire.com), or browse https://www.aquafire.com.`;
    chatKnowledge docs come from the "Teach Ember" flow in chat-insights.html:
      kind "fact" (default): { q, a }            — team-added Q&A knowledge
      kind "correction":     { q, wrong, a }     — a bad answer + what's right;
-   corrections outrank everything and are rephrased, never quoted. */
+   corrections outrank everything. Both kinds are staff shorthand, not customer
+   copy: the prompt tells the model to rephrase them, never quote them back —
+   that's the promise the Teach Ember modal makes to the team. */
 let kbCache = { at: 0, text: '' };
 
 async function teamKnowledge() {
@@ -251,7 +253,10 @@ async function teamKnowledge() {
     });
     let text = '';
     if (facts.length) {
-      text += '\n\nTEAM-ADDED KNOWLEDGE (authoritative, added by Aquafire staff):\n' +
+      text += '\n\nTEAM-ADDED KNOWLEDGE (authoritative, added by Aquafire staff. ' +
+        'Like the base facts, these are staff notes rather than customer copy — ' +
+        'never quote or read one back verbatim; answer in your own warm, on-tone ' +
+        'voice, using only what the customer actually asked about.):\n' +
         facts.join('\n\n');
     }
     if (fixes.length) {

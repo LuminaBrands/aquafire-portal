@@ -120,7 +120,7 @@
     .modal .row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
 
     /* Convo browser */
-    .browser { display: grid; grid-template-columns: 340px 1fr; gap: 16px; margin-bottom: 48px; }
+    .browser { display: grid; grid-template-columns: 340px 1fr; gap: 16px; margin-bottom: 24px; }
     .clist { max-height: 640px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
     .citem { text-align: left; background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; color: var(--text);
@@ -203,12 +203,6 @@
         <div id="missList"></div>
       </div>
 
-      <div class="panel" id="kbPanel">
-        <h3>&#x1f4da; Team-added knowledge <span>&mdash; AI answers use these within ~5 minutes</span></h3>
-        <div id="kbList"><span style="color:var(--text-muted);font-size:0.85rem;">Loading&hellip;</span></div>
-        <button class="btn btn-secondary btn-xs" id="kbAddBtn" style="margin-top:12px;">+ Add knowledge</button>
-      </div>
-
       <div class="controls">
         <button class="fchip active" data-f="all">All</button>
         <button class="fchip" data-f="fallback">Unanswered</button>
@@ -221,6 +215,14 @@
       <div class="browser">
         <div class="clist" id="clist"></div>
         <div class="detail" id="detail"><div class="empty">Select a conversation</div></div>
+      </div>
+
+      <!-- Below the chat log on purpose: the logs are what the team comes here to
+           read; knowledge is the thing they edit after reading them. -->
+      <div class="panel" id="kbPanel" style="margin-bottom:48px;">
+        <h3>&#x1f4da; Team-added knowledge <span>&mdash; AI answers use these within ~5 minutes</span></h3>
+        <div id="kbList"><span style="color:var(--text-muted);font-size:0.85rem;">Loading&hellip;</span></div>
+        <button class="btn btn-secondary btn-xs" id="kbAddBtn" style="margin-top:12px;">+ Add knowledge</button>
       </div>
     </div>
   </div>
