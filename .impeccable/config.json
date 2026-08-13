@@ -82,6 +82,54 @@
         ],
         "createdAt": "2026-08-13T14:02:02.845Z",
         "reason": "Same user-confirmed Inter usage as the shared overused-font=inter ignore; the Google Fonts <link> finding carries no extractable value, so it can only be scoped by file"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          "admin.html",
+          "chat-insights.html",
+          "dealer-admin.html",
+          "help-admin.html"
+        ],
+        "createdAt": "2026-08-13T16:28:05.706Z",
+        "reason": "Admin surfaces deliberately run the pre-redesign hub.css 2025 palette and type so they read as a different surface (CLAUDE.md, docs/history.md); DESIGN.md describes the customer portal only"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "admin.html",
+          "chat-insights.html",
+          "dealer-admin.html",
+          "help-admin.html"
+        ],
+        "createdAt": "2026-08-13T16:28:05.776Z",
+        "reason": "Admin surfaces deliberately run the pre-redesign hub.css 2025 palette and type so they read as a different surface (CLAUDE.md, docs/history.md); DESIGN.md describes the customer portal only"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "admin.html",
+          "chat-insights.html",
+          "dealer-admin.html",
+          "help-admin.html"
+        ],
+        "createdAt": "2026-08-13T16:28:05.833Z",
+        "reason": "Admin surfaces deliberately run the pre-redesign hub.css 2025 palette and type so they read as a different surface (CLAUDE.md, docs/history.md); DESIGN.md describes the customer portal only"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          "admin.html",
+          "chat-insights.html",
+          "dealer-admin.html",
+          "help-admin.html"
+        ],
+        "createdAt": "2026-08-13T16:28:05.888Z",
+        "reason": "Admin surfaces deliberately run the pre-redesign hub.css 2025 palette and type so they read as a different surface (CLAUDE.md, docs/history.md); DESIGN.md describes the customer portal only"
       }
     ]
   }
