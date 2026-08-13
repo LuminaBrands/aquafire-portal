@@ -136,6 +136,12 @@ is published. `help-admin.html` lists the collection unfiltered on purpose:
 it only ever runs that query behind the team gate, where `isTeam()` carries the
 read.
 
+That query is also why a **hide** doc (`hidden: true`, the admin's way of
+retiring a built-in article — `docs/help-center.md`) carries `published: true`:
+the customer page has to be able to read the instruction, and `published` is
+the only field the read rule and the list query understand. It needs no rule of
+its own — the rules above already cover it.
+
 Adjust the domain pattern if the team signs in with something else (e.g.
 `'.*@(luminabrands|aquafire)[.]com'`), or swap `isTeam()` for an explicit UID
 allowlist.

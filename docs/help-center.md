@@ -61,10 +61,41 @@ slug is on the Help Center yet: a draft that overrides nothing shows the
 not-found view until it's published, while an override opens the built-in
 article it is about to replace.
 
+## Hiding a built-in article
+
+Built-in articles ship in `help-articles.js`, so they can't be deleted from the
+editor — but they can be **retired without a deploy**. Every row in the
+*Built-in articles* panel carries a **Hide** button, which writes a doc on that
+slug carrying `hidden: true`; `help.js` reads it as an instruction to drop the
+slug from the Help Center entirely (category list, search, direct links, and
+the counts). **Unhide** puts it back.
+
+Three things about the shape are load-bearing:
+
+- A hide doc carries `published: true` as well. That is what makes it visible
+  to the customer query and the security rules — `hidden`, not `published`, is
+  what it *means*. Don't "fix" that pairing.
+- Hides are applied **after** replacements in `mergeTeamArticles()`, so a hide
+  always wins for a slug regardless of the order Firestore returns docs in.
+- Hiding an article that already carries team edits keeps the body and
+  remembers whether it was published (`hiddenWasPublished`), so unhiding
+  restores exactly what was there. A hide with no body of its own is deleted
+  outright on unhide, rather than left as an empty published doc.
+
+Hidden slugs are not listed under *Team articles* — a hide isn't an article,
+and its state belongs on the built-in row it acts on. The editor refuses to
+open one (the row offers only *Unhide*) so that a save can't quietly resurrect
+it, and the slug lint in the editor says so if you try to write a new article
+on a hidden slug.
+
+Deleting the entry from `help-articles.js` is still the way to retire an
+article permanently; Hide is the no-deploy, reversible version.
+
 `help.js` merges published docs over the built-in catalogue on load:
 
 - a doc whose `slug` matches a built-in article **replaces** it (hot-fixing
   shipped content without a deploy);
+- a doc flagged `hidden` **removes** that slug instead (above);
 - new slugs append to their category;
 - the query **must** filter `.where('published', '==', true)` — the security
   rules deny unfiltered public list queries;
