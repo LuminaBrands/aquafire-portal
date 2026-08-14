@@ -1,0 +1,138 @@
+/* ── Resources — page-specific styles ──────────────────────────────────────
+   Pairs with resources.html. Everything here is `rs-` prefixed; tokens come
+   from redesign.css with fallbacks (same rule as help.css / troubleshoot.css),
+   so the page follows the dark/light switch without a second palette. */
+
+.rs-vh {
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ── Jump row ───────────────────────────────────────────────────────────── */
+/* Three groups is short enough to scroll, but a pro arriving from a spec
+   email wants their model in one tap — and these double as the #anchors. */
+.rs-jump {
+  display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0;
+  padding: 0; list-style: none;
+}
+.rs-jump a {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 14px; border-radius: 999px; text-decoration: none;
+  font-size: 0.83rem; font-weight: 500; color: var(--text-mid, #b9bec8);
+  background: var(--cap-bg, rgba(255,255,255,0.05));
+  border: 1px solid var(--cap-border, rgba(255,255,255,0.10));
+  transition: color 0.25s, background-color 0.25s, border-color 0.25s;
+}
+.rs-jump a:hover {
+  color: var(--text-hi, #f3f4f6);
+  background: var(--cap-bg-hover, rgba(255,255,255,0.08));
+  border-color: var(--cap-border-hover, rgba(255,255,255,0.15));
+}
+.rs-jump .rs-n { font-size: 0.76rem; color: var(--text-dim, #8d939f); }
+
+/* ── Groups ─────────────────────────────────────────────────────────────── */
+.rs-group { scroll-margin-top: 90px; }
+.rs-group + .rs-group { margin-top: 36px; }
+.rs-head {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+  margin-bottom: 13px;
+}
+.rs-head h2 {
+  font-size: 1.05rem; font-weight: 700; letter-spacing: -0.015em;
+  color: var(--text-hi, #f3f4f6);
+}
+/* The model code is what shows up on a spec sheet or a purchase order, so it
+   travels with the name here. */
+.rs-code {
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text-dim, #8d939f);
+  border: 1px solid var(--stroke, rgba(255,255,255,0.12));
+  border-radius: 999px; padding: 3px 9px;
+}
+.rs-guide {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.83rem; text-decoration: none;
+  color: var(--frost-t, #6fc3ff); transition: color 0.25s;
+}
+.rs-guide:hover { color: var(--text-hi, #f3f4f6); }
+
+/* ── Cards ──────────────────────────────────────────────────────────────── */
+/* Five resources per product, so the track is sized to seat all five on one
+   line at full width — a 4 + 1 wrap strands the last card and makes the group
+   look like it ran out of room rather than like a complete set. */
+.rs-grid {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(206px, 1fr));
+}
+.rs-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 15px; border-radius: 15px; text-decoration: none;
+  background: var(--row-bg, rgba(13,15,19,0.4));
+  border: 1px solid var(--row-border, rgba(255,255,255,0.07));
+  box-shadow: var(--row-shadow, none);
+  transition: background-color 0.25s, border-color 0.25s,
+              transform 0.3s var(--ease, ease), box-shadow 0.3s var(--ease, ease);
+}
+.rs-card:hover {
+  background: var(--row-bg-hover, rgba(22,25,31,0.5));
+  border-color: var(--row-border-hover, rgba(255,255,255,0.13));
+  transform: translateY(-2px);
+  box-shadow: var(--row-shadow-hover, none);
+}
+.rs-ico {
+  flex: none; width: 36px; height: 36px; display: grid; place-items: center;
+  border-radius: 13px; color: var(--ico-ink, #b9bec8);
+  background: var(--mini-bg, rgba(16,18,22,0.35));
+  border: 1px solid var(--stroke, rgba(255,255,255,0.12));
+  transition: color 0.25s;
+}
+.rs-card:hover .rs-ico { color: var(--text-hi, #f3f4f6); }
+.rs-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.rs-info b {
+  font-size: 0.93rem; font-weight: 600; color: var(--text-hi, #f3f4f6);
+}
+.rs-type { font-size: 0.76rem; color: var(--text-dim, #8d939f); }
+/* Every card leaves the portal, so each one says so — quietly. */
+.rs-out {
+  flex: none; margin-left: auto; color: var(--text-dim, #8d939f);
+  opacity: 0.75; transition: color 0.25s, opacity 0.25s;
+}
+.rs-card:hover .rs-out { color: var(--text-hi, #f3f4f6); opacity: 1; }
+
+/* ── Not-yet-published group ────────────────────────────────────────────── */
+.rs-empty {
+  padding: 18px 20px; border-radius: 15px;
+  border: 1px dashed var(--stroke, rgba(255,255,255,0.12));
+  color: var(--text-dim, #8d939f); font-size: 0.88rem;
+  line-height: 1.6; max-width: 760px;
+}
+.rs-empty a {
+  color: var(--frost-t, #6fc3ff); text-decoration: underline;
+  text-underline-offset: 0.16em; text-decoration-thickness: 1px;
+}
+.rs-empty a:hover { color: var(--text-hi, #f3f4f6); }
+
+/* ── Foot note ──────────────────────────────────────────────────────────── */
+.rs-note {
+  margin-top: 36px; padding: 18px 20px; border-radius: 15px;
+  background: var(--row-bg, rgba(13,15,19,0.4));
+  border: 1px solid var(--row-border, rgba(255,255,255,0.07));
+  box-shadow: var(--row-shadow, none); max-width: 760px;
+}
+.rs-note b {
+  display: block; font-size: 0.93rem; font-weight: 600;
+  color: var(--text-hi, #f3f4f6); margin-bottom: 6px;
+}
+.rs-note p { font-size: 0.83rem; color: var(--text-dim, #8d939f); line-height: 1.6; }
+.rs-note a {
+  color: var(--frost-t, #6fc3ff); text-decoration: underline;
+  text-underline-offset: 0.16em; text-decoration-thickness: 1px;
+}
+.rs-note a:hover { color: var(--text-hi, #f3f4f6); }
+
+@media (max-width: 700px) {
+  .rs-group + .rs-group { margin-top: 30px; }
+  /* The guide link drops under the heading rather than squeezing beside it. */
+  .rs-guide { margin-left: 0; flex-basis: 100%; }
+  .rs-note, .rs-empty { padding: 16px 17px; }
+}

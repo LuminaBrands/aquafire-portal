@@ -22,6 +22,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 | `help.html` | Help Center — article library (`help.js` engine + `help-articles.js` data + Firestore merge). Docs: `docs/help-center.md` |
 | `rewards.html` | Rewards programme page — tiers and earning modules |
 | `dealer-locator.html` | Find a Dealer map (Leaflet + Carto/OSM tiles), powered by the public `dealers.js` |
+| `resources.html` | Download library (`resources.css`) — every professional resource grouped by model. **Static mirror of the two guides' `#resources` sections** — add a download to a guide and add it here too |
 | `share-install.html` | Photo submission → Firebase Storage (`installs/<uid>/`), awards the 500-pt `share-install` reward. Needs `docs/storage-rules.md` published |
 | `support.html` | Support hub — links Troubleshooter + storefront warranty (awards `register-warranty` on click-through); claims/FAQs cards are still `#` stubs |
 | `builder.html` | **Parked** configurator (`builder.css`/`builder.js`) — placeholder pricing, unlinked, noindexed. Keep its `MODELS` table in step with `app.js`, but don't build features here without a decision to revive (`docs/history.md`) |
@@ -45,7 +46,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 | `hub.css` | **Pre-redesign shared layer (2025 palette)** — now loaded only by the four admin pages |
 | `admin-theme.css` | Admin light theme — rebinds the admin pages' 2025 tokens for `data-theme="light"`, patches hub.css literals. Toggle + persistence live in `admin-nav.js`; the `aquafire-theme` storage key is shared with the customer portal |
 | `styles.css` | **Enclosure guide only**, despite the generic name |
-| `water-care-styles.css` / `troubleshoot.css` / `help.css` / `builder.css` | Per-tool styles (help is `ha-` prefixed) |
+| `water-care-styles.css` / `troubleshoot.css` / `help.css` / `resources.css` / `builder.css` | Per-tool styles (help is `ha-` prefixed, resources `rs-`) |
 | `rewards.css` | Auth modal, profile dropdown, points toast, badges — runs on redesign tokens (`docs/history.md` for the retoning) |
 | `beam.css` | Border Beam (`.af-beam`) — opt-in; loaded by `index.html` + `beam-demo.html` (`docs/border-beam.md`) |
 
@@ -98,7 +99,7 @@ One glass capsule, identical on all nav-bearing pages:
 ```
 [brand] │ Set Up · Guides ▾ · Support ▾ │ Rewards <pts> · ☰ · ☀
 
-Guides: Product Guide · Enclosure Guide · Water Care · Preventative Maintenance
+Guides: Product Guide · Enclosure Guide · Water Care · Preventative Maintenance · Resources
 Support: Troubleshoot · Help Center · Find a Dealer · Warranty/Register* · Rewards · Service Request* · Contact Us*   (* = storefront)
 ```
 

@@ -170,6 +170,8 @@ FACTS:
   - https://aquafire.app/maintenance.html - cleaning and flush schedule
   - https://aquafire.app/troubleshoot.html - guided fixes, model-aware
   - https://aquafire.app/help.html - searchable help articles for every model
+  - https://aquafire.app/resources.html - every download by model: spec/install
+    guides (PDF), shop drawings, BIM files, user manuals, warranty
   - https://aquafire.app/dealer-locator.html - authorised dealers near you
   - https://aquafire.app/support.html - warranty, claims, contact
   - https://aquafire.app/rewards.html - the rewards programme
