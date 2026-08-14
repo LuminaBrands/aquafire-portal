@@ -37,6 +37,28 @@ then re-sync.
 The pre-sync build (source-material extracts + search-snippet articles) is
 described in the git history of this file if the provenance ever matters.
 
+## Home view: Quick Start Guides
+
+The home view opens on a **Quick Start Guides** row — three photo cards for
+Original / Pro / Lite, above *Browse by topic* — so a customer who knows which
+fireplace they own can go straight to that model's guide instead of hunting
+through categories for it. The row renders only on the home view; category,
+article and search views are unchanged.
+
+- Data is the `GUIDES` array at the top of `help.js` (name, `href`, image +
+  its intrinsic size, blurb). `href: null` renders an unlinked *Coming soon*
+  card, which is what the Lite gets until `aquafire-lite.html` exists.
+- **`GUIDES` mirrors the model tiles on `quick-start.html`** — same three
+  products, same order, same committed photographs (`model-*.jpg`). That page
+  is the other front door to these guides; move them together.
+- Styles are `.ha-guide*` in `help.css`, on the shared `.tile` object. The
+  photographs are lifestyle shots, so they are cover-cropped with a radius
+  (never letterboxed), and the card names the model in text — the `<img>`
+  takes `alt=""` rather than repeating it. Under 760px the card turns side-on
+  (thumbnail left, text right) so the row doesn't push the topic grid off the
+  screen. The unlinked card has its hover lift and rim suppressed: it isn't a
+  link and must not offer to open.
+
 ## Team authoring (no deploy needed)
 
 `help-admin.html` writes to the **`helpArticles` Firestore collection**

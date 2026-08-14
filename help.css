@@ -72,6 +72,48 @@
 }
 .ha-count { margin-top: auto; padding-top: 4px; }
 .ha-count-line { margin: 20px 0 0; }
+.ha-h-note {
+  font-size: 0.83rem; line-height: 1.55; color: var(--text-dim, #8d939f);
+  max-width: 62ch; margin: -4px 0 14px;
+}
+
+/* ── Quick Start guides — the home view's top row ───────────────────────── */
+/* Photo cards for the three products. They override the browse grid to hold
+   three across on one line (that row is the whole point), and stack rather
+   than orphan a third card once the column is too narrow for it. */
+.ha-view .ha-guides { grid-template-columns: repeat(3, 1fr); margin-bottom: 36px; }
+.ha-guide { padding: 14px 14px 18px; }
+/* Room photographs, like quick-start.html: fill and clip, never letterbox. */
+.ha-guide-img {
+  display: block; width: 100%; height: 150px; object-fit: cover;
+  border-radius: 13px; margin-bottom: 4px;
+  background: var(--mini-bg, rgba(16,18,22,0.35));
+}
+/* margin-top:auto lines the three pills up whatever the blurb costs. */
+.ha-guide-pill {
+  display: inline-flex; align-items: center; gap: 3px; align-self: flex-start;
+  margin-top: auto; padding: 5px 11px; border-radius: 999px;
+  font-size: 0.76rem; font-weight: 600; color: var(--text-mid, #b9bec8);
+  background: var(--mini-bg, rgba(16,18,22,0.35));
+  border: 1px solid var(--stroke, rgba(255,255,255,0.12));
+  transition: color 0.25s, border-color 0.25s;
+}
+.ha-guide-pill .arr { width: 14px; height: 14px; }
+.ha-guide:hover .ha-guide-pill {
+  color: var(--text-hi, #f3f4f6); border-color: var(--stroke-hi, rgba(255,255,255,0.22));
+}
+/* No Lite guide yet. The card still shows the product, but it isn't a link —
+   so it must not lift, glow or otherwise offer to open. */
+.ha-guide.is-soon { opacity: 0.72; }
+.ha-guide.is-soon .ha-guide-pill { color: var(--text-dim, #8d939f); }
+.ha-guide.is-soon:hover {
+  transform: none;
+  background: var(--row-bg, rgba(13,15,19,0.4));
+  border-color: var(--row-border, rgba(255,255,255,0.07));
+  box-shadow: var(--row-shadow, none);
+}
+.ha-guide.is-soon:hover::after { opacity: 0; }
+.ha-guide.is-soon:hover::before { opacity: var(--rim-opacity, 0.75); }
 
 /* ── Breadcrumb ─────────────────────────────────────────────────────────── */
 .ha-crumbs {
@@ -201,6 +243,30 @@
 .ha-empty p + p { margin-top: 10px; }
 
 /* ── Responsive ─────────────────────────────────────────────────────────── */
+/* 760px is the portal's narrow line (the nav swaps to the burger here). Three
+   cards go straight to one column: a 2 + 1 split leaves the third looking like
+   an afterthought, which is the opposite of what this row is for. Stacked at
+   full width they'd also push the topic grid off the screen, so the card turns
+   side-on instead — photo left, text right, the same object laid down. */
+@media (max-width: 760px) {
+  .ha-view .ha-guides { grid-template-columns: 1fr; gap: 12px; }
+  .ha-guide {
+    display: grid; grid-template-columns: 108px 1fr;
+    column-gap: 14px; padding: 14px;
+  }
+  /* A near-square thumbnail: a tall strip cropped out of a landscape room
+     shot loses the fireplace, which is the one thing the photo is here for. */
+  .ha-guide-img {
+    grid-column: 1; grid-row: 1 / span 3; align-self: start;
+    height: 104px; margin: 0; object-position: 50% 62%;
+  }
+  .ha-guide p { margin-top: 4px; }
+  /* justify-self, not align-self: in grid the flex rule would let it stretch. */
+  .ha-guide-pill { justify-self: start; margin-top: 10px; }
+}
+@media (max-width: 430px) {
+  .ha-guide { grid-template-columns: 84px 1fr; column-gap: 12px; }
+}
 @media (max-width: 700px) {
   .ha-search { max-width: none; }
   .ha-h-sub { margin-top: 28px; }

@@ -39,6 +39,22 @@
     'aquafire-limited-warranty'
   ];
 
+  /* Model guides, shown as the home view's top row. Same three products, same
+     order and the same photographs as quick-start.html — that page is the
+     other front door to them, so the two must not drift. `href: null` renders
+     the card as an unlinked "Coming soon" tile (there is no lite guide yet). */
+  var GUIDES = [
+    { name: 'Aquafire Original', href: 'aquafire-original.html',
+      img: 'model-original.jpg', w: 1264, h: 842,
+      blurb: 'The classic water vapor fireplace — specs, wiring, water care and fixes for 20″, 40″ and 60″.' },
+    { name: 'Aquafire Pro', href: 'aquafire-pro.html',
+      img: 'model-pro.jpg', w: 1400, h: 1400,
+      blurb: 'The flagship — flame colors, the phone app, UV-C sanitizing and direct plumbing, start to finish.' },
+    { name: 'Aquafire Lite', href: null,
+      img: 'model-lite.jpg', w: 1400, h: 933,
+      blurb: 'Compact and manual-fill, built for smaller spaces. Its guide is on the way.' }
+  ];
+
   var MODEL_LABEL = { original: 'Original', pro: 'Pro', lite: 'Lite' };
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
     'August', 'September', 'October', 'November', 'December'];
@@ -217,6 +233,21 @@
 
   function countLabel(n) { return n === 1 ? '1 article' : n + ' articles'; }
 
+  /* Photo cards, so the image is the card's subject: cover-cropped with a
+     radius, never letterboxed (the shots are room photographs). The model name
+     is the accessible name of the link, so the photo takes alt="". */
+  function guideCard(g) {
+    var inner =
+      '<img class="ha-guide-img" src="' + esc(g.img) + '" alt="" ' +
+        'width="' + g.w + '" height="' + g.h + '" decoding="async">' +
+      '<b>' + esc(g.name) + '</b>' +
+      '<p>' + esc(g.blurb) + '</p>' +
+      '<span class="ha-guide-pill">' + (g.href ? 'View guide ' + ICONS.arrow : 'Coming soon') + '</span>';
+    return g.href
+      ? '<a class="tile ha-guide" href="' + esc(g.href) + '">' + inner + '</a>'
+      : '<div class="tile ha-guide is-soon">' + inner + '</div>';
+  }
+
   /* ── Views ────────────────────────────────────────────────────────────── */
   function viewHome() {
     var cards = CATS.map(function (c) {
@@ -236,7 +267,11 @@
       if (picked.length < 3) picked.push(a);
     });
 
-    return '<h2 class="ha-h" id="ha-top" tabindex="-1">Browse by topic</h2>' +
+    return '<h2 class="ha-h" id="ha-top" tabindex="-1">Quick Start Guides</h2>' +
+      '<p class="ha-h-note">Start with the guide for the fireplace you own — each one covers ' +
+      'setup, specs, water care and the fixes for that model.</p>' +
+      '<div class="tiles ha-guides">' + GUIDES.map(guideCard).join('') + '</div>' +
+      '<h2 class="ha-h ha-h-sub">Browse by topic</h2>' +
       '<div class="tiles">' + cards + '</div>' +
       (picked.length
         ? '<h2 class="ha-h ha-h-sub">Popular articles</h2><div class="rows">' +
