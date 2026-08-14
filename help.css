@@ -11,10 +11,17 @@
 }
 
 /* ── Search ─────────────────────────────────────────────────────────────── */
-.ha-search { margin-top: 20px; max-width: 520px; }
+/* The header runs the full page column here so the search bar spans it and
+   lines up with the grids below — a bar that stops two-thirds of the way
+   across reads as a stray form field rather than the way into the library.
+   Title and lede keep the 760px reading measure .phead sets everywhere else. */
+.ha-phead { max-width: none; }
+.ha-phead h1, .ha-phead p { max-width: 760px; }
+
+.ha-search { margin-top: 22px; }
 .ha-search-field {
   display: flex; align-items: center; gap: 10px;
-  padding: 11px 13px; border-radius: 999px;
+  padding: 13px 16px; border-radius: 999px;
   background: var(--composer-bg, rgba(255,255,255,0.05));
   border: 1px solid var(--composer-border, rgba(255,255,255,0.12));
   box-shadow: var(--composer-shadow, none);
@@ -268,7 +275,6 @@
   .ha-guide { grid-template-columns: 84px 1fr; column-gap: 12px; }
 }
 @media (max-width: 700px) {
-  .ha-search { max-width: none; }
   .ha-h-sub { margin-top: 28px; }
   .ha-stuck, .ha-panel { padding: 16px 17px; }
   .ha-body table { min-width: 420px; }
