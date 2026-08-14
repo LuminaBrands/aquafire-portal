@@ -22,7 +22,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 | `help.html` | Help Center — article library (`help.js` engine + `help-articles.js` data + Firestore merge). Docs: `docs/help-center.md` |
 | `rewards.html` | Rewards programme page — tiers and earning modules |
 | `dealer-locator.html` | Find a Dealer map (Leaflet + Carto/OSM tiles), powered by the public `dealers.js` |
-| `resources.html` | Download library (`resources.css`) — every professional resource grouped by model. **Static mirror of the two guides' `#resources` sections** — add a download to a guide and add it here too |
+| `resources.html` | Download library (`resources.css`) — every professional resource grouped by model. Pro/Original are a **static mirror of the two guides' `#resources` sections** (add a download to a guide and add it here too); the **Lite has no guide page, so this is the only place its downloads are published** |
 | `share-install.html` | Photo submission → Firebase Storage (`installs/<uid>/`), awards the 500-pt `share-install` reward. Needs `docs/storage-rules.md` published |
 | `support.html` | Support hub — links Troubleshooter + storefront warranty (awards `register-warranty` on click-through); claims/FAQs cards are still `#` stubs |
 | `builder.html` | **Parked** configurator (`builder.css`/`builder.js`) — placeholder pricing, unlinked, noindexed. Keep its `MODELS` table in step with `app.js`, but don't build features here without a decision to revive (`docs/history.md`) |
