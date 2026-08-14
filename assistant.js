@@ -879,6 +879,7 @@
               { label: '\ud83e\uddf9 Maintenance \u2014 the cleaning and flush schedule', href: pURL('maintenance.html') },
               { label: '\ud83e\udded Troubleshooter \u2014 guided fixes for your model', href: pURL('troubleshoot.html') },
               { label: '\ud83d\udcd6 Help Center \u2014 searchable help articles for every model', href: pURL('help.html') },
+              { label: '\ud83d\udcc1 Resources \u2014 manuals, drawings and BIM files by model', href: pURL('resources.html') },
               { label: '\ud83d\udccd Find a Dealer \u2014 see one in person', href: pURL('dealer-locator.html') },
               { label: '\ud83c\udfc6 Rewards \u2014 earn points as you go', href: pURL('rewards.html') },
               { label: '\ud83d\udee1\ufe0f Support \u2014 warranty, claims and contact', href: pURL('support.html') }
