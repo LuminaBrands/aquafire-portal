@@ -100,11 +100,12 @@ One glass capsule, identical on all nav-bearing pages:
 [brand] │ Set Up · Guides ▾ · Support ▾ │ Rewards <pts> · ☰ · ☀
 
 Guides: Product Guide · Enclosure Guide · Water Care · Preventative Maintenance · Resources
-Support: Troubleshoot · Help Center · Find a Dealer · Warranty/Register* · Rewards · Service Request* · Contact Us*   (* = storefront)
+Support: Troubleshoot · Help Center · Resources · Find a Dealer · Warranty/Register* · Rewards · Service Request* · Contact Us*   (* = storefront)
 ```
 
 - **Nav markup is duplicated across ~13 HTML files — no template.** Changing nav links means editing every page (several have a footer "Guides" column too). `nav.js` owns only the group disclosures, shared so behaviour can't drift; theme toggle + burger stay inline per page.
 - Groups open on **click, not hover** (touch). Inside the burger panel the groups are always-open labelled sections, not nested popovers (`.links.open .navgroup-btn` becomes a heading, loses pointer events).
+- **`resources.html` is deliberately in both groups** — specifiers reach it from Guides, owners chasing a manual from Support. It's the only duplicated item; on the page itself both entries take `aria-current="page"` but only the Guides button takes `is-here`, so one group reads as current rather than two.
 - Current page: `class="is-here" aria-current="page"`, and its group button takes `is-here` too. `support.html` and `share-install.html` have no nav entry and mark nothing.
 - Adding an item inside a group costs no bar width; adding a *group* costs ~85px — re-measure the 760px breakpoint then (comment in `redesign.css`).
 - On the two guide pages, the in-page Enclosure Guide link carries `?model=pro|original` so the tool pre-selects. This has never applied to nav links.
