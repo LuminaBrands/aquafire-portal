@@ -99,19 +99,6 @@
 }
 .rs-card:hover .rs-out { color: var(--text-hi, #f3f4f6); opacity: 1; }
 
-/* ── Not-yet-published group ────────────────────────────────────────────── */
-.rs-empty {
-  padding: 18px 20px; border-radius: 15px;
-  border: 1px dashed var(--stroke, rgba(255,255,255,0.12));
-  color: var(--text-dim, #8d939f); font-size: 0.88rem;
-  line-height: 1.6; max-width: 760px;
-}
-.rs-empty a {
-  color: var(--frost-t, #6fc3ff); text-decoration: underline;
-  text-underline-offset: 0.16em; text-decoration-thickness: 1px;
-}
-.rs-empty a:hover { color: var(--text-hi, #f3f4f6); }
-
 /* ── Foot note ──────────────────────────────────────────────────────────── */
 .rs-note {
   margin-top: 36px; padding: 18px 20px; border-radius: 15px;
@@ -134,5 +121,5 @@
   .rs-group + .rs-group { margin-top: 30px; }
   /* The guide link drops under the heading rather than squeezing beside it. */
   .rs-guide { margin-left: 0; flex-basis: 100%; }
-  .rs-note, .rs-empty { padding: 16px 17px; }
+  .rs-note { padding: 16px 17px; }
 }
