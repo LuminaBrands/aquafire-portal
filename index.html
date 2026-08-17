@@ -429,9 +429,6 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
       transition: color 0.24s, border-color 0.24s;
     }
     a.mcard:hover .mcta { color: var(--text-hi); border-color: var(--stroke-hi); }
-    /* Lite has no guide yet, so its card is a div, not a link. */
-    .mcard.is-soon { opacity: 0.72; }
-    .mcard.is-soon .mshot img { filter: grayscale(0.35); }
 
 
     /* ── Share your install ──────────────────────────────
@@ -782,12 +779,14 @@ switcher (localStorage-persisted, ?theme=light|dark deep link).
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </span>
         </a>
-        <div class="mcard is-soon">
+        <a class="mcard" href="aquafire-lite.html">
           <span class="mshot"><img src="model-lite.jpg" alt="" loading="lazy" width="1400" height="933"></span>
           <b>Aquafire Lite</b>
           <span class="mdesc">Compact and easy to install &mdash; for smaller spaces.</span>
-          <span class="mcta">Guide coming soon</span>
-        </div>
+          <span class="mcta">Open the guide
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </span>
+        </a>
       </div>
     </section>
 

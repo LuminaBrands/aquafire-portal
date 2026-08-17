@@ -122,3 +122,32 @@ Arrived in the 2026-06-01 bulk upload and was never finished: `PRICING` is
 pricing can't be indexed. Its `MODELS` table mirrors `app.js` for parity and
 must stay in step, but don't build features there without a decision to
 revive it.
+
+### aquafire-lite.html: the third model guide (Aug 2026)
+
+The Lite finally got a guide page, closing out the "Coming soon" cards on
+`quick-start.html`, the homepage fleet and the Help Center. Decisions made
+shipping it:
+
+- **Forked from `aquafire-original.html`, not Pro.** The guides are hand
+  forks of one template; the Original carried two tour UX fixes the Pro
+  lacks, and its single-LED / button-remote / no-app content is the Lite's
+  feature set. The ~259-line content delta was reworked for the Lite.
+- **AWA tour art as placeholder.** No `-awl` tour SVGs exist, so the page
+  reuses `tour-top-view-awa.svg` / `tour-controller-awa.svg` (closest match:
+  single LED, button remote) with an HTML comment marking the swap-out.
+- **16″ (AWL-16-42) added across the portal** — specs table, FAQ and the
+  `MODELS` tables in `app.js`/`builder.js` (geometry follows the Lite
+  pattern: nominal + ⅜″ total, 9⅝″ D, 11″ H). The SKU has no published spec
+  sheet, so the 16″ tank/weight/wattage cells are TBC placeholders.
+- **Beeps-only alerts.** The Lite has no indicator-light codes and no
+  maintenance reminder, so the "Lights & Beeps" category became "Beeps" and
+  the renderer's lights column was removed on this page only.
+- **Setup video wired with placeholder timestamps.** The Lite quick-start
+  video (`dH6uRV3GdvI`, from the help center) is chaptered with best-guess
+  start/end times marked TODO — scrub the video and correct them.
+- **Manual-fill-only copy is authoritative.** The 2026 AWL PDF still says
+  the 20″ can take a DP Kit; `note-water-fill-and-plumbing-by-model.txt`
+  supersedes it (no Lite size direct-plumbs, no upgrade path). The stale
+  20″-DP-kit line in `troubleshoot.js` and the missing Lite drain branch in
+  `maintenance.html` were fixed in the same PR.

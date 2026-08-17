@@ -47,7 +47,8 @@ article and search views are unchanged.
 
 - Data is the `GUIDES` array at the top of `help.js` (name, `href`, image +
   its intrinsic size, blurb). `href: null` renders an unlinked *Coming soon*
-  card, which is what the Lite gets until `aquafire-lite.html` exists.
+  card — a fallback kept for future models; every current model links to its
+  guide (the Lite's is `aquafire-lite.html`).
 - **`GUIDES` mirrors the model tiles on `quick-start.html`** — same three
   products, same order, same committed photographs (`model-*.jpg`). That page
   is the other front door to these guides; move them together.

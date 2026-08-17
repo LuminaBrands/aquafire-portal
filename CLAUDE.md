@@ -13,7 +13,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 | File | Purpose |
 |------|---------|
 | `index.html` | Landing hub — hero photo + inline Ember chat, rewards band, three intent routes, fleet row. **Token source of truth for the redesign** |
-| `aquafire-pro.html` / `aquafire-original.html` | Model guides (specs, wiring, troubleshooting, video). Pro is the **largest page (~1,400 lines, self-contained inline CSS/JS)**; both use the committed `tour-*.svg` diagrams |
+| `aquafire-pro.html` / `aquafire-original.html` / `aquafire-lite.html` | Model guides (specs, troubleshooting, video) — hand-forked copies of one template (~2,500 lines each, self-contained inline CSS/JS); all use the committed `tour-*.svg` diagrams. The Lite reuses the AWA (Original) tour art until AWL variants exist, and its 16″ specs are TBC placeholders |
 | `quick-start.html` | Model selection — the site's "getting started" entry point |
 | `enclosure-guide.html` | Dimension calculator + isometric cutout diagram + Installer Field Notes accordion (`#field-notes`). "Print spec sheet" = `@media print` in `styles.css`; app.js fills `#print-summary` and swaps to light theme on `beforeprint` (guarded restore on `afterprint`) — browser save-as-PDF is the PDF path |
 | `water-care.html` | Water hardness lookup (ZIP DB) + softener replacement calculator |
@@ -22,7 +22,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 | `help.html` | Help Center — article library (`help.js` engine + `help-articles.js` data + Firestore merge). Docs: `docs/help-center.md` |
 | `rewards.html` | Rewards programme page — tiers and earning modules |
 | `dealer-locator.html` | Find a Dealer map (Leaflet + Carto/OSM tiles), powered by the public `dealers.js` |
-| `resources.html` | Download library (`resources.css`) — every professional resource grouped by model. Pro/Original are a **static mirror of the two guides' `#resources` sections** (add a download to a guide and add it here too); the **Lite has no guide page, so this is the only place its downloads are published** |
+| `resources.html` | Download library (`resources.css`) — every professional resource grouped by model. Each model group is a **static mirror of its guide's `#resources` section** (add a download to a guide and add it here too) |
 | `share-install.html` | Photo submission → Firebase Storage (`installs/<uid>/`), awards the 500-pt `share-install` reward. Needs `docs/storage-rules.md` published |
 | `support.html` | Support hub — links Troubleshooter + storefront warranty (awards `register-warranty` on click-through); claims/FAQs cards are still `#` stubs |
 | `builder.html` | **Parked** configurator (`builder.css`/`builder.js`) — placeholder pricing, unlinked, noindexed. Keep its `MODELS` table in step with `app.js`, but don't build features here without a decision to revive (`docs/history.md`) |
@@ -103,7 +103,7 @@ Guides: Product Guide · Enclosure Guide · Water Care · Preventative Maintenan
 Support: Troubleshoot · Help Center · Resources · Find a Dealer · Warranty/Register* · Rewards · Service Request* · Contact Us*   (* = storefront)
 ```
 
-- **Nav markup is duplicated across ~13 HTML files — no template.** Changing nav links means editing every page (several have a footer "Guides" column too). `nav.js` owns only the group disclosures, shared so behaviour can't drift; theme toggle + burger stay inline per page.
+- **Nav markup is duplicated across ~14 HTML files — no template.** Changing nav links means editing every page (several have a footer "Guides" column too). `nav.js` owns only the group disclosures, shared so behaviour can't drift; theme toggle + burger stay inline per page.
 - Groups open on **click, not hover** (touch). Inside the burger panel the groups are always-open labelled sections, not nested popovers (`.links.open .navgroup-btn` becomes a heading, loses pointer events).
 - **`resources.html` is deliberately in both groups** — specifiers reach it from Guides, owners chasing a manual from Support. It's the only duplicated item; on the page itself both entries take `aria-current="page"` but only the Guides button takes `is-here`, so one group reads as current rather than two.
 - Current page: `class="is-here" aria-current="page"`, and its group button takes `is-here` too. `support.html` and `share-install.html` have no nav entry and mark nothing.
@@ -162,7 +162,7 @@ Everything in the repo root is publicly served at `https://aquafire.app/<filenam
 
 - **CSP blocks new external resources.** `vercel.json` pins the allowlist (gstatic/apis.google.com for Firebase, unpkg.com for Leaflet, Google Fonts, Shopify CDN, Carto/OSM tiles, nominatim). A new CDN script, font, image host, or `fetch()` target must be added there too, or it silently fails **in production only**.
 - **`embed.js` names the chrome by class** — it removes `.bar`/`.phead`/`.pfoot` (plus the pre-redesign `.site-nav`/`.page-header`/`.site-footer` that `dealer-admin.html` still uses). Rename a chrome element → rename it here, and actually load `?embed` to verify; a mismatch is invisible otherwise and once went unnoticed through a full rollout (`docs/history.md`).
-- **`aquafire-pro.html` is ~1,400 lines** — read specific sections. Its in-page category-accordion troubleshooting (`TS_DATA`/`ALERTS_DATA`) is separate from the standalone Troubleshooter; the tool didn't replace it.
+- **The model guide pages are ~2,500 lines each** — read specific sections. Their in-page category-accordion troubleshooting (`TS_DATA`/`ALERTS_DATA`) is separate from the standalone Troubleshooter; the tool didn't replace it.
 - **`styles.css` is enclosure-specific** despite the name; shared styles are in `redesign.css` (customer) / `hub.css` (admin).
 - **`troubleshoot.css` uses theme tokens with fallbacks** (`var(--blue, #4da6e8)`) — per-page `:root` blocks define only a subset of tokens, so CSS can't rely on every token being present.
 - **No local dev server configured** — open files directly or use any static server (`python -m http.server`).

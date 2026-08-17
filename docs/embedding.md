@@ -73,6 +73,7 @@ Measured content heights with `?embed` (Chromium, Figtree loaded):
 | `rewards.html` | 2487 | 3083 |
 | `enclosure-guide.html` | 3759 | 4213 |
 | `aquafire-pro.html` | 7034 | 12027 |
+| `aquafire-lite.html` | TBD | TBD |
 
 Phone heights are roughly 1.3–1.7× the desktop ones, so a single fixed height
 can't serve both. Either set the height in a media query, or accept internal
@@ -83,7 +84,10 @@ height changes as the visitor uses them — the wizard swaps a card per answer a
 the locator fills a list. Give those a fixed viewport-ish height (600–800px) and
 let them scroll inside it.
 
-`aquafire-pro.html` is very long; consider linking to it rather than embedding.
+The model guide pages (`aquafire-pro.html`, `aquafire-original.html`,
+`aquafire-lite.html`) are very long; consider linking rather than embedding.
+The Lite guide's measured heights are TBD — measure per the note above before
+embedding it.
 
 ## Which origins may embed
 

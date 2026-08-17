@@ -317,7 +317,7 @@
           'If it’s direct-plumbed, check the water feed / shutoff valve is actually open' + (m === 'original' ? ' and the Direct Plumb Kit is connected correctly' : '') + '.',
           'Still beeping "low" after a full fill? A float sensor may be stuck — take off the top lid, open the mist tanks, and agitate each rack <strong>10–15 times</strong>.'
         ];
-        if (isLite(m)) s.push('Note: the 40" and 60" Lite are manual-fill only — there’s no direct-plumb option on those.');
+        if (isLite(m)) s.push('Note: every Lite size is manual-fill only — there’s no direct-plumb option or upgrade path, so skip the water-feed step.');
         return s;
       },
       video: ['beepLowWater'],
@@ -348,7 +348,7 @@
         ];
         if (m === 'original') s.push('Direct-plumbed: check the shutoff valve is open and the Direct Plumb Kit is installed per its instructions (a bad install can leak and voids the warranty).');
         else if (m === 'pro') s.push('Direct-plumbed: check the 1/4" line and shutoff valve — filling starts automatically when the unit is turned on.');
-        else if (isLite(m)) s.push('The Lite 40" and 60" are manual-fill only — there’s no direct-plumb option; the 20" can take a Direct Plumb Kit.');
+        else if (isLite(m)) s.push('The Lite is manual-fill only on every size — there’s no direct-plumb option or upgrade path currently.');
         return s;
       },
       links: ['aWater'],

@@ -45,6 +45,8 @@ const MODELS = {
     frontAngle: 58, backAngle: 68,
     lightOffset: 4.0, lightOffsetBack: 3.75, lightWidth: 3,
     sizes: {
+      // 16" (AWL-16-42) is unique to the Lite — keep in step with app.js.
+      16: { w: 16.375, d: 9.625, h: 11 },
       20: { w: 20.375, d: 9.625, h: 11 },
       40: { w: 40.375, d: 9.625, h: 11 },
       60: { w: 60.375, d: 9.625, h: 11 },
@@ -64,7 +66,7 @@ const MODEL_IMAGES = {
 const PRICING = {
   original: { 20: '$X,XXX', 40: '$X,XXX', 60: '$X,XXX' },
   pro:      { 20: '$X,XXX', 40: '$X,XXX', 60: '$X,XXX' },
-  lite:     { 20: '$X,XXX', 40: '$X,XXX', 60: '$X,XXX' },
+  lite:     { 16: '$X,XXX', 20: '$X,XXX', 40: '$X,XXX', 60: '$X,XXX' },
   firebox:  '$X,XXX',
 };
 
@@ -72,7 +74,7 @@ const PRICING = {
 const SHOPIFY_URLS = {
   original: { 20: '#', 40: '#', 60: '#' },
   pro:      { 20: '#', 40: '#', 60: '#' },
-  lite:     { 20: '#', 40: '#', 60: '#' },
+  lite:     { 16: '#', 20: '#', 40: '#', 60: '#' },
 };
 
 // ── Accessories ──
