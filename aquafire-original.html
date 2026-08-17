@@ -152,18 +152,22 @@
       scrollbar-width: none;
     }
     .sticky-nav-inner::-webkit-scrollbar { display: none; }
+    /* The bar is always dark (fixed rgba background), so its ink is pinned to
+       light-on-dark literals rather than theme tokens — tokens flip dark in
+       light theme and vanish against this surface. */
     .sticky-nav-brand {
-      font-weight: 700; font-size: 0.83rem;
-      white-space: nowrap; padding: 12px 12px 12px 0;
+      display: flex; align-items: center;
+      padding: 12px 14px 12px 0;
       border-right: 1px solid var(--border); margin-right: 4px; flex-shrink: 0;
     }
+    .sticky-nav-brand img { height: 15px; width: auto; display: block; }
     .sticky-nav-link {
       padding: 12px 12px; font-size: 0.76rem; font-weight: 500;
-      color: var(--text-muted); text-decoration: none; white-space: nowrap;
+      color: #8d939f; text-decoration: none; white-space: nowrap;
       transition: color 0.15s; position: relative; flex-shrink: 0;
     }
-    .sticky-nav-link:hover { color: var(--text); }
-    .sticky-nav-link.active { color: var(--text); }
+    .sticky-nav-link:hover { color: #f3f4f6; }
+    .sticky-nav-link.active { color: #f3f4f6; }
     .sticky-nav-link.active::after {
       content: ''; position: absolute; bottom: 0; left: 12px; right: 12px;
       height: 2px; background: var(--red); border-radius: 1px;
@@ -841,6 +845,16 @@
        276px column and pushed the page 25px off-screen at 360. minmax(0,1fr)
        is the fix. The chapter descriptions were nowrap for the same reason. */
     .guide-player { grid-template-columns: minmax(0, 1fr); }
+    /* Desktop: video 2/3, step card 1/3. Stacked, the step text sat below the
+       fold even on large screens, so you couldn't watch and read at once.
+       The card flexes so its pager pins to the bottom edge; below 980px the
+       column gets too narrow for the copy and it stacks again. Placed after
+       the minmax overflow fix above, which would otherwise override it. */
+    @media (min-width: 980px) {
+      .guide-player { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: stretch; }
+      .guide-info { display: flex; flex-direction: column; }
+      .guide-nav { margin-top: auto; }
+    }
     @media (max-width: 640px) {
       .hub-card-desc { white-space: normal; }
     }
@@ -944,7 +958,9 @@
   <!-- Sticky Section Nav (appears on scroll) -->
   <div class="sticky-nav" id="stickyNav">
     <div class="sticky-nav-inner">
-      <span class="sticky-nav-brand">Aquafire Original</span>
+      <a class="sticky-nav-brand" href="index.html" aria-label="Aquafire home">
+        <img src="https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Primary-White2_6e02bdc0-bca1-4414-b4be-f79c24dbb7e0.png?v=1772644031" alt="Aquafire">
+      </a>
       <a href="#tour" class="sticky-nav-link" data-section="tour">Tour</a>
       <a href="#guide" class="sticky-nav-link" data-section="guide">Setup Guide</a>
       <a href="#troubleshoot" class="sticky-nav-link" data-section="troubleshoot">Troubleshoot</a>
