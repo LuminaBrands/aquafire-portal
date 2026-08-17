@@ -55,6 +55,10 @@ const MODELS = {
     lightOffsetBack: 3.75,
     lightWidth: 3,
     sizes: {
+      // 16" (AWL-16-42) is unique to the Lite. Geometry follows the Lite
+      // pattern (nominal + 3/8" total clearance, same depth/height); the SKU
+      // has no published spec sheet yet.
+      16: { w: 16.375, d: 9.625, h: 11 },
       20: { w: 20.375, d: 9.625, h: 11 },
       40: { w: 40.375, d: 9.625, h: 11 },
       60: { w: 60.375, d: 9.625, h: 11 },

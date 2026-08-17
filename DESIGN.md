@@ -567,7 +567,8 @@ spring ease; LED bars slide in at the bottom edge.
   desktop) -- the section follows three full-height route cards, and a tall
   stack here doubles the scroll for the secondary entry point
 - A model with no guide yet is a `div`, not an `a`: dimmed, shot desaturated,
-  CTA reading "coming soon"
+  CTA reading "coming soon" (no current model needs this — every model has a
+  guide — but the rule stands for future additions)
 
 ### Wings (intent panes)
 - **Shape:** 26px pane, blur 18px; contains head (bare tinted icon + headline), Ember tip bubble, rows, minis

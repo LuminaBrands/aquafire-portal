@@ -42,7 +42,8 @@
   /* Model guides, shown as the home view's top row. Same three products, same
      order and the same photographs as quick-start.html — that page is the
      other front door to them, so the two must not drift. `href: null` renders
-     the card as an unlinked "Coming soon" tile (there is no lite guide yet). */
+     the card as an unlinked "Coming soon" tile (kept as a fallback; every
+     model has a guide today). */
   var GUIDES = [
     { name: 'Aquafire Original', href: 'aquafire-original.html',
       img: 'model-original.jpg', w: 1264, h: 842,
@@ -50,9 +51,9 @@
     { name: 'Aquafire Pro', href: 'aquafire-pro.html',
       img: 'model-pro.jpg', w: 1400, h: 1400,
       blurb: 'The flagship — flame colors, the phone app, UV-C sanitizing and direct plumbing, start to finish.' },
-    { name: 'Aquafire Lite', href: null,
+    { name: 'Aquafire Lite', href: 'aquafire-lite.html',
       img: 'model-lite.jpg', w: 1400, h: 933,
-      blurb: 'Compact and manual-fill, built for smaller spaces. Its guide is on the way.' }
+      blurb: 'Compact and manual-fill, built for smaller spaces — specs, setup and fixes for 16″ to 60″.' }
   ];
 
   var MODEL_LABEL = { original: 'Original', pro: 'Pro', lite: 'Lite' };

@@ -97,7 +97,7 @@ Two things that were not obvious:
 
 `rewards.js`'s `updateHomeBanner()` used to bail early when
 `#rb-home-bar-fill` was absent, which would have left the points chip stuck
-at "0 pts" on all 12 non-home pages; each element is now guarded separately.
+at "0 pts" on all non-home pages (13 with the Lite guide); each element is now guarded separately.
 
 ## Border Beam on the hero composer (added 2026-07-31)
 

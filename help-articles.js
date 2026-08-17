@@ -320,7 +320,7 @@ var HELP_ARTICLES = [
     teaser: "Download the Aquafire Lite installation manual and light-trap guide, plus a quick start video walkthrough.",
     keywords: ["pdf download", "quick start video", "light trap pdf", "setup guide", "youtube", "manuals"],
     related: ["installation-guide-and-manuals-pro", "how-to-install-the-direct-plumb-kit", "installation-guide-and-manuals-aquafire"],
-    html: "<p>🛠️ <a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire-AWA-Install-Guide-2024.pdf?v=1706218129\">Installation Manual</a></p><hr><p>🔆 <a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Light_Path_Compare.pdf?v=1706218129\">Light Trap Considerations</a></p><hr><p>🟢 <strong>Quick Start Guide:</strong><br><strong><iframe src=\"https://www.youtube.com/embed/dH6uRV3GdvI\" title=\"Aquafire Lite Quick Start\" loading=\"lazy\" allowfullscreen></iframe></strong></p>"
+    html: "<p>🛠️ <a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Aquafire-Lite-AWL-Specs_Install-Guide-2026-Compressed.pdf?v=1770224059\">Installation Manual</a></p><hr><p>🔆 <a href=\"https://cdn.shopify.com/s/files/1/0671/5562/4256/files/Light_Path_Compare.pdf?v=1706218129\">Light Trap Considerations</a></p><hr><p>🟢 <strong>Quick Start Guide:</strong><br><strong><iframe src=\"https://www.youtube.com/embed/dH6uRV3GdvI\" title=\"Aquafire Lite Quick Start\" loading=\"lazy\" allowfullscreen></iframe></strong></p>"
   },
   {
     slug: "how-to-install-the-direct-plumb-kit",

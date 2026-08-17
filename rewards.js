@@ -640,7 +640,7 @@
       setupQuickStartTracking();
     } else if (path.includes('support')) {
       setTimeout(function () { awardPoints('support-hub'); }, 3000);
-    } else if (path.includes('aquafire-pro') || path.includes('aquafire-original')) {
+    } else if (path.includes('aquafire-pro') || path.includes('aquafire-original') || path.includes('aquafire-lite')) {
       // Second path to the same reward. setupQuickStartTracking awards it on
       // click-through from Quick Start, but the homepage fleet cards link
       // straight here, so landing on a guide has to earn it too. awardPoints
@@ -666,7 +666,7 @@
     grid.addEventListener('click', function (e) {
       var link = e.target.closest('a[href]');
       if (!link || !grid.contains(link)) return;
-      // Model guides only — not the "Coming Soon" Lite card, which isn't a link.
+      // Model guides only (aquafire-pro / aquafire-original / aquafire-lite).
       if (!/^aquafire-[a-z-]+\.html/.test(link.getAttribute('href') || '')) return;
       if (!awardPoints('setup-guide')) return;   // already earned — let the click through
 

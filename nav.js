@@ -2,7 +2,7 @@
  * Nav group disclosures (Guides / Support) in the bar capsule.
  *
  * Shared rather than inlined per page: the nav markup is already duplicated
- * across 13 files with no template, and 13 copies of identical behaviour is
+ * across 14 files with no template, and 14 copies of identical behaviour is
  * how the copies drift. The theme toggle and burger stay in each page's own
  * script -- this file only owns the groups.
  *
