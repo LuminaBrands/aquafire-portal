@@ -133,9 +133,14 @@ shipping it:
   forks of one template; the Original carried two tour UX fixes the Pro
   lacks, and its single-LED / button-remote / no-app content is the Lite's
   feature set. The ~259-line content delta was reworked for the Lite.
-- **AWA tour art as placeholder.** No `-awl` tour SVGs exist, so the page
-  reuses `tour-top-view-awa.svg` / `tour-controller-awa.svg` (closest match:
-  single LED, button remote) with an HTML comment marking the swap-out.
+- **AWA tour art as placeholder.** No `-awl` tour SVGs existed at launch, so
+  the page reused `tour-top-view-awa.svg` / `tour-controller-awa.svg`
+  (closest match: single LED, button remote) with an HTML comment marking
+  the swap-out. Later in Aug 2026 `tour-top-view-awl.svg` was drawn and
+  swapped in — the AWL puts the On/Off + B1 buttons at the left end of the
+  mist rack (the AWA's are a bottom-right pill), so the control-panel
+  hotspot and both top-view stop descriptions moved with it. The remote
+  tour still borrows the AWA controller art.
 - **16″ (AWL-16-42) added across the portal** — specs table, FAQ and the
   `MODELS` tables in `app.js`/`builder.js` (geometry follows the Lite
   pattern: nominal + ⅜″ total, 9⅝″ D, 11″ H). The SKU has no published spec

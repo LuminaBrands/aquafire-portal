@@ -1090,20 +1090,22 @@
 
             <!-- TOP VIEW -->
             <svg id="tour-view-top" class="tour-svg tour-svg--active" viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg">
-              <!-- No Lite (AWL) tour artwork exists yet; the AWA (Original) diagrams
-                   are the closest match — same single-LED layout and button remote.
-                   Swap for tour-top-view-awl.svg / tour-controller-awl.svg when drawn. -->
-              <image href="tour-top-view-awa.svg" x="0" y="0" width="520" height="200"/>
+              <!-- Real AWL artwork. The remote tour below still borrows
+                   tour-controller-awa.svg (closest match: same button remote)
+                   until a tour-controller-awl.svg variant is drawn. -->
+              <image href="tour-top-view-awl.svg" x="0" y="0" width="520" height="200"/>
               <g id="hotspot-ctrl" class="tour-hotspot" style="display:none">
-                <rect x="409" y="124" width="72" height="36" rx="12" fill="rgba(232,168,56,0.1)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
+                <!-- On the AWL the ON/OFF + B1 buttons sit at the left end of
+                     the mist rack, not in a bottom-right pill like the AWA. -->
+                <rect x="44" y="58" width="52" height="38" rx="10" fill="rgba(232,168,56,0.1)" stroke="#e8a838" stroke-width="1.5" stroke-dasharray="4,2">
                   <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
                 </rect>
               </g>
               <g id="hotspot-fill" class="tour-hotspot" style="display:none">
-                <circle cx="488" cy="139.5" r="12" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
+                <circle cx="484.5" cy="138.5" r="12" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
                   <animate attributeName="r" values="12;16;12" dur="2s" repeatCount="indefinite"/>
                 </circle>
-                <circle cx="488" cy="139.5" r="3" fill="#e8a838"/>
+                <circle cx="484.5" cy="138.5" r="3" fill="#e8a838"/>
               </g>
               <g id="hotspot-vents-top" class="tour-hotspot" style="display:none">
                 <rect x="22" y="73" width="474" height="11" rx="4" fill="rgba(232,168,56,0.12)" stroke="#e8a838" stroke-width="1.2">
@@ -2226,8 +2228,8 @@
 
     /* ── Fireplace tour ── */
     var FP_STOPS = [
-      { title: 'Control Panel', desc: 'Located on the top-right of the unit. Two buttons: B1 (fill) and On/Off (with red LED indicator). The B1 button activates the integrated fill pump, and the On/Off button powers the unit on and off.', view: 'top', hotspot: 'hotspot-ctrl' },
-      { title: 'Water Fill Port', desc: 'Located directly to the right of the control panel on the top surface. Use this port to manually add water to the reservoir with the included fill tube — the pump stops automatically when the tank is full. The Lite is manual-fill only; there is no water-line connection.', view: 'top', hotspot: 'hotspot-fill' },
+      { title: 'Control Panel', desc: 'Located at the left end of the mist rack, under the top lid. Two buttons: On/Off (with red LED indicator) and B1 (fill). The B1 button activates the integrated fill pump — press and hold for 5 seconds to start a fill — and the On/Off button powers the unit on and off.', view: 'top', hotspot: 'hotspot-ctrl' },
+      { title: 'Water Fill Port', desc: 'Located in the top-right corner of the burner. Use this port to manually add water to the reservoir with the included fill tube — the pump stops automatically when the tank is full. The Lite is manual-fill only; there is no water-line connection.', view: 'top', hotspot: 'hotspot-fill' },
       { title: 'Venting', desc: 'The unit has vents on the front panel, back panel, and two vent strips on the top lid, and the Lite draws intake air through the top, sides, and bottom. These allow airflow for the ultrasonic mist system — keep all vents unobstructed in your enclosure design.', view: 'back', hotspot: 'hotspot-vents-back' },
       { title: 'Power Port', desc: 'The DC power input is in a recessed area on the far left side of the back panel. Connect the included 24V power adapter here before dropping the insert into the enclosure. Route the cable out through your enclosure before finishing.', view: 'back', hotspot: 'hotspot-power' },
       { title: 'Drain Plug', desc: 'The drain plug is on the bottom of the fireplace. To drain, place a bucket underneath, remove the plug, and let the tank empty completely — do this before moving the unit or leaving it idle for more than a week.', view: 'back', hotspot: '' }
