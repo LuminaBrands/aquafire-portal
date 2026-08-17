@@ -1090,9 +1090,9 @@
 
             <!-- TOP VIEW -->
             <svg id="tour-view-top" class="tour-svg tour-svg--active" viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg">
-              <!-- Real AWL artwork. The remote tour below still borrows
-                   tour-controller-awa.svg (closest match: same button remote)
-                   until a tour-controller-awl.svg variant is drawn. -->
+              <!-- Real AWL artwork (top and bottom views). The remote tour below
+                   still borrows tour-controller-awa.svg (closest match: same
+                   button remote) until a tour-controller-awl.svg variant is drawn. -->
               <image href="tour-top-view-awl.svg" x="0" y="0" width="520" height="200"/>
               <g id="hotspot-ctrl" class="tour-hotspot" style="display:none">
                 <!-- On the AWL the ON/OFF + B1 buttons sit at the left end of
@@ -1161,6 +1161,17 @@
                   <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite"/>
                 </circle>
                 <circle cx="81.5" cy="105.7" r="3" fill="#e8a838"/>
+              </g>
+            </svg>
+
+            <!-- BOTTOM VIEW — real AWL art; shows the drain plug -->
+            <svg id="tour-view-bottom" class="tour-svg" viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg">
+              <image href="tour-BOTTOM-view-awl.svg" x="0" y="0" width="520" height="200"/>
+              <g id="hotspot-drain" class="tour-hotspot" style="display:none">
+                <circle cx="69.7" cy="82.7" r="18" fill="rgba(232,168,56,0.2)" stroke="#e8a838" stroke-width="1.5">
+                  <animate attributeName="r" values="18;22;18" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="69.7" cy="82.7" r="3" fill="#e8a838"/>
               </g>
             </svg>
           </div>
@@ -2232,7 +2243,7 @@
       { title: 'Water Fill Port', desc: 'Located in the top-right corner of the burner. Use this port to manually add water to the reservoir with the included fill tube — the pump stops automatically when the tank is full. The Lite is manual-fill only; there is no water-line connection.', view: 'top', hotspot: 'hotspot-fill' },
       { title: 'Venting', desc: 'The unit has vents on the front panel, back panel, and two vent strips on the top lid, and the Lite draws intake air through the top, sides, and bottom. These allow airflow for the ultrasonic mist system — keep all vents unobstructed in your enclosure design.', view: 'back', hotspot: 'hotspot-vents-back' },
       { title: 'Power Port', desc: 'The DC power input is in a recessed area on the far left side of the back panel. Connect the included 24V power adapter here before dropping the insert into the enclosure. Route the cable out through your enclosure before finishing.', view: 'back', hotspot: 'hotspot-power' },
-      { title: 'Drain Plug', desc: 'The drain plug is on the bottom of the fireplace. To drain, place a bucket underneath, remove the plug, and let the tank empty completely — do this before moving the unit or leaving it idle for more than a week.', view: 'back', hotspot: '' }
+      { title: 'Drain Plug', desc: 'The drain plug is on the underside of the fireplace, toward the left end. To drain, place a bucket underneath, remove the plug, and let the tank empty completely — do this before moving the unit or leaving it idle for more than a week.', view: 'bottom', hotspot: 'hotspot-drain' }
     ];
     var fpCurrent = 0;
     var fpTitle = document.getElementById('tour-stop-title');
@@ -2253,7 +2264,7 @@
         fpDots.appendChild(dot);
       });
 
-      var FP_LABELS = { top: 'Top View', front: 'Front View', back: 'Back View' };
+      var FP_LABELS = { top: 'Top View', front: 'Front View', back: 'Back View', bottom: 'Bottom View' };
 
       function fpGoTo(idx) {
         fpCurrent = idx;
