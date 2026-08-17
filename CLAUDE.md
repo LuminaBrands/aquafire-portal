@@ -13,7 +13,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 | File | Purpose |
 |------|---------|
 | `index.html` | Landing hub — hero photo + inline Ember chat, rewards band, three intent routes, fleet row. **Token source of truth for the redesign** |
-| `aquafire-pro.html` / `aquafire-original.html` / `aquafire-lite.html` | Model guides (specs, troubleshooting, video) — hand-forked copies of one template (~2,500 lines each, self-contained inline CSS/JS); all use the committed `tour-*.svg` diagrams. The Lite's top view uses real AWL art (`tour-top-view-awl.svg`); its remote tour still reuses the AWA controller art until an AWL variant exists, and its 16″ specs are TBC placeholders |
+| `aquafire-pro.html` / `aquafire-original.html` / `aquafire-lite.html` | Model guides (specs, troubleshooting, video) — hand-forked copies of one template (~2,500 lines each, self-contained inline CSS/JS); all use the committed `tour-*.svg` diagrams. The Lite's top and bottom views use real AWL art (`tour-top-view-awl.svg`, `tour-BOTTOM-view-awl.svg` — the bottom view is the Drain Plug stop, a view the other guides don't have); its remote tour still reuses the AWA controller art until an AWL variant exists, and its 16″ specs are TBC placeholders |
 | `quick-start.html` | Model selection — the site's "getting started" entry point |
 | `enclosure-guide.html` | Dimension calculator + isometric cutout diagram + Installer Field Notes accordion (`#field-notes`). "Print spec sheet" = `@media print` in `styles.css`; app.js fills `#print-summary` and swaps to light theme on `beforeprint` (guarded restore on `afterprint`) — browser save-as-PDF is the PDF path |
 | `water-care.html` | Water hardness lookup (ZIP DB) + softener replacement calculator |

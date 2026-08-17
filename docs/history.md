@@ -139,7 +139,11 @@ shipping it:
   the swap-out. Later in Aug 2026 `tour-top-view-awl.svg` was drawn and
   swapped in — the AWL puts the On/Off + B1 buttons at the left end of the
   mist rack (the AWA's are a bottom-right pill), so the control-panel
-  hotspot and both top-view stop descriptions moved with it. The remote
+  hotspot and both top-view stop descriptions moved with it. Shortly after,
+  `tour-BOTTOM-view-awl.svg` added a fourth fireplace view — the Drain Plug
+  stop now shows the underside with a hotspot on the drawn plug, instead of
+  pointing at the back view with no hotspot (a view the Pro/Original tours
+  don't have; their drains are reached from the front/top). The remote
   tour still borrows the AWA controller art.
 - **16″ (AWL-16-42) added across the portal** — specs table, FAQ and the
   `MODELS` tables in `app.js`/`builder.js` (geometry follows the Lite
