@@ -82,6 +82,132 @@
         ],
         "createdAt": "2026-08-13T14:02:02.845Z",
         "reason": "Same user-confirmed Inter usage as the shared overused-font=inter ignore; the Google Fonts <link> finding carries no extractable value, so it can only be scoped by file"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#c0392b",
+        "createdAt": "2026-08-17T16:26:12.536Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#f39c12",
+        "createdAt": "2026-08-17T16:26:12.595Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#1a3a2a",
+        "createdAt": "2026-08-17T16:26:12.652Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#2d7a4f",
+        "createdAt": "2026-08-17T16:26:12.710Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#4ade80",
+        "createdAt": "2026-08-17T16:26:12.765Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(0,0,0,0.3)",
+        "createdAt": "2026-08-17T16:26:12.824Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(0,0,0,0.7)",
+        "createdAt": "2026-08-17T16:26:12.902Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(192,57,43,0.08)",
+        "createdAt": "2026-08-17T16:26:12.978Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(192,57,43,0.1)",
+        "createdAt": "2026-08-17T16:26:13.038Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(192,57,43,0.12)",
+        "createdAt": "2026-08-17T16:26:13.118Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(192,57,43,0.15)",
+        "createdAt": "2026-08-17T16:26:13.196Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(192,57,43,0.18)",
+        "createdAt": "2026-08-17T16:26:13.258Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(192,57,43,0.25)",
+        "createdAt": "2026-08-17T16:26:13.324Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(192,57,43,0.3)",
+        "createdAt": "2026-08-17T16:26:13.392Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(192,57,43,0.35)",
+        "createdAt": "2026-08-17T16:26:13.448Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(192,57,43,0.4)",
+        "createdAt": "2026-08-17T16:26:13.504Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "1px",
+        "createdAt": "2026-08-17T16:26:13.561Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "4px",
+        "createdAt": "2026-08-17T16:26:13.619Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "6px",
+        "createdAt": "2026-08-17T16:26:13.676Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "20px",
+        "createdAt": "2026-08-17T16:26:13.733Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "28px",
+        "createdAt": "2026-08-17T16:26:13.791Z",
+        "reason": "User confirmed: legacy 2025-palette literal in the shared model-guide template (aquafire-pro/original/lite inline CSS); not to be promoted into DESIGN.md"
       }
     ]
   }
