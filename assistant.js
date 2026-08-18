@@ -739,6 +739,8 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'Look for the silver info plate on the <strong>back of the insert</strong> (you may need to slide it out of the enclosure) or the label <strong>under the top lid</strong>. The SKU tells you the model: <strong>AWPR</strong>\u00a0=\u00a0Pro, <strong>AWA</strong>\u00a0=\u00a0Original, <strong>AWL</strong>\u00a0=\u00a0Lite.' },
+            { t: 'image', src: pURL('help-img/identifying-serial-number-2.webp'), alt: 'Informational plate with serial number on the back of the unit', href: HELP + '?article=identifying-serial-number' },
+            { t: 'image', src: pURL('help-img/identifying-serial-number-1.webp'), alt: 'Serial number sticker visible after removing the top lid', href: HELP + '?article=identifying-serial-number' },
             { t: 'links', items: [{ label: '\ud83d\udcc4 Help article: Identifying your serial number', href: HELP + '?article=identifying-serial-number' }] }
           ]
         };
@@ -1449,6 +1451,13 @@
 
     /* Link & video lists */
     '.afa-links{display:flex;flex-direction:column;gap:6px;}',
+    // Inline article figures. Block link (when the figure points at its help
+    // article) with the image filling the card; capped height keeps a tall
+    // photo from swallowing the panel.
+    '.afa-figure{display:block;max-width:82%;border:1px solid var(--afa-border-soft);border-radius:var(--afa-radius-card);overflow:hidden;background:var(--afa-surface);text-decoration:none!important;transition:border-color .22s;}',
+    'a.afa-figure:hover{border-color:var(--afa-border);}',
+    '.afa-figure img{display:block;width:100%;height:auto;max-height:230px;object-fit:cover;}',
+    '.afa-figure-cap{display:block;padding:7px 11px;font-size:11.6px;line-height:1.4;color:var(--afa-muted);}',
     '.afa-link{display:block;padding:10px 13px;background:var(--afa-surface);border:1px solid var(--afa-border-soft);border-radius:var(--afa-radius-card);font-size:12.8px;color:var(--afa-text)!important;text-decoration:none!important;transition:border-color .22s,background .22s;}',
     '.afa-link:hover{border-color:var(--afa-border);background:var(--afa-hover);}',
     '.afa-videos{display:flex;flex-wrap:wrap;gap:6px;}',
@@ -1938,6 +1947,20 @@
           links.appendChild(a);
         });
         container.appendChild(links);
+      } else if (b.t === 'image') {
+        // Inline figure from the help center's self-hosted images. src is
+        // always built via pURL so it resolves on Shopify embeds too.
+        var fig = el(b.href ? 'a' : 'div', 'afa-figure');
+        if (b.href) { fig.href = b.href; fig.target = '_blank'; fig.rel = 'noopener'; }
+        var im = document.createElement('img');
+        im.alt = b.alt || ''; im.loading = 'lazy';
+        // A figure that fails to load (typo'd catalogue entry, renamed file)
+        // removes itself rather than showing a broken card.
+        im.onerror = function () { if (fig.parentNode) fig.parentNode.removeChild(fig); };
+        im.src = b.src;
+        fig.appendChild(im);
+        if (b.alt) fig.appendChild(el('span', 'afa-figure-cap', b.alt));
+        container.appendChild(fig);
       } else if (b.t === 'videos') {
         var vids = el('div', 'afa-videos');
         b.keys.forEach(function (k) {
@@ -2288,10 +2311,13 @@
       afterThink(function () {
         hideTyping();
         logEvent('llm_reply', { text: String(d.reply).slice(0, 500) });
+        var parsed = extractReplyImages(String(d.reply));
         pushBot({
           feedback: true,
           emailAsk: !!d.unresolved,
-          blocks: [{ t: 'text', html: mdLite(d.reply) }, { t: 'chips', items: [CHIP_HUMAN] }]
+          blocks: [{ t: 'text', html: mdLite(parsed.text) }]
+            .concat(parsed.images)
+            .concat([{ t: 'chips', items: [CHIP_HUMAN] }])
         });
       });
     }).catch(function () {
@@ -2305,6 +2331,26 @@
         pushBot(r);
       });
     });
+  }
+
+  // AI replies may carry [[IMG:<file>.webp|<alt>]] markers pointing at the
+  // help center's self-hosted images (api/chat.js BASE_FACTS lists the
+  // approved catalogue). The filename is strictly validated — bare
+  // slug-N.webp only, resolved under help-img/ via pURL — so the model can
+  // never point the widget at an arbitrary source. Max two per reply; the
+  // figure links to its source article (slug = filename minus the -N).
+  function extractReplyImages(text) {
+    var images = [];
+    var clean = text.replace(/\[\[IMG:([a-z0-9][a-z0-9-]*-\d+\.webp)(?:\|([^\]|]*))?\]\]/g, function (_, file, alt) {
+      if (images.length < 2) {
+        var slug = file.replace(/-\d+\.webp$/, '');
+        images.push({ t: 'image', src: pURL('help-img/' + file), alt: (alt || '').trim(), href: HELP + '?article=' + slug });
+      }
+      return '';
+    });
+    // Anything [[IMG:...]]-shaped that failed validation is noise — drop it.
+    clean = clean.replace(/\[\[IMG:[^\]]*\]\]/g, '');
+    return { text: clean.replace(/\n{3,}/g, '\n\n').trim(), images: images };
   }
 
   // Minimal markdown → HTML for remote replies (links, bold, line breaks)
