@@ -72,6 +72,7 @@ Available illustrations (file | what it shows):
 - accessing-the-water-connection-after-install-1.webp | water connection under the bottom-left of the Pro
 - installation-without-direct-plumb-kits-1.webp | water valve in the open position
 - installation-without-direct-plumb-kits-2.webp | water valve in the closed position
+- installation-without-direct-plumb-kits-3.webp | manually filling with the fill tube while holding the B1 button
 - room-air-flow-considerations-1.webp | how room air currents affect flame height
 
 FACTS:
