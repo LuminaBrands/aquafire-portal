@@ -5,7 +5,7 @@
 console and are *not* deployed from this repo — so update this file in the same
 PR as any change to what the client writes, or the two drift apart silently.
 
-Storage is used by two pages:
+Storage is used by three pages:
 
 - `share-install.html`, which uploads a single install photo per submission to
   `installs/<uid>/<timestamp>-<name>` and then awards the `share-install`
@@ -15,6 +15,12 @@ Storage is used by two pages:
   as `![alt](url)` markdown. This is team-authored public content, not a
   customer submission — see the `help-media/` clause below for why its rules
   differ from `installs/`.
+- `chat-insights.html`, whose Teach Ember modal uploads an optional image or
+  PDF attachment to the same `help-media/` path; the URL lands on the
+  `chatKnowledge` doc and the chat can then show the image inline (or link
+  the PDF) in AI answers. Same team-authored-public-content reasoning — the
+  chat shows these to customers, so public read is the point. PDFs are why
+  the clause below allows `application/pdf` alongside images.
 
 ## Rules
 
@@ -53,7 +59,7 @@ service firebase.storage {
                    && request.auth.token.email_verified == true
                    && request.auth.token.email.matches('.*@luminabrands[.]com$')
                    && request.resource.size < 5 * 1024 * 1024
-                   && request.resource.contentType.matches('image/.*');
+                   && request.resource.contentType.matches('image/.*|application/pdf');
       allow delete: if false;
     }
 

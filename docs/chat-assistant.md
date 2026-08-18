@@ -323,14 +323,20 @@ the widget raises a Slack alert (see "Slack alerts" below). `api/chat.js` gets t
 asking the model to end such replies with an `[[UNRESOLVED]]` marker, which the
 function strips before the text reaches the customer.
 
-Replies may also carry `[[IMG:<file>.webp|<caption>]]` markers: `BASE_FACTS`
-lists a curated catalogue of `help-img/` illustrations the model may cite, and
-the widget (`extractReplyImages`) turns valid markers into inline `image`
-blocks linking back to the source article. Validation is strict — bare
-`slug-N.webp` filenames only, resolved under the portal's `help-img/`, max two
-per reply; anything else is stripped as noise, so the model can never point
-the widget at an arbitrary image source. Add new files to the catalogue in
-`api/chat.js` when a picture genuinely earns its place in an answer.
+Replies may also carry `[[IMG:<src>|<caption>]]` markers, which the widget
+(`extractReplyImages`) turns into inline `image` blocks. Two forms pass
+validation, max two per reply, everything else stripped as noise so the model
+can never point the widget at an arbitrary image source:
+
+- **Bare `slug-N.webp` filenames** — the curated `help-img/` catalogue listed
+  in `BASE_FACTS`; the figure links back to the source article. Add new files
+  to the catalogue in `api/chat.js` when a picture genuinely earns its place.
+- **Full https URLs on the widget's `IMG_URL_PREFIXES` allowlist** (Firebase
+  Storage + the Shopify CDN) — these come from **Teach Ember attachments**:
+  the modal in `chat-insights.html` can attach an image or PDF (uploaded to
+  `help-media/`, `docs/storage-rules.md`) to a knowledge entry. Images are
+  offered to the model as `[[IMG:<url>|caption]]` candidates; PDFs are offered
+  as markdown links to share when relevant.
 
 ### Example: Cloudflare Worker
 

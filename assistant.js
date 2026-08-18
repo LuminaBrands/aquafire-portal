@@ -544,6 +544,7 @@
             ]},
             { t: 'text', html: 'On the <strong>width</strong>: leave <strong>\u215c\u2033 of clearance in total</strong> \u2014 \u215c\u2033 over nominal, split across the two outside edges, against the + \u00bc\u2033 minimum in the spec sheets. Our senior install crews recommend it so the insert seats without being forced and air keeps moving around the internals, and it\u2019s what the Enclosure Guide now calculates. Depth and height are unchanged. Watch the convention on someone else\u2019s drawing: \u215c\u2033 here is the total across the opening, not per side.' },
             { t: 'text', html: 'The Enclosure Guide calculates all of this for your exact model and size \u2014 and you can email drawings to <a href="mailto:' + SALES_EMAIL + '">' + SALES_EMAIL + '</a> for a free design review.' },
+            { t: 'image', src: pURL('help-img/common-enclosure-dimensions-2.webp'), alt: 'Photo showing the front setback measurement marked with red lines', href: HELP + '?article=common-enclosure-dimensions' },
             { t: 'links', items: [{ label: '\ud83d\udcd0 Open the Enclosure Guide', href: pURL('enclosure-guide.html') }, { label: '\ud83d\udd28 Enclosure best practices', href: pURL('enclosure-guide.html#field-notes') }] },
             { t: 'chips', items: [{ label: 'Downdrafts & sealing', send: 'How do I stop downdrafts in the enclosure?' }] }
           ]
@@ -569,6 +570,7 @@
               '<strong>Keep the top clear</strong> \u2014 the unit still needs 50\u00a0sq\u00a0in of air intake per 20\u2033 of length, through the top lid or a toe kick if the lid is covered. Keep heavy items off the top.'
             ]},
             { t: 'text', html: 'Do it during the initial install while the enclosure is still open \u2014 sealing after symptoms appear means pulling an installed unit back out of a finished wall.' },
+            { t: 'image', src: pURL('help-img/room-air-flow-considerations-1.webp'), alt: 'Diagram of air currents affecting flame height', href: HELP + '?article=room-air-flow-considerations' },
             { t: 'links', items: [{ label: '\ud83d\udd28 Enclosure best practices', href: pURL('enclosure-guide.html#field-notes') }] },
             { t: 'chips', items: [CHIP_HUMAN] }
           ]
@@ -692,6 +694,7 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'Yes \u2014 Aquafire produces <strong>no heat</strong>, so artwork above is completely fine, and a TV works great too: just put a <strong>mantel shelf</strong> between the flame and the screen so the light mist has room to dissipate. Design tip: add a recessed <strong>light trap</strong> above the flame so LED light doesn\u2019t wash onto the screen or ceiling. The Enclosure Guide shows exactly how.' },
+            { t: 'image', src: pURL('help-img/how-to-avoid-ceiling-light-bleed-1.webp'), alt: 'Aquafire light bleed visible on the ceiling above a TV installation', href: HELP + '?article=how-to-avoid-ceiling-light-bleed' },
             { t: 'links', items: [{ label: '\ud83d\udcd0 Light trap design in the Enclosure Guide', href: pURL('enclosure-guide.html') }] }
           ]
         };
@@ -777,6 +780,7 @@
               '<strong>If unused for a while:</strong> drain and refill \u2014 stale water causes musty smells.',
               '<strong>Mist makers are wear parts</strong> \u2014 plan to replace them every 2,000\u20133,000 operating hours.'
             ]},
+            { t: 'image', src: pURL('help-img/flame-low-or-uneven-4.webp'), alt: 'Mist maker showing buildup and sediment that needs cleaning', href: HELP + '?article=flame-low-or-uneven' },
             { t: 'videos', keys: ['locateMistMaker', 'cleanMM1', 'cleanMM2'] },
             { t: 'links', items: [
               { label: '\ud83e\uddf0 Maintenance guide', href: pURL('maintenance.html') },
@@ -795,6 +799,8 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'A light that flashes for ~30 seconds at power-on (with no beeps) is the <strong>preventative-maintenance reminder</strong> \u2014 the unit is due for a cleaning. After cleaning, reset it by <strong>pressing and holding the middle and left buttons together</strong> until the light stops.' },
+            { t: 'image', src: pURL('help-img/maintenance-reminder-info-and-resetting-1.webp'), alt: 'Aquafire Original (AWA3) control panel with maintenance reminder lights flashing', href: HELP + '?article=maintenance-reminder-info-and-resetting' },
+            { t: 'image', src: pURL('help-img/maintenance-reminder-info-and-resetting-2.webp'), alt: 'Aquafire Pro (AWPR3) control panel with maintenance reminder lights flashing', href: HELP + '?article=maintenance-reminder-info-and-resetting' },
             { t: 'links', items: [tsLink('beep_maintenance', '\ud83e\udded Walk through it in the Troubleshooter')] }
           ]
         };
@@ -950,6 +956,7 @@
               '<strong>Dirty mist makers</strong> \u2014 mineral buildup is the #1 cause, especially if only one section is weak. Clean the discs (5-minute job).',
               'Also check water level in the mist tubes \u2014 it should just reach the top of the black mushroom cap.'
             ]},
+            { t: 'image', src: pURL('help-img/flame-low-or-uneven-2.webp'), alt: 'Diagram comparing normal and high water levels in the mist maker tank', href: HELP + '?article=flame-low-or-uneven' },
             { t: 'videos', keys: ['locateMistMaker', 'cleanMM1'] },
             { t: 'links', items: [tsLink('flame', '\ud83e\udded Guided flame diagnosis'), { label: '\ud83d\udcc4 Help article: Flame low or uneven', href: HELP + '?article=flame-low-or-uneven' }] },
             { t: 'chips', items: [CHIP_HUMAN] }
@@ -965,6 +972,7 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'A smoky or foggy look means <strong>too much mist</strong> is being generated. Press \u201c\u2212\u201d on the remote (or lower density in the app on a Pro) to dial it back. If it stays foggy, check that the water level in the mist tubes isn\u2019t above the black mushroom cap, and inspect the sponge filters.' },
+            { t: 'image', src: pURL('help-img/flame-smoky-foggy-1.webp'), alt: 'Smoky or foggy flame appearance on an Aquafire', href: HELP + '?article=flame-smoky-foggy' },
             { t: 'links', items: [tsLink('flame_smoky', '\ud83e\udded Step-by-step fix'), { label: '\ud83d\udcc4 Help article: Smoky / foggy appearance', href: HELP + '?article=flame-smoky-foggy' }] }
           ]
         };
@@ -983,6 +991,7 @@
               'Lift and plunge the mist-maker rack vigorously 10\u201315 times \u2014 this frees the float sensor.',
               'Run the unit and re-check that the level holds.'
             ]},
+            { t: 'image', src: pURL('help-img/general-cleaning-1.webp'), alt: 'Float sensor location in the bottom tank', href: HELP + '?article=general-cleaning' },
             { t: 'videos', keys: ['agitateFloat'] },
             { t: 'links', items: [tsLink('water_leak', '\ud83e\udded Guided leak diagnosis')] },
             { t: 'chips', items: [CHIP_HUMAN] }
@@ -1072,6 +1081,7 @@
               'On a Pro, check both the amber and RGB strips (they connect separately), and try toggling each from the remote/app.',
               'Individual dead cells on a strip mean the strip needs replacement \u2014 contact support or grab one from the parts store.'
             ]},
+            { t: 'image', src: pURL('help-img/my-lights-wont-turn-on-1.webp'), alt: 'Flame density and speed settings on the remote control', href: HELP + '?article=my-lights-wont-turn-on' },
             { t: 'links', items: [tsLink('led', '\ud83e\udded Guided light diagnosis'), { label: '\ud83d\uded2 Replacement light strips', href: STORE + '/collections/replacement-parts' }] },
             { t: 'chips', items: [CHIP_HUMAN] }
           ]
@@ -2333,22 +2343,31 @@
     });
   }
 
-  // AI replies may carry [[IMG:<file>.webp|<alt>]] markers pointing at the
-  // help center's self-hosted images (api/chat.js BASE_FACTS lists the
-  // approved catalogue). The filename is strictly validated — bare
-  // slug-N.webp only, resolved under help-img/ via pURL — so the model can
-  // never point the widget at an arbitrary source. Max two per reply; the
-  // figure links to its source article (slug = filename minus the -N).
+  // AI replies may carry [[IMG:<src>|<alt>]] markers. Two allowed forms,
+  // both strictly validated so the model can never point the widget at an
+  // arbitrary source:
+  //   1. A bare slug-N.webp filename — one of the help center's self-hosted
+  //      images (api/chat.js BASE_FACTS lists the approved catalogue),
+  //      resolved under help-img/ via pURL; the figure links to its source
+  //      article (slug = filename minus the -N).
+  //   2. A full https URL on the attachment allowlist below — images the
+  //      team attached via the Teach Ember flow (Firebase Storage) or the
+  //      Shopify CDN; the figure links to the image itself.
+  // Max two per reply; anything else [[IMG:...]]-shaped is dropped as noise.
+  var IMG_URL_PREFIXES = ['https://firebasestorage.googleapis.com/', 'https://cdn.shopify.com/'];
   function extractReplyImages(text) {
     var images = [];
-    var clean = text.replace(/\[\[IMG:([a-z0-9][a-z0-9-]*-\d+\.webp)(?:\|([^\]|]*))?\]\]/g, function (_, file, alt) {
-      if (images.length < 2) {
-        var slug = file.replace(/-\d+\.webp$/, '');
-        images.push({ t: 'image', src: pURL('help-img/' + file), alt: (alt || '').trim(), href: HELP + '?article=' + slug });
+    var clean = text.replace(/\[\[IMG:([A-Za-z0-9][^\]|\s]*)(?:\|([^\]|]*))?\]\]/g, function (_, src, alt) {
+      if (images.length >= 2) return '';
+      alt = (alt || '').trim();
+      if (/^[a-z0-9][a-z0-9-]*-\d+\.webp$/.test(src)) {
+        var slug = src.replace(/-\d+\.webp$/, '');
+        images.push({ t: 'image', src: pURL('help-img/' + src), alt: alt, href: HELP + '?article=' + slug });
+      } else if (IMG_URL_PREFIXES.some(function (p) { return src.indexOf(p) === 0; })) {
+        images.push({ t: 'image', src: src, alt: alt, href: src });
       }
       return '';
     });
-    // Anything [[IMG:...]]-shaped that failed validation is noise — drop it.
     clean = clean.replace(/\[\[IMG:[^\]]*\]\]/g, '');
     return { text: clean.replace(/\n{3,}/g, '\n\n').trim(), images: images };
   }
