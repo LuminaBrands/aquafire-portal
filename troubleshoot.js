@@ -21,25 +21,25 @@
   /* ── Resource links ─────────────────────────────────────────────────── */
   var LINKS = {
     pmGuide:         { label: 'Preventative Maintenance Guide', url: 'https://www.aquafire.com/pages/maintenance' },
-    generalClean:    { label: 'General Cleaning (mist makers & full system)', url: 'https://aquafire.gorgias.help/en-US/general-cleaning-for-aquafire-and-aquafire-pro-340453' },
+    generalClean:    { label: 'General Cleaning (mist makers & full system)', url: 'help.html?article=general-cleaning' },
     serviceRequest:  { label: 'Submit a service request', url: 'https://www.aquafire.com/pages/service-request' },
     replacementParts:{ label: 'Replacement parts', url: 'https://www.aquafire.com/collections/replacement-parts' },
     warrantyReg:     { label: 'Register your warranty', url: 'https://www.aquafire.com/warranty' },
     waterCare:       { label: 'Water Care tool (hardness lookup)', url: 'water-care.html' },
     enclosureGuide:  { label: 'Enclosure Guide', url: 'enclosure-guide.html' },
-    aPower:          { label: 'Help article: Power Issues', url: 'https://aquafire.gorgias.help/en-US/power-issues-227728' },
-    aWater:          { label: 'Help article: Water Issues', url: 'https://aquafire.gorgias.help/en-US/water-issues-232520' },
-    aRemote:         { label: 'Help article: Remote Control Issues', url: 'https://aquafire.gorgias.help/en-US/remote-control-issues-232524' },
-    aLightAWA:       { label: 'Help article: Light Issues — Aquafire', url: 'https://aquafire.gorgias.help/en-US/light-issues---aquafire-232523' },
-    aLightAWPR:      { label: 'Help article: Light Issues — Aquafire Pro', url: 'https://aquafire.gorgias.help/en-US/light-issues---aquafire-pro-232522' },
-    aLightsOff:      { label: 'Help article: My Lights Won’t Turn On', url: 'https://aquafire.gorgias.help/en-US/my-lights-wont-turn-on-981511' },
-    aFlameApp:       { label: 'Help article: Flame Appearance Troubleshooting', url: 'https://aquafire.gorgias.help/en-US/flame-appearance-troubleshooting-232521' },
-    aFlameLow:       { label: 'Help article: Flame Issues — Low or Uneven', url: 'https://aquafire.gorgias.help/en-US/flame-issues---low-or-uneven-%22flame%22-271574' },
-    aFlameSmoky:     { label: 'Help article: Flame Issues — Smoky / Foggy', url: 'https://aquafire.gorgias.help/en-US/flame-issues---smoky--foggy-appearance-841252' },
-    aAdjustFlame:    { label: 'Help article: Adjusting the Aquafire Flame', url: 'https://aquafire.gorgias.help/en-US/adjusting-the-aquafire-flame-483763' },
-    aApp:            { label: 'Help article: Aquafire Pro — Phone App not connecting', url: 'https://aquafire.gorgias.help/en-US/aquafire-pro---phone-app-not-connecting-272087' },
-    aBeep:           { label: 'Help article: My Aquafire is beeping!', url: 'https://aquafire.gorgias.help/en-US/my-aquafire-is-beeping-608536' },
-    aSerial:         { label: 'Help article: Identifying your serial number', url: 'https://aquafire.gorgias.help/en-US/identifying-serial-number-275552' }
+    aPower:          { label: 'Help article: Power Issues', url: 'help.html?article=power-issues' },
+    aWater:          { label: 'Help article: Water Issues', url: 'help.html?article=water-issues' },
+    aRemote:         { label: 'Help article: Remote Control Issues', url: 'help.html?article=remote-control-issues' },
+    aLightAWA:       { label: 'Help article: Light Issues — Aquafire', url: 'help.html?article=light-issues-aquafire' },
+    aLightAWPR:      { label: 'Help article: Light Issues — Aquafire Pro', url: 'help.html?article=light-issues-aquafire-pro' },
+    aLightsOff:      { label: 'Help article: My Lights Won’t Turn On', url: 'help.html?article=my-lights-wont-turn-on' },
+    aFlameApp:       { label: 'Help article: Flame Appearance Troubleshooting', url: 'help.html?article=flame-appearance-troubleshooting' },
+    aFlameLow:       { label: 'Help article: Flame Issues — Low or Uneven', url: 'help.html?article=flame-low-or-uneven' },
+    aFlameSmoky:     { label: 'Help article: Flame Issues — Smoky / Foggy', url: 'help.html?article=flame-smoky-foggy' },
+    aAdjustFlame:    { label: 'Help article: Adjusting the Aquafire Flame', url: 'help.html?article=adjusting-the-flame' },
+    aApp:            { label: 'Help article: Aquafire Pro — Phone App not connecting', url: 'help.html?article=pro-phone-app-not-connecting' },
+    aBeep:           { label: 'Help article: My Aquafire is beeping!', url: 'help.html?article=my-aquafire-is-beeping' },
+    aSerial:         { label: 'Help article: Identifying your serial number', url: 'help.html?article=identifying-serial-number' }
   };
   var SUPPORT_EMAIL = 'support@aquafire.com';
   var SUPPORT_PHONE = '(877) 888-4260';
