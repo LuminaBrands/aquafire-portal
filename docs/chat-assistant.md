@@ -323,6 +323,15 @@ the widget raises a Slack alert (see "Slack alerts" below). `api/chat.js` gets t
 asking the model to end such replies with an `[[UNRESOLVED]]` marker, which the
 function strips before the text reaches the customer.
 
+Replies may also carry `[[IMG:<file>.webp|<caption>]]` markers: `BASE_FACTS`
+lists a curated catalogue of `help-img/` illustrations the model may cite, and
+the widget (`extractReplyImages`) turns valid markers into inline `image`
+blocks linking back to the source article. Validation is strict — bare
+`slug-N.webp` filenames only, resolved under the portal's `help-img/`, max two
+per reply; anything else is stripped as noise, so the model can never point
+the widget at an arbitrary image source. Add new files to the catalogue in
+`api/chat.js` when a picture genuinely earns its place in an answer.
+
 ### Example: Cloudflare Worker
 
 ```bash
@@ -620,7 +629,14 @@ an eval set if you later want automated answer-quality testing).
 
 Answers live in the `INTENTS` array in `assistant.js` — each intent has weighted
 keywords and an `answer()` returning rich blocks (`text`, `steps`, `cards`, `links`,
-`videos`, `chips`, `contact`). House rules:
+`videos`, `chips`, `contact`, `image`). House rules:
+
+- **`image` blocks** (`{ t: 'image', src, alt, href }`) render an inline figure
+  with the alt text as its caption; `href` (usually the source help article)
+  makes the whole card a link. Always build `src` with `pURL('help-img/…')`
+  so it resolves on Shopify embeds — the images are the Help Center's
+  self-hosted `help-img/*.webp` set, so a chat figure and its article never
+  drift apart.
 
 - **Facts must trace to `docs/source-material/`.** When Aquafire revises a help
   article or spec guide, update the intent *and* the extract.
