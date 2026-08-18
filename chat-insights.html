@@ -240,6 +240,13 @@
       </div>
       <label for="kbA" id="kbALabel">The correct answer</label>
       <textarea id="kbA" rows="5" maxlength="1500" placeholder="e.g. Yes — we ship to Canada via&hellip;"></textarea>
+      <label for="kbFile">Attach an image or PDF <span style="font-weight:400;color:var(--text-muted);">(optional — Ember can show it to customers when it helps)</span></label>
+      <input type="file" id="kbFile" accept="image/*,application/pdf" style="font-size:0.82rem;">
+      <div id="kbAttState" style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;"></div>
+      <div id="kbAttCapWrap" style="display:none;">
+        <label for="kbAttCap">What the attachment shows <span style="font-weight:400;color:var(--text-muted);">(used as its caption / link label)</span></label>
+        <input id="kbAttCap" maxlength="120" placeholder="e.g. Fill valve in the open position">
+      </div>
       <div class="auth-err" id="kbErr"></div>
       <div class="row">
         <button class="btn btn-secondary" id="kbCancel">Cancel</button>
@@ -251,6 +258,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
   <script>
     (function () {
       'use strict';
@@ -350,8 +358,12 @@
             var tag = it.d.kind === 'correction'
               ? '<span class="tag warn" style="margin-right:6px;">correction</span>'
               : '<span class="tag info" style="margin-right:6px;">fact</span>';
+            var attHtml = it.d.attUrl
+              ? '<div class="kb-a" style="margin-top:4px;"><a href="' + esc(it.d.attUrl) + '" target="_blank" rel="noopener" style="color:var(--blue);">\u{1F4CE} ' +
+                esc(it.d.attCap || (it.d.attType === 'pdf' ? 'Attached PDF' : 'Attached image')) + '</a></div>'
+              : '';
             row.innerHTML = '<div><div class="kb-q">' + tag + esc(it.d.q || '(general)') + '</div>' +
-              '<div class="kb-a">' + esc(it.d.a || '') + '</div></div>' +
+              '<div class="kb-a">' + esc(it.d.a || '') + '</div>' + attHtml + '</div>' +
               '<button class="kb-x">Remove</button>';
             row.querySelector('.kb-x').onclick = function () {
               if (!confirm('Remove this knowledge? Ember’s AI answers stop using it within ~5 minutes.')) return;
@@ -373,6 +385,7 @@
         $('kbQ').value = question || '';
         $('kbA').value = '';
         $('kbErr').textContent = '';
+        resetAtt();
         if (teachMode === 'correction') {
           $('kbTitle').innerHTML = '&#x1f527; Correct this answer';
           $('kbHint').textContent = 'Plain notes are fine — tell Ember what’s actually correct and it will phrase it naturally, in its own voice, for each conversation. Corrections override everything else it knows. Live within ~5 min.';
@@ -393,6 +406,58 @@
       $('kbModal').addEventListener('click', function (e) {
         if (e.target === $('kbModal')) $('kbModal').style.display = 'none';
       });
+      /* ── Teach attachments (help-media/, same Storage path + rules as
+         help-admin's article images — docs/storage-rules.md; PDFs need the
+         updated contentType clause published). The uploaded URL is stored on
+         the knowledge doc; api/chat.js hands images to the model as [[IMG]]
+         candidates and PDFs as shareable links. */
+      var att = null; // { url, type: 'image'|'pdf', name }
+      function resetAtt() {
+        att = null;
+        $('kbFile').value = '';
+        $('kbAttState').textContent = '';
+        $('kbAttCap').value = '';
+        $('kbAttCapWrap').style.display = 'none';
+      }
+      $('kbFile').onchange = function () {
+        var file = this.files && this.files[0];
+        if (!file) return;
+        $('kbErr').textContent = '';
+        var isPdf = file.type === 'application/pdf';
+        if (!isPdf && !/^image\//.test(file.type || '')) {
+          $('kbErr').textContent = 'Only images and PDFs can be attached.'; this.value = ''; return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          $('kbErr').textContent = 'That file is ' + (file.size / 1048576).toFixed(1) + ' MB — the limit is 5 MB.';
+          this.value = ''; return;
+        }
+        if (typeof firebase === 'undefined' || !firebase.storage) {
+          $('kbErr').textContent = 'Uploads are unavailable — the Storage SDK did not load.'; return;
+        }
+        var safe = (file.name || 'file').replace(/[^A-Za-z0-9._-]/g, '_').slice(-80);
+        var task = firebase.storage().ref('help-media/' + Date.now() + '-' + safe)
+          .put(file, { contentType: file.type });
+        $('kbAttState').textContent = 'Uploading… 0%';
+        task.on('state_changed', function (snap) {
+          var pct = snap.totalBytes ? Math.round((snap.bytesTransferred / snap.totalBytes) * 100) : 0;
+          $('kbAttState').textContent = 'Uploading… ' + pct + '%';
+        }, function (e) {
+          $('kbAttState').textContent = '';
+          $('kbErr').textContent = 'Upload failed: ' + (e && e.message ? e.message : e) +
+            (e && e.code === 'storage/unauthorized'
+              ? ' — publish the help-media rules from docs/storage-rules.md (PDFs need the updated contentType clause).' : '');
+        }, function () {
+          task.snapshot.ref.getDownloadURL().then(function (url) {
+            att = { url: url, type: isPdf ? 'pdf' : 'image', name: file.name || 'attachment' };
+            $('kbAttState').textContent = '\u{1F4CE} ' + att.name + ' attached';
+            $('kbAttCapWrap').style.display = '';
+          }).catch(function (e) {
+            $('kbAttState').textContent = '';
+            $('kbErr').textContent = 'Uploaded, but couldn’t read back the URL: ' + e.message;
+          });
+        });
+      };
+
       $('kbSave').onclick = function () {
         var q = $('kbQ').value.trim(), a = $('kbA').value.trim();
         if (!a) { $('kbErr').textContent = 'Write the correct information first.'; return; }
@@ -402,6 +467,11 @@
           ts: new Date().toISOString()
         };
         if (teachMode === 'correction' && teachWrong) doc.wrong = teachWrong;
+        if (att) {
+          doc.attUrl = att.url;
+          doc.attType = att.type;
+          doc.attCap = $('kbAttCap').value.trim() || att.name;
+        }
         db.collection('chatKnowledge').add(doc).then(function () {
           $('kbModal').style.display = 'none';
           loadKb();

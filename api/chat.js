@@ -54,7 +54,8 @@ model in their cart) — never recite it back robotically or mention "context".
 You can show the customer a picture. When one of the illustrations below would
 directly clarify your answer (where a part is, what a setting looks like),
 append [[IMG:<file>|<caption>]] on its own line after the sentence it
-illustrates — at most two per reply, only files from this list, and never
+illustrates — at most two per reply, only files from this list (or an
+illustration URL a team-added knowledge entry explicitly offers), and never
 mention the marker or describe it to the customer (the chat renders it as an
 inline photo). Skip images that merely decorate.
 Available illustrations (file | what it shows):
@@ -268,12 +269,22 @@ async function teamKnowledge() {
       const f = d.fields || {};
       const q = sv(f, 'q'), a = sv(f, 'a'), wrong = sv(f, 'wrong');
       if (!a) return;
+      // Teach-flow attachments (chat-insights.html): an image the chat may
+      // show inline, or a document it may link. Only https URLs pass through.
+      const attUrl = sv(f, 'attUrl'), attType = sv(f, 'attType');
+      const attCap = sv(f, 'attCap') || 'attachment';
+      let att = '';
+      if (attUrl && /^https:\/\//.test(attUrl)) {
+        att = attType === 'pdf'
+          ? '\n  Reference document — when it helps, share it as the markdown link [' + attCap + '](' + attUrl + ').'
+          : '\n  Illustration — when showing it helps, add [[IMG:' + attUrl + '|' + attCap + ']] on its own line.';
+      }
       if (sv(f, 'kind') === 'correction') {
         fixes.push('- Topic: ' + (q || '(general)') +
           (wrong ? '\n  The chat previously said (WRONG, never repeat this): "' + wrong + '"' : '') +
-          '\n  The correct information: ' + a);
+          '\n  The correct information: ' + a + att);
       } else {
-        facts.push(q ? 'Q: ' + q + '\nA: ' + a : '- ' + a);
+        facts.push((q ? 'Q: ' + q + '\nA: ' + a : '- ' + a) + att);
       }
     });
     let text = '';
