@@ -45,7 +45,9 @@
   var PORTAL_BASE = cfg.portalBase || dataAttr('portal-base') ||
     (script && script.src ? script.src.replace(/[^\/]*(\?.*)?$/, '') : '');
   var STORE = 'https://www.aquafire.com';
-  var HELP = 'https://aquafire.gorgias.help/en-US';
+  // Portal-native Help Center (help.js clones the old Gorgias catalogue,
+  // same articles). pURL keeps links absolute on Shopify embeds.
+  var HELP = pURL('help.html');
 
   function pURL(path) { return PORTAL_BASE + path; }
 
@@ -737,7 +739,7 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'Look for the silver info plate on the <strong>back of the insert</strong> (you may need to slide it out of the enclosure) or the label <strong>under the top lid</strong>. The SKU tells you the model: <strong>AWPR</strong>\u00a0=\u00a0Pro, <strong>AWA</strong>\u00a0=\u00a0Original, <strong>AWL</strong>\u00a0=\u00a0Lite.' },
-            { t: 'links', items: [{ label: '\ud83d\udcc4 Help article: Identifying your serial number', href: HELP + '/identifying-serial-number-275552' }] }
+            { t: 'links', items: [{ label: '\ud83d\udcc4 Help article: Identifying your serial number', href: HELP + '?article=identifying-serial-number' }] }
           ]
         };
       }
@@ -776,7 +778,7 @@
             { t: 'videos', keys: ['locateMistMaker', 'cleanMM1', 'cleanMM2'] },
             { t: 'links', items: [
               { label: '\ud83e\uddf0 Maintenance guide', href: pURL('maintenance.html') },
-              { label: '\ud83d\udcc4 General cleaning help article', href: HELP + '/general-cleaning-for-aquafire-and-aquafire-pro-340453' }
+              { label: '\ud83d\udcc4 General cleaning help article', href: HELP + '?article=general-cleaning' }
             ]},
             { t: 'chips', items: [{ label: 'Maintenance light is on', send: 'My maintenance reminder light is flashing' }, { label: 'Order parts', send: 'I need replacement parts' }] }
           ]
@@ -926,7 +928,7 @@
               '<strong>Light flashing ~30s, no beeps</strong> \u2192 Maintenance reminder \u2014 time for a cleaning.'
             ]},
             { t: 'videos', keys: ['beepLowWater', 'beepOverflow', 'beepVoltage'] },
-            { t: 'links', items: [tsLink('beep', '\ud83e\udded Step-by-step in the Troubleshooter'), { label: '\ud83d\udcc4 Help article: My Aquafire is beeping!', href: HELP + '/my-aquafire-is-beeping-608536' }] },
+            { t: 'links', items: [tsLink('beep', '\ud83e\udded Step-by-step in the Troubleshooter'), { label: '\ud83d\udcc4 Help article: My Aquafire is beeping!', href: HELP + '?article=my-aquafire-is-beeping' }] },
             { t: 'chips', items: [CHIP_HUMAN] }
           ]
         };
@@ -947,7 +949,7 @@
               'Also check water level in the mist tubes \u2014 it should just reach the top of the black mushroom cap.'
             ]},
             { t: 'videos', keys: ['locateMistMaker', 'cleanMM1'] },
-            { t: 'links', items: [tsLink('flame', '\ud83e\udded Guided flame diagnosis'), { label: '\ud83d\udcc4 Help article: Flame low or uneven', href: HELP + '/flame-issues---low-or-uneven-%22flame%22-271574' }] },
+            { t: 'links', items: [tsLink('flame', '\ud83e\udded Guided flame diagnosis'), { label: '\ud83d\udcc4 Help article: Flame low or uneven', href: HELP + '?article=flame-low-or-uneven' }] },
             { t: 'chips', items: [CHIP_HUMAN] }
           ]
         };
@@ -961,7 +963,7 @@
           feedback: true,
           blocks: [
             { t: 'text', html: 'A smoky or foggy look means <strong>too much mist</strong> is being generated. Press \u201c\u2212\u201d on the remote (or lower density in the app on a Pro) to dial it back. If it stays foggy, check that the water level in the mist tubes isn\u2019t above the black mushroom cap, and inspect the sponge filters.' },
-            { t: 'links', items: [tsLink('flame_smoky', '\ud83e\udded Step-by-step fix'), { label: '\ud83d\udcc4 Help article: Smoky / foggy appearance', href: HELP + '/flame-issues---smoky--foggy-appearance-841252' }] }
+            { t: 'links', items: [tsLink('flame_smoky', '\ud83e\udded Step-by-step fix'), { label: '\ud83d\udcc4 Help article: Smoky / foggy appearance', href: HELP + '?article=flame-smoky-foggy' }] }
           ]
         };
       }
@@ -1014,7 +1016,7 @@
               'If it beeps then shuts off, that\u2019s low water \u2014 refill or check the water feed.',
               'Green adapter light but still no power? The internal fuse may be blown \u2014 that\u2019s one for support.'
             ]},
-            { t: 'links', items: [tsLink('power', '\ud83e\udded Guided power diagnosis'), { label: '\ud83d\udcc4 Help article: Power issues', href: HELP + '/power-issues-227728' }] },
+            { t: 'links', items: [tsLink('power', '\ud83e\udded Guided power diagnosis'), { label: '\ud83d\udcc4 Help article: Power issues', href: HELP + '?article=power-issues' }] },
             { t: 'chips', items: [CHIP_HUMAN] }
           ]
         };
@@ -1032,7 +1034,7 @@
               '<strong>Fresh battery</strong> \u2014 it takes a CR-2032 lithium coin cell.',
               '<strong>Re-sync</strong> \u2014 press and hold the power button on the fireplace until it flashes, then press any button on the remote. A beep confirms pairing. (Same process syncs multiple ganged units to one remote.)'
             ]},
-            { t: 'links', items: [tsLink('remote', '\ud83e\udded Guided remote fix'), { label: '\ud83d\udcc4 Help article: Remote control issues', href: HELP + '/remote-control-issues-232524' }] },
+            { t: 'links', items: [tsLink('remote', '\ud83e\udded Guided remote fix'), { label: '\ud83d\udcc4 Help article: Remote control issues', href: HELP + '?article=remote-control-issues' }] },
             { t: 'chips', items: [{ label: 'Buy a new remote', send: 'I need replacement parts' }, CHIP_HUMAN] }
           ]
         };
@@ -1050,7 +1052,7 @@
               ? 'For the AFIRE app on the Pro: make sure Bluetooth is on, you\u2019re within range, and the unit is powered. Force-close and reopen the app, then re-run the pairing flow. This video walks through it:'
               : 'Heads up \u2014 the phone app is a <strong>Pro (AWPR)</strong> feature; the Original and Lite are controlled by remote. If you have a Pro:') },
             { t: 'videos', keys: ['appConnect'] },
-            { t: 'links', items: [tsLink('app_entry', '\ud83e\udded Guided app connection'), { label: '\ud83d\udcc4 Help article: Phone app not connecting', href: HELP + '/aquafire-pro---phone-app-not-connecting-272087' }] }
+            { t: 'links', items: [tsLink('app_entry', '\ud83e\udded Guided app connection'), { label: '\ud83d\udcc4 Help article: Phone app not connecting', href: HELP + '?article=pro-phone-app-not-connecting' }] }
           ]
         };
       }
