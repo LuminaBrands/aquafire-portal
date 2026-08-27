@@ -21,7 +21,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 | `troubleshoot.html` | Interactive model-aware decision-tree Troubleshooter |
 | `help.html` | Help Center — article library (`help.js` engine + `help-articles.js` data + Firestore merge). Docs: `docs/help-center.md` |
 | `rewards.html` | Rewards programme page — tiers and earning modules |
-| `dealer-locator.html` | Find a Dealer map (Leaflet + Carto/OSM tiles), powered by the public `dealers.js` |
+| `dealer-locator.html` | Find a Dealer map (Leaflet + Stadia Maps tiles), powered by the public `dealers.js` |
 | `resources.html` | Download library (`resources.css`) — every professional resource grouped by model. Each model group is a **static mirror of its guide's `#resources` section** (add a download to a guide and add it here too) |
 | `share-install.html` | Photo submission → Firebase Storage (`installs/<uid>/`), awards the 500-pt `share-install` reward. Needs `docs/storage-rules.md` published |
 | `support.html` | Support hub — links Troubleshooter + storefront warranty (awards `register-warranty` on click-through); claims/FAQs cards are still `#` stubs |
@@ -161,7 +161,7 @@ Everything in the repo root is publicly served at `https://aquafire.app/<filenam
 
 ## Gotchas
 
-- **CSP blocks new external resources.** `vercel.json` pins the allowlist (gstatic/apis.google.com for Firebase, unpkg.com for Leaflet, Google Fonts, Shopify CDN, Carto/OSM tiles, nominatim). A new CDN script, font, image host, or `fetch()` target must be added there too, or it silently fails **in production only**.
+- **CSP blocks new external resources.** `vercel.json` pins the allowlist (gstatic/apis.google.com for Firebase, unpkg.com for Leaflet, Google Fonts, Shopify CDN, Stadia Maps + OSM tiles, nominatim). A new CDN script, font, image host, or `fetch()` target must be added there too, or it silently fails **in production only**.
 - **`embed.js` names the chrome by class** — it removes `.bar`/`.phead`/`.pfoot` (plus the pre-redesign `.site-nav`/`.page-header`/`.site-footer` that `dealer-admin.html` still uses). Rename a chrome element → rename it here, and actually load `?embed` to verify; a mismatch is invisible otherwise and once went unnoticed through a full rollout (`docs/history.md`).
 - **The model guide pages are ~2,500 lines each** — read specific sections. Their in-page category-accordion troubleshooting (`TS_DATA`/`ALERTS_DATA`) is separate from the standalone Troubleshooter; the tool didn't replace it.
 - **`styles.css` is enclosure-specific** despite the name; shared styles are in `redesign.css` (customer) / `hub.css` (admin).
