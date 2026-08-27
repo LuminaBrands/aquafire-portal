@@ -38,6 +38,36 @@ Mega-menu promo images (Products / Support / Discover) are **kept** — they
 render as the same compact horizontal scroll row Impact already used in the
 drawer, appended to their group.
 
+### Containing the promo row
+
+Impact's promo row carries `scroll-area bleed`, and it originally lived inside a
+panel that was itself the horizontal scroll container. Dropped into normal list
+flow it misbehaves: flex children default to `min-width: auto`, so the row's
+min-content width (three 172px+ tiles) forced the whole drawer wide and the text
+menu panned sideways along with the images.
+
+Fixed by giving the list, its items and the promo wrapper `min-width: 0` so the
+row shrinks to the drawer width and scrolls internally, plus `overflow-x: clip`
+on the scroller as a backstop — `clip` rather than `hidden` so the vertical axis
+isn't turned into a scroll container. The images still swipe; the text stays put.
+
+### Contact Us pinned to the bottom
+
+`Contact Us` is lifted out of the main list and rendered in the bottom utility
+group next to `Find A Dealer`, so the two support routes sit together within
+thumb reach. This is drawer-only markup, so it's mobile-only by construction —
+the desktop nav still shows `Contact Us` as a top-level item, and the Shopify
+menus are untouched.
+
+Driven by a list at the top of the snippet, so more items can be pinned without
+touching the loop:
+
+```liquid
+{%- assign pinned_bottom_titles = 'contact us' | split: ',' -%}
+```
+
+Titles are matched lowercased and trimmed against the main menu.
+
 ### Files
 
 Both live in the theme, not in this repo:
