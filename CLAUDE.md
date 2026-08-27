@@ -83,7 +83,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 - `robots.txt` — keeps the internal pages, `builder.html`, and `/api/` out of indexes.
 - `DESIGN.md` + `.impeccable/design.json` — the carbonized redesign contract (tokens, world, glass recipe).
 - `PRODUCT.md` — impeccable product schema.
-- `docs/` — `history.md` (decision record), `help-center.md`, `chat-assistant.md`, `embedding.md`, `dealer-admin.md`, `border-beam.md`, `firestore-rules.md` + `storage-rules.md` (**source of truth for the hand-published Firebase rules** — `installs/` + `help-media/`; update in the same PR as any rule change), `redesign-handoff.md`, `source-material/` (plain-text extracts of the help articles, install/spec guides, warranty and manuals that the Troubleshooter, chat KB and help articles are built from).
+- `docs/` — `history.md` (decision record), `help-center.md`, `chat-assistant.md`, `embedding.md`, `dealer-admin.md`, `border-beam.md`, `firestore-rules.md` + `storage-rules.md` (**source of truth for the hand-published Firebase rules** — `installs/` + `help-media/`; update in the same PR as any rule change), `redesign-handoff.md`, `shopify-theme-nav.md` (the storefront theme's expanded mobile drawer menu — theme-side change, lives in Shopify not here), `source-material/` (plain-text extracts of the help articles, install/spec guides, warranty and manuals that the Troubleshooter, chat KB and help articles are built from).
 - Committed assets: `model-pro/original/lite.jpg`, `install-example.jpg`, `ember-mark.png`, favicons, `tour-*.svg`, `AWPR 40-100.pdf`. Everything else is on the Shopify CDN — see Gotchas.
 
 ## Design System
