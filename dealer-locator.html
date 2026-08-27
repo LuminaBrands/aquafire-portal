@@ -144,8 +144,11 @@
     .leaflet-popup-close-button { color: var(--text-muted) !important; }
     .leaflet-control-attribution { font-size: 0.7rem; }
     .leaflet-control-attribution a { color: var(--text-muted); }
-    /* Lifts Carto's dark basemap toward the page's own darkness. The light
-       basemap needs none of it, so it is scoped rather than global. */
+    /* Lifts the dark basemap toward the page's own darkness. The light
+       basemap needs none of it, so it is scoped rather than global.
+       NOTE: these numbers were tuned against Carto's near-black dark_all.
+       Stadia's Alidade Smooth Dark starts lighter, so check this in the
+       browser before trusting it -- it likely wants dialling back. */
     :root[data-theme="dark"] .leaflet-tile-pane { filter: brightness(1.6) contrast(1.1) saturate(0.9); }
 
     /* Responsive */
@@ -617,12 +620,18 @@
   // ─── Init ───
   var HQ = [35.5951, -82.5515]; // Aquafire HQ, Asheville NC
 
-  /* Carto ships a dark and a light basemap and the page has both themes, so
+  /* Stadia ships a dark and a light basemap and the page has both themes, so
      the tiles follow it -- a brightened dark basemap under a light page was
      the one part of this screen that never switched. Watched with an observer
      rather than wired into the theme toggle: that toggle block is duplicated
      verbatim across every redesigned page, and this is the only one with a
-     map, so hooking it here would make this copy diverge from the other 12. */
+     map, so hooking it here would make this copy diverge from the other 12.
+
+     Alidade Smooth / Smooth Dark, not Carto's light_all / dark_all: Carto put
+     their basemaps behind an account and now stamps "API KEY REQUIRED" across
+     every tile served without one. Stadia authorises by domain instead of a
+     URL key, so aquafire.app must stay registered on the Stadia account --
+     an unregistered domain gets 401s and a blank map, not a watermark. */
   var tileLayer = null;
   function syncTiles() {
     if (!map) return;
@@ -632,10 +641,10 @@
     }
     if (tileLayer) map.removeLayer(tileLayer);
     tileLayer = L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/' + (light ? 'light_all' : 'dark_all') + '/{z}/{x}/{y}{r}.png',
+      'https://tiles.stadiamaps.com/tiles/alidade_smooth' + (light ? '' : '_dark') + '/{z}/{x}/{y}{r}.png',
       {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com/">CARTO</a>',
-        subdomains: 'abcd', maxZoom: 19
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://openmaptiles.org/">OpenMapTiles</a> © <a href="https://stadiamaps.com/">Stadia Maps</a>',
+        maxZoom: 20
       }
     ).addTo(map);
   }

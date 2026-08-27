@@ -160,3 +160,41 @@ shipping it:
   supersedes it (no Lite size direct-plumbs, no upgrade path). The stale
   20″-DP-kit line in `troubleshoot.js` and the missing Lite drain branch in
   `maintenance.html` were fixed in the same PR.
+
+### Dealer map: Carto → Stadia Maps (Aug 2026)
+
+CARTO moved their basemaps behind an account. They don't block keyless
+traffic, they *watermark* it — every tile came back stamped
+`API KEY REQUIRED · carto.com/basemaps/apikey` on the diagonal, across the
+whole locator. Nothing in our code had changed; the failure arrived on its
+own, in production, on a page that was working the day before.
+
+Swapped to Stadia Maps' **Alidade Smooth** / **Alidade Smooth Dark**, which
+are the closest free stand-ins for the `light_all` / `dark_all` pair the
+page was built around — the dual-theme tile swap survives unchanged. Two
+alternatives were on the table and lost:
+
+- **Buy a CARTO key.** Keeps the exact tiles, but the key would sit in
+  client-side JS on a public page — domain-restricted at best — and the free
+  tier's request cap becomes a thing to watch.
+- **Plain OSM tiles.** Keyless and already in the CSP, but there is no dark
+  variant, so the dark theme would show a bright map and we'd lose the
+  theme-following behaviour this map went out of its way to build.
+
+Things this swap changes that are easy to miss:
+
+- **Authorisation is by domain, not by URL key.** `aquafire.app` must stay
+  registered on the Stadia account. An unregistered domain gets 401s and a
+  *blank* map — a louder failure than Carto's watermark, but a silent one in
+  the sense that nothing in the repo records it. This is the only external
+  dependency the portal has that can't be fixed from the repo alone.
+- **No `{s}` subdomain rotation.** Stadia serves from one host, so the
+  `subdomains: 'abcd'` option came out with the URL.
+- **`img-src` in `vercel.json`** swapped `*.basemaps.cartocdn.com` for
+  `tiles.stadiamaps.com`. Miss this and the map is blank in production only.
+- **The dark-tile brightness filter is now mistuned.** The
+  `:root[data-theme="dark"] .leaflet-tile-pane` filter
+  (`brightness(1.6) contrast(1.1) saturate(0.9)`) was dialled in against
+  Carto's near-black `dark_all`. Alidade Smooth Dark starts lighter, so the
+  same numbers over-lift it. Left as-is with a comment rather than guessed
+  at — it wants a pass with the map actually on screen.
