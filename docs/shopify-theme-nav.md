@@ -51,13 +51,30 @@ row shrinks to the drawer width and scrolls internally, plus `overflow-x: clip`
 on the scroller as a backstop — `clip` rather than `hidden` so the vertical axis
 isn't turned into a scroll container. The images still swipe; the text stays put.
 
-### Contact Us pinned to the bottom
+### Find A Dealer + Contact Us in the sticky footer
 
-`Contact Us` is lifted out of the main list and rendered in the bottom utility
-group next to `Find A Dealer`, so the two support routes sit together within
-thumb reach. This is drawer-only markup, so it's mobile-only by construction —
-the desktop nav still shows `Contact Us` as a top-level item, and the Shopify
-menus are untouched.
+`.panel-footer` sits *outside* `.panel__scroller`, so it stays put while the menu
+scrolls — that's why the currency and Account row never moves. The two support
+routes now live there too, in their own row directly above it:
+
+```
+[ social icons ]
+──────────────────────────
+Find A Dealer   Contact Us
+──────────────────────────
+🇺🇸 USD $ ▾     Account
+```
+
+`Contact Us` is lifted out of the main menu (it's skipped in the scrolling list)
+and `Find A Dealer` comes from the secondary menu. Both are always reachable
+without scrolling, matching Account.
+
+They get their own row rather than joining the currency/Account row: at ~350px of
+usable drawer width, `USD $ ▾` + `Account` + `Find a Dealer` + `Contact Us` plus
+gaps overflows, and the chat bubble covers the right end of that row.
+
+This is drawer-only markup, so it's mobile-only by construction — the desktop nav
+still shows `Contact Us` as a top-level item, and the Shopify menus are untouched.
 
 Driven by a list at the top of the snippet, so more items can be pinned without
 touching the loop:
@@ -110,14 +127,20 @@ file unmodified. Or simply don't publish the theme copy.
 
 ## Deployment state
 
-Built on an **unpublished duplicate**, never on the live theme:
+The expanded menu went live on 2026-08-27: `Mobile menu expanded (2026-08-27)`
+(`187860910400`) is now the **published** theme.
 
-- Live theme: `Updated copy of Updated copy of Updated copy of...` (`185926418752`) — **unchanged**
-- Working copy: `Mobile menu expanded (2026-08-27)` (`187860910400`)
+Because Shopify blocks writes against the live theme, later changes are built on a
+fresh duplicate and published by hand:
 
-Preview: `https://www.aquafire.com/?preview_theme_id=187860910400`
+- Live: `Mobile menu expanded (2026-08-27)` (`187860910400`) — expanded menu, `Contact Us` still in the scrolling list
+- Working copy: `Mobile menu - sticky footer links (2026-08-27)` (`187975172416`) — adds the sticky footer row
+
+Preview: `https://www.aquafire.com/?preview_theme_id=187975172416`
 
 Publish from **Online Store → Themes** once it's been checked on a real phone.
+The pre-change original is still recoverable from
+`snippets/navigation-panel-classic.liquid`, which every duplicate carries forward.
 
 ## Possible follow-up (menu content, not theme code)
 
