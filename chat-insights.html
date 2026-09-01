@@ -66,8 +66,16 @@
     /* Stats */
     .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;
       margin: 24px 0; }
-    .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 16px 18px; }
+    /* Every stat is a filter button for the same filters as the chips below,
+       so a number you're reading can be opened straight into the log. The two
+       whole-corpus counts (conversations, messages) reset to All and so never
+       take the active highlight — nothing is being filtered out. */
+    .stat { display: block; width: 100%; text-align: left; font-family: inherit; color: var(--text);
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px 18px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+    .stat:hover { border-color: var(--red); }
+    .stat:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+    .stat.active { border-color: var(--red); background: var(--red-glow); }
     .stat .num { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; }
     .stat .lbl { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.6px; }
     .stat.good .num { color: var(--green); } .stat.warn .num { color: var(--amber); }
@@ -191,11 +199,16 @@
     <!-- Dashboard -->
     <div id="dash" style="display:none;">
       <div class="stats">
-        <div class="stat"><div class="num" id="sConvos">&ndash;</div><div class="lbl">Conversations</div></div>
-        <div class="stat"><div class="num" id="sMsgs">&ndash;</div><div class="lbl">User messages</div></div>
-        <div class="stat good"><div class="num" id="sAnswered">&ndash;</div><div class="lbl">Answered rate</div></div>
-        <div class="stat good"><div class="num" id="sSat">&ndash;</div><div class="lbl">&#x1f44d; rate</div></div>
-        <div class="stat warn"><div class="num" id="sHandoff">&ndash;</div><div class="lbl">Handoffs</div></div>
+        <button type="button" class="stat" data-f="all" aria-pressed="false" title="Show every conversation">
+          <div class="num" id="sConvos">&ndash;</div><div class="lbl">Conversations</div></button>
+        <button type="button" class="stat" data-f="all" aria-pressed="false" title="Show every conversation">
+          <div class="num" id="sMsgs">&ndash;</div><div class="lbl">User messages</div></button>
+        <button type="button" class="stat good" data-f="fallback" aria-pressed="false" title="Show conversations with unanswered questions">
+          <div class="num" id="sAnswered">&ndash;</div><div class="lbl">Answered rate</div></button>
+        <button type="button" class="stat good" data-f="down" aria-pressed="false" title="Show conversations with a &#x1f44e; rating">
+          <div class="num" id="sSat">&ndash;</div><div class="lbl">&#x1f44d; rate</div></button>
+        <button type="button" class="stat warn" data-f="handoff" aria-pressed="false" title="Show conversations that reached a handoff">
+          <div class="num" id="sHandoff">&ndash;</div><div class="lbl">Handoffs</div></button>
       </div>
 
       <div class="panel" id="missPanel" style="display:none;">
@@ -531,13 +544,30 @@
         $('detail').appendChild(hint);
       }
 
-      /* ── Filters ── */
+      /* ── Filters ── One setter for both controls: the chips and the stat
+         cards above them drive the same filter, so whichever you click, the
+         other stays in step. */
+      function setFilter(f) {
+        filter = f;
+        document.querySelectorAll('.fchip').forEach(function (x) {
+          x.classList.toggle('active', x.getAttribute('data-f') === f);
+        });
+        document.querySelectorAll('.stat').forEach(function (x) {
+          // 'all' is a reset, not a filter — leave those cards unhighlighted.
+          var on = f !== 'all' && x.getAttribute('data-f') === f;
+          x.classList.toggle('active', on);
+          x.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        render();
+      }
       document.querySelectorAll('.fchip').forEach(function (b) {
+        b.onclick = function () { setFilter(b.getAttribute('data-f')); };
+      });
+      document.querySelectorAll('.stat').forEach(function (b) {
         b.onclick = function () {
-          document.querySelectorAll('.fchip').forEach(function (x) { x.classList.remove('active'); });
-          b.classList.add('active');
-          filter = b.getAttribute('data-f');
-          render();
+          setFilter(b.getAttribute('data-f'));
+          // The log sits below the fold on a laptop — bring it to the click.
+          document.querySelector('.controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
       });
       $('search').oninput = function () { render(); };
