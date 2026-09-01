@@ -261,3 +261,28 @@ body.is-embed main { padding-top: 24px; }
   margin-bottom: 12px;
 }
 .placeholder-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 24px; }
+
+/* ── Scrollbars ── */
+/* The admin pages scroll inside panes — the chat-log list and transcript, the
+   help-article preview and its markdown editor, the dealer modal — where the
+   platform default renders as a bright slab against the dark surface (a Mac
+   set to "always show scrollbars" is the loud case). Thin bars on a
+   transparent track instead. Standard properties cover current Chrome,
+   Firefox and Safari; the -webkit- block carries older WebKit. Both take the
+   theme tokens, so admin-theme.css light follows without a second rule. */
+* { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--border); background-clip: content-box;
+  border: 2px solid transparent; border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); background-clip: content-box; }
+::-webkit-scrollbar-corner { background: transparent; }
+/* Brighten the bar while its pane is under the pointer — quiet while you read,
+   findable when you reach for it. Named per pane rather than applied to every
+   :hover, because an ancestor is hovered whenever a child is, which would keep
+   the page's own bar permanently lit. */
+.clist:hover, .detail:hover, .preview:hover, .modal:hover, textarea:hover, pre:hover {
+  scrollbar-color: var(--text-muted) transparent;
+}

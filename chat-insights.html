@@ -127,23 +127,6 @@
     .modal input:focus, .modal textarea:focus { border-color: var(--red); }
     .modal .row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
 
-    /* Scrollbars. This page scrolls in four places — both browser panes, the
-       teach modal's textarea, and its quoted answer — and the platform default
-       renders as a bright slab against the dark surface. Standard properties
-       cover current Chrome/Firefox/Safari; the -webkit- block carries older
-       WebKit. Both take theme tokens, so admin-theme.css light follows. */
-    * { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
-    ::-webkit-scrollbar { width: 10px; height: 10px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); background-clip: content-box;
-      border: 2px solid transparent; border-radius: 999px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); background-clip: content-box; }
-    ::-webkit-scrollbar-corner { background: transparent; }
-    /* Brighten the bar while the pane it belongs to is under the pointer —
-       quiet when you're reading, findable when you reach for it. */
-    .clist:hover, .detail:hover, .modal textarea:hover, #kbWrong:hover {
-      scrollbar-color: var(--text-muted) transparent; }
-
     /* Convo browser */
     .browser { display: grid; grid-template-columns: 340px 1fr; gap: 16px; margin-bottom: 24px; }
     .clist { max-height: 640px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
