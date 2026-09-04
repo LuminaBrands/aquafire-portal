@@ -58,7 +58,7 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 | `water-care-app.js` | Water care — `WATER_HARDNESS_DB` (2,000+ `[zip_prefix, city, state, ppm]` tuples), autocomplete, US map, timeline |
 | `troubleshoot.js` | Troubleshooter — `TREE` decision-tree data + wizard engine; `LINKS`/`VIDEOS` maps |
 | `help.js` / `help-articles.js` | Help Center engine + static catalogue (`HELP_CATEGORIES` ×8, `HELP_ARTICLES` ×76 — verbatim clone of the live Gorgias help center + 4 portal-native articles, images self-hosted in `help-img/`); published `helpArticles` Firestore docs merge over it at load, same-slug docs override, and a `hidden: true` doc retires a built-in article without a deploy |
-| `nav.js` | **Shared** nav group disclosures (Guides/Support) for all nav-bearing pages; each page's inline script still owns theme toggle + burger |
+| `nav.js` | **Shared** nav group disclosures (Guides/Help & Resources) for all nav-bearing pages; each page's inline script still owns theme toggle + burger |
 | `rewards.js` | Firebase Auth + Firestore points engine; injects reward badges as first child of `[data-reward]` |
 | `dealers.js` | **Public** dealer database + `COLORS` — powers the customer locator; rebuilt server-side by `/api/publish-dealers` |
 | `assistant.js` | **"Ember" chat widget** — self-contained single file (CSS injected, `afa-` prefixed), embeddable on Shopify with one script tag. Docs: `docs/chat-assistant.md` |
@@ -97,15 +97,15 @@ How the site evolved and why settled decisions went the way they did: `docs/hist
 One glass capsule, identical on all nav-bearing pages:
 
 ```
-[brand] │ Set Up · Guides ▾ · Support ▾ │ Rewards <pts> · ☰ · ☀
+[brand] │ Set Up · Guides ▾ · Help & Resources ▾ │ Rewards <pts> · ☰ · ☀
 
 Guides: Product Guide · Enclosure Guide · Water Care · Preventative Maintenance · Resources
-Support: Troubleshoot · Help Center · Resources · Find a Dealer · Warranty/Register* · Rewards · Service Request* · Contact Us*   (* = storefront)
+Help & Resources (the `nav-support` group; markup ids kept): Troubleshoot · Help Center · Resources · Find a Dealer · Warranty/Register* · Rewards · Service Request* · Contact Us*   (* = storefront)
 ```
 
 - **Nav markup is duplicated across ~14 HTML files — no template.** Changing nav links means editing every page (several have a footer "Guides" column too). `nav.js` owns only the group disclosures, shared so behaviour can't drift; theme toggle + burger stay inline per page.
 - Groups open on **click, not hover** (touch). Inside the burger panel the groups are always-open labelled sections, not nested popovers (`.links.open .navgroup-btn` becomes a heading, loses pointer events).
-- **`resources.html` is deliberately in both groups** — specifiers reach it from Guides, owners chasing a manual from Support. It's the only duplicated item; on the page itself both entries take `aria-current="page"` but only the Guides button takes `is-here`, so one group reads as current rather than two.
+- **`resources.html` is deliberately in both groups** — specifiers reach it from Guides, owners chasing a manual from Help & Resources. It's the only duplicated item; on the page itself both entries take `aria-current="page"` but only the Guides button takes `is-here`, so one group reads as current rather than two.
 - Current page: `class="is-here" aria-current="page"`, and its group button takes `is-here` too. `support.html` and `share-install.html` have no nav entry and mark nothing.
 - Adding an item inside a group costs no bar width; adding a *group* costs ~85px — re-measure the 760px breakpoint then (comment in `redesign.css`).
 - On the two guide pages, the in-page Enclosure Guide link carries `?model=pro|original` so the tool pre-selects. This has never applied to nav links.
