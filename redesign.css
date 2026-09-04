@@ -388,10 +388,10 @@ button, input, select, textarea { font-family: inherit; }
 }
 .bar .links a:hover { color: var(--text-hi); background: var(--cap-bg-hover); }
 .bar .links a.is-here { color: var(--text-hi); background: var(--cap-bg-hover); font-weight: 600; }
-/* ── Nav groups (Guides / Support) ──
+/* ── Nav groups (Guides / Help & Resources) ──
    The capsule carries three items: one link and two disclosures. Grouping was
    tried and dropped once (#82/#91) when the bar held its destinations flat and
-   the dropdowns only added a click; it earns its place now that Support alone
+   the dropdowns only added a click; it earns its place now that Help & Resources alone
    holds six, four of them off-site. */
 .navgroup { position: relative; display: block; }
 .navgroup-btn {
@@ -470,7 +470,7 @@ button, input, select, textarea { font-family: inherit; }
   width: 15px; height: 15px; flex: none;
   color: var(--text-mid);
 }
-/* One end chip. Find a Dealer is a Support menu item now, and the storefront is
+/* One end chip. Find a Dealer is a Help & Resources menu item now, and the storefront is
    reached through the Warranty / Service Request / Contact Us items and the
    footer. The rewards chip stays because it is not really navigation -- it
    reports a live points total, and rewards are always visible (DESIGN.md). */
@@ -636,6 +636,8 @@ button, input, select, textarea { font-family: inherit; }
    Re-measured in Chromium with Figtree loaded and the points chip at its
    maximum (4,600 pts) after the bar became Set Up + two group disclosures:
    capsule 256 (was 653 with six flat links), brand ~110, end chip 177.
+   Relabelling the second group "Help & Resources" (2026-09) grew the
+   capsule to ~330; still ~230px of headroom at 760.
    The whole bar needs ~450px without the points chip and ~630px with it, so
    the capsule now unfolds at 760 rather than 1080 -- that reaches iPad
    portrait (768) with ~300px to spare instead of handing it a burger.

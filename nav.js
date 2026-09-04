@@ -1,5 +1,5 @@
 /**
- * Nav group disclosures (Guides / Support) in the bar capsule.
+ * Nav group disclosures (Guides / Help & Resources) in the bar capsule.
  *
  * Shared rather than inlined per page: the nav markup is already duplicated
  * across 14 files with no template, and 14 copies of identical behaviour is
