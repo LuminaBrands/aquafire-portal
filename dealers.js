@@ -99,5 +99,6 @@ var DEALERS = [
   { name:"Indiana Audio Video", type:"Dealer", address:"11316 Abbitt Trail, Zionsville, IN 46077", lat:39.9992, lng:-86.255, phone:"317-292-8802", email:"", website:"https://www.indianaaudiovideo.com", appt:false, country:"US" },
   { name:"Bay Area Fireplace", type:"Dealer", address:"3275 Stevens Creek Blvd, Santa Clara, CA 95050", lat:37.3252, lng:-121.9543, phone:"408-249-9000", email:"", website:"https://bayareafireplace.com/", appt:false, country:"US" },
   { name:"Oneida Hearth and Home", type:"Dealer", address:"405 Beech St Warren, PA, United States, Pennsylvania 16365", lat:41.84619314490724, lng:-79.16044113777335, phone:"814-723-8234", email:"", website:"https://www.oneidaacehardware.com/", appt:false, country:"US" },
-  { name:"Hardy Heating", type:"Dealer", address:"9191 E Frontage Rd, Palmer, AK 99645", lat:61.599968139780735, lng:-149.2191158460225, phone:"907-917-4286", email:"", website:"http://hardyheating.com/", appt:false, country:"US" }
+  { name:"Hardy Heating", type:"Dealer", address:"9191 E Frontage Rd, Palmer, AK 99645", lat:61.599968139780735, lng:-149.2191158460225, phone:"907-917-4286", email:"", website:"http://hardyheating.com/", appt:false, country:"US" },
+  { name:"Home and Hearth Fireplaces", type:"Dealer", address:"1750 45th St S, Fargo, North Dakota 58103", lat:46.8541, lng:-96.8621, phone:"701-893-9300", email:"", website:"https://www.homeandhearthfireplaces.com/", appt:false, country:"US" }
 ];
