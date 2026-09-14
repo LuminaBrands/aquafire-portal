@@ -100,5 +100,6 @@ var DEALERS = [
   { name:"Bay Area Fireplace", type:"Dealer", address:"3275 Stevens Creek Blvd, Santa Clara, CA 95050", lat:37.3252, lng:-121.9543, phone:"408-249-9000", email:"", website:"https://bayareafireplace.com/", appt:false, country:"US" },
   { name:"Oneida Hearth and Home", type:"Dealer", address:"405 Beech St Warren, PA, United States, Pennsylvania 16365", lat:41.84619314490724, lng:-79.16044113777335, phone:"814-723-8234", email:"", website:"https://www.oneidaacehardware.com/", appt:false, country:"US" },
   { name:"Hardy Heating", type:"Dealer", address:"9191 E Frontage Rd, Palmer, AK 99645", lat:61.599968139780735, lng:-149.2191158460225, phone:"907-917-4286", email:"", website:"http://hardyheating.com/", appt:false, country:"US" },
-  { name:"Home and Hearth Fireplaces", type:"Dealer", address:"1750 45th St S, Fargo, North Dakota 58103", lat:46.8541, lng:-96.8621, phone:"701-893-9300", email:"", website:"https://www.homeandhearthfireplaces.com/", appt:false, country:"US" }
+  { name:"Home and Hearth Fireplaces", type:"Dealer", address:"1750 45th St S, Fargo, North Dakota 58103", lat:46.8541, lng:-96.8621, phone:"701-893-9300", email:"", website:"https://www.homeandhearthfireplaces.com/", appt:false, country:"US" },
+  { name:"Bromwell's", type:"Dealer", address:"117 W 4th St, Cincinnati, OH 45202", lat:39.0996, lng:-84.5146, phone:"513-621-0620", email:"", website:"http://www.bromwells.com/", appt:false, country:"US" }
 ];
